@@ -22,23 +22,7 @@ export default function Nation() {
     }
   ];
 
-  const communityStructure = [
-    {
-      icon: <Church />,
-      title: "Local Assemblies",
-      description: "Covenant communities gathering to study, worship, and support one another in walking out kingdom principles."
-    },
-    {
-      icon: <Handshake />,
-      title: "Mutual Support",
-      description: "A network of believers committed to helping each other practically apply covenant principles in daily life."
-    },
-    {
-      icon: <GraduationCap />,
-      title: "Ongoing Education",
-      description: "Continuous learning opportunities to deepen understanding of our covenant identity and freedom."
-    }
-  ];
+
 
   return (
     <div className="pt-16">
@@ -88,20 +72,7 @@ export default function Nation() {
             className="mb-16"
           />
 
-          {/* Community Structure */}
-          <div className="grid md:grid-cols-3 gap-8 mb-16">
-            {communityStructure.map((item, index) => (
-              <div key={index} className="bg-white p-8 rounded-xl shadow-lg text-center">
-                <div className="text-covenant-gold text-4xl mb-4">
-                  {item.icon}
-                </div>
-                <h4 className="font-playfair text-xl font-bold text-covenant-blue mb-3">{item.title}</h4>
-                <p className="text-covenant-gray leading-relaxed">
-                  {item.description}
-                </p>
-              </div>
-            ))}
-          </div>
+
 
           {/* Join the Community */}
           <div className="text-center bg-white p-12 rounded-2xl shadow-lg">
