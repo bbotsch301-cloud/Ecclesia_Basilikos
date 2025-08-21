@@ -15,6 +15,7 @@ import Contact from "@/pages/contact";
 import Forum from "@/pages/forum";
 import ThreadPage from "@/pages/thread";
 import AdminDashboard from "@/pages/admin-dashboard";
+import AdminContent from "@/pages/admin-content";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -32,6 +33,7 @@ function Router() {
           <Route path="/contact" component={Contact} />
           <Route path="/forum" component={Forum} />
           <Route path="/forum/thread/:threadId" component={ThreadPage} />
+          <Route path="/admin/content" component={AdminContent} />
           <Route path="/admin" component={AdminDashboard} />
           <Route component={NotFound} />
         </Switch>

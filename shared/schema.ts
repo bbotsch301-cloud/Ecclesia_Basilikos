@@ -126,6 +126,19 @@ export const downloads = pgTable("downloads", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// Page content management
+export const page_content = pgTable("page_content", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  pageName: text("page_name").notNull(), // 'about', 'home', 'education', etc.
+  contentKey: text("content_key").notNull(), // 'hero_background', 'main_image', etc.
+  contentValue: text("content_value").notNull(), // URL or text content
+  contentType: text("content_type").notNull(), // 'image', 'text', 'html'
+  description: text("description"), // human-readable description
+  updatedById: varchar("updated_by_id").notNull().references(() => users.id),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 export const forum_categories = pgTable("forum_categories", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   name: text("name").notNull(),
@@ -362,6 +375,17 @@ export const adminAuditLogSchema = createInsertSchema(admin_audit_log).omit({
   createdAt: true,
 });
 
+export const insertPageContentSchema = createInsertSchema(page_content).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const updatePageContentSchema = z.object({
+  contentValue: z.string(),
+  description: z.string().optional(),
+});
+
 // Type exports
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
@@ -406,3 +430,7 @@ export type Resource = typeof resources.$inferSelect;
 
 export type UpdateUserRole = z.infer<typeof updateUserRoleSchema>;
 export type AdminAuditLog = typeof admin_audit_log.$inferSelect;
+
+export type InsertPageContent = z.infer<typeof insertPageContentSchema>;
+export type PageContent = typeof page_content.$inferSelect;
+export type UpdatePageContent = z.infer<typeof updatePageContentSchema>;

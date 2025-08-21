@@ -7,7 +7,9 @@ import {
   insertCourseSchema, 
   insertLessonSchema,
   insertForumCategorySchema,
-  updateUserRoleSchema
+  updateUserRoleSchema,
+  insertPageContentSchema,
+  updatePageContentSchema
 } from '@shared/schema';
 
 const router = Router();
@@ -720,6 +722,117 @@ router.get('/activity', requireAdmin, async (req, res) => {
   } catch (error) {
     console.error('Error fetching recent activity:', error);
     res.status(500).json({ error: 'Failed to fetch recent activity' });
+  }
+});
+
+// ================================
+// PAGE CONTENT MANAGEMENT (ADMIN)
+// ================================
+
+// Get all page content
+router.get('/page-content', requireAdmin, async (req, res) => {
+  try {
+    const pageContent = await storage.getAllPageContent();
+    res.json(pageContent);
+  } catch (error) {
+    console.error('Error fetching page content:', error);
+    res.status(500).json({ error: 'Failed to fetch page content' });
+  }
+});
+
+// Get page content by page name
+router.get('/page-content/:pageName', requireAdmin, async (req, res) => {
+  try {
+    const { pageName } = req.params;
+    const pageContent = await storage.getPageContent(pageName);
+    res.json(pageContent);
+  } catch (error) {
+    console.error('Error fetching page content:', error);
+    res.status(500).json({ error: 'Failed to fetch page content' });
+  }
+});
+
+// Create or update page content
+router.post('/page-content', requireAdmin, async (req, res) => {
+  try {
+    const contentData = insertPageContentSchema.parse({
+      ...req.body,
+      updatedById: req.user!.id
+    });
+    
+    const pageContent = await storage.upsertPageContent(contentData);
+    
+    await auditLog(
+      req.user!.id, 
+      'CREATE', 
+      'PAGE_CONTENT', 
+      pageContent.id, 
+      null, 
+      pageContent,
+      req.ip,
+      req.get('User-Agent')
+    );
+    
+    res.status(201).json(pageContent);
+  } catch (error) {
+    console.error('Error creating page content:', error);
+    res.status(500).json({ error: 'Failed to create page content' });
+  }
+});
+
+// Update specific page content
+router.patch('/page-content/:id', requireAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updates = updatePageContentSchema.parse(req.body);
+    
+    const oldContent = await storage.getPageContentById(id);
+    const updatedContent = await storage.updatePageContent(id, {
+      ...updates,
+      updatedById: req.user!.id
+    });
+    
+    await auditLog(
+      req.user!.id, 
+      'UPDATE', 
+      'PAGE_CONTENT', 
+      id, 
+      oldContent, 
+      updatedContent,
+      req.ip,
+      req.get('User-Agent')
+    );
+    
+    res.json(updatedContent);
+  } catch (error) {
+    console.error('Error updating page content:', error);
+    res.status(500).json({ error: 'Failed to update page content' });
+  }
+});
+
+// Delete page content
+router.delete('/page-content/:id', requireAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const oldContent = await storage.getPageContentById(id);
+    await storage.deletePageContent(id);
+    
+    await auditLog(
+      req.user!.id, 
+      'DELETE', 
+      'PAGE_CONTENT', 
+      id, 
+      oldContent, 
+      null,
+      req.ip,
+      req.get('User-Agent')
+    );
+    
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error deleting page content:', error);
+    res.status(500).json({ error: 'Failed to delete page content' });
   }
 });
 

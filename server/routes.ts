@@ -21,6 +21,8 @@ import {
   insertForumCategorySchema,
   insertForumThreadSchema,
   insertForumReplySchema,
+  insertPageContentSchema,
+  updatePageContentSchema,
   type User
 } from "@shared/schema";
 import { z } from "zod";
@@ -318,6 +320,88 @@ export async function registerRoutes(app: Express): Promise<Server> {
         console.error("Error creating forum reply:", error);
         res.status(500).json({ error: "Failed to create reply" });
       }
+    }
+  });
+
+  // Page Content Management (Admin only)
+  app.get("/api/admin/page-content", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+      if (user.role !== 'admin') {
+        return res.status(403).json({ error: "Admin access required" });
+      }
+      
+      const content = await storage.getAllPageContent();
+      res.json(content);
+    } catch (error) {
+      console.error("Error fetching page content:", error);
+      res.status(500).json({ error: "Failed to fetch page content" });
+    }
+  });
+
+  app.post("/api/admin/page-content", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+      if (user.role !== 'admin') {
+        return res.status(403).json({ error: "Admin access required" });
+      }
+      
+      const contentData = insertPageContentSchema.parse(req.body);
+      const content = await storage.upsertPageContent({
+        ...contentData,
+        updatedById: user.id,
+      });
+      
+      res.json({ success: true, content });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ errors: error.errors });
+      } else {
+        console.error("Error creating page content:", error);
+        res.status(500).json({ error: "Failed to create page content" });
+      }
+    }
+  });
+
+  app.patch("/api/admin/page-content/:id", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+      if (user.role !== 'admin') {
+        return res.status(403).json({ error: "Admin access required" });
+      }
+      
+      const { id } = req.params;
+      const updateData = updatePageContentSchema.parse(req.body);
+      const content = await storage.updatePageContent(id, {
+        ...updateData,
+        updatedById: user.id,
+      });
+      
+      res.json({ success: true, content });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ errors: error.errors });
+      } else {
+        console.error("Error updating page content:", error);
+        res.status(500).json({ error: "Failed to update page content" });
+      }
+    }
+  });
+
+  app.delete("/api/admin/page-content/:id", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+      if (user.role !== 'admin') {
+        return res.status(403).json({ error: "Admin access required" });
+      }
+      
+      const { id } = req.params;
+      await storage.deletePageContent(id);
+      
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting page content:", error);
+      res.status(500).json({ error: "Failed to delete page content" });
     }
   });
 

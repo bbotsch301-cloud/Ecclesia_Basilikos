@@ -195,6 +195,12 @@ export default function AdminDashboard() {
                   Manage Courses
                 </Button>
               </Link>
+              <Link href="/admin/content">
+                <Button className="w-full justify-start" variant="outline">
+                  <Edit className="h-4 w-4 mr-2" />
+                  Page Content
+                </Button>
+              </Link>
             </CardContent>
           </Card>
 

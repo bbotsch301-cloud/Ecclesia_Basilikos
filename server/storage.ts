@@ -28,6 +28,9 @@ import {
   type InsertResource,
   type UpdateUserRole,
   type AdminAuditLog,
+  type PageContent,
+  type InsertPageContent,
+  type UpdatePageContent,
   users,
   contacts,
   newsletter_subscribers,
@@ -42,7 +45,8 @@ import {
   forum_likes,
   videos,
   resources,
-  admin_audit_log
+  admin_audit_log,
+  page_content
 } from "@shared/schema";
 import { eq, and, desc, sql } from "drizzle-orm";
 import { db } from "./db";
@@ -125,6 +129,14 @@ export interface IStorage {
   }>;
   getRecentActivity(): Promise<AdminAuditLog[]>;
   createAuditLog(log: Omit<AdminAuditLog, 'id' | 'createdAt'>): Promise<AdminAuditLog>;
+  
+  // Admin: Page Content Management
+  getAllPageContent(): Promise<PageContent[]>;
+  getPageContent(pageName: string): Promise<PageContent[]>;
+  getPageContentById(id: string): Promise<PageContent | undefined>;
+  upsertPageContent(content: InsertPageContent): Promise<PageContent>;
+  updatePageContent(id: string, updates: UpdatePageContent & { updatedById: string }): Promise<PageContent>;
+  deletePageContent(id: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -631,6 +643,71 @@ export class DatabaseStorage implements IStorage {
   async createAuditLog(log: Omit<AdminAuditLog, 'id' | 'createdAt'>): Promise<AdminAuditLog> {
     const [newLog] = await db.insert(admin_audit_log).values(log).returning();
     return newLog;
+  }
+
+  // Admin: Page Content Management
+  async getAllPageContent(): Promise<PageContent[]> {
+    return await db.select().from(page_content)
+      .orderBy(page_content.pageName, page_content.contentKey);
+  }
+
+  async getPageContent(pageName: string): Promise<PageContent[]> {
+    return await db.select().from(page_content)
+      .where(eq(page_content.pageName, pageName))
+      .orderBy(page_content.contentKey);
+  }
+
+  async getPageContentById(id: string): Promise<PageContent | undefined> {
+    const [content] = await db.select().from(page_content)
+      .where(eq(page_content.id, id));
+    return content;
+  }
+
+  async upsertPageContent(content: InsertPageContent): Promise<PageContent> {
+    // First try to find existing content by page + key
+    const [existing] = await db.select().from(page_content)
+      .where(
+        and(
+          eq(page_content.pageName, content.pageName),
+          eq(page_content.contentKey, content.contentKey)
+        )
+      );
+
+    if (existing) {
+      // Update existing
+      const [updated] = await db.update(page_content)
+        .set({
+          contentValue: content.contentValue,
+          contentType: content.contentType,
+          description: content.description,
+          updatedById: content.updatedById,
+          updatedAt: new Date()
+        })
+        .where(eq(page_content.id, existing.id))
+        .returning();
+      return updated;
+    } else {
+      // Create new
+      const [newContent] = await db.insert(page_content)
+        .values(content)
+        .returning();
+      return newContent;
+    }
+  }
+
+  async updatePageContent(id: string, updates: UpdatePageContent & { updatedById: string }): Promise<PageContent> {
+    const [updated] = await db.update(page_content)
+      .set({
+        ...updates,
+        updatedAt: new Date()
+      })
+      .where(eq(page_content.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deletePageContent(id: string): Promise<void> {
+    await db.delete(page_content).where(eq(page_content.id, id));
   }
 }
 
