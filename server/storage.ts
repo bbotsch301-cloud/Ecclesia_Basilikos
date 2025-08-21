@@ -144,6 +144,7 @@ export interface IStorage {
   // Trust Document Downloads
   createTrustDownload(download: InsertTrustDownload): Promise<TrustDownload>;
   getTrustDownloadByEmail(email: string): Promise<TrustDownload | undefined>;
+  getAllTrustDownloads(): Promise<TrustDownload[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -729,6 +730,11 @@ export class DatabaseStorage implements IStorage {
     const [download] = await db.select().from(trustDownloads)
       .where(eq(trustDownloads.email, email));
     return download;
+  }
+
+  async getAllTrustDownloads(): Promise<TrustDownload[]> {
+    return await db.select().from(trustDownloads)
+      .orderBy(desc(trustDownloads.downloadedAt));
   }
 }
 

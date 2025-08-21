@@ -17,6 +17,7 @@ import ThreadPage from "@/pages/thread";
 import TrustDownload from "@/pages/trust-download";
 import AdminDashboard from "@/pages/admin-dashboard";
 import AdminContent from "@/pages/admin-content";
+import AdminTrustDownloads from "@/pages/admin-trust-downloads";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -36,6 +37,7 @@ function Router() {
           <Route path="/forum/thread/:threadId" component={ThreadPage} />
           <Route path="/trust-download" component={TrustDownload} />
           <Route path="/admin/content" component={AdminContent} />
+          <Route path="/admin/trust-downloads" component={AdminTrustDownloads} />
           <Route path="/admin" component={AdminDashboard} />
           <Route component={NotFound} />
         </Switch>

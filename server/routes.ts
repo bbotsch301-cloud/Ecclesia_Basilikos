@@ -541,6 +541,22 @@ startxref
     res.send(Buffer.from(pdfContent));
   });
 
+  // Trust document downloads admin endpoint
+  app.get("/api/admin/trust-downloads", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+      if (user.role !== 'admin') {
+        return res.status(403).json({ error: "Admin access required" });
+      }
+      
+      const downloads = await storage.getAllTrustDownloads();
+      res.json(downloads);
+    } catch (error) {
+      console.error("Error fetching trust downloads:", error);
+      res.status(500).json({ error: "Failed to fetch trust downloads" });
+    }
+  });
+
   // Admin routes
   app.use('/api/admin', adminRoutes);
 

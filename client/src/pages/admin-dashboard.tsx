@@ -15,7 +15,8 @@ import {
   Trash2,
   MoreHorizontal,
   Pin,
-  Lock
+  Lock,
+  Download
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { Link } from "wouter";
@@ -241,6 +242,12 @@ export default function AdminDashboard() {
                 <Button className="w-full justify-start" variant="outline">
                   <FileText className="h-4 w-4 mr-2" />
                   Audit Log
+                </Button>
+              </Link>
+              <Link href="/admin/trust-downloads">
+                <Button className="w-full justify-start" variant="outline">
+                  <Download className="h-4 w-4 mr-2" />
+                  Trust Downloads
                 </Button>
               </Link>
             </CardContent>
