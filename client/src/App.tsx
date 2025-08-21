@@ -12,6 +12,8 @@ import Videos from "@/pages/videos";
 import Resources from "@/pages/resources";
 import Nation from "@/pages/nation";
 import Contact from "@/pages/contact";
+import Forum from "@/pages/forum";
+import ThreadPage from "@/pages/thread";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -27,6 +29,8 @@ function Router() {
           <Route path="/resources" component={Resources} />
           <Route path="/nation" component={Nation} />
           <Route path="/contact" component={Contact} />
+          <Route path="/forum" component={Forum} />
+          <Route path="/forum/thread/:threadId" component={ThreadPage} />
           <Route component={NotFound} />
         </Switch>
       </main>

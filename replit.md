@@ -12,6 +12,8 @@ The New Covenant Trust is a modern, responsive website focused on teaching spiri
 ✓ Created enrollment system for structured learning
 ✓ Set up object storage for secure file downloads
 ✓ Added sample courses and downloadable resources
+✓ Built comprehensive forum system for user communication
+✓ Added course lessons with biblical content structure
 ✓ Maintained exclusive use of King James Version (KJV) scriptures
 
 ## User Preferences

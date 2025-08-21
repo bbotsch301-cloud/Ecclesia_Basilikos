@@ -1,4 +1,13 @@
-import type { Express } from "express";
+import type { Express, Request } from "express";
+
+// Extend Request type to include user property
+declare global {
+  namespace Express {
+    interface Request {
+      user?: User;
+    }
+  }
+}
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { sessionMiddleware, requireAuth, optionalAuth } from "./auth";
@@ -7,7 +16,11 @@ import {
   insertNewsletterSchema, 
   insertUserSchema, 
   loginSchema,
-  insertEnrollmentSchema 
+  insertEnrollmentSchema,
+  insertForumCategorySchema,
+  insertForumThreadSchema,
+  insertForumReplySchema,
+  type User
 } from "@shared/schema";
 import { z } from "zod";
 
@@ -192,6 +205,117 @@ export async function registerRoutes(app: Express): Promise<Server> {
         res.status(400).json({ success: false, errors: error.errors });
       } else {
         res.status(500).json({ success: false, message: "Internal server error" });
+      }
+    }
+  });
+
+  // Forum routes
+
+  // Get all forum categories
+  app.get("/api/forum/categories", async (req, res) => {
+    try {
+      const categories = await storage.getForumCategories();
+      res.json(categories);
+    } catch (error) {
+      console.error("Error fetching forum categories:", error);
+      res.status(500).json({ error: "Failed to fetch categories" });
+    }
+  });
+
+  // Create a new forum category (admin only for now)
+  app.post("/api/forum/categories", requireAuth, async (req, res) => {
+    try {
+      const categoryData = insertForumCategorySchema.parse(req.body);
+      const category = await storage.createForumCategory(categoryData);
+      res.json({ success: true, category });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ errors: error.errors });
+      } else {
+        console.error("Error creating forum category:", error);
+        res.status(500).json({ error: "Failed to create category" });
+      }
+    }
+  });
+
+  // Get threads by category
+  app.get("/api/forum/categories/:categoryId/threads", async (req, res) => {
+    try {
+      const { categoryId } = req.params;
+      const threads = await storage.getForumThreadsByCategory(categoryId);
+      res.json(threads);
+    } catch (error) {
+      console.error("Error fetching forum threads:", error);
+      res.status(500).json({ error: "Failed to fetch threads" });
+    }
+  });
+
+  // Create a new thread
+  app.post("/api/forum/threads", requireAuth, async (req, res) => {
+    try {
+      const threadData = insertForumThreadSchema.parse(req.body);
+      const user = req.user as User;
+      
+      const thread = await storage.createForumThread({
+        ...threadData,
+        authorId: user.id,
+      });
+      
+      res.json({ success: true, thread });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ errors: error.errors });
+      } else {
+        console.error("Error creating forum thread:", error);
+        res.status(500).json({ error: "Failed to create thread" });
+      }
+    }
+  });
+
+  // Get a specific thread with replies
+  app.get("/api/forum/threads/:threadId", async (req, res) => {
+    try {
+      const { threadId } = req.params;
+      
+      // Get thread details
+      const thread = await storage.getForumThreadById(threadId);
+      if (!thread) {
+        return res.status(404).json({ error: "Thread not found" });
+      }
+
+      // Get replies
+      const replies = await storage.getForumRepliesByThread(threadId);
+      
+      // Increment view count
+      await storage.incrementThreadViews(threadId);
+
+      res.json({ thread, replies });
+    } catch (error) {
+      console.error("Error fetching forum thread:", error);
+      res.status(500).json({ error: "Failed to fetch thread" });
+    }
+  });
+
+  // Create a reply to a thread
+  app.post("/api/forum/threads/:threadId/replies", requireAuth, async (req, res) => {
+    try {
+      const { threadId } = req.params;
+      const replyData = insertForumReplySchema.parse(req.body);
+      const user = req.user as User;
+      
+      const reply = await storage.createForumReply({
+        ...replyData,
+        threadId,
+        authorId: user.id,
+      });
+      
+      res.json({ success: true, reply });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ errors: error.errors });
+      } else {
+        console.error("Error creating forum reply:", error);
+        res.status(500).json({ error: "Failed to create reply" });
       }
     }
   });

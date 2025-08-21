@@ -9,6 +9,7 @@ export const users = pgTable("users", {
   password: text("password").notNull(),
   firstName: text("first_name").notNull(),
   lastName: text("last_name").notNull(),
+  username: text("username").unique(), // Optional username for forum display
   isActive: boolean("is_active").default(true),
   createdAt: timestamp("created_at").defaultNow(),
 });
@@ -83,6 +84,52 @@ export const downloads = pgTable("downloads", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+export const forum_categories = pgTable("forum_categories", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  description: text("description"),
+  color: text("color").default("#3B82F6"), // hex color for category badge
+  order: integer("order").default(0),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const forum_threads = pgTable("forum_threads", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  title: text("title").notNull(),
+  content: text("content").notNull(),
+  categoryId: varchar("category_id").notNull().references(() => forum_categories.id),
+  authorId: varchar("author_id").notNull().references(() => users.id),
+  isPinned: boolean("is_pinned").default(false),
+  isLocked: boolean("is_locked").default(false),
+  viewCount: integer("view_count").default(0),
+  replyCount: integer("reply_count").default(0),
+  lastReplyAt: timestamp("last_reply_at"),
+  lastReplyUserId: varchar("last_reply_user_id").references(() => users.id),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const forum_replies = pgTable("forum_replies", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  content: text("content").notNull(),
+  threadId: varchar("thread_id").notNull().references(() => forum_threads.id),
+  authorId: varchar("author_id").notNull().references(() => users.id),
+  parentReplyId: varchar("parent_reply_id"), // for nested replies - self-reference added separately
+  isEdited: boolean("is_edited").default(false),
+  editedAt: timestamp("edited_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const forum_likes = pgTable("forum_likes", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  threadId: varchar("thread_id").references(() => forum_threads.id),
+  replyId: varchar("reply_id").references(() => forum_replies.id),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 // Zod schemas for validation
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
@@ -128,6 +175,34 @@ export const insertDownloadSchema = createInsertSchema(downloads).omit({
   createdAt: true,
 });
 
+export const insertForumCategorySchema = createInsertSchema(forum_categories).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertForumThreadSchema = createInsertSchema(forum_threads).omit({
+  id: true,
+  viewCount: true,
+  replyCount: true,
+  lastReplyAt: true,
+  lastReplyUserId: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertForumReplySchema = createInsertSchema(forum_replies).omit({
+  id: true,
+  isEdited: true,
+  editedAt: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertForumLikeSchema = createInsertSchema(forum_likes).omit({
+  id: true,
+  createdAt: true,
+});
+
 // Type exports
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
@@ -150,3 +225,15 @@ export type Enrollment = typeof enrollments.$inferSelect;
 
 export type InsertDownload = z.infer<typeof insertDownloadSchema>;
 export type Download = typeof downloads.$inferSelect;
+
+export type InsertForumCategory = z.infer<typeof insertForumCategorySchema>;
+export type ForumCategory = typeof forum_categories.$inferSelect;
+
+export type InsertForumThread = z.infer<typeof insertForumThreadSchema>;
+export type ForumThread = typeof forum_threads.$inferSelect;
+
+export type InsertForumReply = z.infer<typeof insertForumReplySchema>;
+export type ForumReply = typeof forum_replies.$inferSelect;
+
+export type InsertForumLike = z.infer<typeof insertForumLikeSchema>;
+export type ForumLike = typeof forum_likes.$inferSelect;
