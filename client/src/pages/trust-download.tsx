@@ -95,32 +95,6 @@ export default function TrustDownload() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-6">
-                    <div>
-                      <h4 className="font-semibold text-covenant-blue mb-3">What's Included:</h4>
-                      <div className="space-y-2">
-                        <div className="flex items-center">
-                          <CheckCircle className="text-green-500 mr-3" size={16} />
-                          <span className="text-covenant-gray">Biblical foundations with KJV references</span>
-                        </div>
-                        <div className="flex items-center">
-                          <CheckCircle className="text-green-500 mr-3" size={16} />
-                          <span className="text-covenant-gray">Trust structure and covenant principles</span>
-                        </div>
-                        <div className="flex items-center">
-                          <CheckCircle className="text-green-500 mr-3" size={16} />
-                          <span className="text-covenant-gray">Practical implementation steps</span>
-                        </div>
-                        <div className="flex items-center">
-                          <CheckCircle className="text-green-500 mr-3" size={16} />
-                          <span className="text-covenant-gray">Freedom from Babylon's systems</span>
-                        </div>
-                        <div className="flex items-center">
-                          <CheckCircle className="text-green-500 mr-3" size={16} />
-                          <span className="text-covenant-gray">Prayer templates and declarations</span>
-                        </div>
-                      </div>
-                    </div>
-
                     <div className="bg-covenant-light p-6 rounded-lg">
                       <blockquote className="font-georgia text-lg italic text-covenant-dark-gray mb-3">
                         "If the Son therefore shall make you free, ye shall be free indeed."
