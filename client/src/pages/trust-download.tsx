@@ -71,7 +71,7 @@ export default function TrustDownload() {
       <HeroSection
         title="New Covenant Trust Document"
         description="Access your comprehensive guide to covenant freedom and spiritual sovereignty"
-        backgroundImage="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
+        backgroundImage="https://images.unsplash.com/photo-1507692164823-de1ba477cd5b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
       />
 
       <div className="py-20">
