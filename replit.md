@@ -1,8 +1,8 @@
-# The New Covenant Trust Website
+# Kingdom Ventures Trust Website
 
 ## Overview
 
-The New Covenant Trust is a modern, responsive website focused on teaching spiritual freedom and sovereignty within the Christian faith. The platform has been transformed into a comprehensive **student platform** with user authentication, course enrollment, and secure access to educational materials. The site educates visitors about covenant relationships with Christ, exposes counterfeit systems, and provides structured learning paths for believers to understand their true identity and inheritance through biblical education.
+Kingdom Ventures Trust is a modern, responsive website focused on teaching spiritual freedom and sovereignty within the Christian faith. The platform has been transformed into a comprehensive **student platform** with user authentication, course enrollment, and secure access to educational materials. The site educates visitors about covenant relationships with Christ, exposes counterfeit systems, and provides structured learning paths for believers to understand their true identity and inheritance through biblical education.
 
 ## Recent Changes (August 21, 2025)
 

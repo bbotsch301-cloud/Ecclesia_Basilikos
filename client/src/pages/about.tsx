@@ -6,7 +6,7 @@ export default function About() {
   return (
     <div className="pt-16">
       <HeroSection
-        title="About the New Covenant Trust"
+        title="About Kingdom Ventures Trust"
         description="Understanding Christ as Grantor and us as beneficiaries in the divine trust relationship"
         backgroundImage="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
       />
@@ -24,7 +24,7 @@ export default function About() {
             <div>
               <h2 className="font-playfair text-3xl font-bold text-covenant-blue mb-6">Christ as the Grantor</h2>
               <p className="text-lg text-covenant-gray leading-relaxed mb-6">
-                The New Covenant Trust is established by Jesus Christ Himself as the Grantor, who has transferred all authority and blessing to His Body. Unlike Babylon's system of contracts and merchandise, this trust operates under divine law and spiritual authority.
+                Kingdom Ventures Trust is established by Jesus Christ Himself as the Grantor, who has transferred all authority and blessing to His Body. Unlike Babylon's system of contracts and merchandise, this trust operates under divine law and spiritual authority.
               </p>
               <div className="bg-covenant-light p-6 rounded-lg">
                 <blockquote className="font-georgia text-lg italic text-covenant-dark-gray mb-3">
@@ -46,7 +46,7 @@ export default function About() {
             <div className="lg:order-1">
               <h2 className="font-playfair text-3xl font-bold text-covenant-blue mb-6">Contrast with Babylon's System</h2>
               <p className="text-lg text-covenant-gray leading-relaxed mb-6">
-                Babylon operates through contracts, legal fictions, and the creation of artificial persons to bind mankind in debt slavery. The New Covenant Trust transcends these earthly systems, operating under the perfect law of liberty found in Christ.
+                Babylon operates through contracts, legal fictions, and the creation of artificial persons to bind mankind in debt slavery. Kingdom Ventures Trust transcends these earthly systems, operating under the perfect law of liberty found in Christ.
               </p>
               <div className="space-y-4">
                 <div className="flex items-start">
@@ -65,7 +65,7 @@ export default function About() {
           <div className="bg-covenant-blue p-12 rounded-2xl">
             <h3 className="font-playfair text-3xl font-bold text-white mb-8 text-center">Scriptural Foundation</h3>
             <p className="text-white text-center mb-8 text-lg">
-              The New Covenant Trust is established upon the sure foundation of God's Word, as revealed in the King James Version of the Holy Bible.
+              Kingdom Ventures Trust is established upon the sure foundation of God's Word, as revealed in the King James Version of the Holy Bible.
             </p>
             
             <div className="space-y-8">

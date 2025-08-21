@@ -26,7 +26,7 @@ export default function Navbar() {
           <Link href="/" className="flex items-center">
             <Scroll className="text-covenant-gold text-2xl mr-3" />
             <span className="font-playfair font-bold text-xl text-covenant-blue">
-              The New Covenant Trust
+              Kingdom Ventures Trust
             </span>
           </Link>
 

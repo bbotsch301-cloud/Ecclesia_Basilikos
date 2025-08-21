@@ -43,10 +43,10 @@ export default function Footer() {
           <div>
             <div className="flex items-center mb-4">
               <Scroll className="text-covenant-gold text-2xl mr-3" />
-              <span className="font-playfair font-bold text-xl">The New Covenant Trust</span>
+              <span className="font-playfair font-bold text-xl">Kingdom Ventures Trust</span>
             </div>
             <p className="text-gray-300 leading-relaxed">
-              Walking in the freedom that Christ has provided through His New Covenant Trust.
+              Walking in the freedom that Christ has provided through Kingdom Ventures Trust.
             </p>
           </div>
 
