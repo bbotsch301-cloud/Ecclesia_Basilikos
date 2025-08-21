@@ -1,0 +1,157 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Georgia:ital,wght@0,400;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0 0% 100%);
+  --foreground: hsl(30 54% 15%);
+  --card: hsl(248 6% 97%);
+  --card-foreground: hsl(30 54% 15%);
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(30 54% 15%);
+  --primary: hsl(45 93% 47%);
+  --primary-foreground: hsl(219 78% 11%);
+  --secondary: hsl(219 78% 11%);
+  --secondary-foreground: hsl(0 0% 100%);
+  --muted: hsl(248 10% 90%);
+  --muted-foreground: hsl(220 14% 40%);
+  --accent: hsl(248 10% 92%);
+  --accent-foreground: hsl(45 93% 47%);
+  --destructive: hsl(0 84% 60%);
+  --destructive-foreground: hsl(0 0% 100%);
+  --border: hsl(220 13% 91%);
+  --input: hsl(216 23% 97%);
+  --ring: hsl(45 93% 47%);
+  --chart-1: hsl(45 93% 47%);
+  --chart-2: hsl(159 100% 36%);
+  --chart-3: hsl(42 93% 56%);
+  --chart-4: hsl(147 78% 42%);
+  --chart-5: hsl(341 75% 51%);
+  --sidebar: hsl(248 6% 97%);
+  --sidebar-foreground: hsl(30 54% 15%);
+  --sidebar-primary: hsl(45 93% 47%);
+  --sidebar-primary-foreground: hsl(219 78% 11%);
+  --sidebar-accent: hsl(248 10% 92%);
+  --sidebar-accent-foreground: hsl(45 93% 47%);
+  --sidebar-border: hsl(220 13% 91%);
+  --sidebar-ring: hsl(45 93% 47%);
+  --font-sans: 'Inter', sans-serif;
+  --font-serif: 'Georgia', serif;
+  --font-mono: 'Menlo', monospace;
+  --font-playfair: 'Playfair Display', serif;
+  --radius: 0.75rem;
+  
+  /* Custom covenant colors */
+  --covenant-blue: hsl(219 78% 11%);
+  --covenant-gold: hsl(45 93% 47%);
+  --covenant-light: hsl(248 10% 98%);
+  --covenant-gray: hsl(220 14% 40%);
+  --covenant-dark-gray: hsl(213 27% 18%);
+}
+
+.dark {
+  --background: hsl(219 78% 11%);
+  --foreground: hsl(210 40% 98%);
+  --card: hsl(219 78% 11%);
+  --card-foreground: hsl(210 40% 98%);
+  --popover: hsl(219 78% 11%);
+  --popover-foreground: hsl(210 40% 98%);
+  --primary: hsl(45 93% 47%);
+  --primary-foreground: hsl(219 78% 11%);
+  --secondary: hsl(217 32% 17%);
+  --secondary-foreground: hsl(210 40% 98%);
+  --muted: hsl(217 32% 17%);
+  --muted-foreground: hsl(215 20% 65%);
+  --accent: hsl(217 32% 17%);
+  --accent-foreground: hsl(210 40% 98%);
+  --destructive: hsl(0 62% 30%);
+  --destructive-foreground: hsl(210 40% 98%);
+  --border: hsl(217 32% 17%);
+  --input: hsl(217 32% 17%);
+  --ring: hsl(45 93% 47%);
+  --chart-1: hsl(220 70% 50%);
+  --chart-2: hsl(160 60% 45%);
+  --chart-3: hsl(30 80% 55%);
+  --chart-4: hsl(280 65% 60%);
+  --chart-5: hsl(340 75% 55%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-playfair);
+  }
+}
+
+@layer components {
+  .hero-overlay {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.6));
+  }
+  
+  .text-covenant-blue {
+    color: var(--covenant-blue);
+  }
+  
+  .text-covenant-gold {
+    color: var(--covenant-gold);
+  }
+  
+  .text-covenant-gray {
+    color: var(--covenant-gray);
+  }
+  
+  .text-covenant-dark-gray {
+    color: var(--covenant-dark-gray);
+  }
+  
+  .bg-covenant-blue {
+    background-color: var(--covenant-blue);
+  }
+  
+  .bg-covenant-gold {
+    background-color: var(--covenant-gold);
+  }
+  
+  .bg-covenant-light {
+    background-color: var(--covenant-light);
+  }
+  
+  .border-covenant-blue {
+    border-color: var(--covenant-blue);
+  }
+  
+  .border-covenant-gold {
+    border-color: var(--covenant-gold);
+  }
+  
+  .hover\:bg-covenant-gold:hover {
+    background-color: var(--covenant-gold);
+  }
+  
+  .hover\:text-covenant-gold:hover {
+    color: var(--covenant-gold);
+  }
+  
+  .hover\:border-covenant-gold:hover {
+    border-color: var(--covenant-gold);
+  }
+}
+
+@layer utilities {
+  .font-playfair {
+    font-family: var(--font-playfair);
+  }
+  
+  .font-georgia {
+    font-family: var(--font-serif);
+  }
+}
