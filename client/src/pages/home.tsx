@@ -8,7 +8,7 @@ export default function Home() {
     <div className="pt-16">
       <HeroSection
         title="Freedom Under the"
-        subtitle="Kingdom Ventures Trust"
+        subtitle="New Covenant"
         description="Reclaim your inheritance in the Body of Christ, outside Babylon's counterfeit system"
         primaryButton={{
           text: "🔑 Enter the Trust",
