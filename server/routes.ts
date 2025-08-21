@@ -11,6 +11,7 @@ declare global {
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { sessionMiddleware, requireAuth, optionalAuth } from "./auth";
+import adminRoutes from "./adminRoutes";
 import { 
   insertContactSchema, 
   insertNewsletterSchema, 
@@ -319,6 +320,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
     }
   });
+
+  // Admin routes
+  app.use('/api/admin', adminRoutes);
 
   const httpServer = createServer(app);
   return httpServer;

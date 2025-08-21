@@ -22,6 +22,12 @@ import {
   type InsertForumReply,
   type ForumLike,
   type InsertForumLike,
+  type Video,
+  type InsertVideo,
+  type Resource,
+  type InsertResource,
+  type UpdateUserRole,
+  type AdminAuditLog,
   users,
   contacts,
   newsletter_subscribers,
@@ -33,7 +39,10 @@ import {
   forum_categories,
   forum_threads,
   forum_replies,
-  forum_likes
+  forum_likes,
+  videos,
+  resources,
+  admin_audit_log
 } from "@shared/schema";
 import { eq, and, desc, sql } from "drizzle-orm";
 import { db } from "./db";
@@ -67,6 +76,55 @@ export interface IStorage {
   getPublicDownloads(): Promise<Download[]>;
   getCourseDownloads(courseId: string): Promise<Download[]>;
   getUserDownloads(userId: string): Promise<Download[]>;
+  
+  // Admin: User Management
+  getAllUsers(): Promise<User[]>;
+  updateUserRole(userId: string, role: string): Promise<User>;
+  toggleUserActive(userId: string): Promise<User>;
+  deleteUser(userId: string): Promise<void>;
+  
+  // Admin: Content Management
+  createVideo(video: InsertVideo): Promise<Video>;
+  getAllVideos(): Promise<Video[]>;
+  updateVideo(id: string, video: Partial<InsertVideo>): Promise<Video>;
+  toggleVideoPublished(id: string): Promise<Video>;
+  deleteVideo(id: string): Promise<void>;
+  
+  createResource(resource: InsertResource): Promise<Resource>;
+  getAllResources(): Promise<Resource[]>;
+  updateResource(id: string, resource: Partial<InsertResource>): Promise<Resource>;
+  toggleResourcePublished(id: string): Promise<Resource>;
+  deleteResource(id: string): Promise<void>;
+  
+  // Admin: Course Management
+  updateCourse(id: string, course: Partial<InsertCourse>): Promise<Course>;
+  toggleCoursePublished(id: string): Promise<Course>;
+  deleteCourse(id: string): Promise<void>;
+  createLesson(lesson: InsertLesson): Promise<Lesson>;
+  updateLesson(id: string, lesson: Partial<InsertLesson>): Promise<Lesson>;
+  deleteLesson(id: string): Promise<void>;
+  
+  // Admin: Forum Management
+  createForumCategory(category: InsertForumCategory): Promise<ForumCategory>;
+  updateForumCategory(id: string, category: Partial<InsertForumCategory>): Promise<ForumCategory>;
+  deleteForumCategory(id: string): Promise<void>;
+  toggleThreadPinned(id: string): Promise<ForumThread>;
+  toggleThreadLocked(id: string): Promise<ForumThread>;
+  deleteForumThread(id: string): Promise<void>;
+  deleteForumReply(id: string): Promise<void>;
+  
+  // Admin: Analytics & Monitoring
+  getSystemStats(): Promise<{
+    totalUsers: number;
+    totalCourses: number;
+    totalVideos: number;
+    totalResources: number;
+    totalEnrollments: number;
+    totalForumThreads: number;
+    totalForumReplies: number;
+  }>;
+  getRecentActivity(): Promise<AdminAuditLog[]>;
+  createAuditLog(log: Omit<AdminAuditLog, 'id' | 'createdAt'>): Promise<AdminAuditLog>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -328,6 +386,251 @@ export class DatabaseStorage implements IStorage {
       .where(eq(forum_threads.id, reply.threadId));
 
     return newReply;
+  }
+
+  // Admin: User Management
+  async getAllUsers(): Promise<User[]> {
+    return await db.select().from(users).orderBy(desc(users.createdAt));
+  }
+
+  async updateUserRole(userId: string, role: string): Promise<User> {
+    const [user] = await db.update(users)
+      .set({ role: role as any, updatedAt: new Date() })
+      .where(eq(users.id, userId))
+      .returning();
+    return user;
+  }
+
+  async toggleUserActive(userId: string): Promise<User> {
+    const [user] = await db.update(users)
+      .set({ 
+        isActive: sql`NOT ${users.isActive}`,
+        updatedAt: new Date()
+      })
+      .where(eq(users.id, userId))
+      .returning();
+    return user;
+  }
+
+  async deleteUser(userId: string): Promise<void> {
+    await db.delete(users).where(eq(users.id, userId));
+  }
+
+  // Admin: Video Management
+  async createVideo(video: InsertVideo): Promise<Video> {
+    const [newVideo] = await db.insert(videos).values(video).returning();
+    return newVideo;
+  }
+
+  async getAllVideos(): Promise<Video[]> {
+    return await db.select().from(videos).orderBy(desc(videos.createdAt));
+  }
+
+  async updateVideo(id: string, video: Partial<InsertVideo>): Promise<Video> {
+    const [updatedVideo] = await db.update(videos)
+      .set({ ...video, updatedAt: new Date() })
+      .where(eq(videos.id, id))
+      .returning();
+    return updatedVideo;
+  }
+
+  async toggleVideoPublished(id: string): Promise<Video> {
+    const [video] = await db.update(videos)
+      .set({ 
+        isPublished: sql`NOT ${videos.isPublished}`,
+        updatedAt: new Date()
+      })
+      .where(eq(videos.id, id))
+      .returning();
+    return video;
+  }
+
+  async deleteVideo(id: string): Promise<void> {
+    await db.delete(videos).where(eq(videos.id, id));
+  }
+
+  // Admin: Resource Management
+  async createResource(resource: InsertResource): Promise<Resource> {
+    const [newResource] = await db.insert(resources).values(resource).returning();
+    return newResource;
+  }
+
+  async getAllResources(): Promise<Resource[]> {
+    return await db.select().from(resources).orderBy(desc(resources.createdAt));
+  }
+
+  async updateResource(id: string, resource: Partial<InsertResource>): Promise<Resource> {
+    const [updatedResource] = await db.update(resources)
+      .set({ ...resource, updatedAt: new Date() })
+      .where(eq(resources.id, id))
+      .returning();
+    return updatedResource;
+  }
+
+  async toggleResourcePublished(id: string): Promise<Resource> {
+    const [resource] = await db.update(resources)
+      .set({ 
+        isPublished: sql`NOT ${resources.isPublished}`,
+        updatedAt: new Date()
+      })
+      .where(eq(resources.id, id))
+      .returning();
+    return resource;
+  }
+
+  async deleteResource(id: string): Promise<void> {
+    await db.delete(resources).where(eq(resources.id, id));
+  }
+
+  // Admin: Course Management
+  async updateCourse(id: string, course: Partial<InsertCourse>): Promise<Course> {
+    const [updatedCourse] = await db.update(courses)
+      .set({ ...course, updatedAt: new Date() })
+      .where(eq(courses.id, id))
+      .returning();
+    return updatedCourse;
+  }
+
+  async toggleCoursePublished(id: string): Promise<Course> {
+    const [course] = await db.update(courses)
+      .set({ 
+        isPublished: sql`NOT ${courses.isPublished}`,
+        updatedAt: new Date()
+      })
+      .where(eq(courses.id, id))
+      .returning();
+    return course;
+  }
+
+  async deleteCourse(id: string): Promise<void> {
+    // Delete related lessons and enrollments first
+    await db.delete(lesson_progress).where(
+      sql`${lesson_progress.lessonId} IN (SELECT id FROM ${lessons} WHERE ${lessons.courseId} = ${id})`
+    );
+    await db.delete(lessons).where(eq(lessons.courseId, id));
+    await db.delete(enrollments).where(eq(enrollments.courseId, id));
+    await db.delete(courses).where(eq(courses.id, id));
+  }
+
+  async createLesson(lesson: InsertLesson): Promise<Lesson> {
+    const [newLesson] = await db.insert(lessons).values(lesson).returning();
+    return newLesson;
+  }
+
+  async updateLesson(id: string, lesson: Partial<InsertLesson>): Promise<Lesson> {
+    const [updatedLesson] = await db.update(lessons)
+      .set(lesson)
+      .where(eq(lessons.id, id))
+      .returning();
+    return updatedLesson;
+  }
+
+  async deleteLesson(id: string): Promise<void> {
+    await db.delete(lesson_progress).where(eq(lesson_progress.lessonId, id));
+    await db.delete(lessons).where(eq(lessons.id, id));
+  }
+
+  // Admin: Forum Management
+  async updateForumCategory(id: string, category: Partial<InsertForumCategory>): Promise<ForumCategory> {
+    const [updatedCategory] = await db.update(forum_categories)
+      .set(category)
+      .where(eq(forum_categories.id, id))
+      .returning();
+    return updatedCategory;
+  }
+
+  async deleteForumCategory(id: string): Promise<void> {
+    // Delete all threads and replies in this category first
+    const threadsInCategory = await db.select({ id: forum_threads.id })
+      .from(forum_threads)
+      .where(eq(forum_threads.categoryId, id));
+    
+    for (const thread of threadsInCategory) {
+      await db.delete(forum_replies).where(eq(forum_replies.threadId, thread.id));
+      await db.delete(forum_likes).where(eq(forum_likes.threadId, thread.id));
+    }
+    
+    await db.delete(forum_threads).where(eq(forum_threads.categoryId, id));
+    await db.delete(forum_categories).where(eq(forum_categories.id, id));
+  }
+
+  async toggleThreadPinned(id: string): Promise<ForumThread> {
+    const [thread] = await db.update(forum_threads)
+      .set({ 
+        isPinned: sql`NOT ${forum_threads.isPinned}`,
+        updatedAt: new Date()
+      })
+      .where(eq(forum_threads.id, id))
+      .returning();
+    return thread;
+  }
+
+  async toggleThreadLocked(id: string): Promise<ForumThread> {
+    const [thread] = await db.update(forum_threads)
+      .set({ 
+        isLocked: sql`NOT ${forum_threads.isLocked}`,
+        updatedAt: new Date()
+      })
+      .where(eq(forum_threads.id, id))
+      .returning();
+    return thread;
+  }
+
+  async deleteForumThread(id: string): Promise<void> {
+    await db.delete(forum_replies).where(eq(forum_replies.threadId, id));
+    await db.delete(forum_likes).where(eq(forum_likes.threadId, id));
+    await db.delete(forum_threads).where(eq(forum_threads.id, id));
+  }
+
+  async deleteForumReply(id: string): Promise<void> {
+    // Get the thread ID before deleting
+    const [reply] = await db.select({ threadId: forum_replies.threadId })
+      .from(forum_replies)
+      .where(eq(forum_replies.id, id));
+    
+    await db.delete(forum_likes).where(eq(forum_likes.replyId, id));
+    await db.delete(forum_replies).where(eq(forum_replies.id, id));
+    
+    // Update thread reply count
+    if (reply) {
+      await db.update(forum_threads)
+        .set({ replyCount: sql`${forum_threads.replyCount} - 1` })
+        .where(eq(forum_threads.id, reply.threadId));
+    }
+  }
+
+  // Admin: Analytics & Monitoring
+  async getSystemStats(): Promise<{
+    totalUsers: number;
+    totalCourses: number;
+    totalVideos: number;
+    totalResources: number;
+    totalEnrollments: number;
+    totalForumThreads: number;
+    totalForumReplies: number;
+  }> {
+    const [stats] = await db.select({
+      totalUsers: sql<number>`(SELECT COUNT(*) FROM ${users})`,
+      totalCourses: sql<number>`(SELECT COUNT(*) FROM ${courses})`,
+      totalVideos: sql<number>`(SELECT COUNT(*) FROM ${videos})`,
+      totalResources: sql<number>`(SELECT COUNT(*) FROM ${resources})`,
+      totalEnrollments: sql<number>`(SELECT COUNT(*) FROM ${enrollments})`,
+      totalForumThreads: sql<number>`(SELECT COUNT(*) FROM ${forum_threads})`,
+      totalForumReplies: sql<number>`(SELECT COUNT(*) FROM ${forum_replies})`,
+    });
+    
+    return stats;
+  }
+
+  async getRecentActivity(): Promise<AdminAuditLog[]> {
+    return await db.select().from(admin_audit_log)
+      .orderBy(desc(admin_audit_log.createdAt))
+      .limit(50);
+  }
+
+  async createAuditLog(log: Omit<AdminAuditLog, 'id' | 'createdAt'>): Promise<AdminAuditLog> {
+    const [newLog] = await db.insert(admin_audit_log).values(log).returning();
+    return newLog;
   }
 }
 

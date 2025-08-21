@@ -1,7 +1,11 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, timestamp, boolean, integer } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, timestamp, boolean, integer, pgEnum } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
+
+// Define user roles enum
+export const userRoleEnum = pgEnum('user_role', ['student', 'instructor', 'moderator', 'admin']);
 
 export const users = pgTable("users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -10,8 +14,11 @@ export const users = pgTable("users", {
   firstName: text("first_name").notNull(),
   lastName: text("last_name").notNull(),
   username: text("username").unique(), // Optional username for forum display
+  role: userRoleEnum("role").default('student'),
   isActive: boolean("is_active").default(true),
+  lastLoginAt: timestamp("last_login_at"),
   createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 export const contacts = pgTable("contacts", {
@@ -39,6 +46,41 @@ export const courses = pgTable("courses", {
   price: integer("price").default(0), // in cents, 0 for free
   imageUrl: text("image_url"),
   isPublished: boolean("is_published").default(false),
+  createdById: varchar("created_by_id").notNull().references(() => users.id),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Videos table for standalone videos and teachings
+export const videos = pgTable("videos", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  title: text("title").notNull(),
+  description: text("description"),
+  videoUrl: text("video_url").notNull(),
+  thumbnailUrl: text("thumbnail_url"),
+  category: text("category").notNull(),
+  tags: text("tags"), // comma-separated tags
+  duration: text("duration"), // e.g., "45 minutes"
+  isPublished: boolean("is_published").default(false),
+  isFeatured: boolean("is_featured").default(false),
+  viewCount: integer("view_count").default(0),
+  createdById: varchar("created_by_id").notNull().references(() => users.id),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Resources table for downloadable content
+export const resources = pgTable("resources", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  title: text("title").notNull(),
+  description: text("description"),
+  category: text("category").notNull(),
+  fileUrl: text("file_url").notNull(),
+  fileType: text("file_type").notNull(), // pdf, audio, image, etc.
+  fileSize: integer("file_size"), // in bytes
+  isPublished: boolean("is_published").default(false),
+  downloadCount: integer("download_count").default(0),
+  createdById: varchar("created_by_id").notNull().references(() => users.id),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -130,6 +172,98 @@ export const forum_likes = pgTable("forum_likes", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// Admin audit log table
+export const admin_audit_log = pgTable("admin_audit_log", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  adminId: varchar("admin_id").notNull().references(() => users.id),
+  action: text("action").notNull(), // CREATE, UPDATE, DELETE, PUBLISH, UNPUBLISH
+  entityType: text("entity_type").notNull(), // USER, COURSE, VIDEO, RESOURCE, etc.
+  entityId: varchar("entity_id").notNull(),
+  oldData: text("old_data"), // JSON string of previous state
+  newData: text("new_data"), // JSON string of new state
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Relations
+export const userRelations = relations(users, ({ many }) => ({
+  courses: many(courses),
+  videos: many(videos),
+  resources: many(resources),
+  enrollments: many(enrollments),
+  lessonProgress: many(lesson_progress),
+  forumThreads: many(forum_threads),
+  forumReplies: many(forum_replies),
+  forumLikes: many(forum_likes),
+  auditLogs: many(admin_audit_log),
+}));
+
+export const courseRelations = relations(courses, ({ one, many }) => ({
+  creator: one(users, {
+    fields: [courses.createdById],
+    references: [users.id],
+  }),
+  lessons: many(lessons),
+  enrollments: many(enrollments),
+  downloads: many(downloads),
+}));
+
+export const videoRelations = relations(videos, ({ one }) => ({
+  creator: one(users, {
+    fields: [videos.createdById],
+    references: [users.id],
+  }),
+}));
+
+export const resourceRelations = relations(resources, ({ one }) => ({
+  creator: one(users, {
+    fields: [resources.createdById],
+    references: [users.id],
+  }),
+}));
+
+export const lessonRelations = relations(lessons, ({ one, many }) => ({
+  course: one(courses, {
+    fields: [lessons.courseId],
+    references: [courses.id],
+  }),
+  progress: many(lesson_progress),
+}));
+
+export const forumCategoryRelations = relations(forum_categories, ({ many }) => ({
+  threads: many(forum_threads),
+}));
+
+export const forumThreadRelations = relations(forum_threads, ({ one, many }) => ({
+  category: one(forum_categories, {
+    fields: [forum_threads.categoryId],
+    references: [forum_categories.id],
+  }),
+  author: one(users, {
+    fields: [forum_threads.authorId],
+    references: [users.id],
+  }),
+  lastReplyUser: one(users, {
+    fields: [forum_threads.lastReplyUserId],
+    references: [users.id],
+  }),
+  replies: many(forum_replies),
+  likes: many(forum_likes),
+}));
+
+export const forumReplyRelations = relations(forum_replies, ({ one, many }) => ({
+  thread: one(forum_threads, {
+    fields: [forum_replies.threadId],
+    references: [forum_threads.id],
+  }),
+  author: one(users, {
+    fields: [forum_replies.authorId],
+    references: [users.id],
+  }),
+  likes: many(forum_likes),
+}));
+
 // Zod schemas for validation
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
@@ -203,6 +337,31 @@ export const insertForumLikeSchema = createInsertSchema(forum_likes).omit({
   createdAt: true,
 });
 
+// Admin-specific schemas
+export const insertVideoSchema = createInsertSchema(videos).omit({
+  id: true,
+  viewCount: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertResourceSchema = createInsertSchema(resources).omit({
+  id: true,
+  downloadCount: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const updateUserRoleSchema = z.object({
+  userId: z.string(),
+  role: z.enum(['student', 'instructor', 'moderator', 'admin']),
+});
+
+export const adminAuditLogSchema = createInsertSchema(admin_audit_log).omit({
+  id: true,
+  createdAt: true,
+});
+
 // Type exports
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
@@ -237,3 +396,13 @@ export type ForumReply = typeof forum_replies.$inferSelect;
 
 export type InsertForumLike = z.infer<typeof insertForumLikeSchema>;
 export type ForumLike = typeof forum_likes.$inferSelect;
+
+// Admin-specific types
+export type InsertVideo = z.infer<typeof insertVideoSchema>;
+export type Video = typeof videos.$inferSelect;
+
+export type InsertResource = z.infer<typeof insertResourceSchema>;
+export type Resource = typeof resources.$inferSelect;
+
+export type UpdateUserRole = z.infer<typeof updateUserRoleSchema>;
+export type AdminAuditLog = typeof admin_audit_log.$inferSelect;
