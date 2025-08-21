@@ -121,111 +121,22 @@ export default function Forum() {
             </p>
           </div>
           {isAuthenticated && (
-            <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-              <DialogTrigger asChild>
-                <Button className="bg-amber-600 hover:bg-amber-700">
-                  <Plus className="h-4 w-4 mr-2" />
-                  New Thread
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-2xl">
-                <DialogHeader>
-                  <DialogTitle>Create New Discussion Thread</DialogTitle>
-                  <DialogDescription>
-                    Share your thoughts and start a conversation with the community
-                  </DialogDescription>
-                </DialogHeader>
-                <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                    <FormField
-                      control={form.control}
-                      name="categoryId"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Category</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select a category" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {categories.map((category: ForumCategory) => (
-                                <SelectItem key={category.id} value={category.id}>
-                                  {category.name}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="title"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Thread Title</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Enter thread title..." {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="content"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Content</FormLabel>
-                          <FormControl>
-                            <Textarea 
-                              placeholder="Share your thoughts..." 
-                              className="min-h-32"
-                              {...field} 
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <div className="flex justify-end space-x-2">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => setIsCreateDialogOpen(false)}
-                      >
-                        Cancel
-                      </Button>
-                      <Button
-                        type="submit"
-                        disabled={createThreadMutation.isPending}
-                        className="bg-amber-600 hover:bg-amber-700"
-                      >
-                        {createThreadMutation.isPending ? "Creating..." : "Create Thread"}
-                      </Button>
-                    </div>
-                  </form>
-                </Form>
-              </DialogContent>
-            </Dialog>
+            <div className="opacity-50">
+              <Button disabled className="bg-gray-400 cursor-not-allowed">
+                <Plus className="h-4 w-4 mr-2" />
+                Forum Coming Soon
+              </Button>
+            </div>
           )}
         </div>
 
-        {!isAuthenticated && (
-          <Card className="mb-6 border-amber-200 bg-amber-50">
-            <CardContent className="py-4">
-              <p className="text-amber-800">
-                <Link href="/education" className="text-amber-600 hover:text-amber-800 font-semibold">
-                  Register or login
-                </Link>{" "}
-                to participate in discussions and create new threads.
-              </p>
-            </CardContent>
-          </Card>
-        )}
+        <Card className="mb-6 border-covenant-gold bg-covenant-light">
+          <CardContent className="py-4">
+            <p className="text-covenant-blue text-center">
+              <strong>Community Forum Coming Soon</strong> - We're preparing a space for covenant discussions and Kingdom fellowship.
+            </p>
+          </CardContent>
+        </Card>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -237,36 +148,27 @@ export default function Forum() {
             </CardHeader>
             <CardContent className="p-0">
               <div className="space-y-1">
-                <button
-                  onClick={() => setSelectedCategory(null)}
-                  className={`w-full text-left px-4 py-3 hover:bg-gray-50 transition-colors ${
-                    selectedCategory === null ? 'bg-amber-50 border-r-2 border-amber-600' : ''
-                  }`}
-                >
-                  <div className="font-medium">All Categories</div>
-                  <div className="text-sm text-gray-500">View all discussions</div>
-                </button>
+                <div className="w-full text-left px-4 py-3 bg-gray-100 opacity-50">
+                  <div className="font-medium text-gray-400">All Categories</div>
+                  <div className="text-sm text-gray-400">Coming soon</div>
+                </div>
                 {categories.map((category: ForumCategory) => (
-                  <button
+                  <div
                     key={category.id}
-                    onClick={() => setSelectedCategory(category.id)}
-                    className={`w-full text-left px-4 py-3 hover:bg-gray-50 transition-colors ${
-                      selectedCategory === category.id ? 'bg-amber-50 border-r-2 border-amber-600' : ''
-                    }`}
+                    className="w-full text-left px-4 py-3 bg-gray-100 opacity-50"
                   >
                     <div className="flex items-center gap-2">
                       <div
-                        className="w-3 h-3 rounded-full"
-                        style={{ backgroundColor: category.color || '#3B82F6' }}
+                        className="w-3 h-3 rounded-full bg-gray-400"
                       />
-                      <span className="font-medium">{category.name}</span>
+                      <span className="font-medium text-gray-400">{category.name}</span>
                     </div>
                     {category.description && (
-                      <div className="text-sm text-gray-500 mt-1">
-                        {category.description}
+                      <div className="text-sm text-gray-400 mt-1">
+                        Coming soon
                       </div>
                     )}
-                  </button>
+                  </div>
                 ))}
               </div>
             </CardContent>
