@@ -1,0 +1,67 @@
+Create a modern, responsive website titled **“The New Covenant Trust”** that teaches freedom and sovereignty under the Nation/Body of Christ.  
+
+Core Mission:  
+- Show that Christ is the cornerstone and grantor of the New Covenant Trust.  
+- Provide resources for people to reclaim their true identity in Him.  
+- Expose counterfeit systems (Babylon, personhood, debt slavery).  
+
+Structure:  
+
+1. **Homepage:**  
+   - Bold headline: "Freedom Under the New Covenant Trust."  
+   - Sub-headline: "Reclaim your inheritance in the Body of Christ, outside Babylon’s counterfeit system."  
+   - Call-to-action buttons:  
+     - “Enter the Trust” (leads to overview page)  
+     - “Begin Learning” (leads to education hub)  
+   - Symbolic imagery: covenant scrolls, light breaking chains, Kingdom imagery (crown/tree of life).  
+
+2. **Navigation:**  
+   - Home  
+   - About the Trust  
+   - Educational Hub  
+   - Videos & Teachings  
+   - Freedom Resources  
+   - Nation of Christ  
+   - Contact  
+
+3. **About the Trust Page:**  
+   - Explain the New Covenant Trust: Christ as Grantor, us as beneficiaries.  
+   - Contrast with Babylon’s system of contracts and merchandise.  
+   - Key scripture anchors (Hebrews 8, Galatians 5, John 8:36).  
+
+4. **Educational Hub:**  
+   - Articles, guides, and downloadable PDFs.  
+   - Topics:  
+     - “What is a Trust?”  
+     - “The Legal Fiction vs. The Living Man”  
+     - “Freedom under Christ’s Law”  
+     - “Exposing Babylon’s Counterfeit.”  
+
+5. **Videos & Teachings:**  
+   - Embedded library of short teachings.  
+   - Categories: Covenant, Law & Freedom, Babylon Exposed.  
+
+6. **Freedom Resources:**  
+   - Practical steps to walk in covenantal freedom.  
+   - Templates, prayers, lawful notices, study guides.  
+   - Links to your ebook(s) and handouts.  
+
+7. **Nation of Christ Page:**  
+   - Teach the idea of Christ’s body as a real nation/kingdom.  
+   - Emphasize citizenship in Heaven as primary.  
+   - Covenant-based community vision.  
+
+8. **Contact Page:**  
+   - Secure form for questions or mentorship requests.  
+
+Style Guide:  
+- Colors: Deep midnight blue (truth/revelation), gold (kingdom/authority), and white (purity/light).  
+- Fonts: Elegant serif for headings (covenantal, authoritative), modern sans-serif for body (clarity).  
+- Aesthetic: Minimalist, symbolic, reverent yet powerful.  
+
+Footer:  
+- Copyright © [Year] The New Covenant Trust  
+- Scripture reference (e.g. Hebrews 8:6)  
+- Newsletter signup for updates.  
+
+Make the site fully responsive, mobile-friendly, and optimized for speed.  
