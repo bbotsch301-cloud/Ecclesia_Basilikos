@@ -8,7 +8,7 @@ export default function About() {
       <HeroSection
         title="About the New Covenant Trust"
         description="Understanding Christ as Grantor and us as beneficiaries in the divine trust relationship"
-        backgroundImage="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
+        backgroundImage="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
       />
 
       <div className="py-20">
@@ -16,8 +16,8 @@ export default function About() {
           <div className="grid lg:grid-cols-2 gap-12 items-center mb-20">
             <div>
               <img 
-                src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" 
-                alt="Ancient scrolls representing covenant documents" 
+                src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" 
+                alt="Open Bible with golden light representing God's covenant" 
                 className="rounded-xl shadow-lg w-full h-auto"
               />
             </div>
