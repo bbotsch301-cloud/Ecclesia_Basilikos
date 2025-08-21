@@ -74,26 +74,19 @@ export default function Nation() {
 
 
 
-          {/* Join the Community */}
+          {/* Join the Covenant Community */}
           <div className="text-center bg-white p-12 rounded-2xl shadow-lg">
             <h3 className="font-playfair text-3xl font-bold text-covenant-blue mb-6">
               Join the Covenant Community
             </h3>
-            <p className="text-lg text-covenant-gray max-w-3xl mx-auto leading-relaxed mb-8">
-              Connect with like-minded believers who are walking in covenant freedom. Share experiences, ask questions, and grow together in understanding of our identity in Christ.
+            <p className="text-lg text-covenant-gray max-w-4xl mx-auto leading-relaxed mb-8">
+              The Kingdom of God operates as a nation without borders, transcending all earthly jurisdictions and political boundaries. Under ecclesiastical jurisdiction, God's people form a divine commonwealth where Christ reigns as King and we serve as His ambassadors. This spiritual nation exists wherever covenant believers gather, bound not by geography but by the blood covenant of Jesus Christ. As citizens of heaven, we operate under divine law and Kingdom principles that supersede all human institutions, forming an eternal nation that cannot be shaken by worldly powers or temporal governments.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button className="bg-covenant-blue hover:bg-opacity-90 text-white px-8 py-4 text-lg font-semibold">
-                <MessageCircle className="mr-2" size={20} />
-                Join Discussion Forum
-              </Button>
-              <Button 
-                variant="outline" 
-                className="border-2 border-covenant-blue text-covenant-blue hover:bg-covenant-blue hover:text-white px-8 py-4 text-lg font-semibold"
-              >
-                <Calendar className="mr-2" size={20} />
-                Find Local Group
-              </Button>
+            <div className="bg-covenant-light p-6 rounded-lg max-w-3xl mx-auto">
+              <blockquote className="font-georgia text-lg italic text-covenant-dark-gray mb-3">
+                "But ye are a chosen generation, a royal priesthood, an holy nation, a peculiar people; that ye should shew forth the praises of him who hath called you out of darkness into his marvellous light."
+              </blockquote>
+              <cite className="text-covenant-gold font-semibold">1 Peter 2:9</cite>
             </div>
           </div>
         </div>
