@@ -7,6 +7,7 @@ The New Covenant Trust is a modern, responsive website focused on teaching spiri
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
+Scripture versions: King James Version (KJV) exclusively
 
 ## System Architecture
 

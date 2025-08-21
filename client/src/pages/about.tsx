@@ -28,7 +28,7 @@ export default function About() {
               </p>
               <div className="bg-covenant-light p-6 rounded-lg">
                 <blockquote className="font-georgia text-lg italic text-covenant-dark-gray mb-3">
-                  "But in fact the ministry Jesus has received is as superior to theirs as the covenant of which he is mediator is superior to the old one, since the new covenant is established on better promises."
+                  "But now hath he obtained a more excellent ministry, by how much also he is the mediator of a better covenant, which was established upon better promises."
                 </blockquote>
                 <cite className="text-covenant-gold font-semibold">Hebrews 8:6</cite>
               </div>
@@ -67,13 +67,13 @@ export default function About() {
             <div className="grid md:grid-cols-2 gap-8">
               <div className="bg-white bg-opacity-10 p-6 rounded-lg">
                 <blockquote className="font-georgia text-lg italic text-white mb-3">
-                  "It is for freedom that Christ has set us free. Stand firm, then, and do not let yourselves be burdened again by a yoke of slavery."
+                  "Stand fast therefore in the liberty wherewith Christ hath made us free, and be not entangled again with the yoke of bondage."
                 </blockquote>
                 <cite className="text-covenant-gold font-semibold">Galatians 5:1</cite>
               </div>
               <div className="bg-white bg-opacity-10 p-6 rounded-lg">
                 <blockquote className="font-georgia text-lg italic text-white mb-3">
-                  "So if the Son sets you free, you will be free indeed."
+                  "If the Son therefore shall make you free, ye shall be free indeed."
                 </blockquote>
                 <cite className="text-covenant-gold font-semibold">John 8:36</cite>
               </div>

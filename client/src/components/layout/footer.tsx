@@ -132,7 +132,7 @@ export default function Footer() {
             </div>
             <div className="text-center">
               <blockquote className="font-georgia italic text-covenant-gold text-sm mb-1">
-                "But in fact the ministry Jesus has received is as superior to theirs as the covenant of which he is mediator is superior to the old one, since the new covenant is established on better promises."
+                "But now hath he obtained a more excellent ministry, by how much also he is the mediator of a better covenant, which was established upon better promises."
               </blockquote>
               <cite className="text-gray-300 text-xs">Hebrews 8:6</cite>
             </div>

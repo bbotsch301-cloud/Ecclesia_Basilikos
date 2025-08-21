@@ -53,7 +53,7 @@ export default function Home() {
       </div>
 
       <ScriptureQuote
-        quote="So if the Son sets you free, you will be free indeed."
+        quote="If the Son therefore shall make you free, ye shall be free indeed."
         reference="John 8:36"
       />
     </div>
