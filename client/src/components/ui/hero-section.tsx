@@ -71,7 +71,7 @@ export default function HeroSection({
                 <Button
                   asChild
                   variant="outline"
-                  className="border-2 border-white text-white hover:bg-white hover:text-covenant-blue px-8 py-4 text-lg font-semibold transition-all"
+                  className="border-2 border-covenant-gold text-covenant-gold hover:bg-covenant-gold hover:text-covenant-blue px-8 py-4 text-lg font-semibold transition-all shadow-lg"
                 >
                   <Link href={secondaryButton.href}>
                     {secondaryButton.text}
