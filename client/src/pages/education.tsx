@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { BookOpen, Download, Video, Users, Award, Clock, Lock, CheckCircle, User, LogIn, UserPlus } from "lucide-react";
+import { BookOpen, Download, Video, Users, Award, Clock, Lock, CheckCircle, User, LogIn, UserPlus, GraduationCap, Crown, Shield, Scroll, Heart, Key } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -107,7 +107,7 @@ export default function Education() {
       await register(userData);
       setShowAuthDialog(false);
       toast({
-        title: "Welcome to The New Covenant Trust!",
+        title: "Welcome to Kingdom College!",
         description: "Your account has been created successfully.",
       });
     } catch (error: any) {
@@ -144,21 +144,43 @@ export default function Education() {
   };
 
   return (
-    <div className="min-h-screen pt-16">
+    <div className="min-h-screen bg-gradient-to-b from-covenant-light via-white to-covenant-light">
       {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570')] bg-cover bg-center opacity-10"></div>
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center text-white">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 font-serif">
-              Student Platform
+      <section className="bg-covenant-blue text-white py-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <div className="flex justify-center mb-6">
+              <GraduationCap className="h-16 w-16 text-covenant-gold" />
+            </div>
+            <h1 className="text-4xl md:text-6xl font-playfair font-bold mb-6">
+              Kingdom College
             </h1>
-            <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto leading-relaxed">
-              Transform your understanding of God's covenant and walk in the freedom Christ has provided through comprehensive biblical education.
+            <p className="text-xl md:text-2xl font-inter max-w-4xl mx-auto leading-relaxed mb-8">
+              Understanding your divine identity as co-heirs with Christ and trustees of the New Covenant Legacy Trust
             </p>
             
+            <div className="space-y-6">
+              <div className="flex flex-wrap justify-center gap-4">
+                <div className="inline-flex items-center bg-covenant-gold/20 px-6 py-3 rounded-full">
+                  <Crown className="h-5 w-5 mr-2 text-covenant-gold" />
+                  <span className="font-medium">Royal Priesthood</span>
+                </div>
+                <div className="inline-flex items-center bg-covenant-gold/20 px-6 py-3 rounded-full">
+                  <Shield className="h-5 w-5 mr-2 text-covenant-gold" />
+                  <span className="font-medium">Holy Nation</span>
+                </div>
+              </div>
+              
+              <div className="max-w-3xl mx-auto">
+                <blockquote className="font-georgia text-lg italic mb-3">
+                  "But ye are a chosen generation, a royal priesthood, an holy nation, a peculiar people; that ye should shew forth the praises of him who hath called you out of darkness into his marvellous light."
+                </blockquote>
+                <cite className="text-covenant-gold font-medium">1 Peter 2:9 (KJV)</cite>
+              </div>
+            </div>
+
             {isAuthenticated ? (
-              <div className="flex items-center justify-center space-x-4">
+              <div className="flex items-center justify-center space-x-4 mt-8">
                 <div className="flex items-center space-x-2 bg-green-600/20 text-green-200 px-4 py-2 rounded-lg">
                   <User className="h-5 w-5" />
                   <span>Welcome, {user?.firstName}!</span>
@@ -166,19 +188,18 @@ export default function Education() {
                 <Button 
                   onClick={handleLogout} 
                   variant="outline" 
-                  className="border-white text-white hover:bg-white hover:text-slate-900"
+                  className="border-white text-white hover:bg-white hover:text-covenant-blue"
                 >
-                  <LogIn className="h-4 w-4 mr-2" />
                   Logout
                 </Button>
               </div>
             ) : (
-              <div className="flex justify-center space-x-4">
+              <div className="mt-8">
                 <Dialog open={showAuthDialog} onOpenChange={setShowAuthDialog}>
                   <DialogTrigger asChild>
-                    <Button size="lg" className="bg-amber-600 hover:bg-amber-700 text-white px-8">
+                    <Button size="lg" className="bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue px-8 py-3 font-semibold">
                       <LogIn className="h-5 w-5 mr-2" />
-                      Student Login
+                      Begin Your Journey
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-md">
@@ -188,8 +209,8 @@ export default function Education() {
                       </DialogTitle>
                       <DialogDescription>
                         {authMode === 'login' 
-                          ? 'Sign in to access your courses and materials'
-                          : 'Create an account to enroll in courses and access resources'
+                          ? 'Sign in to continue your covenant education'
+                          : 'Join Kingdom College to understand your divine inheritance'
                         }
                       </DialogDescription>
                     </DialogHeader>
@@ -229,7 +250,7 @@ export default function Education() {
                                 </FormItem>
                               )}
                             />
-                            <Button type="submit" className="w-full" disabled={isLoggingIn}>
+                            <Button type="submit" className="w-full bg-covenant-blue hover:bg-covenant-blue/80" disabled={isLoggingIn}>
                               {isLoggingIn ? "Signing in..." : "Sign In"}
                             </Button>
                           </form>
@@ -287,7 +308,7 @@ export default function Education() {
                                 <FormItem>
                                   <FormLabel>Password</FormLabel>
                                   <FormControl>
-                                    <Input type="password" placeholder="Create a password" {...field} />
+                                    <Input type="password" placeholder="Create password" {...field} />
                                   </FormControl>
                                   <FormMessage />
                                 </FormItem>
@@ -300,14 +321,14 @@ export default function Education() {
                                 <FormItem>
                                   <FormLabel>Confirm Password</FormLabel>
                                   <FormControl>
-                                    <Input type="password" placeholder="Confirm your password" {...field} />
+                                    <Input type="password" placeholder="Confirm password" {...field} />
                                   </FormControl>
                                   <FormMessage />
                                 </FormItem>
                               )}
                             />
-                            <Button type="submit" className="w-full" disabled={isRegistering}>
-                              {isRegistering ? "Creating account..." : "Create Account"}
+                            <Button type="submit" className="w-full bg-covenant-blue hover:bg-covenant-blue/80" disabled={isRegistering}>
+                              {isRegistering ? "Creating Account..." : "Create Account"}
                             </Button>
                           </form>
                         </Form>
@@ -315,256 +336,316 @@ export default function Education() {
                     </Tabs>
                   </DialogContent>
                 </Dialog>
-                
-                <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-slate-900 px-8">
-                  View Free Resources
-                </Button>
               </div>
             )}
           </div>
         </div>
       </section>
 
-      {/* Main Content */}
+      {/* Core Teachings Section */}
       <section className="py-16">
-        <div className="container mx-auto px-4">
-          <Tabs defaultValue="courses" className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="courses">
-                <BookOpen className="h-4 w-4 mr-2" />
-                Courses
-              </TabsTrigger>
-              <TabsTrigger value="my-learning" disabled={!isAuthenticated}>
-                <Award className="h-4 w-4 mr-2" />
-                My Learning
-              </TabsTrigger>
-              <TabsTrigger value="resources">
-                <Download className="h-4 w-4 mr-2" />
-                Resources
-              </TabsTrigger>
-            </TabsList>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-playfair font-bold text-covenant-blue mb-4">
+              Core Kingdom Principles
+            </h2>
+            <p className="text-lg text-covenant-gray max-w-3xl mx-auto">
+              Learn the fundamental truths of your identity in Christ and your inheritance as a co-heir with Christ
+            </p>
+          </div>
 
-            {/* Courses Tab */}
-            <TabsContent value="courses" className="space-y-8">
-              <div className="text-center">
-                <h2 className="text-3xl font-bold text-gray-900 mb-4 font-serif">
-                  Available Courses
-                </h2>
-                <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-                  "Study to shew thyself approved unto God, a workman that needeth not to be ashamed, rightly dividing the word of truth." - 2 Timothy 2:15 (KJV)
+          <div className="grid md:grid-cols-3 gap-8">
+            <Card className="border-covenant-light hover:border-covenant-gold transition-colors">
+              <CardHeader>
+                <div className="flex items-center mb-4">
+                  <Scroll className="h-8 w-8 text-covenant-blue mr-3" />
+                  <CardTitle className="text-covenant-blue">The New Covenant</CardTitle>
+                </div>
+                <CardDescription>
+                  Understanding Christ's testament as both covenant and will
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <blockquote className="font-georgia italic text-sm border-l-4 border-covenant-gold pl-4">
+                    "For where a testament is, there must also of necessity be the death of the testator."
+                  </blockquote>
+                  <cite className="text-xs text-covenant-gold">Hebrews 9:16 (KJV)</cite>
+                  <p className="text-sm text-covenant-gray">
+                    Jesus' death ratified the New Covenant, making us beneficiaries of His will and co-heirs to His Kingdom.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-covenant-light hover:border-covenant-gold transition-colors">
+              <CardHeader>
+                <div className="flex items-center mb-4">
+                  <Crown className="h-8 w-8 text-covenant-blue mr-3" />
+                  <CardTitle className="text-covenant-blue">Royal Identity</CardTitle>
+                </div>
+                <CardDescription>
+                  Your divine inheritance and authority in Christ
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <blockquote className="font-georgia italic text-sm border-l-4 border-covenant-gold pl-4">
+                    "And if children, then heirs; heirs of God, and joint-heirs with Christ"
+                  </blockquote>
+                  <cite className="text-xs text-covenant-gold">Romans 8:17 (KJV)</cite>
+                  <p className="text-sm text-covenant-gray">
+                    In Christ, you are sealed with the Holy Spirit as the earnest of your inheritance and divine authority.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-covenant-light hover:border-covenant-gold transition-colors">
+              <CardHeader>
+                <div className="flex items-center mb-4">
+                  <Shield className="h-8 w-8 text-covenant-blue mr-3" />
+                  <CardTitle className="text-covenant-blue">Kingdom Freedom</CardTitle>
+                </div>
+                <CardDescription>
+                  Liberation from Babylonian systems and worldly bondage
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <blockquote className="font-georgia italic text-sm border-l-4 border-covenant-gold pl-4">
+                    "If the Son therefore shall make you free, ye shall be free indeed."
+                  </blockquote>
+                  <cite className="text-xs text-covenant-gold">John 8:36 (KJV)</cite>
+                  <p className="text-sm text-covenant-gray">
+                    Christ has freed you from the counterfeit kingdom's merchandise system where souls are traded.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Trust Structure Section */}
+      <section className="py-16 bg-covenant-light/30">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-playfair font-bold text-covenant-blue mb-4">
+              The New Covenant Trust Structure
+            </h2>
+            <p className="text-lg text-covenant-gray max-w-3xl mx-auto">
+              Understanding your role as trustee in God's divine legacy trust
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <Card className="border-covenant-blue">
+                <CardHeader className="bg-covenant-blue text-white">
+                  <CardTitle className="flex items-center">
+                    <Key className="h-6 w-6 mr-3" />
+                    Trust Elements
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-6">
+                  <div className="space-y-4">
+                    <div className="flex items-start">
+                      <div className="w-2 h-2 bg-covenant-gold rounded-full mt-2 mr-3"></div>
+                      <div>
+                        <h4 className="font-semibold text-covenant-blue">Grantor: The Creator</h4>
+                        <p className="text-sm text-covenant-gray">God, the original grantor of the divine trust</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start">
+                      <div className="w-2 h-2 bg-covenant-gold rounded-full mt-2 mr-3"></div>
+                      <div>
+                        <h4 className="font-semibold text-covenant-blue">Trustee of Trustees: Christ</h4>
+                        <p className="text-sm text-covenant-gray">Jesus who reconciled the breach and restored authority</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start">
+                      <div className="w-2 h-2 bg-covenant-gold rounded-full mt-2 mr-3"></div>
+                      <div>
+                        <h4 className="font-semibold text-covenant-blue">Beneficiary: You</h4>
+                        <p className="text-sm text-covenant-gray">Co-heir with Christ, trustee of the restored estate</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start">
+                      <div className="w-2 h-2 bg-covenant-gold rounded-full mt-2 mr-3"></div>
+                      <div>
+                        <h4 className="font-semibold text-covenant-blue">Witness: Holy Spirit</h4>
+                        <p className="text-sm text-covenant-gray">The earnest and seal of your inheritance</p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="space-y-6">
+              <div className="bg-white p-6 rounded-lg border-l-4 border-covenant-gold">
+                <blockquote className="font-georgia text-lg italic mb-4">
+                  "Which is the earnest of our inheritance until the redemption of the purchased possession, unto the praise of his glory."
+                </blockquote>
+                <cite className="text-covenant-gold font-medium">Ephesians 1:14 (KJV)</cite>
+              </div>
+              
+              <div className="space-y-4">
+                <h3 className="text-xl font-semibold text-covenant-blue">Your Divine Role</h3>
+                <p className="text-covenant-gray">
+                  As a trustee in the New Covenant Trust, you are called to be a living sacrifice, holy and acceptable to God. 
+                  Your body becomes a temple of the Holy Spirit, stewarding the Kingdom's resources with divine authority.
+                </p>
+                <p className="text-covenant-gray">
+                  This trust operates under Lex Divina (divine law), transcending earthly jurisdictions and empowering 
+                  you to walk as an ambassador of Heaven with full access to Kingdom resources.
                 </p>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-              {coursesLoading ? (
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {[1, 2, 3].map((i) => (
-                    <Card key={i} className="animate-pulse">
-                      <CardHeader>
-                        <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                        <div className="h-3 bg-gray-200 rounded w-1/2"></div>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-2">
-                          <div className="h-3 bg-gray-200 rounded"></div>
-                          <div className="h-3 bg-gray-200 rounded w-5/6"></div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              ) : courses.length === 0 ? (
-                <Card className="text-center py-12">
+      {/* Courses Section */}
+      {courses.length > 0 && (
+        <section className="py-16">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-playfair font-bold text-covenant-blue mb-4">
+                Available Courses
+              </h2>
+              <p className="text-lg text-covenant-gray max-w-3xl mx-auto">
+                Deepen your understanding of covenant principles and your divine inheritance
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {courses.map((course) => (
+                <Card key={course.id} className="border-covenant-light hover:border-covenant-gold transition-all hover:shadow-lg">
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <Badge variant="outline" className="border-covenant-blue text-covenant-blue">
+                        <BookOpen className="h-3 w-3 mr-1" />
+                        Course
+                      </Badge>
+                      {isEnrolled(course.id) && (
+                        <Badge className="bg-green-100 text-green-800 hover:bg-green-100">
+                          <CheckCircle className="h-3 w-3 mr-1" />
+                          Enrolled
+                        </Badge>
+                      )}
+                    </div>
+                    <CardTitle className="text-covenant-blue">{course.title}</CardTitle>
+                    <CardDescription>{course.description}</CardDescription>
+                  </CardHeader>
                   <CardContent>
-                    <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">No Courses Available</h3>
-                    <p className="text-gray-600">Courses will be available soon. Check back later!</p>
-                  </CardContent>
-                </Card>
-              ) : (
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {courses.map((course: Course) => (
-                    <Card key={course.id} className="hover:shadow-lg transition-shadow">
-                      <CardHeader>
-                        <div className="flex justify-between items-start">
-                          <div className="flex-1">
-                            <CardTitle className="text-lg font-bold">{course.title}</CardTitle>
-                            <div className="flex space-x-2 mt-2">
-                              <Badge variant="secondary" className="text-xs">
-                                {course.level}
-                              </Badge>
-                              <Badge variant="outline" className="text-xs">
-                                {course.category}
-                              </Badge>
-                            </div>
-                          </div>
-                        </div>
-                        <CardDescription className="mt-2">
-                          {course.description}
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="flex items-center justify-between text-sm text-gray-600 mb-4">
-                          <div className="flex items-center">
-                            <Clock className="h-4 w-4 mr-1" />
-                            {course.duration || "Self-paced"}
-                          </div>
-                          <div className="text-lg font-bold text-green-600">
-                            {course.price === 0 ? "Free" : `$${((course.price || 0) / 100).toFixed(2)}`}
-                          </div>
-                        </div>
-                        
-                        {isAuthenticated ? (
-                          isEnrolled(course.id) ? (
-                            <Button className="w-full" disabled>
-                              <CheckCircle className="h-4 w-4 mr-2" />
-                              Enrolled
-                            </Button>
-                          ) : (
-                            <Button 
-                              className="w-full" 
-                              onClick={() => handleEnroll(course.id)}
-                              disabled={enrollMutation.isPending}
-                            >
-                              {enrollMutation.isPending ? "Enrolling..." : "Enroll Now"}
-                            </Button>
-                          )
+                    <div className="space-y-4">
+                      <div className="flex items-center text-sm text-covenant-gray">
+                        <Clock className="h-4 w-4 mr-2" />
+                        Self-paced learning
+                      </div>
+                      
+                      {isAuthenticated ? (
+                        isEnrolled(course.id) ? (
+                          <Button className="w-full bg-green-600 hover:bg-green-700">
+                            <BookOpen className="h-4 w-4 mr-2" />
+                            Continue Learning
+                          </Button>
                         ) : (
                           <Button 
-                            className="w-full" 
-                            onClick={() => setShowAuthDialog(true)}
+                            onClick={() => handleEnroll(course.id)}
+                            disabled={enrollMutation.isPending}
+                            className="w-full bg-covenant-blue hover:bg-covenant-blue/80"
                           >
-                            <Lock className="h-4 w-4 mr-2" />
-                            Sign In to Enroll
+                            {enrollMutation.isPending ? "Enrolling..." : "Enroll Now"}
                           </Button>
-                        )}
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              )}
-            </TabsContent>
+                        )
+                      ) : (
+                        <Button 
+                          onClick={() => setShowAuthDialog(true)}
+                          className="w-full bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue"
+                        >
+                          <Lock className="h-4 w-4 mr-2" />
+                          Login to Enroll
+                        </Button>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
-            {/* My Learning Tab */}
-            <TabsContent value="my-learning" className="space-y-8">
-              <div className="text-center">
-                <h2 className="text-3xl font-bold text-gray-900 mb-4 font-serif">
-                  My Learning Journey
-                </h2>
-                <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-                  Continue your covenant education and track your progress in understanding God's truth.
-                </p>
-              </div>
+      {/* Resources Section */}
+      {downloads.length > 0 && (
+        <section className="py-16 bg-covenant-light/30">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-playfair font-bold text-covenant-blue mb-4">
+                Kingdom Resources
+              </h2>
+              <p className="text-lg text-covenant-gray max-w-3xl mx-auto">
+                Essential documents and materials for your covenant education
+              </p>
+            </div>
 
-              {enrollments.length === 0 ? (
-                <Card className="text-center py-12">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {downloads.map((download) => (
+                <Card key={download.id} className="border-covenant-light hover:border-covenant-gold transition-all hover:shadow-lg">
+                  <CardHeader>
+                    <Badge variant="outline" className="border-covenant-gold text-covenant-gold w-fit">
+                      <Download className="h-3 w-3 mr-1" />
+                      Resource
+                    </Badge>
+                    <CardTitle className="text-covenant-blue">{download.title}</CardTitle>
+                    <CardDescription>{download.description}</CardDescription>
+                  </CardHeader>
                   <CardContent>
-                    <Award className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">No Enrollments Yet</h3>
-                    <p className="text-gray-600 mb-4">Start your learning journey by enrolling in a course.</p>
-                    <Button onClick={() => {
-                      const coursesTab = document.querySelector('[value="courses"]') as HTMLElement;
-                      coursesTab?.click();
-                    }}>
-                      Browse Courses
+                    <Button className="w-full bg-covenant-blue hover:bg-covenant-blue/80">
+                      <Download className="h-4 w-4 mr-2" />
+                      Download
                     </Button>
                   </CardContent>
                 </Card>
-              ) : (
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {enrollments.map((enrollment: any) => (
-                    <Card key={enrollment.id} className="hover:shadow-lg transition-shadow">
-                      <CardHeader>
-                        <CardTitle className="text-lg">{enrollment.course.title}</CardTitle>
-                        <CardDescription>{enrollment.course.description}</CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-4">
-                          <div className="flex justify-between text-sm text-gray-600">
-                            <span>Progress</span>
-                            <span>{enrollment.progress || 0}%</span>
-                          </div>
-                          <div className="w-full bg-gray-200 rounded-full h-2">
-                            <div 
-                              className="bg-blue-600 h-2 rounded-full" 
-                              style={{ width: `${enrollment.progress || 0}%` }}
-                            ></div>
-                          </div>
-                          <Button className="w-full">
-                            Continue Learning
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              )}
-            </TabsContent>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
-            {/* Resources Tab */}
-            <TabsContent value="resources" className="space-y-8">
-              <div className="text-center">
-                <h2 className="text-3xl font-bold text-gray-900 mb-4 font-serif">
-                  Study Resources
-                </h2>
-                <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-                  "All scripture is given by inspiration of God, and is profitable for doctrine, for reproof, for correction, for instruction in righteousness." - 2 Timothy 3:16 (KJV)
-                </p>
-              </div>
+      {/* Call to Action */}
+      <section className="py-16 bg-covenant-blue text-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="flex justify-center mb-6">
+            <Heart className="h-12 w-12 text-covenant-gold" />
+          </div>
+          <h2 className="text-3xl md:text-4xl font-playfair font-bold mb-6">
+            Step Into Your Divine Inheritance
+          </h2>
+          <p className="text-xl mb-8 max-w-3xl mx-auto">
+            You are no longer a stranger or foreigner, but a fellow citizen with the saints and members of God's household. 
+            Accept your role as trustee and walk in the authority Christ has provided.
+          </p>
+          
+          <div className="bg-white/10 p-6 rounded-lg max-w-2xl mx-auto mb-8">
+            <blockquote className="font-georgia text-lg italic mb-3">
+              "Now therefore ye are no more strangers and foreigners, but fellowcitizens with the saints, and of the household of God"
+            </blockquote>
+            <cite className="text-covenant-gold font-medium">Ephesians 2:19 (KJV)</cite>
+          </div>
 
-              {downloadsLoading ? (
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {[1, 2, 3].map((i) => (
-                    <Card key={i} className="animate-pulse">
-                      <CardHeader>
-                        <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                        <div className="h-3 bg-gray-200 rounded w-1/2"></div>
-                      </CardHeader>
-                    </Card>
-                  ))}
-                </div>
-              ) : downloads.length === 0 ? (
-                <Card className="text-center py-12">
-                  <CardContent>
-                    <Download className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">No Resources Available</h3>
-                    <p className="text-gray-600">Study resources will be available soon. Check back later!</p>
-                  </CardContent>
-                </Card>
-              ) : (
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {downloads.map((download: DownloadType) => (
-                    <Card key={download.id} className="hover:shadow-lg transition-shadow">
-                      <CardHeader>
-                        <CardTitle className="text-lg">{download.title}</CardTitle>
-                        <div className="flex space-x-2">
-                          <Badge variant="secondary" className="text-xs">
-                            {download.fileType.toUpperCase()}
-                          </Badge>
-                          <Badge variant="outline" className="text-xs">
-                            {download.category}
-                          </Badge>
-                          {download.isPublic && (
-                            <Badge variant="default" className="text-xs bg-green-100 text-green-800">
-                              Free
-                            </Badge>
-                          )}
-                        </div>
-                        {download.description && (
-                          <CardDescription>{download.description}</CardDescription>
-                        )}
-                      </CardHeader>
-                      <CardContent>
-                        <Button className="w-full">
-                          <Download className="h-4 w-4 mr-2" />
-                          Download
-                        </Button>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              )}
-            </TabsContent>
-          </Tabs>
+          {!isAuthenticated && (
+            <Button 
+              size="lg" 
+              className="bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue px-8 py-3 font-semibold"
+              onClick={() => setShowAuthDialog(true)}
+            >
+              Begin Your Kingdom Education
+            </Button>
+          )}
         </div>
       </section>
     </div>
