@@ -10,6 +10,7 @@ const navigation = [
   { name: "Educational Hub", href: "/education" },
   { name: "Videos & Teachings", href: "/videos" },
   { name: "Freedom Resources", href: "/resources" },
+  { name: "Download Trust Document", href: "/trust-download" },
   { name: "Community Forum", href: "/forum" },
   { name: "Nation of Christ", href: "/nation" },
   { name: "Contact", href: "/contact" },

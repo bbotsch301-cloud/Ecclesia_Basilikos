@@ -14,6 +14,7 @@ import Nation from "@/pages/nation";
 import Contact from "@/pages/contact";
 import Forum from "@/pages/forum";
 import ThreadPage from "@/pages/thread";
+import TrustDownload from "@/pages/trust-download";
 import AdminDashboard from "@/pages/admin-dashboard";
 import AdminContent from "@/pages/admin-content";
 import NotFound from "@/pages/not-found";
@@ -33,6 +34,7 @@ function Router() {
           <Route path="/contact" component={Contact} />
           <Route path="/forum" component={Forum} />
           <Route path="/forum/thread/:threadId" component={ThreadPage} />
+          <Route path="/trust-download" component={TrustDownload} />
           <Route path="/admin/content" component={AdminContent} />
           <Route path="/admin" component={AdminDashboard} />
           <Route component={NotFound} />

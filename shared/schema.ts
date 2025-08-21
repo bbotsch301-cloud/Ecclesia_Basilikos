@@ -434,3 +434,18 @@ export type AdminAuditLog = typeof admin_audit_log.$inferSelect;
 export type InsertPageContent = z.infer<typeof insertPageContentSchema>;
 export type PageContent = typeof page_content.$inferSelect;
 export type UpdatePageContent = z.infer<typeof updatePageContentSchema>;
+
+// Trust document downloads table
+export const trustDownloads = pgTable("trust_downloads", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  email: varchar("email").notNull(),
+  firstName: varchar("first_name").notNull(),
+  lastName: varchar("last_name").notNull(),
+  downloadedAt: timestamp("downloaded_at").defaultNow(),
+  ipAddress: varchar("ip_address"),
+  userAgent: varchar("user_agent"),
+});
+
+export const insertTrustDownloadSchema = createInsertSchema(trustDownloads);
+export type InsertTrustDownload = z.infer<typeof insertTrustDownloadSchema>;
+export type TrustDownload = typeof trustDownloads.$inferSelect;

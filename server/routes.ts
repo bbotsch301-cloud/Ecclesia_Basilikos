@@ -23,6 +23,7 @@ import {
   insertForumReplySchema,
   insertPageContentSchema,
   updatePageContentSchema,
+  insertTrustDownloadSchema,
   type User
 } from "@shared/schema";
 import { z } from "zod";
@@ -403,6 +404,141 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error("Error deleting page content:", error);
       res.status(500).json({ error: "Failed to delete page content" });
     }
+  });
+
+  // Trust Document Download Endpoints
+  app.post("/api/trust-download-signup", async (req, res) => {
+    try {
+      const downloadData = insertTrustDownloadSchema.parse({
+        ...req.body,
+        ipAddress: req.ip,
+        userAgent: req.get('User-Agent'),
+      });
+
+      // Check if email already has access
+      const existingDownload = await storage.getTrustDownloadByEmail(downloadData.email);
+      if (existingDownload) {
+        return res.json({ 
+          success: true, 
+          downloadUrl: "/api/trust-document-pdf",
+          message: "You already have access to this document" 
+        });
+      }
+
+      // Create new download record
+      await storage.createTrustDownload(downloadData);
+      
+      res.json({ 
+        success: true, 
+        downloadUrl: "/api/trust-document-pdf",
+        message: "Access granted successfully" 
+      });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ errors: error.errors });
+      } else {
+        console.error("Error processing trust download signup:", error);
+        res.status(500).json({ error: "Failed to process signup" });
+      }
+    }
+  });
+
+  app.post("/api/track-download", async (req, res) => {
+    try {
+      const { documentType } = req.body;
+      // Track download analytics if needed
+      console.log(`Document downloaded: ${documentType} from IP: ${req.ip}`);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error tracking download:", error);
+      res.status(500).json({ error: "Failed to track download" });
+    }
+  });
+
+  // Serve the trust document PDF
+  app.get("/api/trust-document-pdf", (req, res) => {
+    // For now, redirect to a sample PDF or serve a placeholder
+    // In production, this would serve the actual trust document
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename="new-covenant-trust-document.pdf"');
+    
+    // Create a simple PDF placeholder response
+    const pdfContent = `%PDF-1.4
+1 0 obj
+<<
+/Type /Catalog
+/Pages 2 0 R
+>>
+endobj
+
+2 0 obj
+<<
+/Type /Pages
+/Kids [3 0 R]
+/Count 1
+>>
+endobj
+
+3 0 obj
+<<
+/Type /Page
+/Parent 2 0 R
+/MediaBox [0 0 612 792]
+/Contents 4 0 R
+/Resources <<
+/Font <<
+/F1 5 0 R
+>>
+>>
+>>
+endobj
+
+4 0 obj
+<<
+/Length 200
+>>
+stream
+BT
+/F1 24 Tf
+100 700 Td
+(New Covenant Trust Document) Tj
+0 -50 Td
+/F1 12 Tf
+(This is a placeholder for the actual trust document.) Tj
+0 -20 Td
+(The complete biblical foundation and implementation) Tj
+0 -20 Td
+(guide will be available here.) Tj
+ET
+endstream
+endobj
+
+5 0 obj
+<<
+/Type /Font
+/Subtype /Type1
+/BaseFont /Helvetica
+>>
+endobj
+
+xref
+0 6
+0000000000 65535 f 
+0000000015 00000 n 
+0000000062 00000 n 
+0000000118 00000 n 
+0000000266 00000 n 
+0000000516 00000 n 
+trailer
+<<
+/Size 6
+/Root 1 0 R
+>>
+startxref
+585
+%%EOF`;
+    
+    res.send(Buffer.from(pdfContent));
   });
 
   // Admin routes

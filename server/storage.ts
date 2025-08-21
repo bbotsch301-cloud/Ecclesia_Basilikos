@@ -31,6 +31,8 @@ import {
   type PageContent,
   type InsertPageContent,
   type UpdatePageContent,
+  type TrustDownload,
+  type InsertTrustDownload,
   users,
   contacts,
   newsletter_subscribers,
@@ -46,7 +48,8 @@ import {
   videos,
   resources,
   admin_audit_log,
-  page_content
+  page_content,
+  trustDownloads
 } from "@shared/schema";
 import { eq, and, desc, sql } from "drizzle-orm";
 import { db } from "./db";
@@ -137,6 +140,10 @@ export interface IStorage {
   upsertPageContent(content: InsertPageContent): Promise<PageContent>;
   updatePageContent(id: string, updates: UpdatePageContent & { updatedById: string }): Promise<PageContent>;
   deletePageContent(id: string): Promise<void>;
+
+  // Trust Document Downloads
+  createTrustDownload(download: InsertTrustDownload): Promise<TrustDownload>;
+  getTrustDownloadByEmail(email: string): Promise<TrustDownload | undefined>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -708,6 +715,20 @@ export class DatabaseStorage implements IStorage {
 
   async deletePageContent(id: string): Promise<void> {
     await db.delete(page_content).where(eq(page_content.id, id));
+  }
+
+  // Trust Document Downloads
+  async createTrustDownload(downloadData: InsertTrustDownload): Promise<TrustDownload> {
+    const [download] = await db.insert(trustDownloads)
+      .values(downloadData)
+      .returning();
+    return download;
+  }
+
+  async getTrustDownloadByEmail(email: string): Promise<TrustDownload | undefined> {
+    const [download] = await db.select().from(trustDownloads)
+      .where(eq(trustDownloads.email, email));
+    return download;
   }
 }
 
