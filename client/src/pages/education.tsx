@@ -395,7 +395,7 @@ export default function Education() {
                   </blockquote>
                   <cite className="text-xs text-covenant-gold">Romans 8:17 (KJV)</cite>
                   <p className="text-sm text-covenant-gray">
-                    In Christ, you are sealed with the Holy Spirit as the earnest of your inheritance and divine authority.
+                    In Christ, you are sealed with the Holy Spirit as the down payment of your inheritance and divine authority.
                   </p>
                 </div>
               </CardContent>
