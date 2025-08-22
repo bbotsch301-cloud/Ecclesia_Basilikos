@@ -250,7 +250,7 @@ export default function Education() {
                                 </FormItem>
                               )}
                             />
-                            <Button type="submit" className="w-full bg-covenant-blue hover:bg-covenant-blue/80" disabled={isLoggingIn}>
+                            <Button type="submit" className="w-full bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue" disabled={isLoggingIn}>
                               {isLoggingIn ? "Signing in..." : "Sign In"}
                             </Button>
                           </form>
