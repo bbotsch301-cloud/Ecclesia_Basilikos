@@ -344,6 +344,34 @@ export default function Education() {
         </div>
       </section>
 
+      {/* Student Menu Header - Only visible when logged in */}
+      {true && (
+        <section className="bg-white border-b border-covenant-light">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-center">
+              <div className="flex space-x-8 py-4">
+                <Link href="/courses" className="flex items-center px-4 py-2 text-covenant-blue hover:text-covenant-gold hover:bg-covenant-light rounded-lg transition-colors">
+                  <GraduationCap className="h-5 w-5 mr-2" />
+                  <span className="font-medium">My Courses</span>
+                </Link>
+                <Link href="/resources" className="flex items-center px-4 py-2 text-covenant-blue hover:text-covenant-gold hover:bg-covenant-light rounded-lg transition-colors">
+                  <Download className="h-5 w-5 mr-2" />
+                  <span className="font-medium">Freedom Resources</span>
+                </Link>
+                <Link href="/forum" className="flex items-center px-4 py-2 text-covenant-blue hover:text-covenant-gold hover:bg-covenant-light rounded-lg transition-colors">
+                  <MessageCircle className="h-5 w-5 mr-2" />
+                  <span className="font-medium">Community</span>
+                </Link>
+                <Link href="/trust-download" className="flex items-center px-4 py-2 text-covenant-blue hover:text-covenant-gold hover:bg-covenant-light rounded-lg transition-colors">
+                  <FileText className="h-5 w-5 mr-2" />
+                  <span className="font-medium">Trust Documents</span>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Featured Course */}
       <section className="py-16 bg-gradient-to-r from-covenant-blue to-covenant-dark-blue">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
