@@ -301,8 +301,8 @@ export default function Courses() {
         </div>
       </section>
 
-      {/* Dashboard Content */}
-      {isAuthenticated ? (
+      {/* Dashboard Content - Temporarily allow access without login */}
+      {true && (
         <section className="py-16">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
@@ -423,7 +423,7 @@ export default function Courses() {
                 <CardContent>
                   <div className="flex items-center justify-between">
                     <Badge className="bg-covenant-light text-covenant-blue">
-                      {user?.firstName} {user?.lastName}
+                      {user?.firstName || "Student"} {user?.lastName || "User"}
                     </Badge>
                     <ChevronRight className="h-5 w-5 text-covenant-gray" />
                   </div>
@@ -452,60 +452,6 @@ export default function Courses() {
                   </CardContent>
                 </Card>
               </Link>
-            </div>
-          </div>
-        </section>
-      ) : (
-        <section className="py-16">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center">
-              <h2 className="text-3xl md:text-4xl font-playfair font-bold text-covenant-blue mb-6">
-                Trust Administration Curriculum
-              </h2>
-              <p className="text-xl text-covenant-gray max-w-3xl mx-auto mb-8">
-                Learn to be a faithful steward of your trust inheritance through practical education in banking, investments, asset management, and legacy building.
-              </p>
-              
-              <div className="grid md:grid-cols-3 gap-8 mb-12">
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-covenant-gold/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Building className="h-8 w-8 text-covenant-gold" />
-                  </div>
-                  <h3 className="font-semibold text-covenant-blue mb-2">Trust Banking</h3>
-                  <p className="text-sm text-covenant-gray">Opening accounts, managing finances, and banking relationships as a trustee</p>
-                </div>
-                
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-covenant-gold/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <TrendingUp className="h-8 w-8 text-covenant-gold" />
-                  </div>
-                  <h3 className="font-semibold text-covenant-blue mb-2">Investment Strategy</h3>
-                  <p className="text-sm text-covenant-gray">Growing trust assets through wise investment choices and portfolio management</p>
-                </div>
-                
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-covenant-gold/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Shield className="h-8 w-8 text-covenant-gold" />
-                  </div>
-                  <h3 className="font-semibold text-covenant-blue mb-2">Asset Protection</h3>
-                  <p className="text-sm text-covenant-gray">Safeguarding trust property and ensuring proper legal compliance</p>
-                </div>
-              </div>
-
-              <ScriptureQuote
-                quote="A good man leaveth an inheritance to his children's children: and the wealth of the sinner is laid up for the just."
-                reference="Proverbs 13:22 (KJV)"
-                className="mb-8"
-              />
-              
-              <Button 
-                onClick={() => setShowAuthDialog(true)}
-                size="lg" 
-                className="bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue px-8 py-3 font-semibold"
-              >
-                <LogIn className="h-5 w-5 mr-2" />
-                Access Kingdom College
-              </Button>
             </div>
           </div>
         </section>
