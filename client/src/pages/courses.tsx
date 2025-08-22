@@ -461,6 +461,7 @@ export default function Courses() {
   const { user, isAuthenticated } = useAuth();
   const { toast } = useToast();
   const [openCourses, setOpenCourses] = useState<string[]>([]);
+  const [openSections, setOpenSections] = useState<string[]>([]);
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
   const [showAuthDialog, setShowAuthDialog] = useState(false);
 
@@ -469,6 +470,14 @@ export default function Courses() {
       prev.includes(courseId) 
         ? prev.filter(id => id !== courseId)
         : [...prev, courseId]
+    );
+  };
+
+  const toggleSection = (sectionId: string) => {
+    setOpenSections(prev => 
+      prev.includes(sectionId) 
+        ? prev.filter(id => id !== sectionId)
+        : [...prev, sectionId]
     );
   };
 
@@ -761,50 +770,92 @@ export default function Courses() {
                               <BookOpen className="h-5 w-5 text-covenant-gold" />
                               Course Sections
                             </h4>
-                            <div className="space-y-4">
+                            <div className="space-y-3">
                               {course.sections.map((section, sectionIdx) => (
-                                <div key={section.id} className="border border-covenant-light rounded-lg p-4">
-                                  <div className="flex items-start gap-4">
-                                    <div className="w-8 h-8 bg-covenant-light rounded-full flex items-center justify-center flex-shrink-0">
-                                      <span className="text-sm font-bold text-covenant-blue">{sectionIdx + 1}</span>
-                                    </div>
-                                    <div className="flex-1">
-                                      <div className="flex items-center gap-3 mb-2">
-                                        <h5 className="font-medium text-covenant-blue">{section.title}</h5>
-                                        <Badge variant="outline" className="text-xs">
-                                          {section.duration}
-                                        </Badge>
+                                <div key={section.id} className="border border-covenant-light rounded-lg overflow-hidden">
+                                  <Collapsible 
+                                    open={openSections.includes(section.id)} 
+                                    onOpenChange={() => toggleSection(section.id)}
+                                  >
+                                    <CollapsibleTrigger asChild>
+                                      <div className="p-4 cursor-pointer hover:bg-covenant-light/30 transition-colors" data-testid={`section-header-${section.id}`}>
+                                        <div className="flex items-center gap-4">
+                                          <div className="w-8 h-8 bg-covenant-light rounded-full flex items-center justify-center flex-shrink-0">
+                                            <span className="text-sm font-bold text-covenant-blue">{sectionIdx + 1}</span>
+                                          </div>
+                                          <div className="flex-1">
+                                            <div className="flex items-center gap-3 mb-1">
+                                              <h5 className="font-medium text-covenant-blue">{section.title}</h5>
+                                              <Badge variant="outline" className="text-xs">
+                                                {section.duration}
+                                              </Badge>
+                                            </div>
+                                            <p className="text-sm text-covenant-gray">{section.description}</p>
+                                          </div>
+                                          <div className="flex-shrink-0">
+                                            {openSections.includes(section.id) ? (
+                                              <ChevronDown className="h-4 w-4 text-covenant-blue" />
+                                            ) : (
+                                              <ChevronRight className="h-4 w-4 text-covenant-blue" />
+                                            )}
+                                          </div>
+                                        </div>
                                       </div>
-                                      <p className="text-sm text-covenant-gray mb-3">{section.description}</p>
-                                      <div className="flex flex-wrap gap-2">
-                                        {section.topics.map((topic, topicIdx) => (
-                                          <span key={topicIdx} className="text-xs bg-covenant-light text-covenant-blue px-2 py-1 rounded">
-                                            {topic}
-                                          </span>
-                                        ))}
+                                    </CollapsibleTrigger>
+                                    
+                                    <CollapsibleContent>
+                                      <div className="px-4 pb-4 border-t border-covenant-light/50">
+                                        {/* Section Topics */}
+                                        <div className="mb-4 pt-4">
+                                          <h6 className="text-sm font-medium text-covenant-blue mb-2">Topics Covered:</h6>
+                                          <div className="flex flex-wrap gap-2">
+                                            {section.topics.map((topic, topicIdx) => (
+                                              <span key={topicIdx} className="text-xs bg-covenant-light text-covenant-blue px-2 py-1 rounded">
+                                                {topic}
+                                              </span>
+                                            ))}
+                                          </div>
+                                        </div>
+                                        
+                                        {/* Video Content */}
+                                        <div className="bg-gradient-to-br from-covenant-light to-covenant-light/50 rounded-lg p-6 border-2 border-dashed border-covenant-gold/30">
+                                          <div className="flex flex-col items-center justify-center text-center space-y-3">
+                                            <div className="w-12 h-12 bg-covenant-gold/20 rounded-full flex items-center justify-center">
+                                              <Video className="h-6 w-6 text-covenant-gold" />
+                                            </div>
+                                            <div>
+                                              <h6 className="font-medium text-covenant-blue mb-1">
+                                                Video: {section.title}
+                                              </h6>
+                                              <p className="text-xs text-covenant-gray mb-2">
+                                                Coming Soon - {section.duration} teaching video
+                                              </p>
+                                              <Badge className="bg-covenant-gold/10 text-covenant-blue border-covenant-gold text-xs">
+                                                Video Content Planned
+                                              </Badge>
+                                            </div>
+                                          </div>
+                                        </div>
+
+                                        {/* Text Content Placeholder */}
+                                        <div className="mt-4 p-4 bg-white rounded-lg border border-covenant-light">
+                                          <h6 className="font-medium text-covenant-blue mb-2">Lesson Content:</h6>
+                                          <div className="text-sm text-covenant-gray space-y-2">
+                                            <p className="italic">Detailed written content for "{section.title}" will be available here.</p>
+                                            <p>This section will include:</p>
+                                            <ul className="list-disc list-inside space-y-1 ml-4">
+                                              {section.topics.map((topic, idx) => (
+                                                <li key={idx}>Step-by-step guidance on {topic.toLowerCase()}</li>
+                                              ))}
+                                            </ul>
+                                            <p className="text-xs text-covenant-gray/70 mt-3">
+                                              Content duration: {section.duration} • Coming soon
+                                            </p>
+                                          </div>
+                                        </div>
                                       </div>
-                                    </div>
-                                  </div>
-                                  
-                                  {/* Video Placeholder */}
-                                  <div className="mt-4 bg-gradient-to-br from-covenant-light to-covenant-light/50 rounded-lg p-6 border-2 border-dashed border-covenant-gold/30">
-                                    <div className="flex flex-col items-center justify-center text-center space-y-3">
-                                      <div className="w-12 h-12 bg-covenant-gold/20 rounded-full flex items-center justify-center">
-                                        <Video className="h-6 w-6 text-covenant-gold" />
-                                      </div>
-                                      <div>
-                                        <h6 className="font-medium text-covenant-blue mb-1">
-                                          Video: {section.title}
-                                        </h6>
-                                        <p className="text-xs text-covenant-gray mb-2">
-                                          Coming Soon - {section.duration} teaching video
-                                        </p>
-                                        <Badge className="bg-covenant-gold/10 text-covenant-blue border-covenant-gold text-xs">
-                                          Video Content Planned
-                                        </Badge>
-                                      </div>
-                                    </div>
-                                  </div>
+                                    </CollapsibleContent>
+                                  </Collapsible>
                                 </div>
                               ))}
                             </div>
