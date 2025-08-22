@@ -65,6 +65,7 @@ export interface IStorage {
   
   // Contact & Newsletter
   createContact(contact: InsertContact): Promise<Contact>;
+  getAllContacts(): Promise<Contact[]>;
   createNewsletterSubscriber(subscriber: InsertNewsletter): Promise<Newsletter>;
   getNewsletterSubscriber(email: string): Promise<Newsletter | undefined>;
   
@@ -183,6 +184,13 @@ export class DatabaseStorage implements IStorage {
       .values(insertContact)
       .returning();
     return contact;
+  }
+
+  async getAllContacts(): Promise<Contact[]> {
+    return await db
+      .select()
+      .from(contacts)
+      .orderBy(desc(contacts.created_at));
   }
 
   async createNewsletterSubscriber(insertNewsletter: InsertNewsletter): Promise<Newsletter> {

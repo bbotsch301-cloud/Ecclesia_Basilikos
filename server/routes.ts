@@ -213,6 +213,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin contact messages endpoint
+  app.get("/api/admin/contacts", requireAuth, async (req, res) => {
+    try {
+      const contacts = await storage.getAllContacts();
+      res.json(contacts);
+    } catch (error) {
+      console.error("Error fetching contacts:", error);
+      res.status(500).json({ error: "Failed to fetch contacts" });
+    }
+  });
+
   // Forum routes
 
   // Get all forum categories
