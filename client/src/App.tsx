@@ -21,6 +21,7 @@ import AdminTrustDownloads from "@/pages/admin-trust-downloads";
 import NewCovenantIntro from "@/pages/new-covenant-intro";
 import Courses from "@/pages/courses";
 import MyCourses from "@/pages/my-courses";
+import CourseLesson from "@/pages/course-lesson";
 import VerifyEmail from "@/pages/verify-email";
 import NotFound from "@/pages/not-found";
 
@@ -43,6 +44,8 @@ function Router() {
           <Route path="/new-covenant-intro" component={NewCovenantIntro} />
           <Route path="/courses" component={Courses} />
           <Route path="/my-courses" component={MyCourses} />
+          <Route path="/course/:courseId" component={CourseLesson} />
+          <Route path="/course/:courseId/lesson/:lessonId" component={CourseLesson} />
           <Route path="/verify-email" component={VerifyEmail} />
           <Route path="/admin/content" component={AdminContent} />
           <Route path="/admin/trust-downloads" component={AdminTrustDownloads} />

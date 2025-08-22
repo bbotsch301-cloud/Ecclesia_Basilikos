@@ -279,33 +279,31 @@ export default function MyCourses() {
                       </div>
                     )}
 
-                    <Button 
-                      className={`w-full ${
-                        course.status === 'enrolled' 
-                          ? 'bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue' 
-                          : course.status === 'available'
-                          ? 'bg-covenant-blue hover:bg-covenant-blue/80 text-white'
-                          : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                      }`}
-                      disabled={course.status === 'locked'}
-                    >
-                      {course.status === 'enrolled' ? (
-                        <>
+                    {course.status === 'enrolled' ? (
+                      <Link href={`/course/${course.id}`}>
+                        <Button 
+                          className="w-full bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue"
+                        >
                           <Play className="h-4 w-4 mr-2" />
                           Continue Learning
-                        </>
-                      ) : course.status === 'available' ? (
-                        <>
-                          <BookOpen className="h-4 w-4 mr-2" />
-                          Enroll Now
-                        </>
-                      ) : (
-                        <>
-                          <Lock className="h-4 w-4 mr-2" />
-                          Locked
-                        </>
-                      )}
-                    </Button>
+                        </Button>
+                      </Link>
+                    ) : course.status === 'available' ? (
+                      <Button 
+                        className="w-full bg-covenant-blue hover:bg-covenant-blue/80 text-white"
+                      >
+                        <BookOpen className="h-4 w-4 mr-2" />
+                        Enroll Now
+                      </Button>
+                    ) : (
+                      <Button 
+                        className="w-full bg-gray-300 text-gray-500 cursor-not-allowed"
+                        disabled
+                      >
+                        <Lock className="h-4 w-4 mr-2" />
+                        Locked
+                      </Button>
+                    )}
                   </div>
                 </CardContent>
               </Card>
