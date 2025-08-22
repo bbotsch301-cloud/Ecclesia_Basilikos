@@ -52,345 +52,345 @@ interface CourseData {
 
 const coursesData: CourseData[] = [
   {
-    id: "new-covenant-foundation",
-    title: "Introduction to the New Covenant Trust",
-    description: "Understanding Christ as the Grantor and your role as beneficiary in God's eternal trust",
+    id: "trust-foundations",
+    title: "Trust Administration Fundamentals",
+    description: "Essential knowledge for managing your New Covenant Trust including legal structure, documentation, and basic administrative duties",
     level: "foundation",
-    duration: "45 minutes",
+    duration: "1.5 hours",
     sectionCount: 6,
-    estimatedTime: "1 week",
-    thumbnail: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300",
-    completionBadge: "Covenant Foundation",
+    estimatedTime: "1-2 weeks",
+    thumbnail: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300",
+    completionBadge: "Trust Administrator",
     sections: [
       {
-        id: "foundation",
-        title: "The Foundation of Trust",
-        duration: "5 min",
-        description: "Understanding what a trust is and why Christ established one",
-        topics: ["Trust Fundamentals", "Biblical Foundation", "Legal Framework"]
+        id: "trust-structure",
+        title: "Understanding Trust Structure",
+        duration: "12 min",
+        description: "Legal framework, roles, and responsibilities in trust administration",
+        topics: ["Trust Formation", "Grantor vs Trustee", "Beneficiary Rights", "Legal Documentation"]
       },
       {
-        id: "grantor",
-        title: "Christ as Grantor",
-        duration: "8 min", 
-        description: "How Jesus established the New Covenant Trust through His sacrifice",
-        topics: ["Grantor Authority", "Sacrifice & Inheritance", "Eternal Covenant"]
+        id: "trust-documents",
+        title: "Essential Trust Documents",
+        duration: "15 min", 
+        description: "Required paperwork, certificates, and legal instruments for trust operation",
+        topics: ["Trust Indenture", "EIN Application", "Certification of Trust", "Operating Agreements"]
       },
       {
-        id: "beneficiary",
-        title: "Your Role as Beneficiary",
-        duration: "7 min",
-        description: "Understanding your inheritance and rights in the trust",
-        topics: ["Inheritance Rights", "Co-heir Status", "Kingdom Benefits"]
+        id: "record-keeping",
+        title: "Trust Record Keeping",
+        duration: "18 min",
+        description: "Maintaining proper records, bookkeeping, and documentation systems",
+        topics: ["Financial Records", "Asset Documentation", "Transaction Logs", "Compliance Files"]
       },
       {
-        id: "authority",
-        title: "Spiritual Authority",
-        duration: "6 min",
-        description: "Operating in Kingdom authority as a co-heir with Christ",
-        topics: ["Delegated Authority", "Kingdom Power", "Spiritual Warfare"]
+        id: "trust-banking",
+        title: "Opening Trust Bank Accounts",
+        duration: "20 min",
+        description: "Step-by-step process for establishing banking relationships for your trust",
+        topics: ["Bank Selection", "Required Documents", "Account Types", "Signatory Authority"]
       },
       {
-        id: "freedom",
-        title: "True Freedom in Christ", 
-        duration: "9 min",
-        description: "How regeneration brings freedom from Babylon's systems",
-        topics: ["Liberation Theology", "Breaking Bondage", "Spiritual Freedom"]
+        id: "initial-funding",
+        title: "Initial Trust Funding", 
+        duration: "14 min",
+        description: "Moving assets into the trust and establishing initial capital",
+        topics: ["Asset Transfer", "Funding Strategies", "Title Changes", "Initial Deposits"]
       },
       {
-        id: "living",
-        title: "Living as a Beneficiary",
-        duration: "10 min",
-        description: "Practical application of your covenant identity",
-        topics: ["Daily Practice", "Identity in Christ", "Kingdom Lifestyle"]
+        id: "basic-operations",
+        title: "Basic Trust Operations",
+        duration: "16 min",
+        description: "Day-to-day administrative tasks and operational procedures",
+        topics: ["Regular Reporting", "Distribution Procedures", "Compliance Tasks", "Administrative Calendar"]
       }
     ],
     learningOutcomes: [
-      "Understand the biblical foundation of the New Covenant Trust",
-      "Recognize your role as a joint-heir with Christ",
-      "Operate in Kingdom spiritual authority",
-      "Experience freedom from Babylon's legal fiction systems",
-      "Apply covenant principles in daily life"
+      "Understand the legal structure and roles within a trust",
+      "Properly maintain trust records and documentation",
+      "Successfully open and manage trust banking relationships",
+      "Execute proper asset transfer and funding procedures",
+      "Implement effective administrative systems and procedures"
     ]
   },
   {
-    id: "covenant-authority",
-    title: "Advanced Covenant Authority",
-    description: "Deep dive into spiritual authority, dominion, and the believer's governmental role in the Kingdom",
+    id: "asset-management",
+    title: "Trust Asset Management & Investment Strategies",
+    description: "Comprehensive training in managing trust assets, investment accounts, and building wealth through the trust structure",
     level: "intermediate",
-    duration: "2.5 hours",
+    duration: "3 hours",
     sectionCount: 8,
-    estimatedTime: "2-3 weeks",
-    thumbnail: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300",
-    completionBadge: "Authority Walker",
+    estimatedTime: "3-4 weeks",
+    thumbnail: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300",
+    completionBadge: "Asset Manager",
     sections: [
       {
-        id: "delegated-authority",
-        title: "Understanding Delegated Authority",
-        duration: "20 min",
-        description: "The biblical basis for spiritual authority and how it flows from the throne",
-        topics: ["Divine Hierarchy", "Authority Structure", "Commissioning"]
-      },
-      {
-        id: "dominion-mandate",
-        title: "The Dominion Mandate",
-        duration: "18 min",
-        description: "Restoring mankind's original commission to rule and reign",
-        topics: ["Genesis Commission", "Cultural Mandate", "Kingdom Dominion"]
-      },
-      {
-        id: "governmental-authority",
-        title: "Governmental Authority in the Kingdom",
-        duration: "22 min",
-        description: "How believers function as governmental agents of the Kingdom",
-        topics: ["Governmental Intercession", "Legislative Authority", "Judicial Authority"]
-      },
-      {
-        id: "binding-loosing",
-        title: "Binding and Loosing",
+        id: "investment-accounts",
+        title: "Opening Trust Investment Accounts",
         duration: "25 min",
-        description: "Understanding the keys of the Kingdom and their practical application",
-        topics: ["Keys of the Kingdom", "Binding Principles", "Loosing Principles"]
+        description: "Establishing brokerage and investment accounts in the trust name",
+        topics: ["Brokerage Selection", "Account Documentation", "Trading Authorization", "Tax Considerations"]
       },
       {
-        id: "territorial-authority",
-        title: "Territorial Authority",
-        duration: "19 min",
-        description: "Operating in authority over regions, cities, and territories",
-        topics: ["Geographic Authority", "Territorial Spirits", "Regional Transformation"]
-      },
-      {
-        id: "marketplace-authority",
-        title: "Authority in the Marketplace",
-        duration: "17 min",
-        description: "Exercising Kingdom authority in business and commerce",
-        topics: ["Business as Ministry", "Economic Authority", "Marketplace Transformation"]
-      },
-      {
-        id: "family-authority",
-        title: "Family and Household Authority",
-        duration: "15 min",
-        description: "Establishing godly authority structures in family and household",
-        topics: ["Family Hierarchy", "Household Governance", "Generational Authority"]
-      },
-      {
-        id: "advanced-intercession",
-        title: "Advanced Intercession & Warfare",
-        duration: "24 min",
-        description: "High-level intercession and strategic spiritual warfare",
-        topics: ["Strategic Intercession", "Governmental Warfare", "Prophetic Intercession"]
-      }
-    ],
-    learningOutcomes: [
-      "Exercise delegated authority with confidence and biblical foundation",
-      "Understand and implement the dominion mandate",
-      "Function governmentally in the Kingdom of God",
-      "Use the keys of the Kingdom effectively",
-      "Transform territories through spiritual authority",
-      "Exercise Kingdom authority in marketplace and family"
-    ],
-    prerequisites: ["Introduction to the New Covenant Trust"]
-  },
-  {
-    id: "prophetic-ministry",
-    title: "Prophetic Ministry & Divine Communication",
-    description: "Advanced training in prophetic ministry, hearing God's voice, and functioning in the prophetic office",
-    level: "advanced",
-    duration: "4 hours",
-    sectionCount: 10,
-    estimatedTime: "4-6 weeks",
-    thumbnail: "https://images.unsplash.com/photo-1519904981063-b0cf448d479e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300",
-    completionBadge: "Prophetic Voice",
-    sections: [
-      {
-        id: "prophetic-foundation",
-        title: "Foundations of Prophetic Ministry",
-        duration: "28 min",
-        description: "Biblical foundations and principles of prophetic ministry",
-        topics: ["Old Testament Prophets", "New Testament Prophecy", "Prophetic Office"]
-      },
-      {
-        id: "hearing-god",
-        title: "Hearing the Voice of God",
-        duration: "25 min",
-        description: "Developing sensitivity to God's voice and various forms of divine communication",
-        topics: ["Divine Communication", "Spiritual Discernment", "Testing the Spirits"]
-      },
-      {
-        id: "prophetic-protocols",
-        title: "Prophetic Protocols & Ethics",
+        id: "crypto-integration",
+        title: "Cryptocurrency Accounts for Trusts",
         duration: "22 min",
-        description: "Proper protocols, ethics, and accountability in prophetic ministry",
-        topics: ["Prophetic Ethics", "Accountability", "Submission to Authority"]
+        description: "Setting up crypto exchanges and wallets for trust use",
+        topics: ["Exchange Selection", "Wallet Security", "Private Key Management", "KYC Requirements"]
       },
       {
-        id: "prophetic-intercession",
-        title: "Prophetic Intercession",
-        duration: "26 min",
-        description: "Intercession guided by prophetic insight and divine strategy",
-        topics: ["Strategic Intercession", "Prophetic Prayer", "Divine Strategy"]
-      },
-      {
-        id: "dreams-visions",
-        title: "Dreams, Visions & Supernatural Encounters",
+        id: "real-estate-titles",
+        title: "Transferring Real Estate Titles",
         duration: "30 min",
-        description: "Understanding and interpreting dreams, visions, and supernatural experiences",
-        topics: ["Dream Interpretation", "Visions & Trances", "Angelic Encounters"]
+        description: "Moving property titles into trust ownership and management",
+        topics: ["Title Transfer Process", "Deed Preparation", "Recording Requirements", "Property Management"]
       },
       {
-        id: "prophetic-worship",
-        title: "Prophetic Worship & Expression",
-        duration: "20 min",
-        description: "Expressing prophetic revelation through worship and creative arts",
-        topics: ["Prophetic Worship", "Creative Expression", "Spontaneous Song"]
-      },
-      {
-        id: "national-prophecy",
-        title: "National & Regional Prophecy",
-        duration: "27 min",
-        description: "Prophetic ministry to nations, regions, and governmental spheres",
-        topics: ["National Prophecy", "Regional Transformation", "Governmental Prophets"]
-      },
-      {
-        id: "prophetic-evangelism",
-        title: "Prophetic Evangelism",
+        id: "vehicle-assets",
+        title: "Vehicles and Personal Property",
         duration: "18 min",
-        description: "Using prophetic gifts in evangelism and ministry to the lost",
-        topics: ["Prophetic Evangelism", "Words of Knowledge", "Supernatural Encounters"]
+        description: "Transferring vehicles, boats, and personal assets to trust ownership",
+        topics: ["Vehicle Title Transfer", "Registration Process", "Insurance Considerations", "Asset Documentation"]
       },
       {
-        id: "prophetic-teams",
-        title: "Building Prophetic Teams",
-        duration: "21 min",
-        description: "Developing and leading prophetic teams and communities",
-        topics: ["Team Building", "Prophetic Community", "Leadership Development"]
+        id: "business-interests",
+        title: "Business Interests and Intellectual Property",
+        duration: "27 min",
+        description: "Moving business ownership and IP assets into the trust structure",
+        topics: ["Business Entity Transfer", "Intellectual Property", "Operating Agreements", "Revenue Streams"]
       },
       {
-        id: "mature-prophetic",
-        title: "Mature Prophetic Ministry",
-        duration: "23 min",
-        description: "Operating in mature prophetic ministry with wisdom and authority",
-        topics: ["Prophetic Maturity", "Wisdom & Timing", "Prophetic Authority"]
+        id: "precious-metals",
+        title: "Precious Metals and Alternative Assets",
+        duration: "20 min",
+        description: "Acquiring and storing precious metals and alternative investments",
+        topics: ["Gold & Silver Acquisition", "Storage Solutions", "Authentication", "Portfolio Diversification"]
+      },
+      {
+        id: "offshore-considerations",
+        title: "International Asset Protection",
+        duration: "24 min",
+        description: "Offshore banking and international asset protection strategies",
+        topics: ["Offshore Banking", "International Compliance", "Asset Protection", "Privacy Strategies"]
+      },
+      {
+        id: "portfolio-management",
+        title: "Trust Portfolio Management",
+        duration: "34 min",
+        description: "Advanced strategies for managing and growing trust assets",
+        topics: ["Asset Allocation", "Risk Management", "Growth Strategies", "Performance Monitoring"]
       }
     ],
     learningOutcomes: [
-      "Establish strong biblical foundations for prophetic ministry",
-      "Develop clear communication with God through various channels",
-      "Operate with proper protocols and ethical standards",
-      "Function in prophetic intercession and strategic prayer",
-      "Interpret dreams, visions, and supernatural encounters",
-      "Lead and develop prophetic teams and communities",
-      "Minister prophetically to nations and regions"
+      "Successfully establish investment and crypto accounts for the trust",
+      "Transfer real estate and personal property titles to trust ownership",
+      "Manage business interests and intellectual property within the trust",
+      "Implement precious metals and alternative asset strategies",
+      "Navigate international asset protection and offshore considerations",
+      "Build and maintain a diversified trust portfolio"
     ],
-    prerequisites: ["Introduction to the New Covenant Trust", "Advanced Covenant Authority"]
+    prerequisites: ["Trust Administration Fundamentals"]
   },
   {
-    id: "apostolic-government",
-    title: "Apostolic Government & Kingdom Administration",
-    description: "Master-level training in apostolic ministry, church government, and Kingdom administration",
+    id: "trust-taxation-compliance",
+    title: "Trust Taxation, Compliance & Legal Protection",
+    description: "Advanced training in trust tax strategies, regulatory compliance, and legal asset protection techniques",
+    level: "advanced",
+    duration: "4.5 hours",
+    sectionCount: 10,
+    estimatedTime: "5-6 weeks",
+    thumbnail: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300",
+    completionBadge: "Compliance Expert",
+    sections: [
+      {
+        id: "trust-taxation",
+        title: "Trust Tax Strategy & Planning",
+        duration: "32 min",
+        description: "Understanding trust taxation and implementing effective tax strategies",
+        topics: ["Trust Tax Returns", "Income Distribution", "Tax Minimization", "Quarterly Filings"]
+      },
+      {
+        id: "regulatory-compliance",
+        title: "Regulatory Compliance Requirements",
+        duration: "28 min",
+        description: "Meeting federal and state compliance requirements for trust operations",
+        topics: ["Reporting Requirements", "Due Diligence", "Anti-Money Laundering", "Record Retention"]
+      },
+      {
+        id: "asset-protection",
+        title: "Advanced Asset Protection Strategies",
+        duration: "35 min",
+        description: "Sophisticated techniques for protecting trust assets from creditors and litigation",
+        topics: ["Creditor Protection", "Liability Shields", "Jurisdictional Strategies", "Legal Structures"]
+      },
+      {
+        id: "banking-relationships",
+        title: "Advanced Banking Relationships",
+        duration: "24 min",
+        description: "Building relationships with private banks and managing complex banking needs",
+        topics: ["Private Banking", "Credit Facilities", "International Banking", "Relationship Management"]
+      },
+      {
+        id: "estate-planning",
+        title: "Estate Planning Integration",
+        duration: "29 min",
+        description: "Integrating trust structures with comprehensive estate planning strategies",
+        topics: ["Succession Planning", "Generation-Skipping", "Charitable Giving", "Legacy Structures"]
+      },
+      {
+        id: "business-operations",
+        title: "Trust Business Operations",
+        duration: "26 min",
+        description: "Operating businesses through trust structures and managing commercial activities",
+        topics: ["Business Operations", "Commercial Transactions", "Contract Management", "Liability Issues"]
+      },
+      {
+        id: "international-structures",
+        title: "International Trust Structures",
+        duration: "31 min",
+        description: "Understanding and implementing international trust and entity structures",
+        topics: ["Offshore Trusts", "International Entities", "Cross-Border Compliance", "Tax Treaties"]
+      },
+      {
+        id: "dispute-resolution",
+        title: "Trust Disputes & Legal Issues",
+        duration: "22 min",
+        description: "Managing disputes, litigation, and legal challenges involving trust assets",
+        topics: ["Dispute Resolution", "Legal Defense", "Court Procedures", "Settlement Strategies"]
+      },
+      {
+        id: "succession-planning",
+        title: "Trust Succession & Continuity",
+        duration: "25 min",
+        description: "Planning for trust continuity and successor trustee arrangements",
+        topics: ["Successor Trustees", "Continuity Planning", "Documentation Updates", "Transition Management"]
+      },
+      {
+        id: "advanced-strategies",
+        title: "Advanced Trust Strategies",
+        duration: "33 min",
+        description: "Sophisticated trust strategies for complex financial and legal situations",
+        topics: ["Complex Structures", "Multi-Generational Planning", "Special Situations", "Innovation Strategies"]
+      }
+    ],
+    learningOutcomes: [
+      "Master trust taxation and implement effective tax minimization strategies",
+      "Ensure full compliance with all regulatory requirements",
+      "Implement sophisticated asset protection techniques",
+      "Manage complex banking relationships and credit facilities",
+      "Integrate trust planning with comprehensive estate strategies",
+      "Navigate international structures and cross-border compliance",
+      "Handle trust disputes and legal challenges effectively"
+    ],
+    prerequisites: ["Trust Administration Fundamentals", "Trust Asset Management & Investment Strategies"]
+  },
+  {
+    id: "trust-mastery-legacy",
+    title: "Trust Mastery & Wealth Legacy Building",
+    description: "Master-level training in sophisticated trust strategies, wealth preservation, and building generational legacy through trust structures",
     level: "master",
-    duration: "6 hours",
+    duration: "6.5 hours",
     sectionCount: 12,
     estimatedTime: "8-10 weeks",
-    thumbnail: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300",
-    completionBadge: "Apostolic Leader",
+    thumbnail: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300",
+    completionBadge: "Trust Master",
     sections: [
       {
-        id: "apostolic-foundation",
-        title: "Foundations of Apostolic Ministry",
-        duration: "35 min",
-        description: "Biblical foundations and characteristics of apostolic ministry",
-        topics: ["Apostolic Office", "New Testament Apostles", "Modern Apostolic Movement"]
+        id: "family-office-setup",
+        title: "Family Office & Trust Administration",
+        duration: "38 min",
+        description: "Establishing family office structures and professional trust administration",
+        topics: ["Family Office Setup", "Professional Administration", "Governance Structures", "Advisory Boards"]
       },
       {
-        id: "church-government",
-        title: "Divine Government in the Church",
-        duration: "32 min",
-        description: "Establishing proper governmental structure in local church",
-        topics: ["Fivefold Ministry", "Elder Government", "Theocratic Structure"]
-      },
-      {
-        id: "kingdom-administration",
-        title: "Kingdom Administration",
-        duration: "28 min",
-        description: "Administrative principles for Kingdom expansion and church growth",
-        topics: ["Administrative Gifts", "Kingdom Systems", "Organizational Structure"]
-      },
-      {
-        id: "apostolic-teams",
-        title: "Building Apostolic Teams",
-        duration: "30 min",
-        description: "Developing and deploying apostolic teams for ministry and missions",
-        topics: ["Team Dynamics", "Apostolic Deployment", "Team Leadership"]
-      },
-      {
-        id: "church-planting",
-        title: "Apostolic Church Planting",
-        duration: "33 min",
-        description: "Strategic church planting and establishing healthy church communities",
-        topics: ["Church Planting Strategy", "Community Building", "Church Health"]
-      },
-      {
-        id: "regional-oversight",
-        title: "Regional & Network Oversight",
-        duration: "29 min",
-        description: "Providing apostolic oversight to regions and church networks",
-        topics: ["Regional Oversight", "Church Networks", "Apostolic Covering"]
-      },
-      {
-        id: "marketplace-transformation",
-        title: "Marketplace Transformation",
-        duration: "26 min",
-        description: "Transforming businesses and economic systems through apostolic ministry",
-        topics: ["Business Transformation", "Economic Reformation", "Marketplace Ministry"]
-      },
-      {
-        id: "cultural-reformation",
-        title: "Cultural Reformation",
-        duration: "31 min",
-        description: "Bringing Kingdom influence to culture and societal institutions",
-        topics: ["Cultural Mandate", "Societal Transformation", "Kingdom Influence"]
-      },
-      {
-        id: "apostolic-signs",
-        title: "Signs, Wonders & Miracles",
-        duration: "27 min",
-        description: "Operating in the supernatural signs that accompany apostolic ministry",
-        topics: ["Apostolic Signs", "Miraculous Ministry", "Supernatural Validation"]
-      },
-      {
-        id: "international-ministry",
-        title: "International Apostolic Ministry",
+        id: "multi-generational",
+        title: "Multi-Generational Wealth Planning",
         duration: "34 min",
-        description: "Cross-cultural apostolic ministry and international church development",
-        topics: ["Cross-Cultural Ministry", "International Networks", "Global Strategy"]
+        description: "Creating trust structures that preserve and grow wealth across generations",
+        topics: ["Generational Planning", "Dynasty Trusts", "Education Funding", "Values Transmission"]
       },
       {
-        id: "succession-legacy",
-        title: "Succession & Legacy Building",
-        duration: "25 min",
-        description: "Building sustainable ministry legacy and preparing successors",
-        topics: ["Legacy Building", "Succession Planning", "Generational Ministry"]
+        id: "business-empire",
+        title: "Building Business Empires Through Trusts",
+        duration: "31 min",
+        description: "Using trust structures to build, acquire, and manage business empires",
+        topics: ["Business Acquisition", "Empire Building", "Corporate Structures", "Exit Strategies"]
       },
       {
-        id: "mature-apostolic",
-        title: "Mature Apostolic Leadership",
+        id: "alternative-investments",
+        title: "Alternative Investment Strategies",
+        duration: "29 min",
+        description: "Advanced alternative investments including private equity, hedge funds, and exotic assets",
+        topics: ["Private Equity", "Hedge Funds", "Art & Collectibles", "Exotic Investments"]
+      },
+      {
+        id: "global-wealth",
+        title: "Global Wealth Management",
+        duration: "36 min",
+        description: "International wealth management and global asset allocation strategies",
+        topics: ["Global Diversification", "Currency Strategies", "International Markets", "Sovereign Risk"]
+      },
+      {
+        id: "charitable-giving",
+        title: "Charitable Giving & Philanthropic Strategies",
+        duration: "27 min",
+        description: "Tax-efficient charitable giving and establishing philanthropic legacy",
+        topics: ["Charitable Trusts", "Foundation Setup", "Tax Benefits", "Impact Investing"]
+      },
+      {
+        id: "trust-innovations",
+        title: "Trust Innovation & Emerging Strategies",
+        duration: "33 min",
+        description: "Cutting-edge trust strategies and innovations in wealth management",
+        topics: ["Blockchain Integration", "Digital Assets", "Innovation Strategies", "Future Trends"]
+      },
+      {
+        id: "crisis-management",
+        title: "Crisis Management & Wealth Preservation",
         duration: "30 min",
-        description: "Operating in mature apostolic authority with wisdom and humility",
-        topics: ["Apostolic Maturity", "Servant Leadership", "Kingdom Wisdom"]
+        description: "Protecting wealth during economic crises and market downturns",
+        topics: ["Crisis Planning", "Economic Hedging", "Liquidity Management", "Emergency Strategies"]
+      },
+      {
+        id: "exit-strategies",
+        title: "Exit Strategies & Liquidity Events",
+        duration: "28 min",
+        description: "Managing major liquidity events and business exits through trust structures",
+        topics: ["Business Sales", "IPO Strategies", "Liquidity Planning", "Tax Optimization"]
+      },
+      {
+        id: "wealth-mentoring",
+        title: "Wealth Mentoring & Family Education",
+        duration: "25 min",
+        description: "Educating family members and preparing next generation for wealth responsibility",
+        topics: ["Financial Education", "Mentoring Programs", "Values Training", "Responsibility Development"]
+      },
+      {
+        id: "legacy-structures",
+        title: "Creating Permanent Legacy Structures",
+        duration: "32 min",
+        description: "Building permanent institutions and structures that outlast generations",
+        topics: ["Perpetual Trusts", "Institutional Building", "Endowment Creation", "Legacy Preservation"]
+      },
+      {
+        id: "mastery-integration",
+        title: "Trust Mastery Integration",
+        duration: "37 min",
+        description: "Integrating all trust strategies into a comprehensive wealth management system",
+        topics: ["System Integration", "Comprehensive Planning", "Ongoing Management", "Continuous Optimization"]
       }
     ],
     learningOutcomes: [
-      "Understand and operate in apostolic ministry with biblical foundation",
-      "Establish divine government structures in church and ministry",
-      "Administer Kingdom principles in complex organizational settings",
-      "Build and deploy effective apostolic teams",
-      "Plant and oversee healthy, growing church communities",
-      "Transform marketplace and cultural institutions",
-      "Operate in supernatural signs, wonders, and miracles",
-      "Build sustainable ministry legacy for future generations"
+      "Establish sophisticated family office and professional administration structures",
+      "Create multi-generational wealth preservation and growth strategies",
+      "Build and manage business empires through advanced trust structures",
+      "Implement cutting-edge alternative investment and global wealth strategies",
+      "Develop comprehensive philanthropic and charitable giving programs",
+      "Navigate crisis management and wealth preservation during market volatility",
+      "Manage major liquidity events and business exits efficiently",
+      "Build permanent legacy structures that transcend generations"
     ],
-    prerequisites: ["Introduction to the New Covenant Trust", "Advanced Covenant Authority", "Prophetic Ministry & Divine Communication"]
+    prerequisites: ["Trust Administration Fundamentals", "Trust Asset Management & Investment Strategies", "Trust Taxation, Compliance & Legal Protection"]
   }
 ];
 
