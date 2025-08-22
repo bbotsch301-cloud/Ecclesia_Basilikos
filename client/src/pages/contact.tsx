@@ -173,15 +173,7 @@ export default function Contact() {
                 <div className="space-y-4">
                   <div className="flex items-center">
                     <Mail className="text-covenant-gold text-xl mr-4" />
-                    <span className="text-covenant-gray">info@newcovenanttrust.org</span>
-                  </div>
-                  <div className="flex items-center">
-                    <Phone className="text-covenant-gold text-xl mr-4" />
-                    <span className="text-covenant-gray">1-800-COVENANT</span>
-                  </div>
-                  <div className="flex items-center">
-                    <Clock className="text-covenant-gold text-xl mr-4" />
-                    <span className="text-covenant-gray">Monday - Friday, 9 AM - 6 PM EST</span>
+                    <span className="text-covenant-gray">KINGDOMVENTURESTRUST@gmail.com</span>
                   </div>
                 </div>
               </div>
