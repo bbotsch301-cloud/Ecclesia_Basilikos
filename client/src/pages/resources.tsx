@@ -334,7 +334,7 @@ export default function Resources() {
                                 </FormItem>
                               )}
                             />
-                            <Button type="submit" className="w-full bg-covenant-blue hover:bg-covenant-blue/80" disabled={isLoggingIn}>
+                            <Button type="submit" className="w-full bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue" disabled={isLoggingIn}>
                               {isLoggingIn ? "Signing in..." : "Sign In"}
                             </Button>
                           </form>
@@ -398,8 +398,8 @@ export default function Resources() {
                                 </FormItem>
                               )}
                             />
-                            <Button type="submit" className="w-full bg-covenant-blue hover:bg-covenant-blue/80" disabled={isRegistering}>
-                              {isRegistering ? "Creating Account..." : "Create Account"}
+                            <Button type="submit" className="w-full bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue" disabled={isRegistering}>
+                              {isRegistering ? "Joining..." : "Join"}
                             </Button>
                           </form>
                         </Form>
