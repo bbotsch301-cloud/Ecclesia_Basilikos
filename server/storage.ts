@@ -675,7 +675,7 @@ export class DatabaseStorage implements IStorage {
       totalEnrollments: sql<number>`(SELECT COUNT(*) FROM ${enrollments})`,
       totalForumThreads: sql<number>`(SELECT COUNT(*) FROM ${forum_threads})`,
       totalForumReplies: sql<number>`(SELECT COUNT(*) FROM ${forum_replies})`,
-    });
+    }).execute();
     
     return stats;
   }

@@ -19,6 +19,7 @@ import AdminDashboard from "@/pages/admin-dashboard";
 import AdminContent from "@/pages/admin-content";
 import AdminTrustDownloads from "@/pages/admin-trust-downloads";
 import NewCovenantIntro from "@/pages/new-covenant-intro";
+import Courses from "@/pages/courses";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -38,6 +39,7 @@ function Router() {
           <Route path="/forum/thread/:threadId" component={ThreadPage} />
           <Route path="/trust-download" component={TrustDownload} />
           <Route path="/new-covenant-intro" component={NewCovenantIntro} />
+          <Route path="/courses" component={Courses} />
           <Route path="/admin/content" component={AdminContent} />
           <Route path="/admin/trust-downloads" component={AdminTrustDownloads} />
           <Route path="/admin" component={AdminDashboard} />
