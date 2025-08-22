@@ -56,7 +56,8 @@ export const videos = pgTable("videos", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   title: text("title").notNull(),
   description: text("description"),
-  videoUrl: text("video_url").notNull(),
+  videoUrl: text("video_url"), // Made optional for future video uploads
+  embedUrl: text("embed_url"), // For YouTube, Vimeo, etc.
   thumbnailUrl: text("thumbnail_url"),
   category: text("category").notNull(),
   tags: text("tags"), // comma-separated tags
@@ -67,6 +68,56 @@ export const videos = pgTable("videos", {
   createdById: varchar("created_by_id").notNull().references(() => users.id),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Course sections/modules for the New Covenant Trust course
+export const courseSections = pgTable("course_sections", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  courseId: varchar("course_id").notNull().references(() => courses.id),
+  title: text("title").notNull(),
+  description: text("description"),
+  sectionOrder: integer("section_order").notNull(),
+  videoId: varchar("video_id").references(() => videos.id),
+  duration: text("duration").notNull(), // e.g., "5 min", "8 min"
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Video attachments (PDFs, documents, etc.)
+export const videoAttachments = pgTable("video_attachments", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  videoId: varchar("video_id").notNull().references(() => videos.id),
+  title: text("title").notNull(),
+  description: text("description"),
+  fileUrl: text("file_url").notNull(),
+  fileName: text("file_name").notNull(),
+  fileSize: integer("file_size"), // in bytes
+  fileType: text("file_type").notNull(), // pdf, docx, etc.
+  downloadCount: integer("download_count").default(0),
+  isPublic: boolean("is_public").default(false), // whether accessible without auth
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Video progress tracking
+export const videoProgress = pgTable("video_progress", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  videoId: varchar("video_id").notNull().references(() => videos.id),
+  watchedDuration: integer("watched_duration").default(0), // in seconds
+  totalDuration: integer("total_duration"), // in seconds
+  isCompleted: boolean("is_completed").default(false),
+  lastWatchedAt: timestamp("last_watched_at").defaultNow(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Course section progress
+export const sectionProgress = pgTable("section_progress", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  sectionId: varchar("section_id").notNull().references(() => courseSections.id),
+  isCompleted: boolean("is_completed").default(false),
+  completedAt: timestamp("completed_at"),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
 // Resources table for downloadable content
@@ -210,6 +261,8 @@ export const userRelations = relations(users, ({ many }) => ({
   forumReplies: many(forum_replies),
   forumLikes: many(forum_likes),
   auditLogs: many(admin_audit_log),
+  videoProgress: many(videoProgress),
+  sectionProgress: many(sectionProgress),
 }));
 
 export const courseRelations = relations(courses, ({ one, many }) => ({
@@ -220,14 +273,60 @@ export const courseRelations = relations(courses, ({ one, many }) => ({
   lessons: many(lessons),
   enrollments: many(enrollments),
   downloads: many(downloads),
+  sections: many(courseSections),
 }));
 
-export const videoRelations = relations(videos, ({ one }) => ({
+export const videoRelations = relations(videos, ({ one, many }) => ({
   creator: one(users, {
     fields: [videos.createdById],
     references: [users.id],
   }),
+  attachments: many(videoAttachments),
+  progress: many(videoProgress),
+  sections: many(courseSections),
 }));
+
+export const courseSectionRelations = relations(courseSections, ({ one }) => ({
+  course: one(courses, {
+    fields: [courseSections.courseId],
+    references: [courses.id],
+  }),
+  video: one(videos, {
+    fields: [courseSections.videoId],
+    references: [videos.id],
+  }),
+}));
+
+export const videoAttachmentRelations = relations(videoAttachments, ({ one }) => ({
+  video: one(videos, {
+    fields: [videoAttachments.videoId],
+    references: [videos.id],
+  }),
+}));
+
+export const videoProgressRelations = relations(videoProgress, ({ one }) => ({
+  user: one(users, {
+    fields: [videoProgress.userId],
+    references: [users.id],
+  }),
+  video: one(videos, {
+    fields: [videoProgress.videoId],
+    references: [videos.id],
+  }),
+}));
+
+export const sectionProgressRelations = relations(sectionProgress, ({ one }) => ({
+  user: one(users, {
+    fields: [sectionProgress.userId],
+    references: [users.id],
+  }),
+  section: one(courseSections, {
+    fields: [sectionProgress.sectionId],
+    references: [courseSections.id],
+  }),
+}));
+
+
 
 export const resourceRelations = relations(resources, ({ one }) => ({
   creator: one(users, {
@@ -351,11 +450,36 @@ export const insertForumLikeSchema = createInsertSchema(forum_likes).omit({
 });
 
 // Admin-specific schemas
+// Video management schemas
 export const insertVideoSchema = createInsertSchema(videos).omit({
   id: true,
   viewCount: true,
   createdAt: true,
   updatedAt: true,
+});
+
+export const insertCourseSectionSchema = createInsertSchema(courseSections).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertVideoAttachmentSchema = createInsertSchema(videoAttachments).omit({
+  id: true,
+  downloadCount: true,
+  createdAt: true,
+});
+
+export const insertVideoProgressSchema = createInsertSchema(videoProgress).omit({
+  id: true,
+  lastWatchedAt: true,
+  createdAt: true,
+});
+
+export const insertSectionProgressSchema = createInsertSchema(sectionProgress).omit({
+  id: true,
+  completedAt: true,
+  createdAt: true,
 });
 
 export const insertResourceSchema = createInsertSchema(resources).omit({
@@ -449,3 +573,16 @@ export const trustDownloads = pgTable("trust_downloads", {
 export const insertTrustDownloadSchema = createInsertSchema(trustDownloads);
 export type InsertTrustDownload = z.infer<typeof insertTrustDownloadSchema>;
 export type TrustDownload = typeof trustDownloads.$inferSelect;
+
+// Video management types
+export type InsertCourseSection = z.infer<typeof insertCourseSectionSchema>;
+export type CourseSection = typeof courseSections.$inferSelect;
+
+export type InsertVideoAttachment = z.infer<typeof insertVideoAttachmentSchema>;
+export type VideoAttachment = typeof videoAttachments.$inferSelect;
+
+export type InsertVideoProgress = z.infer<typeof insertVideoProgressSchema>;
+export type VideoProgress = typeof videoProgress.$inferSelect;
+
+export type InsertSectionProgress = z.infer<typeof insertSectionProgressSchema>;
+export type SectionProgress = typeof sectionProgress.$inferSelect;

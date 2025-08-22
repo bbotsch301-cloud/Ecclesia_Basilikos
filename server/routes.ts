@@ -24,6 +24,10 @@ import {
   insertPageContentSchema,
   updatePageContentSchema,
   insertTrustDownloadSchema,
+  insertCourseSectionSchema,
+  insertVideoAttachmentSchema,
+  insertVideoProgressSchema,
+  insertSectionProgressSchema,
   type User
 } from "@shared/schema";
 import { z } from "zod";
@@ -565,6 +569,109 @@ startxref
     } catch (error) {
       console.error("Error fetching trust downloads:", error);
       res.status(500).json({ error: "Failed to fetch trust downloads" });
+    }
+  });
+
+  // Video Management Routes
+  
+  // Get course sections for a specific course
+  app.get("/api/courses/:courseId/sections", async (req, res) => {
+    try {
+      const sections = await storage.getCourseSections(req.params.courseId);
+      res.json(sections);
+    } catch (error) {
+      console.error("Error fetching course sections:", error);
+      res.status(500).json({ error: "Failed to fetch course sections" });
+    }
+  });
+
+  // Create a new course section (admin only)
+  app.post("/api/courses/:courseId/sections", requireAuth, async (req, res) => {
+    try {
+      const sectionData = insertCourseSectionSchema.parse({
+        ...req.body,
+        courseId: req.params.courseId,
+      });
+      
+      const section = await storage.createCourseSection(sectionData);
+      res.json(section);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ errors: error.errors });
+      } else {
+        console.error("Error creating course section:", error);
+        res.status(500).json({ error: "Failed to create course section" });
+      }
+    }
+  });
+
+  // Update course section (admin only)
+  app.put("/api/sections/:id", requireAuth, async (req, res) => {
+    try {
+      const updates = insertCourseSectionSchema.partial().parse(req.body);
+      const section = await storage.updateCourseSection(req.params.id, updates);
+      res.json(section);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ errors: error.errors });
+      } else {
+        console.error("Error updating course section:", error);
+        res.status(500).json({ error: "Failed to update course section" });
+      }
+    }
+  });
+
+  // Get user's course progress
+  app.get("/api/courses/:courseId/progress", requireAuth, async (req, res) => {
+    try {
+      const userId = (req as any).user.id;
+      const progress = await storage.getCourseProgressForUser(userId, req.params.courseId);
+      res.json(progress);
+    } catch (error) {
+      console.error("Error fetching course progress:", error);
+      res.status(500).json({ error: "Failed to fetch course progress" });
+    }
+  });
+
+  // Complete a section
+  app.post("/api/sections/:sectionId/complete", requireAuth, async (req, res) => {
+    try {
+      const userId = (req as any).user.id;
+      const progress = await storage.completeSectionForUser(userId, req.params.sectionId);
+      res.json(progress);
+    } catch (error) {
+      console.error("Error completing section:", error);
+      res.status(500).json({ error: "Failed to complete section" });
+    }
+  });
+
+  // Update video progress
+  app.post("/api/videos/:videoId/progress", requireAuth, async (req, res) => {
+    try {
+      const userId = (req as any).user.id;
+      const progressData = insertVideoProgressSchema.parse(req.body);
+      
+      const progress = await storage.updateVideoProgress(userId, req.params.videoId, progressData);
+      res.json(progress);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ errors: error.errors });
+      } else {
+        console.error("Error updating video progress:", error);
+        res.status(500).json({ error: "Failed to update video progress" });
+      }
+    }
+  });
+
+  // Get user's video progress
+  app.get("/api/videos/:videoId/progress", requireAuth, async (req, res) => {
+    try {
+      const userId = (req as any).user.id;
+      const progress = await storage.getUserVideoProgress(userId, req.params.videoId);
+      res.json(progress || { watchedDuration: 0, isCompleted: false });
+    } catch (error) {
+      console.error("Error fetching video progress:", error);
+      res.status(500).json({ error: "Failed to fetch video progress" });
     }
   });
 

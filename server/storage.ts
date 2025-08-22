@@ -33,6 +33,14 @@ import {
   type UpdatePageContent,
   type TrustDownload,
   type InsertTrustDownload,
+  type CourseSection,
+  type InsertCourseSection,
+  type VideoAttachment,
+  type InsertVideoAttachment,
+  type VideoProgress,
+  type InsertVideoProgress,
+  type SectionProgress,
+  type InsertSectionProgress,
   users,
   contacts,
   newsletter_subscribers,
@@ -49,7 +57,11 @@ import {
   resources,
   admin_audit_log,
   page_content,
-  trustDownloads
+  trustDownloads,
+  courseSections,
+  videoAttachments,
+  videoProgress,
+  sectionProgress
 } from "@shared/schema";
 import { eq, and, desc, sql } from "drizzle-orm";
 import { db } from "./db";
@@ -111,6 +123,24 @@ export interface IStorage {
   createLesson(lesson: InsertLesson): Promise<Lesson>;
   updateLesson(id: string, lesson: Partial<InsertLesson>): Promise<Lesson>;
   deleteLesson(id: string): Promise<void>;
+
+  // Video Management
+  createCourseSection(section: InsertCourseSection): Promise<CourseSection>;
+  getCourseSections(courseId: string): Promise<CourseSection[]>;
+  updateCourseSection(id: string, section: Partial<InsertCourseSection>): Promise<CourseSection>;
+  deleteCourseSection(id: string): Promise<void>;
+  
+  // Video Attachments
+  createVideoAttachment(attachment: InsertVideoAttachment): Promise<VideoAttachment>;
+  getVideoAttachments(videoId: string): Promise<VideoAttachment[]>;
+  deleteVideoAttachment(id: string): Promise<void>;
+  
+  // Progress Tracking
+  getUserVideoProgress(userId: string, videoId: string): Promise<VideoProgress | undefined>;
+  updateVideoProgress(userId: string, videoId: string, progress: Partial<InsertVideoProgress>): Promise<VideoProgress>;
+  getUserSectionProgress(userId: string, sectionId: string): Promise<SectionProgress | undefined>;
+  completeSectionForUser(userId: string, sectionId: string): Promise<SectionProgress>;
+  getCourseProgressForUser(userId: string, courseId: string): Promise<{ totalSections: number; completedSections: number }>;
   
   // Admin: Forum Management
   createForumCategory(category: InsertForumCategory): Promise<ForumCategory>;
@@ -743,6 +773,145 @@ export class DatabaseStorage implements IStorage {
   async getAllTrustDownloads(): Promise<TrustDownload[]> {
     return await db.select().from(trustDownloads)
       .orderBy(desc(trustDownloads.downloadedAt));
+  }
+
+  // Video Management Implementation
+  async createCourseSection(section: InsertCourseSection): Promise<CourseSection> {
+    const [newSection] = await db.insert(courseSections)
+      .values(section)
+      .returning();
+    return newSection;
+  }
+
+  async getCourseSections(courseId: string): Promise<CourseSection[]> {
+    return await db.select().from(courseSections)
+      .where(eq(courseSections.courseId, courseId))
+      .orderBy(courseSections.sectionOrder);
+  }
+
+  async updateCourseSection(id: string, section: Partial<InsertCourseSection>): Promise<CourseSection> {
+    const [updated] = await db.update(courseSections)
+      .set({ ...section, updatedAt: new Date() })
+      .where(eq(courseSections.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteCourseSection(id: string): Promise<void> {
+    await db.delete(courseSections).where(eq(courseSections.id, id));
+  }
+
+  // Video Attachments
+  async createVideoAttachment(attachment: InsertVideoAttachment): Promise<VideoAttachment> {
+    const [newAttachment] = await db.insert(videoAttachments)
+      .values(attachment)
+      .returning();
+    return newAttachment;
+  }
+
+  async getVideoAttachments(videoId: string): Promise<VideoAttachment[]> {
+    return await db.select().from(videoAttachments)
+      .where(eq(videoAttachments.videoId, videoId))
+      .orderBy(videoAttachments.createdAt);
+  }
+
+  async deleteVideoAttachment(id: string): Promise<void> {
+    await db.delete(videoAttachments).where(eq(videoAttachments.id, id));
+  }
+
+  // Progress Tracking
+  async getUserVideoProgress(userId: string, videoId: string): Promise<VideoProgress | undefined> {
+    const [progress] = await db.select().from(videoProgress)
+      .where(and(
+        eq(videoProgress.userId, userId),
+        eq(videoProgress.videoId, videoId)
+      ));
+    return progress;
+  }
+
+  async updateVideoProgress(userId: string, videoId: string, progress: Partial<InsertVideoProgress>): Promise<VideoProgress> {
+    // Check if progress record exists
+    const existing = await this.getUserVideoProgress(userId, videoId);
+    
+    if (existing) {
+      const [updated] = await db.update(videoProgress)
+        .set({ ...progress, lastWatchedAt: new Date() })
+        .where(and(
+          eq(videoProgress.userId, userId),
+          eq(videoProgress.videoId, videoId)
+        ))
+        .returning();
+      return updated;
+    } else {
+      const [newProgress] = await db.insert(videoProgress)
+        .values({
+          userId,
+          videoId,
+          ...progress,
+        })
+        .returning();
+      return newProgress;
+    }
+  }
+
+  async getUserSectionProgress(userId: string, sectionId: string): Promise<SectionProgress | undefined> {
+    const [progress] = await db.select().from(sectionProgress)
+      .where(and(
+        eq(sectionProgress.userId, userId),
+        eq(sectionProgress.sectionId, sectionId)
+      ));
+    return progress;
+  }
+
+  async completeSectionForUser(userId: string, sectionId: string): Promise<SectionProgress> {
+    // Check if progress record exists
+    const existing = await this.getUserSectionProgress(userId, sectionId);
+    
+    if (existing) {
+      const [updated] = await db.update(sectionProgress)
+        .set({ 
+          isCompleted: true, 
+          completedAt: new Date() 
+        })
+        .where(and(
+          eq(sectionProgress.userId, userId),
+          eq(sectionProgress.sectionId, sectionId)
+        ))
+        .returning();
+      return updated;
+    } else {
+      const [newProgress] = await db.insert(sectionProgress)
+        .values({
+          userId,
+          sectionId,
+          isCompleted: true,
+          completedAt: new Date(),
+        })
+        .returning();
+      return newProgress;
+    }
+  }
+
+  async getCourseProgressForUser(userId: string, courseId: string): Promise<{ totalSections: number; completedSections: number }> {
+    // Get total sections for course
+    const totalSections = await db.select({ count: sql<number>`count(*)` })
+      .from(courseSections)
+      .where(eq(courseSections.courseId, courseId));
+
+    // Get completed sections for user
+    const completedSections = await db.select({ count: sql<number>`count(*)` })
+      .from(sectionProgress)
+      .innerJoin(courseSections, eq(sectionProgress.sectionId, courseSections.id))
+      .where(and(
+        eq(sectionProgress.userId, userId),
+        eq(courseSections.courseId, courseId),
+        eq(sectionProgress.isCompleted, true)
+      ));
+
+    return {
+      totalSections: totalSections[0]?.count || 0,
+      completedSections: completedSections[0]?.count || 0,
+    };
   }
 }
 
