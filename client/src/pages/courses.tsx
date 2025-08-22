@@ -13,6 +13,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { insertUserSchema, loginSchema } from "@shared/schema";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
+import { useMutation } from "@tanstack/react-query";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 import { 
   BookOpen, 
   Download, 
@@ -122,6 +124,28 @@ export default function Courses() {
 
   const { login, register: registerUser, logout, isLoggingIn, isRegistering } = useAuth();
 
+  // Course enrollment mutation
+  const enrollMutation = useMutation({
+    mutationFn: async (courseId: string) => {
+      const response = await apiRequest("POST", `/api/enrollments`, { courseId });
+      return response.json();
+    },
+    onSuccess: () => {
+      toast({
+        title: "Enrollment Successful!",
+        description: "You have been enrolled in the course. Access it from My Courses.",
+      });
+      queryClient.invalidateQueries({ queryKey: ["/api/my-enrollments"] });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Enrollment Failed",
+        description: error.message || "Please try again later.",
+        variant: "destructive",
+      });
+    },
+  });
+
   const onLogin = async (data: z.infer<typeof loginSchema>) => {
     try {
       await login(data);
@@ -166,6 +190,15 @@ export default function Courses() {
       });
     } catch (error) {
       console.error("Logout error:", error);
+    }
+  };
+
+  const handleEnroll = async (courseId: string, courseTitle: string) => {
+    // Temporarily disable authentication requirement for development
+    try {
+      await enrollMutation.mutateAsync(courseId.toString());
+    } catch (error) {
+      console.error("Enrollment error:", error);
     }
   };
 
@@ -404,9 +437,14 @@ export default function Courses() {
                     </div>
                   </div>
                   
-                  <Button size="lg" className="bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue px-8 py-3 font-semibold">
+                  <Button 
+                    size="lg" 
+                    className="bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue px-8 py-3 font-semibold"
+                    onClick={() => handleEnroll(course.id.toString(), course.title)}
+                    disabled={enrollMutation.isPending}
+                  >
                     <GraduationCap className="h-5 w-5 mr-2" />
-                    Start This Course
+                    {enrollMutation.isPending ? "Enrolling..." : "Start This Course"}
                   </Button>
                 </CardContent>
               </Card>
@@ -499,9 +537,13 @@ export default function Courses() {
                       </div>
                     </div>
                     
-                    <Button className="w-full bg-covenant-blue hover:bg-covenant-blue/80 text-white">
+                    <Button 
+                      className="w-full bg-covenant-blue hover:bg-covenant-blue/80 text-white"
+                      onClick={() => handleEnroll(course.id.toString(), course.title)}
+                      disabled={enrollMutation.isPending}
+                    >
                       <GraduationCap className="h-4 w-4 mr-2" />
-                      Enroll Now
+                      {enrollMutation.isPending ? "Enrolling..." : "Enroll Now"}
                     </Button>
                   </div>
                 </CardContent>
