@@ -28,7 +28,7 @@ export default function Home() {
               Your Path to Covenant Freedom
             </h2>
             <p className="text-xl text-covenant-gray max-w-3xl mx-auto">
-              Discover the truth of your identity in Christ and step into the freedom He has provided
+              True freedom is found in regeneration through Christ's saving grace. The New Covenant Trust is simply a lawful expression of what happens when you are Born Again into Christ, discovering your divine identity as a co-heir and learning to operate in Kingdom authority.
             </p>
           </div>
 
@@ -36,7 +36,7 @@ export default function Home() {
             <FeatureCard
               icon={<Crown />}
               title="Kingdom Authority"
-              description="Understand Christ as the cornerstone and grantor of the New Covenant Trust, establishing true spiritual authority."
+              description="Understand Christ as the cornerstone and grantor of the New Covenant Trust. Through regeneration in Him, you receive true spiritual authority as your birthright."
             />
             <FeatureCard
               icon={<Unlink />}
@@ -46,7 +46,7 @@ export default function Home() {
             <FeatureCard
               icon={<Scroll />}
               title="Covenant Identity"
-              description="Reclaim your true identity as a beneficiary of the New Covenant Trust in the Body of Christ."
+              description="The trust simply recognizes what God has already done - you are Born Again into Christ and made a beneficiary of His eternal inheritance."
             />
           </div>
         </div>
