@@ -6,12 +6,33 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { BookOpen, Crown, Heart, Shield, CheckCircle, ArrowRight, Play } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { BookOpen, Crown, Heart, Shield, CheckCircle, ArrowRight, Play, Video, LogIn, UserPlus } from "lucide-react";
 import { Link } from "wouter";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { insertUserSchema, loginSchema } from "@shared/schema";
+import { z } from "zod";
+import { useToast } from "@/hooks/use-toast";
+
+const registrationSchema = insertUserSchema.extend({
+  confirmPassword: z.string().min(6),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+});
+
+type RegistrationData = z.infer<typeof registrationSchema>;
 
 export default function NewCovenantIntro() {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, login, register, isLoggingIn, isRegistering } = useAuth();
+  const { toast } = useToast();
   const [completedSections, setCompletedSections] = useState<string[]>([]);
+  const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
+  const [showAuthDialog, setShowAuthDialog] = useState(false);
   
   const markSectionComplete = (sectionId: string) => {
     if (!completedSections.includes(sectionId)) {
@@ -20,6 +41,60 @@ export default function NewCovenantIntro() {
   };
 
   const progressPercentage = (completedSections.length / 6) * 100;
+
+  const loginForm = useForm({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const registerForm = useForm({
+    resolver: zodResolver(registrationSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
+
+  const onLogin = async (data: z.infer<typeof loginSchema>) => {
+    try {
+      await login(data);
+      setShowAuthDialog(false);
+      toast({
+        title: "Welcome back!",
+        description: "You can now access all course materials.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Login failed",
+        description: error.message || "Please check your credentials and try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const onRegister = async (data: RegistrationData) => {
+    try {
+      const { confirmPassword, ...registerData } = data;
+      await register(registerData);
+      setShowAuthDialog(false);
+      toast({
+        title: "Account created!",
+        description: "Welcome to Kingdom College. You can now access all course materials.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Registration failed",
+        description: error.message || "Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
 
   const lessonSections = [
     {
@@ -162,11 +237,147 @@ export default function NewCovenantIntro() {
                     ) : (
                       <div className="text-center">
                         <p className="text-sm text-covenant-gray mb-3">Sign in to track progress</p>
-                        <Link href="/education">
-                          <Button className="w-full bg-covenant-blue hover:bg-covenant-blue/80 text-white">
-                            Get Access
-                          </Button>
-                        </Link>
+                        <Dialog open={showAuthDialog} onOpenChange={setShowAuthDialog}>
+                          <DialogTrigger asChild>
+                            <Button className="w-full bg-covenant-blue hover:bg-covenant-blue/80 text-white">
+                              <LogIn className="h-4 w-4 mr-2" />
+                              Get Access
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="sm:max-w-md">
+                            <DialogHeader>
+                              <DialogTitle>
+                                {authMode === 'login' ? 'Student Login' : 'Create Student Account'}
+                              </DialogTitle>
+                              <DialogDescription>
+                                {authMode === 'login' 
+                                  ? 'Sign in to continue your covenant education'
+                                  : 'Join Kingdom College to understand your divine inheritance'
+                                }
+                              </DialogDescription>
+                            </DialogHeader>
+                            
+                            <Tabs value={authMode} onValueChange={(value) => setAuthMode(value as 'login' | 'register')}>
+                              <TabsList className="grid w-full grid-cols-2">
+                                <TabsTrigger value="login">Login</TabsTrigger>
+                                <TabsTrigger value="register">Register</TabsTrigger>
+                              </TabsList>
+                              
+                              <TabsContent value="login" className="space-y-4">
+                                <Form {...loginForm}>
+                                  <form onSubmit={loginForm.handleSubmit(onLogin)} className="space-y-4">
+                                    <FormField
+                                      control={loginForm.control}
+                                      name="email"
+                                      render={({ field }) => (
+                                        <FormItem>
+                                          <FormLabel>Email</FormLabel>
+                                          <FormControl>
+                                            <Input placeholder="Enter your email" {...field} />
+                                          </FormControl>
+                                          <FormMessage />
+                                        </FormItem>
+                                      )}
+                                    />
+                                    <FormField
+                                      control={loginForm.control}
+                                      name="password"
+                                      render={({ field }) => (
+                                        <FormItem>
+                                          <FormLabel>Password</FormLabel>
+                                          <FormControl>
+                                            <Input type="password" placeholder="Enter your password" {...field} />
+                                          </FormControl>
+                                          <FormMessage />
+                                        </FormItem>
+                                      )}
+                                    />
+                                    <Button type="submit" className="w-full bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue" disabled={isLoggingIn}>
+                                      {isLoggingIn ? "Signing in..." : "Sign In"}
+                                    </Button>
+                                  </form>
+                                </Form>
+                              </TabsContent>
+                              
+                              <TabsContent value="register" className="space-y-4">
+                                <Form {...registerForm}>
+                                  <form onSubmit={registerForm.handleSubmit(onRegister)} className="space-y-4">
+                                    <div className="grid grid-cols-2 gap-4">
+                                      <FormField
+                                        control={registerForm.control}
+                                        name="firstName"
+                                        render={({ field }) => (
+                                          <FormItem>
+                                            <FormLabel>First Name</FormLabel>
+                                            <FormControl>
+                                              <Input placeholder="First name" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                          </FormItem>
+                                        )}
+                                      />
+                                      <FormField
+                                        control={registerForm.control}
+                                        name="lastName"
+                                        render={({ field }) => (
+                                          <FormItem>
+                                            <FormLabel>Last Name</FormLabel>
+                                            <FormControl>
+                                              <Input placeholder="Last name" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                          </FormItem>
+                                        )}
+                                      />
+                                    </div>
+                                    <FormField
+                                      control={registerForm.control}
+                                      name="email"
+                                      render={({ field }) => (
+                                        <FormItem>
+                                          <FormLabel>Email</FormLabel>
+                                          <FormControl>
+                                            <Input placeholder="Enter your email" {...field} />
+                                          </FormControl>
+                                          <FormMessage />
+                                        </FormItem>
+                                      )}
+                                    />
+                                    <FormField
+                                      control={registerForm.control}
+                                      name="password"
+                                      render={({ field }) => (
+                                        <FormItem>
+                                          <FormLabel>Password</FormLabel>
+                                          <FormControl>
+                                            <Input type="password" placeholder="Create password" {...field} />
+                                          </FormControl>
+                                          <FormMessage />
+                                        </FormItem>
+                                      )}
+                                    />
+                                    <FormField
+                                      control={registerForm.control}
+                                      name="confirmPassword"
+                                      render={({ field }) => (
+                                        <FormItem>
+                                          <FormLabel>Confirm Password</FormLabel>
+                                          <FormControl>
+                                            <Input type="password" placeholder="Confirm password" {...field} />
+                                          </FormControl>
+                                          <FormMessage />
+                                        </FormItem>
+                                      )}
+                                    />
+                                    <Button type="submit" className="w-full bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue" disabled={isRegistering}>
+                                      {isRegistering ? "Creating account..." : "Create Account"}
+                                    </Button>
+                                  </form>
+                                </Form>
+                              </TabsContent>
+                            </Tabs>
+                          </DialogContent>
+                        </Dialog>
                       </div>
                     )}
                   </div>
@@ -182,46 +393,69 @@ export default function NewCovenantIntro() {
             {lessonSections.map((section, index) => (
               <Card key={section.id} className="hover:shadow-lg transition-shadow">
                 <CardContent className="pt-6">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-start gap-4 flex-1">
-                      <div className="flex-shrink-0">
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                          completedSections.includes(section.id) 
-                            ? 'bg-green-500 text-white' 
-                            : 'bg-covenant-light text-covenant-blue'
-                        }`}>
-                          {completedSections.includes(section.id) ? (
-                            <CheckCircle className="h-5 w-5" />
-                          ) : (
-                            <span className="font-bold">{index + 1}</span>
-                          )}
+                  <div className="space-y-4">
+                    {/* Section Header */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-start gap-4 flex-1">
+                        <div className="flex-shrink-0">
+                          <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                            completedSections.includes(section.id) 
+                              ? 'bg-green-500 text-white' 
+                              : 'bg-covenant-light text-covenant-blue'
+                          }`}>
+                            {completedSections.includes(section.id) ? (
+                              <CheckCircle className="h-5 w-5" />
+                            ) : (
+                              <span className="font-bold">{index + 1}</span>
+                            )}
+                          </div>
+                        </div>
+                        
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-3 mb-2">
+                            <h3 className="font-semibold text-lg text-covenant-blue">{section.title}</h3>
+                            <Badge variant="outline" className="text-xs">
+                              {section.duration}
+                            </Badge>
+                          </div>
+                          <p className="text-covenant-gray text-sm leading-relaxed">
+                            {section.description}
+                          </p>
                         </div>
                       </div>
                       
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-3 mb-2">
-                          <h3 className="font-semibold text-lg text-covenant-blue">{section.title}</h3>
-                          <Badge variant="outline" className="text-xs">
-                            {section.duration}
-                          </Badge>
-                        </div>
-                        <p className="text-covenant-gray text-sm leading-relaxed">
-                          {section.description}
-                        </p>
+                      <div className="ml-4">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => markSectionComplete(section.id)}
+                          disabled={!isAuthenticated}
+                          className="border-covenant-blue text-covenant-blue hover:bg-covenant-blue hover:text-white"
+                        >
+                          {completedSections.includes(section.id) ? 'Completed' : 'Start'}
+                          <ArrowRight className="h-4 w-4 ml-2" />
+                        </Button>
                       </div>
                     </div>
-                    
-                    <div className="ml-4">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => markSectionComplete(section.id)}
-                        disabled={!isAuthenticated}
-                        className="border-covenant-blue text-covenant-blue hover:bg-covenant-blue hover:text-white"
-                      >
-                        {completedSections.includes(section.id) ? 'Completed' : 'Start'}
-                        <ArrowRight className="h-4 w-4 ml-2" />
-                      </Button>
+
+                    {/* Video Placeholder */}
+                    <div className="bg-gradient-to-br from-covenant-light to-covenant-light/50 rounded-lg p-8 border-2 border-dashed border-covenant-gold/30">
+                      <div className="flex flex-col items-center justify-center text-center space-y-4">
+                        <div className="w-16 h-16 bg-covenant-gold/20 rounded-full flex items-center justify-center">
+                          <Video className="h-8 w-8 text-covenant-gold" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-covenant-blue mb-2">
+                            Video: {section.title}
+                          </h4>
+                          <p className="text-sm text-covenant-gray mb-3">
+                            Coming Soon - {section.duration} teaching video
+                          </p>
+                          <Badge className="bg-covenant-gold/10 text-covenant-blue border-covenant-gold">
+                            Video Content Planned
+                          </Badge>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </CardContent>
