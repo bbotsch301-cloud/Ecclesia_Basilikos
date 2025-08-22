@@ -327,8 +327,8 @@ export default function Education() {
                                 </FormItem>
                               )}
                             />
-                            <Button type="submit" className="w-full bg-covenant-blue hover:bg-covenant-blue/80" disabled={isRegistering}>
-                              {isRegistering ? "Creating Account..." : "Create Account"}
+                            <Button type="submit" className="w-full bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue" disabled={isRegistering}>
+                              {isRegistering ? "Joining..." : "Join"}
                             </Button>
                           </form>
                         </Form>
