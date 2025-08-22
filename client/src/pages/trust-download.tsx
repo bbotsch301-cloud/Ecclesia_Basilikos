@@ -11,6 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { Download, FileText, Shield, CheckCircle, Mail } from "lucide-react";
+import customImage from "@assets/IMG_9062_1755824052661.jpeg";
 
 const emailSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -71,7 +72,7 @@ export default function TrustDownload() {
       <HeroSection
         title="New Covenant Trust Document"
         description="Access your comprehensive guide to covenant freedom and spiritual sovereignty"
-        backgroundImage="@assets/IMG_9062_1755824052661.jpeg"
+        backgroundImage={customImage}
       />
 
       <div className="py-20">

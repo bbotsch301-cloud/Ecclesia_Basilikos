@@ -1,6 +1,7 @@
 import HeroSection from "@/components/ui/hero-section";
 import ScriptureQuote from "@/components/ui/scripture-quote";
 import { Check, X } from "lucide-react";
+import customImage from "@assets/IMG_9062_1755824052661.jpeg";
 
 export default function About() {
   return (
@@ -16,7 +17,7 @@ export default function About() {
           <div className="grid lg:grid-cols-2 gap-12 items-center mb-20">
             <div>
               <img 
-                src="@assets/IMG_9062_1755824052661.jpeg" 
+                src={customImage} 
                 alt="Ancient scroll and covenant documents representing divine trust establishment" 
                 className="rounded-xl shadow-lg w-full h-auto"
               />
