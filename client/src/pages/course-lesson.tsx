@@ -22,10 +22,17 @@ interface Lesson {
   id: string;
   title: string;
   description: string;
-  videoUrl: string;
+  youtubeVideoId?: string;
   duration: string;
   order: number;
   completed?: boolean;
+  files?: Array<{
+    id: string;
+    name: string;
+    size: string;
+    type: string;
+    downloadUrl: string;
+  }>;
 }
 
 interface CourseData {
@@ -52,16 +59,32 @@ const sampleCourseData: { [key: string]: CourseData } = {
         id: "1",
         title: "Introduction to Biblical Trusts",
         description: "Understanding the scriptural foundation of trust relationships and your role as a trustee in God's kingdom economy.",
-        videoUrl: "https://example.com/video1",
+        youtubeVideoId: "dQw4w9WgXcQ", // Sample YouTube video ID
         duration: "15 minutes",
         order: 1,
-        completed: true
+        completed: true,
+        files: [
+          {
+            id: "1",
+            name: "Trust Administration Guide",
+            size: "2.3 MB",
+            type: "PDF",
+            downloadUrl: "/api/files/trust-admin-guide.pdf"
+          },
+          {
+            id: "2", 
+            name: "Biblical Stewardship Principles",
+            size: "1.8 MB",
+            type: "PDF",
+            downloadUrl: "/api/files/stewardship-principles.pdf"
+          }
+        ]
       },
       {
         id: "2",
         title: "Legal Structures and Kingdom Authority",
         description: "How to establish trust structures that honor God's authority while operating effectively in the modern legal system.",
-        videoUrl: "https://example.com/video2",
+        youtubeVideoId: "dQw4w9WgXcQ",
         duration: "20 minutes",
         order: 2,
         completed: false
@@ -70,7 +93,7 @@ const sampleCourseData: { [key: string]: CourseData } = {
         id: "3",
         title: "Trustee Responsibilities and Biblical Stewardship",
         description: "Understanding your duties and obligations as a faithful trustee managing God's resources.",
-        videoUrl: "https://example.com/video3",
+        youtubeVideoId: "dQw4w9WgXcQ",
         duration: "25 minutes", 
         order: 3,
         completed: false
@@ -79,7 +102,7 @@ const sampleCourseData: { [key: string]: CourseData } = {
         id: "4",
         title: "Asset Management and Investment Principles",
         description: "Biblical principles for managing trust assets, investments, and growing wealth according to Kingdom values.",
-        videoUrl: "https://example.com/video4",
+        youtubeVideoId: "dQw4w9WgXcQ",
         duration: "30 minutes",
         order: 4,
         completed: false
@@ -88,7 +111,7 @@ const sampleCourseData: { [key: string]: CourseData } = {
         id: "5",
         title: "Banking and Financial Institutions",
         description: "Working with banks, managing accounts, and establishing proper financial relationships as a trustee.",
-        videoUrl: "https://example.com/video5",
+        youtubeVideoId: "dQw4w9WgXcQ",
         duration: "22 minutes",
         order: 5,
         completed: false
@@ -97,7 +120,7 @@ const sampleCourseData: { [key: string]: CourseData } = {
         id: "6",
         title: "Cryptocurrency and Digital Assets",
         description: "Understanding and managing digital assets, cryptocurrency, and modern investment vehicles within a trust.",
-        videoUrl: "https://example.com/video6",
+        youtubeVideoId: "dQw4w9WgXcQ",
         duration: "28 minutes",
         order: 6,
         completed: false
@@ -106,7 +129,7 @@ const sampleCourseData: { [key: string]: CourseData } = {
         id: "7",
         title: "Wealth Legacy Building",
         description: "Creating lasting financial legacies that honor God and bless future generations through proper trust management.",
-        videoUrl: "https://example.com/video7",
+        youtubeVideoId: "dQw4w9WgXcQ",
         duration: "35 minutes",
         order: 7,
         completed: false
@@ -115,7 +138,7 @@ const sampleCourseData: { [key: string]: CourseData } = {
         id: "8",
         title: "Practical Trust Administration",
         description: "Daily operations, record keeping, beneficiary communication, and practical aspects of trust management.",
-        videoUrl: "https://example.com/video8",
+        youtubeVideoId: "dQw4w9WgXcQ",
         duration: "32 minutes",
         order: 8,
         completed: false
@@ -248,77 +271,72 @@ export default function CourseLesson() {
                 </div>
               </CardHeader>
               <CardContent>
-                {/* Video Player */}
+                {/* YouTube Video Player */}
                 <div className="mb-8">
                   <Card className="bg-black rounded-lg overflow-hidden">
                     <CardContent className="p-0">
-                      <div className="relative aspect-video bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
-                        <div className="text-center">
-                          <div className="bg-white/10 rounded-full p-6 mb-4">
-                            <Play className="h-12 w-12 text-white mx-auto" />
-                          </div>
-                          <h3 className="text-white text-xl font-semibold mb-2">{currentLesson?.title}</h3>
-                          <p className="text-gray-300 mb-6">{currentLesson?.description}</p>
-                          <Button 
-                            size="lg"
-                            className="bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue font-semibold"
-                          >
-                            <Play className="h-5 w-5 mr-2" />
-                            Play Video ({currentLesson?.duration})
-                          </Button>
+                      {currentLesson?.youtubeVideoId ? (
+                        <div className="relative aspect-video">
+                          <iframe
+                            className="w-full h-full"
+                            src={`https://www.youtube.com/embed/${currentLesson.youtubeVideoId}`}
+                            title={currentLesson.title}
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                          />
                         </div>
-                        
-                        {/* Video Controls Overlay */}
-                        <div className="absolute bottom-4 left-4 right-4">
-                          <div className="bg-black/50 rounded-lg p-3">
-                            <div className="flex items-center justify-between text-white text-sm mb-2">
-                              <span>0:00</span>
-                              <span>{currentLesson?.duration}</span>
+                      ) : (
+                        <div className="relative aspect-video bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
+                          <div className="text-center">
+                            <div className="bg-white/10 rounded-full p-6 mb-4">
+                              <Video className="h-12 w-12 text-white mx-auto" />
                             </div>
-                            <div className="w-full bg-gray-600 rounded-full h-1">
-                              <div className="bg-covenant-gold h-1 rounded-full w-1/4"></div>
-                            </div>
+                            <h3 className="text-white text-xl font-semibold mb-2">{currentLesson?.title}</h3>
+                            <p className="text-gray-300 mb-6">Video will be available soon</p>
                           </div>
                         </div>
-                      </div>
+                      )}
                     </CardContent>
                   </Card>
                 </div>
 
-                {/* Lesson Resources */}
-                <div className="grid md:grid-cols-2 gap-6 mb-8">
+                {/* Lesson Files */}
+                <div className="mb-8">
                   <Card className="border-covenant-light">
                     <CardHeader>
                       <CardTitle className="text-covenant-blue flex items-center">
-                        <BookOpen className="h-5 w-5 mr-2" />
-                        Lesson Notes
+                        <Download className="h-5 w-5 mr-2" />
+                        Lesson Resources
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-covenant-gray mb-4">
-                        Download comprehensive lesson notes and biblical references for this lesson.
-                      </p>
-                      <Button variant="outline" className="border-covenant-blue text-covenant-blue">
-                        <Download className="h-4 w-4 mr-2" />
-                        Download Notes
-                      </Button>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="border-covenant-light">
-                    <CardHeader>
-                      <CardTitle className="text-covenant-blue flex items-center">
-                        <Users className="h-5 w-5 mr-2" />
-                        Discussion
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-covenant-gray mb-4">
-                        Join the community discussion about this lesson and share insights.
-                      </p>
-                      <Button variant="outline" className="border-covenant-blue text-covenant-blue">
-                        Join Discussion
-                      </Button>
+                      {currentLesson?.files && currentLesson.files.length > 0 ? (
+                        <div className="space-y-3">
+                          {currentLesson.files.map((file) => (
+                            <div key={file.id} className="flex items-center justify-between p-3 border border-covenant-light rounded-lg">
+                              <div className="flex items-center">
+                                <BookOpen className="h-5 w-5 text-covenant-blue mr-3" />
+                                <div>
+                                  <p className="font-medium text-covenant-blue">{file.name}</p>
+                                  <p className="text-sm text-covenant-gray">{file.type} • {file.size}</p>
+                                </div>
+                              </div>
+                              <Button 
+                                size="sm" 
+                                variant="outline" 
+                                className="border-covenant-blue text-covenant-blue"
+                                onClick={() => window.open(file.downloadUrl, '_blank')}
+                              >
+                                <Download className="h-4 w-4 mr-2" />
+                                Download
+                              </Button>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-covenant-gray text-center py-4">No files available for this lesson</p>
+                      )}
                     </CardContent>
                   </Card>
                 </div>

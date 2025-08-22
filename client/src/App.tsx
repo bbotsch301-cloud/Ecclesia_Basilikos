@@ -18,6 +18,7 @@ import TrustDownload from "@/pages/trust-download";
 import AdminDashboard from "@/pages/admin-dashboard";
 import AdminContent from "@/pages/admin-content";
 import AdminTrustDownloads from "@/pages/admin-trust-downloads";
+import AdminVideos from "@/pages/admin-videos";
 import NewCovenantIntro from "@/pages/new-covenant-intro";
 import Courses from "@/pages/courses";
 import MyCourses from "@/pages/my-courses";
@@ -49,6 +50,7 @@ function Router() {
           <Route path="/verify-email" component={VerifyEmail} />
           <Route path="/admin/content" component={AdminContent} />
           <Route path="/admin/trust-downloads" component={AdminTrustDownloads} />
+          <Route path="/admin/videos" component={AdminVideos} />
           <Route path="/admin" component={AdminDashboard} />
           <Route component={NotFound} />
         </Switch>
