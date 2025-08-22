@@ -28,7 +28,7 @@ export default function Home() {
               Your Path to Covenant Freedom
             </h2>
             <p className="text-xl text-covenant-gray max-w-3xl mx-auto">
-              True freedom is found in regeneration through Christ's saving grace. The New Covenant Trust is simply a lawful expression of what happens when you are Born Again into Christ, discovering your divine identity as a co-heir and learning to operate in Kingdom authority.
+              True freedom is found in regeneration through Christ's saving grace. The New Covenant Trust is a lawful expression of what happens when you are Born Again into Christ, discovering your divine identity as a co-heir and learning to operate in Kingdom authority.
             </p>
           </div>
 
