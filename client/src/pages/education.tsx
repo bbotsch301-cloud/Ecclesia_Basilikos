@@ -7,7 +7,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { BookOpen, Download, Video, Users, Award, Clock, Lock, CheckCircle, User, LogIn, UserPlus, GraduationCap, Crown, Shield, Scroll, Heart, Key } from "lucide-react";
+import { BookOpen, Download, Video, Users, Award, Clock, Lock, CheckCircle, User, LogIn, UserPlus, GraduationCap, Crown, Shield, Scroll, Heart, Key, Play } from "lucide-react";
+import { Link } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -338,6 +339,41 @@ export default function Education() {
                 </Dialog>
               </div>
             )}
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Course */}
+      <section className="py-16 bg-gradient-to-r from-covenant-blue to-covenant-dark-blue">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="text-white">
+            <Badge className="bg-covenant-gold text-covenant-blue mb-4">Featured Course</Badge>
+            <h2 className="text-3xl md:text-4xl font-playfair font-bold mb-4">
+              Introduction to the New Covenant Trust
+            </h2>
+            <p className="text-lg mb-8 text-blue-100 max-w-2xl mx-auto">
+              A comprehensive overview of Christ as the Grantor of the New Covenant Trust and how you can step into your role as a beneficiary. This foundational teaching sets the stage for understanding your true identity and freedom in Christ.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4 mb-8">
+              <div className="flex items-center text-blue-200">
+                <Clock className="h-4 w-4 mr-2" />
+                <span className="text-sm">45 minutes</span>
+              </div>
+              <div className="flex items-center text-blue-200">
+                <Users className="h-4 w-4 mr-2" />
+                <span className="text-sm">Foundational Level</span>
+              </div>
+              <div className="flex items-center text-blue-200">
+                <BookOpen className="h-4 w-4 mr-2" />
+                <span className="text-sm">6 Sections</span>
+              </div>
+            </div>
+            <Link href="/new-covenant-intro">
+              <Button size="lg" className="bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue px-8 py-3 font-semibold">
+                <Play className="h-5 w-5 mr-2" />
+                Start Learning
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
