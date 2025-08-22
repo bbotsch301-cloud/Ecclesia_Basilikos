@@ -52,10 +52,72 @@ interface CourseData {
 
 const coursesData: CourseData[] = [
   {
-    id: "trust-foundations",
-    title: "Trust Administration Fundamentals",
-    description: "Essential knowledge for managing your New Covenant Trust including legal structure, documentation, and basic administrative duties",
+    id: "new-covenant-foundation",
+    title: "Introduction to the New Covenant Trust",
+    description: "Understanding Christ as the Grantor and your role as beneficiary in God's eternal trust",
     level: "foundation",
+    duration: "45 minutes",
+    sectionCount: 6,
+    estimatedTime: "1 week",
+    thumbnail: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=300",
+    completionBadge: "Covenant Foundation",
+    sections: [
+      {
+        id: "foundation",
+        title: "The Foundation of Trust",
+        duration: "5 min",
+        description: "Understanding what a trust is and why Christ established one",
+        topics: ["Trust Fundamentals", "Biblical Foundation", "Legal Framework"]
+      },
+      {
+        id: "grantor",
+        title: "Christ as Grantor",
+        duration: "8 min", 
+        description: "How Jesus established the New Covenant Trust through His sacrifice",
+        topics: ["Grantor Authority", "Sacrifice & Inheritance", "Eternal Covenant"]
+      },
+      {
+        id: "beneficiary",
+        title: "Your Role as Beneficiary",
+        duration: "7 min",
+        description: "Understanding your inheritance and rights in the trust",
+        topics: ["Inheritance Rights", "Co-heir Status", "Kingdom Benefits"]
+      },
+      {
+        id: "authority",
+        title: "Spiritual Authority",
+        duration: "6 min",
+        description: "Operating in Kingdom authority as a co-heir with Christ",
+        topics: ["Delegated Authority", "Kingdom Power", "Spiritual Warfare"]
+      },
+      {
+        id: "freedom",
+        title: "True Freedom in Christ", 
+        duration: "9 min",
+        description: "How regeneration brings freedom from Babylon's systems",
+        topics: ["Liberation Theology", "Breaking Bondage", "Spiritual Freedom"]
+      },
+      {
+        id: "living",
+        title: "Living as a Beneficiary",
+        duration: "10 min",
+        description: "Practical application of your covenant identity",
+        topics: ["Daily Practice", "Identity in Christ", "Kingdom Lifestyle"]
+      }
+    ],
+    learningOutcomes: [
+      "Understand the biblical foundation of the New Covenant Trust",
+      "Recognize your role as a joint-heir with Christ",
+      "Operate in Kingdom spiritual authority",
+      "Experience freedom from Babylon's legal fiction systems",
+      "Apply covenant principles in daily life"
+    ]
+  },
+  {
+    id: "trust-administration",
+    title: "Trust Administration Fundamentals", 
+    description: "Essential knowledge for managing your New Covenant Trust including legal structure, documentation, and basic administrative duties",
+    level: "intermediate",
     duration: "1.5 hours",
     sectionCount: 6,
     estimatedTime: "1-2 weeks",
@@ -111,7 +173,8 @@ const coursesData: CourseData[] = [
       "Successfully open and manage trust banking relationships",
       "Execute proper asset transfer and funding procedures",
       "Implement effective administrative systems and procedures"
-    ]
+    ],
+    prerequisites: ["Introduction to the New Covenant Trust"]
   },
   {
     id: "asset-management",
@@ -189,7 +252,7 @@ const coursesData: CourseData[] = [
       "Navigate international asset protection and offshore considerations",
       "Build and maintain a diversified trust portfolio"
     ],
-    prerequisites: ["Trust Administration Fundamentals"]
+    prerequisites: ["Introduction to the New Covenant Trust", "Trust Administration Fundamentals"]
   },
   {
     id: "trust-taxation-compliance",
@@ -282,7 +345,7 @@ const coursesData: CourseData[] = [
       "Navigate international structures and cross-border compliance",
       "Handle trust disputes and legal challenges effectively"
     ],
-    prerequisites: ["Trust Administration Fundamentals", "Trust Asset Management & Investment Strategies"]
+    prerequisites: ["Introduction to the New Covenant Trust", "Trust Administration Fundamentals", "Trust Asset Management & Investment Strategies"]
   },
   {
     id: "trust-mastery-legacy",
@@ -390,7 +453,7 @@ const coursesData: CourseData[] = [
       "Manage major liquidity events and business exits efficiently",
       "Build permanent legacy structures that transcend generations"
     ],
-    prerequisites: ["Trust Administration Fundamentals", "Trust Asset Management & Investment Strategies", "Trust Taxation, Compliance & Legal Protection"]
+    prerequisites: ["Introduction to the New Covenant Trust", "Trust Administration Fundamentals", "Trust Asset Management & Investment Strategies", "Trust Taxation, Compliance & Legal Protection"]
   }
 ];
 
