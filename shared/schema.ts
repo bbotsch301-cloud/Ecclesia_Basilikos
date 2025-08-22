@@ -414,6 +414,7 @@ export const insertLessonSchema = createInsertSchema(lessons).omit({
 
 export const insertEnrollmentSchema = createInsertSchema(enrollments).omit({
   id: true,
+  userId: true,
   enrolledAt: true,
   completedAt: true,
   progress: true,
