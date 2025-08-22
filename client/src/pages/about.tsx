@@ -154,6 +154,148 @@ export default function About() {
               </div>
             </div>
           </div>
+
+          {/* Trust Structure Introduction */}
+          <div className="mb-20">
+            <div className="text-center mb-12">
+              <h2 className="font-playfair text-3xl font-bold text-covenant-blue mb-4">
+                Understanding Trust Structure
+              </h2>
+              <p className="text-lg text-covenant-gray max-w-3xl mx-auto">
+                A basic introduction to trust roles and how the New Covenant Trust operates under divine law
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8 mb-12">
+              {/* Grantor */}
+              <div className="bg-white p-6 rounded-xl shadow-lg border border-covenant-light">
+                <div className="text-center mb-4">
+                  <div className="w-16 h-16 bg-covenant-gold rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-2xl font-bold text-covenant-blue">G</span>
+                  </div>
+                  <h3 className="font-playfair text-xl font-bold text-covenant-blue">The Grantor</h3>
+                  <p className="text-sm text-covenant-gray">Creator & Owner of the Trust</p>
+                </div>
+                <div className="space-y-3">
+                  <p className="text-sm text-covenant-gray">
+                    <strong>In earthly trusts:</strong> The person who creates the trust and transfers assets into it.
+                  </p>
+                  <p className="text-sm text-covenant-blue font-semibold">
+                    <strong>In New Covenant Trust:</strong> Jesus Christ, who transferred all authority and blessing to His Body.
+                  </p>
+                  <blockquote className="text-xs italic bg-covenant-light p-3 rounded">
+                    "All power is given unto me in heaven and in earth." - Matthew 28:18
+                  </blockquote>
+                </div>
+              </div>
+
+              {/* Trustee */}
+              <div className="bg-white p-6 rounded-xl shadow-lg border border-covenant-light">
+                <div className="text-center mb-4">
+                  <div className="w-16 h-16 bg-covenant-gold rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-2xl font-bold text-covenant-blue">T</span>
+                  </div>
+                  <h3 className="font-playfair text-xl font-bold text-covenant-blue">The Trustee</h3>
+                  <p className="text-sm text-covenant-gray">Manager & Administrator</p>
+                </div>
+                <div className="space-y-3">
+                  <p className="text-sm text-covenant-gray">
+                    <strong>In earthly trusts:</strong> The person who manages the trust assets according to the trust terms.
+                  </p>
+                  <p className="text-sm text-covenant-blue font-semibold">
+                    <strong>In New Covenant Trust:</strong> Believers who operate in Kingdom authority as royal priests.
+                  </p>
+                  <blockquote className="text-xs italic bg-covenant-light p-3 rounded">
+                    "But ye are a chosen generation, a royal priesthood..." - 1 Peter 2:9
+                  </blockquote>
+                </div>
+              </div>
+
+              {/* Beneficiary */}
+              <div className="bg-white p-6 rounded-xl shadow-lg border border-covenant-light">
+                <div className="text-center mb-4">
+                  <div className="w-16 h-16 bg-covenant-gold rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-2xl font-bold text-covenant-blue">B</span>
+                  </div>
+                  <h3 className="font-playfair text-xl font-bold text-covenant-blue">The Beneficiary</h3>
+                  <p className="text-sm text-covenant-gray">Recipient of Trust Benefits</p>
+                </div>
+                <div className="space-y-3">
+                  <p className="text-sm text-covenant-gray">
+                    <strong>In earthly trusts:</strong> The person who receives benefits from the trust assets.
+                  </p>
+                  <p className="text-sm text-covenant-blue font-semibold">
+                    <strong>In New Covenant Trust:</strong> All believers as joint-heirs with Christ in His inheritance.
+                  </p>
+                  <blockquote className="text-xs italic bg-covenant-light p-3 rounded">
+                    "And if children, then heirs; heirs of God, and joint-heirs with Christ" - Romans 8:17
+                  </blockquote>
+                </div>
+              </div>
+            </div>
+
+            {/* How New Covenant Trust Operates */}
+            <div className="bg-gradient-to-r from-covenant-blue to-covenant-dark-blue text-white p-8 rounded-xl">
+              <h3 className="font-playfair text-2xl font-bold mb-6 text-center">How the New Covenant Trust Operates</h3>
+              
+              <div className="grid md:grid-cols-2 gap-8">
+                <div>
+                  <h4 className="font-semibold text-lg mb-4 text-covenant-gold">Divine Authority Structure</h4>
+                  <ul className="space-y-3 text-sm">
+                    <li className="flex items-start">
+                      <span className="text-covenant-gold mr-2">•</span>
+                      <span>Christ as Grantor established the trust through His death and resurrection</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-covenant-gold mr-2">•</span>
+                      <span>Believers serve as both trustees (managing Kingdom resources) and beneficiaries (receiving inheritance)</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-covenant-gold mr-2">•</span>
+                      <span>Holy Spirit acts as the down payment ensuring full inheritance</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-covenant-gold mr-2">•</span>
+                      <span>Operates under divine law, not human legal systems</span>
+                    </li>
+                  </ul>
+                </div>
+                
+                <div>
+                  <h4 className="font-semibold text-lg mb-4 text-covenant-gold">Trust Assets & Benefits</h4>
+                  <ul className="space-y-3 text-sm">
+                    <li className="flex items-start">
+                      <span className="text-covenant-gold mr-2">•</span>
+                      <span>Spiritual authority in heavenly places</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-covenant-gold mr-2">•</span>
+                      <span>Royal priesthood status and Kingdom citizenship</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-covenant-gold mr-2">•</span>
+                      <span>Freedom from Babylon's legal fiction and debt slavery</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-covenant-gold mr-2">•</span>
+                      <span>Access to divine provision and protection</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-covenant-gold mr-2">•</span>
+                      <span>Eternal inheritance in God's Kingdom</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div className="mt-6 p-4 bg-black/20 rounded-lg">
+                <p className="text-center text-sm italic">
+                  "For he hath made him to be sin for us, who knew no sin; that we might be made the righteousness of God in him." 
+                  <span className="block text-covenant-gold font-semibold mt-2">- 2 Corinthians 5:21 (KJV)</span>
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
