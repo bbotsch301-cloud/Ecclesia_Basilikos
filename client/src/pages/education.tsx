@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { BookOpen, Download, Video, Users, Award, Clock, Lock, CheckCircle, User, LogIn, UserPlus, GraduationCap, Crown, Shield, Scroll, Heart, Key, Play } from "lucide-react";
+import { BookOpen, Download, Video, Users, Award, Clock, Lock, CheckCircle, User, LogIn, UserPlus, GraduationCap, Crown, Shield, Scroll, Heart, Key, Play, MessageCircle, FileText } from "lucide-react";
 import { Link } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
 import { useForm } from "react-hook-form";
