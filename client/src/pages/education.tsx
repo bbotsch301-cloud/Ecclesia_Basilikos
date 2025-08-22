@@ -189,7 +189,8 @@ export default function Education() {
                 <Button 
                   onClick={handleLogout} 
                   variant="outline" 
-                  className="border-white text-white hover:bg-white hover:text-covenant-blue"
+                  className="border-white bg-white/10 text-white hover:bg-white hover:text-covenant-blue font-medium"
+                  data-testid="button-logout"
                 >
                   Logout
                 </Button>
