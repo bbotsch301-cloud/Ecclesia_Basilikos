@@ -7,8 +7,8 @@ import { Menu, Scroll } from "lucide-react";
 const navigation = [
   { name: "Home", href: "/" },
   { name: "About the Trust", href: "/about" },
-  { name: "Kingdom College", href: "/courses" },
   { name: "Educational Hub", href: "/education" },
+  { name: "Kingdom College", href: "/courses" },
   { name: "Videos & Teachings", href: "/videos" },
   { name: "Freedom Resources", href: "/resources" },
   { name: "Download Trust Document", href: "/trust-download" },
