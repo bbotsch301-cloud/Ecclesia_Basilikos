@@ -368,7 +368,7 @@ export default function Education() {
                 <span className="text-sm">6 Sections</span>
               </div>
             </div>
-            <Link href="/new-covenant-intro">
+            <Link href="/courses">
               <Button size="lg" className="bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue px-8 py-3 font-semibold">
                 <Play className="h-5 w-5 mr-2" />
                 Start Learning
@@ -582,30 +582,12 @@ export default function Education() {
                         Self-paced learning
                       </div>
                       
-                      {isAuthenticated ? (
-                        isEnrolled(course.id) ? (
-                          <Button className="w-full bg-green-600 hover:bg-green-700">
-                            <BookOpen className="h-4 w-4 mr-2" />
-                            Continue Learning
-                          </Button>
-                        ) : (
-                          <Button 
-                            onClick={() => handleEnroll(course.id)}
-                            disabled={enrollMutation.isPending}
-                            className="w-full bg-covenant-blue hover:bg-covenant-blue/80"
-                          >
-                            {enrollMutation.isPending ? "Enrolling..." : "Enroll Now"}
-                          </Button>
-                        )
-                      ) : (
-                        <Button 
-                          onClick={() => setShowAuthDialog(true)}
-                          className="w-full bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue"
-                        >
-                          <Lock className="h-4 w-4 mr-2" />
-                          Login to Enroll
+                      <Link href="/courses">
+                        <Button className="w-full bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue">
+                          <BookOpen className="h-4 w-4 mr-2" />
+                          View in Kingdom College
                         </Button>
-                      )}
+                      </Link>
                     </div>
                   </CardContent>
                 </Card>
@@ -673,15 +655,14 @@ export default function Education() {
             <cite className="text-covenant-gold font-medium">Ephesians 2:19 (KJV)</cite>
           </div>
 
-          {!isAuthenticated && (
+          <Link href="/courses">
             <Button 
               size="lg" 
               className="bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue px-8 py-3 font-semibold"
-              onClick={() => setShowAuthDialog(true)}
             >
               Begin Your Kingdom Education
             </Button>
-          )}
+          </Link>
         </div>
       </section>
     </div>
