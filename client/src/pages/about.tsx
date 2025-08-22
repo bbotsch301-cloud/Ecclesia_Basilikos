@@ -16,7 +16,7 @@ export default function About() {
           <div className="grid lg:grid-cols-2 gap-12 items-center mb-20">
             <div>
               <img 
-                src="https://images.unsplash.com/photo-1519904981063-b0cf448d479e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" 
+                src="@assets/IMG_9062_1755824052661.jpeg" 
                 alt="Ancient scroll and covenant documents representing divine trust establishment" 
                 className="rounded-xl shadow-lg w-full h-auto"
               />
