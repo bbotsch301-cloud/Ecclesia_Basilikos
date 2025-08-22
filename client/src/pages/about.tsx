@@ -142,6 +142,15 @@ export default function About() {
                 </blockquote>
                 <cite className="text-covenant-gold font-semibold">Hebrews 10:16-17</cite>
               </div>
+
+              {/* The Eternal Kingdom */}
+              <div className="bg-white bg-opacity-10 p-6 rounded-lg">
+                <h4 className="font-playfair text-xl font-bold text-covenant-gold mb-4">The Eternal Kingdom</h4>
+                <blockquote className="font-georgia text-white mb-3 leading-relaxed">
+                  "And in the days of these kings shall the God of heaven set up a kingdom, which shall never be destroyed: and the kingdom shall not be left to other people, but it shall break in pieces and consume all these kingdoms, and it shall stand for ever."
+                </blockquote>
+                <cite className="text-covenant-gold font-semibold">Daniel 2:44</cite>
+              </div>
             </div>
           </div>
         </div>

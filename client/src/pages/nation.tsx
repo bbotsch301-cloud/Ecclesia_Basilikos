@@ -41,8 +41,14 @@ export default function Nation() {
                 A Kingdom Without Borders
               </h2>
               <p className="text-lg text-covenant-gray leading-relaxed mb-6">
-                The Nation of Christ transcends all earthly boundaries and jurisdictions. As citizens of heaven, we operate under divine law and spiritual authority that supersedes all human governments and institutions.
+                The Nation of Christ transcends all earthly boundaries and jurisdictions. As citizens of heaven, we operate under divine law and spiritual authority that supersedes all human governments and institutions. This eternal Kingdom, established by the God of heaven, shall never be destroyed nor given to another people, but will consume all earthly kingdoms and stand forever.
               </p>
+              <div className="bg-covenant-light p-6 rounded-lg mb-6">
+                <blockquote className="font-georgia text-lg italic text-covenant-dark-gray mb-3">
+                  "And in the days of these kings shall the God of heaven set up a kingdom, which shall never be destroyed: and the kingdom shall not be left to other people, but it shall break in pieces and consume all these kingdoms, and it shall stand for ever."
+                </blockquote>
+                <cite className="text-covenant-gold font-semibold">Daniel 2:44</cite>
+              </div>
               <div className="space-y-4">
                 {kingdomFeatures.map((feature, index) => (
                   <div key={index} className="flex items-start">
@@ -80,7 +86,7 @@ export default function Nation() {
               Join the Covenant Community
             </h3>
             <p className="text-lg text-covenant-gray max-w-4xl mx-auto leading-relaxed mb-8">
-              The Kingdom of God operates as a nation without borders, transcending all earthly jurisdictions and political boundaries. Under ecclesiastical jurisdiction, God's people form a divine commonwealth where Christ reigns as King and we serve as His ambassadors. This spiritual nation exists wherever covenant believers gather, bound not by geography but by the blood covenant of Jesus Christ. As citizens of heaven, we operate under divine law and Kingdom principles that supersede all human institutions, forming an eternal nation that cannot be shaken by worldly powers or temporal governments.
+              The Kingdom of God operates as a nation without borders, transcending all earthly jurisdictions and political boundaries. Under ecclesiastical jurisdiction, God's people form a divine commonwealth where Christ reigns as King and we serve as His ambassadors. This spiritual nation exists wherever covenant believers gather, bound not by geography but by the blood covenant of Jesus Christ. As citizens of heaven, we operate under divine law and Kingdom principles that supersede all human institutions, forming an eternal nation that shall never be destroyed. According to Daniel's prophecy, this Kingdom will consume all earthly kingdoms and stand forever, established by the God of heaven Himself.
             </p>
             <div className="bg-covenant-light p-6 rounded-lg max-w-3xl mx-auto">
               <blockquote className="font-georgia text-lg italic text-covenant-dark-gray mb-3">
