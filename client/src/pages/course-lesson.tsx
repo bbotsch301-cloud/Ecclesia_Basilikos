@@ -22,8 +22,7 @@ interface Lesson {
   id: string;
   title: string;
   description: string;
-  content: string;
-  videoUrl?: string;
+  videoUrl: string;
   duration: string;
   order: number;
   completed?: boolean;
@@ -52,42 +51,8 @@ const sampleCourseData: { [key: string]: CourseData } = {
       {
         id: "1",
         title: "Introduction to Biblical Trusts",
-        description: "Understanding the scriptural foundation of trust relationships and stewardship",
-        content: `
-# Introduction to Biblical Trusts
-
-## The Foundation of Trust
-
-In the Kingdom of God, trust is not merely a legal concept but a spiritual principle that reflects our relationship with the Almighty. As believers, we are called to be faithful stewards of all that God has entrusted to us.
-
-### Scripture Foundation
-
-"Moreover it is required in stewards, that a man be found faithful." (1 Corinthians 4:2 KJV)
-
-The concept of trusteeship is woven throughout Scripture, from Adam's dominion in the Garden to the parables of talents and pounds. Every believer operates as a trustee over God's resources.
-
-### Key Principles
-
-1. **Divine Ownership**: "The earth is the Lord's, and the fulness thereof; the world, and they that dwell therein." (Psalm 24:1 KJV)
-
-2. **Human Stewardship**: We are managers, not owners, of God's resources
-
-3. **Faithful Administration**: Our calling is to manage according to His will and purposes
-
-4. **Eternal Perspective**: Our stewardship will be evaluated at the judgment seat of Christ
-
-### Trust as Covenant Relationship
-
-A biblical trust reflects the covenant relationship between God and His people. Just as God has established covenants with His people, a trust creates a covenant relationship between trustor, trustee, and beneficiary.
-
-### Practical Application
-
-Understanding these principles forms the foundation for all trust administration. Every decision, every investment, every distribution must align with biblical principles of stewardship and faithfulness.
-
-## Next Steps
-
-In the following lessons, we will explore how to practically implement these biblical principles in modern trust administration, including legal structures, financial management, and beneficiary relationships.
-        `,
+        description: "Understanding the scriptural foundation of trust relationships and your role as a trustee in God's kingdom economy.",
+        videoUrl: "https://example.com/video1",
         duration: "15 minutes",
         order: 1,
         completed: true
@@ -95,56 +60,8 @@ In the following lessons, we will explore how to practically implement these bib
       {
         id: "2",
         title: "Legal Structures and Kingdom Authority",
-        description: "How to establish trust structures that honor God's authority while operating effectively",
-        content: `
-# Legal Structures and Kingdom Authority
-
-## Balancing God's Kingdom and Caesar's Requirements
-
-As trustees operating in the Kingdom of God, we must navigate the requirements of earthly legal systems while maintaining our allegiance to divine authority.
-
-### Biblical Framework for Authority
-
-"Render therefore unto Caesar the things which are Caesar's; and unto God the things that are God's." (Matthew 22:21 KJV)
-
-This principle guides how we structure trusts that honor both divine and civil authority.
-
-### Trust Formation Principles
-
-1. **Purpose Declaration**: Every trust should clearly state its Kingdom purpose
-2. **Biblical Guidelines**: Operating procedures should reflect scriptural principles
-3. **Stewardship Standards**: Decision-making processes based on biblical stewardship
-4. **Beneficiary Focus**: Blessing recipients according to God's will
-
-### Common Trust Structures
-
-#### Revocable Living Trusts
-- Maintains control during lifetime
-- Provides for seamless transition
-- Protects privacy of estate plans
-
-#### Irrevocable Trusts  
-- Permanent transfer of assets
-- Potential tax benefits
-- Demonstrates faith in God's provision
-
-#### Charitable Remainder Trusts
-- Combines income and charitable giving
-- Reflects biblical generosity principles
-- Creates lasting legacy for Kingdom work
-
-### Kingdom-Centered Trust Provisions
-
-When drafting trust documents, consider including:
-- Regular prayer and seeking God's guidance
-- Biblical principles for investment decisions
-- Charitable giving requirements
-- Discipleship opportunities for beneficiaries
-
-## Practical Exercise
-
-Review existing trust documents or draft provisions that clearly establish Kingdom authority while meeting legal requirements.
-        `,
+        description: "How to establish trust structures that honor God's authority while operating effectively in the modern legal system.",
+        videoUrl: "https://example.com/video2",
         duration: "20 minutes",
         order: 2,
         completed: false
@@ -152,70 +69,55 @@ Review existing trust documents or draft provisions that clearly establish Kingd
       {
         id: "3",
         title: "Trustee Responsibilities and Biblical Stewardship",
-        description: "Understanding your duties and obligations as a faithful trustee",
-        content: `
-# Trustee Responsibilities and Biblical Stewardship
-
-## The High Calling of Trusteeship
-
-Being appointed as a trustee is more than a legal position—it's a sacred calling to stewardship that reflects our relationship with God.
-
-### Core Trustee Duties
-
-#### 1. Fiduciary Responsibility
-"He that is faithful in that which is least is faithful also in much" (Luke 16:10 KJV)
-
-- Duty of loyalty to beneficiaries
-- Prudent investment standards
-- Impartial administration
-- Accurate record keeping
-
-#### 2. Biblical Stewardship Standards
-- Seek God's wisdom in all decisions
-- Invest according to biblical principles
-- Consider eternal impact of choices
-- Maintain integrity in all dealings
-
-#### 3. Administrative Excellence
-- Regular communication with beneficiaries  
-- Detailed financial reporting
-- Tax compliance and filing
-- Asset protection and growth
-
-### Investment Philosophy for Trustees
-
-Biblical trustees should consider:
-- **Values-based investing**: Avoiding industries that contradict biblical values
-- **Long-term perspective**: "A good man leaveth an inheritance to his children's children" (Proverbs 13:22 KJV)
-- **Risk management**: Prudent diversification while trusting God's provision
-- **Kingdom impact**: Seeking returns that advance God's purposes
-
-### Common Trustee Challenges
-
-1. **Balancing beneficiary requests with trust purposes**
-2. **Making difficult investment decisions** 
-3. **Managing family dynamics**
-4. **Keeping accurate records and documentation**
-5. **Staying current with legal requirements**
-
-### Building a Support Team
-
-Successful trustees surround themselves with:
-- Godly financial advisors
-- Experienced estate attorneys
-- Qualified accountants
-- Trusted investment managers
-- Spiritual mentors for guidance
-
-## Action Steps
-
-1. Review your current trustee responsibilities
-2. Assess your support team and resources
-3. Establish regular prayer and planning routines
-4. Create systems for documentation and reporting
-        `,
+        description: "Understanding your duties and obligations as a faithful trustee managing God's resources.",
+        videoUrl: "https://example.com/video3",
         duration: "25 minutes", 
         order: 3,
+        completed: false
+      },
+      {
+        id: "4",
+        title: "Asset Management and Investment Principles",
+        description: "Biblical principles for managing trust assets, investments, and growing wealth according to Kingdom values.",
+        videoUrl: "https://example.com/video4",
+        duration: "30 minutes",
+        order: 4,
+        completed: false
+      },
+      {
+        id: "5",
+        title: "Banking and Financial Institutions",
+        description: "Working with banks, managing accounts, and establishing proper financial relationships as a trustee.",
+        videoUrl: "https://example.com/video5",
+        duration: "22 minutes",
+        order: 5,
+        completed: false
+      },
+      {
+        id: "6",
+        title: "Cryptocurrency and Digital Assets",
+        description: "Understanding and managing digital assets, cryptocurrency, and modern investment vehicles within a trust.",
+        videoUrl: "https://example.com/video6",
+        duration: "28 minutes",
+        order: 6,
+        completed: false
+      },
+      {
+        id: "7",
+        title: "Wealth Legacy Building",
+        description: "Creating lasting financial legacies that honor God and bless future generations through proper trust management.",
+        videoUrl: "https://example.com/video7",
+        duration: "35 minutes",
+        order: 7,
+        completed: false
+      },
+      {
+        id: "8",
+        title: "Practical Trust Administration",
+        description: "Daily operations, record keeping, beneficiary communication, and practical aspects of trust management.",
+        videoUrl: "https://example.com/video8",
+        duration: "32 minutes",
+        order: 8,
         completed: false
       }
     ]
@@ -346,31 +248,92 @@ export default function CourseLesson() {
                 </div>
               </CardHeader>
               <CardContent>
-                {currentLesson?.videoUrl && (
-                  <div className="mb-6">
-                    <Card className="bg-gray-100">
-                      <CardContent className="flex items-center justify-center h-64">
+                {/* Video Player */}
+                <div className="mb-8">
+                  <Card className="bg-black rounded-lg overflow-hidden">
+                    <CardContent className="p-0">
+                      <div className="relative aspect-video bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
                         <div className="text-center">
-                          <Video className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                          <p className="text-gray-600">Video content would be embedded here</p>
-                          <Button className="mt-4 bg-covenant-blue hover:bg-covenant-blue/80 text-white">
-                            <Play className="h-4 w-4 mr-2" />
-                            Play Lesson
+                          <div className="bg-white/10 rounded-full p-6 mb-4">
+                            <Play className="h-12 w-12 text-white mx-auto" />
+                          </div>
+                          <h3 className="text-white text-xl font-semibold mb-2">{currentLesson?.title}</h3>
+                          <p className="text-gray-300 mb-6">{currentLesson?.description}</p>
+                          <Button 
+                            size="lg"
+                            className="bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue font-semibold"
+                          >
+                            <Play className="h-5 w-5 mr-2" />
+                            Play Video ({currentLesson?.duration})
                           </Button>
                         </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                )}
-
-                <div className="prose prose-lg max-w-none">
-                  <div 
-                    className="text-covenant-gray leading-relaxed"
-                    dangerouslySetInnerHTML={{ 
-                      __html: currentLesson?.content?.replace(/\n/g, '<br />').replace(/### /g, '<h3 class="text-xl font-semibold text-covenant-blue mt-6 mb-3">').replace(/## /g, '<h2 class="text-2xl font-bold text-covenant-blue mt-8 mb-4">').replace(/# /g, '<h1 class="text-3xl font-bold text-covenant-blue mt-8 mb-6">') || ''
-                    }} 
-                  />
+                        
+                        {/* Video Controls Overlay */}
+                        <div className="absolute bottom-4 left-4 right-4">
+                          <div className="bg-black/50 rounded-lg p-3">
+                            <div className="flex items-center justify-between text-white text-sm mb-2">
+                              <span>0:00</span>
+                              <span>{currentLesson?.duration}</span>
+                            </div>
+                            <div className="w-full bg-gray-600 rounded-full h-1">
+                              <div className="bg-covenant-gold h-1 rounded-full w-1/4"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
                 </div>
+
+                {/* Lesson Resources */}
+                <div className="grid md:grid-cols-2 gap-6 mb-8">
+                  <Card className="border-covenant-light">
+                    <CardHeader>
+                      <CardTitle className="text-covenant-blue flex items-center">
+                        <BookOpen className="h-5 w-5 mr-2" />
+                        Lesson Notes
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-covenant-gray mb-4">
+                        Download comprehensive lesson notes and biblical references for this lesson.
+                      </p>
+                      <Button variant="outline" className="border-covenant-blue text-covenant-blue">
+                        <Download className="h-4 w-4 mr-2" />
+                        Download Notes
+                      </Button>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="border-covenant-light">
+                    <CardHeader>
+                      <CardTitle className="text-covenant-blue flex items-center">
+                        <Users className="h-5 w-5 mr-2" />
+                        Discussion
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-covenant-gray mb-4">
+                        Join the community discussion about this lesson and share insights.
+                      </p>
+                      <Button variant="outline" className="border-covenant-blue text-covenant-blue">
+                        Join Discussion
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Scripture Reference */}
+                <Card className="bg-covenant-light/30 border-covenant-gold mb-8">
+                  <CardContent className="pt-6">
+                    <div className="text-center">
+                      <blockquote className="text-lg text-covenant-blue font-georgia italic mb-2">
+                        "Moreover it is required in stewards, that a man be found faithful."
+                      </blockquote>
+                      <cite className="text-covenant-gray">— 1 Corinthians 4:2 (KJV)</cite>
+                    </div>
+                  </CardContent>
+                </Card>
 
                 {/* Navigation */}
                 <div className="flex justify-between items-center mt-12 pt-8 border-t border-covenant-light">
