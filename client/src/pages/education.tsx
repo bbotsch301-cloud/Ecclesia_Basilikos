@@ -108,8 +108,8 @@ export default function Education() {
       await register(userData);
       setShowAuthDialog(false);
       toast({
-        title: "Welcome to Kingdom College!",
-        description: "Your account has been created successfully.",
+        title: "Registration Successful!",
+        description: "Please check your email to verify your account before logging in.",
       });
     } catch (error: any) {
       toast({

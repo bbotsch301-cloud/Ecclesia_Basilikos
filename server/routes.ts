@@ -48,10 +48,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const user = await storage.createUser(userData);
-      req.session.userId = user.id;
       
-      const { password, ...userWithoutPassword } = user;
-      res.json({ success: true, user: userWithoutPassword });
+      // Send verification email
+      const verificationUrl = `${req.protocol}://${req.get('host')}/verify-email?token=${user.emailVerificationToken}`;
+      
+      const { sendEmail, generateVerificationEmailHtml } = await import('./email');
+      const emailSent = await sendEmail({
+        to: user.email,
+        subject: 'Verify Your Email - Kingdom Ventures Trust',
+        html: generateVerificationEmailHtml(user.firstName, verificationUrl)
+      });
+      
+      if (!emailSent) {
+        console.error('Failed to send verification email');
+      }
+      
+      const { password, emailVerificationToken, ...userWithoutSensitiveData } = user;
+      res.json({ 
+        success: true, 
+        user: userWithoutSensitiveData,
+        message: "Registration successful! Please check your email to verify your account."
+      });
     } catch (error) {
       if (error instanceof z.ZodError) {
         res.status(400).json({ errors: error.errors });
@@ -71,7 +88,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ error: "Invalid email or password" });
       }
 
+      if (!user.isEmailVerified) {
+        return res.status(401).json({ 
+          error: "Please verify your email before logging in. Check your inbox for the verification link."
+        });
+      }
+
       req.session.userId = user.id;
+      
+      // Update last login
+      await storage.updateUser(user.id, { lastLoginAt: new Date() });
       
       const { password: _, ...userWithoutPassword } = user;
       res.json({ success: true, user: userWithoutPassword });
@@ -96,8 +122,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.get("/api/auth/me", requireAuth, async (req, res) => {
-    const { password, ...userWithoutPassword } = (req as any).user;
+    const { password, emailVerificationToken, ...userWithoutPassword } = (req as any).user;
     res.json(userWithoutPassword);
+  });
+
+  // Email verification endpoint
+  app.get("/api/auth/verify-email", async (req, res) => {
+    try {
+      const { token } = req.query;
+      
+      if (!token || typeof token !== 'string') {
+        return res.status(400).json({ error: "Verification token required" });
+      }
+      
+      const user = await storage.getUserByVerificationToken(token);
+      if (!user) {
+        return res.status(400).json({ error: "Invalid verification token" });
+      }
+      
+      // Check if token has expired
+      if (user.emailVerificationExpires && new Date() > user.emailVerificationExpires) {
+        return res.status(400).json({ error: "Verification token has expired" });
+      }
+      
+      // Verify the user
+      await storage.verifyUserEmail(user.id);
+      
+      res.json({ 
+        success: true, 
+        message: "Email verified successfully! You can now log in."
+      });
+    } catch (error) {
+      console.error("Email verification error:", error);
+      res.status(500).json({ error: "Email verification failed" });
+    }
   });
 
   // Course routes

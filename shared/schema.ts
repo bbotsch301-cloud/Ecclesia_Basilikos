@@ -16,6 +16,9 @@ export const users = pgTable("users", {
   username: text("username").unique(), // Optional username for forum display
   role: userRoleEnum("role").default('student'),
   isActive: boolean("is_active").default(true),
+  isEmailVerified: boolean("is_email_verified").default(false),
+  emailVerificationToken: text("email_verification_token"),
+  emailVerificationExpires: timestamp("email_verification_expires"),
   lastLoginAt: timestamp("last_login_at"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),

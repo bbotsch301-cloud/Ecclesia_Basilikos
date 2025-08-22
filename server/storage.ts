@@ -72,7 +72,10 @@ export interface IStorage {
   // User management
   getUser(id: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
+  getUserByVerificationToken(token: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
+  updateUser(userId: string, updates: Partial<InsertUser>): Promise<User>;
+  verifyUserEmail(userId: string): Promise<User>;
   validateUser(email: string, password: string): Promise<User | null>;
   
   // Contact & Newsletter
@@ -190,11 +193,47 @@ export class DatabaseStorage implements IStorage {
     return user;
   }
 
+  async getUserByVerificationToken(token: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.emailVerificationToken, token));
+    return user;
+  }
+
+  async updateUser(userId: string, updates: Partial<InsertUser>): Promise<User> {
+    const [user] = await db.update(users)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(users.id, userId))
+      .returning();
+    return user;
+  }
+
+  async verifyUserEmail(userId: string): Promise<User> {
+    const [user] = await db.update(users)
+      .set({ 
+        isEmailVerified: true,
+        isActive: true,
+        emailVerificationToken: null,
+        emailVerificationExpires: null,
+        updatedAt: new Date()
+      })
+      .where(eq(users.id, userId))
+      .returning();
+    return user;
+  }
+
   async createUser(insertUser: InsertUser): Promise<User> {
     const hashedPassword = await bcrypt.hash(insertUser.password, 10);
+    const verificationToken = randomUUID();
+    const verificationExpires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+    
     const [user] = await db
       .insert(users)
-      .values({ ...insertUser, password: hashedPassword })
+      .values({ 
+        ...insertUser, 
+        password: hashedPassword,
+        emailVerificationToken: verificationToken,
+        emailVerificationExpires: verificationExpires,
+        isActive: false // User inactive until email verified
+      })
       .returning();
     return user;
   }
@@ -675,7 +714,7 @@ export class DatabaseStorage implements IStorage {
       totalEnrollments: sql<number>`(SELECT COUNT(*) FROM ${enrollments})`,
       totalForumThreads: sql<number>`(SELECT COUNT(*) FROM ${forum_threads})`,
       totalForumReplies: sql<number>`(SELECT COUNT(*) FROM ${forum_replies})`,
-    });
+    }).from(sql`(SELECT 1) as dummy`);
     
     return stats;
   }
