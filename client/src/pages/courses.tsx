@@ -25,7 +25,7 @@ import {
   Building,
   Shield
 } from "lucide-react";
-import { ScriptureQuote } from "@/components/ui/scripture-quote";
+import ScriptureQuote from "@/components/ui/scripture-quote";
 
 const registrationSchema = insertUserSchema.extend({
   confirmPassword: z.string().min(6),
