@@ -52,11 +52,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Send verification email
       const verificationUrl = `${req.protocol}://${req.get('host')}/verify-email?token=${user.emailVerificationToken}`;
       
+      // Get email template from page content
+      const emailTemplateContent = await storage.getPageContent('email-templates');
+      const emailTemplate = {
+        subject: emailTemplateContent.find(c => c.contentKey === 'verification_subject')?.contentValue,
+        headerTitle: emailTemplateContent.find(c => c.contentKey === 'verification_header_title')?.contentValue,
+        headerSubtitle: emailTemplateContent.find(c => c.contentKey === 'verification_header_subtitle')?.contentValue,
+        greeting: emailTemplateContent.find(c => c.contentKey === 'verification_greeting')?.contentValue,
+        mainMessage: emailTemplateContent.find(c => c.contentKey === 'verification_main_message')?.contentValue,
+        instructionText: emailTemplateContent.find(c => c.contentKey === 'verification_instruction_text')?.contentValue,
+        buttonText: emailTemplateContent.find(c => c.contentKey === 'verification_button_text')?.contentValue,
+        expirationText: emailTemplateContent.find(c => c.contentKey === 'verification_expiration_text')?.contentValue,
+        scriptureQuote: emailTemplateContent.find(c => c.contentKey === 'verification_scripture_quote')?.contentValue,
+        scriptureReference: emailTemplateContent.find(c => c.contentKey === 'verification_scripture_reference')?.contentValue,
+        benefitsList: emailTemplateContent.find(c => c.contentKey === 'verification_benefits_list')?.contentValue,
+        closingMessage: emailTemplateContent.find(c => c.contentKey === 'verification_closing_message')?.contentValue,
+        footerText: emailTemplateContent.find(c => c.contentKey === 'verification_footer_text')?.contentValue,
+        footerSubtext: emailTemplateContent.find(c => c.contentKey === 'verification_footer_subtext')?.contentValue,
+      };
+      
       const { sendEmail, generateVerificationEmailHtml } = await import('./email');
       const emailSent = await sendEmail({
         to: user.email,
-        subject: 'Verify Your Email - Kingdom Ventures Trust',
-        html: generateVerificationEmailHtml(user.firstName, verificationUrl)
+        subject: emailTemplate.subject || 'Verify Your Email - Kingdom Ventures Trust',
+        html: generateVerificationEmailHtml(user.firstName, verificationUrl, emailTemplate)
       });
       
       if (!emailSent) {

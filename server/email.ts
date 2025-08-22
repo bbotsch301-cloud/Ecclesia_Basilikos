@@ -42,8 +42,26 @@ export async function sendEmail(options: EmailOptions): Promise<boolean> {
 
 export function generateVerificationEmailHtml(
   firstName: string, 
-  verificationUrl: string
+  verificationUrl: string,
+  emailTemplate?: {
+    subject?: string;
+    headerTitle?: string;
+    headerSubtitle?: string;
+    greeting?: string;
+    mainMessage?: string;
+    instructionText?: string;
+    buttonText?: string;
+    expirationText?: string;
+    scriptureQuote?: string;
+    scriptureReference?: string;
+    benefitsList?: string;
+    closingMessage?: string;
+    footerText?: string;
+    footerSubtext?: string;
+  }
 ): string {
+  const template = emailTemplate || {};
+  
   return `
     <!DOCTYPE html>
     <html>
@@ -78,43 +96,43 @@ export function generateVerificationEmailHtml(
       <body>
         <div class="container">
           <div class="header">
-            <h1>Welcome to Kingdom Ventures Trust</h1>
-            <p>Your Journey to Spiritual Freedom Begins Here</p>
+            <h1>${template.headerTitle || 'Welcome to Kingdom Ventures Trust'}</h1>
+            <p>${template.headerSubtitle || 'Your Journey to Spiritual Freedom Begins Here'}</p>
           </div>
           
           <div class="content">
-            <h2>Hello ${firstName},</h2>
+            <h2>${(template.greeting || 'Hello {{firstName}}').replace('{{firstName}}', firstName)},</h2>
             
-            <p>Thank you for joining Kingdom Ventures Trust! We're excited to have you begin your journey of understanding true spiritual freedom and your covenant relationship with Christ.</p>
+            <p>${template.mainMessage || 'Thank you for joining Kingdom Ventures Trust! We\'re excited to have you begin your journey of understanding true spiritual freedom and your covenant relationship with Christ.'}</p>
             
-            <p>To complete your registration and access our educational resources, please verify your email address by clicking the button below:</p>
+            <p>${template.instructionText || 'To complete your registration and access our educational resources, please verify your email address by clicking the button below:'}</p>
             
             <div style="text-align: center;">
-              <a href="${verificationUrl}" class="button">Verify Email Address</a>
+              <a href="${verificationUrl}" class="button">${template.buttonText || 'Verify Email Address'}</a>
             </div>
             
-            <p>This verification link will expire in 24 hours. If you didn't create an account with us, please ignore this email.</p>
+            <p>${template.expirationText || 'This verification link will expire in 24 hours. If you didn\'t create an account with us, please ignore this email.'}</p>
             
             <div class="scripture">
-              "If the Son therefore shall make you free, ye shall be free indeed."<br>
-              <strong>- John 8:36 (KJV)</strong>
+              "${template.scriptureQuote || 'If the Son therefore shall make you free, ye shall be free indeed.'}"<br>
+              <strong>- ${template.scriptureReference || 'John 8:36 (KJV)'}</strong>
             </div>
             
             <p>Once verified, you'll have access to:</p>
             <ul>
-              <li>Comprehensive courses on trust administration</li>
+              ${(template.benefitsList || `<li>Comprehensive courses on trust administration</li>
               <li>Biblical foundations of covenant relationships</li>
               <li>Practical guidance on asset management</li>
               <li>Community forum discussions</li>
-              <li>Downloadable resources and documents</li>
+              <li>Downloadable resources and documents</li>`)}
             </ul>
             
-            <p>Blessings on your journey,<br><strong>The Kingdom Ventures Trust Team</strong></p>
+            <p>${template.closingMessage || 'Blessings on your journey,<br><strong>The Kingdom Ventures Trust Team</strong>'}</p>
           </div>
           
           <div class="footer">
-            <p>Kingdom Ventures Trust - Teaching Spiritual Freedom Through Biblical Truth</p>
-            <p>If you have any questions, please contact us through our website.</p>
+            <p>${template.footerText || 'Kingdom Ventures Trust - Teaching Spiritual Freedom Through Biblical Truth'}</p>
+            <p>${template.footerSubtext || 'If you have any questions, please contact us through our website.'}</p>
           </div>
         </div>
       </body>

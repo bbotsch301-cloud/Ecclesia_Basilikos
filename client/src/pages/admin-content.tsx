@@ -24,7 +24,8 @@ import {
   Plus,
   ArrowLeft,
   Eye,
-  Globe
+  Globe,
+  Mail
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { Link } from "wouter";
@@ -34,6 +35,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import EmailTemplateEditor from "@/components/EmailTemplateEditor";
 
 interface PageContent {
   id: string;
@@ -66,6 +68,7 @@ export default function AdminContent() {
   const [selectedContent, setSelectedContent] = useState<PageContent | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<"content" | "email-templates">("content");
 
   // Check if user is admin
   useEffect(() => {
@@ -338,18 +341,46 @@ export default function AdminContent() {
           </CardContent>
         </Card>
 
-        {/* Content Table */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <FileText className="h-5 w-5 mr-2" />
-              Page Content
-            </CardTitle>
-            <CardDescription>
-              Manage images, text, and HTML content across all website pages
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
+        {/* Tab Navigation */}
+        <div className="flex border-b border-gray-200 dark:border-gray-700 mb-6">
+          <button
+            onClick={() => setActiveTab("content")}
+            className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+              activeTab === "content"
+                ? "border-covenant-gold text-covenant-gold"
+                : "border-transparent text-gray-500 hover:text-gray-700"
+            }`}
+            data-testid="tab-content"
+          >
+            <FileText className="h-4 w-4 mr-2 inline" />
+            Page Content
+          </button>
+          <button
+            onClick={() => setActiveTab("email-templates")}
+            className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+              activeTab === "email-templates"
+                ? "border-covenant-gold text-covenant-gold"
+                : "border-transparent text-gray-500 hover:text-gray-700"
+            }`}
+            data-testid="tab-email-templates"
+          >
+            <Mail className="h-4 w-4 mr-2 inline" />
+            Email Templates
+          </button>
+        </div>
+
+        {activeTab === "content" && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <FileText className="h-5 w-5 mr-2" />
+                Page Content
+              </CardTitle>
+              <CardDescription>
+                Manage images, text, and HTML content across all website pages
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
             {contentLoading ? (
               <div className="text-center py-8">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-600 mx-auto mb-4"></div>
@@ -481,8 +512,13 @@ export default function AdminContent() {
                 <p className="text-gray-500 text-sm">Try adjusting your search or filter criteria</p>
               </div>
             )}
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        )}
+
+        {activeTab === "email-templates" && (
+          <EmailTemplateEditor />
+        )}
       </div>
 
       {/* Create/Edit Dialog */}
