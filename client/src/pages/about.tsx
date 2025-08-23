@@ -25,7 +25,7 @@ export default function About() {
             <div>
               <h2 className="font-playfair text-3xl font-bold text-covenant-blue mb-6">Christ as the Grantor</h2>
               <p className="text-lg text-covenant-gray leading-relaxed mb-6">
-                Kingdom Ventures Trust is established by Jesus Christ Himself as the Grantor, who has transferred all authority and blessing to His Body. Unlike Babylon's system of contracts and merchandise, this trust operates under divine law and spiritual authority.
+                New Covenant Trust is established by Jesus Christ Himself as the Grantor, who has transferred all authority and blessing to His Body. Unlike Babylon's system of contracts and merchandise, this trust operates under divine law and spiritual authority.
               </p>
               <div className="bg-covenant-light p-6 rounded-lg">
                 <blockquote className="font-georgia text-lg italic text-covenant-dark-gray mb-3">
@@ -47,7 +47,7 @@ export default function About() {
             <div className="lg:order-1">
               <h2 className="font-playfair text-3xl font-bold text-covenant-blue mb-6">Contrast with Babylon's System</h2>
               <p className="text-lg text-covenant-gray leading-relaxed mb-6">
-                Babylon operates through contracts, legal fictions, and the creation of artificial persons to bind mankind in debt slavery. Kingdom Ventures Trust transcends these earthly systems, operating under the perfect law of liberty found in Christ.
+                Babylon operates through contracts, legal fictions, and the creation of artificial persons to bind mankind in debt slavery. New Covenant Trust transcends these earthly systems, operating under the perfect law of liberty found in Christ.
               </p>
               <div className="space-y-4">
                 <div className="flex items-start">
@@ -66,7 +66,7 @@ export default function About() {
           <div className="bg-covenant-blue p-12 rounded-2xl">
             <h3 className="font-playfair text-3xl font-bold text-white mb-8 text-center">Scriptural Foundation</h3>
             <p className="text-white text-center mb-8 text-lg">
-              Kingdom Ventures Trust is established upon the sure foundation of God's Word, as revealed in the King James Version of the Holy Bible.
+              New Covenant Trust is established upon the sure foundation of God's Word, as revealed in the King James Version of the Holy Bible.
             </p>
             
             <div className="space-y-8">
