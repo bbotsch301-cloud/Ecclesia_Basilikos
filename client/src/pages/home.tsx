@@ -15,8 +15,8 @@ export default function Home() {
           href: "/about"
         }}
         secondaryButton={{
-          text: "🎓 Begin Learning",
-          href: "/education"
+          text: "🎓 Kingdom College",
+          href: "/courses"
         }}
       />
 

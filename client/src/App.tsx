@@ -7,7 +7,6 @@ import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
 import Home from "@/pages/home";
 import About from "@/pages/about";
-import Education from "@/pages/education";
 import Videos from "@/pages/videos";
 import Resources from "@/pages/resources";
 import Nation from "@/pages/nation";
@@ -34,7 +33,6 @@ function Router() {
         <Switch>
           <Route path="/" component={Home} />
           <Route path="/about" component={About} />
-          <Route path="/education" component={Education} />
           <Route path="/videos" component={Videos} />
           <Route path="/resources" component={Resources} />
           <Route path="/nation" component={Nation} />

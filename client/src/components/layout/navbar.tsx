@@ -7,7 +7,6 @@ import { Menu, Scroll } from "lucide-react";
 const navigation = [
   { name: "Home", href: "/" },
   { name: "About the Trust", href: "/about" },
-  { name: "Educational Hub", href: "/education" },
   { name: "Kingdom College", href: "/courses" },
   { name: "Download Trust Document", href: "/trust-download" },
   { name: "Community Forum", href: "/forum" },
