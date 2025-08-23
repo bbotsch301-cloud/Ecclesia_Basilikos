@@ -74,7 +74,7 @@ export default function VerifyEmail() {
               className="w-full bg-covenant-gold hover:bg-covenant-gold/90 text-white"
               data-testid="button-go-to-courses"
             >
-              Go to Kingdom College
+              Go to Learn to Steward
             </Button>
             
             <Button 

@@ -85,7 +85,7 @@ export default function NewCovenantIntro() {
       setShowAuthDialog(false);
       toast({
         title: "Account created!",
-        description: "Welcome to Kingdom College. You can now access all course materials.",
+        description: "Welcome to Learn to Steward. You can now access all course materials.",
       });
     } catch (error: any) {
       toast({
@@ -252,7 +252,7 @@ export default function NewCovenantIntro() {
                               <DialogDescription>
                                 {authMode === 'login' 
                                   ? 'Sign in to continue your covenant education'
-                                  : 'Join Kingdom College to understand your divine inheritance'
+                                  : 'Join Learn to Steward to understand your divine inheritance'
                                 }
                               </DialogDescription>
                             </DialogHeader>

@@ -101,7 +101,7 @@ export default function Resources() {
       queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
       setShowAuthDialog(false);
       toast({
-        title: "Welcome to Kingdom College!",
+        title: "Welcome to Learn to Steward!",
         description: "Your account has been created successfully.",
       });
     } catch (error: any) {
@@ -274,7 +274,7 @@ export default function Resources() {
                   <FileText className="h-16 w-16 text-gray-400 mx-auto mb-4" />
                   <h2 className="text-2xl font-bold text-gray-900 mb-2">Members Only</h2>
                   <p className="text-gray-600">
-                    Freedom Resources are exclusively available to Kingdom College members. 
+                    Freedom Resources are exclusively available to Learn to Steward members. 
                     Sign in or create an account to access your covenant freedom tools.
                   </p>
                 </div>
@@ -294,7 +294,7 @@ export default function Resources() {
                       <DialogDescription>
                         {authMode === 'login' 
                           ? 'Sign in to access your freedom resources'
-                          : 'Join Kingdom College to unlock exclusive covenant resources'
+                          : 'Join Learn to Steward to unlock exclusive covenant resources'
                         }
                       </DialogDescription>
                     </DialogHeader>

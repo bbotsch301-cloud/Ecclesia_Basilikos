@@ -22,9 +22,9 @@ export default function ThreadPage() {
                 Back to Forum
               </Button>
             </Link>
-            <Link href="/education">
+            <Link href="/courses">
               <Button className="w-full bg-covenant-blue hover:bg-covenant-blue/80">
-                Explore Kingdom College
+                Explore Learn to Steward
               </Button>
             </Link>
           </div>

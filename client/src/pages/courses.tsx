@@ -38,7 +38,7 @@ const registrationSchema = insertUserSchema.extend({
 
 type RegistrationData = z.infer<typeof registrationSchema>;
 
-// Sample course data for the Kingdom College
+// Sample course data for the Learn to Steward program
 const availableCourses = [
   {
     id: 1,
@@ -200,7 +200,7 @@ export default function Courses() {
       await registerUser(userData);
       setShowAuthDialog(false);
       toast({
-        title: "Welcome to Kingdom College!",
+        title: "Welcome to Learn to Steward!",
         description: "Your account has been created successfully.",
       });
     } catch (error: any) {
@@ -267,7 +267,7 @@ export default function Courses() {
       <div className="min-h-screen bg-gradient-to-b from-covenant-light via-white to-covenant-light flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-covenant-gold mx-auto mb-4"></div>
-          <p className="text-covenant-gray">Loading Kingdom College...</p>
+          <p className="text-covenant-gray">Loading Learn to Steward...</p>
         </div>
       </div>
     );
@@ -283,7 +283,7 @@ export default function Courses() {
               <GraduationCap className="h-16 w-16 text-covenant-gold" />
             </div>
             <h1 className="text-4xl md:text-6xl font-playfair font-bold mb-6">
-              Kingdom College
+              Learn to Steward
             </h1>
             <p className="text-xl md:text-2xl font-inter max-w-4xl mx-auto leading-relaxed mb-8">
               Your personal dashboard for trust administration education and resources
@@ -309,7 +309,7 @@ export default function Courses() {
                   <DialogTrigger asChild>
                     <Button size="lg" className="bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue px-8 py-3 font-semibold">
                       <LogIn className="h-5 w-5 mr-2" />
-                      Access Kingdom College
+                      Access Learn to Steward
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-md">
@@ -319,8 +319,8 @@ export default function Courses() {
                       </DialogTitle>
                       <DialogDescription>
                         {authMode === 'login' 
-                          ? 'Sign in to access your Kingdom College dashboard'
-                          : 'Join Kingdom College to begin your trust education'
+                          ? 'Sign in to access your Learn to Steward dashboard'
+                          : 'Join Learn to Steward to begin your trust education'
                         }
                       </DialogDescription>
                     </DialogHeader>
@@ -438,7 +438,7 @@ export default function Courses() {
                               )}
                             />
                             <Button type="submit" className="w-full bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue" disabled={isRegistering}>
-                              {isRegistering ? "Joining..." : "Join Kingdom College"}
+                              {isRegistering ? "Joining..." : "Join Learn to Steward"}
                             </Button>
                           </form>
                         </Form>
