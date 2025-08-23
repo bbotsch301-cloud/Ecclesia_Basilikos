@@ -296,6 +296,145 @@ export default function About() {
               </div>
             </div>
           </div>
+
+          {/* Core Kingdom Principles */}
+          <div className="mb-20">
+            <div className="text-center mb-12">
+              <h2 className="font-playfair text-3xl font-bold text-covenant-blue mb-4">
+                Core Kingdom Principles
+              </h2>
+              <p className="text-lg text-covenant-gray max-w-3xl mx-auto">
+                Learn the fundamental truths of your identity in Christ and your inheritance as a co-heir with Christ
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8 mb-12">
+              {/* The New Covenant */}
+              <div className="bg-white p-6 rounded-xl shadow-lg border border-covenant-light">
+                <h3 className="font-playfair text-xl font-bold text-covenant-blue mb-4">The New Covenant</h3>
+                <p className="text-sm text-covenant-gray mb-4">
+                  Understanding Christ's testament as both covenant and will
+                </p>
+                <div className="bg-covenant-light p-4 rounded-lg mb-4">
+                  <blockquote className="font-georgia text-sm italic text-covenant-dark-gray mb-2">
+                    "For where a testament is, there must also of necessity be the death of the testator."
+                  </blockquote>
+                  <cite className="text-covenant-gold font-semibold text-xs">Hebrews 9:16 (KJV)</cite>
+                </div>
+                <p className="text-sm text-covenant-gray">
+                  Jesus' death ratified the New Covenant, making us beneficiaries of His will and co-heirs to His Kingdom.
+                </p>
+              </div>
+
+              {/* Royal Identity */}
+              <div className="bg-white p-6 rounded-xl shadow-lg border border-covenant-light">
+                <h3 className="font-playfair text-xl font-bold text-covenant-blue mb-4">Royal Identity</h3>
+                <p className="text-sm text-covenant-gray mb-4">
+                  Your divine inheritance and authority in Christ
+                </p>
+                <div className="bg-covenant-light p-4 rounded-lg mb-4">
+                  <blockquote className="font-georgia text-sm italic text-covenant-dark-gray mb-2">
+                    "And if children, then heirs; heirs of God, and joint-heirs with Christ"
+                  </blockquote>
+                  <cite className="text-covenant-gold font-semibold text-xs">Romans 8:17 (KJV)</cite>
+                </div>
+                <p className="text-sm text-covenant-gray">
+                  In Christ, you are sealed with the Holy Spirit as the down payment of your inheritance and divine authority.
+                </p>
+              </div>
+
+              {/* Kingdom Freedom */}
+              <div className="bg-white p-6 rounded-xl shadow-lg border border-covenant-light">
+                <h3 className="font-playfair text-xl font-bold text-covenant-blue mb-4">Kingdom Freedom</h3>
+                <p className="text-sm text-covenant-gray mb-4">
+                  Liberation from Babylonian systems and worldly bondage
+                </p>
+                <div className="bg-covenant-light p-4 rounded-lg mb-4">
+                  <blockquote className="font-georgia text-sm italic text-covenant-dark-gray mb-2">
+                    "If the Son therefore shall make you free, ye shall be free indeed."
+                  </blockquote>
+                  <cite className="text-covenant-gold font-semibold text-xs">John 8:36 (KJV)</cite>
+                </div>
+                <p className="text-sm text-covenant-gray">
+                  Christ has freed you from the counterfeit kingdom's merchandise system where souls are traded.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* The New Covenant Trust Structure */}
+          <div className="mb-20">
+            <div className="text-center mb-12">
+              <h2 className="font-playfair text-3xl font-bold text-covenant-blue mb-4">
+                The New Covenant Trust Structure
+              </h2>
+              <p className="text-lg text-covenant-gray max-w-3xl mx-auto">
+                Understanding your role as trustee in God's divine legacy trust
+              </p>
+            </div>
+
+            <div className="bg-gradient-to-br from-covenant-blue via-covenant-dark-blue to-covenant-blue text-white p-8 rounded-xl mb-8">
+              <h3 className="font-playfair text-2xl font-bold mb-8 text-center text-covenant-gold">Trust Elements</h3>
+              
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {/* Grantor */}
+                <div className="bg-white/10 p-6 rounded-lg text-center">
+                  <div className="w-12 h-12 bg-covenant-gold rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-lg font-bold text-covenant-blue">G</span>
+                  </div>
+                  <h4 className="font-semibold text-lg mb-2 text-covenant-gold">Grantor: The Creator</h4>
+                  <p className="text-sm">God, the original grantor of the divine trust</p>
+                </div>
+
+                {/* Trustee of Trustees */}
+                <div className="bg-white/10 p-6 rounded-lg text-center">
+                  <div className="w-12 h-12 bg-covenant-gold rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-lg font-bold text-covenant-blue">T</span>
+                  </div>
+                  <h4 className="font-semibold text-lg mb-2 text-covenant-gold">Trustee of Trustees: Christ</h4>
+                  <p className="text-sm">Jesus who reconciled the breach and restored authority</p>
+                </div>
+
+                {/* Beneficiary */}
+                <div className="bg-white/10 p-6 rounded-lg text-center">
+                  <div className="w-12 h-12 bg-covenant-gold rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-lg font-bold text-covenant-blue">B</span>
+                  </div>
+                  <h4 className="font-semibold text-lg mb-2 text-covenant-gold">Beneficiary: You</h4>
+                  <p className="text-sm">Co-heir with Christ, trustee of the restored estate</p>
+                </div>
+
+                {/* Witness */}
+                <div className="bg-white/10 p-6 rounded-lg text-center">
+                  <div className="w-12 h-12 bg-covenant-gold rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-lg font-bold text-covenant-blue">W</span>
+                  </div>
+                  <h4 className="font-semibold text-lg mb-2 text-covenant-gold">Witness: Holy Spirit</h4>
+                  <p className="text-sm">The earnest and seal of your inheritance</p>
+                </div>
+              </div>
+
+              <div className="mt-8 p-6 bg-black/20 rounded-lg">
+                <blockquote className="font-georgia text-center italic mb-3">
+                  "Which is the earnest of our inheritance until the redemption of the purchased possession, unto the praise of his glory."
+                </blockquote>
+                <cite className="text-covenant-gold font-semibold text-center block">Ephesians 1:14 (KJV)</cite>
+              </div>
+            </div>
+
+            {/* Your Divine Role */}
+            <div className="bg-white p-8 rounded-xl shadow-lg border border-covenant-light">
+              <h3 className="font-playfair text-2xl font-bold text-covenant-blue mb-6 text-center">Your Divine Role</h3>
+              <div className="max-w-4xl mx-auto">
+                <p className="text-lg text-covenant-gray leading-relaxed mb-6">
+                  As a trustee in the New Covenant Trust, you are called to be a living sacrifice, holy and acceptable to God. Your body becomes a temple of the Holy Spirit, stewarding the Kingdom's resources with divine authority.
+                </p>
+                <p className="text-lg text-covenant-gray leading-relaxed">
+                  This trust operates under <span className="font-semibold text-covenant-blue">Lex Divina</span> (divine law), transcending earthly jurisdictions and empowering you to walk as an ambassador of Heaven with full access to Kingdom resources.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
