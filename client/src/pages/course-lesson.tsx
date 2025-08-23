@@ -150,6 +150,7 @@ const sampleCourseData: { [key: string]: CourseData } = {
 
 export default function CourseLesson() {
   const params = useParams();
+  const { toast } = useToast();
   const courseId = params.courseId || "1";
   const lessonId = params.lessonId;
   const [currentLessonIndex, setCurrentLessonIndex] = useState(0);

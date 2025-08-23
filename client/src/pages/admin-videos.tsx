@@ -22,7 +22,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
-import { apiRequest } from "@/lib/queryClient";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 import { ObjectUploader } from "@/components/ObjectUploader";
 import type { UploadResult } from "@uppy/core";
 
@@ -100,8 +100,8 @@ export default function AdminVideos() {
     uploadUrl: string;
   }>>([]);
 
-  // Remove admin authentication check for development
-  // const { data: videos } = useQuery({ queryKey: ['/api/admin/videos'] });
+  // Load videos from API
+  const { data: videos } = useQuery<VideoData[]>({ queryKey: ['/api/admin/videos'] });
   
   // Current video data from the course system
   const sampleVideos: VideoData[] = [
@@ -255,9 +255,10 @@ export default function AdminVideos() {
   const handleGetUploadParameters = async () => {
     try {
       const response = await apiRequest("POST", "/api/objects/upload", {});
+      const data = await response.json();
       return {
         method: "PUT" as const,
-        url: response.uploadURL,
+        url: data.uploadURL,
       };
     } catch (error) {
       toast({
@@ -275,7 +276,7 @@ export default function AdminVideos() {
         name: file.name,
         size: `${(file.size / (1024 * 1024)).toFixed(1)} MB`,
         type: file.type.split('/')[1].toUpperCase(),
-        uploadUrl: file.uploadURL || "",
+        uploadUrl: file.uploadURL || file.response?.uploadURL || "",
       }));
       
       setUploadedFiles(prev => [...prev, ...newFiles]);
@@ -287,14 +288,16 @@ export default function AdminVideos() {
     }
   };
 
-  const handleVideoSubmit = async (data: z.infer<typeof videoSchema>) => {
-    try {
-      const videoData = {
-        ...data,
-        files: uploadedFiles
-      };
-      
-      // API call would go here with video data and associated files
+  const videoMutation = useMutation({
+    mutationFn: async (data: z.infer<typeof videoSchema>) => {
+      if (editingVideo) {
+        return apiRequest('PATCH', `/api/admin/videos/${editingVideo.id}`, data);
+      } else {
+        return apiRequest('POST', '/api/admin/videos', data);
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/videos'] });
       toast({
         title: "Success",
         description: editingVideo ? "Video updated successfully" : "Video added successfully",
@@ -303,18 +306,34 @@ export default function AdminVideos() {
       videoForm.reset();
       setUploadedFiles([]);
       setEditingVideo(null);
-    } catch (error) {
+    },
+    onError: (error) => {
       toast({
         title: "Error",
         description: "Failed to save video",
         variant: "destructive",
       });
-    }
+    },
+  });
+
+  const handleVideoSubmit = async (data: z.infer<typeof videoSchema>) => {
+    const videoData = {
+      ...data,
+      files: uploadedFiles
+    };
+    videoMutation.mutate(videoData);
   };
 
-  const handleFileSubmit = async (data: z.infer<typeof fileSchema>) => {
-    try {
-      // API call would go here
+  const fileMutation = useMutation({
+    mutationFn: async (data: z.infer<typeof fileSchema>) => {
+      if (editingFile) {
+        return apiRequest('PATCH', `/api/admin/files/${editingFile.id}`, data);
+      } else {
+        return apiRequest('POST', '/api/admin/files', data);
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/files'] });
       toast({
         title: "Success", 
         description: editingFile ? "File updated successfully" : "File added successfully",
@@ -322,29 +341,38 @@ export default function AdminVideos() {
       setFileDialogOpen(false);
       fileForm.reset();
       setEditingFile(null);
-    } catch (error) {
+    },
+    onError: (error) => {
       toast({
         title: "Error",
         description: "Failed to save file",
         variant: "destructive",
       });
-    }
+    },
+  });
+
+  const handleFileSubmit = async (data: z.infer<typeof fileSchema>) => {
+    fileMutation.mutate(data);
   };
 
   const filteredLessons = selectedCourse && selectedCourse !== "all"
     ? sampleLessons.filter(lesson => lesson.courseId === selectedCourse)
     : sampleLessons;
 
+  // Use real API data when available, fallback to sample data for demo
+  const videosToDisplay: VideoData[] = (videos && Array.isArray(videos)) ? videos : sampleVideos;
+  const filesToDisplay = sampleFiles; // Files API integration can be added later
+
   const filteredVideos = selectedCourse && selectedCourse !== "all"
-    ? sampleVideos.filter(video => video.courseId === selectedCourse)
-    : sampleVideos;
+    ? videosToDisplay.filter((video: VideoData) => video.courseId === selectedCourse)
+    : videosToDisplay;
 
   const filteredFiles = selectedCourse && selectedCourse !== "all"
-    ? sampleFiles.filter(file => {
+    ? filesToDisplay.filter(file => {
         const lesson = sampleLessons.find(l => l.id === file.lessonId);
         return lesson?.courseId === selectedCourse;
       })
-    : sampleFiles;
+    : filesToDisplay;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-covenant-light via-white to-covenant-light p-6">
@@ -523,8 +551,14 @@ export default function AdminVideos() {
                       }}>
                         Cancel
                       </Button>
-                      <Button type="submit" className="bg-covenant-blue hover:bg-covenant-blue/80 text-white">
-                        {editingVideo ? 'Update Video' : 'Add Video'}
+                      <Button 
+                        type="submit" 
+                        disabled={videoMutation.isPending}
+                        className="bg-covenant-blue hover:bg-covenant-blue/80 text-white"
+                      >
+                        {videoMutation.isPending 
+                          ? "Saving..." 
+                          : editingVideo ? 'Update Video' : 'Add Video'}
                       </Button>
                     </div>
                   </form>
@@ -639,8 +673,14 @@ export default function AdminVideos() {
                       }}>
                         Cancel
                       </Button>
-                      <Button type="submit" className="bg-covenant-blue hover:bg-covenant-blue/80 text-white">
-                        {editingFile ? 'Update File' : 'Add File'}
+                      <Button 
+                        type="submit" 
+                        disabled={fileMutation.isPending}
+                        className="bg-covenant-blue hover:bg-covenant-blue/80 text-white"
+                      >
+                        {fileMutation.isPending 
+                          ? "Saving..." 
+                          : editingFile ? 'Update File' : 'Add File'}
                       </Button>
                     </div>
                   </form>

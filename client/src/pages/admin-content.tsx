@@ -95,10 +95,7 @@ export default function AdminContent() {
 
   const createContentMutation = useMutation({
     mutationFn: async (data: ContentFormData) => {
-      return apiRequest('/api/admin/page-content', {
-        method: 'POST',
-        body: JSON.stringify(data),
-      });
+      return apiRequest('POST', '/api/admin/page-content', data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/admin/page-content'] });
@@ -120,10 +117,7 @@ export default function AdminContent() {
 
   const updateContentMutation = useMutation({
     mutationFn: async ({ id, data }: { id: string; data: Partial<ContentFormData> }) => {
-      return apiRequest(`/api/admin/page-content/${id}`, {
-        method: 'PATCH',
-        body: JSON.stringify(data),
-      });
+      return apiRequest('PATCH', `/api/admin/page-content/${id}`, data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/admin/page-content'] });
@@ -145,9 +139,7 @@ export default function AdminContent() {
 
   const deleteContentMutation = useMutation({
     mutationFn: async (id: string) => {
-      return apiRequest(`/api/admin/page-content/${id}`, {
-        method: 'DELETE',
-      });
+      return apiRequest('DELETE', `/api/admin/page-content/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/admin/page-content'] });
