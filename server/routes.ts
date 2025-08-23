@@ -31,6 +31,7 @@ import {
   type User
 } from "@shared/schema";
 import { z } from "zod";
+import { ObjectStorageService } from "./objectStorage";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Session middleware
@@ -580,9 +581,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Object Storage Upload Endpoint
   app.post("/api/objects/upload", async (req, res) => {
     try {
-      // For development - return a mock URL since object storage might not be fully configured
-      const mockUploadURL = "https://example.com/upload/mock-url";
-      res.json({ uploadURL: mockUploadURL });
+      const objectStorageService = new ObjectStorageService();
+      const uploadURL = await objectStorageService.getObjectEntityUploadURL();
+      res.json({ uploadURL });
     } catch (error) {
       console.error("Error getting upload URL:", error);
       res.status(500).json({ error: "Failed to get upload URL" });
