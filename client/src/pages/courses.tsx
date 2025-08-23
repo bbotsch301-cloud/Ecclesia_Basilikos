@@ -144,33 +144,30 @@ export default function Courses() {
 
   // Get button text based on enrollment status
   const getButtonText = (courseId: string, isPending: boolean = false) => {
-    if (isPending) return "Processing...";
+    if (isPending) return "Starting Course...";
     
     const status = getEnrollmentStatus(courseId);
     switch (status) {
-      case "login": return "Login to Enroll";
-      case "enrolled": return "Continue Course";
-      case "enroll": return "Begin Course";
-      default: return "Enroll Now";
+      case "login": return "Login to Begin";
+      case "enrolled": return "Continue Learning";
+      case "enroll": return "Begin Learning";
+      default: return "Begin Learning";
     }
   };
 
-  // Course enrollment mutation
+  // Course auto-enrollment mutation
   const enrollMutation = useMutation({
     mutationFn: async (courseId: string) => {
       const response = await apiRequest("POST", `/api/enrollments`, { courseId });
       return response.json();
     },
-    onSuccess: () => {
-      toast({
-        title: "Enrollment Successful!",
-        description: "You have been enrolled in the course. Access it from My Courses.",
-      });
-      queryClient.invalidateQueries({ queryKey: ["/api/my-enrollments"] });
+    onSuccess: (data, courseId) => {
+      // Auto-navigate to first lesson after successful enrollment
+      window.location.href = `/course-lesson/${courseId}/1`;
     },
     onError: (error: any) => {
       toast({
-        title: "Enrollment Failed",
+        title: "Unable to Start Course",
         description: error.message || "Please try again later.",
         variant: "destructive",
       });
@@ -224,7 +221,7 @@ export default function Courses() {
     }
   };
 
-  const handleEnroll = async (courseId: string, courseTitle: string) => {
+  const handleBeginLearning = async (courseId: string, courseTitle: string) => {
     const status = getEnrollmentStatus(courseId);
     
     if (status === "login") {
@@ -233,16 +230,16 @@ export default function Courses() {
     }
     
     if (status === "enrolled") {
-      // Navigate to course or first lesson
+      // Navigate directly to first lesson
       window.location.href = `/course-lesson/${courseId}/1`;
       return;
     }
     
-    // Proceed with enrollment
+    // Auto-enroll and navigate to course content
     try {
       await enrollMutation.mutateAsync(courseId.toString());
     } catch (error) {
-      console.error("Enrollment error:", error);
+      console.error("Auto-enrollment error:", error);
     }
   };
 
@@ -484,7 +481,7 @@ export default function Courses() {
                   <Button 
                     size="lg" 
                     className="bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue px-8 py-3 font-semibold"
-                    onClick={() => handleEnroll(course.id.toString(), course.title)}
+                    onClick={() => handleBeginLearning(course.id.toString(), course.title)}
                     disabled={enrollMutation.isPending}
                   >
                     <GraduationCap className="h-5 w-5 mr-2" />
@@ -587,7 +584,7 @@ export default function Courses() {
                     
                     <Button 
                       className="w-full bg-covenant-blue hover:bg-covenant-blue/80 text-white"
-                      onClick={() => handleEnroll(course.id.toString(), course.title)}
+                      onClick={() => handleBeginLearning(course.id.toString(), course.title)}
                       disabled={enrollMutation.isPending}
                     >
                       <GraduationCap className="h-4 w-4 mr-2" />
