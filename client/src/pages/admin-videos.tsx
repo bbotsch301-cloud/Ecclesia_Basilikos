@@ -23,6 +23,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import { ObjectUploader } from "@/components/ObjectUploader";
+import type { UploadResult } from "@uppy/core";
 
 const videoSchema = z.object({
   courseId: z.string().min(1, "Course is required"),
@@ -91,6 +93,12 @@ export default function AdminVideos() {
   const [fileDialogOpen, setFileDialogOpen] = useState(false);
   const [editingVideo, setEditingVideo] = useState<VideoData | null>(null);
   const [editingFile, setEditingFile] = useState<FileData | null>(null);
+  const [uploadedFiles, setUploadedFiles] = useState<Array<{
+    name: string;
+    size: string;
+    type: string;
+    uploadUrl: string;
+  }>>([]);
 
   // Remove admin authentication check for development
   // const { data: videos } = useQuery({ queryKey: ['/api/admin/videos'] });
@@ -244,15 +252,56 @@ export default function AdminVideos() {
     }
   });
 
+  const handleGetUploadParameters = async () => {
+    try {
+      const response = await apiRequest("POST", "/api/objects/upload", {});
+      return {
+        method: "PUT" as const,
+        url: (await response.json()).uploadURL,
+      };
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to get upload URL. Please try again.",
+        variant: "destructive",
+      });
+      throw error;
+    }
+  };
+
+  const handleUploadComplete = (result: UploadResult<Record<string, unknown>, Record<string, unknown>>) => {
+    if (result.successful && result.successful.length > 0) {
+      const newFiles = result.successful.map((file: any) => ({
+        name: file.name,
+        size: `${(file.size / (1024 * 1024)).toFixed(1)} MB`,
+        type: file.type.split('/')[1].toUpperCase(),
+        uploadUrl: file.uploadURL || "",
+      }));
+      
+      setUploadedFiles(prev => [...prev, ...newFiles]);
+      
+      toast({
+        title: "Upload successful",
+        description: `${newFiles.length} file(s) uploaded successfully.`,
+      });
+    }
+  };
+
   const handleVideoSubmit = async (data: z.infer<typeof videoSchema>) => {
     try {
-      // API call would go here
+      const videoData = {
+        ...data,
+        files: uploadedFiles
+      };
+      
+      // API call would go here with video data and associated files
       toast({
         title: "Success",
         description: editingVideo ? "Video updated successfully" : "Video added successfully",
       });
       setVideoDialogOpen(false);
       videoForm.reset();
+      setUploadedFiles([]);
       setEditingVideo(null);
     } catch (error) {
       toast({
@@ -415,10 +464,61 @@ export default function AdminVideos() {
                       )}
                     />
 
+                    {/* File Upload Section */}
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-lg font-semibold text-covenant-blue">Downloadable Files</h3>
+                        <ObjectUploader
+                          maxNumberOfFiles={5}
+                          maxFileSize={50485760} // 50MB
+                          onGetUploadParameters={handleGetUploadParameters}
+                          onComplete={handleUploadComplete}
+                          buttonClassName="bg-covenant-blue hover:bg-covenant-blue/80 text-white"
+                        >
+                          <Upload className="h-4 w-4 mr-2" />
+                          Upload Files
+                        </ObjectUploader>
+                      </div>
+                      
+                      {uploadedFiles.length > 0 && (
+                        <div className="space-y-2">
+                          {uploadedFiles.map((file, index) => (
+                            <div key={index} className="flex items-center justify-between p-3 border border-covenant-light rounded-lg bg-gray-50">
+                              <div className="flex items-center space-x-3">
+                                <FileText className="h-5 w-5 text-covenant-blue" />
+                                <div>
+                                  <p className="font-medium text-covenant-blue">{file.name}</p>
+                                  <p className="text-sm text-covenant-gray">{file.type} • {file.size}</p>
+                                </div>
+                              </div>
+                              <Button
+                                type="button"
+                                size="sm"
+                                variant="outline"
+                                className="text-red-600 hover:text-red-700"
+                                onClick={() => {
+                                  setUploadedFiles(prev => prev.filter((_, i) => i !== index));
+                                }}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      
+                      {uploadedFiles.length === 0 && (
+                        <p className="text-sm text-covenant-gray italic">
+                          No files uploaded yet. Click "Upload Files" to add downloadable resources for this lesson.
+                        </p>
+                      )}
+                    </div>
+
                     <div className="flex justify-end gap-3">
                       <Button type="button" variant="outline" onClick={() => {
                         setVideoDialogOpen(false);
                         videoForm.reset();
+                        setUploadedFiles([]);
                         setEditingVideo(null);
                       }}>
                         Cancel
