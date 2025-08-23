@@ -60,13 +60,90 @@ export default function Contact() {
   return (
     <div className="pt-16">
       <HeroSection
-        title="Contact Us"
-        description="We're here to support you on your journey to covenant freedom"
+        title="About & Contact Kingdom Ventures Trust"
+        description="The ministry called to administer The New Covenant Legacy Trust here on earth"
         backgroundImage="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
       />
 
       <div className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* About Kingdom Ventures Trust Section */}
+          <div className="mb-20">
+            <div className="text-center mb-12">
+              <h2 className="font-playfair text-3xl font-bold text-covenant-blue mb-4">
+                Our Ministry Role
+              </h2>
+              <p className="text-lg text-covenant-gray max-w-3xl mx-auto">
+                Understanding Kingdom Ventures Trust's calling to serve believers in The New Covenant Legacy Trust
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-12 items-center mb-12">
+              <div>
+                <h3 className="font-playfair text-2xl font-bold text-covenant-blue mb-6">The Ministry Calling</h3>
+                <p className="text-lg text-covenant-gray leading-relaxed mb-6">
+                  Kingdom Ventures Trust is the ministry called to administer The New Covenant Legacy Trust here on earth. As Christ's appointed trustees, we help believers understand their divine inheritance and learn to operate as royal priests in God's kingdom economy.
+                </p>
+                <p className="text-lg text-covenant-gray leading-relaxed">
+                  Our mission is to teach believers how The New Covenant Legacy Trust operates differently from Babylon's system of contracts and legal fictions, helping God's people understand their true identity as trustees and beneficiaries of Christ's inheritance.
+                </p>
+              </div>
+              <div className="bg-covenant-blue p-8 rounded-xl text-white">
+                <h4 className="font-playfair text-xl font-bold mb-6">Ministry Services</h4>
+                <div className="space-y-4">
+                  <div className="flex items-start">
+                    <div className="w-3 h-3 bg-covenant-gold rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                    <div>
+                      <h5 className="font-semibold mb-1">Trust Administration Education</h5>
+                      <p className="text-sm opacity-90">Learn practical steps to establish and operate your trust</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start">
+                    <div className="w-3 h-3 bg-covenant-gold rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                    <div>
+                      <h5 className="font-semibold mb-1">Biblical Mentorship</h5>
+                      <p className="text-sm opacity-90">One-on-one guidance in covenant principles and trust operation</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start">
+                    <div className="w-3 h-3 bg-covenant-gold rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                    <div>
+                      <h5 className="font-semibold mb-1">Course Instruction</h5>
+                      <p className="text-sm opacity-90">Comprehensive training from basics to bank account opening</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start">
+                    <div className="w-3 h-3 bg-covenant-gold rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                    <div>
+                      <h5 className="font-semibold mb-1">Prayer Support</h5>
+                      <p className="text-sm opacity-90">Spiritual covering as you walk in covenant freedom</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-covenant-light p-8 rounded-xl">
+              <div className="text-center">
+                <h4 className="font-playfair text-xl font-bold text-covenant-blue mb-4">Our Foundation</h4>
+                <blockquote className="font-georgia text-lg italic text-covenant-dark-gray mb-3">
+                  "But now hath he obtained a more excellent ministry, by how much also he is the mediator of a better covenant, which was established upon better promises."
+                </blockquote>
+                <cite className="text-covenant-gold font-semibold">Hebrews 8:6 (KJV)</cite>
+              </div>
+            </div>
+          </div>
+
+          {/* Contact Section */}
+          <div className="text-center mb-12">
+            <h2 className="font-playfair text-3xl font-bold text-covenant-blue mb-4">
+              Connect with Our Ministry
+            </h2>
+            <p className="text-lg text-covenant-gray max-w-3xl mx-auto">
+              Ready to learn more about your divine inheritance and trust administration? We're here to guide you on this journey.
+            </p>
+          </div>
+
           <div className="grid lg:grid-cols-2 gap-12">
             {/* Contact Form */}
             <div className="bg-white p-8 rounded-xl shadow-lg">
