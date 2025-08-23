@@ -60,7 +60,7 @@ const sampleCourseData: { [key: string]: CourseData } = {
         id: "1",
         title: "What is a Trust? The Complete Basics",
         description: "Simple explanation of trusts, the three parties involved, and why people create them. No prior knowledge needed.",
-        youtubeVideoId: "dQw4w9WgXcQ", // Sample YouTube video ID
+        youtubeVideoId: "IP4NzMFGKA8",
         duration: "15 minutes",
         order: 1,
         completed: true,
