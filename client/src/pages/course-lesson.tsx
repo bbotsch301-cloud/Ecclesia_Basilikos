@@ -50,18 +50,18 @@ interface CourseData {
 const sampleCourseData: { [key: string]: CourseData } = {
   "1": {
     id: "1",
-    title: "Trust Fundamentals",
-    description: "Learn what a trust actually is, why people use them, and how they work in simple terms. Perfect for complete beginners who have never heard of trusts before.",
-    level: "Foundational",
+    title: "Foundations of Trust",
+    description: "Learn the biblical and legal foundations of trust, your divine identity, and role as a Kingdom steward through 8 comprehensive modules.",
+    level: "Foundation",
     totalLessons: 8,
-    progress: 25,
+    progress: 12,
     lessons: [
       {
         id: "1",
-        title: "What is a Trust? The Complete Basics",
-        description: "Simple explanation of trusts, the three parties involved, and why people create them. No prior knowledge needed.",
+        title: "Module 1: Foundations of Trust",
+        description: "What is Trust? Definition in law, finance, and Scripture. The Bible as a living trust and divine contract. The New Covenant as Trust with Jesus as Testator & Principal.",
         youtubeVideoId: "IP4NzMFGKA8",
-        duration: "15 minutes",
+        duration: "22 minutes",
         order: 1,
         completed: true,
         files: [
@@ -90,127 +90,127 @@ const sampleCourseData: { [key: string]: CourseData } = {
       },
       {
         id: "2",
-        title: "Understanding Your Role as Trustee",
-        description: "Your responsibilities, authority, and biblical stewardship principles as the person managing the trust.",
-        youtubeVideoId: "JXeJANDKwDc", // Different video for lesson 2
-        duration: "18 minutes",
+        title: "Module 2: Identity in the Trust",
+        description: "True vs. False Identity. Distinction between 'person/legal fiction' and 'trustee in Christ.' Citizenship in Heaven and living as ambassadors of the Kingdom.",
+        youtubeVideoId: "JXeJANDKwDc",
+        duration: "25 minutes",
         order: 2,
         completed: false,
         files: [
           {
             id: "4",
-            name: "Trustee Responsibilities Checklist",
-            size: "1.1 MB",
+            name: "Identity in Christ Study Guide",
+            size: "1.4 MB",
             type: "PDF",
-            downloadUrl: "/public-objects/trustee-responsibilities.pdf"
+            downloadUrl: "/public-objects/identity-in-christ-guide.pdf"
           }
         ]
       },
       {
         id: "3",
-        title: "Creating Your Trust Document",
-        description: "Step-by-step guide to drafting your trust agreement, key provisions, and essential language to include.",
-        youtubeVideoId: "3AtDnEC4zak", // Different video for lesson 3
-        duration: "25 minutes", 
+        title: "Module 3: Roles in the Trust",
+        description: "Understanding the divine trust structure: God as Grantor, believer as Trustee/steward, Christ as first beneficiary, and ecclesiastical governance for accountability.",
+        youtubeVideoId: "3AtDnEC4zak",
+        duration: "28 minutes", 
         order: 3,
         completed: false,
         files: [
           {
             id: "5",
-            name: "Trust Document Template",
-            size: "2.3 MB", 
+            name: "Trust Roles & Responsibilities",
+            size: "1.9 MB", 
             type: "PDF",
-            downloadUrl: "/public-objects/trust-document-template.pdf"
+            downloadUrl: "/public-objects/trust-roles-responsibilities.pdf"
           }
         ]
       },
       {
         id: "4",
-        title: "Legal Requirements and Compliance",
-        description: "What the law requires, proper documentation, and ensuring your trust meets all legal standards.",
-        youtubeVideoId: "2Z4m4lnjxkY", // Different video for lesson 4
-        duration: "22 minutes",
+        title: "Module 4: Jurisdiction and Sovereignty",
+        description: "Lex Divina, Lex Naturalis, Lex Humana - Divine law above natural and human law. Private vs. Public Systems and true sovereignty through Christ.",
+        youtubeVideoId: "2Z4m4lnjxkY",
+        duration: "30 minutes",
         order: 4,
         completed: false,
         files: [
           {
             id: "6",
-            name: "Legal Compliance Guide",
-            size: "1.7 MB",
+            name: "Jurisdiction & Divine Law Guide",
+            size: "2.2 MB",
             type: "PDF", 
-            downloadUrl: "/public-objects/legal-compliance-guide.pdf"
+            downloadUrl: "/public-objects/jurisdiction-divine-law.pdf"
           }
         ]
       },
       {
         id: "5",
-        title: "Trust Activation Process",
-        description: "How to officially activate your trust, funding it with assets, and making it operational.",
-        youtubeVideoId: "YQHsXMglC9A", // Different video for lesson 5
-        duration: "28 minutes",
+        title: "Module 5: The Power of Stewardship",
+        description: "Faith as the Currency of the Kingdom. Managing resources spiritually, materially, and legally. Lawful money redemption and living sacrifice principles.",
+        youtubeVideoId: "YQHsXMglC9A",
+        duration: "26 minutes",
         order: 5,
         completed: false,
         files: [
           {
             id: "7",
-            name: "Trust Activation Worksheet",
-            size: "1.4 MB",
+            name: "Kingdom Stewardship Manual",
+            size: "2.5 MB",
             type: "PDF",
-            downloadUrl: "/public-objects/trust-activation-worksheet.pdf"
+            downloadUrl: "/public-objects/kingdom-stewardship-manual.pdf"
           }
         ]
       },
       {
         id: "6",
-        title: "Obtaining Your EIN (Tax ID Number)",
-        description: "Applying for your trust's federal tax identification number with the IRS - required for banking.",
-        youtubeVideoId: "oHg5SJYRHA0", // Different video for lesson 6
-        duration: "20 minutes",
+        title: "Module 6: The Great Deception and Restoration",
+        description: "Babylonian systems of control, legal fictions, birth certificates, and the merchandise of men. Understanding masks vs. true identity and restoration through trust.",
+        youtubeVideoId: "oHg5SJYRHA0",
+        duration: "32 minutes",
         order: 6,
         completed: false,
         files: [
           {
             id: "8",
-            name: "EIN Application Guide",
-            size: "1.3 MB",
+            name: "Babylonian Systems Exposed",
+            size: "3.1 MB",
             type: "PDF",
-            downloadUrl: "/public-objects/ein-application-guide.pdf"
+            downloadUrl: "/public-objects/babylonian-systems-exposed.pdf"
           }
         ]
       },
       {
         id: "7",
-        title: "Opening a Trust Bank Account",
-        description: "Finding the right bank, required documentation, and successfully opening your first trust account.",
-        youtubeVideoId: "SfOTTOF9fpA", // Different video for lesson 7
-        duration: "30 minutes",
+        title: "Module 7: Application and Practice",
+        description: "Establishing Your Trust through acknowledgment, acceptance, and governance. Walking as a Trustee in daily stewardship and living as Kingdom ambassadors.",
+        youtubeVideoId: "SfOTTOF9fpA",
+        duration: "35 minutes",
         order: 7,
         completed: false,
         files: [
           {
             id: "9",
-            name: "Bank Requirements Checklist",
-            size: "0.9 MB",
+            name: "Trust Establishment Workbook",
+            size: "2.8 MB",
             type: "PDF",
-            downloadUrl: "/public-objects/bank-requirements-checklist.pdf"
+            downloadUrl: "/public-objects/trust-establishment-workbook.pdf"
           }
         ]
       },
       {
         id: "8",
-        title: "Initial Trust Operations and Next Steps",
-        description: "Managing your new trust account, basic operations, record keeping, and planning for growth.",
-        youtubeVideoId: "rAHQY4VAX-k", // Different video for lesson 8
-        duration: "25 minutes",
+        title: "Module 8: The Mission of Trusteeship",
+        description: "Reconciling Creation by stewarding land, sea, and air. Restoring abundance, discharging debts, and maintaining eternal perspective as co-heirs with Christ.",
+        youtubeVideoId: "rAHQY4VAX-k",
+        duration: "28 minutes",
         order: 8,
         completed: false,
         files: [
           {
             id: "10",
-            name: "Trust Operations Manual",
-            size: "2.8 MB",
+            name: "Mission of Trusteeship Guide",
+            size: "2.6 MB",
             type: "PDF",
-            downloadUrl: "/public-objects/trust-operations-manual.pdf"
+            downloadUrl: "/public-objects/mission-trusteeship-guide.pdf"
           }
         ]
       }
@@ -253,11 +253,6 @@ export default function CourseLesson() {
     ? courseData.lessons.find(l => l.id === lessonId)
     : courseData.lessons[currentLessonIndex];
 
-  // Debug logging
-  console.log('URL lessonId:', lessonId);
-  console.log('Current lesson index:', currentLessonIndex);
-  console.log('Current lesson:', currentLesson);
-  console.log('Current lesson video ID:', currentLesson?.youtubeVideoId);
     
   const nextLesson = courseData.lessons[currentLessonIndex + 1];
   const prevLesson = courseData.lessons[currentLessonIndex - 1];
@@ -372,9 +367,6 @@ export default function CourseLesson() {
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowFullScreen
                           />
-                          <div className="absolute top-2 left-2 bg-black/80 text-white px-2 py-1 rounded text-sm">
-                            Debug: {currentLesson.youtubeVideoId}
-                          </div>
                         </div>
                       ) : (
                         <div className="relative aspect-video bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
