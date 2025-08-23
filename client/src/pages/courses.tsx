@@ -163,7 +163,7 @@ export default function Courses() {
     },
     onSuccess: (data, courseId) => {
       // Auto-navigate to first lesson after successful enrollment
-      window.location.href = `/course-lesson/${courseId}/1`;
+      window.location.href = `/course/${courseId}/lesson/1`;
     },
     onError: (error: any) => {
       toast({
@@ -231,7 +231,7 @@ export default function Courses() {
     
     if (status === "enrolled") {
       // Navigate directly to first lesson
-      window.location.href = `/course-lesson/${courseId}/1`;
+      window.location.href = `/course/${courseId}/lesson/1`;
       return;
     }
     
