@@ -23,9 +23,9 @@ export default function About() {
               />
             </div>
             <div>
-              <h2 className="font-playfair text-3xl font-bold text-covenant-blue mb-6">Christ as the Grantor</h2>
+              <h2 className="font-playfair text-3xl font-bold text-covenant-blue mb-6">Kingdom Ventures Trust Ministry</h2>
               <p className="text-lg text-covenant-gray leading-relaxed mb-6">
-                Kingdom Ventures Trust is established by Jesus Christ Himself as the Grantor, who has transferred all authority and blessing to His Body. Unlike Babylon's system of contracts and merchandise, this trust operates under divine law and spiritual authority.
+                Kingdom Ventures Trust is the ministry called to administer The New Covenant Legacy Trust here on earth. As Christ's appointed trustees, we help believers understand their divine inheritance and learn to operate as royal priests in God's kingdom economy, administering the trust that Jesus established through His death and resurrection.
               </p>
               <div className="bg-covenant-light p-6 rounded-lg">
                 <blockquote className="font-georgia text-lg italic text-covenant-dark-gray mb-3">
@@ -45,9 +45,9 @@ export default function About() {
               />
             </div>
             <div className="lg:order-1">
-              <h2 className="font-playfair text-3xl font-bold text-covenant-blue mb-6">Contrast with Babylon's System</h2>
+              <h2 className="font-playfair text-3xl font-bold text-covenant-blue mb-6">Our Ministry Mission</h2>
               <p className="text-lg text-covenant-gray leading-relaxed mb-6">
-                Babylon operates through contracts, legal fictions, and the creation of artificial persons to bind mankind in debt slavery. Kingdom Ventures Trust transcends these earthly systems, operating under the perfect law of liberty found in Christ.
+                Through Kingdom Ventures Trust ministry, we teach believers how The New Covenant Legacy Trust operates differently from Babylon's system of contracts and legal fictions. Our mission is to help God's people understand their true identity as trustees and beneficiaries of Christ's inheritance, free from debt slavery and artificial legal persons.
               </p>
               <div className="space-y-4">
                 <div className="flex items-start">
@@ -66,7 +66,7 @@ export default function About() {
           <div className="bg-covenant-blue p-12 rounded-2xl">
             <h3 className="font-playfair text-3xl font-bold text-white mb-8 text-center">Scriptural Foundation</h3>
             <p className="text-white text-center mb-8 text-lg">
-              Kingdom Ventures Trust is established upon the sure foundation of God's Word, as revealed in the King James Version of the Holy Bible.
+              The New Covenant Legacy Trust is established upon the sure foundation of God's Word, and Kingdom Ventures Trust ministry is called to teach and administer these biblical truths as revealed in the King James Version of the Holy Bible.
             </p>
             
             <div className="space-y-8">
@@ -293,6 +293,80 @@ export default function About() {
                   "For he hath made him to be sin for us, who knew no sin; that we might be made the righteousness of God in him." 
                   <span className="block text-covenant-gold font-semibold mt-2">- 2 Corinthians 5:21 (KJV)</span>
                 </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Contact Section */}
+          <div className="mt-20">
+            <div className="text-center mb-12">
+              <h2 className="font-playfair text-3xl font-bold text-covenant-blue mb-4">
+                Connect with Kingdom Ventures Trust Ministry
+              </h2>
+              <p className="text-lg text-covenant-gray max-w-3xl mx-auto">
+                Ready to learn more about The New Covenant Legacy Trust and your divine inheritance? We're here to guide you on this journey.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* Contact Information */}
+              <div className="bg-covenant-blue p-8 rounded-xl text-white">
+                <h3 className="font-playfair text-2xl font-bold mb-6">Get in Touch</h3>
+                <div className="space-y-4">
+                  <div className="flex items-center">
+                    <svg className="w-6 h-6 text-covenant-gold mr-4" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10h5v-2h-5c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8v1.43c0 .79-.71 1.57-1.5 1.57s-1.5-.78-1.5-1.57V12c0-2.76-2.24-5-5-5s-5 2.24-5 5 2.24 5 5 5c1.38 0 2.64-.56 3.54-1.47.65.89 1.77 1.47 2.96 1.47 1.97 0 3.5-1.53 3.5-3.5V12c0-5.52-4.48-10-10-10zm0 13c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/>
+                    </svg>
+                    <div>
+                      <p className="font-semibold">Email Ministry</p>
+                      <p className="text-covenant-gold">KINGDOMVENTURESTRUST@gmail.com</p>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-6 p-4 bg-white/10 rounded-lg">
+                    <p className="text-sm">
+                      Email us with questions about trust administration, course enrollment, or to request mentorship as you learn to operate in your divine inheritance.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Ministry Services */}
+              <div className="bg-white p-8 rounded-xl shadow-lg border border-covenant-light">
+                <h3 className="font-playfair text-2xl font-bold text-covenant-blue mb-6">Ministry Services</h3>
+                <div className="space-y-4">
+                  <div className="flex items-start">
+                    <div className="w-3 h-3 bg-covenant-gold rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                    <div>
+                      <h4 className="font-semibold text-covenant-blue mb-1">Trust Administration Education</h4>
+                      <p className="text-covenant-gray text-sm">Learn practical steps to establish and operate your trust</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start">
+                    <div className="w-3 h-3 bg-covenant-gold rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                    <div>
+                      <h4 className="font-semibold text-covenant-blue mb-1">Biblical Mentorship</h4>
+                      <p className="text-covenant-gray text-sm">One-on-one guidance in covenant principles and trust operation</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start">
+                    <div className="w-3 h-3 bg-covenant-gold rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                    <div>
+                      <h4 className="font-semibold text-covenant-blue mb-1">Course Instruction</h4>
+                      <p className="text-covenant-gray text-sm">Comprehensive training from basics to bank account opening</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start">
+                    <div className="w-3 h-3 bg-covenant-gold rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                    <div>
+                      <h4 className="font-semibold text-covenant-blue mb-1">Prayer Support</h4>
+                      <p className="text-covenant-gray text-sm">Spiritual covering as you walk in covenant freedom</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
