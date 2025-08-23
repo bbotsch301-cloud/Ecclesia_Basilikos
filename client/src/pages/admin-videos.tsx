@@ -282,15 +282,15 @@ export default function AdminVideos() {
     }
   };
 
-  const filteredLessons = selectedCourse 
+  const filteredLessons = selectedCourse && selectedCourse !== "all"
     ? sampleLessons.filter(lesson => lesson.courseId === selectedCourse)
     : sampleLessons;
 
-  const filteredVideos = selectedCourse
+  const filteredVideos = selectedCourse && selectedCourse !== "all"
     ? sampleVideos.filter(video => video.courseId === selectedCourse)
     : sampleVideos;
 
-  const filteredFiles = selectedCourse
+  const filteredFiles = selectedCourse && selectedCourse !== "all"
     ? sampleFiles.filter(file => {
         const lesson = sampleLessons.find(l => l.id === file.lessonId);
         return lesson?.courseId === selectedCourse;
@@ -557,7 +557,7 @@ export default function AdminVideos() {
               <SelectValue placeholder="Filter by course" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Courses</SelectItem>
+              <SelectItem value="all">All Courses</SelectItem>
               {sampleCourses.map((course) => (
                 <SelectItem key={course.id} value={course.id}>
                   {course.title}
