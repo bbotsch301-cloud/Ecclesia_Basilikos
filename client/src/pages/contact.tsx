@@ -173,7 +173,7 @@ export default function Contact() {
                 <div className="space-y-4">
                   <div className="flex items-center">
                     <Mail className="text-covenant-gold text-xl mr-4" />
-                    <span className="text-covenant-gray">KINGDOMVENTURESTRUST@gmail.com</span>
+                    <span className="text-covenant-gray">KingdomVenturesTrust@gmail.com</span>
                   </div>
                 </div>
               </div>

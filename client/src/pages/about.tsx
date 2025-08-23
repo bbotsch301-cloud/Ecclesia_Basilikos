@@ -319,7 +319,7 @@ export default function About() {
                     </svg>
                     <div>
                       <p className="font-semibold">Email Ministry</p>
-                      <p className="text-covenant-gold">KINGDOMVENTURESTRUST@gmail.com</p>
+                      <p className="text-covenant-gold">KingdomVenturesTrust@gmail.com</p>
                     </div>
                   </div>
                   
