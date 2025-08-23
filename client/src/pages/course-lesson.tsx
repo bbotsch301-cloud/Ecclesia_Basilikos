@@ -92,64 +92,127 @@ const sampleCourseData: { [key: string]: CourseData } = {
         id: "2",
         title: "Understanding Your Role as Trustee",
         description: "Your responsibilities, authority, and biblical stewardship principles as the person managing the trust.",
-        youtubeVideoId: "dQw4w9WgXcQ",
+        youtubeVideoId: "JXeJANDKwDc", // Different video for lesson 2
         duration: "18 minutes",
         order: 2,
-        completed: false
+        completed: false,
+        files: [
+          {
+            id: "4",
+            name: "Trustee Responsibilities Checklist",
+            size: "1.1 MB",
+            type: "PDF",
+            downloadUrl: "/public-objects/trustee-responsibilities.pdf"
+          }
+        ]
       },
       {
         id: "3",
         title: "Creating Your Trust Document",
         description: "Step-by-step guide to drafting your trust agreement, key provisions, and essential language to include.",
-        youtubeVideoId: "dQw4w9WgXcQ",
+        youtubeVideoId: "3AtDnEC4zak", // Different video for lesson 3
         duration: "25 minutes", 
         order: 3,
-        completed: false
+        completed: false,
+        files: [
+          {
+            id: "5",
+            name: "Trust Document Template",
+            size: "2.3 MB", 
+            type: "PDF",
+            downloadUrl: "/public-objects/trust-document-template.pdf"
+          }
+        ]
       },
       {
         id: "4",
         title: "Legal Requirements and Compliance",
         description: "What the law requires, proper documentation, and ensuring your trust meets all legal standards.",
-        youtubeVideoId: "dQw4w9WgXcQ",
+        youtubeVideoId: "2Z4m4lnjxkY", // Different video for lesson 4
         duration: "22 minutes",
         order: 4,
-        completed: false
+        completed: false,
+        files: [
+          {
+            id: "6",
+            name: "Legal Compliance Guide",
+            size: "1.7 MB",
+            type: "PDF", 
+            downloadUrl: "/public-objects/legal-compliance-guide.pdf"
+          }
+        ]
       },
       {
         id: "5",
         title: "Trust Activation Process",
         description: "How to officially activate your trust, funding it with assets, and making it operational.",
-        youtubeVideoId: "dQw4w9WgXcQ",
+        youtubeVideoId: "YQHsXMglC9A", // Different video for lesson 5
         duration: "28 minutes",
         order: 5,
-        completed: false
+        completed: false,
+        files: [
+          {
+            id: "7",
+            name: "Trust Activation Worksheet",
+            size: "1.4 MB",
+            type: "PDF",
+            downloadUrl: "/public-objects/trust-activation-worksheet.pdf"
+          }
+        ]
       },
       {
         id: "6",
         title: "Obtaining Your EIN (Tax ID Number)",
         description: "Applying for your trust's federal tax identification number with the IRS - required for banking.",
-        youtubeVideoId: "dQw4w9WgXcQ",
+        youtubeVideoId: "oHg5SJYRHA0", // Different video for lesson 6
         duration: "20 minutes",
         order: 6,
-        completed: false
+        completed: false,
+        files: [
+          {
+            id: "8",
+            name: "EIN Application Guide",
+            size: "1.3 MB",
+            type: "PDF",
+            downloadUrl: "/public-objects/ein-application-guide.pdf"
+          }
+        ]
       },
       {
         id: "7",
         title: "Opening a Trust Bank Account",
         description: "Finding the right bank, required documentation, and successfully opening your first trust account.",
-        youtubeVideoId: "dQw4w9WgXcQ",
+        youtubeVideoId: "SfOTTOF9fpA", // Different video for lesson 7
         duration: "30 minutes",
         order: 7,
-        completed: false
+        completed: false,
+        files: [
+          {
+            id: "9",
+            name: "Bank Requirements Checklist",
+            size: "0.9 MB",
+            type: "PDF",
+            downloadUrl: "/public-objects/bank-requirements-checklist.pdf"
+          }
+        ]
       },
       {
         id: "8",
         title: "Initial Trust Operations and Next Steps",
         description: "Managing your new trust account, basic operations, record keeping, and planning for growth.",
-        youtubeVideoId: "dQw4w9WgXcQ",
+        youtubeVideoId: "rAHQY4VAX-k", // Different video for lesson 8
         duration: "25 minutes",
         order: 8,
-        completed: false
+        completed: false,
+        files: [
+          {
+            id: "10",
+            name: "Trust Operations Manual",
+            size: "2.8 MB",
+            type: "PDF",
+            downloadUrl: "/public-objects/trust-operations-manual.pdf"
+          }
+        ]
       }
     ]
   }
