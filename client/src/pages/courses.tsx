@@ -43,10 +43,10 @@ const availableCourses = [
   {
     id: 1,
     title: "Trust Fundamentals",
-    description: "Understanding the biblical foundation of trust relationships and your role as a trustee in God's kingdom economy.",
+    description: "Learn what a trust actually is, why people use them, and how they work in simple terms. Perfect for complete beginners who have never heard of trusts before.",
     lessons: 8,
     duration: "2.5 hours",
-    level: "Foundational",
+    level: "Foundational", 
     featured: true
   },
   {
