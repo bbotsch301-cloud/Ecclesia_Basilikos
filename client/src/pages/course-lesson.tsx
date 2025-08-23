@@ -252,6 +252,12 @@ export default function CourseLesson() {
   const currentLesson = lessonId 
     ? courseData.lessons.find(l => l.id === lessonId)
     : courseData.lessons[currentLessonIndex];
+
+  // Debug logging
+  console.log('URL lessonId:', lessonId);
+  console.log('Current lesson index:', currentLessonIndex);
+  console.log('Current lesson:', currentLesson);
+  console.log('Current lesson video ID:', currentLesson?.youtubeVideoId);
     
   const nextLesson = courseData.lessons[currentLessonIndex + 1];
   const prevLesson = courseData.lessons[currentLessonIndex - 1];
@@ -366,6 +372,9 @@ export default function CourseLesson() {
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowFullScreen
                           />
+                          <div className="absolute top-2 left-2 bg-black/80 text-white px-2 py-1 rounded text-sm">
+                            Debug: {currentLesson.youtubeVideoId}
+                          </div>
                         </div>
                       ) : (
                         <div className="relative aspect-video bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
