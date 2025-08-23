@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { ObjectUploader } from "@/components/ObjectUploader";
 import type { UploadResult } from "@uppy/core";
@@ -86,8 +87,16 @@ const sampleLessons = [
 ];
 
 export default function AdminVideos() {
+  const { user, isAuthenticated, isLoading } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  
+  // Check if user is admin or instructor
+  useEffect(() => {
+    if (!isLoading && (!isAuthenticated || (user?.role !== 'admin' && user?.role !== 'instructor'))) {
+      window.location.href = '/';
+    }
+  }, [isAuthenticated, isLoading, user]);
   const [selectedCourse, setSelectedCourse] = useState<string>("");
   const [videoDialogOpen, setVideoDialogOpen] = useState(false);
   const [fileDialogOpen, setFileDialogOpen] = useState(false);
@@ -100,8 +109,11 @@ export default function AdminVideos() {
     uploadUrl: string;
   }>>([]);
 
-  // Load videos from API
-  const { data: videos } = useQuery<VideoData[]>({ queryKey: ['/api/admin/videos'] });
+  // Load videos from API - only when authenticated
+  const { data: videos } = useQuery<VideoData[]>({ 
+    queryKey: ['/api/admin/videos'],
+    enabled: isAuthenticated && (user?.role === 'admin' || user?.role === 'instructor')
+  });
   
   // Current video data from the course system
   const sampleVideos: VideoData[] = [
@@ -354,6 +366,18 @@ export default function AdminVideos() {
   const handleFileSubmit = async (data: z.infer<typeof fileSchema>) => {
     fileMutation.mutate(data);
   };
+
+  // Show loading screen while checking authentication
+  if (isLoading || !isAuthenticated || (user?.role !== 'admin' && user?.role !== 'instructor')) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-covenant-blue mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading admin panel...</p>
+        </div>
+      </div>
+    );
+  }
 
   const filteredLessons = selectedCourse && selectedCourse !== "all"
     ? sampleLessons.filter(lesson => lesson.courseId === selectedCourse)
