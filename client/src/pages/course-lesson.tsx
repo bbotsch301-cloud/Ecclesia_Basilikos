@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useToast } from "@/hooks/use-toast";
 import { useParams, Link } from "wouter";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -223,16 +224,17 @@ export default function CourseLesson() {
               <CardContent>
                 <div className="space-y-2">
                   {courseData.lessons.map((lesson, index) => (
-                    <button
+                    <Button
                       key={lesson.id}
+                      variant="ghost"
                       onClick={() => setCurrentLessonIndex(index)}
-                      className={`w-full text-left p-3 rounded-lg transition-colors ${
+                      className={`w-full text-left p-3 rounded-lg transition-colors h-auto ${
                         currentLessonIndex === index 
                           ? 'bg-covenant-blue text-white' 
                           : 'hover:bg-covenant-light text-covenant-gray'
                       }`}
                     >
-                      <div className="flex items-center justify-between">
+                      <div className="flex items-center justify-between w-full">
                         <div className="flex-1">
                           <p className="font-medium text-sm">{lesson.title}</p>
                           <div className="flex items-center mt-1">
@@ -244,7 +246,7 @@ export default function CourseLesson() {
                           <CheckCircle className="h-4 w-4 text-green-500 ml-2" />
                         )}
                       </div>
-                    </button>
+                    </Button>
                   ))}
                 </div>
               </CardContent>
@@ -380,6 +382,12 @@ export default function CourseLesson() {
                     ) : (
                       <Button 
                         className="bg-green-600 hover:bg-green-700 text-white"
+                        onClick={() => {
+                          toast({
+                            title: "Course Complete!",
+                            description: "Congratulations! You have completed this course. Continue your learning journey with more courses.",
+                          });
+                        }}
                       >
                         <CheckCircle className="h-4 w-4 mr-2" />
                         Complete Course

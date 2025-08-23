@@ -125,14 +125,14 @@ export default function Courses() {
   const { login, register: registerUser, logout, isLoggingIn, isRegistering } = useAuth();
 
   // Fetch user enrollments
-  const { data: enrollments = [] } = useQuery({
+  const { data: enrollments = [] } = useQuery<Array<{ courseId: string; enrolledAt: string }>>({
     queryKey: ["/api/my-enrollments"],
     enabled: isAuthenticated,
   });
 
   // Check if user is enrolled in a course
   const isEnrolledInCourse = (courseId: string) => {
-    return enrollments.some((enrollment: any) => enrollment.courseId === courseId);
+    return enrollments.some((enrollment) => enrollment.courseId === courseId);
   };
 
   // Get enrollment status for button text
@@ -506,7 +506,8 @@ export default function Courses() {
             
             <div className="flex justify-center">
               <div className="bg-white rounded-lg p-1 shadow-md">
-                <button
+                <Button
+                  variant="ghost"
                   onClick={() => setSelectedLevel('all')}
                   className={`px-6 py-3 rounded-md font-medium transition-colors ${
                     selectedLevel === 'all' 
@@ -515,8 +516,9 @@ export default function Courses() {
                   }`}
                 >
                   All Courses
-                </button>
-                <button
+                </Button>
+                <Button
+                  variant="ghost"
                   onClick={() => setSelectedLevel('foundational')}
                   className={`px-6 py-3 rounded-md font-medium transition-colors ${
                     selectedLevel === 'foundational' 
@@ -525,8 +527,9 @@ export default function Courses() {
                   }`}
                 >
                   Foundational
-                </button>
-                <button
+                </Button>
+                <Button
+                  variant="ghost"
                   onClick={() => setSelectedLevel('intermediate')}
                   className={`px-6 py-3 rounded-md font-medium transition-colors ${
                     selectedLevel === 'intermediate' 
@@ -535,8 +538,9 @@ export default function Courses() {
                   }`}
                 >
                   Intermediate
-                </button>
-                <button
+                </Button>
+                <Button
+                  variant="ghost"
                   onClick={() => setSelectedLevel('advanced')}
                   className={`px-6 py-3 rounded-md font-medium transition-colors ${
                     selectedLevel === 'advanced' 
@@ -545,7 +549,7 @@ export default function Courses() {
                   }`}
                 >
                   Advanced
-                </button>
+                </Button>
               </div>
             </div>
           </div>
