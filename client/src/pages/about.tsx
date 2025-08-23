@@ -7,7 +7,7 @@ export default function About() {
   return (
     <div className="pt-16">
       <HeroSection
-        title="About Kingdom Ventures Trust"
+        title="About The New Covenant Legacy Trust"
         description="Understanding Christ as Grantor and us as beneficiaries in the divine trust relationship"
         backgroundImage="https://images.unsplash.com/photo-1507692029427-0d52b0b999e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
       />
