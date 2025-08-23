@@ -62,16 +62,25 @@ interface FileData {
   lessonTitle: string;
 }
 
+// Course data matching the actual course system
 const sampleCourses = [
-  { id: "1", title: "Trust Fundamentals" },
-  { id: "2", title: "Advanced Trust Strategies" },
-  { id: "3", title: "Estate Planning Mastery" },
+  { id: "1", title: "Trust Fundamentals", description: "Understanding the biblical foundation of trust relationships and your role as a trustee in God's kingdom economy." },
+  { id: "2", title: "Advanced Trust Strategies", description: "Advanced techniques for trust management and wealth preservation." },
+  { id: "3", title: "Estate Planning Mastery", description: "Comprehensive estate planning and legacy building strategies." },
+  { id: "4", title: "Investment & Asset Management", description: "Biblical principles for managing trust assets and investments." },
+  { id: "5", title: "Tax Strategy & Compliance", description: "Navigating tax implications and compliance requirements for trusts." },
+  { id: "6", title: "Wealth Transfer Strategies", description: "Effective strategies for transferring wealth across generations." },
 ];
 
 const sampleLessons = [
   { id: "1", title: "Introduction to Biblical Trusts", courseId: "1" },
   { id: "2", title: "Legal Structures and Kingdom Authority", courseId: "1" },
-  { id: "3", title: "Trustee Responsibilities", courseId: "1" },
+  { id: "3", title: "Trustee Responsibilities and Biblical Stewardship", courseId: "1" },
+  { id: "4", title: "Asset Management and Investment Principles", courseId: "1" },
+  { id: "5", title: "Banking and Financial Institutions", courseId: "1" },
+  { id: "6", title: "Cryptocurrency and Digital Assets", courseId: "1" },
+  { id: "7", title: "Wealth Legacy Building", courseId: "1" },
+  { id: "8", title: "Practical Trust Administration", courseId: "1" },
 ];
 
 export default function AdminVideos() {
@@ -86,7 +95,7 @@ export default function AdminVideos() {
   // Remove admin authentication check for development
   // const { data: videos } = useQuery({ queryKey: ['/api/admin/videos'] });
   
-  // Sample data - would come from API
+  // Current video data from the course system
   const sampleVideos: VideoData[] = [
     {
       id: "1",
@@ -94,9 +103,79 @@ export default function AdminVideos() {
       lessonId: "1", 
       youtubeVideoId: "dQw4w9WgXcQ",
       title: "Introduction to Biblical Trusts",
-      description: "Understanding the scriptural foundation of trust relationships",
+      description: "Understanding the scriptural foundation of trust relationships and your role as a trustee in God's kingdom economy.",
       courseName: "Trust Fundamentals",
       lessonTitle: "Introduction to Biblical Trusts"
+    },
+    {
+      id: "2",
+      courseId: "1",
+      lessonId: "2", 
+      youtubeVideoId: "dQw4w9WgXcQ",
+      title: "Legal Structures and Kingdom Authority",
+      description: "How to establish trust structures that honor God's authority while operating effectively in the modern legal system.",
+      courseName: "Trust Fundamentals",
+      lessonTitle: "Legal Structures and Kingdom Authority"
+    },
+    {
+      id: "3",
+      courseId: "1",
+      lessonId: "3", 
+      youtubeVideoId: "dQw4w9WgXcQ",
+      title: "Trustee Responsibilities and Biblical Stewardship",
+      description: "Understanding your duties and obligations as a faithful trustee managing God's resources.",
+      courseName: "Trust Fundamentals",
+      lessonTitle: "Trustee Responsibilities and Biblical Stewardship"
+    },
+    {
+      id: "4",
+      courseId: "1",
+      lessonId: "4", 
+      youtubeVideoId: "dQw4w9WgXcQ",
+      title: "Asset Management and Investment Principles",
+      description: "Biblical principles for managing trust assets, investments, and growing wealth according to Kingdom values.",
+      courseName: "Trust Fundamentals",
+      lessonTitle: "Asset Management and Investment Principles"
+    },
+    {
+      id: "5",
+      courseId: "1",
+      lessonId: "5", 
+      youtubeVideoId: "dQw4w9WgXcQ",
+      title: "Banking and Financial Institutions",
+      description: "Working with banks, managing accounts, and establishing proper financial relationships as a trustee.",
+      courseName: "Trust Fundamentals",
+      lessonTitle: "Banking and Financial Institutions"
+    },
+    {
+      id: "6",
+      courseId: "1",
+      lessonId: "6", 
+      youtubeVideoId: "dQw4w9WgXcQ",
+      title: "Cryptocurrency and Digital Assets",
+      description: "Understanding and managing digital assets, cryptocurrency, and modern investment vehicles within a trust.",
+      courseName: "Trust Fundamentals",
+      lessonTitle: "Cryptocurrency and Digital Assets"
+    },
+    {
+      id: "7",
+      courseId: "1",
+      lessonId: "7", 
+      youtubeVideoId: "dQw4w9WgXcQ",
+      title: "Wealth Legacy Building",
+      description: "Creating lasting financial legacies that honor God and bless future generations through proper trust management.",
+      courseName: "Trust Fundamentals",
+      lessonTitle: "Wealth Legacy Building"
+    },
+    {
+      id: "8",
+      courseId: "1",
+      lessonId: "8", 
+      youtubeVideoId: "dQw4w9WgXcQ",
+      title: "Practical Trust Administration",
+      description: "Daily operations, record keeping, beneficiary communication, and practical aspects of trust management.",
+      courseName: "Trust Fundamentals",
+      lessonTitle: "Practical Trust Administration"
     }
   ];
 
@@ -110,6 +189,36 @@ export default function AdminVideos() {
       downloadUrl: "/api/files/trust-admin-guide.pdf",
       courseName: "Trust Fundamentals",
       lessonTitle: "Introduction to Biblical Trusts"
+    },
+    {
+      id: "2",
+      lessonId: "1",
+      name: "Biblical Stewardship Principles",
+      type: "PDF",
+      size: "1.8 MB",
+      downloadUrl: "/api/files/stewardship-principles.pdf",
+      courseName: "Trust Fundamentals",
+      lessonTitle: "Introduction to Biblical Trusts"
+    },
+    {
+      id: "3",
+      lessonId: "2",
+      name: "Legal Structure Templates",
+      type: "PDF",
+      size: "3.1 MB",
+      downloadUrl: "/api/files/legal-templates.pdf",
+      courseName: "Trust Fundamentals",
+      lessonTitle: "Legal Structures and Kingdom Authority"
+    },
+    {
+      id: "4",
+      lessonId: "3",
+      name: "Trustee Duties Checklist",
+      type: "PDF",
+      size: "1.2 MB",
+      downloadUrl: "/api/files/trustee-checklist.pdf",
+      courseName: "Trust Fundamentals",
+      lessonTitle: "Trustee Responsibilities and Biblical Stewardship"
     }
   ];
 
@@ -176,6 +285,17 @@ export default function AdminVideos() {
   const filteredLessons = selectedCourse 
     ? sampleLessons.filter(lesson => lesson.courseId === selectedCourse)
     : sampleLessons;
+
+  const filteredVideos = selectedCourse
+    ? sampleVideos.filter(video => video.courseId === selectedCourse)
+    : sampleVideos;
+
+  const filteredFiles = selectedCourse
+    ? sampleFiles.filter(file => {
+        const lesson = sampleLessons.find(l => l.id === file.lessonId);
+        return lesson?.courseId === selectedCourse;
+      })
+    : sampleFiles;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-covenant-light via-white to-covenant-light p-6">
@@ -459,7 +579,7 @@ export default function AdminVideos() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {sampleVideos.map((video) => (
+                {filteredVideos.map((video) => (
                   <div key={video.id} className="flex items-center justify-between p-4 border border-covenant-light rounded-lg">
                     <div className="flex items-center space-x-4">
                       <div className="w-24 h-16 bg-gray-200 rounded flex items-center justify-center">
@@ -467,21 +587,43 @@ export default function AdminVideos() {
                       </div>
                       <div>
                         <h3 className="font-semibold text-covenant-blue">{video.title}</h3>
-                        <p className="text-sm text-covenant-gray">
+                        <p className="text-sm text-covenant-gray mb-1">
                           {video.courseName} • {video.lessonTitle}
                         </p>
-                        <Badge variant="outline" className="mt-1">
-                          ID: {video.youtubeVideoId}
-                        </Badge>
+                        <p className="text-xs text-covenant-gray mb-2 line-clamp-2">
+                          {video.description}
+                        </p>
+                        <div className="flex gap-2">
+                          <Badge variant="outline" className="text-xs">
+                            ID: {video.youtubeVideoId}
+                          </Badge>
+                          <Badge variant="outline" className="text-xs">
+                            Course: {video.courseId} • Lesson: {video.lessonId}
+                          </Badge>
+                        </div>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
                       <Button 
                         size="sm" 
                         variant="outline"
+                        onClick={() => window.open(`https://www.youtube.com/watch?v=${video.youtubeVideoId}`, '_blank')}
+                        className="text-red-600 hover:text-red-700"
+                      >
+                        <Youtube className="h-4 w-4" />
+                      </Button>
+                      <Button 
+                        size="sm" 
+                        variant="outline"
                         onClick={() => {
                           setEditingVideo(video);
-                          videoForm.reset(video);
+                          videoForm.reset({
+                            courseId: video.courseId,
+                            lessonId: video.lessonId,
+                            youtubeVideoId: video.youtubeVideoId,
+                            title: video.title,
+                            description: video.description || ""
+                          });
                           setVideoDialogOpen(true);
                         }}
                       >
@@ -493,7 +635,7 @@ export default function AdminVideos() {
                     </div>
                   </div>
                 ))}
-                {sampleVideos.length === 0 && (
+                {filteredVideos.length === 0 && (
                   <div className="text-center py-8 text-covenant-gray">
                     No videos found. Add your first video to get started.
                   </div>
@@ -513,7 +655,7 @@ export default function AdminVideos() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {sampleFiles.map((file) => (
+                {filteredFiles.map((file) => (
                   <div key={file.id} className="flex items-center justify-between p-4 border border-covenant-light rounded-lg">
                     <div className="flex items-center space-x-4">
                       <div className="w-12 h-12 bg-covenant-light rounded flex items-center justify-center">
@@ -554,7 +696,7 @@ export default function AdminVideos() {
                     </div>
                   </div>
                 ))}
-                {sampleFiles.length === 0 && (
+                {filteredFiles.length === 0 && (
                   <div className="text-center py-8 text-covenant-gray">
                     No files found. Add your first file to get started.
                   </div>
