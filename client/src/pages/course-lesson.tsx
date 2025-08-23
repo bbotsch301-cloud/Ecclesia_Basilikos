@@ -67,17 +67,24 @@ const sampleCourseData: { [key: string]: CourseData } = {
         files: [
           {
             id: "1",
-            name: "Trust Basics Checklist",
-            size: "1.2 MB",
+            name: "Common Law Handbook",
+            size: "2.1 MB",
             type: "PDF",
-            downloadUrl: "/api/files/trust-basics-checklist.pdf"
+            downloadUrl: "/public-objects/common-law-handbook.pdf"
           },
           {
             id: "2", 
-            name: "Trust Terminology Guide",
-            size: "0.8 MB",
+            name: "Creation & Essentials of a Valid Trust",
+            size: "1.8 MB", 
             type: "PDF",
-            downloadUrl: "/api/files/trust-terminology.pdf"
+            downloadUrl: "/public-objects/essentials-of-trust.pdf"
+          },
+          {
+            id: "3",
+            name: "Maxims of Law",
+            size: "3.2 MB",
+            type: "PDF", 
+            downloadUrl: "/public-objects/maxims-of-law.pdf"
           }
         ]
       },
