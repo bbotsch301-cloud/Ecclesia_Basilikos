@@ -257,7 +257,7 @@ export default function AdminVideos() {
       const response = await apiRequest("POST", "/api/objects/upload", {});
       return {
         method: "PUT" as const,
-        url: (await response.json()).uploadURL,
+        url: response.uploadURL,
       };
     } catch (error) {
       toast({
