@@ -223,7 +223,6 @@ export default function CourseLesson() {
   const { toast } = useToast();
   const courseId = params.courseId || "1";
   const lessonId = params.lessonId;
-  const [currentLessonIndex, setCurrentLessonIndex] = useState(0);
 
   const courseData = sampleCourseData[courseId];
   
@@ -245,10 +244,15 @@ export default function CourseLesson() {
     );
   }
 
+  // Find current lesson index for navigation
+  const currentLessonIndex = lessonId 
+    ? courseData.lessons.findIndex(l => l.id === lessonId)
+    : 0;
+
   const currentLesson = lessonId 
     ? courseData.lessons.find(l => l.id === lessonId)
     : courseData.lessons[currentLessonIndex];
-
+    
   const nextLesson = courseData.lessons[currentLessonIndex + 1];
   const prevLesson = courseData.lessons[currentLessonIndex - 1];
 
@@ -295,16 +299,19 @@ export default function CourseLesson() {
               <CardContent>
                 <div className="space-y-2">
                   {courseData.lessons.map((lesson, index) => (
-                    <Button
-                      key={lesson.id}
-                      variant="ghost"
-                      onClick={() => setCurrentLessonIndex(index)}
-                      className={`w-full text-left p-3 rounded-lg transition-colors h-auto ${
-                        currentLessonIndex === index 
-                          ? 'bg-covenant-blue text-white' 
-                          : 'hover:bg-covenant-light text-covenant-gray'
-                      }`}
+                    <Link 
+                      key={lesson.id} 
+                      href={`/course/${courseId}/lesson/${lesson.id}`}
+                      className="w-full"
                     >
+                      <Button
+                        variant="ghost"
+                        className={`w-full text-left p-3 rounded-lg transition-colors h-auto ${
+                          currentLesson?.id === lesson.id 
+                            ? 'bg-covenant-blue text-white' 
+                            : 'hover:bg-covenant-light text-covenant-gray'
+                        }`}
+                      >
                       <div className="flex items-center justify-between w-full">
                         <div className="flex-1">
                           <p className="font-medium text-sm">{lesson.title}</p>
@@ -317,7 +324,8 @@ export default function CourseLesson() {
                           <CheckCircle className="h-4 w-4 text-green-500 ml-2" />
                         )}
                       </div>
-                    </Button>
+                      </Button>
+                    </Link>
                   ))}
                 </div>
               </CardContent>
@@ -430,26 +438,28 @@ export default function CourseLesson() {
                 <div className="flex justify-between items-center mt-12 pt-8 border-t border-covenant-light">
                   <div>
                     {prevLesson && (
-                      <Button 
-                        variant="outline"
-                        onClick={() => setCurrentLessonIndex(currentLessonIndex - 1)}
-                        className="border-covenant-blue text-covenant-blue hover:bg-covenant-blue hover:text-white"
-                      >
-                        <ChevronLeft className="h-4 w-4 mr-2" />
-                        Previous Lesson
-                      </Button>
+                      <Link href={`/course/${courseId}/lesson/${prevLesson.id}`}>
+                        <Button 
+                          variant="outline"
+                          className="border-covenant-blue text-covenant-blue hover:bg-covenant-blue hover:text-white"
+                        >
+                          <ChevronLeft className="h-4 w-4 mr-2" />
+                          Previous Lesson
+                        </Button>
+                      </Link>
                     )}
                   </div>
                   
                   <div>
                     {nextLesson ? (
-                      <Button 
-                        onClick={() => setCurrentLessonIndex(currentLessonIndex + 1)}
-                        className="bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue"
-                      >
-                        Next Lesson
-                        <ChevronRight className="h-4 w-4 ml-2" />
-                      </Button>
+                      <Link href={`/course/${courseId}/lesson/${nextLesson.id}`}>
+                        <Button 
+                          className="bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue"
+                        >
+                          Next Lesson
+                          <ChevronRight className="h-4 w-4 ml-2" />
+                        </Button>
+                      </Link>
                     ) : (
                       <Button 
                         className="bg-green-600 hover:bg-green-700 text-white"
