@@ -83,6 +83,9 @@ export default function AdminVideos() {
   const [editingVideo, setEditingVideo] = useState<VideoData | null>(null);
   const [editingFile, setEditingFile] = useState<FileData | null>(null);
 
+  // Remove admin authentication check for development
+  // const { data: videos } = useQuery({ queryKey: ['/api/admin/videos'] });
+  
   // Sample data - would come from API
   const sampleVideos: VideoData[] = [
     {
