@@ -13,7 +13,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { insertUserSchema, loginSchema } from "@shared/schema";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { 
   BookOpen, 
@@ -124,6 +124,37 @@ export default function Courses() {
 
   const { login, register: registerUser, logout, isLoggingIn, isRegistering } = useAuth();
 
+  // Fetch user enrollments
+  const { data: enrollments = [] } = useQuery({
+    queryKey: ["/api/my-enrollments"],
+    enabled: isAuthenticated,
+  });
+
+  // Check if user is enrolled in a course
+  const isEnrolledInCourse = (courseId: string) => {
+    return enrollments.some((enrollment: any) => enrollment.courseId === courseId);
+  };
+
+  // Get enrollment status for button text
+  const getEnrollmentStatus = (courseId: string) => {
+    if (!isAuthenticated) return "login";
+    if (isEnrolledInCourse(courseId)) return "enrolled";
+    return "enroll";
+  };
+
+  // Get button text based on enrollment status
+  const getButtonText = (courseId: string, isPending: boolean = false) => {
+    if (isPending) return "Processing...";
+    
+    const status = getEnrollmentStatus(courseId);
+    switch (status) {
+      case "login": return "Login to Enroll";
+      case "enrolled": return "Continue Course";
+      case "enroll": return "Begin Course";
+      default: return "Enroll Now";
+    }
+  };
+
   // Course enrollment mutation
   const enrollMutation = useMutation({
     mutationFn: async (courseId: string) => {
@@ -194,7 +225,20 @@ export default function Courses() {
   };
 
   const handleEnroll = async (courseId: string, courseTitle: string) => {
-    // Temporarily disable authentication requirement for development
+    const status = getEnrollmentStatus(courseId);
+    
+    if (status === "login") {
+      setShowAuthDialog(true);
+      return;
+    }
+    
+    if (status === "enrolled") {
+      // Navigate to course or first lesson
+      window.location.href = `/course-lesson/${courseId}/1`;
+      return;
+    }
+    
+    // Proceed with enrollment
     try {
       await enrollMutation.mutateAsync(courseId.toString());
     } catch (error) {
@@ -444,7 +488,7 @@ export default function Courses() {
                     disabled={enrollMutation.isPending}
                   >
                     <GraduationCap className="h-5 w-5 mr-2" />
-                    {enrollMutation.isPending ? "Enrolling..." : "Start This Course"}
+                    {getButtonText(course.id.toString(), enrollMutation.isPending)}
                   </Button>
                 </CardContent>
               </Card>
@@ -543,7 +587,7 @@ export default function Courses() {
                       disabled={enrollMutation.isPending}
                     >
                       <GraduationCap className="h-4 w-4 mr-2" />
-                      {enrollMutation.isPending ? "Enrolling..." : "Enroll Now"}
+                      {getButtonText(course.id.toString(), enrollMutation.isPending)}
                     </Button>
                   </div>
                 </CardContent>
