@@ -50,15 +50,15 @@ const sampleCourseData: { [key: string]: CourseData } = {
   "1": {
     id: "1",
     title: "Trust Fundamentals",
-    description: "Understanding the biblical foundation of trust relationships and your role as a trustee in God's kingdom economy.",
+    description: "Learn what a trust actually is, why people use them, and how they work in simple terms. Perfect for complete beginners who have never heard of trusts before.",
     level: "Foundational",
     totalLessons: 8,
     progress: 25,
     lessons: [
       {
         id: "1",
-        title: "Introduction to Biblical Trusts",
-        description: "Understanding the scriptural foundation of trust relationships and your role as a trustee in God's kingdom economy.",
+        title: "What is a Trust? The Complete Basics",
+        description: "Simple explanation of trusts, the three parties involved, and why people create them. No prior knowledge needed.",
         youtubeVideoId: "dQw4w9WgXcQ", // Sample YouTube video ID
         duration: "15 minutes",
         order: 1,
@@ -66,33 +66,33 @@ const sampleCourseData: { [key: string]: CourseData } = {
         files: [
           {
             id: "1",
-            name: "Trust Administration Guide",
-            size: "2.3 MB",
+            name: "Trust Basics Checklist",
+            size: "1.2 MB",
             type: "PDF",
-            downloadUrl: "/api/files/trust-admin-guide.pdf"
+            downloadUrl: "/api/files/trust-basics-checklist.pdf"
           },
           {
             id: "2", 
-            name: "Biblical Stewardship Principles",
-            size: "1.8 MB",
+            name: "Trust Terminology Guide",
+            size: "0.8 MB",
             type: "PDF",
-            downloadUrl: "/api/files/stewardship-principles.pdf"
+            downloadUrl: "/api/files/trust-terminology.pdf"
           }
         ]
       },
       {
         id: "2",
-        title: "Legal Structures and Kingdom Authority",
-        description: "How to establish trust structures that honor God's authority while operating effectively in the modern legal system.",
+        title: "Understanding Your Role as Trustee",
+        description: "Your responsibilities, authority, and biblical stewardship principles as the person managing the trust.",
         youtubeVideoId: "dQw4w9WgXcQ",
-        duration: "20 minutes",
+        duration: "18 minutes",
         order: 2,
         completed: false
       },
       {
         id: "3",
-        title: "Trustee Responsibilities and Biblical Stewardship",
-        description: "Understanding your duties and obligations as a faithful trustee managing God's resources.",
+        title: "Creating Your Trust Document",
+        description: "Step-by-step guide to drafting your trust agreement, key provisions, and essential language to include.",
         youtubeVideoId: "dQw4w9WgXcQ",
         duration: "25 minutes", 
         order: 3,
@@ -100,46 +100,46 @@ const sampleCourseData: { [key: string]: CourseData } = {
       },
       {
         id: "4",
-        title: "Asset Management and Investment Principles",
-        description: "Biblical principles for managing trust assets, investments, and growing wealth according to Kingdom values.",
+        title: "Legal Requirements and Compliance",
+        description: "What the law requires, proper documentation, and ensuring your trust meets all legal standards.",
         youtubeVideoId: "dQw4w9WgXcQ",
-        duration: "30 minutes",
+        duration: "22 minutes",
         order: 4,
         completed: false
       },
       {
         id: "5",
-        title: "Banking and Financial Institutions",
-        description: "Working with banks, managing accounts, and establishing proper financial relationships as a trustee.",
+        title: "Trust Activation Process",
+        description: "How to officially activate your trust, funding it with assets, and making it operational.",
         youtubeVideoId: "dQw4w9WgXcQ",
-        duration: "22 minutes",
+        duration: "28 minutes",
         order: 5,
         completed: false
       },
       {
         id: "6",
-        title: "Cryptocurrency and Digital Assets",
-        description: "Understanding and managing digital assets, cryptocurrency, and modern investment vehicles within a trust.",
+        title: "Obtaining Your EIN (Tax ID Number)",
+        description: "Applying for your trust's federal tax identification number with the IRS - required for banking.",
         youtubeVideoId: "dQw4w9WgXcQ",
-        duration: "28 minutes",
+        duration: "20 minutes",
         order: 6,
         completed: false
       },
       {
         id: "7",
-        title: "Wealth Legacy Building",
-        description: "Creating lasting financial legacies that honor God and bless future generations through proper trust management.",
+        title: "Opening a Trust Bank Account",
+        description: "Finding the right bank, required documentation, and successfully opening your first trust account.",
         youtubeVideoId: "dQw4w9WgXcQ",
-        duration: "35 minutes",
+        duration: "30 minutes",
         order: 7,
         completed: false
       },
       {
         id: "8",
-        title: "Practical Trust Administration",
-        description: "Daily operations, record keeping, beneficiary communication, and practical aspects of trust management.",
+        title: "Initial Trust Operations and Next Steps",
+        description: "Managing your new trust account, basic operations, record keeping, and planning for growth.",
         youtubeVideoId: "dQw4w9WgXcQ",
-        duration: "32 minutes",
+        duration: "25 minutes",
         order: 8,
         completed: false
       }
