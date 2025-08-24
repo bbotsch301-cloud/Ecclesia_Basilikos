@@ -50,18 +50,18 @@ interface CourseData {
 const sampleCourseData: { [key: string]: CourseData } = {
   "1": {
     id: "1",
-    title: "Foundations of Trust",
-    description: "Learn the biblical and legal foundations of trust, your divine identity, and role as a Kingdom steward through 8 comprehensive modules.",
+    title: "Understanding Trust and Dominion",
+    description: "Discover God's original design for dominion, your dual identity in Christ, and how to operate as Heaven's ambassador on earth through 7 essential modules.",
     level: "Foundation",
-    totalLessons: 8,
-    progress: 12,
+    totalLessons: 7,
+    progress: 14,
     lessons: [
       {
         id: "1",
-        title: "Module 1: Foundations of Trust",
-        description: "What is Trust? Definition in law, finance, and Scripture. The Bible as a living trust and divine contract. The New Covenant as Trust with Jesus as Testator & Principal.",
+        title: "Module 1: Understanding Trust and Dominion",
+        description: "Genesis 1:26–28 – God gave man dominion (trusteeship) over creation. The Fall and breach of trust. Christ's Restoration as the Second Adam re-establishing trust.",
         youtubeVideoId: "IP4NzMFGKA8",
-        duration: "22 minutes",
+        duration: "25 minutes",
         order: 1,
         completed: true,
         files: [
@@ -90,127 +90,109 @@ const sampleCourseData: { [key: string]: CourseData } = {
       },
       {
         id: "2",
-        title: "Module 2: Identity in the Trust",
-        description: "True vs. False Identity. Distinction between 'person/legal fiction' and 'trustee in Christ.' Citizenship in Heaven and living as ambassadors of the Kingdom.",
+        title: "Module 2: The Public vs. Private Identity",
+        description: "Understanding dual identity: public citizen/legal person vs. private living man/woman in God's image. Christ's status correction making us 100% man + 100% divine.",
         youtubeVideoId: "JXeJANDKwDc",
-        duration: "25 minutes",
+        duration: "28 minutes",
         order: 2,
         completed: false,
         files: [
           {
             id: "4",
-            name: "Identity in Christ Study Guide",
-            size: "1.4 MB",
+            name: "Public vs Private Identity Guide",
+            size: "1.6 MB",
             type: "PDF",
-            downloadUrl: "/public-objects/identity-in-christ-guide.pdf"
+            downloadUrl: "/public-objects/public-private-identity-guide.pdf"
           }
         ]
       },
       {
         id: "3",
-        title: "Module 3: Roles in the Trust",
-        description: "Understanding the divine trust structure: God as Grantor, believer as Trustee/steward, Christ as first beneficiary, and ecclesiastical governance for accountability.",
+        title: "Module 3: The Role of the Holy Spirit",
+        description: "The Holy Spirit as bridge/transmitting utility between heaven and earth. Our seal, earnest, and divine letter of credit. Jesus as Surety guaranteeing all obligations.",
         youtubeVideoId: "3AtDnEC4zak",
-        duration: "28 minutes", 
+        duration: "26 minutes", 
         order: 3,
         completed: false,
         files: [
           {
             id: "5",
-            name: "Trust Roles & Responsibilities",
-            size: "1.9 MB", 
+            name: "Holy Spirit as Transmitting Utility",
+            size: "1.8 MB", 
             type: "PDF",
-            downloadUrl: "/public-objects/trust-roles-responsibilities.pdf"
+            downloadUrl: "/public-objects/holy-spirit-transmitting-utility.pdf"
           }
         ]
       },
       {
         id: "4",
-        title: "Module 4: Jurisdiction and Sovereignty",
-        description: "Lex Divina, Lex Naturalis, Lex Humana - Divine law above natural and human law. Private vs. Public Systems and true sovereignty through Christ.",
+        title: "Module 4: Documents of Identity in the Trust",
+        description: "Trust Declaration, Beneficiary Authorization, Ecclesiastical Heirship Claim, Divine Jurisdiction Notice, Spiritual Currency Ledger, and Debt Discharge Statements.",
         youtubeVideoId: "2Z4m4lnjxkY",
-        duration: "30 minutes",
+        duration: "32 minutes",
         order: 4,
         completed: false,
         files: [
           {
             id: "6",
-            name: "Jurisdiction & Divine Law Guide",
-            size: "2.2 MB",
+            name: "Trust Documents Template Package",
+            size: "3.4 MB",
             type: "PDF", 
-            downloadUrl: "/public-objects/jurisdiction-divine-law.pdf"
+            downloadUrl: "/public-objects/trust-documents-template-package.pdf"
           }
         ]
       },
       {
         id: "5",
-        title: "Module 5: The Power of Stewardship",
-        description: "Faith as the Currency of the Kingdom. Managing resources spiritually, materially, and legally. Lawful money redemption and living sacrifice principles.",
+        title: "Module 5: Operating 'In Christ'",
+        description: "Ambassadors for Christ (2 Cor. 5:20). Living man as agent on earth, redeemed man as principal in heaven. Authority without liability through Jesus our Surety.",
         youtubeVideoId: "YQHsXMglC9A",
-        duration: "26 minutes",
+        duration: "24 minutes",
         order: 5,
         completed: false,
         files: [
           {
             id: "7",
-            name: "Kingdom Stewardship Manual",
-            size: "2.5 MB",
+            name: "Operating In Christ Handbook",
+            size: "2.1 MB",
             type: "PDF",
-            downloadUrl: "/public-objects/kingdom-stewardship-manual.pdf"
+            downloadUrl: "/public-objects/operating-in-christ-handbook.pdf"
           }
         ]
       },
       {
         id: "6",
-        title: "Module 6: The Great Deception and Restoration",
-        description: "Babylonian systems of control, legal fictions, birth certificates, and the merchandise of men. Understanding masks vs. true identity and restoration through trust.",
+        title: "Module 6: Contrast: Babylonian System vs. Kingdom System",
+        description: "Babylon/Federal Reserve operates on debt and fiat trust. Kingdom operates on faith and divine promises. Spiritual currency backed by God's Word vs. debt-based currency.",
         youtubeVideoId: "oHg5SJYRHA0",
-        duration: "32 minutes",
+        duration: "29 minutes",
         order: 6,
         completed: false,
         files: [
           {
             id: "8",
-            name: "Babylonian Systems Exposed",
-            size: "3.1 MB",
+            name: "Kingdom vs Babylon Comparison Chart",
+            size: "2.3 MB",
             type: "PDF",
-            downloadUrl: "/public-objects/babylonian-systems-exposed.pdf"
+            downloadUrl: "/public-objects/kingdom-vs-babylon-chart.pdf"
           }
         ]
       },
       {
         id: "7",
-        title: "Module 7: Application and Practice",
-        description: "Establishing Your Trust through acknowledgment, acceptance, and governance. Walking as a Trustee in daily stewardship and living as Kingdom ambassadors.",
+        title: "Module 7: Status Correction: Living as Sons",
+        description: "Galatians 4:7 – No longer slaves but sons and heirs. Romans 8:17 – Co-heirs with Christ. Operating with ambassadorial authority, free from worldly bondage.",
         youtubeVideoId: "SfOTTOF9fpA",
-        duration: "35 minutes",
+        duration: "27 minutes",
         order: 7,
         completed: false,
         files: [
           {
             id: "9",
-            name: "Trust Establishment Workbook",
-            size: "2.8 MB",
+            name: "Living as Sons Declaration & Prayer Guide",
+            size: "1.9 MB",
             type: "PDF",
-            downloadUrl: "/public-objects/trust-establishment-workbook.pdf"
-          }
-        ]
-      },
-      {
-        id: "8",
-        title: "Module 8: The Mission of Trusteeship",
-        description: "Reconciling Creation by stewarding land, sea, and air. Restoring abundance, discharging debts, and maintaining eternal perspective as co-heirs with Christ.",
-        youtubeVideoId: "rAHQY4VAX-k",
-        duration: "28 minutes",
-        order: 8,
-        completed: false,
-        files: [
-          {
-            id: "10",
-            name: "Mission of Trusteeship Guide",
-            size: "2.6 MB",
-            type: "PDF",
-            downloadUrl: "/public-objects/mission-trusteeship-guide.pdf"
+            downloadUrl: "/public-objects/living-as-sons-prayer-guide.pdf"
           }
         ]
       }
