@@ -58,7 +58,7 @@ const sampleCourseData: { [key: string]: CourseData } = {
     lessons: [
       {
         id: "1",
-        title: "Module 1: Understanding Trust and Dominion",
+        title: "Module 1: Trust and Dominion",
         description: "Genesis 1:26–28 – God gave man dominion (trusteeship) over creation. The Fall and breach of trust. Christ's Restoration as the Second Adam re-establishing trust.",
         youtubeVideoId: "IP4NzMFGKA8",
         duration: "25 minutes",
@@ -90,7 +90,7 @@ const sampleCourseData: { [key: string]: CourseData } = {
       },
       {
         id: "2",
-        title: "Module 2: The Public vs. Private Identity",
+        title: "Module 2: Public vs. Private Identity",
         description: "Understanding dual identity: public citizen/legal person vs. private living man/woman in God's image. Christ's status correction making us 100% man + 100% divine.",
         youtubeVideoId: "JXeJANDKwDc",
         duration: "28 minutes",
@@ -126,7 +126,7 @@ const sampleCourseData: { [key: string]: CourseData } = {
       },
       {
         id: "4",
-        title: "Module 4: Documents of Identity in the Trust",
+        title: "Module 4: Trust Identity Documents",
         description: "Trust Declaration, Beneficiary Authorization, Ecclesiastical Heirship Claim, Divine Jurisdiction Notice, Spiritual Currency Ledger, and Debt Discharge Statements.",
         youtubeVideoId: "2Z4m4lnjxkY",
         duration: "32 minutes",
@@ -162,7 +162,7 @@ const sampleCourseData: { [key: string]: CourseData } = {
       },
       {
         id: "6",
-        title: "Module 6: Contrast: Babylonian System vs. Kingdom System",
+        title: "Module 6: Babylon vs. Kingdom Systems",
         description: "Babylon/Federal Reserve operates on debt and fiat trust. Kingdom operates on faith and divine promises. Spiritual currency backed by God's Word vs. debt-based currency.",
         youtubeVideoId: "oHg5SJYRHA0",
         duration: "29 minutes",
@@ -180,7 +180,7 @@ const sampleCourseData: { [key: string]: CourseData } = {
       },
       {
         id: "7",
-        title: "Module 7: Status Correction: Living as Sons",
+        title: "Module 7: Living as Sons",
         description: "Galatians 4:7 – No longer slaves but sons and heirs. Romans 8:17 – Co-heirs with Christ. Operating with ambassadorial authority, free from worldly bondage.",
         youtubeVideoId: "SfOTTOF9fpA",
         duration: "27 minutes",
@@ -296,15 +296,15 @@ export default function CourseLesson() {
                         }`}
                       >
                       <div className="flex items-start justify-between w-full gap-2">
-                        <div className="flex-1 min-w-0">
-                          <p className="font-medium text-sm leading-tight break-words">{lesson.title}</p>
+                        <div className="flex-1 min-w-0 max-w-full overflow-hidden">
+                          <p className="font-medium text-xs leading-tight break-words word-wrap overflow-wrap-anywhere">{lesson.title}</p>
                           <div className="flex items-center mt-1">
                             <Clock className="h-3 w-3 mr-1 flex-shrink-0" />
                             <span className="text-xs">{lesson.duration}</span>
                           </div>
                         </div>
                         {lesson.completed && (
-                          <CheckCircle className="h-4 w-4 text-green-500 ml-2" />
+                          <CheckCircle className="h-4 w-4 text-green-500 ml-1 flex-shrink-0" />
                         )}
                       </div>
                       </Button>
