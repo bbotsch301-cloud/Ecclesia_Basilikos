@@ -51,16 +51,26 @@ const sampleCourseData: { [key: string]: CourseData } = {
   "1": {
     id: "1",
     title: "Understanding Trust and Dominion",
-    description: "Discover God's original design for dominion, your dual identity in Christ, and how to operate as Heaven's ambassador on earth through 7 essential modules.",
+    description: "Discover God's original design for dominion, your dual identity in Christ, and how to operate as Heaven's ambassador on earth through this comprehensive 8-module course starting with foundational principles.",
     level: "Foundation",
-    totalLessons: 7,
+    totalLessons: 8,
     progress: 14,
     lessons: [
+      {
+        id: "0",
+        title: "Module 0: Introduction: Foundations & Course Overview",
+        description: "Welcome to the Understanding Trust and Dominion course. This foundational overview introduces the biblical principles of stewardship, dominion, and Kingdom authority that form the basis of our comprehensive 7-module curriculum.",
+        youtubeVideoId: "IP4NzMFGKA8",
+        duration: "25 minutes",
+        order: 0,
+        completed: false,
+        files: []
+      },
       {
         id: "1",
         title: "Module 1: Trust and Dominion",
         description: "Genesis 1:26–28 – God gave man dominion (trusteeship) over creation. The Fall and breach of trust. Christ's Restoration as the Second Adam re-establishing trust.",
-        youtubeVideoId: "IP4NzMFGKA8",
+        youtubeVideoId: "",
         duration: "25 minutes",
         order: 1,
         completed: true,
