@@ -295,11 +295,11 @@ export default function CourseLesson() {
                             : 'hover:bg-covenant-light text-covenant-gray'
                         }`}
                       >
-                      <div className="flex items-center justify-between w-full">
-                        <div className="flex-1">
-                          <p className="font-medium text-sm">{lesson.title}</p>
+                      <div className="flex items-start justify-between w-full gap-2">
+                        <div className="flex-1 min-w-0">
+                          <p className="font-medium text-sm leading-tight break-words">{lesson.title}</p>
                           <div className="flex items-center mt-1">
-                            <Clock className="h-3 w-3 mr-1" />
+                            <Clock className="h-3 w-3 mr-1 flex-shrink-0" />
                             <span className="text-xs">{lesson.duration}</span>
                           </div>
                         </div>
