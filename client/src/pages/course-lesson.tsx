@@ -298,10 +298,6 @@ export default function CourseLesson() {
                       <div className="flex items-start justify-between w-full gap-2">
                         <div className="flex-1 min-w-0 max-w-full overflow-hidden">
                           <p className="font-medium text-xs leading-tight break-words word-wrap overflow-wrap-anywhere">{lesson.title}</p>
-                          <div className="flex items-center mt-1">
-                            <Clock className="h-3 w-3 mr-1 flex-shrink-0" />
-                            <span className="text-xs">{lesson.duration}</span>
-                          </div>
                         </div>
                         {lesson.completed && (
                           <CheckCircle className="h-4 w-4 text-green-500 ml-1 flex-shrink-0" />
@@ -319,19 +315,13 @@ export default function CourseLesson() {
           <div className="lg:col-span-3">
             <Card className="mb-8">
               <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <CardTitle className="text-covenant-blue text-2xl">
-                      {currentLesson?.title}
-                    </CardTitle>
-                    <CardDescription className="mt-2">
-                      {currentLesson?.description}
-                    </CardDescription>
-                  </div>
-                  <div className="flex items-center text-covenant-gray">
-                    <Clock className="h-4 w-4 mr-1" />
-                    <span className="text-sm">{currentLesson?.duration}</span>
-                  </div>
+                <div>
+                  <CardTitle className="text-covenant-blue text-2xl">
+                    {currentLesson?.title}
+                  </CardTitle>
+                  <CardDescription className="mt-2">
+                    {currentLesson?.description}
+                  </CardDescription>
                 </div>
               </CardHeader>
               <CardContent>
