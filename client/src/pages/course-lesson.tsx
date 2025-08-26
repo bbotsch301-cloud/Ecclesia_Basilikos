@@ -50,16 +50,16 @@ interface CourseData {
 const sampleCourseData: { [key: string]: CourseData } = {
   "1": {
     id: "1",
-    title: "Understanding Trust and Dominion",
-    description: "Discover God's original design for dominion, your dual identity in Christ, and how to operate as Heaven's ambassador on earth through this comprehensive 8-module course starting with foundational principles.",
+    title: "Come out of her, my people: Building the Everlasting Kingdom",
+    description: "Answer God's divine call to separate from Babylon and become partakers and builders of His everlasting Kingdom that shall never be destroyed, learning to operate as citizens of Heaven's eternal dominion through this comprehensive 8-module journey.",
     level: "Foundation",
     totalLessons: 8,
     progress: 14,
     lessons: [
       {
         id: "0",
-        title: "Module 0: Introduction: Foundations & Course Overview",
-        description: "Welcome to the Understanding Trust and Dominion course. This foundational overview introduces the biblical principles of stewardship, dominion, and Kingdom authority that form the basis of our comprehensive 7-module curriculum.",
+        title: "Module 0: The Divine Call to Come Out",
+        description: "\"Come out of her, my people\" - Understanding God's urgent call to separate from Babylon's corrupt systems and embrace your role as a Kingdom builder in the everlasting dominion that shall never be destroyed.",
         youtubeVideoId: "IP4NzMFGKA8",
         duration: "25 minutes",
         order: 0,
@@ -68,8 +68,8 @@ const sampleCourseData: { [key: string]: CourseData } = {
       },
       {
         id: "1",
-        title: "Module 1: Trust and Dominion",
-        description: "Genesis 1:26–28 – God gave man dominion (trusteeship) over creation. The Fall and breach of trust. Christ's Restoration as the Second Adam re-establishing trust.",
+        title: "Module 1: Kingdom Foundation and Authority",
+        description: "Daniel 2:44 - The God of heaven sets up a Kingdom that shall never be destroyed. Understanding your divine mandate as a Kingdom builder and partaker in God's everlasting dominion over all earthly systems.",
         youtubeVideoId: "",
         duration: "25 minutes",
         order: 1,
@@ -100,8 +100,8 @@ const sampleCourseData: { [key: string]: CourseData } = {
       },
       {
         id: "2",
-        title: "Module 2: Public vs. Private Identity",
-        description: "Understanding dual identity: public citizen/legal person vs. private living man/woman in God's image. Christ's status correction making us 100% man + 100% divine.",
+        title: "Module 2: Separating from Babylon's Identity",
+        description: "Rejecting the false legal person/citizen identity imposed by Babylon's system. Embracing your true identity as a citizen of Heaven and partaker in the everlasting Kingdom that transcends all earthly jurisdictions.",
         youtubeVideoId: "JXeJANDKwDc",
         duration: "28 minutes",
         order: 2,
@@ -172,8 +172,8 @@ const sampleCourseData: { [key: string]: CourseData } = {
       },
       {
         id: "6",
-        title: "Module 6: Babylon vs. Kingdom Systems",
-        description: "Babylon/Federal Reserve operates on debt and fiat trust. Kingdom operates on faith and divine promises. Spiritual currency backed by God's Word vs. debt-based currency.",
+        title: "Module 6: The Kingdom That Consumes All",
+        description: "Daniel 2:44 - The Kingdom of God shall break in pieces and consume all earthly kingdoms. Understanding how the everlasting Kingdom operates in direct opposition to Babylon's temporary systems of control.",
         youtubeVideoId: "oHg5SJYRHA0",
         duration: "29 minutes",
         order: 6,
@@ -190,8 +190,8 @@ const sampleCourseData: { [key: string]: CourseData } = {
       },
       {
         id: "7",
-        title: "Module 7: Living as Sons",
-        description: "Galatians 4:7 – No longer slaves but sons and heirs. Romans 8:17 – Co-heirs with Christ. Operating with ambassadorial authority, free from worldly bondage.",
+        title: "Module 7: Partakers in the Everlasting Kingdom",
+        description: "Romans 8:17 – Co-heirs with Christ in the Kingdom that shall stand forever. Living as sons and daughters who have fully separated from Babylon and are actively building God's eternal dominion on earth.",
         youtubeVideoId: "SfOTTOF9fpA",
         duration: "27 minutes",
         order: 7,

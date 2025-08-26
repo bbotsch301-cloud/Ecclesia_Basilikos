@@ -31,6 +31,12 @@ Kingdom Ventures Trust is a modern, responsive website focused on teaching spiri
 ✓ Fixed "Begin Learning" button visibility issues with proper gold styling
 ✓ Removed Local Assemblies, Mutual Support, and Ongoing Education content sections
 ✓ Updated covenant community content to emphasize Kingdom without borders theology
+✓ Revamped entire website theme from "Freedom Under the New Covenant" to "Come out of her, my people"
+✓ Updated main course title to focus on building the everlasting Kingdom from Daniel 2:44
+✓ Rebranded "Learn to Steward" to "Kingdom Builder Academy" throughout the platform
+✓ Updated all module descriptions to emphasize separation from Babylon and Kingdom building
+✓ Changed main scripture reference to Revelation 18:4 "Come out of her, my people"
+✓ Integrated Daniel 2:44 theology about the everlasting Kingdom that shall consume all earthly kingdoms
 
 ## User Preferences
 

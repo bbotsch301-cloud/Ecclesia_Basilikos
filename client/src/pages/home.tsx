@@ -7,15 +7,15 @@ export default function Home() {
   return (
     <div className="pt-16">
       <HeroSection
-        title="Freedom Under the"
-        subtitle="New Covenant"
-        description="Reclaim your inheritance in the Body of Christ, outside Babylon's counterfeit system"
+        title="Come out of her,"
+        subtitle="my people"
+        description="Answer God's call to separate from Babylon and become partakers and builders of His everlasting Kingdom that shall never be destroyed"
         primaryButton={{
           text: "🔑 Enter the Trust",
           href: "/about"
         }}
         secondaryButton={{
-          text: "🎓 Learn to Steward",
+          text: "⚡ Begin Building",
           href: "/courses"
         }}
       />
@@ -25,36 +25,36 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-playfair text-4xl md:text-5xl font-bold text-covenant-blue mb-4">
-              Your Path to Covenant Freedom
+              Building the Everlasting Kingdom
             </h2>
             <p className="text-xl text-covenant-gray max-w-3xl mx-auto">
-              True freedom is found in regeneration through Christ's saving grace. The New Covenant Trust is a lawful expression of what happens when you are Born Again into Christ, discovering your divine identity as a co-heir and learning to operate in Kingdom authority.
+              "And in the days of these kings shall the God of heaven set up a kingdom, which shall never be destroyed: and the kingdom shall not be left to other people, but it shall break in pieces and consume all these kingdoms, and it shall stand for ever." (Daniel 2:44) You are called to be partakers and builders of this eternal Kingdom.
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
             <FeatureCard
               icon={<Crown />}
-              title="Kingdom Authority"
-              description="Understand Christ as the cornerstone and grantor of the New Covenant Trust. Through regeneration in Him, you receive true spiritual authority as your birthright."
+              title="Kingdom Builders"
+              description="As partakers of the everlasting Kingdom, you are called to build and establish God's eternal dominion that shall consume all earthly kingdoms and stand forever."
             />
             <FeatureCard
               icon={<Unlink />}
-              title="Break the Chains"
-              description="Expose and escape Babylon's counterfeit systems of personhood, contracts, and debt slavery."
+              title="Come Out of Babylon"
+              description="Heed the divine command to separate from Babylon's corrupt systems of commerce, government, and false worship that enslave God's people."
             />
             <FeatureCard
               icon={<Scroll />}
-              title="Covenant Identity"
-              description="The trust simply recognizes what God has already done - you are Born Again into Christ and made a beneficiary of His eternal inheritance."
+              title="Eternal Inheritance"
+              description="Receive your portion in the Kingdom that shall never be destroyed, as co-heirs with Christ in His everlasting dominion over all creation."
             />
           </div>
         </div>
       </div>
 
       <ScriptureQuote
-        quote="If the Son therefore shall make you free, ye shall be free indeed."
-        reference="John 8:36"
+        quote="And I heard another voice from heaven, saying, Come out of her, my people, that ye be not partakers of her sins, and that ye receive not of her plagues."
+        reference="Revelation 18:4"
       />
     </div>
   );
