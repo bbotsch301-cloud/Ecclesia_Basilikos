@@ -28,12 +28,13 @@ export default function HeroSection({
     <div 
       className="relative min-h-screen flex items-center bg-gradient-to-br from-blue-900 via-slate-800 to-gray-900"
       style={{
-        backgroundImage: `linear-gradient(135deg, rgba(30, 58, 138, 0.9), rgba(51, 65, 85, 0.8), rgba(17, 24, 39, 0.9)), url(${backgroundImage})`,
+        backgroundImage: `url(${backgroundImage})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat'
       }}
     >
+      <div className="hero-overlay absolute inset-0" />
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div className="max-w-4xl mx-auto">

@@ -18,6 +18,7 @@ export default function Home() {
           text: "⚡ Begin Building",
           href: "/courses"
         }}
+        backgroundImage="https://images.unsplash.com/photo-1464822759844-d150baec0494?auto=format&fit=crop&w=1920&h=1080&q=80"
       />
 
       {/* Key Features Section */}
