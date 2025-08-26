@@ -22,22 +22,19 @@ export default function HeroSection({
   description,
   primaryButton,
   secondaryButton,
-  backgroundImage = "https://images.unsplash.com/photo-1464822759844-d150baec0494?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
+  backgroundImage = "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop"
 }: HeroSectionProps) {
   return (
-    <div className="relative min-h-screen flex items-center">
-      <div className="absolute inset-0 bg-covenant-blue">
-        <div
-          style={{
-            backgroundImage: `url('${backgroundImage}')`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat'
-          }}
-          className="absolute inset-0 opacity-60"
-        />
-        <div className="hero-overlay absolute inset-0" />
-      </div>
+    <div 
+      className="relative min-h-screen flex items-center"
+      style={{
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
+      <div className="hero-overlay absolute inset-0" />
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div className="max-w-4xl mx-auto">
