@@ -22,7 +22,7 @@ export default function HeroSection({
   description,
   primaryButton,
   secondaryButton,
-  backgroundImage = "https://images.unsplash.com/photo-1475776408506-9a5371e7a068?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
+  backgroundImage = "https://images.unsplash.com/photo-1464822759844-d150baec0494?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
 }: HeroSectionProps) {
   return (
     <div className="relative min-h-screen flex items-center">
