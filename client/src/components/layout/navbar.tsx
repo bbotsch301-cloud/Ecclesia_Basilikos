@@ -7,10 +7,10 @@ import { Menu, Scroll } from "lucide-react";
 const navigation = [
   { name: "Home", href: "/" },
   { name: "About the Trust", href: "/about" },
+  { name: "Nation of Christ", href: "/nation" },
   { name: "Kingdom Builder Academy", href: "/courses" },
   { name: "Download Trust Document", href: "/trust-download" },
   { name: "Community Forum", href: "/forum" },
-  { name: "Nation of Christ", href: "/nation" },
   { name: "Contact", href: "/contact" },
 ];
 
