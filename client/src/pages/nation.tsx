@@ -28,7 +28,7 @@ export default function Nation() {
     <div className="pt-16">
       <HeroSection
         title="Nation of Christ"
-        description="Understanding the Body of Christ as a real nation and kingdom with divine authority"
+        description="The Body of Christ is more than fellowship, it is a real kingdom with heavenly law, divine authority, and eternal citizenship."
         backgroundImage="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
       />
 
