@@ -94,7 +94,39 @@
 
 @layer components {
   .hero-overlay {
-    background: linear-gradient(135deg, rgba(15, 23, 42, 0.3), rgba(15, 23, 42, 0.2));
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.3));
+  }
+  
+  .mountain-background {
+    background: linear-gradient(
+      180deg,
+      /* Sky */
+      #1e3a8a 0%,
+      #3b82f6 15%,
+      #60a5fa 30%,
+      /* Mountain peaks */
+      #475569 45%,
+      #334155 55%,
+      #1e293b 70%,
+      /* Valley shadows */
+      #0f172a 85%,
+      #020617 100%
+    );
+    position: relative;
+  }
+  
+  .mountain-background::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      /* Mountain silhouettes */
+      radial-gradient(ellipse 800px 300px at 20% 60%, rgba(51, 65, 85, 0.8) 0%, transparent 50%),
+      radial-gradient(ellipse 600px 200px at 80% 65%, rgba(30, 41, 59, 0.9) 0%, transparent 50%),
+      radial-gradient(ellipse 400px 150px at 50% 70%, rgba(15, 23, 42, 0.7) 0%, transparent 50%);
   }
   
   .text-covenant-blue {

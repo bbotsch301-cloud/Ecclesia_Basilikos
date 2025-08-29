@@ -25,18 +25,10 @@ export default function HeroSection({
   backgroundImage = "https://picsum.photos/1920/1080?random=1"
 }: HeroSectionProps) {
   return (
-    <div 
-      className="relative min-h-screen flex items-center bg-gradient-to-br from-blue-900 via-slate-800 to-gray-900"
-      style={{
-        backgroundImage: `url(${backgroundImage})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat'
-      }}
-    >
-      <div className="hero-overlay absolute inset-0" />
+    <div className="relative min-h-screen flex items-center mountain-background">
+      <div className="hero-overlay absolute inset-0 z-10" />
       
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div className="max-w-4xl mx-auto">
           <h1 className="font-playfair text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
             {subtitle ? (
