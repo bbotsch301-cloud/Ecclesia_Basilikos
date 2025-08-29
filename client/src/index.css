@@ -98,20 +98,12 @@
   }
   
   .mountain-background {
-    background: linear-gradient(
-      180deg,
-      /* Sky */
-      #1e3a8a 0%,
-      #3b82f6 15%,
-      #60a5fa 30%,
-      /* Mountain peaks */
-      #475569 45%,
-      #334155 55%,
-      #1e293b 70%,
-      /* Valley shadows */
-      #0f172a 85%,
-      #020617 100%
-    );
+    background: 
+      /* Mountain silhouettes using polygon shapes */
+      linear-gradient(135deg, transparent 0%, transparent 30%, #334155 30%, #334155 45%, transparent 45%, transparent 60%, #1e293b 60%, #1e293b 75%, transparent 75%),
+      linear-gradient(-135deg, transparent 0%, transparent 25%, #475569 25%, #475569 40%, transparent 40%, transparent 55%, #334155 55%, #334155 70%, transparent 70%),
+      /* Sky gradient */
+      linear-gradient(180deg, #1e40af 0%, #3b82f6 20%, #60a5fa 40%, #94a3b8 60%, #64748b 80%, #334155 100%);
     position: relative;
   }
   
@@ -123,10 +115,22 @@
     right: 0;
     bottom: 0;
     background: 
-      /* Mountain silhouettes */
-      radial-gradient(ellipse 800px 300px at 20% 60%, rgba(51, 65, 85, 0.8) 0%, transparent 50%),
-      radial-gradient(ellipse 600px 200px at 80% 65%, rgba(30, 41, 59, 0.9) 0%, transparent 50%),
-      radial-gradient(ellipse 400px 150px at 50% 70%, rgba(15, 23, 42, 0.7) 0%, transparent 50%);
+      /* Additional mountain peaks */
+      conic-gradient(from 180deg at 15% 85%, transparent 0deg, #1e293b 60deg, #334155 120deg, transparent 180deg),
+      conic-gradient(from 180deg at 85% 90%, transparent 0deg, #334155 45deg, #475569 90deg, transparent 135deg),
+      conic-gradient(from 180deg at 50% 80%, transparent 0deg, #1e293b 30deg, #334155 60deg, transparent 90deg);
+    z-index: 1;
+  }
+  
+  .mountain-background::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40%;
+    background: linear-gradient(0deg, rgba(15, 23, 42, 0.8) 0%, transparent 100%);
+    z-index: 2;
   }
   
   .text-covenant-blue {
