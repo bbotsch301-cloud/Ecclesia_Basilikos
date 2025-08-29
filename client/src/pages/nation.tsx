@@ -73,7 +73,7 @@ export default function Nation() {
           </div>
 
           <ScriptureQuote
-            quote="For our conversation is in heaven; from whence also we look for the Saviour, the Lord Jesus Christ."
+            quote="For our conversation [citizenship] is in heaven; from whence also we look for the Saviour, the Lord Jesus Christ."
             reference="Philippians 3:20"
             className="mb-16"
           />
