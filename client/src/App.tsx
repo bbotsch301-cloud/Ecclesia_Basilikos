@@ -23,6 +23,8 @@ import Courses from "@/pages/courses";
 import MyCourses from "@/pages/my-courses";
 import CourseLesson from "@/pages/course-lesson";
 import VerifyEmail from "@/pages/verify-email";
+import Mandate from "@/pages/mandate";
+import Repository from "@/pages/repository";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -33,6 +35,8 @@ function Router() {
         <Switch>
           <Route path="/" component={Home} />
           <Route path="/about" component={About} />
+          <Route path="/mandate" component={Mandate} />
+          <Route path="/repository" component={Repository} />
           <Route path="/videos" component={Videos} />
           <Route path="/resources" component={Resources} />
           <Route path="/nation" component={Nation} />
