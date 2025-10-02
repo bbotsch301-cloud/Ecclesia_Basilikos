@@ -1,113 +1,267 @@
-# Kingdom Ventures Trust Website
+# Ecclesia Basilikos
 
 ## Overview
 
-Kingdom Ventures Trust is a modern, responsive website focused on teaching spiritual freedom and sovereignty within the Christian faith. The platform has been transformed into a comprehensive **student platform** with user authentication, course enrollment, and secure access to educational materials. The site educates visitors about covenant relationships with Christ, exposes counterfeit systems, and provides structured learning paths for believers to understand their true identity and inheritance through biblical education.
+**Ecclesia Basilikos** (Royal Assembly) is a comprehensive royal embassy website teaching Kingdom citizenship and covenant truth to believers called out of Babylon. The platform features a sophisticated royal aesthetic combining deep navy, imperial burgundy, and luminous gold with Cinzel Decorative typography, presenting 11 biblical comparison tables that expose Babylon's counterfeits and reveal Kingdom realities. The site educates visitors about their divine identity as royal priests, heavenly citizenship, and the eternal Kingdom established by Daniel 2:44 that shall consume all earthly kingdoms.
 
-## Recent Changes (August 21, 2025)
+## Recent Changes (October 2, 2025)
 
-✓ Transformed educational center into full student platform
-✓ Implemented user registration and authentication system  
-✓ Added PostgreSQL database with course management
-✓ Created enrollment system for structured learning
-✓ Set up object storage for secure file downloads
-✓ Added sample courses and downloadable resources
-✓ Built comprehensive forum system for user communication
-✓ Added course lessons with biblical content structure
-✓ Maintained exclusive use of King James Version (KJV) scriptures
-✓ Implemented comprehensive page content management system for admin dashboard
-✓ Replaced technology imagery with spiritual content (open Bible, peaceful landscapes)
-✓ Created content tracking system to monitor all website image and text changes
-✓ Added trust document download page with email signup requirement
-✓ Created secure document access system with download tracking
-✓ Updated website branding to "Kingdom Ventures Trust"
-✓ Created comprehensive trust downloads admin interface with email management and CSV export
-✓ Completely redesigned Learn to Steward based on New Covenant Trust theological framework
-✓ Updated education content to focus on divine identity, royal priesthood, and trustee roles
-✓ Integrated biblical foundations of covenant relationship and Kingdom authority principles
-✓ Disabled forum functionality while keeping it visible for future activation
-✓ Updated background images to be more spiritually relevant (Bible imagery, covenant themes)
-✓ Enhanced Nation page with Daniel 2:44 ideology about eternal Kingdom authority
-✓ Fixed "Begin Learning" button visibility issues with proper gold styling
-✓ Removed Local Assemblies, Mutual Support, and Ongoing Education content sections
-✓ Updated covenant community content to emphasize Kingdom without borders theology
-✓ Revamped entire website theme from "Freedom Under the New Covenant" to "Come out of her, my people"
-✓ Updated main course title to focus on building the everlasting Kingdom from Daniel 2:44
-✓ Rebranded "Learn to Steward" to "Kingdom Builder Academy" throughout the platform
-✓ Updated all module descriptions to emphasize separation from Babylon and Kingdom building
-✓ Changed main scripture reference to Revelation 18:4 "Come out of her, my people"
-✓ Integrated Daniel 2:44 theology about the everlasting Kingdom that shall consume all earthly kingdoms
+### Major Transformation: Kingdom Ventures Trust → Ecclesia Basilikos
+
+✓ **Complete Rebranding**: Transformed entire website from "Kingdom Ventures Trust" to "Ecclesia Basilikos"
+✓ **Royal Design System**: Implemented serious, royal embassy aesthetic with deep navy (#0b1437), imperial burgundy (#4a1d30), luminous gold (#d7b46a)
+✓ **Royal Typography**: Added Cinzel Decorative for royal headings, maintained Playfair Display and Georgia for complementary text
+✓ **11 Biblical Comparison Tables**: Created comprehensive data structure containing all PDF comparison content (Two Births, Two Registries, Two Creations, Two Lands, Levitical systems, etc.)
+✓ **New Royal UI Components**: Built RoyalHero, ComparisonCard, ScriptureBanner, PillarGrid for consistent royal aesthetic
+✓ **New Pages Created**:
+  - **Mandate Page** (`/mandate`): Daniel 2:44 focus with scriptural charge
+  - **Covenant Repository** (`/repository`): Interactive showcase of all 11 comparison tables with filtering and modal viewers
+✓ **Homepage Redesign**: Transformed into "Embassy of the Eternal Kingdom" with four-pillar architecture
+✓ **Ecclesia Nation Page**: Updated with royal citizenship theme and Babylon vs Kingdom timeline
+✓ **Royal Academy**: Rebranded courses page with references to comparison tables as foundational materials
+✓ **Navigation Structure**: Updated to Mandate, Ecclesia Nation, Royal Academy, Covenant Repository, Embassy Forum
+✓ **Thematic Shift**: From "Come out of her, my people" to royal embassy of the eternal Kingdom
+✓ **Visual Elements**: Added ornamental borders, velvet backgrounds, marble textures, and parchment effects
+
+### Previous Platform Features (Maintained)
+
+✓ User registration and authentication system
+✓ PostgreSQL database with course management
+✓ Enrollment system for structured learning
+✓ Object storage for secure file downloads
+✓ Forum system for user communication (currently disabled)
+✓ Course lessons with biblical content structure
+✓ Exclusive use of King James Version (KJV) scriptures
+✓ Trust document download page with email tracking
+✓ Admin dashboard with content management
 
 ## User Preferences
 
-Preferred communication style: Simple, everyday language.
-Scripture versions: King James Version (KJV) exclusively
+**Preferred communication style**: Simple, everyday language  
+**Scripture versions**: King James Version (KJV) exclusively  
+**Design preference**: Serious, royal embassy aesthetic with formal tone  
+**Theological framework**: New Covenant, Melchizedek priesthood, separation from Babylon
+
+## Core Educational Content
+
+### 11 Biblical Comparison Tables
+
+The foundation of Ecclesia Basilikos educational content consists of 11 comprehensive comparison tables stored in `shared/comparisonData.ts`:
+
+1. **Two Births**: Flesh (Cain's lineage) vs Spirit (Abel/Seth lineage)
+2. **Two Registries**: Man's registration (birth certificate, SSN) vs Heaven's registry (Lamb's Book of Life)
+3. **Two Creations**: Beast creation (legal fiction, corporate persons) vs God's creation (living soul)
+4. **Two Lands**: Possession (territorial jurisdiction, eminent domain) vs Inheritance (divine grant, eternal)
+5. **Levitical vs Currency System**: Tithe system vs taxation, mammon worship
+6. **Levitical vs Babylon Trajectory**: Priesthood corruption leading to Babylonian captivity
+7. **Two Legal Systems**: Statutes & ordinances (letter of law) vs Covenant law (written on hearts)
+8. **501c3 vs 508c1a**: State-controlled churches vs ecclesiastical jurisdiction
+9. **Two Governments**: State (territorial, coercive) vs Ecclesia (covenant community, voluntary)
+10. **Levitical → Babylon → Melchizedek**: Transition from fallen priesthood to eternal order
+11. **Two Priesthoods**: Levitical (earthly, temporal) vs Melchizedek (heavenly, eternal)
+
+Each comparison table includes:
+- Detailed descriptions of Babylon's counterfeit vs Kingdom reality
+- Supporting scripture references (KJV)
+- Biblical analysis and theological implications
+- Visual representation via ComparisonCard components
 
 ## System Architecture
 
 ### Frontend Architecture
+
 - **Framework**: React 18 with TypeScript for type safety and modern development
-- **Routing**: Wouter for lightweight client-side routing without unnecessary complexity
-- **Styling**: Tailwind CSS with custom covenant-themed color variables and Shadcn/ui component library
-- **Typography**: Multi-font system using Playfair Display for headings, Inter for body text, and Georgia for scripture quotes
-- **State Management**: TanStack Query for server state management with optimistic updates
-- **Forms**: React Hook Form with Zod validation for type-safe form handling
-- **Build Tool**: Vite for fast development and optimized production builds
+- **Routing**: Wouter for lightweight client-side routing
+- **Styling**: Tailwind CSS with custom royal-themed color variables
+  - Royal Navy: `#0b1437`
+  - Royal Burgundy: `#4a1d30`
+  - Royal Gold: `#d7b46a`
+  - Parchment: `#f5f1e8`
+- **Typography**: 
+  - **Cinzel Decorative**: Royal headings and titles
+  - **Playfair Display**: Section headings
+  - **Georgia**: Scripture quotes
+  - **Inter**: Body text
+- **Component Library**: Shadcn/ui with royal theme customization
+- **State Management**: TanStack Query for server state with optimistic updates
+- **Forms**: React Hook Form with Zod validation
+- **Build Tool**: Vite for fast development and optimized builds
 
 ### Backend Architecture
-- **Server**: Express.js with TypeScript running on Node.js
-- **API Design**: RESTful endpoints with structured error handling and request logging
-- **Storage Layer**: Abstracted storage interface supporting both in-memory (development) and database implementations
-- **Validation**: Zod schemas shared between frontend and backend for consistent data validation
-- **Development**: Hot reload with Vite integration for seamless full-stack development
+
+- **Server**: Express.js with TypeScript on Node.js
+- **API Design**: RESTful endpoints with structured error handling
+- **Storage Layer**: Abstracted interface supporting in-memory and database implementations
+- **Validation**: Zod schemas shared between frontend and backend
+- **Development**: Hot reload with Vite integration
 
 ### Data Storage
-- **Database**: PostgreSQL configured through Drizzle ORM
-- **Schema Management**: Drizzle Kit for migrations and schema evolution
-- **Connection**: Neon Database serverless PostgreSQL for scalable cloud deployment
-- **Tables**: Users, contacts, and newsletter subscribers with UUID primary keys
-- **Development Storage**: In-memory storage implementation for local development without database dependency
+
+- **Database**: PostgreSQL via Drizzle ORM
+- **Schema Management**: Drizzle Kit for migrations
+- **Connection**: Neon Database serverless PostgreSQL
+- **Core Tables**: 
+  - `users`: Student accounts with authentication
+  - `courses`: Course catalog and content
+  - `enrollments`: Student course registrations
+  - `trustDownloads`: Document access tracking
+  - `contacts`: Contact form submissions
+  - `newsletter`: Email subscription management
+- **Object Storage**: Replit Object Storage for downloadable resources
+
+### Page Structure
+
+#### Core Pages
+
+1. **Home** (`/`): Embassy of the Eternal Kingdom with four pillars
+2. **Mandate** (`/mandate`): Scriptural charge with Daniel 2:44 and Revelation 18:4
+3. **Ecclesia Nation** (`/nation`): Heavenly citizenship and royal priesthood
+4. **Royal Academy** (`/courses`): Kingdom education platform with course enrollment
+5. **Covenant Repository** (`/repository`): Interactive comparison table showcase
+6. **About** (`/about`): Ecclesia Basilikos mission and scriptural foundation
+7. **Contact** (`/contact`): Visitor inquiry form
+8. **Trust Download** (`/trust-download`): Secure document access with email requirement
+9. **Embassy Forum** (`/forum`): Community discussion (currently disabled)
+
+#### Student Platform Pages
+
+- `/course/:id/lesson/:lessonId`: Individual lesson content viewer
+- `/admin/trust-downloads`: Admin dashboard for document downloads management
+
+### Royal UI Components
+
+Custom components built for consistent royal aesthetic:
+
+- **RoyalHero**: Full-width hero sections with royal styling and optional scripture verses
+- **ComparisonCard**: Interactive cards displaying Babylon vs Kingdom comparisons
+- **ScriptureBanner**: Full-width scripture quote banners with dark/light themes
+- **PillarGrid**: Four-column grid for homepage pillar showcase
+- **RoyalNavigation**: Top navigation with gold accents and Cinzel typography
 
 ### API Endpoints
-- **Contact Form**: `POST /api/contact` - Handles visitor inquiries with validation
-- **Newsletter**: `POST /api/newsletter` - Manages email subscriptions with duplicate prevention
-- **Error Handling**: Structured error responses with appropriate HTTP status codes
-- **Request Logging**: Comprehensive logging for API requests with performance metrics
+
+- `POST /api/contact`: Contact form submissions
+- `POST /api/newsletter`: Newsletter subscriptions
+- `POST /api/register`: User registration
+- `POST /api/login`: User authentication
+- `POST /api/logout`: Session termination
+- `GET /api/me`: Current user session
+- `GET /api/my-enrollments`: User's course enrollments
+- `POST /api/enrollments`: Course enrollment creation
+- `GET /api/course/:id`: Course details
+- `GET /api/course/:id/lesson/:lessonId`: Lesson content
+- `POST /api/trust-download`: Trust document download tracking
+- `GET /api/admin/trust-downloads`: Admin analytics
 
 ### Authentication & Authorization
-- **Current State**: Basic infrastructure in place with user schema
-- **Session Management**: Connect-pg-simple for PostgreSQL session storage
-- **Future Implementation**: Ready for role-based access control and user authentication
 
-### UI Component System
-- **Design System**: Shadcn/ui with custom covenant theme integration
-- **Accessibility**: ARIA-compliant components with keyboard navigation support
-- **Responsive Design**: Mobile-first approach with breakpoint-based layouts
-- **Custom Components**: Hero sections, feature cards, scripture quotes, and navigation components
+- **Session Management**: Connect-pg-simple for PostgreSQL session storage
+- **Password Security**: Bcrypt hashing with salt rounds
+- **Role-based Access**: Admin role for dashboard access
+- **Protected Routes**: Course content requires authentication
+- **Enrollment Tracking**: Auto-enrollment system for seamless student experience
+
+### Visual Design System
+
+#### Color Palette
+
+- **Primary**: Royal Navy (#0b1437) - Authority, stability, eternal Kingdom
+- **Secondary**: Imperial Burgundy (#4a1d30) - Covenant blood, royal lineage
+- **Accent**: Luminous Gold (#d7b46a) - Divine glory, heavenly treasures
+- **Neutral**: Parchment (#f5f1e8) - Ancient scrolls, timeless truth
+
+#### Background Patterns
+
+- **Marble Background**: Subtle texture for content sections
+- **Velvet Background**: Rich deep navy with burgundy gradient
+- **Parchment**: Warm ancient scroll texture
+- **Mountain Landscape**: CSS clip-path silhouette overlay
+
+#### UI Elements
+
+- **Royal Cards**: White cards with gold borders and subtle shadows
+- **Royal Buttons**: Gold background with navy text, hover effects
+- **Ornamental Borders**: Gold accent lines and decorative elements
+- **Badge Styling**: Gold badges with Cinzel font for emphasis
 
 ## External Dependencies
 
 ### Database Services
-- **Neon Database**: Serverless PostgreSQL hosting with connection pooling
-- **Environment Configuration**: DATABASE_URL environment variable for database connectivity
+- **Neon Database**: Serverless PostgreSQL with connection pooling
+- **Environment Variable**: `DATABASE_URL`
+
+### Object Storage
+- **Replit Object Storage**: Secure file storage for downloadable resources
+- **Public Directory**: `/public` for publicly accessible assets
+- **Private Directory**: `/.private` for restricted downloads
 
 ### Development Tools
-- **Replit Integration**: Custom plugins for development environment optimization
-- **Error Overlay**: Runtime error modal for enhanced debugging experience
-- **Code Mapping**: Source map integration for better error tracking
+- **Replit Integration**: Custom Vite plugins for development optimization
+- **Error Overlay**: Runtime error modal for debugging
+- **Code Mapping**: Source map integration for error tracking
 
 ### Content Delivery
-- **Unsplash**: External image service for high-quality background images and stock photography
-- **Google Fonts**: Web font delivery for Playfair Display, Inter, and Georgia typefaces
-- **Font Awesome**: Icon library for additional UI elements
+- **Unsplash**: High-quality background images
+- **Google Fonts**: Cinzel Decorative, Playfair Display, Georgia, Inter
+- **Lucide React**: Icon system for UI elements
 
 ### Frontend Libraries
-- **Radix UI**: Headless component primitives for accessible UI components
-- **Lucide React**: Icon system for consistent iconography throughout the application
-- **Class Variance Authority**: Type-safe variant handling for component styling
-- **Date-fns**: Date manipulation and formatting utilities
+- **Radix UI**: Accessible headless component primitives
+- **TanStack Query**: Powerful data fetching and caching
+- **React Hook Form**: Performant form validation
+- **Zod**: TypeScript-first schema validation
+- **Class Variance Authority**: Type-safe component variants
+- **Tailwind Merge**: Efficient class name merging
 
 ### Build & Development
-- **ESBuild**: Fast JavaScript bundling for production builds
-- **PostCSS**: CSS processing with Tailwind CSS and Autoprefixer
-- **TypeScript**: Static type checking across the entire application stack
+- **ESBuild**: Fast JavaScript bundling
+- **PostCSS**: CSS processing with Tailwind
+- **TypeScript**: Static type checking
+- **Drizzle ORM**: Type-safe database access
+- **Drizzle Kit**: Database migration tools
+
+## Theological Framework
+
+### Core Doctrines
+
+1. **New Covenant in Christ's Blood**: All authority flows from Christ as Grantor
+2. **Melchizedek Priesthood**: Believers operate as royal priests under eternal order
+3. **Separation from Babylon**: Called out from world systems into Kingdom jurisdiction
+4. **Heavenly Citizenship**: Primary allegiance to Christ, not earthly governments
+5. **Daniel 2:44 Kingdom**: Eternal Kingdom that consumes all earthly kingdoms
+6. **Revelation 18:4 Mandate**: "Come out of her, my people"
+
+### Educational Philosophy
+
+- Scripture as sole authority (King James Version exclusively)
+- Exposure of Babylon's counterfeits through biblical comparison
+- Emphasis on divine identity and royal inheritance
+- Practical application of Kingdom principles
+- Historical and theological context for covenant understanding
+
+## Development Guidelines
+
+### Code Organization
+
+- **Shared Types**: `shared/schema.ts` for database models and validation
+- **Comparison Data**: `shared/comparisonData.ts` for all PDF table content
+- **Client Pages**: `client/src/pages/` for all route components
+- **UI Components**: `client/src/components/ui/` for reusable elements
+- **Server Routes**: `server/routes.ts` for API endpoint definitions
+- **Storage Layer**: `server/storage.ts` for database abstraction
+
+### Styling Conventions
+
+- Use royal color variables consistently
+- Cinzel Decorative for major headings only (performance consideration)
+- Maintain gold accent borders on interactive elements
+- Apply marble/velvet/parchment backgrounds appropriately
+- Ensure responsive design with mobile-first approach
+
+### Content Standards
+
+- All scripture quotes in King James Version
+- Serious, formal tone befitting royal embassy
+- Biblical accuracy in theological content
+- Clear distinction between Babylon and Kingdom systems
+- Consistent use of "Ecclesia Basilikos" branding
