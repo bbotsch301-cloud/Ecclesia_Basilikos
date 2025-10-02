@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Scroll } from "lucide-react";
+import { Menu, Crown } from "lucide-react";
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -22,9 +22,14 @@ export default function Navbar() {
     <nav className="bg-white dark:bg-royal-navy shadow-lg fixed w-full top-0 z-50 border-b-2 border-royal-gold/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <Link href="/" className="flex items-center">
-            <Scroll className="text-royal-gold text-2xl mr-3" />
-            <span className="font-cinzel font-bold text-xl text-royal-navy">
+          <Link href="/" className="flex items-center group">
+            <div className="relative">
+              <Crown className="text-royal-gold w-8 h-8 mr-3 transition-transform group-hover:scale-110" />
+              <div className="absolute inset-0 text-royal-gold opacity-50 blur-sm">
+                <Crown className="w-8 h-8 mr-3" />
+              </div>
+            </div>
+            <span className="font-cinzel-decorative font-bold text-xl text-royal-navy dark:text-royal-gold">
               Ecclesia Basilikos
             </span>
           </Link>
