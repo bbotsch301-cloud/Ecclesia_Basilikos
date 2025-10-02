@@ -294,6 +294,45 @@
       0 0 40px rgba(215, 180, 106, 0.3);
   }
   
+  /* Text Visibility Helpers - Use these to ensure proper contrast */
+  .on-light {
+    color: var(--royal-navy);
+  }
+  
+  .on-light h1,
+  .on-light h2,
+  .on-light h3,
+  .on-light h4,
+  .on-light h5,
+  .on-light h6 {
+    color: var(--royal-navy);
+  }
+  
+  .on-light p,
+  .on-light li,
+  .on-light span {
+    color: hsl(0 0% 20%);
+  }
+  
+  .on-dark {
+    color: white;
+  }
+  
+  .on-dark h1,
+  .on-dark h2,
+  .on-dark h3,
+  .on-dark h4,
+  .on-dark h5,
+  .on-dark h6 {
+    color: white;
+  }
+  
+  .on-dark p,
+  .on-dark li,
+  .on-dark span {
+    color: hsl(0 0% 85%);
+  }
+  
   /* Heraldic Crest Frame */
   .crest-frame {
     position: relative;
