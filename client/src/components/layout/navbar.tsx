@@ -6,12 +6,12 @@ import { Menu, Scroll } from "lucide-react";
 
 const navigation = [
   { name: "Home", href: "/" },
-  { name: "About the Trust", href: "/about" },
-  { name: "Nation of Christ", href: "/nation" },
-  { name: "Kingdom Builder Academy", href: "/courses" },
-  { name: "Download Trust Document", href: "/trust-download" },
-  { name: "Community Forum", href: "/forum" },
-  { name: "Contact", href: "/contact" },
+  { name: "The Mandate", href: "/mandate" },
+  { name: "Ecclesia Nation", href: "/nation" },
+  { name: "Royal Academy", href: "/courses" },
+  { name: "Covenant Repository", href: "/repository" },
+  { name: "Embassy Forum", href: "/forum" },
+  { name: "Contact & Stewardship", href: "/contact" },
 ];
 
 export default function Navbar() {
@@ -19,13 +19,13 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="bg-white shadow-lg fixed w-full top-0 z-50">
+    <nav className="bg-white dark:bg-royal-navy shadow-lg fixed w-full top-0 z-50 border-b-2 border-royal-gold/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <Link href="/" className="flex items-center">
-            <Scroll className="text-covenant-gold text-2xl mr-3" />
-            <span className="font-playfair font-bold text-xl text-covenant-blue">
-              Kingdom Ventures Trust
+            <Scroll className="text-royal-gold text-2xl mr-3" />
+            <span className="font-cinzel font-bold text-xl text-royal-navy">
+              Ecclesia Basilikos
             </span>
           </Link>
 
@@ -35,10 +35,10 @@ export default function Navbar() {
               <Link
                 key={item.name}
                 href={item.href}
-                className={`transition-colors font-medium ${
+                className={`transition-colors font-medium font-cinzel ${
                   location === item.href
-                    ? "text-covenant-gold"
-                    : "text-covenant-dark-gray hover:text-covenant-gold"
+                    ? "text-royal-gold"
+                    : "text-royal-navy dark:text-gray-300 hover:text-royal-gold"
                 }`}
               >
                 {item.name}
@@ -61,10 +61,10 @@ export default function Navbar() {
                       key={item.name}
                       href={item.href}
                       onClick={() => setIsOpen(false)}
-                      className={`text-left py-2 transition-colors ${
+                      className={`text-left py-2 transition-colors font-cinzel ${
                         location === item.href
-                          ? "text-covenant-gold"
-                          : "text-covenant-dark-gray hover:text-covenant-gold"
+                          ? "text-royal-gold"
+                          : "text-royal-navy dark:text-gray-300 hover:text-royal-gold"
                       }`}
                     >
                       {item.name}

@@ -60,8 +60,8 @@ export default function Contact() {
   return (
     <div className="pt-16">
       <HeroSection
-        title="About & Contact Kingdom Ventures Trust"
-        description="The ministry called to administer The New Covenant Legacy Trust here on earth"
+        title="Contact & Stewardship"
+        description="Ambassadorial communication with the Embassy of the Eternal Kingdom"
         backgroundImage="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
       />
 
@@ -70,53 +70,53 @@ export default function Contact() {
           {/* About Kingdom Ventures Trust Section */}
           <div className="mb-20">
             <div className="text-center mb-12">
-              <h2 className="font-playfair text-3xl font-bold text-covenant-blue mb-4">
-                Our Ministry Role
+              <h2 className="font-cinzel text-3xl font-bold text-royal-navy mb-4">
+                Embassy of the Eternal Kingdom
               </h2>
-              <p className="text-lg text-covenant-gray max-w-3xl mx-auto">
-                Understanding Kingdom Ventures Trust's calling to serve believers in The New Covenant Legacy Trust
+              <p className="text-lg text-gray-700 max-w-3xl mx-auto">
+                Ecclesia Basilikos operates as the earthly embassy of Christ's everlasting Kingdom, established by Daniel 2:44
               </p>
             </div>
 
             <div className="grid md:grid-cols-2 gap-12 items-center mb-12">
               <div>
-                <h3 className="font-playfair text-2xl font-bold text-covenant-blue mb-6">The Ministry Calling</h3>
-                <p className="text-lg text-covenant-gray leading-relaxed mb-6">
-                  Kingdom Ventures Trust is the ministry called to administer The New Covenant Legacy Trust here on earth. As Christ's appointed trustees, we help believers understand their divine inheritance and learn to operate as royal priests in God's kingdom economy.
+                <h3 className="font-cinzel text-2xl font-bold text-royal-navy mb-6">The Royal Calling</h3>
+                <p className="text-lg text-gray-700 leading-relaxed mb-6">
+                  Ecclesia Basilikos serves as the earthly embassy of Christ's eternal Kingdom—a royal priesthood administering divine covenant authority. We equip believers to understand their true identity as ambassadors, priests, and co-heirs with Christ, operating under heavenly jurisdiction rather than Babylon's counterfeit systems.
                 </p>
-                <p className="text-lg text-covenant-gray leading-relaxed">
-                  Our mission is to teach believers how The New Covenant Legacy Trust operates differently from Babylon's system of contracts and legal fictions, helping God's people understand their true identity as trustees and beneficiaries of Christ's inheritance.
+                <p className="text-lg text-gray-700 leading-relaxed">
+                  Our mandate is to call God's people out of Babylon and into the everlasting Kingdom that shall consume all earthly kingdoms. We teach the distinction between flesh and spirit, Levitical shadow and Melchizedek fulfillment, Babylon's registries and heaven's Book of Life.
                 </p>
               </div>
-              <div className="bg-covenant-blue p-8 rounded-xl text-white">
-                <h4 className="font-playfair text-xl font-bold mb-6">Ministry Services</h4>
+              <div className="bg-royal-navy p-8 rounded-xl text-white royal-card">
+                <h4 className="font-cinzel text-xl font-bold mb-6">Embassy Services</h4>
                 <div className="space-y-4">
                   <div className="flex items-start">
-                    <div className="w-3 h-3 bg-covenant-gold rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                    <div className="w-3 h-3 bg-royal-gold rounded-full mt-2 mr-3 flex-shrink-0"></div>
                     <div>
-                      <h5 className="font-semibold mb-1">Trust Administration Education</h5>
-                      <p className="text-sm opacity-90">Learn practical steps to establish and operate your trust</p>
+                      <h5 className="font-semibold mb-1">Covenant Education</h5>
+                      <p className="text-sm opacity-90">Comprehensive teaching on Babylon vs Kingdom distinctions</p>
                     </div>
                   </div>
                   <div className="flex items-start">
-                    <div className="w-3 h-3 bg-covenant-gold rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                    <div className="w-3 h-3 bg-royal-gold rounded-full mt-2 mr-3 flex-shrink-0"></div>
                     <div>
-                      <h5 className="font-semibold mb-1">Biblical Mentorship</h5>
-                      <p className="text-sm opacity-90">One-on-one guidance in covenant principles and trust operation</p>
+                      <h5 className="font-semibold mb-1">Royal Priesthood Training</h5>
+                      <p className="text-sm opacity-90">Equipping believers to operate under divine authority</p>
                     </div>
                   </div>
                   <div className="flex items-start">
-                    <div className="w-3 h-3 bg-covenant-gold rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                    <div className="w-3 h-3 bg-royal-gold rounded-full mt-2 mr-3 flex-shrink-0"></div>
                     <div>
-                      <h5 className="font-semibold mb-1">Course Instruction</h5>
-                      <p className="text-sm opacity-90">Comprehensive training from basics to bank account opening</p>
+                      <h5 className="font-semibold mb-1">Kingdom Studies</h5>
+                      <p className="text-sm opacity-90">Deep biblical instruction in eternal Kingdom principles</p>
                     </div>
                   </div>
                   <div className="flex items-start">
-                    <div className="w-3 h-3 bg-covenant-gold rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                    <div className="w-3 h-3 bg-royal-gold rounded-full mt-2 mr-3 flex-shrink-0"></div>
                     <div>
-                      <h5 className="font-semibold mb-1">Prayer Support</h5>
-                      <p className="text-sm opacity-90">Spiritual covering as you walk in covenant freedom</p>
+                      <h5 className="font-semibold mb-1">Ambassadorial Support</h5>
+                      <p className="text-sm opacity-90">Spiritual guidance as you walk as Christ's ambassador</p>
                     </div>
                   </div>
                 </div>

@@ -37,16 +37,16 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-covenant-blue text-white py-16">
+    <footer className="bg-royal-navy text-white py-16 border-t-2 border-royal-gold">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           <div>
             <div className="flex items-center mb-4">
-              <Scroll className="text-covenant-gold text-2xl mr-3" />
-              <span className="font-playfair font-bold text-xl">Kingdom Ventures Trust</span>
+              <Scroll className="text-royal-gold text-2xl mr-3" />
+              <span className="font-cinzel font-bold text-xl">Ecclesia Basilikos</span>
             </div>
             <p className="text-gray-300 leading-relaxed">
-              Walking in the freedom that Christ has provided through Kingdom Ventures Trust.
+              Embassy of the everlasting Kingdom. Royal priesthood operating under divine covenant authority.
             </p>
           </div>
 
@@ -54,23 +54,23 @@ export default function Footer() {
             <h4 className="font-playfair font-semibold text-lg mb-4">Quick Links</h4>
             <ul className="space-y-2">
               <li>
-                <Link href="/about" className="text-gray-300 hover:text-covenant-gold transition-colors">
-                  About the Trust
+                <Link href="/mandate" className="text-gray-300 hover:text-royal-gold transition-colors">
+                  The Mandate
                 </Link>
               </li>
               <li>
-                <Link href="/education" className="text-gray-300 hover:text-covenant-gold transition-colors">
-                  Educational Hub
+                <Link href="/nation" className="text-gray-300 hover:text-royal-gold transition-colors">
+                  Ecclesia Nation
                 </Link>
               </li>
               <li>
-                <Link href="/resources" className="text-gray-300 hover:text-covenant-gold transition-colors">
-                  Freedom Resources
+                <Link href="/courses" className="text-gray-300 hover:text-royal-gold transition-colors">
+                  Royal Academy
                 </Link>
               </li>
               <li>
-                <Link href="/nation" className="text-gray-300 hover:text-covenant-gold transition-colors">
-                  Nation of Christ
+                <Link href="/repository" className="text-gray-300 hover:text-royal-gold transition-colors">
+                  Covenant Repository
                 </Link>
               </li>
             </ul>
@@ -80,24 +80,24 @@ export default function Footer() {
             <h4 className="font-playfair font-semibold text-lg mb-4">Resources</h4>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-gray-300 hover:text-covenant-gold transition-colors">
-                  Freedom Handbook
-                </a>
+                <Link href="/repository" className="text-gray-300 hover:text-royal-gold transition-colors">
+                  Two Kingdoms Teaching
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-covenant-gold transition-colors">
-                  Legal Templates
-                </a>
+                <Link href="/repository" className="text-gray-300 hover:text-royal-gold transition-colors">
+                  Covenant Documents
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-covenant-gold transition-colors">
-                  Prayer Guides
-                </a>
+                <Link href="/forum" className="text-gray-300 hover:text-royal-gold transition-colors">
+                  Embassy Forum
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-covenant-gold transition-colors">
-                  Study Materials
-                </a>
+                <Link href="/courses" className="text-gray-300 hover:text-royal-gold transition-colors">
+                  Kingdom Studies
+                </Link>
               </li>
             </ul>
           </div>
@@ -111,12 +111,12 @@ export default function Footer() {
                 placeholder="Your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="flex-1 rounded-r-none text-covenant-dark-gray"
+                className="flex-1 rounded-r-none text-royal-navy"
                 required
               />
               <Button
                 type="submit"
-                className="bg-covenant-gold hover:bg-yellow-500 text-covenant-blue rounded-l-none"
+                className="bg-royal-gold hover:bg-royal-gold-bright text-royal-navy rounded-l-none font-cinzel"
                 disabled={newsletterMutation.isPending}
               >
                 {newsletterMutation.isPending ? "..." : "Subscribe"}
@@ -128,13 +128,13 @@ export default function Footer() {
         <div className="border-t border-gray-600 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="text-gray-300 mb-4 md:mb-0">
-              © 2024 The New Covenant Trust. All rights reserved.
+              © 2025 Ecclesia Basilikos. Embassy of the Eternal Kingdom.
             </div>
             <div className="text-center">
-              <blockquote className="font-georgia italic text-covenant-gold text-sm mb-1">
-                "But now hath he obtained a more excellent ministry, by how much also he is the mediator of a better covenant, which was established upon better promises."
+              <blockquote className="font-georgia italic text-royal-gold text-sm mb-1">
+                "And in the days of these kings shall the God of heaven set up a kingdom, which shall never be destroyed"
               </blockquote>
-              <cite className="text-gray-300 text-xs">Hebrews 8:6</cite>
+              <cite className="text-gray-300 text-xs">Daniel 2:44</cite>
             </div>
           </div>
         </div>
