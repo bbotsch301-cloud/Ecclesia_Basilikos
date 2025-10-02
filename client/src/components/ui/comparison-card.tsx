@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Scale, Book, Download, X } from "lucide-react";
+import { Scale, Book, X } from "lucide-react";
 import type { Comparison } from "@shared/comparisonData";
 
 interface ComparisonCardProps {
@@ -71,26 +71,14 @@ export default function ComparisonCard({ comparison, featured = false }: Compari
             </p>
           </div>
           
-          <div className="flex gap-2 mt-auto">
+          <div className="mt-auto">
             <Button 
               onClick={() => setIsOpen(true)}
-              className="flex-1 royal-button" 
+              className="w-full royal-button" 
               data-testid={`button-view-${comparison.id}`}
             >
               View Full Comparison
             </Button>
-            {comparison.pdfPath && (
-              <a href={comparison.pdfPath} download target="_blank" rel="noopener noreferrer">
-                <Button 
-                  variant="outline" 
-                  size="icon" 
-                  className="border-royal-gold text-royal-navy hover:bg-royal-gold/10"
-                  data-testid={`button-download-${comparison.id}`}
-                >
-                  <Download className="w-4 h-4" />
-                </Button>
-              </a>
-            )}
           </div>
         </CardContent>
       </Card>
@@ -184,17 +172,6 @@ export default function ComparisonCard({ comparison, featured = false }: Compari
                 </div>
               )}
 
-              {/* Download PDF */}
-              {comparison.pdfPath && (
-                <div className="text-center pt-4 border-t border-royal-gold/30">
-                  <a href={comparison.pdfPath} download target="_blank" rel="noopener noreferrer">
-                    <Button className="royal-button" data-testid="button-download-pdf">
-                      <Download className="w-4 h-4 mr-2" />
-                      Download PDF Version
-                    </Button>
-                  </a>
-                </div>
-              )}
             </div>
           </ScrollArea>
         </DialogContent>
