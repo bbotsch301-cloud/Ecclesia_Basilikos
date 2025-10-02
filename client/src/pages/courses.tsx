@@ -197,7 +197,7 @@ export default function Courses() {
       await registerUser(userData);
       setShowAuthDialog(false);
       toast({
-        title: "Welcome to Kingdom Builder Academy!",
+        title: "Welcome to Royal Academy!",
         description: "Your account has been created successfully.",
       });
     } catch (error: any) {
@@ -264,27 +264,32 @@ export default function Courses() {
       <div className="min-h-screen bg-gradient-to-b from-covenant-light via-white to-covenant-light flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-covenant-gold mx-auto mb-4"></div>
-          <p className="text-covenant-gray">Loading Kingdom Builder Academy...</p>
+          <p className="text-gray-700">Loading Royal Academy...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-covenant-light via-white to-covenant-light">
+    <div className="min-h-screen marble-bg">
       {/* Hero Section */}
-      <section className="bg-covenant-blue text-white py-20">
+      <section className="bg-royal-navy text-white py-20 border-b-2 border-royal-gold">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="flex justify-center mb-6">
-              <GraduationCap className="h-16 w-16 text-covenant-gold" />
+              <GraduationCap className="h-16 w-16 text-royal-gold" />
             </div>
-            <h1 className="text-4xl md:text-6xl font-playfair font-bold mb-6">
-              Kingdom Builder Academy
+            <h1 className="text-4xl md:text-6xl font-cinzel-decorative font-bold mb-6">
+              Royal Academy
             </h1>
-            <p className="text-xl md:text-2xl font-inter max-w-4xl mx-auto leading-relaxed mb-8">
-              Your personal dashboard for coming out of Babylon and building the everlasting Kingdom that shall never be destroyed
+            <p className="text-xl md:text-2xl max-w-4xl mx-auto leading-relaxed mb-8">
+              Comprehensive Kingdom education equipping royal priests to operate under divine covenant authority
             </p>
+            <div className="bg-royal-burgundy/30 border border-royal-gold/30 rounded-lg p-4 max-w-2xl mx-auto">
+              <p className="text-gray-200 text-sm">
+                <strong>Foundation:</strong> Before beginning course instruction, explore the <a href="/repository" className="text-royal-gold hover:underline">Covenant Repository</a> to understand the critical distinctions between Babylon's counterfeits and Kingdom realities.
+              </p>
+            </div>
 
             {isAuthenticated ? (
               <div className="flex items-center justify-center space-x-4 mt-8">
@@ -295,7 +300,7 @@ export default function Courses() {
                 <Button 
                   onClick={handleLogout} 
                   variant="outline" 
-                  className="border-white text-white hover:bg-white hover:text-covenant-blue"
+                  className="border-white text-white hover:bg-white hover:text-royal-navy"
                 >
                   Logout
                 </Button>
@@ -304,9 +309,9 @@ export default function Courses() {
               <div className="mt-8">
                 <Dialog open={showAuthDialog} onOpenChange={setShowAuthDialog}>
                   <DialogTrigger asChild>
-                    <Button size="lg" className="bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue px-8 py-3 font-semibold">
+                    <Button size="lg" className="royal-button px-8 py-3 font-semibold">
                       <LogIn className="h-5 w-5 mr-2" />
-                      Access Kingdom Builder Academy
+                      Access Royal Academy
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-md">
@@ -316,8 +321,8 @@ export default function Courses() {
                       </DialogTitle>
                       <DialogDescription>
                         {authMode === 'login' 
-                          ? 'Sign in to access your Learn to Steward dashboard'
-                          : 'Join Learn to Steward to begin your trust education'
+                          ? 'Sign in to access Royal Academy'
+                          : 'Join Royal Academy to begin Kingdom education'
                         }
                       </DialogDescription>
                     </DialogHeader>
@@ -357,7 +362,7 @@ export default function Courses() {
                                 </FormItem>
                               )}
                             />
-                            <Button type="submit" className="w-full bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue" disabled={isLoggingIn}>
+                            <Button type="submit" className="w-full royal-button" disabled={isLoggingIn}>
                               {isLoggingIn ? "Signing in..." : "Sign In"}
                             </Button>
                           </form>

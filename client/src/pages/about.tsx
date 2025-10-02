@@ -7,8 +7,8 @@ export default function About() {
   return (
     <div className="pt-16">
       <HeroSection
-        title="About The New Covenant Legacy Trust"
-        description="Understanding Christ as Grantor and us as beneficiaries in the divine trust relationship"
+        title="About Ecclesia Basilikos"
+        description="Embassy of the Eternal Kingdom established by Christ as Grantor and High Priest of the Melchizedek order"
         backgroundImage="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1920&h=1080&q=80"
       />
 
