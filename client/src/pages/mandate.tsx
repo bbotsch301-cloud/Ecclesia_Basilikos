@@ -30,7 +30,7 @@ export default function Mandate() {
           <div className="text-center mb-16">
             <Flame className="w-16 h-16 text-royal-burgundy mx-auto mb-6" data-testid="icon-flame" />
             <h2 className="font-cinzel-decorative text-4xl font-bold text-royal-navy mb-6" data-testid="text-call-heading">
-              The Clarion Call: Come Out of Her
+              The Divine Call: Come Out of Her
             </h2>
             <p className="text-xl text-gray-700 max-w-4xl mx-auto leading-relaxed">
               God's urgent command echoes through the ages: separate from Babylon's counterfeit systems and become partakers of His everlasting Kingdom. This is not mere theological theory—it is the divine mandate for every believer who hears His voice.
