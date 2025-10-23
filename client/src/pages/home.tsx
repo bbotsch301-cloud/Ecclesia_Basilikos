@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Link } from "wouter";
 import { 
   Crown, Shield, Heart, Users, BookOpen, Star, Cross,
-  Key, Mountain, Home as HomeIcon
+  Key, Mountain, Home as HomeIcon, ScrollText
 } from "lucide-react";
 import customImage from "@assets/IMG_9062_1755824052661.jpeg";
 
