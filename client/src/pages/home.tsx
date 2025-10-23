@@ -293,8 +293,298 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Understanding Trust Structure */}
+      <div className="py-20 marble-bg">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <ScrollText className="w-16 h-16 text-royal-navy mx-auto mb-6" data-testid="icon-scroll" />
+            <h2 className="font-cinzel-decorative text-3xl md:text-4xl font-bold text-royal-navy mb-6" data-testid="text-trust-structure">
+              Understanding Trust Structure
+            </h2>
+            <p className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
+              A trust is the most powerful structure on earth because it separates legal ownership from beneficial enjoyment. This is how we express our relationship with God.
+            </p>
+          </div>
+
+          <div className="max-w-5xl mx-auto space-y-8 mb-12">
+            <Card className="royal-card border-4 border-royal-gold">
+              <CardContent className="p-8">
+                <h3 className="font-cinzel text-2xl font-bold text-royal-navy mb-6">The Three Roles in Every Trust</h3>
+                <div className="space-y-6">
+                  <div className="bg-gradient-to-r from-royal-navy/5 to-royal-burgundy/5 p-6 rounded-lg border-l-4 border-royal-gold">
+                    <h4 className="font-bold text-xl text-royal-navy mb-3">1. The Grantor (Creator/Settlor)</h4>
+                    <p className="text-gray-700 mb-3">
+                      <span className="font-semibold">In Covenant Trust:</span> God the Father is the ultimate Grantor. He created all things, owns all things, and establishes the covenant relationship.
+                    </p>
+                    <p className="text-gray-700 italic">
+                      "The earth is the LORD's, and the fulness thereof; the world, and they that dwell therein." - Psalm 24:1
+                    </p>
+                  </div>
+
+                  <div className="bg-gradient-to-r from-royal-navy/5 to-royal-burgundy/5 p-6 rounded-lg border-l-4 border-royal-burgundy">
+                    <h4 className="font-bold text-xl text-royal-navy mb-3">2. The Trustee (Administrator)</h4>
+                    <p className="text-gray-700 mb-3">
+                      <span className="font-semibold">In Covenant Trust:</span> Jesus Christ is the Trustee. All authority in heaven and earth has been given to Him. He administers everything the Father has placed in trust.
+                    </p>
+                    <p className="text-gray-700 mb-3 italic">
+                      "All things are delivered unto me of my Father." - Matthew 11:27
+                    </p>
+                    <p className="text-gray-700">
+                      <span className="font-semibold">Your role as trustee:</span> You operate as a trustee of what God has given you to steward. You hold legal title to property, but you administer it according to the Father's purposes, not the state's demands.
+                    </p>
+                  </div>
+
+                  <div className="bg-gradient-to-r from-royal-navy/5 to-royal-burgundy/5 p-6 rounded-lg border-l-4 border-royal-gold">
+                    <h4 className="font-bold text-xl text-royal-navy mb-3">3. The Beneficiary (Recipient)</h4>
+                    <p className="text-gray-700 mb-3">
+                      <span className="font-semibold">In Covenant Trust:</span> You are the beneficiary of the Father's covenant. You receive identity, citizenship, protection, provision, and inheritance—not from the state, but from God.
+                    </p>
+                    <p className="text-gray-700 italic">
+                      "For all things are yours...And ye are Christ's; and Christ is God's." - 1 Corinthians 3:21-23
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="royal-card">
+              <CardContent className="p-8">
+                <h3 className="font-cinzel text-2xl font-bold text-royal-navy mb-6">The Power: Separation of Title and Benefit</h3>
+                <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+                  Here's where trust becomes the most powerful structure on earth: <span className="font-semibold">It separates who holds legal title from who enjoys the benefits.</span>
+                </p>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="bg-royal-navy/5 p-6 rounded-lg">
+                    <h4 className="font-bold text-lg text-royal-navy mb-3">Legal Title (Trustee Holds)</h4>
+                    <ul className="space-y-2 text-gray-700">
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-5 h-5 text-royal-gold flex-shrink-0 mt-0.5" />
+                        <span>Appears on deeds and documents</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-5 h-5 text-royal-gold flex-shrink-0 mt-0.5" />
+                        <span>Manages and controls property</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-5 h-5 text-royal-gold flex-shrink-0 mt-0.5" />
+                        <span>Has legal responsibility</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-5 h-5 text-royal-gold flex-shrink-0 mt-0.5" />
+                        <span>Must act according to trust terms</span>
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="bg-royal-burgundy/5 p-6 rounded-lg">
+                    <h4 className="font-bold text-lg text-royal-navy mb-3">Beneficial Interest (Beneficiary Receives)</h4>
+                    <ul className="space-y-2 text-gray-700">
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-5 h-5 text-royal-gold flex-shrink-0 mt-0.5" />
+                        <span>Enjoys use of the property</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-5 h-5 text-royal-gold flex-shrink-0 mt-0.5" />
+                        <span>Receives income and benefits</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-5 h-5 text-royal-gold flex-shrink-0 mt-0.5" />
+                        <span>Protected from legal claims</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-5 h-5 text-royal-gold flex-shrink-0 mt-0.5" />
+                        <span>Not subject to probate or seizure</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="mt-6 bg-royal-gold/10 border-2 border-royal-gold p-6 rounded-lg">
+                  <p className="text-lg text-gray-800 font-semibold">
+                    This separation is the key: The state can only touch what's in YOUR name. When property is held in trust, it's not in your name—it's held by the trustee for the beneficiary according to covenant terms.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+
+      {/* Two Jurisdictions */}
+      <div className="py-20 bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <Shield className="w-16 h-16 text-royal-burgundy mx-auto mb-6" data-testid="icon-jurisdiction" />
+            <h2 className="font-cinzel-decorative text-3xl md:text-4xl font-bold text-royal-navy mb-6" data-testid="text-jurisdiction">
+              Two Systems of Authority
+            </h2>
+            <p className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
+              Understanding the difference between territorial jurisdiction and ecclesiastical jurisdiction is critical to walking outside Babylon's control.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 mb-12">
+            <Card className="border-4 border-red-600/30 bg-gradient-to-br from-red-50 to-gray-50">
+              <CardContent className="p-8">
+                <h3 className="font-cinzel text-2xl font-bold text-red-800 mb-6 flex items-center gap-3">
+                  <span className="w-3 h-3 bg-red-600 rounded-full"></span>
+                  Babylon's Territorial Jurisdiction
+                </h3>
+                <div className="space-y-4 text-gray-700">
+                  <div>
+                    <p className="font-semibold text-red-900 mb-2">Based on:</p>
+                    <p>Physical location, geography, borders</p>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-red-900 mb-2">Authority from:</p>
+                    <p>Force, military power, threat of violence</p>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-red-900 mb-2">Applies to:</p>
+                    <p>Legal entities created by the state (corporations, trusts registered with them, persons holding state IDs)</p>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-red-900 mb-2">Controls through:</p>
+                    <p>Licenses, permits, registration, taxation, probate</p>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-red-900 mb-2">You're subject when:</p>
+                    <p>You claim citizenship, register property in your name, use their benefits, ask their permission</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-4 border-royal-gold bg-gradient-to-br from-royal-gold/5 to-white">
+              <CardContent className="p-8">
+                <h3 className="font-cinzel text-2xl font-bold text-royal-navy mb-6 flex items-center gap-3">
+                  <span className="w-3 h-3 bg-royal-gold rounded-full"></span>
+                  Kingdom's Ecclesiastical Jurisdiction
+                </h3>
+                <div className="space-y-4 text-gray-700">
+                  <div>
+                    <p className="font-semibold text-royal-navy mb-2">Based on:</p>
+                    <p>Covenant relationship, spiritual birth, divine appointment</p>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-royal-navy mb-2">Authority from:</p>
+                    <p>God the Father, through Christ the King</p>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-royal-navy mb-2">Applies to:</p>
+                    <p>Children of God, citizens of heaven, ambassadors of Christ, those born of the Spirit</p>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-royal-navy mb-2">Operates through:</p>
+                    <p>Covenant trust, divine law written on hearts, Kingdom stewardship</p>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-royal-navy mb-2">You operate here when:</p>
+                    <p>You receive identity from God, hold property in trust for Kingdom purposes, function as His ambassador</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <Card className="royal-card border-4 border-royal-gold max-w-4xl mx-auto">
+            <CardContent className="p-8">
+              <h3 className="font-cinzel text-2xl font-bold text-royal-navy mb-4">The Power of Choosing Your Jurisdiction</h3>
+              <p className="text-lg text-gray-700 leading-relaxed mb-4">
+                Here's what most people don't understand: <span className="font-semibold">Babylon's territorial jurisdiction only applies to you if you consent to it.</span>
+              </p>
+              <p className="text-lg text-gray-700 leading-relaxed mb-4">
+                When you operate as a citizen of heaven, holding property in covenant trust, functioning as an ambassador under divine authority—you're operating under ecclesiastical jurisdiction. The state has no inherent authority over ambassadors of a foreign kingdom unless they violate natural law or commit actual crimes against real people.
+              </p>
+              <p className="text-xl font-semibold text-royal-burgundy">
+                This is how you walk outside their system: You're not fighting Babylon. You're simply operating under a different authority—one they have no jurisdiction over.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
+      {/* Walking Outside the System */}
+      <div className="py-20 bg-gradient-to-br from-royal-burgundy via-royal-navy to-royal-burgundy">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <Key className="w-20 h-20 text-royal-gold mx-auto mb-8" data-testid="icon-walking-out" />
+            <h2 className="font-cinzel-decorative text-3xl md:text-5xl font-bold text-white mb-6" data-testid="text-walking-out">
+              Walking Outside Babylon's System
+            </h2>
+            <p className="text-xl text-gray-200 max-w-3xl mx-auto leading-relaxed">
+              This isn't rebellion. This is operating as who you really are—under the authority of a different kingdom.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {[
+              {
+                area: "Property Ownership",
+                babylon: "You own property in YOUR name (legal entity created by birth certificate). State claims ultimate ownership through property tax. They can seize it, tax it, and take it in probate when you die.",
+                kingdom: "Property held in covenant trust. You're the trustee, stewarding it for Kingdom purposes. Not in your personal name, so not subject to personal claims, liens, or probate court. Passed through covenant succession, not probate."
+              },
+              {
+                area: "Income & Taxation",
+                babylon: "You're a taxpayer, registered with their system via SSN. Your labor is taxed as if you're a corporate employee subject to their revenue laws.",
+                kingdom: "Operating as an ambassador under ecclesiastical jurisdiction. Compensation for ministry work is not 'income' under their code—it's an exchange between covenant parties. The trust receives resources for Kingdom purposes."
+              },
+              {
+                area: "Travel",
+                babylon: "You need their permission (driver's license) to travel. You're using state-created roads as a privilege they grant, which they can revoke.",
+                kingdom: "As an ambassador, you have right to travel freely. Using public roads is a right, not a privilege requiring a license. You're not engaged in commercial activity requiring state permission."
+              },
+              {
+                area: "Inheritance",
+                babylon: "When you die, probate court seizes your estate, pays creditors, takes fees and taxes (up to 50%), then distributes what's left according to their laws—not your wishes.",
+                kingdom: "Property held in trust never goes through probate. Trust continues after your death. Successor trustees step in seamlessly. Beneficiaries receive inheritance directly through covenant, bypassing the state entirely."
+              },
+              {
+                area: "Business Activity",
+                babylon: "Must incorporate, register, get permits and licenses. Business is a legal entity subject to commercial codes, taxation, and state control.",
+                kingdom: "Operating as trustees administering Kingdom resources. Not 'doing business' in their commercial sense—administering a trust for ministry purposes. Private exchange between covenant parties."
+              },
+              {
+                area: "Legal Standing",
+                babylon: "You're a legal person/entity created by the state, subject to their statutes and codes. You have no rights they don't grant you.",
+                kingdom: "You're a living soul created by God, operating under natural law and divine covenant. You have God-given rights no state can lawfully touch. You answer to God's law, not man's statutes."
+              }
+            ].map((item, index) => (
+              <Card key={index} className="bg-white/95 backdrop-blur-sm hover:bg-white transition-all">
+                <CardContent className="p-6">
+                  <h4 className="font-cinzel text-xl font-bold text-royal-navy mb-4 flex items-center gap-2">
+                    <Crown className="w-6 h-6 text-royal-gold" />
+                    {item.area}
+                  </h4>
+                  <div className="space-y-4">
+                    <div className="bg-red-50 border-l-4 border-red-600 p-4 rounded">
+                      <p className="text-sm font-semibold text-red-900 mb-2">Babylon's System:</p>
+                      <p className="text-sm text-gray-700">{item.babylon}</p>
+                    </div>
+                    <div className="bg-royal-gold/10 border-l-4 border-royal-gold p-4 rounded">
+                      <p className="text-sm font-semibold text-royal-navy mb-2">Kingdom Expression:</p>
+                      <p className="text-sm text-gray-700">{item.kingdom}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          <Card className="bg-white/10 backdrop-blur-lg border-2 border-royal-gold mt-12">
+            <CardContent className="p-8">
+              <h3 className="font-cinzel text-2xl font-bold text-white mb-4 text-center">The Foundation: Identity Determines Jurisdiction</h3>
+              <p className="text-lg text-gray-200 leading-relaxed text-center">
+                You can't walk outside Babylon's system while still claiming identity from them. Your birth certificate name is THEIR legal entity. Your SSN is THEIR tracking number. Your citizenship is THEIR jurisdiction. 
+                <span className="block mt-4 text-xl font-semibold text-royal-gold">
+                  You must first receive your true identity from God the Father—then express that reality through covenant trust structures.
+                </span>
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
       {/* A Voice from the Journey */}
-      <div className="py-20 bg-gradient-to-br from-royal-navy to-royal-burgundy">
+      <div className="py-20 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <Card className="bg-white/10 backdrop-blur-lg border-2 border-royal-gold">
             <CardContent className="p-8">
