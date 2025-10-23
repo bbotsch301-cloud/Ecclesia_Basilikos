@@ -1,6 +1,8 @@
 import RoyalHero from "@/components/ui/royal-hero";
 import ScriptureBanner from "@/components/ui/scripture-banner";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Link } from "wouter";
 import { Crown, Scroll, Shield, Flame } from "lucide-react";
 
 export default function Mandate() {
@@ -213,11 +215,11 @@ export default function Mandate() {
           </div>
 
           <div className="text-center">
-            <a href="/courses">
-              <button className="royal-button text-lg px-8 py-4" data-testid="button-answer-call">
+            <Link href="/courses">
+              <Button className="royal-button text-lg px-8 py-4" data-testid="button-answer-call">
                 Answer the Call
-              </button>
-            </a>
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
