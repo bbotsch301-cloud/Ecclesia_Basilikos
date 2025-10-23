@@ -2,6 +2,8 @@ import RoyalHero from "@/components/ui/royal-hero";
 import ScriptureBanner from "@/components/ui/scripture-banner";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Link } from "wouter";
 import { Crown, Scale, Shield, Globe, Scroll, Book } from "lucide-react";
 
 export default function Nation() {
@@ -212,11 +214,11 @@ export default function Nation() {
             <p className="text-xl text-gray-700 mb-6 font-semibold">
               Which registry claims you? Which jurisdiction governs your life?
             </p>
-            <a href="/repository">
-              <button className="royal-button text-lg px-8 py-4" data-testid="button-learn-more">
+            <Link href="/repository">
+              <Button className="royal-button text-lg px-8 py-4" data-testid="button-learn-more">
                 Explore the Full Comparisons
-              </button>
-            </a>
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
@@ -232,16 +234,16 @@ export default function Nation() {
             Your citizenship is not derived from birth certificates or state registration. You are born again, sealed by the Spirit, and your name is written in the Lamb's Book of Life. Walk in the authority of your heavenly citizenship.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="/courses">
-              <button className="royal-button text-lg px-8 py-4" data-testid="button-join">
+            <Link href="/courses">
+              <Button className="royal-button text-lg px-8 py-4" data-testid="button-join">
                 Begin Kingdom Training
-              </button>
-            </a>
-            <a href="/mandate">
-              <button className="bg-transparent border-2 border-royal-gold text-white hover:bg-royal-gold/20 font-cinzel text-lg px-8 py-4 rounded-lg transition-all" data-testid="button-mandate">
+              </Button>
+            </Link>
+            <Link href="/mandate">
+              <Button className="bg-transparent border-2 border-royal-gold text-white hover:bg-royal-gold/20 font-cinzel text-lg px-8 py-4 rounded-lg transition-all" data-testid="button-mandate">
                 Read the Full Mandate
-              </button>
-            </a>
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
