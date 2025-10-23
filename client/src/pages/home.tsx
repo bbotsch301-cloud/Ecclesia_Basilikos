@@ -4,91 +4,91 @@ import { Badge } from "@/components/ui/badge";
 import { Link } from "wouter";
 import { 
   Crown, Shield, ScrollText, CheckCircle, Book, 
-  AlertCircle, Users, BookOpen, Heart, Compass,
-  Key, Mountain, Star, Lightbulb
+  Heart, Users, BookOpen, Star, Cross,
+  Key, Mountain, Lightbulb, Home as HomeIcon
 } from "lucide-react";
 import customImage from "@assets/IMG_9062_1755824052661.jpeg";
 
 export default function Home() {
   return (
     <div className="pt-16">
-      {/* Opening - The Discovery */}
+      {/* Opening - The Identity Crisis */}
       <div className="relative bg-gradient-to-br from-royal-navy via-royal-burgundy to-royal-navy py-20 md:py-32">
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Badge className="mb-6 bg-royal-gold/20 text-royal-gold border-2 border-royal-gold font-semibold px-6 py-2 text-lg backdrop-blur-sm" data-testid="badge-online">
-            A Journey of Discovery
+            A Journey Home
           </Badge>
           
           <h1 className="font-cinzel-decorative text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-8 leading-tight" data-testid="text-hero-title">
-            The Day Everything Changed
+            The Day I Discovered<br />Who I Really Am
           </h1>
           
           <div className="bg-white/10 backdrop-blur-sm border border-royal-gold/30 rounded-lg p-8 mb-8">
             <p className="text-xl md:text-2xl text-gray-200 leading-relaxed italic">
-              "I thought I understood how the world worked—until I discovered what a trust really means. Not the legal fiction they sell you, but the ancient covenant truth that's been hidden in plain sight for generations."
+              "For years, I lived as a stranger in my own life—carrying someone else's name, someone else's identity, answering to someone else's authority. Then I discovered I was never meant to be a subject of Babylon. I was born to be a child of God, a citizen of heaven, an ambassador of Christ."
             </p>
           </div>
           
           <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            This is the story of how ordinary people like you and me uncovered a truth so profound, it changed everything about how we understand freedom, inheritance, and God's design for His people.
+            This is the story of how God revealed our true identity—and how the ancient structure of covenant trust became the way we express that reality on earth.
           </p>
         </div>
       </div>
 
-      {/* Chapter 1: The Problem We All Shared */}
+      {/* Chapter 1: Lost Identity */}
       <div className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <Mountain className="w-16 h-16 text-royal-burgundy mx-auto mb-6" data-testid="icon-mountain" />
             <h2 className="font-cinzel-decorative text-3xl md:text-4xl font-bold text-royal-navy mb-6" data-testid="text-chapter-one">
-              Chapter 1: The Mountain We Couldn't Climb
+              Chapter 1: The Identity They Gave Us
             </h2>
           </div>
           
           <div className="max-w-4xl mx-auto space-y-6 text-lg text-gray-700 leading-relaxed">
             <p>
-              For years, we watched our parents work their entire lives, only to see the government take half their estate in probate. We saw families torn apart over inheritance disputes. We watched nursing homes drain life savings, leaving nothing for the next generation.
+              From the moment we were born, they told us who we were. They gave us a certificate, assigned us a number, registered us in their system. They said, "You are a citizen. You are a taxpayer. You are a legal entity subject to our jurisdiction."
             </p>
             <p>
-              We were told this was just "how it works." Lawyers said we needed expensive estate plans. Financial advisors pushed complex legal structures. Everyone had a different answer, and none of them felt right.
+              We grew up believing that's all we were—subjects of the state, bound by their laws, required to ask permission for everything. Want to travel? Get a license. Want to work? Pay your taxes. Want to leave an inheritance? We'll take half in probate.
             </p>
-            <p className="font-semibold text-royal-navy">
-              Deep down, we knew there had to be another way. We just didn't know what it was yet.
+            <p className="font-semibold text-royal-navy text-xl">
+              But something inside us always knew this wasn't right. We were meant for something more.
+            </p>
+            <p>
+              We felt it when we read scripture. "You are a chosen generation, a royal priesthood, a holy nation." But how could that be true when we felt so powerless? When Babylon controlled everything?
             </p>
           </div>
         </div>
       </div>
 
-      {/* The Confusion Section */}
+      {/* The Struggle */}
       <div className="py-20 marble-bg">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <Compass className="w-16 h-16 text-royal-burgundy mx-auto mb-6" data-testid="icon-compass" />
-            <h3 className="font-cinzel text-3xl font-bold text-royal-navy mb-4" data-testid="text-confusion-heading">
-              We Tried Everything They Told Us
+            <h3 className="font-cinzel text-3xl font-bold text-royal-navy mb-4" data-testid="text-struggle-heading">
+              We Tried to Live Free Within Their System
             </h3>
             <p className="text-xl text-gray-700 max-w-3xl mx-auto">
-              Every expert had a different solution. Every guru promised the answer. We chased them all.
+              We kept asking Babylon for permission to live out our God-given identity. Every attempt led to the same dead end.
             </p>
           </div>
           
           <div className="grid md:grid-cols-2 gap-6 mb-12">
             {[
-              { path: "Living Trusts", result: "Still under state jurisdiction" },
-              { path: "Revocable Trusts", result: "Subject to probate anyway" },
-              { path: "Expensive Attorneys", result: "Thousands spent, same results" },
-              { path: "Standard Estate Plans", result: "Taxes still drained everything" },
-              { path: "Asset Protection LLCs", result: "More paperwork, same bondage" },
-              { path: "Tax Reduction Strategies", result: "Just moving deck chairs on the Titanic" }
+              { attempt: "We declared we were children of God", reality: "But still carried their birth certificate name" },
+              { attempt: "We said we were citizens of heaven", reality: "But still paid taxes to Caesar like subjects" },
+              { attempt: "We called ourselves ambassadors", reality: "But operated under their jurisdiction" },
+              { attempt: "We believed our security came from God", reality: "But watched the state seize our property" },
+              { attempt: "We wanted to leave an inheritance", reality: "But probate court took it from our children" },
+              { attempt: "We tried to operate in covenant", reality: "But lived under contract law" }
             ].map((item, index) => (
               <Card key={index} className="bg-white border-l-4 border-royal-burgundy hover:shadow-lg transition-shadow">
                 <CardContent className="p-6">
-                  <div className="flex items-start gap-4">
-                    <div className="flex-1">
-                      <p className="text-lg font-semibold text-gray-800 mb-2">We tried: {item.path}</p>
-                      <p className="text-gray-600 italic">{item.result}</p>
-                    </div>
+                  <div className="space-y-3">
+                    <p className="text-lg font-semibold text-gray-800">{item.attempt}</p>
+                    <p className="text-gray-600 italic">Reality: {item.reality}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -97,26 +97,28 @@ export default function Home() {
           
           <div className="text-center">
             <p className="text-xl text-gray-700 italic max-w-3xl mx-auto">
-              Every door we knocked on led to the same place: state control, legal bondage, and generational theft disguised as "proper estate planning."
+              We had the right words, but we didn't know how to make them real. We proclaimed our identity in Christ, but still lived under Babylon's authority.
             </p>
           </div>
         </div>
       </div>
 
-      {/* The Turning Point */}
+      {/* The Awakening */}
       <div className="py-20 bg-gradient-to-r from-royal-burgundy via-royal-navy to-royal-burgundy">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <Lightbulb className="w-20 h-20 text-royal-gold mx-auto mb-8" data-testid="icon-lightbulb" />
-          <h2 className="font-cinzel-decorative text-3xl md:text-5xl font-bold text-white mb-8" data-testid="text-turning-point">
-            Chapter 2: The Awakening
+          <Cross className="w-20 h-20 text-royal-gold mx-auto mb-8" data-testid="icon-cross" />
+          <h2 className="font-cinzel-decorative text-3xl md:text-5xl font-bold text-white mb-8" data-testid="text-awakening">
+            Chapter 2: The Revelation
           </h2>
           
           <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8 mb-8 border border-royal-gold/30">
-            <p className="text-xl md:text-2xl text-gray-200 leading-relaxed">
-              Then someone asked us a simple question that changed everything: 
-              <span className="block mt-4 text-royal-gold font-semibold text-2xl md:text-3xl">
-                "What if you've been looking at trusts through Babylon's lens instead of through covenant?"
-              </span>
+            <p className="text-xl md:text-2xl text-gray-200 leading-relaxed mb-6">
+              Then God opened our eyes to see what had been there all along:
+            </p>
+            <p className="text-2xl md:text-3xl text-royal-gold font-semibold leading-relaxed">
+              We don't need Babylon's permission to live as God's children.<br />
+              We already ARE who God says we are.<br />
+              We just need to learn how to express that reality on earth.
             </p>
           </div>
         </div>
@@ -129,79 +131,96 @@ export default function Home() {
             <div>
               <img 
                 src={customImage}
-                alt="Ancient covenant documents"
+                alt="Covenant relationship with God"
                 className="rounded-xl shadow-xl w-full"
-                data-testid="img-discovery"
+                data-testid="img-covenant"
               />
             </div>
             <div className="space-y-6 text-lg text-gray-700 leading-relaxed">
-              <h3 className="font-cinzel text-3xl font-bold text-royal-navy mb-4">What We Found</h3>
+              <h3 className="font-cinzel text-3xl font-bold text-royal-navy mb-4">Living in Trust with God</h3>
               <p>
-                We started studying. Not legal codes or statute books, but something far older: the biblical foundation of covenant relationships. And there it was, hidden in plain sight for centuries.
+                That's when we discovered what covenant trust really means. Not a legal document. Not an estate planning tool. But <span className="font-semibold text-royal-navy">a way of living in trust relationship with God the Father through Jesus Christ</span>.
               </p>
               <p>
-                Trust isn't a legal document filed with the state. Trust is a <span className="font-semibold text-royal-navy">covenant relationship</span> established by a Grantor, administered by a Trustee, for the benefit of Beneficiaries.
+                God is the Grantor—He established the covenant. Christ is the Trustee—He administers everything the Father has given. We are the Beneficiaries—receiving identity, citizenship, ambassadorship, and security from our Father.
               </p>
-              <p className="font-semibold text-royal-burgundy">
-                Just like God established with Abraham. Just like Christ established with His Church.
+              <p className="text-xl font-semibold text-royal-burgundy">
+                This isn't theory. This is how we actually live.
               </p>
               <p>
-                The legal system had taken this ancient, sacred structure and turned it into a counterfeit—a cage disguised as protection.
+                When we understand we're living in trust with God, everything changes. Our property? Held in trust for Kingdom purposes. Our inheritance? Passed through covenant, not probate. Our authority? Derived from heaven, not the state.
               </p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* The Three Revelations */}
+      {/* Four Revelations */}
       <div className="py-20 marble-bg">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <Star className="w-16 h-16 text-royal-gold mx-auto mb-6" data-testid="icon-star" />
             <h2 className="font-cinzel-decorative text-3xl md:text-4xl font-bold text-royal-navy mb-6" data-testid="text-revelations">
-              Three Revelations That Changed Everything
+              Four Truths That Changed Everything
             </h2>
+            <p className="text-xl text-gray-700 max-w-3xl mx-auto">
+              When we understood who we really are in Christ, these truths became the foundation of how we live.
+            </p>
           </div>
           
           <div className="space-y-12">
             {[
               {
                 number: 1,
-                title: "Trust Is Covenant, Not Contract",
-                story: "We learned that when God established covenant with Abraham, He was the Grantor. Abraham became the trustee of God's promises. And all who believe are beneficiaries of that trust. This isn't legal theory—it's the pattern of creation itself.",
-                icon: ScrollText,
+                title: "Our Identity: Children of God",
+                scripture: "\"Behold, what manner of love the Father hath bestowed upon us, that we should be called the sons of God\" - 1 John 3:1",
+                revelation: "We're not legal entities created by the state. We're children of the Most High God, created in His image, born again by His Spirit. Our true identity comes from our Father, not from a birth certificate.",
+                icon: Heart,
                 color: "royal-gold"
               },
               {
                 number: 2,
-                title: "The State Can't Touch What It Didn't Create",
-                story: "Babylon's system only has authority over what it creates: legal fictions, birth certificates, corporate entities. But a covenant trust established under divine law exists in a different jurisdiction entirely. It's like trying to enforce California law in heaven.",
-                icon: Shield,
+                title: "Our Citizenship: Heaven's Kingdom",
+                scripture: "\"For our conversation is in heaven; from whence also we look for the Saviour\" - Philippians 3:20",
+                revelation: "We're not primarily citizens of any earthly nation. Our citizenship is in heaven. We're ambassadors here, representing a foreign Kingdom. Babylon has no authority over citizens of heaven unless we consent to their jurisdiction.",
+                icon: Crown,
                 color: "royal-navy"
               },
               {
                 number: 3,
-                title: "This Knowledge Was Always Meant To Be Shared",
-                story: "We realized the wealthy families have known this for generations. They pass down massive estates through private trusts that never see probate court. But they kept it hidden, thinking it was their secret advantage. God is bringing this knowledge back to His people.",
-                icon: Crown,
+                title: "Our Role: Ambassadors of Christ",
+                scripture: "\"Now then we are ambassadors for Christ\" - 2 Corinthians 5:20",
+                revelation: "As ambassadors, we operate under diplomatic immunity. We represent Christ's Kingdom on earth. We don't need the state's permission to fulfill our divine commission. We answer to a higher authority.",
+                icon: Shield,
                 color: "royal-burgundy"
+              },
+              {
+                number: 4,
+                title: "Our Security: In the Father's Hands",
+                scripture: "\"My sheep hear my voice...and no man is able to pluck them out of my Father's hand\" - John 10:27-29",
+                revelation: "Our security doesn't come from the state, from legal documents, or from our own efforts. We're held in the Father's hands. When we structure our lives around this trust relationship, Babylon's threats lose their power.",
+                icon: HomeIcon,
+                color: "royal-gold"
               }
-            ].map((revelation) => (
-              <Card key={revelation.number} className="royal-card border-l-8" style={{ borderLeftColor: `var(--${revelation.color})` }}>
+            ].map((truth) => (
+              <Card key={truth.number} className="royal-card border-l-8" style={{ borderLeftColor: `var(--${truth.color})` }}>
                 <CardContent className="p-8">
                   <div className="flex items-start gap-6">
                     <div className="bg-gradient-to-br from-royal-navy to-royal-burgundy text-white rounded-full w-16 h-16 flex items-center justify-center flex-shrink-0 shadow-lg">
-                      <span className="text-2xl font-bold">{revelation.number}</span>
+                      <span className="text-2xl font-bold">{truth.number}</span>
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-4 mb-4">
-                        <revelation.icon className="w-10 h-10 text-royal-navy" data-testid={`icon-revelation-${revelation.number}`} />
-                        <h3 className="font-cinzel text-2xl font-bold text-royal-navy" data-testid={`text-revelation-title-${revelation.number}`}>
-                          {revelation.title}
+                        <truth.icon className="w-10 h-10 text-royal-navy" data-testid={`icon-truth-${truth.number}`} />
+                        <h3 className="font-cinzel text-2xl font-bold text-royal-navy" data-testid={`text-truth-title-${truth.number}`}>
+                          {truth.title}
                         </h3>
                       </div>
-                      <p className="text-lg text-gray-700 leading-relaxed italic">
-                        {revelation.story}
+                      <div className="bg-royal-gold/10 border-l-4 border-royal-gold p-4 mb-4 rounded">
+                        <p className="font-georgia italic text-gray-700">{truth.scripture}</p>
+                      </div>
+                      <p className="text-lg text-gray-700 leading-relaxed">
+                        {truth.revelation}
                       </p>
                     </div>
                   </div>
@@ -212,59 +231,59 @@ export default function Home() {
         </div>
       </div>
 
-      {/* The Transformation */}
+      {/* The Practical Expression */}
       <div className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <Heart className="w-16 h-16 text-royal-burgundy mx-auto mb-6" data-testid="icon-heart" />
-            <h2 className="font-cinzel-decorative text-3xl md:text-4xl font-bold text-royal-navy mb-6" data-testid="text-transformation">
-              Chapter 3: How Our Lives Changed
+            <Lightbulb className="w-16 h-16 text-royal-burgundy mx-auto mb-6" data-testid="icon-lightbulb" />
+            <h2 className="font-cinzel-decorative text-3xl md:text-4xl font-bold text-royal-navy mb-6" data-testid="text-expression">
+              Chapter 3: How We Express This on Earth
             </h2>
             <p className="text-xl text-gray-700 max-w-3xl mx-auto mb-12">
-              Once we understood covenant trust, everything shifted. Not overnight, but steadily. Here's what began to happen:
+              Understanding our identity in Christ is one thing. Learning to express that reality in how we live, steward property, and pass inheritance is another. This is where covenant trust becomes practical.
             </p>
           </div>
           
           <div className="grid md:grid-cols-2 gap-6">
             {[
               {
-                before: "Living in fear of probate stealing our inheritance",
-                after: "Understanding our property belongs to the covenant, not the state"
+                spiritual: "Identity: We are children of God",
+                practical: "We operate as beneficiaries of the Father's trust, not legal entities of the state"
               },
               {
-                before: "Paying lawyers thousands for documents that didn't work",
-                after: "Learning to operate as trustees of what God has given us"
+                spiritual: "Citizenship: Heaven is our home",
+                practical: "We establish ecclesiastical jurisdiction, operating under divine authority not territorial law"
               },
               {
-                before: "Watching nursing homes drain everything our parents built",
-                after: "Protecting family assets through proper covenant structure"
+                spiritual: "Role: Ambassadors of Christ",
+                practical: "We function as trustees of Kingdom resources, stewarding what God has entrusted to us"
               },
               {
-                before: "Feeling helpless against the legal system",
-                after: "Walking in the authority of our true jurisdiction"
+                spiritual: "Security: In the Father's hands",
+                practical: "Our property is held in covenant trust, protected from Babylon's probate theft"
               },
               {
-                before: "Worried about leaving nothing to our children",
-                after: "Building generational wealth that flows through covenant"
+                spiritual: "Authority: Under Christ as Head",
+                practical: "We establish trust structures that recognize Christ as Grantor and ultimate authority"
               },
               {
-                before: "Trapped in Babylon's endless taxation",
-                after: "Understanding the difference between Caesar's things and God's things"
+                spiritual: "Inheritance: Co-heirs with Christ",
+                practical: "We pass generational wealth through covenant succession, not state-controlled probate"
               }
-            ].map((transformation, index) => (
+            ].map((expression, index) => (
               <Card key={index} className="bg-gradient-to-br from-gray-50 to-white border-2 border-royal-gold/20 hover:border-royal-gold transition-all">
                 <CardContent className="p-6">
                   <div className="space-y-4">
                     <div>
-                      <p className="text-sm font-semibold text-gray-500 mb-2">Before:</p>
-                      <p className="text-gray-700">{transformation.before}</p>
+                      <p className="text-sm font-semibold text-royal-burgundy mb-2">Spiritual Reality:</p>
+                      <p className="text-gray-800 font-semibold">{expression.spiritual}</p>
                     </div>
                     <div className="flex justify-center">
                       <div className="w-12 h-0.5 bg-royal-gold"></div>
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-royal-gold mb-2">After:</p>
-                      <p className="text-royal-navy font-semibold">{transformation.after}</p>
+                      <p className="text-sm font-semibold text-royal-navy mb-2">Earthly Expression:</p>
+                      <p className="text-gray-700">{expression.practical}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -283,9 +302,9 @@ export default function Home() {
                 <Users className="w-16 h-16 text-royal-gold flex-shrink-0" data-testid="icon-voice" />
                 <div>
                   <p className="text-xl text-white leading-relaxed mb-6 italic">
-                    "I spent thirty years thinking I had to play by their rules. Lawyers, accountants, estate planners—they all said the same thing: 'This is just how it is.' But when I learned about covenant trust, I realized I'd been asking permission from Babylon to live in Kingdom freedom. Once I understood the jurisdiction I actually operate in, everything changed. My family's inheritance is secure now, not in their system, but in God's."
+                    "For forty years I proclaimed I was a child of God, but I still lived like a subject of Babylon. I said I was a citizen of heaven, but I let the state control my property. When I finally understood that covenant trust isn't just spiritual metaphor—it's the actual structure God designed for His people to live in—everything shifted. Now I don't just believe I'm God's child. I live like it. My property is held in trust for Kingdom purposes. My inheritance flows through covenant. I operate as an ambassador under divine authority. This isn't just doctrine anymore. It's how I actually live."
                   </p>
-                  <p className="font-bold text-royal-gold text-lg">— A Fellow Traveler on This Journey</p>
+                  <p className="font-bold text-royal-gold text-lg">— A Fellow Sojourner</p>
                 </div>
               </div>
             </CardContent>
@@ -293,52 +312,59 @@ export default function Home() {
         </div>
       </div>
 
-      {/* The Path Forward */}
+      {/* The Learning Journey */}
       <div className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <Book className="w-16 h-16 text-royal-navy mx-auto mb-6" data-testid="icon-book" />
-            <h2 className="font-cinzel-decorative text-3xl md:text-4xl font-bold text-royal-navy mb-6" data-testid="text-path-forward">
-              The Path We're Walking Now
+            <h2 className="font-cinzel-decorative text-3xl md:text-4xl font-bold text-royal-navy mb-6" data-testid="text-learning">
+              Learning to Walk in This Reality
             </h2>
             <p className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
-              This isn't a sales pitch. It's an invitation to walk a path that many are discovering. We're learning together, growing together, and helping each other understand what it means to operate in covenant rather than contract.
+              Understanding who you are in Christ is the revelation. Learning to express that identity through covenant trust is the journey we're walking together.
             </p>
           </div>
 
           <div className="max-w-4xl mx-auto space-y-8 mb-12">
             <Card className="royal-card">
               <CardContent className="p-8">
-                <h3 className="font-cinzel text-2xl font-bold text-royal-navy mb-4">If You're Curious...</h3>
+                <h3 className="font-cinzel text-2xl font-bold text-royal-navy mb-4">The Journey We're Offering</h3>
                 <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                  We've gathered what we've learned into a comprehensive learning journey. Not because we have all the answers, but because we believe this knowledge was never meant to be hidden. It's structured in a way that anyone can understand, starting from the very basics and building step by step.
+                  We've gathered what God has revealed to us—and to many others walking this path—into a comprehensive learning experience. It starts with the spiritual reality of who you are in Christ, then shows you how to express that reality through covenant trust structures.
                 </p>
                 <div className="space-y-3 text-gray-700">
                   <div className="flex items-start gap-3">
                     <CheckCircle className="w-6 h-6 text-royal-gold flex-shrink-0 mt-1" />
-                    <span>We start with what trust actually means in biblical terms</span>
+                    <span>Discover your true identity as God's child, heaven's citizen, Christ's ambassador</span>
                   </div>
                   <div className="flex items-start gap-3">
                     <CheckCircle className="w-6 h-6 text-royal-gold flex-shrink-0 mt-1" />
-                    <span>We explore the difference between covenant and contract</span>
+                    <span>Understand how covenant trust differs from Babylon's legal fictions</span>
                   </div>
                   <div className="flex items-start gap-3">
                     <CheckCircle className="w-6 h-6 text-royal-gold flex-shrink-0 mt-1" />
-                    <span>We learn how families have protected generational wealth for centuries</span>
+                    <span>Learn to establish trust structures that express your heavenly jurisdiction</span>
                   </div>
                   <div className="flex items-start gap-3">
                     <CheckCircle className="w-6 h-6 text-royal-gold flex-shrink-0 mt-1" />
-                    <span>We understand the jurisdiction we actually operate in as God's people</span>
+                    <span>Steward property as a trustee under divine authority, not state control</span>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="w-6 h-6 text-royal-gold flex-shrink-0 mt-1" />
+                    <span>Pass generational inheritance through covenant, protected from probate theft</span>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="royal-card">
+            <Card className="royal-card border-4 border-royal-gold">
               <CardContent className="p-8">
-                <h3 className="font-cinzel text-2xl font-bold text-royal-navy mb-4">What Others Are Discovering</h3>
+                <h3 className="font-cinzel text-2xl font-bold text-royal-navy mb-4">This Is About Receiving Everything From the Father</h3>
+                <p className="text-lg text-gray-700 leading-relaxed mb-4">
+                  Identity. Citizenship. Ambassadorship. Security. Authority. Inheritance.
+                </p>
                 <p className="text-lg text-gray-700 leading-relaxed">
-                  People from all walks of life are having the same "aha" moment we did. Teachers, nurses, business owners, retirees—ordinary folks who realized that the system they'd been taught was the only way wasn't actually the way at all. They're learning to think differently about inheritance, stewardship, and what it means to leave a legacy.
+                  None of these come from the state. All of them flow from God the Father, through Jesus Christ, to you as His child. Covenant trust is simply how we structure our lives to receive and steward what the Father has given us, operating under His authority rather than Babylon's control.
                 </p>
               </CardContent>
             </Card>
@@ -349,40 +375,43 @@ export default function Home() {
               <Button 
                 size="lg" 
                 className="royal-button text-xl px-12 py-6 shadow-xl hover:scale-105 transition-transform"
-                data-testid="button-explore-journey"
+                data-testid="button-begin-journey"
               >
                 <BookOpen className="mr-2 h-6 w-6" />
-                Explore This Journey
+                Begin This Journey
               </Button>
             </Link>
           </div>
         </div>
       </div>
 
-      {/* The Bigger Picture */}
+      {/* The Heart of It All */}
       <div className="py-20 marble-bg">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="font-cinzel-decorative text-3xl md:text-4xl font-bold text-royal-navy mb-6" data-testid="text-bigger-picture">
-              This Is About More Than Money
+            <h2 className="font-cinzel-decorative text-3xl md:text-4xl font-bold text-royal-navy mb-6" data-testid="text-heart">
+              This Is About Living in Trust with God
             </h2>
           </div>
           
           <div className="space-y-6 text-lg text-gray-700 leading-relaxed max-w-3xl mx-auto">
             <p>
-              Yes, understanding covenant trust can protect your family's inheritance. Yes, it can shield you from probate theft. Yes, it can help you build generational wealth.
+              Yes, you'll learn about trust structures. Yes, you'll understand how to protect inheritance from probate. Yes, you'll discover how to operate under ecclesiastical jurisdiction.
             </p>
             <p>
-              But that's not really what this is about.
+              But none of that is the point.
             </p>
             <p className="text-xl font-semibold text-royal-navy">
-              This is about understanding who you really are and what jurisdiction you actually operate in.
+              The point is learning to actually live in trust relationship with God the Father through Jesus Christ.
             </p>
             <p>
-              It's about recognizing that Babylon has counterfeit everything—including the very concept of trust and stewardship. And it's about learning to see through their fog and walk in the clarity of covenant truth.
+              To receive your identity from Him, not from a birth certificate.<br />
+              To claim your citizenship in heaven, not subjection to the state.<br />
+              To walk as His ambassador, not Babylon's subject.<br />
+              To rest in His security, not their threats.
             </p>
-            <p>
-              When you understand trust the way God designed it, you're not just protecting assets. You're reclaiming your identity as a steward of His Kingdom, operating under His authority, for His purposes.
+            <p className="text-xl font-semibold text-royal-burgundy">
+              When you understand you're living in trust with God, the practical structures follow naturally. Because you're not trying to escape Babylon—you're expressing the reality of who you already are in Christ.
             </p>
           </div>
         </div>
@@ -393,31 +422,35 @@ export default function Home() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Key className="w-20 h-20 text-royal-gold mx-auto mb-8" data-testid="icon-key" />
           <h2 className="font-cinzel-decorative text-4xl md:text-5xl font-bold text-white mb-8" data-testid="text-invitation">
-            Your Journey Begins Here
+            You Are Who God Says You Are
           </h2>
           
           <p className="text-xl md:text-2xl text-gray-200 mb-12 leading-relaxed max-w-3xl mx-auto">
-            We're not trying to convince you of anything. We're simply sharing what we've discovered and inviting you to explore it for yourself. If this resonates with you—if something in your spirit says "there's truth here"—then come walk this path with us.
+            Child of God. Citizen of heaven. Ambassador of Christ. Secure in the Father's hands.
+          </p>
+          
+          <p className="text-lg md:text-xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed">
+            If your spirit bears witness to this truth, come learn how to express that reality in every area of your life—including how you steward property, pass inheritance, and operate under divine authority.
           </p>
           
           <Link href="/courses">
             <Button 
               size="lg" 
               className="royal-button text-2xl px-16 py-8 shadow-2xl hover:scale-105 transition-transform mb-8"
-              data-testid="button-begin-journey"
+              data-testid="button-final-cta"
             >
               <BookOpen className="mr-3 h-8 w-8" />
-              Begin Your Journey
+              Discover Your True Identity
             </Button>
           </Link>
           
           <div className="mt-12 flex flex-col sm:flex-row gap-6 justify-center text-gray-300 text-lg">
             <Link href="/mandate" className="hover:text-royal-gold transition-colors" data-testid="link-mandate">
-              Read Our Story
+              Read the Mandate
             </Link>
             <span className="hidden sm:inline">•</span>
             <Link href="/repository" className="hover:text-royal-gold transition-colors" data-testid="link-repository">
-              Explore the Knowledge
+              Explore the Teachings
             </Link>
             <span className="hidden sm:inline">•</span>
             <Link href="/contact" className="hover:text-royal-gold transition-colors" data-testid="link-contact">
