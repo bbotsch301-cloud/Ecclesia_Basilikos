@@ -10,6 +10,7 @@ const navigation = [
   { name: "Ecclesia Nation", href: "/nation" },
   { name: "Royal Academy", href: "/courses" },
   { name: "Covenant Repository", href: "/repository" },
+  { name: "Downloads", href: "/downloads" },
   { name: "Embassy Forum", href: "/forum" },
   { name: "Contact & Stewardship", href: "/contact" },
 ];

@@ -25,6 +25,7 @@ import CourseLesson from "@/pages/course-lesson";
 import VerifyEmail from "@/pages/verify-email";
 import Mandate from "@/pages/mandate";
 import Repository from "@/pages/repository";
+import Downloads from "@/pages/downloads";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -44,6 +45,7 @@ function Router() {
           <Route path="/forum" component={Forum} />
           <Route path="/forum/thread/:threadId" component={ThreadPage} />
           <Route path="/trust-download" component={TrustDownload} />
+          <Route path="/downloads" component={Downloads} />
           <Route path="/new-covenant-intro" component={NewCovenantIntro} />
           <Route path="/courses" component={Courses} />
           <Route path="/my-courses" component={MyCourses} />
