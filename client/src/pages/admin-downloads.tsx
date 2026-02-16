@@ -59,11 +59,12 @@ export default function AdminDownloads() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingDownload, setEditingDownload] = useState<DownloadType | null>(null);
 
-  useEffect(() => {
-    if (!isLoading && (!isAuthenticated || user?.role !== 'admin')) {
-      window.location.href = '/';
-    }
-  }, [isAuthenticated, isLoading, user]);
+  // Temporarily disabled admin check for development
+  // useEffect(() => {
+  //   if (!isLoading && (!isAuthenticated || user?.role !== 'admin')) {
+  //     window.location.href = '/';
+  //   }
+  // }, [isAuthenticated, isLoading, user]);
 
   const form = useForm<DownloadFormData>({
     resolver: zodResolver(downloadFormSchema),
@@ -87,7 +88,6 @@ export default function AdminDownloads() {
 
   const { data: downloads, isLoading: downloadsLoading } = useQuery<DownloadType[]>({
     queryKey: ['/api/admin/downloads'],
-    enabled: isAuthenticated && user?.role === 'admin',
   });
 
   const createMutation = useMutation({
@@ -256,16 +256,17 @@ export default function AdminDownloads() {
   const totalDownloads = downloads?.reduce((sum, d) => sum + (d.downloadCount || 0), 0) || 0;
   const publishedCount = downloads?.filter(d => d.isPublished).length || 0;
 
-  if (isLoading || !isAuthenticated || user?.role !== 'admin') {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading admin panel...</p>
-        </div>
-      </div>
-    );
-  }
+  // Temporarily disabled admin check for development
+  // if (isLoading || !isAuthenticated || user?.role !== 'admin') {
+  //   return (
+  //     <div className="min-h-screen flex items-center justify-center">
+  //       <div className="text-center">
+  //         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto mb-4"></div>
+  //         <p className="text-gray-600">Loading admin panel...</p>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
