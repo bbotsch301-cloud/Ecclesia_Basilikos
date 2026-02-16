@@ -9,7 +9,8 @@ import {
   insertForumCategorySchema,
   updateUserRoleSchema,
   insertPageContentSchema,
-  updatePageContentSchema
+  updatePageContentSchema,
+  insertDownloadSchema
 } from '@shared/schema';
 
 const router = Router();
@@ -833,6 +834,129 @@ router.delete('/page-content/:id', requireAdmin, async (req, res) => {
   } catch (error) {
     console.error('Error deleting page content:', error);
     res.status(500).json({ error: 'Failed to delete page content' });
+  }
+});
+
+// ================================
+// DOWNLOADS MANAGEMENT (ADMIN ONLY)
+// ================================
+
+router.get('/downloads', requireAdmin, async (req, res) => {
+  try {
+    const allDownloads = await storage.getAllDownloads();
+    res.json(allDownloads);
+  } catch (error) {
+    console.error('Error fetching downloads:', error);
+    res.status(500).json({ error: 'Failed to fetch downloads' });
+  }
+});
+
+router.get('/downloads/:id', requireAdmin, async (req, res) => {
+  try {
+    const download = await storage.getDownload(req.params.id);
+    if (!download) {
+      return res.status(404).json({ error: 'Download not found' });
+    }
+    res.json(download);
+  } catch (error) {
+    console.error('Error fetching download:', error);
+    res.status(500).json({ error: 'Failed to fetch download' });
+  }
+});
+
+router.post('/downloads', requireAdmin, async (req, res) => {
+  try {
+    const downloadData = insertDownloadSchema.parse(req.body);
+    const download = await storage.createDownload(downloadData);
+
+    await auditLog(
+      req.user!.id,
+      'CREATE',
+      'DOWNLOAD',
+      download.id,
+      null,
+      download,
+      req.ip,
+      req.get('User-Agent')
+    );
+
+    res.json(download);
+  } catch (error) {
+    console.error('Error creating download:', error);
+    res.status(500).json({ error: 'Failed to create download' });
+  }
+});
+
+router.put('/downloads/:id', requireAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const oldDownload = await storage.getDownload(id);
+    const updates = insertDownloadSchema.partial().parse(req.body);
+    const updated = await storage.updateDownload(id, updates);
+
+    await auditLog(
+      req.user!.id,
+      'UPDATE',
+      'DOWNLOAD',
+      id,
+      oldDownload,
+      updated,
+      req.ip,
+      req.get('User-Agent')
+    );
+
+    res.json(updated);
+  } catch (error) {
+    console.error('Error updating download:', error);
+    res.status(500).json({ error: 'Failed to update download' });
+  }
+});
+
+router.patch('/downloads/:id/toggle-published', requireAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const oldDownload = await storage.getDownload(id);
+    const updated = await storage.toggleDownloadPublished(id);
+
+    await auditLog(
+      req.user!.id,
+      'UPDATE',
+      'DOWNLOAD',
+      id,
+      { isPublished: oldDownload?.isPublished },
+      { isPublished: updated.isPublished },
+      req.ip,
+      req.get('User-Agent')
+    );
+
+    res.json(updated);
+  } catch (error) {
+    console.error('Error toggling download published:', error);
+    res.status(500).json({ error: 'Failed to toggle download published' });
+  }
+});
+
+router.delete('/downloads/:id', requireAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const oldDownload = await storage.getDownload(id);
+    await storage.deleteDownload(id);
+
+    await auditLog(
+      req.user!.id,
+      'DELETE',
+      'DOWNLOAD',
+      id,
+      oldDownload,
+      null,
+      req.ip,
+      req.get('User-Agent')
+    );
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error deleting download:', error);
+    res.status(500).json({ error: 'Failed to delete download' });
   }
 });
 

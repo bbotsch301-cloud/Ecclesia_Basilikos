@@ -171,13 +171,24 @@ export const lesson_progress = pgTable("lesson_progress", {
 export const downloads = pgTable("downloads", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   title: text("title").notNull(),
+  shortTitle: text("short_title"),
   description: text("description"),
   fileUrl: text("file_url").notNull(),
-  fileType: text("file_type").notNull(), // pdf, doc, etc
+  fileType: text("file_type").notNull(),
+  fileSize: text("file_size"),
   category: text("category").notNull(),
-  isPublic: boolean("is_public").default(false), // true for public, false for enrolled students only
-  courseId: varchar("course_id").references(() => courses.id), // optional, if tied to specific course
+  iconType: text("icon_type").default("file-text"),
+  whenToUse: text("when_to_use"),
+  whyItMatters: text("why_it_matters"),
+  contents: text("contents"),
+  scriptureText: text("scripture_text"),
+  scriptureReference: text("scripture_reference"),
+  isPublic: boolean("is_public").default(false),
+  isPublished: boolean("is_published").default(false),
+  downloadCount: integer("download_count").default(0),
+  courseId: varchar("course_id").references(() => courses.id),
   createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 // Page content management
@@ -422,7 +433,9 @@ export const insertEnrollmentSchema = createInsertSchema(enrollments).omit({
 
 export const insertDownloadSchema = createInsertSchema(downloads).omit({
   id: true,
+  downloadCount: true,
   createdAt: true,
+  updatedAt: true,
 });
 
 export const insertForumCategorySchema = createInsertSchema(forum_categories).omit({

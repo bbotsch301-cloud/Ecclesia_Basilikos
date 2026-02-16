@@ -197,6 +197,12 @@ export default function AdminDashboard() {
                   Manage Courses
                 </Button>
               </Link>
+              <Link href="/admin/downloads">
+                <Button className="w-full justify-start" variant="outline">
+                  <Download className="h-4 w-4 mr-2" />
+                  Manage Downloads
+                </Button>
+              </Link>
               <Link href="/admin/content">
                 <Button className="w-full justify-start" variant="outline">
                   <Edit className="h-4 w-4 mr-2" />

@@ -97,8 +97,16 @@ export interface IStorage {
   
   // Downloads
   getPublicDownloads(): Promise<Download[]>;
+  getPublishedDownloads(): Promise<Download[]>;
   getCourseDownloads(courseId: string): Promise<Download[]>;
   getUserDownloads(userId: string): Promise<Download[]>;
+  getAllDownloads(): Promise<Download[]>;
+  getDownload(id: string): Promise<Download | undefined>;
+  createDownload(download: InsertDownload): Promise<Download>;
+  updateDownload(id: string, download: Partial<InsertDownload>): Promise<Download>;
+  deleteDownload(id: string): Promise<void>;
+  incrementDownloadCount(id: string): Promise<Download>;
+  toggleDownloadPublished(id: string): Promise<Download>;
   
   // Admin: User Management
   getAllUsers(): Promise<User[]>;
@@ -349,6 +357,64 @@ export class DatabaseStorage implements IStorage {
       .select()
       .from(downloads)
       .where(eq(downloads.isPublic, true));
+  }
+
+  async getPublishedDownloads(): Promise<Download[]> {
+    return await db
+      .select()
+      .from(downloads)
+      .where(eq(downloads.isPublished, true))
+      .orderBy(desc(downloads.createdAt));
+  }
+
+  async getAllDownloads(): Promise<Download[]> {
+    return await db
+      .select()
+      .from(downloads)
+      .orderBy(desc(downloads.createdAt));
+  }
+
+  async getDownload(id: string): Promise<Download | undefined> {
+    const [download] = await db.select().from(downloads).where(eq(downloads.id, id));
+    return download;
+  }
+
+  async createDownload(download: InsertDownload): Promise<Download> {
+    const [newDownload] = await db.insert(downloads).values(download).returning();
+    return newDownload;
+  }
+
+  async updateDownload(id: string, updates: Partial<InsertDownload>): Promise<Download> {
+    const [updated] = await db
+      .update(downloads)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(downloads.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteDownload(id: string): Promise<void> {
+    await db.delete(downloads).where(eq(downloads.id, id));
+  }
+
+  async incrementDownloadCount(id: string): Promise<Download> {
+    const [updated] = await db
+      .update(downloads)
+      .set({ downloadCount: sql`${downloads.downloadCount} + 1` })
+      .where(eq(downloads.id, id))
+      .returning();
+    return updated;
+  }
+
+  async toggleDownloadPublished(id: string): Promise<Download> {
+    const download = await this.getDownload(id);
+    if (!download) throw new Error("Download not found");
+    const [updated] = await db
+      .update(downloads)
+      .set({ isPublished: !download.isPublished, updatedAt: new Date() })
+      .where(eq(downloads.id, id))
+      .returning();
+    return updated;
   }
 
   async getCourseDownloads(courseId: string): Promise<Download[]> {

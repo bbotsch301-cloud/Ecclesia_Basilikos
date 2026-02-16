@@ -590,6 +590,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Public Downloads Endpoints
+  app.get("/api/downloads/published", async (req, res) => {
+    try {
+      const publishedDownloads = await storage.getPublishedDownloads();
+      res.json(publishedDownloads);
+    } catch (error) {
+      console.error("Error fetching published downloads:", error);
+      res.status(500).json({ error: "Failed to fetch downloads" });
+    }
+  });
+
+  app.post("/api/downloads/:id/track", async (req, res) => {
+    try {
+      const updated = await storage.incrementDownloadCount(req.params.id);
+      res.json({ downloadCount: updated.downloadCount });
+    } catch (error) {
+      console.error("Error tracking download:", error);
+      res.status(500).json({ error: "Failed to track download" });
+    }
+  });
+
   // Trust Document Download Endpoints
   app.post("/api/trust-download-signup", async (req, res) => {
     try {
