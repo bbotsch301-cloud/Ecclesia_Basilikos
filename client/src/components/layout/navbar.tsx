@@ -21,9 +21,9 @@ export default function Navbar() {
 
   return (
     <nav className="bg-white dark:bg-royal-navy shadow-lg fixed w-full top-0 z-50 border-b-2 border-royal-gold/30">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <Link href="/" className="flex items-center group">
+          <Link href="/" className="flex items-center group shrink-0">
             <div className="relative">
               <Crown className="text-royal-gold w-8 h-8 mr-3 transition-transform group-hover:scale-110" />
               <div className="absolute inset-0 text-royal-gold opacity-50 blur-sm">
@@ -36,12 +36,12 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-4 lg:space-x-6">
+          <div className="hidden xl:flex items-center space-x-2 lg:space-x-4">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className={`transition-colors font-medium font-cinzel text-sm ${
+                className={`transition-colors font-medium font-cinzel text-xs whitespace-nowrap ${
                   location === item.href
                     ? "text-royal-gold"
                     : "text-royal-navy dark:text-gray-300 hover:text-royal-gold"
@@ -53,7 +53,7 @@ export default function Navbar() {
           </div>
 
           {/* Mobile menu button */}
-          <div className="lg:hidden">
+          <div className="xl:hidden">
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon">
