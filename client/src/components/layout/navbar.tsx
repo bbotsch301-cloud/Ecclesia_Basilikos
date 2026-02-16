@@ -23,27 +23,27 @@ export default function Navbar() {
     <nav className="bg-white dark:bg-royal-navy shadow-lg fixed w-full top-0 z-50 border-b-2 border-royal-gold/30">
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <Link href="/" className="flex items-center group shrink-0">
+          <Link href="/" className="flex items-center group shrink-0 py-1">
             <div className="relative">
-              <Crown className="text-royal-gold w-8 h-8 mr-3 transition-transform group-hover:scale-110" />
+              <Crown className="text-royal-gold w-7 h-7 mr-2 transition-transform group-hover:scale-110" />
               <div className="absolute inset-0 text-royal-gold opacity-50 blur-sm">
-                <Crown className="w-8 h-8 mr-3" />
+                <Crown className="w-7 h-7 mr-2" />
               </div>
             </div>
-            <span className="font-cinzel-decorative font-bold text-xl text-royal-navy dark:text-royal-gold">
+            <span className="font-cinzel-decorative font-bold text-base leading-tight text-royal-navy dark:text-royal-gold hidden min-[400px]:block">
               Ecclesia Basilikos
             </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden xl:flex items-center space-x-2 lg:space-x-4">
+          <div className="hidden min-[1200px]:flex items-center space-x-2">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className={`transition-colors font-medium font-cinzel text-xs whitespace-nowrap ${
+                className={`transition-colors font-medium font-cinzel text-[10px] uppercase tracking-tighter whitespace-nowrap px-1 ${
                   location === item.href
-                    ? "text-royal-gold"
+                    ? "text-royal-gold border-b border-royal-gold"
                     : "text-royal-navy dark:text-gray-300 hover:text-royal-gold"
                 }`}
               >
@@ -53,7 +53,7 @@ export default function Navbar() {
           </div>
 
           {/* Mobile menu button */}
-          <div className="xl:hidden">
+          <div className="min-[1200px]:hidden">
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon">
