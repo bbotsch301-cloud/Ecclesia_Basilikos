@@ -36,12 +36,12 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden lg:flex items-center space-x-4 lg:space-x-6">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className={`transition-colors font-medium font-cinzel ${
+                className={`transition-colors font-medium font-cinzel text-sm ${
                   location === item.href
                     ? "text-royal-gold"
                     : "text-royal-navy dark:text-gray-300 hover:text-royal-gold"
@@ -53,7 +53,7 @@ export default function Navbar() {
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div className="lg:hidden">
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon">
