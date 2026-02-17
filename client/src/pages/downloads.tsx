@@ -27,6 +27,7 @@ function parseJsonArray(value: string | null): string[] {
     const parsed = JSON.parse(value);
     if (Array.isArray(parsed)) return parsed;
   } catch {
+    // If it's not valid JSON, it might be a raw string from an older record or manual entry
     return value.split("\n").map(s => s.trim()).filter(Boolean);
   }
   return [];

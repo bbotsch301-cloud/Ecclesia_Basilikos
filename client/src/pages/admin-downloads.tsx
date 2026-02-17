@@ -589,7 +589,7 @@ export default function AdminDownloads() {
                     <FormItem>
                       <FormLabel>When to Use (one item per line)</FormLabel>
                       <FormControl>
-                        <Textarea placeholder="Enter items, one per line" rows={4} {...field} />
+                        <Textarea placeholder="Enter items, one per line" rows={4} className="min-h-[100px]" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -602,7 +602,7 @@ export default function AdminDownloads() {
                     <FormItem>
                       <FormLabel>What's Inside / Contents (one item per line)</FormLabel>
                       <FormControl>
-                        <Textarea placeholder="Enter items, one per line" rows={4} {...field} />
+                        <Textarea placeholder="Enter items, one per line" rows={4} className="min-h-[100px]" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
