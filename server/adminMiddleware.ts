@@ -91,10 +91,10 @@ export const auditLog = async (
       action,
       entityType,
       entityId,
-      oldData: oldData ? JSON.stringify(oldData) : undefined,
-      newData: newData ? JSON.stringify(newData) : undefined,
-      ipAddress,
-      userAgent,
+      oldData: oldData ? JSON.stringify(oldData) : null,
+      newData: newData ? JSON.stringify(newData) : null,
+      ipAddress: ipAddress ?? null,
+      userAgent: userAgent ?? null,
     });
   } catch (error) {
     console.error('Error creating audit log:', error);

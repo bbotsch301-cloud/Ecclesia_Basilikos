@@ -114,12 +114,10 @@ export async function initializeEmailTemplates() {
     if (!systemUser) {
       systemUser = await storage.createUser({
         email: 'system@kingdomventures.com',
-        password: 'system', // This won't be used since it's a system account
+        password: 'system',
         firstName: 'System',
         lastName: 'Administrator',
         role: 'admin',
-        isActive: true,
-        isEmailVerified: true
       });
     }
     
