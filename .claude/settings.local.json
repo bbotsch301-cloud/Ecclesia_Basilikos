@@ -15,7 +15,18 @@
       "Bash(node -e:*)",
       "Bash(pkill:*)",
       "Bash(NODE_ENV=development npx tsx:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(grep:*)",
+      "Bash(find:*)",
+      "Bash(echo:*)",
+      "Bash(git status:*)",
+      "WebSearch",
+      "WebFetch(domain:opentimestamps.org)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:dgi.io)",
+      "WebFetch(domain:blog.eternitywall.com)",
+      "Bash(npx tsx:*)",
+      "Bash(npm run dev:*)"
     ]
   }
 }
