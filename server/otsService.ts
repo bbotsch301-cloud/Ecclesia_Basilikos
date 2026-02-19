@@ -427,7 +427,9 @@ function parseOperationChain(
     const tag = proofBytes[offset];
 
     if (tag === ATTESTATION_MARKER) {
-      // Attestation: 0x00 + 8-byte attestation type tag + varint payload
+      // Attestation format: 0x00 + 8-byte tag + varint(outer_payload_len) + payload
+      // For PendingAttestation, payload = varint(url_len) + url_bytes
+      // For BitcoinAttestation, payload = varint(block_height)
       const attestationMarkerOffset = offset;
       offset += 1; // skip 0x00
 
@@ -435,13 +437,18 @@ function parseOperationChain(
       const attTag = proofBytes.subarray(offset, offset + ATTESTATION_TAG_SIZE);
       offset += ATTESTATION_TAG_SIZE;
 
+      // Outer payload length (wraps the attestation-specific data)
       const { value: payloadLen, bytesRead: payloadLenBytes } = decodeVarint(proofBytes, offset);
       offset += payloadLenBytes;
+      const payloadEnd = offset + payloadLen;
 
       if (attTag.equals(PENDING_ATTESTATION_TAG)) {
-        if (offset + payloadLen <= proofBytes.length) {
-          const url = proofBytes.subarray(offset, offset + payloadLen).toString("utf-8");
-          offset += payloadLen;
+        // Inner varbytes: varint(url_len) + url_bytes
+        const { value: urlLen, bytesRead: urlLenBytes } = decodeVarint(proofBytes, offset);
+        offset += urlLenBytes;
+        if (offset + urlLen <= proofBytes.length) {
+          const url = proofBytes.subarray(offset, offset + urlLen).toString("utf-8");
+          offset = payloadEnd; // advance past full outer payload
 
           result.attestations.push({
             type: "pending",
@@ -452,9 +459,9 @@ function parseOperationChain(
           });
         }
       } else if (attTag.equals(BITCOIN_ATTESTATION_TAG)) {
-        // Payload is the block height encoded as a varint
+        // Inner varint: block height
         const { value: blockHeight } = decodeVarint(proofBytes, offset);
-        offset += payloadLen; // advance past the full payload
+        offset = payloadEnd; // advance past full outer payload
 
         result.attestations.push({
           type: "bitcoin",
@@ -464,7 +471,7 @@ function parseOperationChain(
         });
       } else {
         // Unknown attestation type, skip payload
-        offset += payloadLen;
+        offset = payloadEnd;
       }
 
       // After an attestation, this branch is done
