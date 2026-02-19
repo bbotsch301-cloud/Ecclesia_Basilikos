@@ -27,9 +27,7 @@ import {
   Globe,
   Mail
 } from "lucide-react";
-import { useAuth } from "@/hooks/useAuth";
 import { Link } from "wouter";
-import { useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -60,7 +58,6 @@ const contentSchema = z.object({
 type ContentFormData = z.infer<typeof contentSchema>;
 
 export default function AdminContent() {
-  const { user, isAuthenticated, isLoading } = useAuth();
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState("");
   const [pageFilter, setPageFilter] = useState<string>("all");
@@ -69,13 +66,6 @@ export default function AdminContent() {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"content" | "email-templates">("content");
-
-  // Check if user is admin
-  useEffect(() => {
-    if (!isLoading && (!isAuthenticated || user?.role !== 'admin')) {
-      window.location.href = '/';
-    }
-  }, [isAuthenticated, isLoading, user]);
 
   const form = useForm<ContentFormData>({
     resolver: zodResolver(contentSchema),
@@ -90,7 +80,6 @@ export default function AdminContent() {
 
   const { data: pageContent, isLoading: contentLoading } = useQuery<PageContent[]>({
     queryKey: ['/api/admin/page-content'],
-    enabled: isAuthenticated && user?.role === 'admin',
   });
 
   const createContentMutation = useMutation({
@@ -156,17 +145,6 @@ export default function AdminContent() {
       });
     },
   });
-
-  if (isLoading || !isAuthenticated || user?.role !== 'admin') {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading admin panel...</p>
-        </div>
-      </div>
-    );
-  }
 
   const filteredContent = pageContent?.filter(content => {
     const matchesSearch = content.pageName.toLowerCase().includes(searchTerm.toLowerCase()) ||

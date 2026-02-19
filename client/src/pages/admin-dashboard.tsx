@@ -2,26 +2,18 @@ import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Users, 
-  BookOpen, 
-  Video, 
-  FileText, 
-  MessageSquare, 
-  Activity,
+import {
+  Users,
+  BookOpen,
+  Video,
+  FileText,
+  MessageSquare,
   Plus,
   Eye,
   Edit,
-  Trash2,
-  MoreHorizontal,
-  Pin,
-  Lock,
   Download
 } from "lucide-react";
-import { useAuth } from "@/hooks/useAuth";
 import { Link } from "wouter";
-import { useEffect } from "react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 interface SystemStats {
   totalUsers: number;
@@ -64,46 +56,21 @@ interface AuditLog {
 }
 
 export default function AdminDashboard() {
-  const { user, isAuthenticated, isLoading } = useAuth();
-
-  // Temporarily disabled admin check for development
-  // useEffect(() => {
-  //   if (!isLoading && (!isAuthenticated || user?.role !== 'admin')) {
-  //     window.location.href = '/';
-  //   }
-  // }, [isAuthenticated, isLoading, user]);
-
   const { data: stats, isLoading: statsLoading } = useQuery<SystemStats>({
     queryKey: ['/api/admin/stats'],
-    enabled: isAuthenticated && user?.role === 'admin',
   });
 
   const { data: recentVideos, isLoading: videosLoading } = useQuery<Video[]>({
     queryKey: ['/api/admin/videos'],
-    enabled: isAuthenticated && user?.role === 'admin',
   });
 
   const { data: recentResources, isLoading: resourcesLoading } = useQuery<Resource[]>({
     queryKey: ['/api/admin/resources'],
-    enabled: isAuthenticated && user?.role === 'admin',
   });
 
   const { data: recentActivity, isLoading: activityLoading } = useQuery<AuditLog[]>({
     queryKey: ['/api/admin/activity'],
-    enabled: isAuthenticated && user?.role === 'admin',
   });
-
-  // Temporarily disabled admin check for development
-  // if (isLoading || !isAuthenticated || user?.role !== 'admin') {
-  //   return (
-  //     <div className="min-h-screen flex items-center justify-center">
-  //       <div className="text-center">
-  //         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto mb-4"></div>
-  //         <p className="text-gray-600">Loading admin dashboard...</p>
-  //       </div>
-  //     </div>
-  //   );
-  // }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -185,16 +152,10 @@ export default function AdminDashboard() {
                   Manage Videos
                 </Button>
               </Link>
-              <Link href="/admin/resources">
+              <Link href="/admin/videos">
                 <Button className="w-full justify-start" variant="outline">
                   <FileText className="h-4 w-4 mr-2" />
-                  Manage Resources
-                </Button>
-              </Link>
-              <Link href="/admin/courses">
-                <Button className="w-full justify-start" variant="outline">
-                  <BookOpen className="h-4 w-4 mr-2" />
-                  Manage Courses
+                  Manage Videos & Resources
                 </Button>
               </Link>
               <Link href="/admin/downloads">
@@ -224,10 +185,10 @@ export default function AdminDashboard() {
                   Manage Users
                 </Button>
               </Link>
-              <Link href="/admin/forum">
+              <Link href="/admin/contacts">
                 <Button className="w-full justify-start" variant="outline">
                   <MessageSquare className="h-4 w-4 mr-2" />
-                  Forum Moderation
+                  Contact Messages
                 </Button>
               </Link>
             </CardContent>
@@ -239,18 +200,6 @@ export default function AdminDashboard() {
               <CardDescription>Monitor and analyze system activity</CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
-              <Link href="/admin/analytics">
-                <Button className="w-full justify-start">
-                  <Activity className="h-4 w-4 mr-2" />
-                  View Analytics
-                </Button>
-              </Link>
-              <Link href="/admin/audit-log">
-                <Button className="w-full justify-start" variant="outline">
-                  <FileText className="h-4 w-4 mr-2" />
-                  Audit Log
-                </Button>
-              </Link>
               <Link href="/admin/trust-downloads">
                 <Button className="w-full justify-start" variant="outline">
                   <Download className="h-4 w-4 mr-2" />
@@ -292,27 +241,11 @@ export default function AdminDashboard() {
                         <Badge variant={video.isPublished ? "default" : "secondary"}>
                           {video.isPublished ? "Published" : "Draft"}
                         </Badge>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button size="sm" variant="ghost">
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent>
-                            <DropdownMenuItem>
-                              <Edit className="h-4 w-4 mr-2" />
-                              Edit
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                              <Eye className="h-4 w-4 mr-2" />
-                              View
-                            </DropdownMenuItem>
-                            <DropdownMenuItem className="text-red-600">
-                              <Trash2 className="h-4 w-4 mr-2" />
-                              Delete
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                        <Link href="/admin/videos">
+                          <Button size="sm" variant="ghost">
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                        </Link>
                       </div>
                     </div>
                   ))}
@@ -330,7 +263,7 @@ export default function AdminDashboard() {
                 <CardTitle>Recent Resources</CardTitle>
                 <CardDescription>Latest resource uploads and updates</CardDescription>
               </div>
-              <Link href="/admin/resources">
+              <Link href="/admin/videos">
                 <Button size="sm" variant="outline">
                   <Plus className="h-4 w-4 mr-1" />
                   Add Resource
@@ -354,27 +287,11 @@ export default function AdminDashboard() {
                         <Badge variant={resource.isPublished ? "default" : "secondary"}>
                           {resource.isPublished ? "Published" : "Draft"}
                         </Badge>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button size="sm" variant="ghost">
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent>
-                            <DropdownMenuItem>
-                              <Edit className="h-4 w-4 mr-2" />
-                              Edit
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                              <Eye className="h-4 w-4 mr-2" />
-                              View
-                            </DropdownMenuItem>
-                            <DropdownMenuItem className="text-red-600">
-                              <Trash2 className="h-4 w-4 mr-2" />
-                              Delete
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                        <Link href="/admin/videos">
+                          <Button size="sm" variant="ghost">
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                        </Link>
                       </div>
                     </div>
                   ))}

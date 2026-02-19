@@ -1,13 +1,13 @@
 import { Router } from 'express';
+import { z } from 'zod';
 import { storage } from './storage';
 import { requireAuth, requireAdmin, requireModerator, requireInstructor, loadUser, auditLog } from './adminMiddleware';
-import { 
-  insertVideoSchema, 
-  insertResourceSchema, 
-  insertCourseSchema, 
+import {
+  insertVideoSchema,
+  insertResourceSchema,
+  insertCourseSchema,
   insertLessonSchema,
   insertForumCategorySchema,
-  updateUserRoleSchema,
   insertPageContentSchema,
   updatePageContentSchema,
   insertDownloadSchema
@@ -37,7 +37,7 @@ router.get('/users', requireAdmin, async (req, res) => {
 router.patch('/users/:id/role', requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
-    const { role } = updateUserRoleSchema.parse(req.body);
+    const { role } = z.object({ role: z.enum(['student', 'instructor', 'moderator', 'admin']) }).parse(req.body);
     
     const oldUser = await storage.getUser(id);
     const updatedUser = await storage.updateUserRole(id, role);
@@ -130,7 +130,7 @@ router.get('/videos', requireInstructor, async (req, res) => {
 // Create video
 router.post('/videos', requireInstructor, async (req, res) => {
   try {
-    const videoData = insertVideoSchema.parse(req.body);
+    const videoData = insertVideoSchema.omit({ createdById: true }).parse(req.body);
     const video = await storage.createVideo({
       ...videoData,
       createdById: req.user!.id,
@@ -251,7 +251,7 @@ router.get('/resources', requireInstructor, async (req, res) => {
 // Create resource
 router.post('/resources', requireInstructor, async (req, res) => {
   try {
-    const resourceData = insertResourceSchema.parse(req.body);
+    const resourceData = insertResourceSchema.omit({ createdById: true }).parse(req.body);
     const resource = await storage.createResource({
       ...resourceData,
       createdById: req.user!.id,
@@ -842,7 +842,7 @@ router.delete('/page-content/:id', requireAdmin, async (req, res) => {
 // ================================
 
 // Get all downloads
-router.get('/downloads', async (req, res) => {
+router.get('/downloads', requireAdmin, async (req, res) => {
   try {
     const allDownloads = await storage.getAllDownloads();
     res.json(allDownloads);
@@ -852,7 +852,7 @@ router.get('/downloads', async (req, res) => {
   }
 });
 
-router.get('/downloads/:id', async (req, res) => {
+router.get('/downloads/:id', requireAdmin, async (req, res) => {
   try {
     const download = await storage.getDownload(req.params.id);
     if (!download) {
@@ -865,25 +865,46 @@ router.get('/downloads/:id', async (req, res) => {
   }
 });
 
-router.post('/downloads', async (req, res) => {
+router.post('/downloads', requireAdmin, async (req, res) => {
   try {
     const downloadData = insertDownloadSchema.parse(req.body);
     const download = await storage.createDownload(downloadData);
 
-    // Audit log skipped for development
-    
-    res.json(download);
+    await auditLog(
+      req.user!.id,
+      'CREATE',
+      'DOWNLOAD',
+      download.id,
+      null,
+      download,
+      req.ip,
+      req.get('User-Agent')
+    );
+
+    res.status(201).json(download);
   } catch (error) {
     console.error('Error creating download:', error);
     res.status(500).json({ error: 'Failed to create download' });
   }
 });
 
-router.put('/downloads/:id', async (req, res) => {
+router.put('/downloads/:id', requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
+    const oldDownload = await storage.getDownload(id);
     const updates = insertDownloadSchema.partial().parse(req.body);
     const updated = await storage.updateDownload(id, updates);
+
+    await auditLog(
+      req.user!.id,
+      'UPDATE',
+      'DOWNLOAD',
+      id,
+      oldDownload,
+      updated,
+      req.ip,
+      req.get('User-Agent')
+    );
 
     res.json(updated);
   } catch (error) {
@@ -892,10 +913,23 @@ router.put('/downloads/:id', async (req, res) => {
   }
 });
 
-router.patch('/downloads/:id/toggle-published', async (req, res) => {
+router.patch('/downloads/:id/toggle-published', requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
+    const oldDownload = await storage.getDownload(id);
     const updated = await storage.toggleDownloadPublished(id);
+
+    await auditLog(
+      req.user!.id,
+      'UPDATE',
+      'DOWNLOAD',
+      id,
+      { isPublished: oldDownload?.isPublished },
+      { isPublished: updated.isPublished },
+      req.ip,
+      req.get('User-Agent')
+    );
+
     res.json(updated);
   } catch (error) {
     console.error('Error toggling download published:', error);
@@ -903,10 +937,23 @@ router.patch('/downloads/:id/toggle-published', async (req, res) => {
   }
 });
 
-router.delete('/downloads/:id', async (req, res) => {
+router.delete('/downloads/:id', requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
+    const oldDownload = await storage.getDownload(id);
     await storage.deleteDownload(id);
+
+    await auditLog(
+      req.user!.id,
+      'DELETE',
+      'DOWNLOAD',
+      id,
+      oldDownload,
+      null,
+      req.ip,
+      req.get('User-Agent')
+    );
+
     res.json({ success: true });
   } catch (error) {
     console.error('Error deleting download:', error);

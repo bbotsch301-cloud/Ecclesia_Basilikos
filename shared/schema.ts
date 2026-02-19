@@ -1,11 +1,15 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, timestamp, boolean, integer, pgEnum } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, timestamp, boolean, integer, pgEnum, index, uniqueIndex } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
 // Define user roles enum
 export const userRoleEnum = pgEnum('user_role', ['student', 'instructor', 'moderator', 'admin']);
+
+// Proof Vault enums
+export const proofStatusEnum = pgEnum('proof_status', ['pending', 'confirmed', 'failed']);
+export const proofModeEnum = pgEnum('proof_mode', ['file', 'hash']);
 
 export const users = pgTable("users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -111,7 +115,9 @@ export const videoProgress = pgTable("video_progress", {
   isCompleted: boolean("is_completed").default(false),
   lastWatchedAt: timestamp("last_watched_at").defaultNow(),
   createdAt: timestamp("created_at").defaultNow(),
-});
+}, (table) => [
+  uniqueIndex("uq_video_progress_user_video").on(table.userId, table.videoId),
+]);
 
 // Course section progress
 export const sectionProgress = pgTable("section_progress", {
@@ -121,7 +127,9 @@ export const sectionProgress = pgTable("section_progress", {
   isCompleted: boolean("is_completed").default(false),
   completedAt: timestamp("completed_at"),
   createdAt: timestamp("created_at").defaultNow(),
-});
+}, (table) => [
+  uniqueIndex("uq_section_progress_user_section").on(table.userId, table.sectionId),
+]);
 
 // Resources table for downloadable content
 export const resources = pgTable("resources", {
@@ -158,7 +166,9 @@ export const enrollments = pgTable("enrollments", {
   enrolledAt: timestamp("enrolled_at").defaultNow(),
   completedAt: timestamp("completed_at"),
   progress: integer("progress").default(0), // percentage 0-100
-});
+}, (table) => [
+  uniqueIndex("uq_enrollments_user_course").on(table.userId, table.courseId),
+]);
 
 export const lesson_progress = pgTable("lesson_progress", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -166,7 +176,9 @@ export const lesson_progress = pgTable("lesson_progress", {
   lessonId: varchar("lesson_id").notNull().references(() => lessons.id),
   completed: boolean("completed").default(false),
   completedAt: timestamp("completed_at"),
-});
+}, (table) => [
+  uniqueIndex("uq_lesson_progress_user_lesson").on(table.userId, table.lessonId),
+]);
 
 export const downloads = pgTable("downloads", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -202,7 +214,9 @@ export const page_content = pgTable("page_content", {
   updatedById: varchar("updated_by_id").notNull().references(() => users.id),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-});
+}, (table) => [
+  uniqueIndex("uq_page_content_page_key").on(table.pageName, table.contentKey),
+]);
 
 export const forum_categories = pgTable("forum_categories", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -248,7 +262,10 @@ export const forum_likes = pgTable("forum_likes", {
   threadId: varchar("thread_id").references(() => forum_threads.id),
   replyId: varchar("reply_id").references(() => forum_replies.id),
   createdAt: timestamp("created_at").defaultNow(),
-});
+}, (table) => [
+  uniqueIndex("uq_forum_likes_thread").on(table.userId, table.threadId),
+  uniqueIndex("uq_forum_likes_reply").on(table.userId, table.replyId),
+]);
 
 // Admin audit log table
 export const admin_audit_log = pgTable("admin_audit_log", {
@@ -590,6 +607,52 @@ export const trustDownloads = pgTable("trust_downloads", {
 export const insertTrustDownloadSchema = createInsertSchema(trustDownloads);
 export type InsertTrustDownload = z.infer<typeof insertTrustDownloadSchema>;
 export type TrustDownload = typeof trustDownloads.$inferSelect;
+
+// Proof Vault - timestamped proof records
+export const proofs = pgTable("proofs", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  mode: proofModeEnum("mode").notNull(),
+  originalFilename: text("original_filename"),
+  mimeType: text("mime_type"),
+  sizeBytes: integer("size_bytes"),
+  sha256: text("sha256").notNull(),
+  provider: text("provider").default('opentimestamps'),
+  status: proofStatusEnum("status").default('pending'),
+  otsProof: text("ots_proof"), // base64-encoded OTS proof binary
+  storageKey: text("storage_key"), // randomized key for stored file (if applicable)
+  label: text("label"), // user-provided description
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+  lastUpgradeAttemptAt: timestamp("last_upgrade_attempt_at"),
+  errorMessage: text("error_message"),
+}, (table) => [
+  index("proofs_user_id_idx").on(table.userId),
+  index("proofs_sha256_idx").on(table.sha256),
+]);
+
+export const proofRelations = relations(proofs, ({ one }) => ({
+  user: one(users, {
+    fields: [proofs.userId],
+    references: [users.id],
+  }),
+}));
+
+export const insertProofSchema = createInsertSchema(proofs).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+  lastUpgradeAttemptAt: true,
+  errorMessage: true,
+});
+
+export const createProofHashSchema = z.object({
+  sha256: z.string().regex(/^[a-fA-F0-9]{64}$/, "Must be a valid SHA-256 hex string"),
+  label: z.string().max(200).optional(),
+});
+
+export type InsertProof = z.infer<typeof insertProofSchema>;
+export type Proof = typeof proofs.$inferSelect;
 
 // Video management types
 export type InsertCourseSection = z.infer<typeof insertCourseSectionSchema>;

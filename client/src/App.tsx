@@ -19,6 +19,8 @@ import AdminContent from "@/pages/admin-content";
 import AdminTrustDownloads from "@/pages/admin-trust-downloads";
 import AdminVideos from "@/pages/admin-videos";
 import AdminDownloads from "@/pages/admin-downloads";
+import AdminUsers from "@/pages/admin-users";
+import AdminContactMessages from "@/pages/admin-contact-messages";
 import NewCovenantIntro from "@/pages/new-covenant-intro";
 import Courses from "@/pages/courses";
 import MyCourses from "@/pages/my-courses";
@@ -27,6 +29,11 @@ import VerifyEmail from "@/pages/verify-email";
 import Mandate from "@/pages/mandate";
 import Repository from "@/pages/repository";
 import Downloads from "@/pages/downloads";
+import ProofVault from "@/pages/proof-vault";
+import ProofVaultNew from "@/pages/proof-vault-new";
+import ProofVaultDetail from "@/pages/proof-vault-detail";
+import ProofVaultVerify from "@/pages/proof-vault-verify";
+import RequireAdmin from "@/components/RequireAdmin";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -53,11 +60,19 @@ function Router() {
           <Route path="/course/:courseId" component={CourseLesson} />
           <Route path="/course/:courseId/lesson/:lessonId" component={CourseLesson} />
           <Route path="/verify-email" component={VerifyEmail} />
-          <Route path="/admin/content" component={AdminContent} />
-          <Route path="/admin/trust-downloads" component={AdminTrustDownloads} />
-          <Route path="/admin/videos" component={AdminVideos} />
-          <Route path="/admin/downloads" component={AdminDownloads} />
-          <Route path="/admin" component={AdminDashboard} />
+          {/* Proof Vault routes */}
+          <Route path="/proof-vault" component={ProofVault} />
+          <Route path="/proof-vault/new" component={ProofVaultNew} />
+          <Route path="/proof-vault/proofs/:id" component={ProofVaultDetail} />
+          <Route path="/proof-vault/verify" component={ProofVaultVerify} />
+          {/* Admin routes - client-side gate + server-side requireAdmin middleware */}
+          <Route path="/admin/content">{() => <RequireAdmin><AdminContent /></RequireAdmin>}</Route>
+          <Route path="/admin/trust-downloads">{() => <RequireAdmin><AdminTrustDownloads /></RequireAdmin>}</Route>
+          <Route path="/admin/videos">{() => <RequireAdmin><AdminVideos /></RequireAdmin>}</Route>
+          <Route path="/admin/downloads">{() => <RequireAdmin><AdminDownloads /></RequireAdmin>}</Route>
+          <Route path="/admin/users">{() => <RequireAdmin><AdminUsers /></RequireAdmin>}</Route>
+          <Route path="/admin/contacts">{() => <RequireAdmin><AdminContactMessages /></RequireAdmin>}</Route>
+          <Route path="/admin">{() => <RequireAdmin><AdminDashboard /></RequireAdmin>}</Route>
           <Route component={NotFound} />
         </Switch>
       </main>

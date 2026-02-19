@@ -59,11 +59,6 @@ export default function TrustDownload() {
   };
 
   const handleDownload = () => {
-    // Track download event
-    apiRequest("POST", "/api/track-download", { documentType: "trust-document" })
-      .catch(console.error);
-    
-    // Trigger download
     window.open(downloadUrl, '_blank');
   };
 

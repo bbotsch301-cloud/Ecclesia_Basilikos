@@ -1,875 +1,780 @@
-import { useState, useEffect } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { 
-  Video, 
-  Plus, 
-  Edit, 
-  Trash2, 
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Video,
+  Plus,
+  Edit,
+  Trash2,
   Upload,
   FileText,
-  Download,
-  Youtube
+  Eye,
+  EyeOff,
+  Star,
+  ArrowLeft,
+  Search
 } from "lucide-react";
+import { Link } from "wouter";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/hooks/useAuth";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { ObjectUploader } from "@/components/ObjectUploader";
 import type { UploadResult } from "@uppy/core";
 
-const videoSchema = z.object({
-  courseId: z.string().min(1, "Course is required"),
-  lessonId: z.string().min(1, "Lesson is required"),
-  youtubeVideoId: z.string().min(1, "YouTube Video ID is required"),
+// Matches server's insertVideoSchema (minus id, viewCount, createdAt, updatedAt, createdById)
+const videoFormSchema = z.object({
   title: z.string().min(1, "Title is required"),
-  description: z.string().optional(),
+  description: z.string().optional().or(z.literal("")),
+  videoUrl: z.string().optional().or(z.literal("")),
+  embedUrl: z.string().optional().or(z.literal("")),
+  thumbnailUrl: z.string().optional().or(z.literal("")),
+  category: z.string().min(1, "Category is required"),
+  tags: z.string().optional().or(z.literal("")),
+  duration: z.string().optional().or(z.literal("")),
+  isPublished: z.boolean().default(false),
+  isFeatured: z.boolean().default(false),
 });
 
-const fileSchema = z.object({
-  lessonId: z.string().min(1, "Lesson is required"),
-  name: z.string().min(1, "File name is required"),
-  type: z.string().min(1, "File type is required"),
-  size: z.string().min(1, "File size is required"),
-  downloadUrl: z.string().min(1, "Download URL is required"),
+// Matches server's insertResourceSchema (minus id, downloadCount, createdAt, updatedAt, createdById)
+const resourceFormSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  description: z.string().optional().or(z.literal("")),
+  category: z.string().min(1, "Category is required"),
+  fileUrl: z.string().min(1, "File URL is required"),
+  fileType: z.string().min(1, "File type is required"),
+  fileSize: z.coerce.number().optional(),
+  isPublished: z.boolean().default(false),
 });
 
 interface VideoData {
   id: string;
-  courseId: string;
-  lessonId: string;
-  youtubeVideoId: string;
   title: string;
-  description?: string;
-  courseName: string;
-  lessonTitle: string;
+  description: string | null;
+  videoUrl: string | null;
+  embedUrl: string | null;
+  thumbnailUrl: string | null;
+  category: string;
+  tags: string | null;
+  duration: string | null;
+  isPublished: boolean | null;
+  isFeatured: boolean | null;
+  viewCount: number | null;
+  createdById: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
-interface FileData {
+interface ResourceData {
   id: string;
-  lessonId: string;
-  name: string;
-  type: string;
-  size: string;
-  downloadUrl: string;
-  courseName: string;
-  lessonTitle: string;
+  title: string;
+  description: string | null;
+  category: string;
+  fileUrl: string;
+  fileType: string;
+  fileSize: number | null;
+  isPublished: boolean | null;
+  downloadCount: number | null;
+  createdById: string;
+  createdAt: string;
+  updatedAt: string;
 }
-
-// Course data matching the actual course system
-const sampleCourses = [
-  { id: "1", title: "Trust Fundamentals", description: "Understanding the biblical foundation of trust relationships and your role as a trustee in God's kingdom economy." },
-  { id: "2", title: "Advanced Trust Strategies", description: "Advanced techniques for trust management and wealth preservation." },
-  { id: "3", title: "Estate Planning Mastery", description: "Comprehensive estate planning and legacy building strategies." },
-  { id: "4", title: "Investment & Asset Management", description: "Biblical principles for managing trust assets and investments." },
-  { id: "5", title: "Tax Strategy & Compliance", description: "Navigating tax implications and compliance requirements for trusts." },
-  { id: "6", title: "Wealth Transfer Strategies", description: "Effective strategies for transferring wealth across generations." },
-];
-
-const sampleLessons = [
-  { id: "1", title: "Introduction to Biblical Trusts", courseId: "1" },
-  { id: "2", title: "Legal Structures and Kingdom Authority", courseId: "1" },
-  { id: "3", title: "Trustee Responsibilities and Biblical Stewardship", courseId: "1" },
-  { id: "4", title: "Asset Management and Investment Principles", courseId: "1" },
-  { id: "5", title: "Banking and Financial Institutions", courseId: "1" },
-  { id: "6", title: "Cryptocurrency and Digital Assets", courseId: "1" },
-  { id: "7", title: "Wealth Legacy Building", courseId: "1" },
-  { id: "8", title: "Practical Trust Administration", courseId: "1" },
-];
 
 export default function AdminVideos() {
-  const { user, isAuthenticated, isLoading } = useAuth();
   const { toast } = useToast();
-  const queryClient = useQueryClient();
-  
-  // Check if user is admin or instructor
-  useEffect(() => {
-    if (!isLoading && (!isAuthenticated || (user?.role !== 'admin' && user?.role !== 'instructor'))) {
-      window.location.href = '/';
-    }
-  }, [isAuthenticated, isLoading, user]);
-  const [selectedCourse, setSelectedCourse] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [videoDialogOpen, setVideoDialogOpen] = useState(false);
-  const [fileDialogOpen, setFileDialogOpen] = useState(false);
+  const [resourceDialogOpen, setResourceDialogOpen] = useState(false);
   const [editingVideo, setEditingVideo] = useState<VideoData | null>(null);
-  const [editingFile, setEditingFile] = useState<FileData | null>(null);
-  const [uploadedFiles, setUploadedFiles] = useState<Array<{
-    name: string;
-    size: string;
-    type: string;
-    uploadUrl: string;
-  }>>([]);
+  const [editingResource, setEditingResource] = useState<ResourceData | null>(null);
 
-  // Load videos from API - only when authenticated
-  const { data: videos } = useQuery<VideoData[]>({ 
+  // Real API queries
+  const { data: videos, isLoading: videosLoading } = useQuery<VideoData[]>({
     queryKey: ['/api/admin/videos'],
-    enabled: isAuthenticated && (user?.role === 'admin' || user?.role === 'instructor')
   });
-  
-  // Current video data from the course system
-  const sampleVideos: VideoData[] = [
-    {
-      id: "1",
-      courseId: "1",
-      lessonId: "1", 
-      youtubeVideoId: "dQw4w9WgXcQ",
-      title: "Introduction to Biblical Trusts",
-      description: "Understanding the scriptural foundation of trust relationships and your role as a trustee in God's kingdom economy.",
-      courseName: "Trust Fundamentals",
-      lessonTitle: "Introduction to Biblical Trusts"
-    },
-    {
-      id: "2",
-      courseId: "1",
-      lessonId: "2", 
-      youtubeVideoId: "dQw4w9WgXcQ",
-      title: "Legal Structures and Kingdom Authority",
-      description: "How to establish trust structures that honor God's authority while operating effectively in the modern legal system.",
-      courseName: "Trust Fundamentals",
-      lessonTitle: "Legal Structures and Kingdom Authority"
-    },
-    {
-      id: "3",
-      courseId: "1",
-      lessonId: "3", 
-      youtubeVideoId: "dQw4w9WgXcQ",
-      title: "Trustee Responsibilities and Biblical Stewardship",
-      description: "Understanding your duties and obligations as a faithful trustee managing God's resources.",
-      courseName: "Trust Fundamentals",
-      lessonTitle: "Trustee Responsibilities and Biblical Stewardship"
-    },
-    {
-      id: "4",
-      courseId: "1",
-      lessonId: "4", 
-      youtubeVideoId: "dQw4w9WgXcQ",
-      title: "Asset Management and Investment Principles",
-      description: "Biblical principles for managing trust assets, investments, and growing wealth according to Kingdom values.",
-      courseName: "Trust Fundamentals",
-      lessonTitle: "Asset Management and Investment Principles"
-    },
-    {
-      id: "5",
-      courseId: "1",
-      lessonId: "5", 
-      youtubeVideoId: "dQw4w9WgXcQ",
-      title: "Banking and Financial Institutions",
-      description: "Working with banks, managing accounts, and establishing proper financial relationships as a trustee.",
-      courseName: "Trust Fundamentals",
-      lessonTitle: "Banking and Financial Institutions"
-    },
-    {
-      id: "6",
-      courseId: "1",
-      lessonId: "6", 
-      youtubeVideoId: "dQw4w9WgXcQ",
-      title: "Cryptocurrency and Digital Assets",
-      description: "Understanding and managing digital assets, cryptocurrency, and modern investment vehicles within a trust.",
-      courseName: "Trust Fundamentals",
-      lessonTitle: "Cryptocurrency and Digital Assets"
-    },
-    {
-      id: "7",
-      courseId: "1",
-      lessonId: "7", 
-      youtubeVideoId: "dQw4w9WgXcQ",
-      title: "Wealth Legacy Building",
-      description: "Creating lasting financial legacies that honor God and bless future generations through proper trust management.",
-      courseName: "Trust Fundamentals",
-      lessonTitle: "Wealth Legacy Building"
-    },
-    {
-      id: "8",
-      courseId: "1",
-      lessonId: "8", 
-      youtubeVideoId: "dQw4w9WgXcQ",
-      title: "Practical Trust Administration",
-      description: "Daily operations, record keeping, beneficiary communication, and practical aspects of trust management.",
-      courseName: "Trust Fundamentals",
-      lessonTitle: "Practical Trust Administration"
-    }
-  ];
 
-  const sampleFiles: FileData[] = [
-    {
-      id: "1",
-      lessonId: "1",
-      name: "Trust Administration Guide",
-      type: "PDF",
-      size: "2.3 MB",
-      downloadUrl: "/api/files/trust-admin-guide.pdf",
-      courseName: "Trust Fundamentals",
-      lessonTitle: "Introduction to Biblical Trusts"
-    },
-    {
-      id: "2",
-      lessonId: "1",
-      name: "Biblical Stewardship Principles",
-      type: "PDF",
-      size: "1.8 MB",
-      downloadUrl: "/api/files/stewardship-principles.pdf",
-      courseName: "Trust Fundamentals",
-      lessonTitle: "Introduction to Biblical Trusts"
-    },
-    {
-      id: "3",
-      lessonId: "2",
-      name: "Legal Structure Templates",
-      type: "PDF",
-      size: "3.1 MB",
-      downloadUrl: "/api/files/legal-templates.pdf",
-      courseName: "Trust Fundamentals",
-      lessonTitle: "Legal Structures and Kingdom Authority"
-    },
-    {
-      id: "4",
-      lessonId: "3",
-      name: "Trustee Duties Checklist",
-      type: "PDF",
-      size: "1.2 MB",
-      downloadUrl: "/api/files/trustee-checklist.pdf",
-      courseName: "Trust Fundamentals",
-      lessonTitle: "Trustee Responsibilities and Biblical Stewardship"
-    }
-  ];
+  const { data: resources, isLoading: resourcesLoading } = useQuery<ResourceData[]>({
+    queryKey: ['/api/admin/resources'],
+  });
 
+  // Forms
   const videoForm = useForm({
-    resolver: zodResolver(videoSchema),
+    resolver: zodResolver(videoFormSchema),
     defaultValues: {
-      courseId: "",
-      lessonId: "",
-      youtubeVideoId: "",
       title: "",
       description: "",
-    }
+      videoUrl: "",
+      embedUrl: "",
+      thumbnailUrl: "",
+      category: "",
+      tags: "",
+      duration: "",
+      isPublished: false,
+      isFeatured: false,
+    },
   });
 
-  const fileForm = useForm({
-    resolver: zodResolver(fileSchema),
+  const resourceForm = useForm({
+    resolver: zodResolver(resourceFormSchema),
     defaultValues: {
-      lessonId: "",
-      name: "",
-      type: "",
-      size: "",
-      downloadUrl: "",
-    }
+      title: "",
+      description: "",
+      category: "",
+      fileUrl: "",
+      fileType: "",
+      fileSize: undefined as number | undefined,
+      isPublished: false,
+    },
   });
 
-  const handleGetUploadParameters = async () => {
-    try {
-      const response = await apiRequest("POST", "/api/objects/upload", {});
-      const data = await response.json();
-      return {
-        method: "PUT" as const,
-        url: data.uploadURL,
-      };
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to get upload URL. Please try again.",
-        variant: "destructive",
-      });
-      throw error;
-    }
-  };
-
-  const handleUploadComplete = (result: UploadResult<Record<string, unknown>, Record<string, unknown>>) => {
-    if (result.successful && result.successful.length > 0) {
-      const newFiles = result.successful.map((file: any) => ({
-        name: file.name,
-        size: `${(file.size / (1024 * 1024)).toFixed(1)} MB`,
-        type: file.type.split('/')[1].toUpperCase(),
-        uploadUrl: file.uploadURL || file.response?.uploadURL || "",
-      }));
-      
-      setUploadedFiles(prev => [...prev, ...newFiles]);
-      
-      toast({
-        title: "Upload successful",
-        description: `${newFiles.length} file(s) uploaded successfully.`,
-      });
-    }
-  };
-
+  // Video mutations
   const videoMutation = useMutation({
-    mutationFn: async (data: z.infer<typeof videoSchema>) => {
+    mutationFn: async (data: z.infer<typeof videoFormSchema>) => {
       if (editingVideo) {
         return apiRequest('PATCH', `/api/admin/videos/${editingVideo.id}`, data);
-      } else {
-        return apiRequest('POST', '/api/admin/videos', data);
       }
+      return apiRequest('POST', '/api/admin/videos', data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/admin/videos'] });
       toast({
         title: "Success",
-        description: editingVideo ? "Video updated successfully" : "Video added successfully",
+        description: editingVideo ? "Video updated successfully" : "Video created successfully",
       });
       setVideoDialogOpen(false);
       videoForm.reset();
-      setUploadedFiles([]);
       setEditingVideo(null);
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       toast({
         title: "Error",
-        description: "Failed to save video",
+        description: error.message || "Failed to save video",
         variant: "destructive",
       });
     },
   });
 
-  const handleVideoSubmit = async (data: z.infer<typeof videoSchema>) => {
-    const videoData = {
-      ...data,
-      files: uploadedFiles
-    };
-    videoMutation.mutate(videoData);
-  };
-
-  const fileMutation = useMutation({
-    mutationFn: async (data: z.infer<typeof fileSchema>) => {
-      if (editingFile) {
-        return apiRequest('PATCH', `/api/admin/files/${editingFile.id}`, data);
-      } else {
-        return apiRequest('POST', '/api/admin/files', data);
-      }
+  const deleteVideoMutation = useMutation({
+    mutationFn: async (id: string) => {
+      return apiRequest('DELETE', `/api/admin/videos/${id}`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/admin/files'] });
-      toast({
-        title: "Success", 
-        description: editingFile ? "File updated successfully" : "File added successfully",
-      });
-      setFileDialogOpen(false);
-      fileForm.reset();
-      setEditingFile(null);
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/videos'] });
+      toast({ title: "Video Deleted", description: "Video has been deleted successfully." });
     },
-    onError: (error) => {
+    onError: (error: Error) => {
+      toast({ title: "Error", description: error.message || "Failed to delete video", variant: "destructive" });
+    },
+  });
+
+  const toggleVideoPublishedMutation = useMutation({
+    mutationFn: async (id: string) => {
+      return apiRequest('PATCH', `/api/admin/videos/${id}/toggle-published`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/videos'] });
+      toast({ title: "Status Updated", description: "Video publish status updated." });
+    },
+    onError: (error: Error) => {
+      toast({ title: "Error", description: error.message || "Failed to update video", variant: "destructive" });
+    },
+  });
+
+  // Resource mutations
+  const resourceMutation = useMutation({
+    mutationFn: async (data: z.infer<typeof resourceFormSchema>) => {
+      if (editingResource) {
+        return apiRequest('PATCH', `/api/admin/resources/${editingResource.id}`, data);
+      }
+      return apiRequest('POST', '/api/admin/resources', data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/resources'] });
+      toast({
+        title: "Success",
+        description: editingResource ? "Resource updated successfully" : "Resource created successfully",
+      });
+      setResourceDialogOpen(false);
+      resourceForm.reset();
+      setEditingResource(null);
+    },
+    onError: (error: Error) => {
       toast({
         title: "Error",
-        description: "Failed to save file",
+        description: error.message || "Failed to save resource",
         variant: "destructive",
       });
     },
   });
 
-  const handleFileSubmit = async (data: z.infer<typeof fileSchema>) => {
-    fileMutation.mutate(data);
+  const deleteResourceMutation = useMutation({
+    mutationFn: async (id: string) => {
+      return apiRequest('DELETE', `/api/admin/resources/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/resources'] });
+      toast({ title: "Resource Deleted", description: "Resource has been deleted successfully." });
+    },
+    onError: (error: Error) => {
+      toast({ title: "Error", description: error.message || "Failed to delete resource", variant: "destructive" });
+    },
+  });
+
+  const toggleResourcePublishedMutation = useMutation({
+    mutationFn: async (id: string) => {
+      return apiRequest('PATCH', `/api/admin/resources/${id}/toggle-published`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/resources'] });
+      toast({ title: "Status Updated", description: "Resource publish status updated." });
+    },
+    onError: (error: Error) => {
+      toast({ title: "Error", description: error.message || "Failed to update resource", variant: "destructive" });
+    },
+  });
+
+  // Upload handler for resource files
+  const handleGetUploadParameters = async () => {
+    try {
+      const response = await apiRequest("POST", "/api/objects/upload", {});
+      const data = await response.json();
+      return { method: "PUT" as const, url: data.uploadURL };
+    } catch (error) {
+      toast({ title: "Error", description: "Failed to get upload URL.", variant: "destructive" });
+      throw error;
+    }
   };
 
-  // Show loading screen while checking authentication
-  if (isLoading || !isAuthenticated || (user?.role !== 'admin' && user?.role !== 'instructor')) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-covenant-blue mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading admin panel...</p>
-        </div>
-      </div>
-    );
-  }
+  const handleResourceUploadComplete = (result: UploadResult<Record<string, unknown>, Record<string, unknown>>) => {
+    if (result.successful && result.successful.length > 0) {
+      const file = result.successful[0] as any;
+      resourceForm.setValue("fileUrl", file.uploadURL || file.response?.uploadURL || "");
+      resourceForm.setValue("fileType", file.type?.split('/')[1]?.toUpperCase() || "FILE");
+      resourceForm.setValue("fileSize", file.size || 0);
+      toast({ title: "Upload successful", description: `${file.name} uploaded successfully.` });
+    }
+  };
 
-  const filteredLessons = selectedCourse && selectedCourse !== "all"
-    ? sampleLessons.filter(lesson => lesson.courseId === selectedCourse)
-    : sampleLessons;
+  // Filtering
+  const filteredVideos = videos?.filter(video =>
+    video.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    video.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (video.description || "").toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-  // Use real API data when available, fallback to sample data for demo
-  const videosToDisplay: VideoData[] = (videos && Array.isArray(videos)) ? videos : sampleVideos;
-  const filesToDisplay = sampleFiles; // Files API integration can be added later
-
-  const filteredVideos = selectedCourse && selectedCourse !== "all"
-    ? videosToDisplay.filter((video: VideoData) => video.courseId === selectedCourse)
-    : videosToDisplay;
-
-  const filteredFiles = selectedCourse && selectedCourse !== "all"
-    ? filesToDisplay.filter(file => {
-        const lesson = sampleLessons.find(l => l.id === file.lessonId);
-        return lesson?.courseId === selectedCourse;
-      })
-    : filesToDisplay;
+  const filteredResources = resources?.filter(resource =>
+    resource.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    resource.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (resource.description || "").toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-covenant-light via-white to-covenant-light p-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-playfair font-bold text-covenant-blue">Video Management</h1>
-            <p className="text-covenant-gray mt-2">Manage course videos and lesson files</p>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      {/* Header */}
+      <div className="bg-white dark:bg-gray-800 shadow">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-6">
+            <div className="flex items-center space-x-4">
+              <Link href="/admin">
+                <Button variant="ghost" size="sm">
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Back to Dashboard
+                </Button>
+              </Link>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Videos & Resources</h1>
+                <p className="text-gray-600 dark:text-gray-300">Manage video content and downloadable resources</p>
+              </div>
+            </div>
           </div>
-          <div className="flex gap-3">
-            <Dialog open={videoDialogOpen} onOpenChange={setVideoDialogOpen}>
-              <DialogTrigger asChild>
-                <Button className="bg-covenant-blue hover:bg-covenant-blue/80 text-white">
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Search */}
+        <div className="mb-6">
+          <div className="relative max-w-md">
+            <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+            <Input
+              placeholder="Search videos and resources..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10"
+            />
+          </div>
+        </div>
+
+        <Tabs defaultValue="videos">
+          <TabsList>
+            <TabsTrigger value="videos">
+              <Video className="h-4 w-4 mr-2" />
+              Videos ({videos?.length || 0})
+            </TabsTrigger>
+            <TabsTrigger value="resources">
+              <FileText className="h-4 w-4 mr-2" />
+              Resources ({resources?.length || 0})
+            </TabsTrigger>
+          </TabsList>
+
+          {/* Videos Tab */}
+          <TabsContent value="videos">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle>Videos</CardTitle>
+                  <CardDescription>Manage video teachings and content</CardDescription>
+                </div>
+                <Button onClick={() => {
+                  setEditingVideo(null);
+                  videoForm.reset();
+                  setVideoDialogOpen(true);
+                }}>
                   <Plus className="h-4 w-4 mr-2" />
                   Add Video
                 </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-2xl">
-                <DialogHeader>
-                  <DialogTitle>{editingVideo ? 'Edit Video' : 'Add New Video'}</DialogTitle>
-                  <DialogDescription>
-                    {editingVideo ? 'Update video details' : 'Add a new YouTube video to a lesson'}
-                  </DialogDescription>
-                </DialogHeader>
-                <Form {...videoForm}>
-                  <form onSubmit={videoForm.handleSubmit(handleVideoSubmit)} className="space-y-6">
-                    <div className="grid grid-cols-2 gap-4">
-                      <FormField
-                        control={videoForm.control}
-                        name="courseId"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Course</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select course" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                {sampleCourses.map((course) => (
-                                  <SelectItem key={course.id} value={course.id}>
-                                    {course.title}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={videoForm.control}
-                        name="lessonId"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Lesson</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select lesson" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                {filteredLessons.map((lesson) => (
-                                  <SelectItem key={lesson.id} value={lesson.id}>
-                                    {lesson.title}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    
-                    <FormField
-                      control={videoForm.control}
-                      name="youtubeVideoId"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>YouTube Video ID</FormLabel>
-                          <FormControl>
-                            <Input placeholder="dQw4w9WgXcQ" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={videoForm.control}
-                      name="title"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Video Title</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Enter video title" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={videoForm.control}
-                      name="description"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Description (Optional)</FormLabel>
-                          <FormControl>
-                            <Textarea placeholder="Enter video description" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    {/* File Upload Section */}
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <h3 className="text-lg font-semibold text-covenant-blue">Downloadable Files</h3>
-                        <ObjectUploader
-                          maxNumberOfFiles={5}
-                          maxFileSize={50485760} // 50MB
-                          onGetUploadParameters={handleGetUploadParameters}
-                          onComplete={handleUploadComplete}
-                          buttonClassName="bg-covenant-blue hover:bg-covenant-blue/80 text-white"
-                        >
-                          <Upload className="h-4 w-4 mr-2" />
-                          Upload Files
-                        </ObjectUploader>
-                      </div>
-                      
-                      {uploadedFiles.length > 0 && (
-                        <div className="space-y-2">
-                          {uploadedFiles.map((file, index) => (
-                            <div key={index} className="flex items-center justify-between p-3 border border-covenant-light rounded-lg bg-gray-50">
-                              <div className="flex items-center space-x-3">
-                                <FileText className="h-5 w-5 text-covenant-blue" />
-                                <div>
-                                  <p className="font-medium text-covenant-blue">{file.name}</p>
-                                  <p className="text-sm text-covenant-gray">{file.type} • {file.size}</p>
-                                </div>
-                              </div>
-                              <Button
-                                type="button"
-                                size="sm"
-                                variant="outline"
-                                className="text-red-600 hover:text-red-700"
-                                onClick={() => {
-                                  setUploadedFiles(prev => prev.filter((_, i) => i !== index));
-                                }}
-                              >
+              </CardHeader>
+              <CardContent>
+                {videosLoading ? (
+                  <div className="text-center py-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-600 mx-auto mb-4"></div>
+                    <p className="text-gray-600">Loading videos...</p>
+                  </div>
+                ) : filteredVideos && filteredVideos.length > 0 ? (
+                  <div className="space-y-4">
+                    {filteredVideos.map((video) => (
+                      <div key={video.id} className="flex items-center justify-between p-4 border rounded-lg">
+                        <div className="flex items-center space-x-4 flex-1">
+                          <div className="w-20 h-14 bg-gray-200 rounded flex items-center justify-center flex-shrink-0">
+                            {video.thumbnailUrl ? (
+                              <img src={video.thumbnailUrl} alt={video.title} className="w-full h-full object-cover rounded" />
+                            ) : (
+                              <Video className="h-6 w-6 text-gray-400" />
+                            )}
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <h3 className="font-semibold truncate">{video.title}</h3>
+                            {video.description && (
+                              <p className="text-sm text-gray-500 line-clamp-1">{video.description}</p>
+                            )}
+                            <div className="flex gap-2 mt-1 flex-wrap">
+                              <Badge variant="outline">{video.category}</Badge>
+                              {video.duration && <Badge variant="outline">{video.duration}</Badge>}
+                              <Badge variant={video.isPublished ? "default" : "secondary"}>
+                                {video.isPublished ? "Published" : "Draft"}
+                              </Badge>
+                              {video.isFeatured && (
+                                <Badge variant="default">
+                                  <Star className="h-3 w-3 mr-1" />Featured
+                                </Badge>
+                              )}
+                              <span className="text-xs text-gray-500 flex items-center">
+                                {video.viewCount || 0} views
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2 ml-4">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => toggleVideoPublishedMutation.mutate(video.id)}
+                            title={video.isPublished ? "Unpublish" : "Publish"}
+                          >
+                            {video.isPublished ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => {
+                              setEditingVideo(video);
+                              videoForm.reset({
+                                title: video.title,
+                                description: video.description || "",
+                                videoUrl: video.videoUrl || "",
+                                embedUrl: video.embedUrl || "",
+                                thumbnailUrl: video.thumbnailUrl || "",
+                                category: video.category,
+                                tags: video.tags || "",
+                                duration: video.duration || "",
+                                isPublished: video.isPublished ?? false,
+                                isFeatured: video.isFeatured ?? false,
+                              });
+                              setVideoDialogOpen(true);
+                            }}
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button size="sm" variant="outline" className="text-red-600 hover:text-red-700">
                                 <Trash2 className="h-4 w-4" />
                               </Button>
-                            </div>
-                          ))}
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Delete Video</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  Are you sure you want to delete "{video.title}"? This action cannot be undone.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={() => deleteVideoMutation.mutate(video.id)}
+                                  className="bg-red-600 hover:bg-red-700"
+                                >
+                                  Delete
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
                         </div>
-                      )}
-                      
-                      {uploadedFiles.length === 0 && (
-                        <p className="text-sm text-covenant-gray italic">
-                          No files uploaded yet. Click "Upload Files" to add downloadable resources for this lesson.
-                        </p>
-                      )}
-                    </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <Video className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                    <p className="text-gray-600 font-medium">No videos found</p>
+                    <p className="text-gray-500 text-sm">Add your first video to get started</p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-                    <div className="flex justify-end gap-3">
-                      <Button type="button" variant="outline" onClick={() => {
-                        setVideoDialogOpen(false);
-                        videoForm.reset();
-                        setUploadedFiles([]);
-                        setEditingVideo(null);
-                      }}>
-                        Cancel
-                      </Button>
-                      <Button 
-                        type="submit" 
-                        disabled={videoMutation.isPending}
-                        className="bg-covenant-blue hover:bg-covenant-blue/80 text-white"
-                      >
-                        {videoMutation.isPending 
-                          ? "Saving..." 
-                          : editingVideo ? 'Update Video' : 'Add Video'}
-                      </Button>
-                    </div>
-                  </form>
-                </Form>
-              </DialogContent>
-            </Dialog>
-
-            <Dialog open={fileDialogOpen} onOpenChange={setFileDialogOpen}>
-              <DialogTrigger asChild>
-                <Button variant="outline" className="border-covenant-blue text-covenant-blue">
-                  <Upload className="h-4 w-4 mr-2" />
-                  Add File
+          {/* Resources Tab */}
+          <TabsContent value="resources">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle>Resources</CardTitle>
+                  <CardDescription>Manage downloadable files and documents</CardDescription>
+                </div>
+                <Button onClick={() => {
+                  setEditingResource(null);
+                  resourceForm.reset();
+                  setResourceDialogOpen(true);
+                }}>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add Resource
                 </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-2xl">
-                <DialogHeader>
-                  <DialogTitle>{editingFile ? 'Edit File' : 'Add New File'}</DialogTitle>
-                  <DialogDescription>
-                    {editingFile ? 'Update file details' : 'Add a downloadable file to a lesson'}
-                  </DialogDescription>
-                </DialogHeader>
-                <Form {...fileForm}>
-                  <form onSubmit={fileForm.handleSubmit(handleFileSubmit)} className="space-y-6">
-                    <FormField
-                      control={fileForm.control}
-                      name="lessonId"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Lesson</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select lesson" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {sampleLessons.map((lesson) => (
-                                <SelectItem key={lesson.id} value={lesson.id}>
-                                  {lesson.title}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <FormField
-                        control={fileForm.control}
-                        name="name"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>File Name</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Trust Administration Guide" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={fileForm.control}
-                        name="type"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>File Type</FormLabel>
-                            <FormControl>
-                              <Input placeholder="PDF" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <FormField
-                        control={fileForm.control}
-                        name="size"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>File Size</FormLabel>
-                            <FormControl>
-                              <Input placeholder="2.3 MB" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={fileForm.control}
-                        name="downloadUrl"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Download URL</FormLabel>
-                            <FormControl>
-                              <Input placeholder="/api/files/document.pdf" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-
-                    <div className="flex justify-end gap-3">
-                      <Button type="button" variant="outline" onClick={() => {
-                        setFileDialogOpen(false);
-                        fileForm.reset();
-                        setEditingFile(null);
-                      }}>
-                        Cancel
-                      </Button>
-                      <Button 
-                        type="submit" 
-                        disabled={fileMutation.isPending}
-                        className="bg-covenant-blue hover:bg-covenant-blue/80 text-white"
-                      >
-                        {fileMutation.isPending 
-                          ? "Saving..." 
-                          : editingFile ? 'Update File' : 'Add File'}
-                      </Button>
-                    </div>
-                  </form>
-                </Form>
-              </DialogContent>
-            </Dialog>
-          </div>
-        </div>
-
-        {/* Course Filter */}
-        <div className="mb-6">
-          <Select value={selectedCourse} onValueChange={setSelectedCourse}>
-            <SelectTrigger className="w-64">
-              <SelectValue placeholder="Filter by course" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Courses</SelectItem>
-              {sampleCourses.map((course) => (
-                <SelectItem key={course.id} value={course.id}>
-                  {course.title}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="grid gap-6">
-          {/* Videos Section */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-covenant-blue flex items-center">
-                <Youtube className="h-5 w-5 mr-2" />
-                Course Videos
-              </CardTitle>
-              <CardDescription>Manage YouTube videos for course lessons</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {filteredVideos.map((video) => (
-                  <div key={video.id} className="flex items-center justify-between p-4 border border-covenant-light rounded-lg">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-24 h-16 bg-gray-200 rounded flex items-center justify-center">
-                        <Youtube className="h-6 w-6 text-red-600" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-covenant-blue">{video.title}</h3>
-                        <p className="text-sm text-covenant-gray mb-1">
-                          {video.courseName} • {video.lessonTitle}
-                        </p>
-                        <p className="text-xs text-covenant-gray mb-2 line-clamp-2">
-                          {video.description}
-                        </p>
-                        <div className="flex gap-2">
-                          <Badge variant="outline" className="text-xs">
-                            ID: {video.youtubeVideoId}
-                          </Badge>
-                          <Badge variant="outline" className="text-xs">
-                            Course: {video.courseId} • Lesson: {video.lessonId}
-                          </Badge>
+              </CardHeader>
+              <CardContent>
+                {resourcesLoading ? (
+                  <div className="text-center py-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-600 mx-auto mb-4"></div>
+                    <p className="text-gray-600">Loading resources...</p>
+                  </div>
+                ) : filteredResources && filteredResources.length > 0 ? (
+                  <div className="space-y-4">
+                    {filteredResources.map((resource) => (
+                      <div key={resource.id} className="flex items-center justify-between p-4 border rounded-lg">
+                        <div className="flex items-center space-x-4 flex-1">
+                          <div className="w-12 h-12 bg-gray-100 rounded flex items-center justify-center flex-shrink-0">
+                            <FileText className="h-6 w-6 text-gray-400" />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <h3 className="font-semibold truncate">{resource.title}</h3>
+                            {resource.description && (
+                              <p className="text-sm text-gray-500 line-clamp-1">{resource.description}</p>
+                            )}
+                            <div className="flex gap-2 mt-1 flex-wrap">
+                              <Badge variant="outline">{resource.category}</Badge>
+                              <Badge variant="outline">{resource.fileType}</Badge>
+                              {resource.fileSize != null && (
+                                <Badge variant="outline">{(resource.fileSize / 1000000).toFixed(1)} MB</Badge>
+                              )}
+                              <Badge variant={resource.isPublished ? "default" : "secondary"}>
+                                {resource.isPublished ? "Published" : "Draft"}
+                              </Badge>
+                              <span className="text-xs text-gray-500 flex items-center">
+                                {resource.downloadCount || 0} downloads
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2 ml-4">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => toggleResourcePublishedMutation.mutate(resource.id)}
+                            title={resource.isPublished ? "Unpublish" : "Publish"}
+                          >
+                            {resource.isPublished ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => {
+                              setEditingResource(resource);
+                              resourceForm.reset({
+                                title: resource.title,
+                                description: resource.description || "",
+                                category: resource.category,
+                                fileUrl: resource.fileUrl,
+                                fileType: resource.fileType,
+                                fileSize: resource.fileSize ?? undefined,
+                                isPublished: resource.isPublished ?? false,
+                              });
+                              setResourceDialogOpen(true);
+                            }}
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button size="sm" variant="outline" className="text-red-600 hover:text-red-700">
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Delete Resource</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  Are you sure you want to delete "{resource.title}"? This action cannot be undone.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={() => deleteResourceMutation.mutate(resource.id)}
+                                  className="bg-red-600 hover:bg-red-700"
+                                >
+                                  Delete
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
                         </div>
                       </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Button 
-                        size="sm" 
-                        variant="outline"
-                        onClick={() => window.open(`https://www.youtube.com/watch?v=${video.youtubeVideoId}`, '_blank')}
-                        className="text-red-600 hover:text-red-700"
-                      >
-                        <Youtube className="h-4 w-4" />
-                      </Button>
-                      <Button 
-                        size="sm" 
-                        variant="outline"
-                        onClick={() => {
-                          setEditingVideo(video);
-                          videoForm.reset({
-                            courseId: video.courseId,
-                            lessonId: video.lessonId,
-                            youtubeVideoId: video.youtubeVideoId,
-                            title: video.title,
-                            description: video.description || ""
-                          });
-                          setVideoDialogOpen(true);
-                        }}
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button size="sm" variant="outline" className="text-red-600 hover:text-red-700">
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
+                    ))}
                   </div>
-                ))}
-                {filteredVideos.length === 0 && (
-                  <div className="text-center py-8 text-covenant-gray">
-                    No videos found. Add your first video to get started.
+                ) : (
+                  <div className="text-center py-8">
+                    <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                    <p className="text-gray-600 font-medium">No resources found</p>
+                    <p className="text-gray-500 text-sm">Add your first resource to get started</p>
                   </div>
                 )}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Files Section */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-covenant-blue flex items-center">
-                <FileText className="h-5 w-5 mr-2" />
-                Lesson Files
-              </CardTitle>
-              <CardDescription>Manage downloadable files and resources</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {filteredFiles.map((file) => (
-                  <div key={file.id} className="flex items-center justify-between p-4 border border-covenant-light rounded-lg">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-12 h-12 bg-covenant-light rounded flex items-center justify-center">
-                        <FileText className="h-6 w-6 text-covenant-blue" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-covenant-blue">{file.name}</h3>
-                        <p className="text-sm text-covenant-gray">
-                          {file.courseName} • {file.lessonTitle}
-                        </p>
-                        <Badge variant="outline" className="mt-1">
-                          {file.type} • {file.size}
-                        </Badge>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Button 
-                        size="sm" 
-                        variant="outline"
-                        onClick={() => window.open(file.downloadUrl, '_blank')}
-                      >
-                        <Download className="h-4 w-4" />
-                      </Button>
-                      <Button 
-                        size="sm" 
-                        variant="outline"
-                        onClick={() => {
-                          setEditingFile(file);
-                          fileForm.reset(file);
-                          setFileDialogOpen(true);
-                        }}
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button size="sm" variant="outline" className="text-red-600 hover:text-red-700">
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-                {filteredFiles.length === 0 && (
-                  <div className="text-center py-8 text-covenant-gray">
-                    No files found. Add your first file to get started.
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </div>
+
+      {/* Video Dialog */}
+      <Dialog open={videoDialogOpen} onOpenChange={setVideoDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>{editingVideo ? 'Edit Video' : 'Add New Video'}</DialogTitle>
+            <DialogDescription>
+              {editingVideo ? 'Update video details' : 'Add a new video to your content library'}
+            </DialogDescription>
+          </DialogHeader>
+          <Form {...videoForm}>
+            <form onSubmit={videoForm.handleSubmit((data) => videoMutation.mutate(data))} className="space-y-4">
+              <FormField control={videoForm.control} name="title" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Title</FormLabel>
+                  <FormControl><Input placeholder="Video title" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+
+              <FormField control={videoForm.control} name="description" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl><Textarea placeholder="Video description" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+
+              <div className="grid grid-cols-2 gap-4">
+                <FormField control={videoForm.control} name="category" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Category</FormLabel>
+                    <FormControl><Input placeholder="e.g., Trust Fundamentals" {...field} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+                <FormField control={videoForm.control} name="duration" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Duration</FormLabel>
+                    <FormControl><Input placeholder="e.g., 45 minutes" {...field} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <FormField control={videoForm.control} name="videoUrl" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Video URL</FormLabel>
+                    <FormControl><Input placeholder="Direct video URL" {...field} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+                <FormField control={videoForm.control} name="embedUrl" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Embed URL</FormLabel>
+                    <FormControl><Input placeholder="YouTube/Vimeo embed URL" {...field} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <FormField control={videoForm.control} name="thumbnailUrl" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Thumbnail URL</FormLabel>
+                    <FormControl><Input placeholder="Thumbnail image URL" {...field} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+                <FormField control={videoForm.control} name="tags" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Tags</FormLabel>
+                    <FormControl><Input placeholder="Comma-separated tags" {...field} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+              </div>
+
+              <div className="flex gap-6">
+                <FormField control={videoForm.control} name="isPublished" render={({ field }) => (
+                  <FormItem className="flex items-center gap-2">
+                    <FormControl>
+                      <Switch checked={field.value} onCheckedChange={field.onChange} />
+                    </FormControl>
+                    <FormLabel className="!mt-0">Published</FormLabel>
+                  </FormItem>
+                )} />
+                <FormField control={videoForm.control} name="isFeatured" render={({ field }) => (
+                  <FormItem className="flex items-center gap-2">
+                    <FormControl>
+                      <Switch checked={field.value} onCheckedChange={field.onChange} />
+                    </FormControl>
+                    <FormLabel className="!mt-0">Featured</FormLabel>
+                  </FormItem>
+                )} />
+              </div>
+
+              <div className="flex justify-end gap-3">
+                <Button type="button" variant="outline" onClick={() => {
+                  setVideoDialogOpen(false);
+                  videoForm.reset();
+                  setEditingVideo(null);
+                }}>
+                  Cancel
+                </Button>
+                <Button type="submit" disabled={videoMutation.isPending}>
+                  {videoMutation.isPending ? "Saving..." : editingVideo ? "Update Video" : "Add Video"}
+                </Button>
+              </div>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Resource Dialog */}
+      <Dialog open={resourceDialogOpen} onOpenChange={setResourceDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>{editingResource ? 'Edit Resource' : 'Add New Resource'}</DialogTitle>
+            <DialogDescription>
+              {editingResource ? 'Update resource details' : 'Add a new downloadable resource'}
+            </DialogDescription>
+          </DialogHeader>
+          <Form {...resourceForm}>
+            <form onSubmit={resourceForm.handleSubmit((data) => resourceMutation.mutate(data))} className="space-y-4">
+              <FormField control={resourceForm.control} name="title" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Title</FormLabel>
+                  <FormControl><Input placeholder="Resource title" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+
+              <FormField control={resourceForm.control} name="description" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl><Textarea placeholder="Resource description" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+
+              <div className="grid grid-cols-2 gap-4">
+                <FormField control={resourceForm.control} name="category" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Category</FormLabel>
+                    <FormControl><Input placeholder="e.g., Trust Documents" {...field} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+                <FormField control={resourceForm.control} name="fileType" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>File Type</FormLabel>
+                    <FormControl><Input placeholder="e.g., pdf, audio" {...field} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+              </div>
+
+              <FormField control={resourceForm.control} name="fileUrl" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>File URL</FormLabel>
+                  <div className="flex gap-2">
+                    <FormControl><Input placeholder="File URL (or use upload)" {...field} /></FormControl>
+                    <ObjectUploader
+                      maxNumberOfFiles={1}
+                      maxFileSize={52428800}
+                      onGetUploadParameters={handleGetUploadParameters}
+                      onComplete={handleResourceUploadComplete}
+                    >
+                      <Upload className="h-4 w-4 mr-2" />
+                      Upload
+                    </ObjectUploader>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )} />
+
+              <FormField control={resourceForm.control} name="isPublished" render={({ field }) => (
+                <FormItem className="flex items-center gap-2">
+                  <FormControl>
+                    <Switch checked={field.value} onCheckedChange={field.onChange} />
+                  </FormControl>
+                  <FormLabel className="!mt-0">Published</FormLabel>
+                </FormItem>
+              )} />
+
+              <div className="flex justify-end gap-3">
+                <Button type="button" variant="outline" onClick={() => {
+                  setResourceDialogOpen(false);
+                  resourceForm.reset();
+                  setEditingResource(null);
+                }}>
+                  Cancel
+                </Button>
+                <Button type="submit" disabled={resourceMutation.isPending}>
+                  {resourceMutation.isPending ? "Saving..." : editingResource ? "Update Resource" : "Add Resource"}
+                </Button>
+              </div>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

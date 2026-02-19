@@ -4,9 +4,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Mail, Search, Calendar, User, MessageSquare, Eye, Trash2 } from "lucide-react";
+import { Mail, Search, Calendar, User, Eye } from "lucide-react";
 import { format } from "date-fns";
 
 interface Contact {

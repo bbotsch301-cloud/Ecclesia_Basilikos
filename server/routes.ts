@@ -12,26 +12,23 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { sessionMiddleware, requireAuth, optionalAuth } from "./auth";
 import adminRoutes from "./adminRoutes";
-import { 
-  insertContactSchema, 
-  insertNewsletterSchema, 
-  insertUserSchema, 
+import {
+  insertContactSchema,
+  insertNewsletterSchema,
+  insertUserSchema,
   loginSchema,
   insertEnrollmentSchema,
-  insertForumCategorySchema,
   insertForumThreadSchema,
   insertForumReplySchema,
-  insertPageContentSchema,
-  updatePageContentSchema,
   insertTrustDownloadSchema,
   insertCourseSectionSchema,
-  insertVideoAttachmentSchema,
   insertVideoProgressSchema,
   insertSectionProgressSchema,
   type User
 } from "@shared/schema";
 import { z } from "zod";
 import { ObjectStorageService } from "./objectStorage";
+import proofVaultRoutes from "./proofVaultRoutes";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Session middleware
@@ -374,9 +371,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Admin contact messages endpoint
+  // Admin contact messages endpoint (admin only)
   app.get("/api/admin/contacts", requireAuth, async (req, res) => {
     try {
+      const user = req.user as User;
+      if (user.role !== 'admin') {
+        return res.status(403).json({ error: "Admin access required" });
+      }
       const contacts = await storage.getAllContacts();
       res.json(contacts);
     } catch (error) {
@@ -398,21 +399,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Create a new forum category (admin only for now)
-  app.post("/api/forum/categories", requireAuth, async (req, res) => {
-    try {
-      const categoryData = insertForumCategorySchema.parse(req.body);
-      const category = await storage.createForumCategory(categoryData);
-      res.json({ success: true, category });
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        res.status(400).json({ errors: error.errors });
-      } else {
-        console.error("Error creating forum category:", error);
-        res.status(500).json({ error: "Failed to create category" });
-      }
-    }
-  });
+  // Forum category creation is via POST /api/admin/forum/categories
+  // (adminRoutes.ts) with requireModerator middleware.
 
   // Get threads by category
   app.get("/api/forum/categories/:categoryId/threads", async (req, res) => {
@@ -496,91 +484,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Page Content Management (Admin only)
-  app.get("/api/admin/page-content", requireAuth, async (req, res) => {
+  // Page Content Management routes are in adminRoutes.ts (mounted at /api/admin)
+
+  // Object Storage Upload Endpoint (requires authentication)
+  app.post("/api/objects/upload", requireAuth, async (req, res) => {
     try {
       const user = req.user as User;
-      if (user.role !== 'admin') {
-        return res.status(403).json({ error: "Admin access required" });
+      if (!['admin', 'instructor'].includes(user.role || '')) {
+        return res.status(403).json({ error: "Upload permission required" });
       }
-      
-      const content = await storage.getAllPageContent();
-      res.json(content);
-    } catch (error) {
-      console.error("Error fetching page content:", error);
-      res.status(500).json({ error: "Failed to fetch page content" });
-    }
-  });
-
-  app.post("/api/admin/page-content", requireAuth, async (req, res) => {
-    try {
-      const user = req.user as User;
-      if (user.role !== 'admin') {
-        return res.status(403).json({ error: "Admin access required" });
-      }
-      
-      const contentData = insertPageContentSchema.parse(req.body);
-      const content = await storage.upsertPageContent({
-        ...contentData,
-        updatedById: user.id,
-      });
-      
-      res.json({ success: true, content });
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        res.status(400).json({ errors: error.errors });
-      } else {
-        console.error("Error creating page content:", error);
-        res.status(500).json({ error: "Failed to create page content" });
-      }
-    }
-  });
-
-  app.patch("/api/admin/page-content/:id", requireAuth, async (req, res) => {
-    try {
-      const user = req.user as User;
-      if (user.role !== 'admin') {
-        return res.status(403).json({ error: "Admin access required" });
-      }
-      
-      const { id } = req.params;
-      const updateData = updatePageContentSchema.parse(req.body);
-      const content = await storage.updatePageContent(id, {
-        ...updateData,
-        updatedById: user.id,
-      });
-      
-      res.json({ success: true, content });
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        res.status(400).json({ errors: error.errors });
-      } else {
-        console.error("Error updating page content:", error);
-        res.status(500).json({ error: "Failed to update page content" });
-      }
-    }
-  });
-
-  app.delete("/api/admin/page-content/:id", requireAuth, async (req, res) => {
-    try {
-      const user = req.user as User;
-      if (user.role !== 'admin') {
-        return res.status(403).json({ error: "Admin access required" });
-      }
-      
-      const { id } = req.params;
-      await storage.deletePageContent(id);
-      
-      res.json({ success: true });
-    } catch (error) {
-      console.error("Error deleting page content:", error);
-      res.status(500).json({ error: "Failed to delete page content" });
-    }
-  });
-
-  // Object Storage Upload Endpoint
-  app.post("/api/objects/upload", async (req, res) => {
-    try {
       const objectStorageService = new ObjectStorageService();
       const uploadURL = await objectStorageService.getObjectEntityUploadURL();
       res.json({ uploadURL });
@@ -645,18 +557,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         console.error("Error processing trust download signup:", error);
         res.status(500).json({ error: "Failed to process signup" });
       }
-    }
-  });
-
-  app.post("/api/track-download", async (req, res) => {
-    try {
-      const { documentType } = req.body;
-      // Track download analytics if needed
-      console.log(`Document downloaded: ${documentType} from IP: ${req.ip}`);
-      res.json({ success: true });
-    } catch (error) {
-      console.error("Error tracking download:", error);
-      res.status(500).json({ error: "Failed to track download" });
     }
   });
 
@@ -775,9 +675,13 @@ startxref
     }
   });
 
-  // Create a new course section (admin only)
+  // Create a new course section (instructor+)
   app.post("/api/courses/:courseId/sections", requireAuth, async (req, res) => {
     try {
+      const user = req.user as User;
+      if (!['admin', 'moderator', 'instructor'].includes(user.role || '')) {
+        return res.status(403).json({ error: "Instructor access required" });
+      }
       const sectionData = insertCourseSectionSchema.parse({
         ...req.body,
         courseId: req.params.courseId,
@@ -795,9 +699,13 @@ startxref
     }
   });
 
-  // Update course section (admin only)
+  // Update course section (instructor+)
   app.put("/api/sections/:id", requireAuth, async (req, res) => {
     try {
+      const user = req.user as User;
+      if (!['admin', 'moderator', 'instructor'].includes(user.role || '')) {
+        return res.status(403).json({ error: "Instructor access required" });
+      }
       const updates = insertCourseSectionSchema.partial().parse(req.body);
       const section = await storage.updateCourseSection(req.params.id, updates);
       res.json(section);
@@ -867,6 +775,9 @@ startxref
 
   // Admin routes
   app.use('/api/admin', adminRoutes);
+
+  // Proof Vault routes
+  app.use('/api/proof-vault', proofVaultRoutes);
 
   const httpServer = createServer(app);
   return httpServer;

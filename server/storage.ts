@@ -63,7 +63,7 @@ import {
   videoProgress,
   sectionProgress
 } from "@shared/schema";
-import { eq, and, desc, sql } from "drizzle-orm";
+import { eq, and, desc, sql, or, inArray } from "drizzle-orm";
 import { db } from "./db";
 import { randomUUID } from "crypto";
 import bcrypt from "bcryptjs";
@@ -428,7 +428,7 @@ export class DatabaseStorage implements IStorage {
     // Get downloads from enrolled courses + public downloads
     const userEnrollments = await this.getUserEnrollments(userId);
     const courseIds = userEnrollments.map(e => e.courseId);
-    
+
     if (courseIds.length === 0) {
       return await this.getPublicDownloads();
     }
@@ -437,11 +437,12 @@ export class DatabaseStorage implements IStorage {
       .select()
       .from(downloads)
       .where(
-        and(
+        or(
           eq(downloads.isPublic, true),
-          // Note: This would need a more complex query for enrolled course downloads
+          inArray(downloads.courseId, courseIds)
         )
-      );
+      )
+      .orderBy(desc(downloads.createdAt));
   }
 
   // Forum Categories

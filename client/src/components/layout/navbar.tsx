@@ -11,6 +11,7 @@ const navigation = [
   { name: "Royal Academy", href: "/courses" },
   { name: "Covenant Repository", href: "/repository" },
   { name: "Downloads", href: "/downloads" },
+  { name: "Proof Vault", href: "/proof-vault" },
   { name: "Embassy Forum", href: "/forum" },
   { name: "Contact & Stewardship", href: "/contact" },
 ];

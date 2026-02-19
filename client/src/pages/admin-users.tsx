@@ -25,9 +25,7 @@ import {
   UserCheck,
   UserX
 } from "lucide-react";
-import { useAuth } from "@/hooks/useAuth";
 import { Link } from "wouter";
-import { useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 
@@ -44,7 +42,6 @@ interface User {
 }
 
 export default function AdminUsers() {
-  const { user, isAuthenticated, isLoading } = useAuth();
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState("");
   const [roleFilter, setRoleFilter] = useState<string>("all");
@@ -52,24 +49,13 @@ export default function AdminUsers() {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
-  // Check if user is admin
-  useEffect(() => {
-    if (!isLoading && (!isAuthenticated || user?.role !== 'admin')) {
-      window.location.href = '/';
-    }
-  }, [isAuthenticated, isLoading, user]);
-
   const { data: users, isLoading: usersLoading } = useQuery<User[]>({
     queryKey: ['/api/admin/users'],
-    enabled: isAuthenticated && user?.role === 'admin',
   });
 
   const updateRoleMutation = useMutation({
     mutationFn: async ({ userId, role }: { userId: string; role: string }) => {
-      return apiRequest(`/api/admin/users/${userId}/role`, {
-        method: 'PATCH',
-        body: JSON.stringify({ role }),
-      });
+      return apiRequest('PATCH', `/api/admin/users/${userId}/role`, { role });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/admin/users'] });
@@ -79,10 +65,10 @@ export default function AdminUsers() {
       });
       setIsEditDialogOpen(false);
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       toast({
         title: "Error",
-        description: "Failed to update user role. Please try again.",
+        description: error.message || "Failed to update user role. Please try again.",
         variant: "destructive",
       });
     },
@@ -90,9 +76,7 @@ export default function AdminUsers() {
 
   const toggleActiveMutation = useMutation({
     mutationFn: async (userId: string) => {
-      return apiRequest(`/api/admin/users/${userId}/toggle-active`, {
-        method: 'PATCH',
-      });
+      return apiRequest('PATCH', `/api/admin/users/${userId}/toggle-active`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/admin/users'] });
@@ -101,10 +85,10 @@ export default function AdminUsers() {
         description: "User status has been updated successfully.",
       });
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       toast({
         title: "Error",
-        description: "Failed to update user status. Please try again.",
+        description: error.message || "Failed to update user status. Please try again.",
         variant: "destructive",
       });
     },
@@ -112,9 +96,7 @@ export default function AdminUsers() {
 
   const deleteUserMutation = useMutation({
     mutationFn: async (userId: string) => {
-      return apiRequest(`/api/admin/users/${userId}`, {
-        method: 'DELETE',
-      });
+      return apiRequest('DELETE', `/api/admin/users/${userId}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/admin/users'] });
@@ -123,25 +105,14 @@ export default function AdminUsers() {
         description: "User has been deleted successfully.",
       });
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       toast({
         title: "Error",
-        description: "Failed to delete user. Please try again.",
+        description: error.message || "Failed to delete user. Please try again.",
         variant: "destructive",
       });
     },
   });
-
-  if (isLoading || !isAuthenticated || user?.role !== 'admin') {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading admin panel...</p>
-        </div>
-      </div>
-    );
-  }
 
   const filteredUsers = users?.filter(user => {
     const matchesSearch = user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -193,9 +164,14 @@ export default function AdminUsers() {
               </div>
             </div>
             <div className="flex space-x-4">
-              <Button>
+              <Button
+                onClick={() => toast({
+                  title: "Coming Soon",
+                  description: "User invite functionality will be available in a future update.",
+                })}
+              >
                 <UserPlus className="h-4 w-4 mr-2" />
-                Add User
+                Invite User
               </Button>
             </div>
           </div>
