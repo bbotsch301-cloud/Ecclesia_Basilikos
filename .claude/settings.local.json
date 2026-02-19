@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s http://localhost:5000/api/admin/downloads)",
+      "Bash(npx tsc:*)",
+      "Bash(npx vite build:*)",
+      "Bash(curl -s http://localhost:5000/admin)",
+      "Bash(curl:*)",
+      "Bash(npm install:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(lsof:*)",
+      "Bash(xargs:*)",
+      "Bash(python3:*)",
+      "Bash(node -e:*)",
+      "Bash(pkill:*)",
+      "Bash(NODE_ENV=development npx tsx:*)",
+      "Bash(git push:*)"
+    ]
+  }
+}

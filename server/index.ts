@@ -47,8 +47,15 @@ app.use((req, res, next) => {
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";
 
+    if (err instanceof SyntaxError && status === 400 && 'body' in err) {
+      log(`JSON Parse Error: ${err.message}`);
+      return res.status(400).json({ message: "Invalid JSON" });
+    }
+
     res.status(status).json({ message });
-    throw err;
+    if (app.get("env") === "development") {
+      console.error(err);
+    }
   });
 
   // importantly only setup vite in development and after
