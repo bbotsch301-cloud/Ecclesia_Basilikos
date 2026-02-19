@@ -358,7 +358,7 @@ function ProofVaultDetailContent() {
                 </div>
               )}
 
-              {proof.errorMessage && (
+              {proof.errorMessage && proof.status !== "confirmed" && (
                 <div className="mt-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3">
                   <div className="flex items-start gap-2">
                     <XCircle className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
