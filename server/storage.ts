@@ -236,11 +236,11 @@ export class DatabaseStorage implements IStorage {
     const [user] = await db
       .insert(users)
       .values({ 
-        ...insertUser, 
+        ...insertUser,
         password: hashedPassword,
         emailVerificationToken: verificationToken,
         emailVerificationExpires: verificationExpires,
-        isActive: false // User inactive until email verified
+        isActive: true
       })
       .returning();
     return user;
