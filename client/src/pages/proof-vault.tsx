@@ -1,62 +1,33 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "wouter";
+import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/hooks/useAuth";
 import { apiRequest } from "@/lib/queryClient";
+import RequireAuth from "@/components/RequireAuth";
+import { StatusBadge } from "@/components/proof-vault/StatusBadge";
+import { HashDisplay } from "@/components/proof-vault/HashDisplay";
+import { RelativeTime } from "@/components/proof-vault/RelativeTime";
+import { ProofCardSkeleton } from "@/components/proof-vault/ProofCardSkeleton";
 import type { Proof } from "@shared/schema";
 import {
   Shield,
   Plus,
   Search,
-  RefreshCw,
   FileCheck,
   Hash,
-  Download,
   Clock,
   CheckCircle2,
-  XCircle,
   Loader2,
   Eye,
   ArrowUpCircle,
-  Lock,
-  LogIn,
 } from "lucide-react";
 
-function StatusBadge({ status }: { status: string | null }) {
-  switch (status) {
-    case "confirmed":
-      return (
-        <Badge className="bg-green-100 text-green-700 border-green-300">
-          <CheckCircle2 className="w-3 h-3 mr-1" />
-          Confirmed
-        </Badge>
-      );
-    case "pending":
-      return (
-        <Badge className="bg-yellow-100 text-yellow-700 border-yellow-300">
-          <Clock className="w-3 h-3 mr-1" />
-          Pending
-        </Badge>
-      );
-    case "failed":
-      return (
-        <Badge className="bg-red-100 text-red-700 border-red-300">
-          <XCircle className="w-3 h-3 mr-1" />
-          Failed
-        </Badge>
-      );
-    default:
-      return <Badge variant="secondary">Unknown</Badge>;
-  }
-}
-
-export default function ProofVault() {
-  const { user, isAuthenticated, isLoading: authLoading } = useAuth();
+function ProofVaultContent() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [searchTerm, setSearchTerm] = useState("");
@@ -64,7 +35,6 @@ export default function ProofVault() {
 
   const { data: proofsList = [], isLoading } = useQuery<Proof[]>({
     queryKey: ["/api/proof-vault/proofs"],
-    enabled: isAuthenticated,
   });
 
   const upgradeAllMutation = useMutation({
@@ -88,50 +58,6 @@ export default function ProofVault() {
     },
   });
 
-  if (authLoading) {
-    return (
-      <div className="pt-16 flex items-center justify-center min-h-screen">
-        <Loader2 className="w-8 h-8 animate-spin text-royal-gold" />
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) {
-    return (
-      <div className="pt-16">
-        <div className="relative bg-gradient-to-br from-royal-navy via-royal-burgundy to-royal-navy py-16 md:py-24">
-          <div className="absolute inset-0 bg-black/20" />
-          <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <Badge className="mb-4 bg-royal-gold/20 text-royal-gold border-2 border-royal-gold font-semibold px-6 py-2 text-base backdrop-blur-sm">
-              Time-Sealed Records
-            </Badge>
-            <h1 className="font-cinzel-decorative text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
-              Proof Vault
-            </h1>
-            <p className="text-lg md:text-xl text-gray-200 max-w-3xl mx-auto leading-relaxed">
-              Create verifiable timestamps for your important documents, anchored to the Bitcoin blockchain.
-            </p>
-          </div>
-        </div>
-        <div className="max-w-lg mx-auto px-4 py-16 text-center">
-          <Lock className="w-16 h-16 text-royal-gold mx-auto mb-6" />
-          <h2 className="font-cinzel text-2xl font-bold text-royal-navy dark:text-royal-gold mb-4">
-            Authentication Required
-          </h2>
-          <p className="text-gray-600 dark:text-gray-300 mb-6">
-            Please log in to access Proof Vault and manage your timestamped proofs.
-          </p>
-          <Link href="/">
-            <Button className="bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold">
-              <LogIn className="w-4 h-4 mr-2" />
-              Go to Login
-            </Button>
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
   const filteredProofs = proofsList.filter((p) => {
     if (statusFilter !== "all" && p.status !== statusFilter) return false;
     if (searchTerm) {
@@ -147,6 +73,15 @@ export default function ProofVault() {
 
   const pendingCount = proofsList.filter((p) => p.status === "pending").length;
   const confirmedCount = proofsList.filter((p) => p.status === "confirmed").length;
+
+  const statusAccent = (status: string | null) => {
+    switch (status) {
+      case "confirmed": return "border-l-4 border-l-green-400";
+      case "pending": return "border-l-4 border-l-yellow-400";
+      case "failed": return "border-l-4 border-l-red-400";
+      default: return "border-l-4 border-l-gray-300";
+    }
+  };
 
   return (
     <div className="pt-16">
@@ -167,53 +102,79 @@ export default function ProofVault() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Stats + Actions */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
-          <div className="flex items-center gap-4">
-            <div className="text-sm text-gray-600 dark:text-gray-400">
-              <span className="font-semibold text-royal-navy dark:text-royal-gold">{proofsList.length}</span> total
-              {pendingCount > 0 && (
-                <span className="ml-3">
-                  <span className="font-semibold text-yellow-600">{pendingCount}</span> pending
-                </span>
+        {/* Stats Cards */}
+        <div className="grid grid-cols-3 gap-3 mb-8">
+          <Card className="border-l-4 border-l-royal-gold">
+            <CardContent className="p-4 flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-royal-gold/10">
+                <Shield className="w-5 h-5 text-royal-gold" />
+              </div>
+              <div>
+                <p className="font-cinzel text-2xl font-bold text-royal-navy dark:text-royal-gold">
+                  {proofsList.length}
+                </p>
+                <p className="text-xs text-gray-500 font-cinzel">Total Proofs</p>
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="border-l-4 border-l-yellow-400">
+            <CardContent className="p-4 flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-yellow-100 dark:bg-yellow-900/20">
+                <Clock className="w-5 h-5 text-yellow-600" />
+              </div>
+              <div>
+                <p className="font-cinzel text-2xl font-bold text-yellow-600">
+                  {pendingCount}
+                </p>
+                <p className="text-xs text-gray-500 font-cinzel">Pending</p>
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="border-l-4 border-l-green-400">
+            <CardContent className="p-4 flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-green-100 dark:bg-green-900/20">
+                <CheckCircle2 className="w-5 h-5 text-green-600" />
+              </div>
+              <div>
+                <p className="font-cinzel text-2xl font-bold text-green-600">
+                  {confirmedCount}
+                </p>
+                <p className="text-xs text-gray-500 font-cinzel">Confirmed</p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Actions */}
+        <div className="flex items-center justify-end gap-3 mb-6">
+          {pendingCount > 0 && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => upgradeAllMutation.mutate()}
+              disabled={upgradeAllMutation.isPending}
+              className="font-cinzel"
+            >
+              {upgradeAllMutation.isPending ? (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              ) : (
+                <ArrowUpCircle className="w-4 h-4 mr-2" />
               )}
-              {confirmedCount > 0 && (
-                <span className="ml-3">
-                  <span className="font-semibold text-green-600">{confirmedCount}</span> confirmed
-                </span>
-              )}
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            {pendingCount > 0 && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => upgradeAllMutation.mutate()}
-                disabled={upgradeAllMutation.isPending}
-                className="font-cinzel"
-              >
-                {upgradeAllMutation.isPending ? (
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                ) : (
-                  <ArrowUpCircle className="w-4 h-4 mr-2" />
-                )}
-                Upgrade Pending
-              </Button>
-            )}
-            <Link href="/proof-vault/verify">
-              <Button variant="outline" size="sm" className="font-cinzel">
-                <FileCheck className="w-4 h-4 mr-2" />
-                Verify
-              </Button>
-            </Link>
-            <Link href="/proof-vault/new">
-              <Button size="sm" className="bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold">
-                <Plus className="w-4 h-4 mr-2" />
-                New Proof
-              </Button>
-            </Link>
-          </div>
+              Upgrade Pending
+            </Button>
+          )}
+          <Link href="/proof-vault/verify">
+            <Button variant="outline" size="sm" className="font-cinzel">
+              <FileCheck className="w-4 h-4 mr-2" />
+              Verify
+            </Button>
+          </Link>
+          <Link href="/proof-vault/new">
+            <Button size="sm" className="bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold">
+              <Plus className="w-4 h-4 mr-2" />
+              New Proof
+            </Button>
+          </Link>
         </div>
 
         {/* Search + Filter */}
@@ -246,13 +207,25 @@ export default function ProofVault() {
 
         {/* Proofs list */}
         {isLoading ? (
-          <div className="flex items-center justify-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-royal-gold" />
+          <div className="space-y-3">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <ProofCardSkeleton key={i} />
+            ))}
           </div>
         ) : filteredProofs.length === 0 ? (
           <div className="flex items-center justify-center py-20">
-            <div className="text-center max-w-md">
-              <Shield className="w-12 h-12 text-royal-gold mx-auto mb-4" />
+            <motion.div
+              className="text-center max-w-md"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+            >
+              <motion.div
+                animate={{ scale: [1, 1.05, 1] }}
+                transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+              >
+                <Shield className="w-12 h-12 text-royal-gold mx-auto mb-4" />
+              </motion.div>
               <h3 className="font-cinzel text-xl font-bold text-royal-navy dark:text-royal-gold mb-2">
                 {proofsList.length === 0 ? "No Proofs Yet" : "No Matching Proofs"}
               </h3>
@@ -269,16 +242,16 @@ export default function ProofVault() {
                   </Button>
                 </Link>
               )}
-            </div>
+            </motion.div>
           </div>
         ) : (
           <div className="space-y-3">
             {filteredProofs.map((proof) => (
               <Link key={proof.id} href={`/proof-vault/proofs/${proof.id}`}>
-                <Card className="hover:border-royal-gold/50 hover:shadow-md transition-all cursor-pointer group">
+                <Card className={`royal-card cursor-pointer group ${statusAccent(proof.status)}`}>
                   <CardContent className="p-4 sm:p-6">
                     <div className="flex items-center gap-4">
-                      <div className="p-2 rounded-lg bg-royal-gold/10 group-hover:bg-royal-gold/20 transition-colors">
+                      <div className="p-2 rounded-lg bg-royal-gold/10 group-hover:bg-royal-gold/20 transition-colors flex-shrink-0">
                         {proof.mode === "file" ? (
                           <FileCheck className="w-5 h-5 text-royal-gold" />
                         ) : (
@@ -286,27 +259,23 @@ export default function ProofVault() {
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
+                        <div className="flex items-center gap-2 mb-1 flex-wrap">
                           <h3 className="font-cinzel font-semibold text-royal-navy dark:text-gray-200 text-sm truncate">
-                            {proof.label || proof.originalFilename || `Hash proof`}
+                            {proof.label || proof.originalFilename || "Hash proof"}
                           </h3>
                           <StatusBadge status={proof.status} />
                         </div>
                         <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
-                          <code className="font-mono truncate max-w-[200px] sm:max-w-[300px]">
-                            {proof.sha256}
-                          </code>
-                          <span className="hidden sm:inline">
-                            {proof.createdAt
-                              ? new Date(proof.createdAt).toLocaleDateString()
-                              : ""}
-                          </span>
-                          <Badge variant="secondary" className="text-xs">
-                            {proof.mode}
-                          </Badge>
+                          <HashDisplay hash={proof.sha256} className="text-xs" />
+                          {proof.createdAt && (
+                            <RelativeTime
+                              date={proof.createdAt}
+                              className="hidden sm:inline text-xs text-gray-500 dark:text-gray-400"
+                            />
+                          )}
                         </div>
                       </div>
-                      <Eye className="w-4 h-4 text-gray-400 group-hover:text-royal-gold transition-colors" />
+                      <Eye className="w-4 h-4 text-gray-400 group-hover:text-royal-gold transition-colors flex-shrink-0" />
                     </div>
                   </CardContent>
                 </Card>
@@ -316,5 +285,13 @@ export default function ProofVault() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function ProofVault() {
+  return (
+    <RequireAuth>
+      <ProofVaultContent />
+    </RequireAuth>
   );
 }

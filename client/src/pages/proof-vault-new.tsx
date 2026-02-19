@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useLocation } from "wouter";
 import { Link } from "wouter";
@@ -9,9 +9,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/hooks/useAuth";
+import RequireAuth from "@/components/RequireAuth";
+import { FileDropzone } from "@/components/proof-vault/FileDropzone";
 import {
-  Upload,
   Hash,
   Shield,
   ArrowLeft,
@@ -19,12 +19,15 @@ import {
   Loader2,
   CheckCircle2,
   AlertCircle,
-  Lock,
-  LogIn,
 } from "lucide-react";
 
-export default function ProofVaultNew() {
-  const { user, isAuthenticated, isLoading: authLoading } = useAuth();
+const PROGRESS_MESSAGES = [
+  "Computing file hash...",
+  "Submitting to OpenTimestamps...",
+  "Finalizing proof...",
+];
+
+function ProofVaultNewContent() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [, navigate] = useLocation();
@@ -32,11 +35,13 @@ export default function ProofVaultNew() {
   // File mode state
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [fileLabel, setFileLabel] = useState("");
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Hash mode state
   const [hashInput, setHashInput] = useState("");
   const [hashLabel, setHashLabel] = useState("");
+
+  // Progress message rotation
+  const [progressIndex, setProgressIndex] = useState(0);
 
   const isValidHash = /^[a-fA-F0-9]{64}$/.test(hashInput);
 
@@ -114,37 +119,19 @@ export default function ProofVaultNew() {
     },
   });
 
-  if (authLoading) {
-    return (
-      <div className="pt-16 flex items-center justify-center min-h-screen">
-        <Loader2 className="w-8 h-8 animate-spin text-royal-gold" />
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) {
-    return (
-      <div className="pt-16">
-        <div className="max-w-lg mx-auto px-4 py-32 text-center">
-          <Lock className="w-16 h-16 text-royal-gold mx-auto mb-6" />
-          <h2 className="font-cinzel text-2xl font-bold text-royal-navy dark:text-royal-gold mb-4">
-            Authentication Required
-          </h2>
-          <p className="text-gray-600 dark:text-gray-300 mb-6">
-            Please log in to create timestamped proofs.
-          </p>
-          <Link href="/">
-            <Button className="bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold">
-              <LogIn className="w-4 h-4 mr-2" />
-              Go to Login
-            </Button>
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
   const isPending = createFileProofMutation.isPending || createHashProofMutation.isPending;
+
+  // Rotate progress messages while pending
+  useEffect(() => {
+    if (!isPending) {
+      setProgressIndex(0);
+      return;
+    }
+    const interval = setInterval(() => {
+      setProgressIndex((prev) => Math.min(prev + 1, PROGRESS_MESSAGES.length - 1));
+    }, 2000);
+    return () => clearInterval(interval);
+  }, [isPending]);
 
   return (
     <div className="pt-16">
@@ -198,53 +185,11 @@ export default function ProofVaultNew() {
                   <Label className="font-cinzel text-sm font-medium mb-2 block">
                     Select File
                   </Label>
-                  <div
-                    onClick={() => fileInputRef.current?.click()}
-                    className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl p-8 text-center cursor-pointer hover:border-royal-gold/50 transition-colors"
-                  >
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      className="hidden"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) setSelectedFile(file);
-                      }}
-                    />
-                    {selectedFile ? (
-                      <div>
-                        <CheckCircle2 className="w-10 h-10 text-green-500 mx-auto mb-3" />
-                        <p className="font-medium text-royal-navy dark:text-gray-200">
-                          {selectedFile.name}
-                        </p>
-                        <p className="text-sm text-gray-500 mt-1">
-                          {(selectedFile.size / 1024 / 1024).toFixed(2)} MB - {selectedFile.type || "unknown type"}
-                        </p>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="mt-2 text-xs"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSelectedFile(null);
-                            if (fileInputRef.current) fileInputRef.current.value = "";
-                          }}
-                        >
-                          Change file
-                        </Button>
-                      </div>
-                    ) : (
-                      <div>
-                        <Upload className="w-10 h-10 text-gray-400 mx-auto mb-3" />
-                        <p className="text-gray-600 dark:text-gray-300 font-medium">
-                          Click to select a file
-                        </p>
-                        <p className="text-sm text-gray-400 mt-1">
-                          Max 50 MB - Any file type
-                        </p>
-                      </div>
-                    )}
-                  </div>
+                  <FileDropzone
+                    file={selectedFile}
+                    onFileSelect={setSelectedFile}
+                    onFileClear={() => setSelectedFile(null)}
+                  />
                 </div>
 
                 <div>
@@ -284,7 +229,9 @@ export default function ProofVaultNew() {
                   ) : (
                     <Shield className="w-5 h-5 mr-2" />
                   )}
-                  Create Timestamp Proof
+                  {createFileProofMutation.isPending
+                    ? PROGRESS_MESSAGES[progressIndex]
+                    : "Create Timestamp Proof"}
                 </Button>
               </TabsContent>
 
@@ -353,7 +300,9 @@ export default function ProofVaultNew() {
                   ) : (
                     <Shield className="w-5 h-5 mr-2" />
                   )}
-                  Create Timestamp Proof
+                  {createHashProofMutation.isPending
+                    ? PROGRESS_MESSAGES[progressIndex]
+                    : "Create Timestamp Proof"}
                 </Button>
               </TabsContent>
             </Tabs>
@@ -361,5 +310,13 @@ export default function ProofVaultNew() {
         </Card>
       </div>
     </div>
+  );
+}
+
+export default function ProofVaultNew() {
+  return (
+    <RequireAuth>
+      <ProofVaultNewContent />
+    </RequireAuth>
   );
 }

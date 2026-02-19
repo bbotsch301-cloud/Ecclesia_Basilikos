@@ -1,15 +1,24 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRoute, Link } from "wouter";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/hooks/useAuth";
 import { apiRequest } from "@/lib/queryClient";
+import RequireAuth from "@/components/RequireAuth";
+import { StatusBadge } from "@/components/proof-vault/StatusBadge";
+import { FileDropzone } from "@/components/proof-vault/FileDropzone";
+import { VerificationResultDisplay, type VerificationResult } from "@/components/proof-vault/VerificationResultDisplay";
+import { RelativeTime } from "@/components/proof-vault/RelativeTime";
+import { ProofDetailSkeleton } from "@/components/proof-vault/ProofDetailSkeleton";
 import type { Proof } from "@shared/schema";
 import {
   Shield,
@@ -19,15 +28,10 @@ import {
   FileCheck,
   Hash,
   Clock,
-  CheckCircle2,
-  XCircle,
   Copy,
   Loader2,
   Calendar,
-  Lock,
-  LogIn,
-  Upload,
-  AlertCircle,
+  XCircle,
   Bitcoin,
 } from "lucide-react";
 
@@ -39,51 +43,21 @@ interface ProofWithOtsInfo extends Proof {
   };
 }
 
-function StatusBadge({ status }: { status: string | null }) {
-  switch (status) {
-    case "confirmed":
-      return (
-        <Badge className="bg-green-100 text-green-700 border-green-300 text-sm px-3 py-1">
-          <CheckCircle2 className="w-4 h-4 mr-1" />
-          Confirmed on Bitcoin
-        </Badge>
-      );
-    case "pending":
-      return (
-        <Badge className="bg-yellow-100 text-yellow-700 border-yellow-300 text-sm px-3 py-1">
-          <Clock className="w-4 h-4 mr-1" />
-          Pending Confirmation
-        </Badge>
-      );
-    case "failed":
-      return (
-        <Badge className="bg-red-100 text-red-700 border-red-300 text-sm px-3 py-1">
-          <XCircle className="w-4 h-4 mr-1" />
-          Failed
-        </Badge>
-      );
-    default:
-      return <Badge variant="secondary">Unknown</Badge>;
-  }
-}
-
-export default function ProofVaultDetail() {
+function ProofVaultDetailContent() {
   const [, params] = useRoute("/proof-vault/proofs/:id");
   const proofId = params?.id;
-  const { user, isAuthenticated, isLoading: authLoading } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
   // Verification state
   const [verifyFile, setVerifyFile] = useState<File | null>(null);
   const [verifyHash, setVerifyHash] = useState("");
-  const [verifyResult, setVerifyResult] = useState<any>(null);
-  const [showVerify, setShowVerify] = useState(false);
-  const verifyFileInputRef = useRef<HTMLInputElement>(null);
+  const [verifyResult, setVerifyResult] = useState<VerificationResult | null>(null);
+  const [showVerify, setShowVerify] = useState(true);
 
   const { data: proof, isLoading } = useQuery<ProofWithOtsInfo>({
     queryKey: [`/api/proof-vault/proofs/${proofId}`],
-    enabled: isAuthenticated && !!proofId,
+    enabled: !!proofId,
   });
 
   const upgradeMutation = useMutation({
@@ -166,39 +140,8 @@ export default function ProofVaultDetail() {
     toast({ title: "Copied", description: `${label} copied to clipboard` });
   };
 
-  if (authLoading) {
-    return (
-      <div className="pt-16 flex items-center justify-center min-h-screen">
-        <Loader2 className="w-8 h-8 animate-spin text-royal-gold" />
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) {
-    return (
-      <div className="pt-16">
-        <div className="max-w-lg mx-auto px-4 py-32 text-center">
-          <Lock className="w-16 h-16 text-royal-gold mx-auto mb-6" />
-          <h2 className="font-cinzel text-2xl font-bold text-royal-navy dark:text-royal-gold mb-4">
-            Authentication Required
-          </h2>
-          <Link href="/">
-            <Button className="bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold">
-              <LogIn className="w-4 h-4 mr-2" />
-              Go to Login
-            </Button>
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
   if (isLoading) {
-    return (
-      <div className="pt-16 flex items-center justify-center min-h-screen">
-        <Loader2 className="w-8 h-8 animate-spin text-royal-gold" />
-      </div>
-    );
+    return <ProofDetailSkeleton />;
   }
 
   if (!proof) {
@@ -226,12 +169,17 @@ export default function ProofVaultDetail() {
       <div className="relative bg-gradient-to-br from-royal-navy via-royal-burgundy to-royal-navy py-10 md:py-14">
         <div className="absolute inset-0 bg-black/20" />
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <StatusBadge status={proof.status} />
+          <StatusBadge status={proof.status} variant="detailed" />
           <h1 className="font-cinzel-decorative text-2xl md:text-3xl font-bold text-white mt-4 mb-2 leading-tight">
             {proof.label || proof.originalFilename || "Proof Receipt"}
           </h1>
           <p className="text-sm text-gray-300">
-            Created {proof.createdAt ? new Date(proof.createdAt).toLocaleString() : "Unknown"}
+            Created{" "}
+            {proof.createdAt ? (
+              <RelativeTime date={proof.createdAt} className="text-gray-300" />
+            ) : (
+              "Unknown"
+            )}
           </p>
         </div>
       </div>
@@ -261,194 +209,187 @@ export default function ProofVaultDetail() {
                 Upgrade Proof
               </Button>
             )}
-            <a
-              href={`/api/proof-vault/proofs/${proof.id}/bundle`}
-              download
-            >
-              <Button size="sm" className="bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold">
-                <Download className="w-4 h-4 mr-2" />
-                Download Bundle
-              </Button>
-            </a>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <a
+                  href={`/api/proof-vault/proofs/${proof.id}/bundle`}
+                  download
+                >
+                  <Button size="sm" className="bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold">
+                    <Download className="w-4 h-4 mr-2" />
+                    Download Bundle
+                  </Button>
+                </a>
+              </TooltipTrigger>
+              <TooltipContent className="max-w-xs text-xs">
+                Downloads a ZIP containing your proof receipt, OTS proof file, and verification instructions.
+              </TooltipContent>
+            </Tooltip>
           </div>
         </div>
 
         <div className="grid gap-6">
-          {/* Proof Details Card */}
-          <Card>
+          {/* Zone 1: Primary Info - Hash & Status */}
+          <Card className="royal-card">
             <CardHeader>
               <CardTitle className="font-cinzel flex items-center gap-2">
                 <Shield className="w-5 h-5 text-royal-gold" />
-                Proof Details
+                SHA-256 Hash
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              {/* SHA-256 Hash */}
-              <div>
-                <Label className="text-xs text-gray-500 font-cinzel">SHA-256 Hash</Label>
-                <div className="flex items-center gap-2 mt-1">
-                  <code className="font-mono text-sm bg-gray-50 dark:bg-gray-800 p-2 rounded flex-1 break-all">
-                    {proof.sha256}
-                  </code>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => copyToClipboard(proof.sha256, "Hash")}
-                  >
-                    <Copy className="w-4 h-4" />
-                  </Button>
+              <div className="flex items-center gap-2">
+                <code className="font-mono text-sm bg-royal-navy/5 dark:bg-gray-800 p-3 rounded-lg flex-1 break-all border">
+                  {proof.sha256}
+                </code>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => copyToClipboard(proof.sha256, "Hash")}
+                  className="flex-shrink-0"
+                >
+                  <Copy className="w-4 h-4" />
+                </Button>
+              </div>
+
+              {/* Status + Timestamp row */}
+              <div className="flex items-center justify-between flex-wrap gap-3">
+                <StatusBadge status={proof.status} variant="detailed" />
+                <div className="flex items-center gap-1 text-sm text-gray-500">
+                  <Calendar className="w-3.5 h-3.5" />
+                  {proof.createdAt ? (
+                    <RelativeTime date={proof.createdAt} className="text-sm text-gray-500" />
+                  ) : (
+                    "Unknown"
+                  )}
                 </div>
               </div>
 
-              <Separator />
+              {/* Proof ID */}
+              <div className="flex items-center gap-2 pt-2 border-t">
+                <Label className="text-xs text-gray-400 font-cinzel">Proof ID</Label>
+                <code className="font-mono text-xs text-gray-500">{proof.id}</code>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => copyToClipboard(proof.id, "Proof ID")}
+                  className="h-6 w-6 p-0"
+                >
+                  <Copy className="w-3 h-3" />
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
 
-              {/* Info Grid */}
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {/* Zone 2: File Metadata */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="font-cinzel text-base flex items-center gap-2">
+                {proof.mode === "file" ? (
+                  <FileCheck className="w-4 h-4 text-royal-gold" />
+                ) : (
+                  <Hash className="w-4 h-4 text-royal-gold" />
+                )}
+                File Details
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
                 <div>
-                  <Label className="text-xs text-gray-500 font-cinzel">Mode</Label>
-                  <div className="flex items-center gap-1 mt-1">
-                    {proof.mode === "file" ? (
-                      <FileCheck className="w-4 h-4 text-royal-gold" />
-                    ) : (
-                      <Hash className="w-4 h-4 text-royal-gold" />
-                    )}
-                    <span className="text-sm font-medium capitalize">{proof.mode}</span>
-                  </div>
+                  <Label className="text-xs text-gray-400 font-cinzel">Mode</Label>
+                  <p className="font-medium capitalize mt-0.5">{proof.mode}</p>
                 </div>
 
                 <div>
-                  <Label className="text-xs text-gray-500 font-cinzel">Provider</Label>
-                  <div className="flex items-center gap-1 mt-1">
-                    <Bitcoin className="w-4 h-4 text-royal-gold" />
-                    <span className="text-sm font-medium">OpenTimestamps</span>
-                  </div>
-                </div>
-
-                <div>
-                  <Label className="text-xs text-gray-500 font-cinzel">Status</Label>
-                  <div className="mt-1">
-                    <StatusBadge status={proof.status} />
-                  </div>
+                  <Label className="text-xs text-gray-400 font-cinzel">Provider</Label>
+                  <p className="font-medium mt-0.5">OpenTimestamps</p>
                 </div>
 
                 {proof.originalFilename && (
                   <div>
-                    <Label className="text-xs text-gray-500 font-cinzel">Original File</Label>
-                    <p className="text-sm font-medium mt-1 truncate">{proof.originalFilename}</p>
+                    <Label className="text-xs text-gray-400 font-cinzel">Original File</Label>
+                    <p className="font-medium mt-0.5 truncate">{proof.originalFilename}</p>
                   </div>
                 )}
 
                 {proof.mimeType && (
                   <div>
-                    <Label className="text-xs text-gray-500 font-cinzel">MIME Type</Label>
-                    <p className="text-sm font-medium mt-1">{proof.mimeType}</p>
+                    <Label className="text-xs text-gray-400 font-cinzel">MIME Type</Label>
+                    <p className="font-medium mt-0.5">{proof.mimeType}</p>
                   </div>
                 )}
 
                 {proof.sizeBytes && (
                   <div>
-                    <Label className="text-xs text-gray-500 font-cinzel">File Size</Label>
-                    <p className="text-sm font-medium mt-1">
+                    <Label className="text-xs text-gray-400 font-cinzel">File Size</Label>
+                    <p className="font-medium mt-0.5">
                       {(proof.sizeBytes / 1024 / 1024).toFixed(2)} MB
                     </p>
                   </div>
                 )}
 
-                <div>
-                  <Label className="text-xs text-gray-500 font-cinzel">Created</Label>
-                  <div className="flex items-center gap-1 mt-1">
-                    <Calendar className="w-3 h-3 text-gray-400" />
-                    <span className="text-sm">
-                      {proof.createdAt
-                        ? new Date(proof.createdAt).toLocaleString()
-                        : "Unknown"}
-                    </span>
-                  </div>
-                </div>
-
                 {proof.lastUpgradeAttemptAt && (
                   <div>
-                    <Label className="text-xs text-gray-500 font-cinzel">Last Upgrade</Label>
-                    <span className="text-sm mt-1 block">
-                      {new Date(proof.lastUpgradeAttemptAt).toLocaleString()}
-                    </span>
+                    <Label className="text-xs text-gray-400 font-cinzel">Last Upgrade</Label>
+                    <div className="mt-0.5">
+                      <RelativeTime date={proof.lastUpgradeAttemptAt} className="text-sm" />
+                    </div>
                   </div>
                 )}
               </div>
 
               {proof.label && (
-                <>
-                  <Separator />
-                  <div>
-                    <Label className="text-xs text-gray-500 font-cinzel">Label</Label>
-                    <p className="text-sm mt-1">{proof.label}</p>
-                  </div>
-                </>
+                <div className="mt-4 pt-3 border-t">
+                  <Label className="text-xs text-gray-400 font-cinzel">Label</Label>
+                  <p className="text-sm mt-0.5">{proof.label}</p>
+                </div>
               )}
 
               {proof.errorMessage && (
-                <>
-                  <Separator />
-                  <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3">
-                    <div className="flex items-start gap-2">
-                      <XCircle className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
-                      <div className="text-sm text-red-700 dark:text-red-300">
-                        <p className="font-medium">Error</p>
-                        <p>{proof.errorMessage}</p>
-                      </div>
+                <div className="mt-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3">
+                  <div className="flex items-start gap-2">
+                    <XCircle className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                    <div className="text-sm text-red-700 dark:text-red-300">
+                      <p className="font-medium">Error</p>
+                      <p>{proof.errorMessage}</p>
                     </div>
                   </div>
-                </>
-              )}
-
-              {/* OTS Info */}
-              {proof.otsInfo && (
-                <>
-                  <Separator />
-                  <div>
-                    <Label className="text-xs text-gray-500 font-cinzel">OpenTimestamps Details</Label>
-                    <div className="mt-2 space-y-2">
-                      {proof.otsInfo.calendarUrls.length > 0 && (
-                        <div className="text-sm">
-                          <span className="text-gray-500">Calendar servers: </span>
-                          {proof.otsInfo.calendarUrls.map((url, i) => (
-                            <span key={i} className="text-blue-600 text-xs font-mono">
-                              {i > 0 && ", "}
-                              {url}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                      {proof.otsInfo.bitcoinAttestations.length > 0 && (
-                        <div className="text-sm">
-                          <span className="text-gray-500">Bitcoin block: </span>
-                          <span className="font-mono font-medium text-green-600">
-                            #{proof.otsInfo.bitcoinAttestations[0].blockHeight}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </>
-              )}
-
-              {/* Proof ID */}
-              <Separator />
-              <div>
-                <Label className="text-xs text-gray-500 font-cinzel">Proof ID</Label>
-                <div className="flex items-center gap-2 mt-1">
-                  <code className="font-mono text-xs text-gray-500">{proof.id}</code>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => copyToClipboard(proof.id, "Proof ID")}
-                  >
-                    <Copy className="w-3 h-3" />
-                  </Button>
                 </div>
-              </div>
+              )}
             </CardContent>
           </Card>
+
+          {/* Zone 3: Blockchain Details */}
+          {proof.otsInfo && (proof.otsInfo.calendarUrls.length > 0 || proof.otsInfo.bitcoinAttestations.length > 0) && (
+            <Card className="border-royal-gold/30">
+              <CardHeader className="pb-3">
+                <CardTitle className="font-cinzel text-base flex items-center gap-2">
+                  <Bitcoin className="w-4 h-4 text-royal-gold" />
+                  Blockchain Details
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3 text-sm">
+                {proof.otsInfo.bitcoinAttestations.length > 0 && (
+                  <div>
+                    <Label className="text-xs text-gray-400 font-cinzel">Bitcoin Block</Label>
+                    <p className="font-mono font-medium text-green-600 mt-0.5">
+                      #{proof.otsInfo.bitcoinAttestations[0].blockHeight}
+                    </p>
+                  </div>
+                )}
+                {proof.otsInfo.calendarUrls.length > 0 && (
+                  <div>
+                    <Label className="text-xs text-gray-400 font-cinzel">Calendar Servers</Label>
+                    <div className="mt-1 space-y-1">
+                      {proof.otsInfo.calendarUrls.map((url, i) => (
+                        <p key={i} className="text-xs font-mono text-blue-600 break-all">{url}</p>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          )}
 
           {/* Pending Proof Info */}
           {proof.status === "pending" && (
@@ -463,7 +404,7 @@ export default function ProofVaultDetail() {
                     <p className="text-sm text-yellow-600 dark:text-yellow-300 mb-3">
                       Your proof has been submitted to OpenTimestamps calendar servers but is not yet
                       anchored to the Bitcoin blockchain. This typically takes a few hours. Click
-                      "Upgrade Proof" to check for confirmation.
+                      "Check for Confirmation" to check.
                     </p>
                     <Button
                       variant="outline"
@@ -516,31 +457,15 @@ export default function ProofVaultDetail() {
 
                 <div>
                   <Label className="text-sm font-cinzel mb-2 block">Upload File</Label>
-                  <div
-                    onClick={() => verifyFileInputRef.current?.click()}
-                    className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 text-center cursor-pointer hover:border-royal-gold/50 transition-colors"
-                  >
-                    <input
-                      ref={verifyFileInputRef}
-                      type="file"
-                      className="hidden"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) {
-                          setVerifyFile(file);
-                          setVerifyHash("");
-                        }
-                      }}
-                    />
-                    {verifyFile ? (
-                      <p className="text-sm font-medium">{verifyFile.name}</p>
-                    ) : (
-                      <div className="flex items-center justify-center gap-2 text-gray-500">
-                        <Upload className="w-4 h-4" />
-                        <span className="text-sm">Click to select file</span>
-                      </div>
-                    )}
-                  </div>
+                  <FileDropzone
+                    file={verifyFile}
+                    onFileSelect={(file) => {
+                      setVerifyFile(file);
+                      setVerifyHash("");
+                    }}
+                    onFileClear={() => setVerifyFile(null)}
+                    compact
+                  />
                 </div>
 
                 <div className="flex items-center gap-3">
@@ -580,61 +505,11 @@ export default function ProofVaultDetail() {
                   Verify
                 </Button>
 
-                {/* Verification Result */}
                 {verifyResult && (
-                  <div
-                    className={`rounded-lg p-4 border ${
-                      verifyResult.hashMatch
-                        ? "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800"
-                        : "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800"
-                    }`}
-                  >
-                    <div className="flex items-start gap-3">
-                      {verifyResult.hashMatch ? (
-                        <CheckCircle2 className="w-6 h-6 text-green-500 mt-0.5 flex-shrink-0" />
-                      ) : (
-                        <XCircle className="w-6 h-6 text-red-500 mt-0.5 flex-shrink-0" />
-                      )}
-                      <div>
-                        <h4
-                          className={`font-cinzel font-bold mb-1 ${
-                            verifyResult.hashMatch
-                              ? "text-green-700 dark:text-green-400"
-                              : "text-red-700 dark:text-red-400"
-                          }`}
-                        >
-                          {verifyResult.hashMatch ? "MATCH" : "NO MATCH"}
-                        </h4>
-                        <p
-                          className={`text-sm ${
-                            verifyResult.hashMatch
-                              ? "text-green-600 dark:text-green-300"
-                              : "text-red-600 dark:text-red-300"
-                          }`}
-                        >
-                          {verifyResult.message}
-                        </p>
-                        {verifyResult.otsVerification && (
-                          <div className="mt-2 text-xs space-y-1">
-                            <p>
-                              <span className="font-medium">Proof Status:</span>{" "}
-                              {verifyResult.otsVerification.status}
-                            </p>
-                            <p>
-                              <span className="font-medium">Details:</span>{" "}
-                              {verifyResult.otsVerification.details}
-                            </p>
-                            {verifyResult.otsVerification.bitcoinBlockHeight && (
-                              <p>
-                                <span className="font-medium">Bitcoin Block:</span>{" "}
-                                #{verifyResult.otsVerification.bitcoinBlockHeight}
-                              </p>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
+                  <VerificationResultDisplay
+                    result={verifyResult}
+                    showProofLink={false}
+                  />
                 )}
               </CardContent>
             )}
@@ -642,5 +517,13 @@ export default function ProofVaultDetail() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ProofVaultDetail() {
+  return (
+    <RequireAuth>
+      <ProofVaultDetailContent />
+    </RequireAuth>
   );
 }
