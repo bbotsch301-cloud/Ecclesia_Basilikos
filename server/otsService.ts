@@ -15,6 +15,8 @@
  * treated as untrusted and not executed or served directly.
  */
 
+import { createHash } from "crypto";
+
 const CALENDAR_URLS = [
   "https://a.pool.opentimestamps.org",
   "https://b.pool.opentimestamps.org",
@@ -40,6 +42,8 @@ const OP_REVERSE = 0xf2;
 
 // Attestation tags
 const ATTESTATION_TAG_SIZE = 8;
+const ATTESTATION_MARKER = 0x00;
+const FORK_MARKER = 0xff;
 const PENDING_ATTESTATION_TAG = Buffer.from("83dfe30d2ef90c8e", "hex");
 const BITCOIN_ATTESTATION_TAG = Buffer.from("0588960d73d71901", "hex");
 
@@ -72,6 +76,23 @@ export interface OtsProofInfo {
   bitcoinAttestations: Array<{
     blockHeight: number;
   }>;
+}
+
+// --- Detailed parsing types ---
+
+interface ParsedAttestation {
+  type: "pending" | "bitcoin";
+  calendarUrl?: string;
+  commitmentHash?: Buffer; // The computed hash at this point in the chain
+  offsetStart: number; // Byte offset where the 0x00 attestation marker begins
+  offsetEnd: number; // Byte offset where the attestation ends (exclusive)
+  blockHeight?: number;
+}
+
+interface DetailedProofInfo {
+  valid: boolean;
+  fileHash: Buffer;
+  attestations: ParsedAttestation[];
 }
 
 /**
@@ -187,9 +208,20 @@ export async function upgradeProof(
 ): Promise<OtsUpgradeResult> {
   try {
     const proofBytes = Buffer.from(proofDataBase64, "base64");
-    const info = parseOtsProof(proofBytes);
+    const detailed = parseOtsProofDetailed(proofBytes);
 
-    if (info.bitcoinAttestations.length > 0) {
+    if (!detailed.valid) {
+      return {
+        upgraded: false,
+        proofData: proofDataBase64,
+        status: "failed",
+        error: "Invalid OTS proof format",
+      };
+    }
+
+    // Check if already confirmed
+    const bitcoinAttestations = detailed.attestations.filter(a => a.type === "bitcoin");
+    if (bitcoinAttestations.length > 0) {
       return {
         upgraded: false,
         proofData: proofDataBase64,
@@ -197,22 +229,28 @@ export async function upgradeProof(
       };
     }
 
-    if (info.calendarUrls.length === 0) {
+    const pendingAttestations = detailed.attestations.filter(a => a.type === "pending");
+    if (pendingAttestations.length === 0) {
       return {
         upgraded: false,
         proofData: proofDataBase64,
         status: "pending",
-        error: "No calendar URLs found in proof",
+        error: "No pending attestations found in proof",
       };
     }
 
-    // Try each calendar URL to get upgraded proof
-    for (const url of info.calendarUrls) {
+    // Try to upgrade each pending attestation
+    for (const pending of pendingAttestations) {
+      if (!pending.calendarUrl || !pending.commitmentHash) continue;
+
+      const commitmentHex = pending.commitmentHash.toString("hex");
+      const upgradeUrl = `${pending.calendarUrl}/timestamp/${commitmentHex}`;
+
       try {
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), 15000);
 
-        const response = await fetch(url, {
+        const response = await fetch(upgradeUrl, {
           method: "GET",
           headers: {
             Accept: "application/vnd.opentimestamps.v1",
@@ -226,27 +264,30 @@ export async function upgradeProof(
         if (response.status === 200) {
           const upgradedData = Buffer.from(await response.arrayBuffer());
 
-          // Rebuild the OTS file with the upgraded attestation
-          const upgradedProof = replaceCalendarAttestation(
-            proofBytes,
-            info,
-            upgradedData
-          );
+          // Replace the pending attestation (from its 0x00 marker onward) with
+          // the upgraded attestation chain from the calendar
+          const before = proofBytes.subarray(0, pending.offsetStart);
+          const upgradedProof = Buffer.concat([before, upgradedData]);
 
-          if (upgradedProof) {
-            const upgradedInfo = parseOtsProof(upgradedProof);
-            const isConfirmed = upgradedInfo.bitcoinAttestations.length > 0;
+          // Verify the upgraded proof has a bitcoin attestation
+          const upgradedInfo = parseOtsProofDetailed(upgradedProof);
+          const isConfirmed = upgradedInfo.attestations.some(a => a.type === "bitcoin");
 
-            return {
-              upgraded: true,
-              proofData: upgradedProof.toString("base64"),
-              status: isConfirmed ? "confirmed" : "pending",
-            };
-          }
+          return {
+            upgraded: true,
+            proofData: upgradedProof.toString("base64"),
+            status: isConfirmed ? "confirmed" : "pending",
+          };
         }
-        // 404 means not yet confirmed, try next calendar
+
+        if (response.status === 404) {
+          // Not yet confirmed, try next calendar
+          continue;
+        }
+
+        console.warn(`OTS upgrade from ${upgradeUrl} returned ${response.status}`);
       } catch (err: any) {
-        console.warn(`OTS upgrade from ${url} failed: ${err.message}`);
+        console.warn(`OTS upgrade from ${upgradeUrl} failed: ${err.message}`);
         continue;
       }
     }
@@ -267,57 +308,32 @@ export async function upgradeProof(
 }
 
 /**
- * Parse an OTS proof to extract attestation info.
+ * Parse an OTS proof to extract attestation info (simple version).
+ * Delegates to the detailed parser for correct binary parsing.
  */
 export function parseOtsProof(proofBytes: Buffer): OtsProofInfo {
-  const info: OtsProofInfo = {
-    status: "unknown",
-    calendarUrls: [],
-    bitcoinAttestations: [],
-  };
+  const detailed = parseOtsProofDetailed(proofBytes);
 
-  try {
-    // Scan for attestation tags in the proof data
-    for (let i = 0; i < proofBytes.length - ATTESTATION_TAG_SIZE; i++) {
-      const slice = proofBytes.subarray(i, i + ATTESTATION_TAG_SIZE);
-
-      if (slice.equals(PENDING_ATTESTATION_TAG)) {
-        // Pending attestation: followed by varint length + URL
-        const urlStart = i + ATTESTATION_TAG_SIZE;
-        const { value: urlLen, bytesRead } = decodeVarint(
-          proofBytes,
-          urlStart
-        );
-        if (urlLen > 0 && urlLen < 500) {
-          const url = proofBytes
-            .subarray(urlStart + bytesRead, urlStart + bytesRead + urlLen)
-            .toString("utf-8");
-          if (url.startsWith("http")) {
-            info.calendarUrls.push(url);
-          }
-        }
-      }
-
-      if (slice.equals(BITCOIN_ATTESTATION_TAG)) {
-        // Bitcoin attestation: followed by varint block height
-        const blockStart = i + ATTESTATION_TAG_SIZE;
-        const { value: blockHeight } = decodeVarint(proofBytes, blockStart);
-        if (blockHeight > 0) {
-          info.bitcoinAttestations.push({ blockHeight });
-        }
-      }
-    }
-
-    if (info.bitcoinAttestations.length > 0) {
-      info.status = "confirmed";
-    } else if (info.calendarUrls.length > 0) {
-      info.status = "pending";
-    }
-  } catch (err) {
-    console.warn("Error parsing OTS proof:", err);
+  if (!detailed.valid) {
+    return { status: "unknown", calendarUrls: [], bitcoinAttestations: [] };
   }
 
-  return info;
+  const calendarUrls = detailed.attestations
+    .filter(a => a.type === "pending" && a.calendarUrl)
+    .map(a => a.calendarUrl!);
+
+  const bitcoinAttestations = detailed.attestations
+    .filter(a => a.type === "bitcoin" && a.blockHeight != null)
+    .map(a => ({ blockHeight: a.blockHeight! }));
+
+  let status: "pending" | "confirmed" | "unknown" = "unknown";
+  if (bitcoinAttestations.length > 0) {
+    status = "confirmed";
+  } else if (calendarUrls.length > 0) {
+    status = "pending";
+  }
+
+  return { status, calendarUrls, bitcoinAttestations };
 }
 
 /**
@@ -344,29 +360,172 @@ function decodeVarint(
 }
 
 /**
- * Replace the pending calendar attestation with upgraded data.
- * Returns the new proof bytes, or null if replacement failed.
+ * Parse an OTS proof with full binary format awareness.
+ * Walks operations sequentially, replays crypto operations to compute
+ * the commitment hash at each attestation point.
  */
-function replaceCalendarAttestation(
-  originalProof: Buffer,
-  info: OtsProofInfo,
-  upgradedData: Buffer
-): Buffer | null {
-  try {
-    // Find the pending attestation in the proof and replace it
-    // with the upgraded calendar response data
-    for (let i = 0; i < originalProof.length - ATTESTATION_TAG_SIZE; i++) {
-      const slice = originalProof.subarray(i, i + ATTESTATION_TAG_SIZE);
-      if (slice.equals(PENDING_ATTESTATION_TAG)) {
-        // Replace from the attestation tag onward with upgraded data
-        const before = originalProof.subarray(0, i);
-        return Buffer.concat([before, upgradedData]);
-      }
-    }
+function parseOtsProofDetailed(proofBytes: Buffer): DetailedProofInfo {
+  const result: DetailedProofInfo = {
+    valid: false,
+    fileHash: Buffer.alloc(0),
+    attestations: [],
+  };
 
-    return null;
-  } catch {
-    return null;
+  try {
+    let offset = 0;
+
+    // 1. Validate header magic
+    if (proofBytes.length < OTS_HEADER.length + 1) return result;
+    if (!proofBytes.subarray(0, OTS_HEADER.length).equals(OTS_HEADER)) return result;
+    offset = OTS_HEADER.length;
+
+    // 2. Read version byte
+    const version = proofBytes[offset];
+    offset += 1;
+    if (version !== OTS_VERSION) return result;
+
+    // 3. Read hash algorithm tag
+    const hashAlgorithm = proofBytes[offset];
+    offset += 1;
+    if (hashAlgorithm !== OTS_SHA256_TAG) return result;
+
+    // 4. Read hash length (varint) and hash bytes
+    const { value: hashLen, bytesRead: hashLenBytes } = decodeVarint(proofBytes, offset);
+    offset += hashLenBytes;
+
+    if (offset + hashLen > proofBytes.length) return result;
+    result.fileHash = Buffer.from(proofBytes.subarray(offset, offset + hashLen));
+    offset += hashLen;
+
+    // 5. Parse operations chain, computing intermediate hashes
+    const currentHash = Buffer.from(result.fileHash);
+    parseOperationChain(proofBytes, offset, currentHash, result);
+
+    result.valid = true;
+  } catch (err) {
+    console.warn("Error in detailed OTS parse:", err);
+  }
+
+  return result;
+}
+
+/**
+ * Recursively parse an OTS operation chain starting at the given offset.
+ * Replays cryptographic operations to compute the commitment hash at
+ * each attestation point.
+ */
+function parseOperationChain(
+  proofBytes: Buffer,
+  startOffset: number,
+  initialHash: Buffer,
+  result: DetailedProofInfo
+): void {
+  let offset = startOffset;
+  let currentHash = Buffer.from(initialHash);
+
+  while (offset < proofBytes.length) {
+    const tag = proofBytes[offset];
+
+    if (tag === ATTESTATION_MARKER) {
+      // Attestation: 0x00 + 8-byte attestation type tag + varint payload
+      const attestationMarkerOffset = offset;
+      offset += 1; // skip 0x00
+
+      if (offset + ATTESTATION_TAG_SIZE > proofBytes.length) break;
+      const attTag = proofBytes.subarray(offset, offset + ATTESTATION_TAG_SIZE);
+      offset += ATTESTATION_TAG_SIZE;
+
+      const { value: payloadLen, bytesRead: payloadLenBytes } = decodeVarint(proofBytes, offset);
+      offset += payloadLenBytes;
+
+      if (attTag.equals(PENDING_ATTESTATION_TAG)) {
+        if (offset + payloadLen <= proofBytes.length) {
+          const url = proofBytes.subarray(offset, offset + payloadLen).toString("utf-8");
+          offset += payloadLen;
+
+          result.attestations.push({
+            type: "pending",
+            calendarUrl: url.startsWith("http") ? url : undefined,
+            commitmentHash: Buffer.from(currentHash),
+            offsetStart: attestationMarkerOffset,
+            offsetEnd: offset,
+          });
+        }
+      } else if (attTag.equals(BITCOIN_ATTESTATION_TAG)) {
+        // Payload is the block height encoded as a varint
+        const { value: blockHeight } = decodeVarint(proofBytes, offset);
+        offset += payloadLen; // advance past the full payload
+
+        result.attestations.push({
+          type: "bitcoin",
+          blockHeight,
+          offsetStart: attestationMarkerOffset,
+          offsetEnd: offset,
+        });
+      } else {
+        // Unknown attestation type, skip payload
+        offset += payloadLen;
+      }
+
+      // After an attestation, this branch is done
+      break;
+
+    } else if (tag === FORK_MARKER) {
+      // Fork: proof tree branches. Parse first branch recursively,
+      // then continue parsing the second branch at current level.
+      offset += 1; // skip 0xff
+      parseOperationChain(proofBytes, offset, currentHash, result);
+      // We can't easily determine where the first branch ended without
+      // tracking offset through recursion. For single-calendar proofs
+      // (which is what we create), there are no forks.
+      return;
+
+    } else if (tag === OP_APPEND) {
+      offset += 1;
+      const { value: dataLen, bytesRead: dataLenBytes } = decodeVarint(proofBytes, offset);
+      offset += dataLenBytes;
+      const data = proofBytes.subarray(offset, offset + dataLen);
+      offset += dataLen;
+      currentHash = Buffer.concat([currentHash, data]);
+
+    } else if (tag === OP_PREPEND) {
+      offset += 1;
+      const { value: dataLen, bytesRead: dataLenBytes } = decodeVarint(proofBytes, offset);
+      offset += dataLenBytes;
+      const data = proofBytes.subarray(offset, offset + dataLen);
+      offset += dataLen;
+      currentHash = Buffer.concat([data, currentHash]);
+
+    } else if (tag === OP_SHA256) {
+      offset += 1;
+      currentHash = createHash("sha256").update(currentHash).digest();
+
+    } else if (tag === OP_RIPEMD160) {
+      offset += 1;
+      currentHash = createHash("ripemd160").update(currentHash).digest();
+
+    } else if (tag === OP_SHA1) {
+      offset += 1;
+      currentHash = createHash("sha1").update(currentHash).digest();
+
+    } else if (tag === OP_REVERSE) {
+      offset += 1;
+      currentHash = Buffer.from(currentHash).reverse();
+
+    } else if (tag === OP_HEXLIFY) {
+      offset += 1;
+      currentHash = Buffer.from(currentHash.toString("hex"), "utf-8");
+
+    } else if (tag === OP_KECCAK256) {
+      // Keccak256 is rarely used in OTS and not natively supported in Node.js crypto
+      console.warn("Keccak256 operation encountered, not supported");
+      break;
+
+    } else {
+      // Unknown tag, stop parsing this branch
+      console.warn(`Unknown OTS operation tag: 0x${tag.toString(16)} at offset ${offset}`);
+      break;
+    }
   }
 }
 

@@ -70,10 +70,23 @@ function ProofVaultDetailContent() {
         queryKey: [`/api/proof-vault/proofs/${proofId}`],
       });
       queryClient.invalidateQueries({ queryKey: ["/api/proof-vault/proofs"] });
-      toast({
-        title: data.proof?.status === "confirmed" ? "Proof Confirmed" : "Upgrade Attempted",
-        description: data.message,
-      });
+      if (data.status === "confirmed") {
+        toast({
+          title: "Proof Confirmed!",
+          description: data.message || "Your proof has been anchored to the Bitcoin blockchain.",
+        });
+      } else if (data.status === "pending") {
+        toast({
+          title: "Still Pending",
+          description: data.message || "Not yet confirmed. Timestamps typically take a few hours.",
+        });
+      } else {
+        toast({
+          title: "Upgrade Issue",
+          description: data.message || "Something went wrong during the upgrade check.",
+          variant: "destructive",
+        });
+      }
     },
     onError: () => {
       toast({

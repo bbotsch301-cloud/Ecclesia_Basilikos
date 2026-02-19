@@ -275,11 +275,14 @@ router.post("/proofs/:id/upgrade", async (req: Request, res: Response) => {
 
     res.json({
       message: result.upgraded
-        ? "Proof upgraded successfully"
+        ? result.status === "confirmed"
+          ? "Proof confirmed on Bitcoin blockchain!"
+          : "Proof upgraded but not yet fully confirmed."
         : result.status === "pending"
-          ? "Proof not yet confirmed on Bitcoin. Try again later."
-          : "Upgrade failed",
+          ? "Not yet confirmed on Bitcoin. Timestamps typically take a few hours. Try again later."
+          : result.error || "Upgrade failed",
       proof: updated,
+      status: result.status,
     });
   } catch (error: any) {
     console.error("Error upgrading proof:", error);
