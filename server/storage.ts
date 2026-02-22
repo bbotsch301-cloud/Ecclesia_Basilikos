@@ -1,10 +1,10 @@
-import { 
-  type User, 
-  type InsertUser, 
+import {
+  type User,
+  type InsertUser,
   type LoginUser,
-  type Contact, 
-  type InsertContact, 
-  type Newsletter, 
+  type Contact,
+  type InsertContact,
+  type Newsletter,
   type InsertNewsletter,
   type Course,
   type InsertCourse,
@@ -41,6 +41,8 @@ import {
   type InsertVideoProgress,
   type SectionProgress,
   type InsertSectionProgress,
+  type DictionaryEntry,
+  type InsertDictionaryEntry,
   users,
   contacts,
   newsletter_subscribers,
@@ -61,7 +63,8 @@ import {
   courseSections,
   videoAttachments,
   videoProgress,
-  sectionProgress
+  sectionProgress,
+  dictionaryEntries
 } from "@shared/schema";
 import { eq, and, desc, sql, or, inArray } from "drizzle-orm";
 import { db } from "./db";
@@ -187,6 +190,11 @@ export interface IStorage {
   createTrustDownload(download: InsertTrustDownload): Promise<TrustDownload>;
   getTrustDownloadByEmail(email: string): Promise<TrustDownload | undefined>;
   getAllTrustDownloads(): Promise<TrustDownload[]>;
+
+  // Dictionary
+  searchDictionary(query: string, limit?: number): Promise<DictionaryEntry[]>;
+  getDictionaryEntry(id: string): Promise<DictionaryEntry | undefined>;
+  getDictionaryStats(): Promise<{ totalEntries: number; letters: string[] }>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1017,6 +1025,57 @@ export class DatabaseStorage implements IStorage {
     return {
       totalSections: totalSections[0]?.count || 0,
       completedSections: completedSections[0]?.count || 0,
+    };
+  }
+  // Dictionary
+  async searchDictionary(query: string, limit: number = 20): Promise<DictionaryEntry[]> {
+    const maxLimit = Math.min(limit, 50);
+    const lowerQuery = query.toLowerCase().trim();
+
+    if (lowerQuery.length < 2) return [];
+
+    // Use a union approach: exact matches first, then prefix, then substring
+    const results = await db.select().from(dictionaryEntries)
+      .where(
+        or(
+          eq(dictionaryEntries.termLower, lowerQuery),
+          sql`${dictionaryEntries.termLower} LIKE ${lowerQuery + '%'}`,
+          sql`${dictionaryEntries.termLower} LIKE ${'%' + lowerQuery + '%'}`
+        )
+      )
+      .orderBy(
+        // Exact match first, then prefix, then substring
+        sql`CASE
+          WHEN ${dictionaryEntries.termLower} = ${lowerQuery} THEN 0
+          WHEN ${dictionaryEntries.termLower} LIKE ${lowerQuery + '%'} THEN 1
+          ELSE 2
+        END`,
+        dictionaryEntries.termLower
+      )
+      .limit(maxLimit);
+
+    return results;
+  }
+
+  async getDictionaryEntry(id: string): Promise<DictionaryEntry | undefined> {
+    const [entry] = await db.select().from(dictionaryEntries)
+      .where(eq(dictionaryEntries.id, id));
+    return entry;
+  }
+
+  async getDictionaryStats(): Promise<{ totalEntries: number; letters: string[] }> {
+    const [countResult] = await db.select({
+      count: sql<number>`count(*)`,
+    }).from(dictionaryEntries);
+
+    const letterResults = await db.selectDistinct({
+      letter: dictionaryEntries.letter,
+    }).from(dictionaryEntries)
+      .orderBy(dictionaryEntries.letter);
+
+    return {
+      totalEntries: countResult?.count || 0,
+      letters: letterResults.map(r => r.letter),
     };
   }
 }

@@ -654,6 +654,29 @@ export const createProofHashSchema = z.object({
 export type InsertProof = z.infer<typeof insertProofSchema>;
 export type Proof = typeof proofs.$inferSelect;
 
+// Dictionary entries table for Black's Law Dictionary search
+export const dictionaryEntries = pgTable("dictionary_entries", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  term: text("term").notNull(),
+  termLower: text("term_lower").notNull(),
+  definition: text("definition").notNull(),
+  letter: varchar("letter", { length: 1 }).notNull(),
+  subContext: text("sub_context"),
+  pageNumber: integer("page_number"),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("dictionary_entries_term_lower_idx").on(table.termLower),
+  index("dictionary_entries_letter_idx").on(table.letter),
+]);
+
+export const insertDictionaryEntrySchema = createInsertSchema(dictionaryEntries).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertDictionaryEntry = z.infer<typeof insertDictionaryEntrySchema>;
+export type DictionaryEntry = typeof dictionaryEntries.$inferSelect;
+
 // Video management types
 export type InsertCourseSection = z.infer<typeof insertCourseSectionSchema>;
 export type CourseSection = typeof courseSections.$inferSelect;

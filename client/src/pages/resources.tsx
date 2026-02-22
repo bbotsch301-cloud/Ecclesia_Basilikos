@@ -13,6 +13,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { FileText, Heart, BookOpen, Download, CheckSquare, Calculator, Search, Phone, LogIn, User } from "lucide-react";
+import DictionarySearch from "@/components/dictionary-search";
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -152,38 +153,27 @@ export default function Resources() {
     { icon: <Phone />, title: "Support Line" }
   ];
 
-  if (isLoading) {
-    return (
-      <div className="pt-16">
-        <HeroSection
-          title="Freedom Resources"
-          description="Loading your covenant resources..."
-          backgroundImage="https://images.unsplash.com/photo-1543002588-bfa74002ed7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
-        />
-        <div className="py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-covenant-gold mx-auto"></div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="pt-16">
       <HeroSection
         title="Freedom Resources"
-        description={isAuthenticated 
-          ? "Access your exclusive covenant freedom resources and tools"
-          : "Members-only resources for walking in covenantal freedom"
-        }
+        description="Search Black's Law Dictionary and access covenant freedom tools"
         backgroundImage="https://images.unsplash.com/photo-1543002588-bfa74002ed7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
       />
 
       <div className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
-          {isAuthenticated ? (
+
+          {/* Public Dictionary Section — visible to all visitors */}
+          <DictionarySearch />
+
+          <div className="royal-divider my-16 relative" />
+
+          {isLoading ? (
+            <div className="text-center py-12">
+              <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-royal-gold mx-auto"></div>
+            </div>
+          ) : isAuthenticated ? (
             <>
               {/* Welcome Section for Authenticated Users */}
               <div className="text-center mb-16">

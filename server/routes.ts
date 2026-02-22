@@ -785,6 +785,42 @@ startxref
     }
   });
 
+  // Dictionary routes (public — no auth required)
+  app.get("/api/dictionary/search", async (req, res) => {
+    try {
+      const q = typeof req.query.q === "string" ? req.query.q : "";
+      const limit = parseInt(req.query.limit as string) || 20;
+      const results = await storage.searchDictionary(q, limit);
+      res.json(results);
+    } catch (error) {
+      console.error("Dictionary search error:", error);
+      res.status(500).json({ error: "Failed to search dictionary" });
+    }
+  });
+
+  app.get("/api/dictionary/stats", async (req, res) => {
+    try {
+      const stats = await storage.getDictionaryStats();
+      res.json(stats);
+    } catch (error) {
+      console.error("Dictionary stats error:", error);
+      res.status(500).json({ error: "Failed to fetch dictionary stats" });
+    }
+  });
+
+  app.get("/api/dictionary/:id", async (req, res) => {
+    try {
+      const entry = await storage.getDictionaryEntry(req.params.id);
+      if (!entry) {
+        return res.status(404).json({ error: "Entry not found" });
+      }
+      res.json(entry);
+    } catch (error) {
+      console.error("Dictionary entry error:", error);
+      res.status(500).json({ error: "Failed to fetch dictionary entry" });
+    }
+  });
+
   // Admin routes
   app.use('/api/admin', adminRoutes);
 
