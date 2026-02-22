@@ -26,7 +26,14 @@
       "WebFetch(domain:dgi.io)",
       "WebFetch(domain:blog.eternitywall.com)",
       "Bash(npx tsx:*)",
-      "Bash(npm run dev:*)"
+      "Bash(npm run dev:*)",
+      "Bash(psql \"$DATABASE_URL\" -c \"SELECT term, LEFT\\(definition, 200\\) as definition FROM dictionary_entries WHERE term_lower = 'trust' OR term_lower = 'habeas corpus' OR term_lower = 'lien' OR term_lower = 'mortgage' OR term_lower = 'estoppel' LIMIT 5;\" 2>&1222)",
+      "Bash(psql \"$DATABASE_URL\" -c \"SELECT term, LEFT\\(definition, 200\\) as definition FROM dictionary_entries WHERE term_lower LIKE 'trust%' ORDER BY term LIMIT 10;\" 2>&1)",
+      "Bash(fuser 5000/tcp 2>/dev/null || echo \"no fuser\"; ps aux | grep \"tsx server\" | grep -v grep)",
+      "Bash(which npx && npx --yes playwright --version 2>&1 || echo \"no playwright\"2)",
+      "Bash(npx playwright screenshot --wait-for-timeout 3000 'http://localhost:5000/resources' /tmp/resources-page.png 2>&1)",
+      "Bash(npx playwright install chromium 2>&1 | tail -5)",
+      "Bash(npx playwright screenshot --wait-for-timeout 3000 --viewport-size '1280,900' --full-page 'http://localhost:5000/resources' /tmp/resources-page.png 2>&1)"
     ]
   }
 }
