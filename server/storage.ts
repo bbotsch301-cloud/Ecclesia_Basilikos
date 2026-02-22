@@ -195,6 +195,8 @@ export interface IStorage {
   searchDictionary(query: string, limit?: number): Promise<DictionaryEntry[]>;
   getDictionaryEntry(id: string): Promise<DictionaryEntry | undefined>;
   getDictionaryStats(): Promise<{ totalEntries: number; letters: string[] }>;
+  getAllDictionaryTerms(): Promise<Pick<DictionaryEntry, 'id' | 'term' | 'termLower' | 'letter'>[]>;
+  getDictionaryBatch(offset: number, limit: number): Promise<DictionaryEntry[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1050,6 +1052,7 @@ export class DatabaseStorage implements IStorage {
           WHEN ${dictionaryEntries.termLower} LIKE ${lowerQuery + '%'} THEN 1
           ELSE 2
         END`,
+        sql`length(${dictionaryEntries.definition}) DESC`,
         dictionaryEntries.termLower
       )
       .limit(maxLimit);
@@ -1077,6 +1080,24 @@ export class DatabaseStorage implements IStorage {
       totalEntries: countResult?.count || 0,
       letters: letterResults.map(r => r.letter),
     };
+  }
+
+  async getAllDictionaryTerms(): Promise<Pick<DictionaryEntry, 'id' | 'term' | 'termLower' | 'letter'>[]> {
+    return db.select({
+      id: dictionaryEntries.id,
+      term: dictionaryEntries.term,
+      termLower: dictionaryEntries.termLower,
+      letter: dictionaryEntries.letter,
+    }).from(dictionaryEntries)
+      .orderBy(dictionaryEntries.termLower);
+  }
+
+  async getDictionaryBatch(offset: number, limit: number): Promise<DictionaryEntry[]> {
+    const maxLimit = Math.min(limit, 500);
+    return db.select().from(dictionaryEntries)
+      .orderBy(dictionaryEntries.termLower)
+      .offset(offset)
+      .limit(maxLimit);
   }
 }
 
