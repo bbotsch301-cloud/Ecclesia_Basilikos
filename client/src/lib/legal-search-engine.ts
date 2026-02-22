@@ -475,7 +475,30 @@ function scoreEntry(
   return { score: 0, matchType: "exact" };
 }
 
-// ─── Entry Validation ────────────────────────────────────────────────
+// ─── Entry Repair & Validation ───────────────────────────────────────
+
+/**
+ * Repair common PDF parsing artifacts where the first word of the definition
+ * gets merged into the term (e.g., "INJUNCTION. A" → term "INJUNCTION", def "A prohibitive writ...")
+ */
+function repairEntry(entry: DictionaryEntry): DictionaryEntry {
+  const trailingArticleMatch = entry.term.match(/^(.+?)\.\s+(A|An|The|In|To|Of)\s*$/i);
+  if (trailingArticleMatch) {
+    const cleanTerm = trailingArticleMatch[1].trim();
+    // Only repair if cleaned term contains a real word (3+ consecutive letters)
+    if (/[A-Za-z]{3}/.test(cleanTerm)) {
+      const article = trailingArticleMatch[2];
+      const repairedDef = article.charAt(0).toUpperCase() + article.slice(1).toLowerCase() + " " + entry.definition;
+      return {
+        ...entry,
+        term: cleanTerm,
+        termLower: cleanTerm.toLowerCase(),
+        definition: repairedDef,
+      };
+    }
+  }
+  return entry;
+}
 
 function isValidEntry(entry: DictionaryEntry): boolean {
   const term = entry.term.trim();
@@ -484,17 +507,17 @@ function isValidEntry(entry: DictionaryEntry): boolean {
   // Term must be 3+ characters
   if (term.length < 3) return false;
 
-  // Term must be only letters, spaces, hyphens (reject "Y.S", "CONVENTICLE. A")
-  if (!/^[A-Za-z][A-Za-z\s\-]+$/.test(term)) return false;
+  // Term must be only letters, spaces, hyphens
+  if (!/^[A-Za-z][A-Za-z\s\-]*[A-Za-z]$/.test(term) && !/^[A-Za-z]{3,}$/.test(term)) return false;
 
   // Reject terms ending with trailing articles/prepositions
-  if (/\s+(A|AN|THE|OF|TO|IN|AT|BY|FOR|ON)$/i.test(term)) return false;
+  if (/\s+(A|AN|THE|OF|TO|IN|AT|BY|FOR|ON|AND)$/i.test(term)) return false;
 
   // Definition must start with a letter (not "433, 434;...")
   if (!/^[A-Za-z]/.test(def)) return false;
 
-  // Definition must be 20+ characters
-  if (def.length < 20) return false;
+  // Definition must be 10+ characters (allow short cross-reference entries like "See Injunction.")
+  if (def.length < 10) return false;
 
   return true;
 }
@@ -508,7 +531,7 @@ export class LegalSearchEngine {
   private initialized = false;
 
   loadEntries(entries: DictionaryEntry[]) {
-    this.entries = entries.filter(isValidEntry);
+    this.entries = entries.map(repairEntry).filter(isValidEntry);
     this.buildIndices();
     this.initialized = true;
   }
