@@ -24,6 +24,7 @@ import {
 import { format } from "date-fns";
 import AdminLayout from "@/components/layout/admin-layout";
 import { getQueryFn } from "@/lib/queryClient";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 interface TrustDownload {
   id: string;
@@ -36,6 +37,7 @@ interface TrustDownload {
 }
 
 export default function AdminTrustDownloads() {
+  usePageTitle("Admin - Trust Downloads");
   const [searchTerm, setSearchTerm] = useState("");
 
   const { data: downloads = [], isLoading } = useQuery<TrustDownload[]>({

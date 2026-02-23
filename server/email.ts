@@ -81,6 +81,9 @@ export function generateBulkEmailHtml(subject: string, body: string): string {
           <div class="footer">
             <p>Kingdom Ventures Trust - Teaching Spiritual Freedom Through Biblical Truth</p>
             <p>If you have any questions, please contact us through our website.</p>
+            <p style="margin-top:12px;font-size:12px;color:#999;">
+              <a href="${process.env.BASE_URL || ''}/newsletter/unsubscribe" style="color:#999;text-decoration:underline;">Unsubscribe</a> from future emails.
+            </p>
           </div>
         </div>
       </body>

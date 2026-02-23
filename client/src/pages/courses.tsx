@@ -15,6 +15,7 @@ import {
   Shield
 } from "lucide-react";
 import ScriptureQuote from "@/components/ui/scripture-quote";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 interface CourseWithLessonCount {
   id: string;
@@ -31,6 +32,7 @@ interface CourseWithLessonCount {
 }
 
 export default function Courses() {
+  usePageTitle("Courses");
   const { user, isAuthenticated, isLoading } = useAuth();
   const { toast } = useToast();
   const [, navigate] = useLocation();

@@ -41,6 +41,7 @@ import type { UploadResult } from "@uppy/core";
 import { Link } from "wouter";
 import type { Download as DownloadType } from "@shared/schema";
 import AdminLayout from "@/components/layout/admin-layout";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const downloadFormSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -88,6 +89,7 @@ function formatDate(dateStr: string | Date | null | undefined): string {
 }
 
 export default function AdminDownloads() {
+  usePageTitle("Admin - Downloads");
   const { toast } = useToast();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingDownload, setEditingDownload] = useState<DownloadType | null>(null);

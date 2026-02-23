@@ -3,8 +3,10 @@ import RoyalHero from "@/components/ui/royal-hero";
 import ComparisonCard from "@/components/ui/comparison-card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { comparisons, getFeaturedComparisons, getComparisonsByCategory } from "@shared/comparisonData";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 export default function Repository() {
+  usePageTitle("Repository");
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'identity' | 'priesthood' | 'government' | 'economy' | 'legal'>('all');
   
   const featuredComparisons = getFeaturedComparisons();

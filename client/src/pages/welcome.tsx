@@ -4,8 +4,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BookOpen, FileText, Shield, Users, Download, GraduationCap, Loader2, Mail, Settings } from "lucide-react";
 import { useEffect } from "react";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 export default function Welcome() {
+  usePageTitle("Dashboard");
   const { user, isAuthenticated, isLoading } = useAuth();
   const [, navigate] = useLocation();
 

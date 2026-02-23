@@ -1,14 +1,34 @@
 import { useState } from "react";
-import { useParams, Link } from "wouter";
+import { useParams, Link, useLocation } from "wouter";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
+import { usePageTitle } from "@/hooks/usePageTitle";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
-import { MessageSquare, ArrowLeft, Eye, Clock, Lock, Users } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { MessageSquare, ArrowLeft, Eye, Clock, Lock, Users, Pencil, Trash2 } from "lucide-react";
 import type { ForumThread, ForumReply, ForumCategory, User } from "@shared/schema";
 
 interface ThreadData {
@@ -22,42 +42,97 @@ export default function ThreadPage() {
   const { user, isAuthenticated } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const [, navigate] = useLocation();
   const [replyContent, setReplyContent] = useState("");
+
+  // Edit states
+  const [editingReplyId, setEditingReplyId] = useState<string | null>(null);
+  const [editReplyContent, setEditReplyContent] = useState("");
+  const [editThreadTitle, setEditThreadTitle] = useState("");
+  const [editThreadContent, setEditThreadContent] = useState("");
+  const [editThreadOpen, setEditThreadOpen] = useState(false);
 
   const { data, isLoading, error } = useQuery<ThreadData>({
     queryKey: ['/api/forum/threads', threadId],
     enabled: !!threadId,
   });
 
+  usePageTitle(data?.thread?.title);
+
+  const canModerate = user && ['admin', 'moderator'].includes(user.role || '');
+
   const replyMutation = useMutation({
     mutationFn: async (content: string) => {
       return await apiRequest('POST', `/api/forum/threads/${threadId}/replies`, { content });
     },
     onSuccess: () => {
-      toast({
-        title: "Reply posted",
-        description: "Your reply has been added to the thread.",
-      });
+      toast({ title: "Reply posted", description: "Your reply has been added to the thread." });
       setReplyContent("");
       queryClient.invalidateQueries({ queryKey: ['/api/forum/threads', threadId] });
     },
     onError: (error: any) => {
-      toast({
-        title: "Error",
-        description: error.message || "Failed to post reply",
-        variant: "destructive",
-      });
+      toast({ title: "Error", description: error.message || "Failed to post reply", variant: "destructive" });
+    },
+  });
+
+  const editThreadMutation = useMutation({
+    mutationFn: async ({ title, content }: { title: string; content: string }) => {
+      return await apiRequest('PUT', `/api/forum/threads/${threadId}`, { title, content });
+    },
+    onSuccess: () => {
+      toast({ title: "Thread updated" });
+      setEditThreadOpen(false);
+      queryClient.invalidateQueries({ queryKey: ['/api/forum/threads', threadId] });
+    },
+    onError: (error: any) => {
+      toast({ title: "Error", description: error.message || "Failed to update thread", variant: "destructive" });
+    },
+  });
+
+  const deleteThreadMutation = useMutation({
+    mutationFn: async () => {
+      return await apiRequest('DELETE', `/api/forum/threads/${threadId}`);
+    },
+    onSuccess: () => {
+      toast({ title: "Thread deleted" });
+      navigate("/forum");
+    },
+    onError: (error: any) => {
+      toast({ title: "Error", description: error.message || "Failed to delete thread", variant: "destructive" });
+    },
+  });
+
+  const editReplyMutation = useMutation({
+    mutationFn: async ({ replyId, content }: { replyId: string; content: string }) => {
+      return await apiRequest('PUT', `/api/forum/replies/${replyId}`, { content });
+    },
+    onSuccess: () => {
+      toast({ title: "Reply updated" });
+      setEditingReplyId(null);
+      queryClient.invalidateQueries({ queryKey: ['/api/forum/threads', threadId] });
+    },
+    onError: (error: any) => {
+      toast({ title: "Error", description: error.message || "Failed to update reply", variant: "destructive" });
+    },
+  });
+
+  const deleteReplyMutation = useMutation({
+    mutationFn: async (replyId: string) => {
+      return await apiRequest('DELETE', `/api/forum/replies/${replyId}`);
+    },
+    onSuccess: () => {
+      toast({ title: "Reply deleted" });
+      queryClient.invalidateQueries({ queryKey: ['/api/forum/threads', threadId] });
+    },
+    onError: (error: any) => {
+      toast({ title: "Error", description: error.message || "Failed to delete reply", variant: "destructive" });
     },
   });
 
   const handleSubmitReply = (e: React.FormEvent) => {
     e.preventDefault();
     if (replyContent.trim().length < 3) {
-      toast({
-        title: "Error",
-        description: "Reply must be at least 3 characters",
-        variant: "destructive",
-      });
+      toast({ title: "Error", description: "Reply must be at least 3 characters", variant: "destructive" });
       return;
     }
     replyMutation.mutate(replyContent);
@@ -114,6 +189,8 @@ export default function ThreadPage() {
   }
 
   const { thread, replies } = data;
+  const isThreadOwner = user?.id === thread.authorId;
+  const canEditThread = isThreadOwner || canModerate;
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
@@ -140,7 +217,74 @@ export default function ThreadPage() {
               </Badge>
             )}
           </div>
-          <CardTitle className="text-2xl text-gray-900">{thread.title}</CardTitle>
+          <div className="flex items-start justify-between gap-4">
+            <CardTitle className="text-2xl text-gray-900">{thread.title}</CardTitle>
+            {canEditThread && (
+              <div className="flex items-center gap-1 shrink-0">
+                <Dialog open={editThreadOpen} onOpenChange={(open) => {
+                  setEditThreadOpen(open);
+                  if (open) {
+                    setEditThreadTitle(thread.title);
+                    setEditThreadContent(thread.content);
+                  }
+                }}>
+                  <DialogTrigger asChild>
+                    <Button variant="ghost" size="sm">
+                      <Pencil className="h-4 w-4" />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Edit Thread</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4">
+                      <Input
+                        value={editThreadTitle}
+                        onChange={(e) => setEditThreadTitle(e.target.value)}
+                        placeholder="Thread title"
+                      />
+                      <Textarea
+                        value={editThreadContent}
+                        onChange={(e) => setEditThreadContent(e.target.value)}
+                        rows={6}
+                      />
+                      <Button
+                        className="bg-amber-600 hover:bg-amber-700"
+                        disabled={editThreadMutation.isPending}
+                        onClick={() => editThreadMutation.mutate({ title: editThreadTitle, content: editThreadContent })}
+                      >
+                        {editThreadMutation.isPending ? "Saving..." : "Save"}
+                      </Button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-700">
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Delete Thread</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This will permanently delete the thread and all its replies. This cannot be undone.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        className="bg-red-600 hover:bg-red-700"
+                        onClick={() => deleteThreadMutation.mutate()}
+                      >
+                        Delete
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
+            )}
+          </div>
           <div className="flex items-center gap-4 text-sm text-gray-500 mt-2">
             <div className="flex items-center gap-1">
               <Users className="h-4 w-4" />
@@ -177,26 +321,100 @@ export default function ThreadPage() {
           </Card>
         ) : (
           <div className="space-y-4">
-            {replies.map((reply) => (
-              <Card key={reply.id}>
-                <CardContent className="pt-4 pb-4">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 font-semibold text-sm">
-                      {getUserDisplayName(reply.author).charAt(0).toUpperCase()}
+            {replies.map((reply) => {
+              const isReplyOwner = user?.id === reply.authorId;
+              const canEditReply = isReplyOwner || canModerate;
+              const isEditing = editingReplyId === reply.id;
+
+              return (
+                <Card key={reply.id}>
+                  <CardContent className="pt-4 pb-4">
+                    <div className="flex items-center justify-between gap-3 mb-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 font-semibold text-sm">
+                          {getUserDisplayName(reply.author).charAt(0).toUpperCase()}
+                        </div>
+                        <div>
+                          <p className="font-medium text-gray-900 text-sm">
+                            {getUserDisplayName(reply.author)}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {formatDate(reply.createdAt)}
+                            {reply.isEdited && (
+                              <span className="ml-2 text-gray-400 italic">(edited)</span>
+                            )}
+                          </p>
+                        </div>
+                      </div>
+                      {canEditReply && !isEditing && (
+                        <div className="flex items-center gap-1">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              setEditingReplyId(reply.id);
+                              setEditReplyContent(reply.content);
+                            }}
+                          >
+                            <Pencil className="h-3 w-3" />
+                          </Button>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-700">
+                                <Trash2 className="h-3 w-3" />
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Delete Reply</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  This will permanently delete this reply. This cannot be undone.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction
+                                  className="bg-red-600 hover:bg-red-700"
+                                  onClick={() => deleteReplyMutation.mutate(reply.id)}
+                                >
+                                  Delete
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </div>
+                      )}
                     </div>
-                    <div>
-                      <p className="font-medium text-gray-900 text-sm">
-                        {getUserDisplayName(reply.author)}
-                      </p>
-                      <p className="text-xs text-gray-500">{formatDate(reply.createdAt)}</p>
-                    </div>
-                  </div>
-                  <div className="prose prose-sm prose-gray max-w-none whitespace-pre-wrap pl-11">
-                    {reply.content}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                    {isEditing ? (
+                      <div className="pl-11 space-y-2">
+                        <Textarea
+                          value={editReplyContent}
+                          onChange={(e) => setEditReplyContent(e.target.value)}
+                          rows={3}
+                        />
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            className="bg-amber-600 hover:bg-amber-700"
+                            disabled={editReplyMutation.isPending}
+                            onClick={() => editReplyMutation.mutate({ replyId: reply.id, content: editReplyContent })}
+                          >
+                            {editReplyMutation.isPending ? "Saving..." : "Save"}
+                          </Button>
+                          <Button size="sm" variant="outline" onClick={() => setEditingReplyId(null)}>
+                            Cancel
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="prose prose-sm prose-gray max-w-none whitespace-pre-wrap pl-11">
+                        {reply.content}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
         )}
       </div>

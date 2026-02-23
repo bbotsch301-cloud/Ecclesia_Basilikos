@@ -33,6 +33,7 @@ import { Link } from "wouter";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient, getQueryFn } from "@/lib/queryClient";
 import AdminLayout from "@/components/layout/admin-layout";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 interface User {
   id: string;
@@ -47,6 +48,7 @@ interface User {
 }
 
 export default function AdminUsers() {
+  usePageTitle("Admin - Users");
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState("");
   const [roleFilter, setRoleFilter] = useState<string>("all");

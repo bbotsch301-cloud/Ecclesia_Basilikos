@@ -41,6 +41,8 @@ import ResetPassword from "@/pages/reset-password";
 import Login from "@/pages/login";
 import Signup from "@/pages/signup";
 import Welcome from "@/pages/welcome";
+import Profile from "@/pages/profile";
+import NewsletterUnsubscribe from "@/pages/newsletter-unsubscribe";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -70,6 +72,8 @@ function Router() {
           <Route path="/login" component={Login} />
           <Route path="/signup" component={Signup} />
           <Route path="/welcome" component={Welcome} />
+          <Route path="/profile" component={Profile} />
+          <Route path="/newsletter/unsubscribe" component={NewsletterUnsubscribe} />
           <Route path="/forgot-password" component={ForgotPassword} />
           <Route path="/reset-password" component={ResetPassword} />
           {/* Proof Vault routes */}

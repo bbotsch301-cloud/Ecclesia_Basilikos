@@ -17,6 +17,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { insertUserSchema, loginSchema } from "@shared/schema";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const registrationSchema = insertUserSchema.extend({
   confirmPassword: z.string().min(6),
@@ -28,6 +29,7 @@ const registrationSchema = insertUserSchema.extend({
 type RegistrationData = z.infer<typeof registrationSchema>;
 
 export default function NewCovenantIntro() {
+  usePageTitle("New Covenant");
   const { user, isAuthenticated, login, register, isLoggingIn, isRegistering } = useAuth();
   const { toast } = useToast();
   const [completedSections, setCompletedSections] = useState<string[]>([]);

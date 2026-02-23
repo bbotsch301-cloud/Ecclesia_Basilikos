@@ -23,6 +23,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import AdminLayout from "@/components/layout/admin-layout";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 interface ForumCategory {
   id: string;
@@ -50,6 +51,7 @@ interface ForumThread {
 }
 
 export default function AdminForum() {
+  usePageTitle("Admin - Forum");
   const { toast } = useToast();
   const [categoryDialogOpen, setCategoryDialogOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<ForumCategory | null>(null);

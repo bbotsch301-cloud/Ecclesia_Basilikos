@@ -2,6 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { useParams, Link } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
+import { usePageTitle } from "@/hooks/usePageTitle";
+import { apiRequest } from "@/lib/queryClient";
 import RequireAuth from "@/components/RequireAuth";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -47,6 +49,16 @@ interface CourseProgress {
   completedSections: number;
 }
 
+interface CourseDownload {
+  id: string;
+  title: string;
+  description: string | null;
+  fileUrl: string;
+  fileType: string | null;
+  fileSize: string | null;
+  downloadCount: number;
+}
+
 function getYouTubeEmbedId(url: string | null): string | null {
   if (!url) return null;
   // Handle various YouTube URL formats
@@ -74,6 +86,13 @@ function CourseLessonContent() {
     queryKey: ['/api/courses', courseId, 'progress'],
     enabled: isAuthenticated,
   });
+
+  // Fetch course downloads
+  const { data: downloadsData } = useQuery<CourseDownload[]>({
+    queryKey: ['/api/courses', courseId, 'downloads'],
+  });
+
+  usePageTitle(courseData?.title ? `${courseData.title}` : "Course");
 
   if (courseLoading) {
     return (
@@ -279,6 +298,52 @@ function CourseLessonContent() {
                     </div>
                   </CardContent>
                 </Card>
+
+                {/* Course Downloads */}
+                {downloadsData && downloadsData.length > 0 && (
+                  <Card className="mb-8">
+                    <CardHeader>
+                      <CardTitle className="text-covenant-blue flex items-center">
+                        <Download className="h-5 w-5 mr-2" />
+                        Course Documents
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        {downloadsData.map((dl) => (
+                          <div key={dl.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <div className="flex-1 min-w-0">
+                              <p className="font-medium text-gray-900 text-sm">{dl.title}</p>
+                              {dl.description && (
+                                <p className="text-xs text-gray-500 mt-1">{dl.description}</p>
+                              )}
+                            </div>
+                            <div className="flex items-center gap-2 ml-4 shrink-0">
+                              {dl.fileType && (
+                                <Badge variant="secondary" className="text-xs uppercase">
+                                  {dl.fileType}
+                                </Badge>
+                              )}
+                              <a
+                                href={dl.fileUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={() => {
+                                  apiRequest('POST', `/api/downloads/${dl.id}/track`).catch(() => {});
+                                }}
+                              >
+                                <Button size="sm" variant="outline">
+                                  <Download className="h-3 w-3 mr-1" />
+                                  Download
+                                </Button>
+                              </a>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
 
                 {/* Navigation */}
                 <div className="flex justify-between items-center mt-12 pt-8 border-t border-covenant-light">

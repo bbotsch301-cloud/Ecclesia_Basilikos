@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { Mail, Send, Shield, ScrollText, Users, BookOpen, CheckCircle, Crown } from "lucide-react";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const contactSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -24,6 +25,7 @@ const contactSchema = z.object({
 type ContactForm = z.infer<typeof contactSchema>;
 
 export default function Contact() {
+  usePageTitle("Contact");
   const { toast } = useToast();
   
   const form = useForm<ContactForm>({

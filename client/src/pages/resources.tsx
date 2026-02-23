@@ -7,8 +7,10 @@ import { useAuth } from "@/hooks/useAuth";
 import { FileText, Download, LogIn, UserPlus } from "lucide-react";
 import DictionarySearch from "@/components/dictionary-search";
 import type { Resource } from "@shared/schema";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 export default function Resources() {
+  usePageTitle("Resources");
   const { user, isAuthenticated, isLoading } = useAuth();
 
   const { data: publishedResources = [], isLoading: resourcesLoading } = useQuery<Resource[]>({

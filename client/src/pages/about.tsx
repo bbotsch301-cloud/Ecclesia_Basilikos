@@ -2,8 +2,10 @@ import HeroSection from "@/components/ui/hero-section";
 import ScriptureQuote from "@/components/ui/scripture-quote";
 import { Check, X } from "lucide-react";
 import customImage from "@assets/IMG_9062_1755824052661.jpeg";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 export default function About() {
+  usePageTitle("About");
   return (
     <div className="pt-16">
       <HeroSection

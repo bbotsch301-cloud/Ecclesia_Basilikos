@@ -18,6 +18,7 @@ import {
   GraduationCap,
 } from "lucide-react";
 import ScriptureQuote from "@/components/ui/scripture-quote";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 interface CourseData {
   id: string;
@@ -45,6 +46,7 @@ interface CourseProgress {
 }
 
 function MyCourseContent() {
+  usePageTitle("My Courses");
   const { user, isAuthenticated } = useAuth();
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState<'enrolled' | 'available' | 'completed'>('enrolled');

@@ -11,6 +11,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { useToast } from "@/hooks/use-toast";
 import { Crown, Loader2, BookOpen, FileText, Shield, Users, Download, GraduationCap } from "lucide-react";
 import { useEffect } from "react";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const registrationSchema = insertUserSchema.extend({
   confirmPassword: z.string().min(6),
@@ -22,6 +23,7 @@ const registrationSchema = insertUserSchema.extend({
 type RegistrationData = z.infer<typeof registrationSchema>;
 
 export default function Signup() {
+  usePageTitle("Join");
   const { isAuthenticated, isLoading, register: registerUser, isRegistering } = useAuth();
   const { toast } = useToast();
   const [, navigate] = useLocation();

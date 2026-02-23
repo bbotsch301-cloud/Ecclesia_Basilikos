@@ -20,6 +20,7 @@ import {
   CheckCircle2,
   AlertCircle,
 } from "lucide-react";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const PROGRESS_MESSAGES = [
   "Computing file hash...",
@@ -28,6 +29,7 @@ const PROGRESS_MESSAGES = [
 ];
 
 function ProofVaultNewContent() {
+  usePageTitle("New Proof");
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [, navigate] = useLocation();

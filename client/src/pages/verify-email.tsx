@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, XCircle, Loader2 } from "lucide-react";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 export default function VerifyEmail() {
+  usePageTitle("Verify Email");
   const [location] = useLocation();
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
   const [message, setMessage] = useState('');

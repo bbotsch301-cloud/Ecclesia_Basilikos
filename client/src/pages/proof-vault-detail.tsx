@@ -20,6 +20,7 @@ import { VerificationResultDisplay, type VerificationResult } from "@/components
 import { RelativeTime } from "@/components/proof-vault/RelativeTime";
 import { ProofDetailSkeleton } from "@/components/proof-vault/ProofDetailSkeleton";
 import type { Proof } from "@shared/schema";
+import { usePageTitle } from "@/hooks/usePageTitle";
 import {
   Shield,
   ArrowLeft,
@@ -44,6 +45,7 @@ interface ProofWithOtsInfo extends Proof {
 }
 
 function ProofVaultDetailContent() {
+  usePageTitle("Proof Details");
   const [, params] = useRoute("/proof-vault/proofs/:id");
   const proofId = params?.id;
   const { toast } = useToast();

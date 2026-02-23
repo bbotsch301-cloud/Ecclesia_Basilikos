@@ -32,6 +32,7 @@ import { apiRequest, queryClient, getQueryFn } from "@/lib/queryClient";
 import { ObjectUploader } from "@/components/ObjectUploader";
 import AdminLayout from "@/components/layout/admin-layout";
 import type { UploadResult } from "@uppy/core";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 // Matches server's insertVideoSchema (minus id, viewCount, createdAt, updatedAt, createdById)
 const videoFormSchema = z.object({
@@ -92,6 +93,7 @@ interface ResourceData {
 }
 
 export default function AdminVideos() {
+  usePageTitle("Admin - Videos");
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState("");
   const [videoDialogOpen, setVideoDialogOpen] = useState(false);

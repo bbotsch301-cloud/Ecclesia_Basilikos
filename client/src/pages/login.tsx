@@ -11,8 +11,10 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { useToast } from "@/hooks/use-toast";
 import { Crown, Loader2, LogIn } from "lucide-react";
 import { useEffect } from "react";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 export default function Login() {
+  usePageTitle("Sign In");
   const { isAuthenticated, isLoading, login, isLoggingIn } = useAuth();
   const { toast } = useToast();
   const [, navigate] = useLocation();

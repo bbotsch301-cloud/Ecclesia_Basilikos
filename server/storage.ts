@@ -200,6 +200,14 @@ export interface IStorage {
   getRecentForumThreads(): Promise<Array<ForumThread & { author: User; category: ForumCategory }>>;
   getCoursesWithLessonCount(): Promise<(Course & { lessonCount: number })[]>;
 
+  // Forum: edit/delete helpers
+  getForumReply(id: string): Promise<ForumReply | undefined>;
+  updateForumThread(id: string, updates: { title?: string; content?: string }): Promise<ForumThread>;
+  updateForumReply(id: string, updates: { content: string }): Promise<ForumReply>;
+
+  // Newsletter: unsubscribe
+  deleteNewsletterSubscriber(email: string): Promise<void>;
+
   // Dictionary
   searchDictionary(query: string, limit?: number): Promise<DictionaryEntry[]>;
   getDictionaryEntry(id: string): Promise<DictionaryEntry | undefined>;
@@ -1060,6 +1068,33 @@ export class DatabaseStorage implements IStorage {
       completedSections: completedSections[0]?.count || 0,
     };
   }
+  // Forum: edit/delete helpers
+  async getForumReply(id: string): Promise<ForumReply | undefined> {
+    const [reply] = await db.select().from(forum_replies).where(eq(forum_replies.id, id));
+    return reply;
+  }
+
+  async updateForumThread(id: string, updates: { title?: string; content?: string }): Promise<ForumThread> {
+    const [thread] = await db.update(forum_threads)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(forum_threads.id, id))
+      .returning();
+    return thread;
+  }
+
+  async updateForumReply(id: string, updates: { content: string }): Promise<ForumReply> {
+    const [reply] = await db.update(forum_replies)
+      .set({ content: updates.content, isEdited: true, editedAt: new Date(), updatedAt: new Date() })
+      .where(eq(forum_replies.id, id))
+      .returning();
+    return reply;
+  }
+
+  // Newsletter: unsubscribe
+  async deleteNewsletterSubscriber(email: string): Promise<void> {
+    await db.delete(newsletter_subscribers).where(eq(newsletter_subscribers.email, email));
+  }
+
   // Public listings
   async getPublishedVideos(): Promise<Video[]> {
     return await db.select().from(videos)

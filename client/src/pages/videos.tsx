@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Play, Clock, X } from "lucide-react";
 import type { Video } from "@shared/schema";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 function getEmbedUrl(video: Video): string | null {
   if (video.embedUrl) {
@@ -28,6 +29,7 @@ function getEmbedUrl(video: Video): string | null {
 }
 
 export default function Videos() {
+  usePageTitle("Videos");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
 

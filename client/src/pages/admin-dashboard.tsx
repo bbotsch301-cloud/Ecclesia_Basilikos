@@ -16,6 +16,7 @@ import {
 import { Link } from "wouter";
 import AdminLayout from "@/components/layout/admin-layout";
 import { getQueryFn } from "@/lib/queryClient";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 interface SystemStats {
   totalUsers: number;
@@ -58,6 +59,7 @@ interface AuditLog {
 }
 
 export default function AdminDashboard() {
+  usePageTitle("Admin - Dashboard");
   const { data: stats, isLoading: statsLoading } = useQuery<SystemStats>({
     queryKey: ['/api/admin/stats'],
     queryFn: getQueryFn({ on401: "returnNull" }),

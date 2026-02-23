@@ -269,6 +269,58 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Profile management
+  app.patch("/api/auth/profile", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+      const updates = z.object({
+        firstName: z.string().min(1).optional(),
+        lastName: z.string().min(1).optional(),
+        username: z.string().min(3).optional(),
+      }).parse(req.body);
+
+      const updated = await storage.updateUser(user.id, updates);
+      const { password: _pw, emailVerificationToken: _tok, ...safeUser } = updated;
+      res.json(safeUser);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ errors: error.errors });
+      }
+      // Check for unique constraint violation on username
+      if ((error as any)?.code === '23505') {
+        return res.status(409).json({ error: "Username already taken" });
+      }
+      console.error("Profile update error:", error);
+      res.status(500).json({ error: "Failed to update profile" });
+    }
+  });
+
+  app.post("/api/auth/change-password", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+      const { currentPassword, newPassword } = z.object({
+        currentPassword: z.string().min(1),
+        newPassword: z.string().min(6),
+      }).parse(req.body);
+
+      const bcryptMod = await import("bcryptjs");
+      const isValid = await bcryptMod.compare(currentPassword, user.password);
+      if (!isValid) {
+        return res.status(400).json({ error: "Current password is incorrect" });
+      }
+
+      const hashedPassword = await bcryptMod.hash(newPassword, 10);
+      await storage.updateUser(user.id, { password: hashedPassword } as any);
+      res.json({ success: true, message: "Password changed successfully" });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ errors: error.errors });
+      }
+      console.error("Change password error:", error);
+      res.status(500).json({ error: "Failed to change password" });
+    }
+  });
+
   // Course routes
   app.get("/api/courses", optionalAuth, async (req, res) => {
     try {
@@ -292,6 +344,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Get course error:", error);
       res.status(500).json({ error: "Failed to fetch course" });
+    }
+  });
+
+  // Course downloads
+  app.get("/api/courses/:courseId/downloads", optionalAuth, async (req, res) => {
+    try {
+      const allDownloads = await storage.getCourseDownloads(req.params.courseId);
+      const published = allDownloads.filter(d => d.isPublished);
+      res.json(published);
+    } catch (error) {
+      console.error("Get course downloads error:", error);
+      res.status(500).json({ error: "Failed to fetch course downloads" });
     }
   });
 
@@ -365,6 +429,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
       } else {
         res.status(500).json({ success: false, message: "Internal server error" });
       }
+    }
+  });
+
+  // Newsletter unsubscribe
+  app.post("/api/newsletter/unsubscribe", async (req, res) => {
+    try {
+      const { email } = z.object({ email: z.string().email() }).parse(req.body);
+      const existing = await storage.getNewsletterSubscriber(email);
+      if (!existing) {
+        return res.status(404).json({ error: "Email not found in subscriber list" });
+      }
+      await storage.deleteNewsletterSubscriber(email);
+      res.json({ success: true, message: "You have been unsubscribed successfully" });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ errors: error.errors });
+      }
+      console.error("Unsubscribe error:", error);
+      res.status(500).json({ error: "Failed to unsubscribe" });
     }
   });
 
@@ -534,6 +617,92 @@ export async function registerRoutes(app: Express): Promise<Server> {
         console.error("Error creating forum reply:", error);
         res.status(500).json({ error: "Failed to create reply" });
       }
+    }
+  });
+
+  // Forum thread edit/delete
+  app.put("/api/forum/threads/:threadId", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+      const { threadId } = req.params;
+      const thread = await storage.getForumThreadById(threadId);
+      if (!thread) return res.status(404).json({ error: "Thread not found" });
+
+      const isOwner = thread.authorId === user.id;
+      const isMod = ['admin', 'moderator'].includes(user.role || '');
+      if (!isOwner && !isMod) return res.status(403).json({ error: "Not authorized" });
+
+      const { title, content } = z.object({
+        title: z.string().min(1).optional(),
+        content: z.string().min(1).optional(),
+      }).parse(req.body);
+
+      const updated = await storage.updateForumThread(threadId, { title, content });
+      res.json({ success: true, thread: updated });
+    } catch (error) {
+      if (error instanceof z.ZodError) return res.status(400).json({ errors: error.errors });
+      console.error("Error updating thread:", error);
+      res.status(500).json({ error: "Failed to update thread" });
+    }
+  });
+
+  app.delete("/api/forum/threads/:threadId", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+      const { threadId } = req.params;
+      const thread = await storage.getForumThreadById(threadId);
+      if (!thread) return res.status(404).json({ error: "Thread not found" });
+
+      const isOwner = thread.authorId === user.id;
+      const isMod = ['admin', 'moderator'].includes(user.role || '');
+      if (!isOwner && !isMod) return res.status(403).json({ error: "Not authorized" });
+
+      await storage.deleteForumThread(threadId);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting thread:", error);
+      res.status(500).json({ error: "Failed to delete thread" });
+    }
+  });
+
+  // Forum reply edit/delete
+  app.put("/api/forum/replies/:replyId", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+      const { replyId } = req.params;
+      const reply = await storage.getForumReply(replyId);
+      if (!reply) return res.status(404).json({ error: "Reply not found" });
+
+      const isOwner = reply.authorId === user.id;
+      const isMod = ['admin', 'moderator'].includes(user.role || '');
+      if (!isOwner && !isMod) return res.status(403).json({ error: "Not authorized" });
+
+      const { content } = z.object({ content: z.string().min(1) }).parse(req.body);
+      const updated = await storage.updateForumReply(replyId, { content });
+      res.json({ success: true, reply: updated });
+    } catch (error) {
+      if (error instanceof z.ZodError) return res.status(400).json({ errors: error.errors });
+      console.error("Error updating reply:", error);
+      res.status(500).json({ error: "Failed to update reply" });
+    }
+  });
+
+  app.delete("/api/forum/replies/:replyId", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+      const { replyId } = req.params;
+      const reply = await storage.getForumReply(replyId);
+      if (!reply) return res.status(404).json({ error: "Reply not found" });
+
+      const isOwner = reply.authorId === user.id;
+      const isMod = ['admin', 'moderator'].includes(user.role || '');
+      if (!isOwner && !isMod) return res.status(403).json({ error: "Not authorized" });
+
+      await storage.deleteForumReply(replyId);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting reply:", error);
+      res.status(500).json({ error: "Failed to delete reply" });
     }
   });
 

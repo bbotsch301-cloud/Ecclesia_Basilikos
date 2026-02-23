@@ -35,6 +35,7 @@ import { z } from "zod";
 import { apiRequest, queryClient, getQueryFn } from "@/lib/queryClient";
 import EmailTemplateEditor from "@/components/EmailTemplateEditor";
 import AdminLayout from "@/components/layout/admin-layout";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 interface PageContent {
   id: string;
@@ -59,6 +60,7 @@ const contentSchema = z.object({
 type ContentFormData = z.infer<typeof contentSchema>;
 
 export default function AdminContent() {
+  usePageTitle("Admin - Content");
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState("");
   const [pageFilter, setPageFilter] = useState<string>("all");

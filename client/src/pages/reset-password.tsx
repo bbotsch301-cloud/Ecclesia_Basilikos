@@ -6,8 +6,10 @@ import { Link, useSearch } from "wouter";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { CheckCircle } from "lucide-react";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 export default function ResetPassword() {
+  usePageTitle("Reset Password");
   const searchString = useSearch();
   const params = new URLSearchParams(searchString);
   const token = params.get("token");

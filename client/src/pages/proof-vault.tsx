@@ -14,6 +14,7 @@ import { HashDisplay } from "@/components/proof-vault/HashDisplay";
 import { RelativeTime } from "@/components/proof-vault/RelativeTime";
 import { ProofCardSkeleton } from "@/components/proof-vault/ProofCardSkeleton";
 import type { Proof } from "@shared/schema";
+import { usePageTitle } from "@/hooks/usePageTitle";
 import {
   Shield,
   Plus,
@@ -28,6 +29,7 @@ import {
 } from "lucide-react";
 
 function ProofVaultContent() {
+  usePageTitle("Proof Vault");
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [searchTerm, setSearchTerm] = useState("");

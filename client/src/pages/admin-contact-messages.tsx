@@ -9,6 +9,7 @@ import { Mail, Search, Calendar, User, Eye } from "lucide-react";
 import { format } from "date-fns";
 import AdminLayout from "@/components/layout/admin-layout";
 import { getQueryFn } from "@/lib/queryClient";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 interface Contact {
   id: string;
@@ -20,6 +21,7 @@ interface Contact {
 }
 
 export default function AdminContactMessages() {
+  usePageTitle("Admin - Messages");
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedMessage, setSelectedMessage] = useState<Contact | null>(null);
   const [showMessageDialog, setShowMessageDialog] = useState(false);

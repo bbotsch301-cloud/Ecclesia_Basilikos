@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Menu, Crown, LogIn, UserPlus, LogOut, BookOpen, FileText, Shield, Home, ChevronDown, Settings } from "lucide-react";
+import { Menu, Crown, LogIn, UserPlus, LogOut, BookOpen, FileText, Shield, Home, ChevronDown, Settings, User } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
 const navigation = [
@@ -86,6 +86,9 @@ export default function Navbar() {
                 <DropdownMenuContent align="end" className="w-48">
                   <DropdownMenuItem onClick={() => navigate("/welcome")}>
                     <Home className="w-4 h-4 mr-2" /> Dashboard
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/profile")}>
+                    <User className="w-4 h-4 mr-2" /> Profile
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => navigate("/my-courses")}>
                     <BookOpen className="w-4 h-4 mr-2" /> My Courses
@@ -175,6 +178,9 @@ export default function Navbar() {
                         <div className="border-t pt-4 mt-2">
                           <Link href="/welcome" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">
                             <Home className="w-4 h-4" /> Dashboard
+                          </Link>
+                          <Link href="/profile" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">
+                            <User className="w-4 h-4" /> Profile
                           </Link>
                           <Link href="/my-courses" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">
                             <BookOpen className="w-4 h-4" /> My Courses

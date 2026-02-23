@@ -24,6 +24,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import AdminLayout from "@/components/layout/admin-layout";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 interface CourseData {
   id: string;
@@ -53,6 +54,7 @@ interface LessonData {
 }
 
 export default function AdminCourses() {
+  usePageTitle("Admin - Courses");
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState("");
   const [courseDialogOpen, setCourseDialogOpen] = useState(false);

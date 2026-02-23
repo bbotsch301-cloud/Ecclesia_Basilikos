@@ -17,6 +17,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import type { ForumCategory, ForumThread, User } from "@shared/schema";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const createThreadSchema = z.object({
   title: z.string().min(5, "Title must be at least 5 characters"),
@@ -27,6 +28,7 @@ const createThreadSchema = z.object({
 type CreateThreadForm = z.infer<typeof createThreadSchema>;
 
 export default function Forum() {
+  usePageTitle("Forum");
   const { user, isAuthenticated } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();

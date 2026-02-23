@@ -7,6 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { Download, FileText, Scale, Shield, BookOpen, Scroll, Crown, ChevronRight, Clock, Users, CheckCircle, ArrowLeft, Loader2 } from "lucide-react";
 import type { Download as DownloadType } from "@shared/schema";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const iconMap: Record<string, any> = {
   scroll: Scroll,
@@ -36,6 +37,7 @@ function parseJsonArray(value: string | null): string[] {
 const categories = ["All", "Foundation", "Legal Templates", "Study Guides", "Prayers & Declarations"];
 
 export default function Downloads() {
+  usePageTitle("Downloads");
   const { toast } = useToast();
   const [selectedItem, setSelectedItem] = useState<DownloadType | null>(null);
   const [activeCategory, setActiveCategory] = useState("All");

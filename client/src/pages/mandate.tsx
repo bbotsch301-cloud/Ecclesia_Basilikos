@@ -4,8 +4,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { Crown, Scroll, Shield, Flame } from "lucide-react";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 export default function Mandate() {
+  usePageTitle("The Mandate");
   return (
     <div className="pt-16">
       <RoyalHero

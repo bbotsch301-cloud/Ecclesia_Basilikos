@@ -17,8 +17,10 @@ import {
   Loader2,
   Search,
 } from "lucide-react";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 function ProofVaultVerifyContent() {
+  usePageTitle("Verify Proof");
   const { toast } = useToast();
 
   const [verifyFile, setVerifyFile] = useState<File | null>(null);

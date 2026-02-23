@@ -12,6 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { Download, FileText, Shield, CheckCircle, Mail } from "lucide-react";
 import customImage from "@assets/IMG_9062_1755824052661.jpeg";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const emailSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -22,6 +23,7 @@ const emailSchema = z.object({
 type EmailForm = z.infer<typeof emailSchema>;
 
 export default function TrustDownload() {
+  usePageTitle("Trust Document");
   const { toast } = useToast();
   const [downloadGranted, setDownloadGranted] = useState(false);
   const [downloadUrl, setDownloadUrl] = useState("");

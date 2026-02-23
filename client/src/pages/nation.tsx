@@ -5,8 +5,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { Crown, Scale, Shield, Globe, Scroll, Book } from "lucide-react";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 export default function Nation() {
+  usePageTitle("Ecclesia Nation");
   const citizenshipFeatures = [
     {
       icon: Crown,

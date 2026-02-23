@@ -7,12 +7,14 @@ import {
 } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import RevealOnScroll from "@/components/ui/reveal-on-scroll";
+import { usePageTitle } from "@/hooks/usePageTitle";
 import StaggerContainer, {
   staggerItemVariants,
   emphasisItemVariants,
 } from "@/components/ui/stagger-container";
 
 export default function Home() {
+  usePageTitle();
   const shouldReduceMotion = useReducedMotion();
 
   const heroInitial = shouldReduceMotion ? {} : { opacity: 0, y: 30 };
