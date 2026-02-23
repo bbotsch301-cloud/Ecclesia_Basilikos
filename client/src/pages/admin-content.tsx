@@ -32,8 +32,9 @@ import { useToast } from "@/hooks/use-toast";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { apiRequest, queryClient } from "@/lib/queryClient";
+import { apiRequest, queryClient, getQueryFn } from "@/lib/queryClient";
 import EmailTemplateEditor from "@/components/EmailTemplateEditor";
+import AdminLayout from "@/components/layout/admin-layout";
 
 interface PageContent {
   id: string;
@@ -80,6 +81,7 @@ export default function AdminContent() {
 
   const { data: pageContent, isLoading: contentLoading } = useQuery<PageContent[]>({
     queryKey: ['/api/admin/page-content'],
+    queryFn: getQueryFn({ on401: "returnNull" }),
   });
 
   const createContentMutation = useMutation({
@@ -212,34 +214,18 @@ export default function AdminContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Header */}
-      <div className="bg-white dark:bg-gray-800 shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div className="flex items-center space-x-4">
-              <Link href="/admin">
-                <Button variant="ghost" size="sm">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back to Dashboard
-                </Button>
-              </Link>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Page Content Management</h1>
-                <p className="text-gray-600 dark:text-gray-300">Manage images, text, and content across all website pages</p>
-              </div>
-            </div>
-            <div className="flex space-x-4">
-              <Button onClick={handleCreate}>
-                <Plus className="h-4 w-4 mr-2" />
-                Add Content
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-
+    <AdminLayout>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Page Content Management</h1>
+            <p className="text-gray-600 dark:text-gray-300">Manage images, text, and content across all website pages</p>
+          </div>
+          <Button onClick={handleCreate}>
+            <Plus className="h-4 w-4 mr-2" />
+            Add Content
+          </Button>
+        </div>
         {/* Recent Changes Summary */}
         <Card className="mb-6 border-l-4 border-l-amber-500">
           <CardHeader>
@@ -652,6 +638,6 @@ export default function AdminContent() {
           </Form>
         </DialogContent>
       </Dialog>
-    </div>
+    </AdminLayout>
   );
 }

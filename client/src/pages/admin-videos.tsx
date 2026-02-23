@@ -28,8 +28,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
-import { apiRequest, queryClient } from "@/lib/queryClient";
+import { apiRequest, queryClient, getQueryFn } from "@/lib/queryClient";
 import { ObjectUploader } from "@/components/ObjectUploader";
+import AdminLayout from "@/components/layout/admin-layout";
 import type { UploadResult } from "@uppy/core";
 
 // Matches server's insertVideoSchema (minus id, viewCount, createdAt, updatedAt, createdById)
@@ -101,10 +102,12 @@ export default function AdminVideos() {
   // Real API queries
   const { data: videos, isLoading: videosLoading } = useQuery<VideoData[]>({
     queryKey: ['/api/admin/videos'],
+    queryFn: getQueryFn({ on401: "returnNull" }),
   });
 
   const { data: resources, isLoading: resourcesLoading } = useQuery<ResourceData[]>({
     queryKey: ['/api/admin/resources'],
+    queryFn: getQueryFn({ on401: "returnNull" }),
   });
 
   // Forms
@@ -279,28 +282,12 @@ export default function AdminVideos() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Header */}
-      <div className="bg-white dark:bg-gray-800 shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div className="flex items-center space-x-4">
-              <Link href="/admin">
-                <Button variant="ghost" size="sm">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back to Dashboard
-                </Button>
-              </Link>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Videos & Resources</h1>
-                <p className="text-gray-600 dark:text-gray-300">Manage video content and downloadable resources</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
+    <AdminLayout>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Videos & Resources</h1>
+          <p className="text-gray-600 dark:text-gray-300">Manage video content and downloadable resources</p>
+        </div>
         {/* Search */}
         <div className="mb-6">
           <div className="relative max-w-md">
@@ -775,6 +762,6 @@ export default function AdminVideos() {
           </Form>
         </DialogContent>
       </Dialog>
-    </div>
+    </AdminLayout>
   );
 }

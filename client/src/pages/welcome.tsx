@@ -2,7 +2,7 @@ import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { BookOpen, FileText, Shield, Users, Download, GraduationCap, Loader2, Mail } from "lucide-react";
+import { BookOpen, FileText, Shield, Users, Download, GraduationCap, Loader2, Mail, Settings } from "lucide-react";
 import { useEffect } from "react";
 
 export default function Welcome() {
@@ -73,6 +73,22 @@ export default function Welcome() {
             </Link>
           ))}
         </div>
+
+        {user.role === 'admin' && (
+          <div className="mt-8">
+            <Link href="/admin">
+              <Card className="royal-card hover:border-royal-gold transition-all cursor-pointer border-dashed border-2">
+                <CardContent className="p-8 flex items-center gap-6">
+                  <Settings className="w-12 h-12 text-royal-burgundy flex-shrink-0" />
+                  <div>
+                    <h3 className="font-cinzel text-xl font-bold text-royal-navy mb-2">Admin Panel</h3>
+                    <p className="text-gray-600">Manage users, content, courses, and system settings</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );

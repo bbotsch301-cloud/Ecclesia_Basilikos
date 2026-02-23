@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Menu, Crown, LogIn, UserPlus, LogOut, BookOpen, FileText, Shield, Home, ChevronDown } from "lucide-react";
+import { Menu, Crown, LogIn, UserPlus, LogOut, BookOpen, FileText, Shield, Home, ChevronDown, Settings } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
 const navigation = [
@@ -96,6 +96,14 @@ export default function Navbar() {
                   <DropdownMenuItem onClick={() => navigate("/proof-vault")}>
                     <Shield className="w-4 h-4 mr-2" /> Proof Vault
                   </DropdownMenuItem>
+                  {user?.role === 'admin' && (
+                    <>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={() => navigate("/admin")}>
+                        <Settings className="w-4 h-4 mr-2" /> Admin Panel
+                      </DropdownMenuItem>
+                    </>
+                  )}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleLogout} className="text-red-600 focus:text-red-600">
                     <LogOut className="w-4 h-4 mr-2" /> Sign Out
@@ -171,6 +179,11 @@ export default function Navbar() {
                           <Link href="/my-courses" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">
                             <BookOpen className="w-4 h-4" /> My Courses
                           </Link>
+                          {user?.role === 'admin' && (
+                            <Link href="/admin" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">
+                              <Settings className="w-4 h-4" /> Admin Panel
+                            </Link>
+                          )}
                         </div>
                       </>
                     )}

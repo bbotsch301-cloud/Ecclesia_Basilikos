@@ -27,7 +27,8 @@ import {
 } from "lucide-react";
 import { Link } from "wouter";
 import { useToast } from "@/hooks/use-toast";
-import { apiRequest, queryClient } from "@/lib/queryClient";
+import { apiRequest, queryClient, getQueryFn } from "@/lib/queryClient";
+import AdminLayout from "@/components/layout/admin-layout";
 
 interface User {
   id: string;
@@ -51,6 +52,7 @@ export default function AdminUsers() {
 
   const { data: users, isLoading: usersLoading } = useQuery<User[]>({
     queryKey: ['/api/admin/users'],
+    queryFn: getQueryFn({ on401: "returnNull" }),
   });
 
   const updateRoleMutation = useMutation({
@@ -146,39 +148,23 @@ export default function AdminUsers() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Header */}
-      <div className="bg-white dark:bg-gray-800 shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div className="flex items-center space-x-4">
-              <Link href="/admin">
-                <Button variant="ghost" size="sm">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back to Dashboard
-                </Button>
-              </Link>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">User Management</h1>
-                <p className="text-gray-600 dark:text-gray-300">Manage user accounts, roles, and permissions</p>
-              </div>
-            </div>
-            <div className="flex space-x-4">
-              <Button
-                onClick={() => toast({
-                  title: "Coming Soon",
-                  description: "User invite functionality will be available in a future update.",
-                })}
-              >
-                <UserPlus className="h-4 w-4 mr-2" />
-                Invite User
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-
+    <AdminLayout>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">User Management</h1>
+            <p className="text-gray-600 dark:text-gray-300">Manage user accounts, roles, and permissions</p>
+          </div>
+          <Button
+            onClick={() => toast({
+              title: "Coming Soon",
+              description: "User invite functionality will be available in a future update.",
+            })}
+          >
+            <UserPlus className="h-4 w-4 mr-2" />
+            Invite User
+          </Button>
+        </div>
         {/* Filters */}
         <Card className="mb-6">
           <CardHeader>
@@ -372,7 +358,6 @@ export default function AdminUsers() {
             )}
           </CardContent>
         </Card>
-      </div>
 
       {/* Edit Role Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
@@ -469,6 +454,7 @@ export default function AdminUsers() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+      </div>
+    </AdminLayout>
   );
 }

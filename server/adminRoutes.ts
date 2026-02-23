@@ -358,6 +358,30 @@ router.delete('/resources/:id', requireAdmin, async (req, res) => {
 // COURSE MANAGEMENT (INSTRUCTOR+)
 // ================================
 
+// Create course
+router.post('/courses', requireInstructor, async (req, res) => {
+  try {
+    const courseData = insertCourseSchema.parse({ ...req.body, createdById: req.user!.id });
+    const course = await storage.createCourse(courseData);
+
+    await auditLog(
+      req.user!.id,
+      'CREATE',
+      'COURSE',
+      course.id,
+      null,
+      course,
+      req.ip,
+      req.get('User-Agent')
+    );
+
+    res.status(201).json(course);
+  } catch (error) {
+    console.error('Error creating course:', error);
+    res.status(500).json({ error: 'Failed to create course' });
+  }
+});
+
 // Update course
 router.patch('/courses/:id', requireInstructor, async (req, res) => {
   try {

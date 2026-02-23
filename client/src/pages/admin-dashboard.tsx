@@ -14,6 +14,8 @@ import {
   Download
 } from "lucide-react";
 import { Link } from "wouter";
+import AdminLayout from "@/components/layout/admin-layout";
+import { getQueryFn } from "@/lib/queryClient";
 
 interface SystemStats {
   totalUsers: number;
@@ -58,43 +60,31 @@ interface AuditLog {
 export default function AdminDashboard() {
   const { data: stats, isLoading: statsLoading } = useQuery<SystemStats>({
     queryKey: ['/api/admin/stats'],
+    queryFn: getQueryFn({ on401: "returnNull" }),
   });
 
   const { data: recentVideos, isLoading: videosLoading } = useQuery<Video[]>({
     queryKey: ['/api/admin/videos'],
+    queryFn: getQueryFn({ on401: "returnNull" }),
   });
 
   const { data: recentResources, isLoading: resourcesLoading } = useQuery<Resource[]>({
     queryKey: ['/api/admin/resources'],
+    queryFn: getQueryFn({ on401: "returnNull" }),
   });
 
   const { data: recentActivity, isLoading: activityLoading } = useQuery<AuditLog[]>({
     queryKey: ['/api/admin/activity'],
+    queryFn: getQueryFn({ on401: "returnNull" }),
   });
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Header */}
-      <div className="bg-white dark:bg-gray-800 shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Admin Dashboard</h1>
-              <p className="text-gray-600 dark:text-gray-300">Welcome back, Admin</p>
-            </div>
-            <div className="flex space-x-4">
-              <Link href="/">
-                <Button variant="outline">
-                  <Eye className="h-4 w-4 mr-2" />
-                  View Site
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-
+    <AdminLayout>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Admin Dashboard</h1>
+          <p className="text-gray-600 dark:text-gray-300">Welcome back, Admin</p>
+        </div>
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <Card>
@@ -146,16 +136,16 @@ export default function AdminDashboard() {
               <CardDescription>Manage videos, resources, and courses</CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
-              <Link href="/admin/videos">
+              <Link href="/admin/courses">
                 <Button className="w-full justify-start">
-                  <Video className="h-4 w-4 mr-2" />
-                  Manage Videos
+                  <BookOpen className="h-4 w-4 mr-2" />
+                  Manage Courses
                 </Button>
               </Link>
               <Link href="/admin/videos">
                 <Button className="w-full justify-start" variant="outline">
-                  <FileText className="h-4 w-4 mr-2" />
-                  Manage Videos & Resources
+                  <Video className="h-4 w-4 mr-2" />
+                  Videos & Resources
                 </Button>
               </Link>
               <Link href="/admin/downloads">
@@ -280,7 +270,7 @@ export default function AdminDashboard() {
                       <div className="flex-1">
                         <h4 className="font-medium text-sm">{resource.title}</h4>
                         <p className="text-xs text-gray-500 mt-1">
-                          {(resource.fileSize / 1000000).toFixed(1)} MB • {resource.downloadCount} downloads
+                          {((resource.fileSize ?? 0) / 1000000).toFixed(1)} MB • {resource.downloadCount} downloads
                         </p>
                       </div>
                       <div className="flex items-center space-x-2">
@@ -318,8 +308,7 @@ export default function AdminDashboard() {
                   <div key={log.id} className="flex items-center justify-between p-3 border rounded-lg">
                     <div className="flex-1">
                       <p className="text-sm">
-                        <span className="font-medium">{log.action}</span> on {log.entityType} 
-                        <span className="text-gray-500"> #{log.entityId}</span>
+                        <span className="font-medium">{log.action}</span> on {log.entityType.replace(/_/g, ' ').toLowerCase()}
                       </p>
                       <p className="text-xs text-gray-500 mt-1">
                         {new Date(log.createdAt).toLocaleString()}
@@ -335,6 +324,6 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </AdminLayout>
   );
 }

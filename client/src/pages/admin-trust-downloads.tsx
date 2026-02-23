@@ -22,6 +22,8 @@ import {
   FileText
 } from "lucide-react";
 import { format } from "date-fns";
+import AdminLayout from "@/components/layout/admin-layout";
+import { getQueryFn } from "@/lib/queryClient";
 
 interface TrustDownload {
   id: string;
@@ -38,6 +40,7 @@ export default function AdminTrustDownloads() {
 
   const { data: downloads = [], isLoading } = useQuery<TrustDownload[]>({
     queryKey: ['/api/admin/trust-downloads'],
+    queryFn: getQueryFn({ on401: "returnNull" }),
   });
 
   const filteredDownloads = downloads.filter(download =>
@@ -86,19 +89,20 @@ export default function AdminTrustDownloads() {
 
   if (isLoading) {
     return (
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold">Trust Document Downloads</h1>
+      <AdminLayout>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <h1 className="text-2xl font-bold">Trust Document Downloads</h1>
+          <div className="flex items-center justify-center py-20">
+            <div className="text-lg">Loading downloads...</div>
+          </div>
         </div>
-        <div className="flex items-center justify-center py-20">
-          <div className="text-lg">Loading downloads...</div>
-        </div>
-      </div>
+      </AdminLayout>
     );
   }
 
   return (
-    <div className="space-y-6">
+    <AdminLayout>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Trust Document Downloads</h1>
@@ -261,6 +265,7 @@ export default function AdminTrustDownloads() {
           </div>
         </CardContent>
       </Card>
-    </div>
+      </div>
+    </AdminLayout>
   );
 }

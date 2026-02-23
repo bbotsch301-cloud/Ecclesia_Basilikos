@@ -21,6 +21,8 @@ import AdminVideos from "@/pages/admin-videos";
 import AdminDownloads from "@/pages/admin-downloads";
 import AdminUsers from "@/pages/admin-users";
 import AdminContactMessages from "@/pages/admin-contact-messages";
+import AdminCourses from "@/pages/admin-courses";
+import AdminForum from "@/pages/admin-forum";
 import NewCovenantIntro from "@/pages/new-covenant-intro";
 import Courses from "@/pages/courses";
 import MyCourses from "@/pages/my-courses";
@@ -78,9 +80,11 @@ function Router() {
           {/* Admin routes - client-side gate + server-side requireAdmin middleware */}
           <Route path="/admin/content">{() => <RequireAdmin><AdminContent /></RequireAdmin>}</Route>
           <Route path="/admin/trust-downloads">{() => <RequireAdmin><AdminTrustDownloads /></RequireAdmin>}</Route>
+          <Route path="/admin/courses">{() => <RequireAdmin><AdminCourses /></RequireAdmin>}</Route>
           <Route path="/admin/videos">{() => <RequireAdmin><AdminVideos /></RequireAdmin>}</Route>
           <Route path="/admin/downloads">{() => <RequireAdmin><AdminDownloads /></RequireAdmin>}</Route>
           <Route path="/admin/users">{() => <RequireAdmin><AdminUsers /></RequireAdmin>}</Route>
+          <Route path="/admin/forum">{() => <RequireAdmin><AdminForum /></RequireAdmin>}</Route>
           <Route path="/admin/contacts">{() => <RequireAdmin><AdminContactMessages /></RequireAdmin>}</Route>
           <Route path="/admin">{() => <RequireAdmin><AdminDashboard /></RequireAdmin>}</Route>
           <Route component={NotFound} />

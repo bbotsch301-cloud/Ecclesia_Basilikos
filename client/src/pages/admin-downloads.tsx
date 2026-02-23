@@ -35,11 +35,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
-import { apiRequest, queryClient } from "@/lib/queryClient";
+import { apiRequest, queryClient, getQueryFn } from "@/lib/queryClient";
 import { ObjectUploader } from "@/components/ObjectUploader";
 import type { UploadResult } from "@uppy/core";
 import { Link } from "wouter";
 import type { Download as DownloadType } from "@shared/schema";
+import AdminLayout from "@/components/layout/admin-layout";
 
 const downloadFormSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -119,6 +120,7 @@ export default function AdminDownloads() {
 
   const { data: downloads, isLoading: downloadsLoading, refetch } = useQuery<DownloadType[]>({
     queryKey: ['/api/admin/downloads'],
+    queryFn: getQueryFn({ on401: "returnNull" }),
   });
 
   const createMutation = useMutation({
@@ -398,37 +400,24 @@ export default function AdminDownloads() {
   const draftCount = (downloads?.length || 0) - publishedCount;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="bg-white dark:bg-gray-800 shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div className="flex items-center space-x-4">
-              <Link href="/admin">
-                <Button variant="ghost" size="sm">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back to Dashboard
-                </Button>
-              </Link>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white font-cinzel">Downloads Management</h1>
-                <p className="text-gray-600 dark:text-gray-300">Manage downloadable resources and documents</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" onClick={() => refetch()}>
-                <RefreshCw className="h-4 w-4 mr-2" />
-                Refresh
-              </Button>
-              <Button onClick={handleCreate}>
-                <Plus className="h-4 w-4 mr-2" />
-                Add Download
-              </Button>
-            </div>
+    <AdminLayout>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white font-cinzel">Downloads Management</h1>
+            <p className="text-gray-600 dark:text-gray-300">Manage downloadable resources and documents</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={() => refetch()}>
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Refresh
+            </Button>
+            <Button onClick={handleCreate}>
+              <Plus className="h-4 w-4 mr-2" />
+              Add Download
+            </Button>
           </div>
         </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <Card>
@@ -1139,6 +1128,6 @@ export default function AdminDownloads() {
           </Form>
         </DialogContent>
       </Dialog>
-    </div>
+    </AdminLayout>
   );
 }

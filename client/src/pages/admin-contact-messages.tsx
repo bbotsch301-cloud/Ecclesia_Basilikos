@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Mail, Search, Calendar, User, Eye } from "lucide-react";
 import { format } from "date-fns";
+import AdminLayout from "@/components/layout/admin-layout";
+import { getQueryFn } from "@/lib/queryClient";
 
 interface Contact {
   id: string;
@@ -24,6 +26,7 @@ export default function AdminContactMessages() {
 
   const { data: contacts = [], isLoading, refetch } = useQuery<Contact[]>({
     queryKey: ["/api/admin/contacts"],
+    queryFn: getQueryFn({ on401: "returnNull" }),
   });
 
   const filteredContacts = contacts.filter(contact =>
@@ -44,25 +47,22 @@ export default function AdminContactMessages() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">Loading contact messages...</div>
+      <AdminLayout>
+        <div className="py-8">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center">Loading contact messages...</div>
+          </div>
         </div>
-      </div>
+      </AdminLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
+    <AdminLayout>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-playfair font-bold text-covenant-blue mb-2">
-            Contact Messages
-          </h1>
-          <p className="text-covenant-gray">
-            Manage and respond to visitor inquiries and contact form submissions
-          </p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Contact Messages</h1>
+          <p className="text-gray-600 dark:text-gray-300">Manage and respond to visitor inquiries and contact form submissions</p>
         </div>
 
         {/* Search and Stats */}
@@ -229,6 +229,6 @@ export default function AdminContactMessages() {
           </DialogContent>
         </Dialog>
       </div>
-    </div>
+    </AdminLayout>
   );
 }
