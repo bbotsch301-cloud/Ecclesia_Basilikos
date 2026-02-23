@@ -194,6 +194,12 @@ export interface IStorage {
   getTrustDownloadByEmail(email: string): Promise<TrustDownload | undefined>;
   getAllTrustDownloads(): Promise<TrustDownload[]>;
 
+  // Public listings
+  getPublishedVideos(): Promise<Video[]>;
+  getPublishedResources(): Promise<Resource[]>;
+  getRecentForumThreads(): Promise<Array<ForumThread & { author: User; category: ForumCategory }>>;
+  getCoursesWithLessonCount(): Promise<(Course & { lessonCount: number })[]>;
+
   // Dictionary
   searchDictionary(query: string, limit?: number): Promise<DictionaryEntry[]>;
   getDictionaryEntry(id: string): Promise<DictionaryEntry | undefined>;
@@ -1054,6 +1060,56 @@ export class DatabaseStorage implements IStorage {
       completedSections: completedSections[0]?.count || 0,
     };
   }
+  // Public listings
+  async getPublishedVideos(): Promise<Video[]> {
+    return await db.select().from(videos)
+      .where(eq(videos.isPublished, true))
+      .orderBy(desc(videos.createdAt));
+  }
+
+  async getPublishedResources(): Promise<Resource[]> {
+    return await db.select().from(resources)
+      .where(eq(resources.isPublished, true))
+      .orderBy(desc(resources.createdAt));
+  }
+
+  async getRecentForumThreads(): Promise<Array<ForumThread & { author: User; category: ForumCategory }>> {
+    const threads = await db
+      .select({
+        thread: forum_threads,
+        author: users,
+        category: forum_categories,
+      })
+      .from(forum_threads)
+      .innerJoin(users, eq(forum_threads.authorId, users.id))
+      .innerJoin(forum_categories, eq(forum_threads.categoryId, forum_categories.id))
+      .orderBy(desc(forum_threads.isPinned), desc(forum_threads.lastReplyAt), desc(forum_threads.createdAt))
+      .limit(50);
+
+    return threads.map(t => ({
+      ...t.thread,
+      author: t.author,
+      category: t.category,
+    }));
+  }
+
+  async getCoursesWithLessonCount(): Promise<(Course & { lessonCount: number })[]> {
+    const result = await db
+      .select({
+        course: courses,
+        lessonCount: sql<number>`count(${lessons.id})::int`,
+      })
+      .from(courses)
+      .leftJoin(lessons, eq(courses.id, lessons.courseId))
+      .where(eq(courses.isPublished, true))
+      .groupBy(courses.id);
+
+    return result.map(r => ({
+      ...r.course,
+      lessonCount: r.lessonCount || 0,
+    }));
+  }
+
   // Dictionary
   async searchDictionary(query: string, limit: number = 20): Promise<DictionaryEntry[]> {
     const maxLimit = Math.min(limit, 50);

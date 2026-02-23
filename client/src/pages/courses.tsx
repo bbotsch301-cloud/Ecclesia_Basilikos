@@ -16,69 +16,30 @@ import {
 } from "lucide-react";
 import ScriptureQuote from "@/components/ui/scripture-quote";
 
-// Sample course data for the Kingdom Builder Academy program
-const availableCourses = [
-  {
-    id: 1,
-    title: "Trust Fundamentals",
-    description: "Learn what a trust actually is, why people use them, and how they work in simple terms. Perfect for complete beginners who have never heard of trusts before.",
-    lessons: 8,
-    duration: "2.5 hours",
-    level: "Foundational",
-    featured: true
-  },
-  {
-    id: 2,
-    title: "Banking & Financial Management",
-    description: "Learn practical trust banking, account management, and financial stewardship principles for kingdom wealth building.",
-    lessons: 12,
-    duration: "4 hours",
-    level: "Intermediate",
-    featured: false
-  },
-  {
-    id: 3,
-    title: "Investment Strategy for Trustees",
-    description: "Biblical investment principles, asset allocation, and growing trust assets through wise stewardship.",
-    lessons: 15,
-    duration: "5 hours",
-    level: "Advanced",
-    featured: false
-  },
-  {
-    id: 4,
-    title: "Cryptocurrency & Digital Assets",
-    description: "Understanding digital currencies, blockchain technology, and incorporating crypto assets into trust portfolios.",
-    lessons: 10,
-    duration: "3.5 hours",
-    level: "Advanced",
-    featured: false
-  },
-  {
-    id: 5,
-    title: "Legacy & Estate Planning",
-    description: "Generational wealth transfer, inheritance planning, and building lasting kingdom legacies for your children's children.",
-    lessons: 14,
-    duration: "4.5 hours",
-    level: "Advanced",
-    featured: true
-  },
-  {
-    id: 6,
-    title: "Asset Protection Strategies",
-    description: "Protecting trust assets, legal compliance, and maintaining proper trustee responsibilities in all circumstances.",
-    lessons: 11,
-    duration: "3.5 hours",
-    level: "Intermediate",
-    featured: false
-  }
-];
+interface CourseWithLessonCount {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  level: string;
+  duration: string | null;
+  price: number | null;
+  imageUrl: string | null;
+  isPublished: boolean;
+  lessonCount: number;
+  createdAt: string;
+}
 
 export default function Courses() {
   const { user, isAuthenticated, isLoading } = useAuth();
   const { toast } = useToast();
   const [, navigate] = useLocation();
-  const [selectedLevel, setSelectedLevel] = useState<'all' | 'foundational' | 'intermediate' | 'advanced'>('all');
+  const [selectedLevel, setSelectedLevel] = useState<string>('all');
+
+  // Fetch courses from API
+  const { data: courses = [], isLoading: coursesLoading } = useQuery<CourseWithLessonCount[]>({
+    queryKey: ['/api/courses'],
+  });
 
   // Fetch user enrollments
   const { data: enrollments = [] } = useQuery<Array<{ courseId: string; enrolledAt: string }>>({
@@ -143,28 +104,32 @@ export default function Courses() {
     }
 
     try {
-      await enrollMutation.mutateAsync(courseId.toString());
+      await enrollMutation.mutateAsync(courseId);
     } catch (error) {
       console.error("Auto-enrollment error:", error);
     }
   };
 
+  // Extract unique levels from courses
+  const levels = Array.from(new Set(courses.map(c => c.level))).sort();
+
   const filteredCourses = selectedLevel === 'all'
-    ? availableCourses
-    : availableCourses.filter(course =>
-        course.level.toLowerCase() === selectedLevel
+    ? courses
+    : courses.filter(course =>
+        course.level.toLowerCase() === selectedLevel.toLowerCase()
       );
 
+  const featuredCourse = courses.length > 0 ? courses[0] : null;
+
   const getLevelColor = (level: string) => {
-    switch (level) {
-      case 'Foundational': return 'bg-covenant-gold/10 text-covenant-blue';
-      case 'Intermediate': return 'bg-blue-100 text-blue-800';
-      case 'Advanced': return 'bg-purple-100 text-purple-800';
-      default: return 'bg-gray-100 text-gray-600';
-    }
+    const lower = level.toLowerCase();
+    if (lower === 'foundational' || lower === 'beginner') return 'bg-covenant-gold/10 text-covenant-blue';
+    if (lower === 'intermediate') return 'bg-blue-100 text-blue-800';
+    if (lower === 'advanced') return 'bg-purple-100 text-purple-800';
+    return 'bg-gray-100 text-gray-600';
   };
 
-  if (isLoading) {
+  if (isLoading || coursesLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-covenant-light via-white to-covenant-light flex items-center justify-center">
         <div className="text-center">
@@ -202,149 +167,146 @@ export default function Courses() {
       {/* Course Catalog */}
       <section className="py-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Featured Course */}
-          <div className="mb-16">
-            {availableCourses.filter(course => course.featured).slice(0, 1).map(course => (
-              <Card key={course.id} className="bg-gradient-to-r from-covenant-blue to-covenant-dark-blue border-0 overflow-hidden">
-                <CardContent className="p-8 text-white">
-                  <div className="flex items-center mb-4">
-                    <Badge className="bg-covenant-gold text-covenant-blue mr-4">Featured Course</Badge>
-                    <Badge className={`${getLevelColor(course.level)} ml-2`}>
-                      {course.level}
-                    </Badge>
-                  </div>
 
-                  <h3 className="text-3xl font-playfair font-bold mb-4">{course.title}</h3>
-                  <p className="text-lg text-blue-100 mb-6 max-w-3xl">{course.description}</p>
+          {courses.length === 0 ? (
+            <Card className="max-w-lg mx-auto">
+              <CardContent className="py-12 text-center">
+                <GraduationCap className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">Courses Coming Soon</h3>
+                <p className="text-gray-600">
+                  We are preparing our curriculum. Check back soon for new courses.
+                </p>
+              </CardContent>
+            </Card>
+          ) : (
+            <>
+              {/* Featured Course */}
+              {featuredCourse && (
+                <div className="mb-16">
+                  <Card className="bg-gradient-to-r from-covenant-blue to-covenant-dark-blue border-0 overflow-hidden">
+                    <CardContent className="p-8 text-white">
+                      <div className="flex items-center mb-4">
+                        <Badge className="bg-covenant-gold text-covenant-blue mr-4">Featured Course</Badge>
+                        <Badge className={`${getLevelColor(featuredCourse.level)} ml-2`}>
+                          {featuredCourse.level}
+                        </Badge>
+                      </div>
 
-                  <div className="flex flex-wrap items-center gap-6 mb-8">
-                    <div className="flex items-center text-blue-200">
-                      <BookOpen className="h-5 w-5 mr-2" />
-                      <span>{course.lessons} lessons</span>
-                    </div>
-                    <div className="flex items-center text-blue-200">
-                      <User className="h-5 w-5 mr-2" />
-                      <span>{course.duration}</span>
-                    </div>
-                  </div>
+                      <h3 className="text-3xl font-playfair font-bold mb-4">{featuredCourse.title}</h3>
+                      <p className="text-lg text-blue-100 mb-6 max-w-3xl">{featuredCourse.description}</p>
 
-                  <Button
-                    size="lg"
-                    className="bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue px-8 py-3 font-semibold"
-                    onClick={() => handleBeginLearning(course.id.toString())}
-                    disabled={enrollMutation.isPending}
-                  >
-                    <GraduationCap className="h-5 w-5 mr-2" />
-                    {getButtonText(course.id.toString(), enrollMutation.isPending)}
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                      <div className="flex flex-wrap items-center gap-6 mb-8">
+                        <div className="flex items-center text-blue-200">
+                          <BookOpen className="h-5 w-5 mr-2" />
+                          <span>{featuredCourse.lessonCount} lessons</span>
+                        </div>
+                        {featuredCourse.duration && (
+                          <div className="flex items-center text-blue-200">
+                            <User className="h-5 w-5 mr-2" />
+                            <span>{featuredCourse.duration}</span>
+                          </div>
+                        )}
+                      </div>
 
-          {/* Course Filter */}
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-playfair font-bold text-covenant-blue mb-4">
-              All Courses
-            </h2>
-            <p className="text-lg text-covenant-gray max-w-3xl mx-auto mb-8">
-              Choose from our comprehensive curriculum designed to equip you as a faithful trustee
-            </p>
+                      <Button
+                        size="lg"
+                        className="bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue px-8 py-3 font-semibold"
+                        onClick={() => handleBeginLearning(featuredCourse.id)}
+                        disabled={enrollMutation.isPending}
+                      >
+                        <GraduationCap className="h-5 w-5 mr-2" />
+                        {getButtonText(featuredCourse.id, enrollMutation.isPending)}
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </div>
+              )}
 
-            <div className="flex justify-center">
-              <div className="bg-white rounded-lg p-1 shadow-md">
-                <Button
-                  variant="ghost"
-                  onClick={() => setSelectedLevel('all')}
-                  className={`px-6 py-3 rounded-md font-medium transition-colors ${
-                    selectedLevel === 'all'
-                      ? 'bg-covenant-blue text-white'
-                      : 'text-covenant-gray hover:text-covenant-blue'
-                  }`}
-                >
+              {/* Course Filter */}
+              <div className="text-center mb-12">
+                <h2 className="text-3xl md:text-4xl font-playfair font-bold text-covenant-blue mb-4">
                   All Courses
-                </Button>
-                <Button
-                  variant="ghost"
-                  onClick={() => setSelectedLevel('foundational')}
-                  className={`px-6 py-3 rounded-md font-medium transition-colors ${
-                    selectedLevel === 'foundational'
-                      ? 'bg-covenant-blue text-white'
-                      : 'text-covenant-gray hover:text-covenant-blue'
-                  }`}
-                >
-                  Foundational
-                </Button>
-                <Button
-                  variant="ghost"
-                  onClick={() => setSelectedLevel('intermediate')}
-                  className={`px-6 py-3 rounded-md font-medium transition-colors ${
-                    selectedLevel === 'intermediate'
-                      ? 'bg-covenant-blue text-white'
-                      : 'text-covenant-gray hover:text-covenant-blue'
-                  }`}
-                >
-                  Intermediate
-                </Button>
-                <Button
-                  variant="ghost"
-                  onClick={() => setSelectedLevel('advanced')}
-                  className={`px-6 py-3 rounded-md font-medium transition-colors ${
-                    selectedLevel === 'advanced'
-                      ? 'bg-covenant-blue text-white'
-                      : 'text-covenant-gray hover:text-covenant-blue'
-                  }`}
-                >
-                  Advanced
-                </Button>
-              </div>
-            </div>
-          </div>
+                </h2>
+                <p className="text-lg text-covenant-gray max-w-3xl mx-auto mb-8">
+                  Choose from our comprehensive curriculum designed to equip you as a faithful trustee
+                </p>
 
-          {/* Course Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-            {filteredCourses.map(course => (
-              <Card key={course.id} className="border-covenant-light hover:border-covenant-gold transition-all hover:shadow-lg">
-                <CardHeader>
-                  <div className="flex justify-between items-start mb-2">
-                    <Badge className={getLevelColor(course.level)}>
-                      {course.level}
-                    </Badge>
-                    {course.featured && (
-                      <Badge variant="outline" className="border-covenant-gold text-covenant-gold">
-                        Featured
-                      </Badge>
-                    )}
-                  </div>
-                  <CardTitle className="text-covenant-blue">{course.title}</CardTitle>
-                  <CardDescription>{course.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between text-sm text-covenant-gray">
-                      <div className="flex items-center">
-                        <BookOpen className="h-4 w-4 mr-1" />
-                        <span>{course.lessons} lessons</span>
-                      </div>
-                      <div className="flex items-center">
-                        <User className="h-4 w-4 mr-1" />
-                        <span>{course.duration}</span>
-                      </div>
+                {levels.length > 1 && (
+                  <div className="flex justify-center">
+                    <div className="bg-white rounded-lg p-1 shadow-md">
+                      <Button
+                        variant="ghost"
+                        onClick={() => setSelectedLevel('all')}
+                        className={`px-6 py-3 rounded-md font-medium transition-colors ${
+                          selectedLevel === 'all'
+                            ? 'bg-covenant-blue text-white'
+                            : 'text-covenant-gray hover:text-covenant-blue'
+                        }`}
+                      >
+                        All Courses
+                      </Button>
+                      {levels.map((level) => (
+                        <Button
+                          key={level}
+                          variant="ghost"
+                          onClick={() => setSelectedLevel(level.toLowerCase())}
+                          className={`px-6 py-3 rounded-md font-medium transition-colors ${
+                            selectedLevel === level.toLowerCase()
+                              ? 'bg-covenant-blue text-white'
+                              : 'text-covenant-gray hover:text-covenant-blue'
+                          }`}
+                        >
+                          {level}
+                        </Button>
+                      ))}
                     </div>
-
-                    <Button
-                      className="w-full bg-covenant-blue hover:bg-covenant-blue/80 text-white"
-                      onClick={() => handleBeginLearning(course.id.toString())}
-                      disabled={enrollMutation.isPending}
-                    >
-                      <GraduationCap className="h-4 w-4 mr-2" />
-                      {getButtonText(course.id.toString(), enrollMutation.isPending)}
-                    </Button>
                   </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                )}
+              </div>
+
+              {/* Course Grid */}
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+                {filteredCourses.map(course => (
+                  <Card key={course.id} className="border-covenant-light hover:border-covenant-gold transition-all hover:shadow-lg">
+                    <CardHeader>
+                      <div className="flex justify-between items-start mb-2">
+                        <Badge className={getLevelColor(course.level)}>
+                          {course.level}
+                        </Badge>
+                      </div>
+                      <CardTitle className="text-covenant-blue">{course.title}</CardTitle>
+                      <CardDescription>{course.description}</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between text-sm text-covenant-gray">
+                          <div className="flex items-center">
+                            <BookOpen className="h-4 w-4 mr-1" />
+                            <span>{course.lessonCount} lessons</span>
+                          </div>
+                          {course.duration && (
+                            <div className="flex items-center">
+                              <User className="h-4 w-4 mr-1" />
+                              <span>{course.duration}</span>
+                            </div>
+                          )}
+                        </div>
+
+                        <Button
+                          className="w-full bg-covenant-blue hover:bg-covenant-blue/80 text-white"
+                          onClick={() => handleBeginLearning(course.id)}
+                          disabled={enrollMutation.isPending}
+                        >
+                          <GraduationCap className="h-4 w-4 mr-2" />
+                          {getButtonText(course.id, enrollMutation.isPending)}
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </>
+          )}
 
           {/* Student Dashboard Link */}
           <div className="text-center mb-12">

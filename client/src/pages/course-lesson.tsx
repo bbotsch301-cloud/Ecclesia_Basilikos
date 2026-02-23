@@ -1,224 +1,92 @@
-import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { useParams, Link } from "wouter";
+import { useAuth } from "@/hooks/useAuth";
+import RequireAuth from "@/components/RequireAuth";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { 
-  BookOpen, 
-  Play, 
-  Download, 
-  Clock, 
+import {
+  BookOpen,
+  Play,
+  Download,
+  Clock,
   CheckCircle,
   ChevronLeft,
   ChevronRight,
-  Users,
   Video
 } from "lucide-react";
 import ScriptureQuote from "@/components/ui/scripture-quote";
 
 interface Lesson {
   id: string;
+  courseId: string;
   title: string;
-  description: string;
-  youtubeVideoId?: string;
-  duration: string;
+  description: string | null;
+  content: string | null;
+  videoUrl: string | null;
   order: number;
-  completed?: boolean;
-  files?: Array<{
-    id: string;
-    name: string;
-    size: string;
-    type: string;
-    downloadUrl: string;
-  }>;
+  duration: string | null;
+  createdAt: string;
 }
 
-interface CourseData {
+interface CourseWithLessons {
   id: string;
   title: string;
   description: string;
   level: string;
-  totalLessons: number;
-  progress: number;
+  duration: string | null;
+  category: string;
+  imageUrl: string | null;
   lessons: Lesson[];
 }
 
-// Sample course data - this would normally come from the API
-const sampleCourseData: { [key: string]: CourseData } = {
-  "1": {
-    id: "1",
-    title: "Come out of her, my people: Building the Everlasting Kingdom",
-    description: "Answer God's divine call to separate from Babylon and become partakers and builders of His everlasting Kingdom that shall never be destroyed, learning to operate as citizens of Heaven's eternal dominion through this comprehensive 8-module journey.",
-    level: "Foundation",
-    totalLessons: 8,
-    progress: 14,
-    lessons: [
-      {
-        id: "0",
-        title: "Module 0: The Divine Call to Come Out",
-        description: "\"Come out of her, my people\" - Understanding God's urgent call to separate from Babylon's corrupt systems and embrace your role as a Kingdom builder in the everlasting dominion that shall never be destroyed.",
-        youtubeVideoId: "IP4NzMFGKA8",
-        duration: "25 minutes",
-        order: 0,
-        completed: false,
-        files: []
-      },
-      {
-        id: "1",
-        title: "Module 1: Kingdom Foundation and Authority",
-        description: "Daniel 2:44 - The God of heaven sets up a Kingdom that shall never be destroyed. Understanding your divine mandate as a Kingdom builder and partaker in God's everlasting dominion over all earthly systems.",
-        youtubeVideoId: "",
-        duration: "25 minutes",
-        order: 1,
-        completed: true,
-        files: [
-          {
-            id: "1",
-            name: "Common Law Handbook",
-            size: "2.1 MB",
-            type: "PDF",
-            downloadUrl: "/public-objects/common-law-handbook.pdf"
-          },
-          {
-            id: "2", 
-            name: "Creation & Essentials of a Valid Trust",
-            size: "1.8 MB", 
-            type: "PDF",
-            downloadUrl: "/public-objects/essentials-of-trust.pdf"
-          },
-          {
-            id: "3",
-            name: "Maxims of Law",
-            size: "3.2 MB",
-            type: "PDF", 
-            downloadUrl: "/public-objects/maxims-of-law.pdf"
-          }
-        ]
-      },
-      {
-        id: "2",
-        title: "Module 2: Separating from Babylon's Identity",
-        description: "Rejecting the false legal person/citizen identity imposed by Babylon's system. Embracing your true identity as a citizen of Heaven and partaker in the everlasting Kingdom that transcends all earthly jurisdictions.",
-        youtubeVideoId: "JXeJANDKwDc",
-        duration: "28 minutes",
-        order: 2,
-        completed: false,
-        files: [
-          {
-            id: "4",
-            name: "Public vs Private Identity Guide",
-            size: "1.6 MB",
-            type: "PDF",
-            downloadUrl: "/public-objects/public-private-identity-guide.pdf"
-          }
-        ]
-      },
-      {
-        id: "3",
-        title: "Module 3: The Role of the Holy Spirit",
-        description: "The Holy Spirit as bridge/transmitting utility between heaven and earth. Our seal, earnest, and divine letter of credit. Jesus as Surety guaranteeing all obligations.",
-        youtubeVideoId: "3AtDnEC4zak",
-        duration: "26 minutes", 
-        order: 3,
-        completed: false,
-        files: [
-          {
-            id: "5",
-            name: "Holy Spirit as Transmitting Utility",
-            size: "1.8 MB", 
-            type: "PDF",
-            downloadUrl: "/public-objects/holy-spirit-transmitting-utility.pdf"
-          }
-        ]
-      },
-      {
-        id: "4",
-        title: "Module 4: Trust Identity Documents",
-        description: "Trust Declaration, Beneficiary Authorization, Ecclesiastical Heirship Claim, Divine Jurisdiction Notice, Spiritual Currency Ledger, and Debt Discharge Statements.",
-        youtubeVideoId: "2Z4m4lnjxkY",
-        duration: "32 minutes",
-        order: 4,
-        completed: false,
-        files: [
-          {
-            id: "6",
-            name: "Trust Documents Template Package",
-            size: "3.4 MB",
-            type: "PDF", 
-            downloadUrl: "/public-objects/trust-documents-template-package.pdf"
-          }
-        ]
-      },
-      {
-        id: "5",
-        title: "Module 5: Operating 'In Christ'",
-        description: "Ambassadors for Christ (2 Cor. 5:20). Living man as agent on earth, redeemed man as principal in heaven. Authority without liability through Jesus our Surety.",
-        youtubeVideoId: "YQHsXMglC9A",
-        duration: "24 minutes",
-        order: 5,
-        completed: false,
-        files: [
-          {
-            id: "7",
-            name: "Operating In Christ Handbook",
-            size: "2.1 MB",
-            type: "PDF",
-            downloadUrl: "/public-objects/operating-in-christ-handbook.pdf"
-          }
-        ]
-      },
-      {
-        id: "6",
-        title: "Module 6: The Kingdom That Consumes All",
-        description: "Daniel 2:44 - The Kingdom of God shall break in pieces and consume all earthly kingdoms. Understanding how the everlasting Kingdom operates in direct opposition to Babylon's temporary systems of control.",
-        youtubeVideoId: "oHg5SJYRHA0",
-        duration: "29 minutes",
-        order: 6,
-        completed: false,
-        files: [
-          {
-            id: "8",
-            name: "Kingdom vs Babylon Comparison Chart",
-            size: "2.3 MB",
-            type: "PDF",
-            downloadUrl: "/public-objects/kingdom-vs-babylon-chart.pdf"
-          }
-        ]
-      },
-      {
-        id: "7",
-        title: "Module 7: Partakers in the Everlasting Kingdom",
-        description: "Romans 8:17 – Co-heirs with Christ in the Kingdom that shall stand forever. Living as sons and daughters who have fully separated from Babylon and are actively building God's eternal dominion on earth.",
-        youtubeVideoId: "SfOTTOF9fpA",
-        duration: "27 minutes",
-        order: 7,
-        completed: false,
-        files: [
-          {
-            id: "9",
-            name: "Living as Sons Declaration & Prayer Guide",
-            size: "1.9 MB",
-            type: "PDF",
-            downloadUrl: "/public-objects/living-as-sons-prayer-guide.pdf"
-          }
-        ]
-      }
-    ]
-  }
-};
+interface CourseProgress {
+  totalSections: number;
+  completedSections: number;
+}
 
-export default function CourseLesson() {
-  const params = useParams();
+function getYouTubeEmbedId(url: string | null): string | null {
+  if (!url) return null;
+  // Handle various YouTube URL formats
+  const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\s?]+)/);
+  if (match) return match[1];
+  // If it looks like just a video ID (11 chars alphanumeric)
+  if (/^[a-zA-Z0-9_-]{11}$/.test(url)) return url;
+  return null;
+}
+
+function CourseLessonContent() {
+  const params = useParams<{ courseId: string; lessonId: string }>();
   const { toast } = useToast();
+  const { isAuthenticated } = useAuth();
   const courseId = params.courseId || "1";
   const lessonId = params.lessonId;
 
-  const courseData = sampleCourseData[courseId];
-  
-  if (!courseData) {
+  // Fetch course with lessons
+  const { data: courseData, isLoading: courseLoading, error: courseError } = useQuery<CourseWithLessons>({
+    queryKey: ['/api/courses', courseId],
+  });
+
+  // Fetch progress
+  const { data: progressData } = useQuery<CourseProgress>({
+    queryKey: ['/api/courses', courseId, 'progress'],
+    enabled: isAuthenticated,
+  });
+
+  if (courseLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-covenant-light via-white to-covenant-light flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-covenant-gold mx-auto mb-4"></div>
+          <p className="text-gray-700">Loading course...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (courseError || !courseData) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-covenant-light via-white to-covenant-light flex items-center justify-center">
         <Card className="max-w-md mx-4">
@@ -236,18 +104,35 @@ export default function CourseLesson() {
     );
   }
 
-  // Find current lesson index for navigation
-  const currentLessonIndex = lessonId 
-    ? courseData.lessons.findIndex(l => l.id === lessonId)
+  const lessons = [...courseData.lessons].sort((a, b) => a.order - b.order);
+
+  // Find current lesson
+  let currentLessonIndex: number;
+  if (lessonId) {
+    // Try to match by ID first
+    currentLessonIndex = lessons.findIndex(l => l.id === lessonId);
+    // Fall back to matching by order (for /lesson/1 style URLs)
+    if (currentLessonIndex === -1) {
+      const orderNum = parseInt(lessonId, 10);
+      if (!isNaN(orderNum)) {
+        currentLessonIndex = lessons.findIndex(l => l.order === orderNum);
+      }
+    }
+    // If still not found, default to first
+    if (currentLessonIndex === -1) currentLessonIndex = 0;
+  } else {
+    currentLessonIndex = 0;
+  }
+
+  const currentLesson = lessons[currentLessonIndex];
+  const nextLesson = lessons[currentLessonIndex + 1];
+  const prevLesson = lessons[currentLessonIndex - 1];
+
+  const progressPercent = progressData && progressData.totalSections > 0
+    ? Math.round((progressData.completedSections / progressData.totalSections) * 100)
     : 0;
 
-  const currentLesson = lessonId 
-    ? courseData.lessons.find(l => l.id === lessonId)
-    : courseData.lessons[currentLessonIndex];
-
-    
-  const nextLesson = courseData.lessons[currentLessonIndex + 1];
-  const prevLesson = courseData.lessons[currentLessonIndex - 1];
+  const youtubeId = getYouTubeEmbedId(currentLesson?.videoUrl ?? null);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-covenant-light via-white to-covenant-light">
@@ -267,14 +152,16 @@ export default function CourseLesson() {
               {courseData.level}
             </Badge>
           </div>
-          
-          <div className="mt-6">
-            <div className="flex items-center justify-between text-sm mb-2">
-              <span className="text-blue-200">Course Progress</span>
-              <span className="text-white font-medium">{courseData.progress}% Complete</span>
+
+          {isAuthenticated && (
+            <div className="mt-6">
+              <div className="flex items-center justify-between text-sm mb-2">
+                <span className="text-blue-200">Course Progress</span>
+                <span className="text-white font-medium">{progressPercent}% Complete</span>
+              </div>
+              <Progress value={progressPercent} className="h-2" />
             </div>
-            <Progress value={courseData.progress} className="h-2" />
-          </div>
+          )}
         </div>
       </section>
 
@@ -286,33 +173,30 @@ export default function CourseLesson() {
               <CardHeader>
                 <CardTitle className="text-covenant-blue">Course Lessons</CardTitle>
                 <CardDescription>
-                  {courseData.lessons.length} lessons • {courseData.totalLessons} total
+                  {lessons.length} lessons
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  {courseData.lessons.map((lesson, index) => (
-                    <Link 
-                      key={lesson.id} 
+                  {lessons.map((lesson) => (
+                    <Link
+                      key={lesson.id}
                       href={`/course/${courseId}/lesson/${lesson.id}`}
                       className="w-full"
                     >
                       <Button
                         variant="ghost"
                         className={`w-full text-left p-3 rounded-lg transition-colors h-auto ${
-                          currentLesson?.id === lesson.id 
-                            ? 'bg-covenant-blue text-white' 
+                          currentLesson?.id === lesson.id
+                            ? 'bg-covenant-blue text-white'
                             : 'hover:bg-covenant-light text-covenant-gray'
                         }`}
                       >
-                      <div className="flex items-start justify-between w-full gap-2">
-                        <div className="flex-1 min-w-0 max-w-full overflow-hidden">
-                          <p className="font-medium text-xs leading-tight break-words word-wrap overflow-wrap-anywhere">{lesson.title}</p>
+                        <div className="flex items-start justify-between w-full gap-2">
+                          <div className="flex-1 min-w-0 max-w-full overflow-hidden">
+                            <p className="font-medium text-xs leading-tight break-words">{lesson.title}</p>
+                          </div>
                         </div>
-                        {lesson.completed && (
-                          <CheckCircle className="h-4 w-4 text-green-500 ml-1 flex-shrink-0" />
-                        )}
-                      </div>
                       </Button>
                     </Link>
                   ))}
@@ -329,22 +213,24 @@ export default function CourseLesson() {
                   <CardTitle className="text-covenant-blue text-2xl">
                     {currentLesson?.title}
                   </CardTitle>
-                  <CardDescription className="mt-2">
-                    {currentLesson?.description}
-                  </CardDescription>
+                  {currentLesson?.description && (
+                    <CardDescription className="mt-2">
+                      {currentLesson.description}
+                    </CardDescription>
+                  )}
                 </div>
               </CardHeader>
               <CardContent>
-                {/* YouTube Video Player */}
+                {/* Video Player */}
                 <div className="mb-8">
                   <Card className="bg-black rounded-lg overflow-hidden">
                     <CardContent className="p-0">
-                      {currentLesson?.youtubeVideoId ? (
+                      {youtubeId ? (
                         <div className="relative aspect-video">
                           <iframe
                             className="w-full h-full"
-                            src={`https://www.youtube.com/embed/${currentLesson.youtubeVideoId}`}
-                            title={currentLesson.title}
+                            src={`https://www.youtube.com/embed/${youtubeId}`}
+                            title={currentLesson?.title}
                             frameBorder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowFullScreen
@@ -365,45 +251,22 @@ export default function CourseLesson() {
                   </Card>
                 </div>
 
-                {/* Lesson Files */}
-                <div className="mb-8">
-                  <Card className="border-covenant-light">
-                    <CardHeader>
-                      <CardTitle className="text-covenant-blue flex items-center">
-                        <Download className="h-5 w-5 mr-2" />
-                        Lesson Resources
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      {currentLesson?.files && currentLesson.files.length > 0 ? (
-                        <div className="space-y-3">
-                          {currentLesson.files.map((file) => (
-                            <div key={file.id} className="flex items-center justify-between p-3 border border-covenant-light rounded-lg">
-                              <div className="flex items-center">
-                                <BookOpen className="h-5 w-5 text-covenant-blue mr-3" />
-                                <div>
-                                  <p className="font-medium text-covenant-blue">{file.name}</p>
-                                  <p className="text-sm text-covenant-gray">{file.type} • {file.size}</p>
-                                </div>
-                              </div>
-                              <Button 
-                                size="sm" 
-                                variant="outline" 
-                                className="border-covenant-blue text-covenant-blue"
-                                onClick={() => window.open(file.downloadUrl, '_blank')}
-                              >
-                                <Download className="h-4 w-4 mr-2" />
-                                Download
-                              </Button>
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <p className="text-covenant-gray text-center py-4">No files available for this lesson</p>
-                      )}
-                    </CardContent>
-                  </Card>
-                </div>
+                {/* Lesson Content */}
+                {currentLesson?.content && (
+                  <div className="mb-8 prose prose-gray max-w-none">
+                    <Card className="border-covenant-light">
+                      <CardHeader>
+                        <CardTitle className="text-covenant-blue flex items-center">
+                          <BookOpen className="h-5 w-5 mr-2" />
+                          Lesson Notes
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="whitespace-pre-wrap">{currentLesson.content}</div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                )}
 
                 {/* Scripture Reference */}
                 <Card className="bg-covenant-light/30 border-covenant-gold mb-8">
@@ -412,7 +275,7 @@ export default function CourseLesson() {
                       <blockquote className="text-lg text-covenant-blue font-georgia italic mb-2">
                         "Moreover it is required in stewards, that a man be found faithful."
                       </blockquote>
-                      <cite className="text-covenant-gray">— 1 Corinthians 4:2 (KJV)</cite>
+                      <cite className="text-covenant-gray">- 1 Corinthians 4:2 (KJV)</cite>
                     </div>
                   </CardContent>
                 </Card>
@@ -422,7 +285,7 @@ export default function CourseLesson() {
                   <div>
                     {prevLesson && (
                       <Link href={`/course/${courseId}/lesson/${prevLesson.id}`}>
-                        <Button 
+                        <Button
                           variant="outline"
                           className="border-covenant-blue text-covenant-blue hover:bg-covenant-blue hover:text-white"
                         >
@@ -432,11 +295,11 @@ export default function CourseLesson() {
                       </Link>
                     )}
                   </div>
-                  
+
                   <div>
                     {nextLesson ? (
                       <Link href={`/course/${courseId}/lesson/${nextLesson.id}`}>
-                        <Button 
+                        <Button
                           className="bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue"
                         >
                           Next Lesson
@@ -444,7 +307,7 @@ export default function CourseLesson() {
                         </Button>
                       </Link>
                     ) : (
-                      <Button 
+                      <Button
                         className="bg-green-600 hover:bg-green-700 text-white"
                         onClick={() => {
                           toast({
@@ -471,5 +334,13 @@ export default function CourseLesson() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function CourseLesson() {
+  return (
+    <RequireAuth>
+      <CourseLessonContent />
+    </RequireAuth>
   );
 }

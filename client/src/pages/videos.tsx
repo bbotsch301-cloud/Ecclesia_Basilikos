@@ -1,68 +1,62 @@
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import HeroSection from "@/components/ui/hero-section";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Play, Clock } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Play, Clock, X } from "lucide-react";
+import type { Video } from "@shared/schema";
+
+function getEmbedUrl(video: Video): string | null {
+  if (video.embedUrl) {
+    // If it's already an embed URL, use directly
+    if (video.embedUrl.includes('/embed/')) return video.embedUrl;
+    // Convert youtube.com/watch?v= or youtu.be/ to embed
+    const ytMatch = video.embedUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\s]+)/);
+    if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}`;
+    // Vimeo
+    const vimeoMatch = video.embedUrl.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+    if (vimeoMatch) return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
+    return video.embedUrl;
+  }
+  if (video.videoUrl) {
+    const ytMatch = video.videoUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\s]+)/);
+    if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}`;
+    return null;
+  }
+  return null;
+}
 
 export default function Videos() {
-  const categories = [
-    { name: "All Videos", active: true },
-    { name: "Covenant Basics", active: false },
-    { name: "Law & Freedom", active: false },
-    { name: "Babylon Exposed", active: false }
-  ];
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
 
-  const videos = [
-    {
-      title: "Trust Law Fundamentals",
-      description: "Understanding the basic principles of trust law as they apply to the covenant relationship.",
-      duration: "28 minutes",
-      category: "Covenant",
-      thumbnail: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=338"
-    },
-    {
-      title: "Breaking Free from Legal Fiction",
-      description: "Discover how to distinguish between your true identity and the artificial legal person.",
-      duration: "35 minutes",
-      category: "Law & Freedom",
-      thumbnail: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=338"
-    },
-    {
-      title: "Exposing Babylon's Deception",
-      description: "Unveiling the counterfeit systems that keep God's people in spiritual and legal bondage.",
-      duration: "42 minutes",
-      category: "Babylon Exposed",
-      thumbnail: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=338"
-    },
-    {
-      title: "Your Covenant Identity",
-      description: "Understanding who you are as a beneficiary of the New Covenant Trust in Christ.",
-      duration: "31 minutes",
-      category: "Covenant",
-      thumbnail: "https://images.unsplash.com/photo-1519452575417-564c1401ecc0?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=338"
-    },
-    {
-      title: "Practical Steps to Freedom",
-      description: "Actionable guidance for walking in the freedom Christ has provided.",
-      duration: "39 minutes",
-      category: "Law & Freedom",
-      thumbnail: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=338"
-    },
-    {
-      title: "Spiritual Authority in Christ",
-      description: "Understanding the authority you have been given as part of the Body of Christ.",
-      duration: "33 minutes",
-      category: "Covenant",
-      thumbnail: "https://images.unsplash.com/photo-1518998053901-5348d3961a04?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=338"
-    }
-  ];
+  const { data: videos = [], isLoading } = useQuery<Video[]>({
+    queryKey: ['/api/videos/published'],
+  });
+
+  // Extract unique categories
+  const categories = Array.from(new Set(videos.map(v => v.category))).sort();
+
+  // Find featured video
+  const featuredVideo = videos.find(v => v.isFeatured) || (videos.length > 0 ? videos[0] : null);
+
+  // Filter videos
+  const filteredVideos = selectedCategory === "all"
+    ? videos
+    : videos.filter(v => v.category === selectedCategory);
 
   const getCategoryColor = (category: string) => {
-    switch (category) {
-      case "Covenant": return "bg-blue-100 text-blue-800";
-      case "Law & Freedom": return "bg-green-100 text-green-800";
-      case "Babylon Exposed": return "bg-red-100 text-red-800";
-      default: return "bg-gray-100 text-gray-800";
-    }
+    const colors = [
+      "bg-blue-100 text-blue-800",
+      "bg-green-100 text-green-800",
+      "bg-red-100 text-red-800",
+      "bg-purple-100 text-purple-800",
+      "bg-amber-100 text-amber-800",
+      "bg-teal-100 text-teal-800",
+    ];
+    const idx = categories.indexOf(category);
+    return colors[idx % colors.length] || "bg-gray-100 text-gray-800";
   };
 
   return (
@@ -75,84 +69,181 @@ export default function Videos() {
 
       <div className="py-20 bg-covenant-light">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Video Categories */}
-          <div className="flex flex-wrap justify-center gap-4 mb-12">
-            {categories.map((category, index) => (
-              <Button
-                key={index}
-                variant={category.active ? "default" : "outline"}
-                className={category.active ? "bg-covenant-blue text-white" : "bg-white text-covenant-blue"}
-              >
-                {category.name}
-              </Button>
-            ))}
-          </div>
-
-          {/* Featured Video */}
-          <div className="bg-white rounded-2xl shadow-lg overflow-hidden mb-12">
-            <div className="aspect-video bg-gray-200 relative">
-              <img 
-                src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=675" 
-                alt="Featured teaching video thumbnail" 
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <Button className="bg-covenant-gold hover:bg-yellow-500 text-covenant-blue rounded-full p-6 shadow-lg transform hover:scale-110 transition-all">
-                  <Play size={32} />
-                </Button>
+          {isLoading ? (
+            <div className="flex justify-center items-center min-h-64">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-covenant-gold mx-auto mb-4"></div>
+                <p className="text-gray-600">Loading videos...</p>
               </div>
             </div>
-            <div className="p-8">
-              <h3 className="font-playfair text-2xl font-bold text-covenant-blue mb-4">
-                Introduction to the New Covenant Trust
-              </h3>
-              <p className="text-covenant-gray leading-relaxed mb-4">
-                A comprehensive overview of Christ as the Grantor of the New Covenant Trust and how you can step into your role as a beneficiary. This foundational teaching sets the stage for understanding your true identity and freedom in Christ.
+          ) : videos.length === 0 ? (
+            <div className="text-center py-16">
+              <Play className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Videos Coming Soon</h3>
+              <p className="text-gray-600">
+                We are preparing video teachings. Check back soon for new content.
               </p>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center text-sm text-covenant-gray">
-                  <Clock size={16} className="mr-2" />
-                  Duration: 45 minutes
-                </div>
-                <Badge className="bg-covenant-light text-covenant-blue">Featured</Badge>
-              </div>
             </div>
-          </div>
-
-          {/* Video Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {videos.map((video, index) => (
-              <div key={index} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-                <div className="aspect-video bg-gray-200 relative">
-                  <img 
-                    src={video.thumbnail} 
-                    alt={`${video.title} teaching video`} 
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <Button className="bg-covenant-gold text-covenant-blue rounded-full p-4 shadow-lg">
-                      <Play size={20} />
-                    </Button>
-                  </div>
-                </div>
-                <div className="p-6">
-                  <h4 className="font-playfair text-lg font-semibold text-covenant-blue mb-2">{video.title}</h4>
-                  <p className="text-covenant-gray text-sm mb-3">{video.description}</p>
-                  <div className="flex justify-between items-center text-xs text-covenant-gray">
-                    <div className="flex items-center">
-                      <Clock size={12} className="mr-1" />
-                      {video.duration}
-                    </div>
-                    <Badge className={getCategoryColor(video.category)}>
-                      {video.category}
-                    </Badge>
-                  </div>
-                </div>
+          ) : (
+            <>
+              {/* Category Filter */}
+              <div className="flex flex-wrap justify-center gap-4 mb-12">
+                <Button
+                  variant={selectedCategory === "all" ? "default" : "outline"}
+                  className={selectedCategory === "all" ? "bg-covenant-blue text-white" : "bg-white text-covenant-blue"}
+                  onClick={() => setSelectedCategory("all")}
+                >
+                  All Videos
+                </Button>
+                {categories.map((category) => (
+                  <Button
+                    key={category}
+                    variant={selectedCategory === category ? "default" : "outline"}
+                    className={selectedCategory === category ? "bg-covenant-blue text-white" : "bg-white text-covenant-blue"}
+                    onClick={() => setSelectedCategory(category)}
+                  >
+                    {category}
+                  </Button>
+                ))}
               </div>
-            ))}
-          </div>
+
+              {/* Featured Video */}
+              {featuredVideo && selectedCategory === "all" && (
+                <div
+                  className="bg-white rounded-2xl shadow-lg overflow-hidden mb-12 cursor-pointer"
+                  onClick={() => setSelectedVideo(featuredVideo)}
+                >
+                  <div className="aspect-video bg-gray-200 relative">
+                    {featuredVideo.thumbnailUrl ? (
+                      <img
+                        src={featuredVideo.thumbnailUrl}
+                        alt={featuredVideo.title}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                        <Play className="h-16 w-16 text-white/50" />
+                      </div>
+                    )}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <Button className="bg-covenant-gold hover:bg-yellow-500 text-covenant-blue rounded-full p-6 shadow-lg transform hover:scale-110 transition-all">
+                        <Play size={32} />
+                      </Button>
+                    </div>
+                  </div>
+                  <div className="p-8">
+                    <h3 className="font-playfair text-2xl font-bold text-covenant-blue mb-4">
+                      {featuredVideo.title}
+                    </h3>
+                    {featuredVideo.description && (
+                      <p className="text-covenant-gray leading-relaxed mb-4">
+                        {featuredVideo.description}
+                      </p>
+                    )}
+                    <div className="flex items-center justify-between">
+                      {featuredVideo.duration && (
+                        <div className="flex items-center text-sm text-covenant-gray">
+                          <Clock size={16} className="mr-2" />
+                          Duration: {featuredVideo.duration}
+                        </div>
+                      )}
+                      <Badge className="bg-covenant-light text-covenant-blue">Featured</Badge>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Video Grid */}
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {filteredVideos.map((video) => (
+                  <div
+                    key={video.id}
+                    className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer"
+                    onClick={() => setSelectedVideo(video)}
+                  >
+                    <div className="aspect-video bg-gray-200 relative">
+                      {video.thumbnailUrl ? (
+                        <img
+                          src={video.thumbnailUrl}
+                          alt={video.title}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
+                          <Play className="h-10 w-10 text-white/40" />
+                        </div>
+                      )}
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <Button className="bg-covenant-gold text-covenant-blue rounded-full p-4 shadow-lg">
+                          <Play size={20} />
+                        </Button>
+                      </div>
+                    </div>
+                    <div className="p-6">
+                      <h4 className="font-playfair text-lg font-semibold text-covenant-blue mb-2">{video.title}</h4>
+                      {video.description && (
+                        <p className="text-covenant-gray text-sm mb-3 line-clamp-2">{video.description}</p>
+                      )}
+                      <div className="flex justify-between items-center text-xs text-covenant-gray">
+                        {video.duration && (
+                          <div className="flex items-center">
+                            <Clock size={12} className="mr-1" />
+                            {video.duration}
+                          </div>
+                        )}
+                        <Badge className={getCategoryColor(video.category)}>
+                          {video.category}
+                        </Badge>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
         </div>
       </div>
+
+      {/* Video Player Dialog */}
+      <Dialog open={!!selectedVideo} onOpenChange={() => setSelectedVideo(null)}>
+        <DialogContent className="max-w-4xl p-0">
+          <DialogHeader className="p-6 pb-0">
+            <DialogTitle className="text-xl font-playfair">
+              {selectedVideo?.title}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="p-6 pt-4">
+            {selectedVideo && (() => {
+              const embed = getEmbedUrl(selectedVideo);
+              if (embed) {
+                return (
+                  <div className="aspect-video rounded-lg overflow-hidden">
+                    <iframe
+                      className="w-full h-full"
+                      src={embed}
+                      title={selectedVideo.title}
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+                );
+              }
+              return (
+                <div className="aspect-video bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg flex items-center justify-center">
+                  <div className="text-center">
+                    <Play className="h-16 w-16 text-white/30 mx-auto mb-4" />
+                    <p className="text-gray-400">Video coming soon</p>
+                  </div>
+                </div>
+              );
+            })()}
+            {selectedVideo?.description && (
+              <p className="text-covenant-gray mt-4">{selectedVideo.description}</p>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

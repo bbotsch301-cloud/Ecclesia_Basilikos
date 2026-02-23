@@ -1,49 +1,39 @@
 import { Link } from "wouter";
+import { useQuery } from "@tanstack/react-query";
 import HeroSection from "@/components/ui/hero-section";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
-import { FileText, Heart, BookOpen, Download, CheckSquare, Calculator, Search, Phone, LogIn, UserPlus } from "lucide-react";
+import { FileText, Download, LogIn, UserPlus } from "lucide-react";
 import DictionarySearch from "@/components/dictionary-search";
+import type { Resource } from "@shared/schema";
 
 export default function Resources() {
   const { user, isAuthenticated, isLoading } = useAuth();
 
-  const resourceCategories = [
-    {
-      icon: <FileText className="text-4xl" />,
-      title: "Legal Templates",
-      resources: [
-        "Freedom Declaration",
-        "Covenant Identity Notice",
-        "Trust Beneficiary Statement"
-      ]
-    },
-    {
-      icon: <Heart className="text-4xl" />,
-      title: "Prayers & Declarations",
-      resources: [
-        "Daily Covenant Prayer",
-        "Freedom Affirmations",
-        "Scripture Declarations"
-      ]
-    },
-    {
-      icon: <BookOpen className="text-4xl" />,
-      title: "Study Guides",
-      resources: [
-        "Trust Law Fundamentals",
-        "Biblical Freedom Study",
-        "Group Discussion Guide"
-      ]
-    }
-  ];
+  const { data: publishedResources = [], isLoading: resourcesLoading } = useQuery<Resource[]>({
+    queryKey: ['/api/resources/published'],
+    enabled: isAuthenticated,
+  });
 
-  const quickTools = [
-    { icon: <CheckSquare />, title: "Freedom Checklist" },
-    { icon: <Calculator />, title: "Trust Calculator" },
-    { icon: <Search />, title: "Law Reference" },
-    { icon: <Phone />, title: "Support Line" }
-  ];
+  // Group resources by category
+  const resourcesByCategory: Record<string, Resource[]> = {};
+  publishedResources.forEach((resource) => {
+    if (!resourcesByCategory[resource.category]) {
+      resourcesByCategory[resource.category] = [];
+    }
+    resourcesByCategory[resource.category].push(resource);
+  });
+
+  const getFileTypeBadgeColor = (fileType: string) => {
+    switch (fileType.toLowerCase()) {
+      case 'pdf': return 'bg-red-100 text-red-800';
+      case 'audio': return 'bg-purple-100 text-purple-800';
+      case 'video': return 'bg-blue-100 text-blue-800';
+      case 'image': return 'bg-green-100 text-green-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
 
   return (
     <div className="pt-16">
@@ -56,7 +46,7 @@ export default function Resources() {
       <div className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-          {/* Public Dictionary Section — visible to all visitors */}
+          {/* Public Dictionary Section */}
           <DictionarySearch />
 
           <div className="royal-divider my-16 relative" />
@@ -75,65 +65,50 @@ export default function Resources() {
                 </p>
               </div>
 
-              {/* Resource Categories */}
-              <div className="grid lg:grid-cols-3 gap-8 mb-16">
-            {resourceCategories.map((category, index) => (
-              <div key={index} className="bg-white p-8 rounded-xl shadow-lg">
-                <div className="text-covenant-gold mb-6 text-center">
-                  {category.icon}
+              {resourcesLoading ? (
+                <div className="text-center py-12">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-covenant-gold mx-auto mb-4"></div>
+                  <p className="text-gray-600">Loading resources...</p>
                 </div>
-                <h3 className="font-playfair text-2xl font-bold text-covenant-blue mb-4 text-center">{category.title}</h3>
-                <div className="space-y-4">
-                  {category.resources.map((resource, resourceIndex) => (
-                    <div key={resourceIndex} className="flex items-center p-3 bg-covenant-light rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
-                      <Download className="text-covenant-gold mr-3" size={16} />
-                      <span className="text-covenant-gray">{resource}</span>
+              ) : Object.keys(resourcesByCategory).length === 0 ? (
+                <div className="text-center py-12">
+                  <FileText className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Resources Coming Soon</h3>
+                  <p className="text-gray-600">
+                    We are preparing downloadable resources for members. Check back soon.
+                  </p>
+                </div>
+              ) : (
+                <div className="grid lg:grid-cols-3 gap-8 mb-16">
+                  {Object.entries(resourcesByCategory).map(([category, resources]) => (
+                    <div key={category} className="bg-white p-8 rounded-xl shadow-lg">
+                      <div className="text-covenant-gold mb-6 text-center">
+                        <FileText className="h-10 w-10 mx-auto" />
+                      </div>
+                      <h3 className="font-playfair text-2xl font-bold text-covenant-blue mb-4 text-center">{category}</h3>
+                      <div className="space-y-4">
+                        {resources.map((resource) => (
+                          <a
+                            key={resource.id}
+                            href={resource.fileUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center p-3 bg-covenant-light rounded-lg hover:bg-gray-100 transition-colors"
+                          >
+                            <Download className="text-covenant-gold mr-3 flex-shrink-0" size={16} />
+                            <div className="flex-1 min-w-0">
+                              <span className="text-covenant-gray text-sm">{resource.title}</span>
+                            </div>
+                            <Badge className={`ml-2 ${getFileTypeBadgeColor(resource.fileType)} text-xs`}>
+                              {resource.fileType.toUpperCase()}
+                            </Badge>
+                          </a>
+                        ))}
+                      </div>
                     </div>
                   ))}
                 </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Featured Resource */}
-          <div className="bg-covenant-blue p-12 rounded-2xl text-white mb-16">
-            <div className="grid lg:grid-cols-2 gap-8 items-center">
-              <div>
-                <h3 className="font-playfair text-3xl font-bold mb-4">
-                  Complete Freedom Handbook
-                </h3>
-                <p className="text-lg leading-relaxed mb-6">
-                  A comprehensive 150-page guide covering every aspect of covenant freedom, from basic principles to advanced applications. Includes templates, prayers, legal notices, and step-by-step instructions.
-                </p>
-                <Button className="bg-covenant-gold hover:bg-yellow-500 text-covenant-blue px-8 py-4 text-lg font-semibold">
-                  <Download className="mr-2" size={20} />
-                  Download Free eBook
-                </Button>
-              </div>
-              <div className="text-center">
-                <img
-                  src="https://images.unsplash.com/photo-1543002588-bfa74002ed7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=600"
-                  alt="Freedom Handbook ebook cover"
-                  className="rounded-xl shadow-lg mx-auto max-w-xs"
-                />
-              </div>
-            </div>
-          </div>
-
-              {/* Quick Access Tools */}
-              <div className="bg-covenant-light p-8 rounded-xl">
-                <h3 className="font-playfair text-2xl font-bold text-covenant-blue mb-6 text-center">Quick Access Tools</h3>
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-                  {quickTools.map((tool, index) => (
-                    <button key={index} className="bg-white p-4 rounded-lg shadow hover:shadow-lg transition-all text-center group">
-                      <div className="text-covenant-gold text-2xl mb-2 group-hover:scale-110 transition-transform">
-                        {tool.icon}
-                      </div>
-                      <div className="font-semibold text-covenant-blue">{tool.title}</div>
-                    </button>
-                  ))}
-                </div>
-              </div>
+              )}
             </>
           ) : (
             /* Members Only CTA */

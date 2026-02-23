@@ -272,7 +272,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Course routes
   app.get("/api/courses", optionalAuth, async (req, res) => {
     try {
-      const courses = await storage.getCourses();
+      const courses = await storage.getCoursesWithLessonCount();
       res.json(courses);
     } catch (error) {
       console.error("Get courses error:", error);
@@ -406,7 +406,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Published videos endpoint (public)
+  app.get("/api/videos/published", async (req, res) => {
+    try {
+      const publishedVideos = await storage.getPublishedVideos();
+      res.json(publishedVideos);
+    } catch (error) {
+      console.error("Error fetching published videos:", error);
+      res.status(500).json({ error: "Failed to fetch videos" });
+    }
+  });
+
+  // Published resources endpoint (public)
+  app.get("/api/resources/published", async (req, res) => {
+    try {
+      const publishedResources = await storage.getPublishedResources();
+      res.json(publishedResources);
+    } catch (error) {
+      console.error("Error fetching published resources:", error);
+      res.status(500).json({ error: "Failed to fetch resources" });
+    }
+  });
+
   // Forum routes
+
+  // Get all recent threads (across all categories)
+  app.get("/api/forum/threads", async (req, res) => {
+    try {
+      const threads = await storage.getRecentForumThreads();
+      res.json(threads);
+    } catch (error) {
+      console.error("Error fetching recent forum threads:", error);
+      res.status(500).json({ error: "Failed to fetch threads" });
+    }
+  });
 
   // Get all forum categories
   app.get("/api/forum/categories", async (req, res) => {

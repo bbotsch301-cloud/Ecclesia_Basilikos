@@ -4,118 +4,128 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Link } from "wouter";
-import { 
-  BookOpen, 
-  Play, 
-  Clock, 
+import { useQuery, useQueries, useMutation } from "@tanstack/react-query";
+import { useAuth } from "@/hooks/useAuth";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
+import RequireAuth from "@/components/RequireAuth";
+import {
+  BookOpen,
+  Play,
+  Clock,
   CheckCircle,
   Users,
-  Trophy,
   GraduationCap,
-  Download,
-  Lock,
-  Unlock
 } from "lucide-react";
 import ScriptureQuote from "@/components/ui/scripture-quote";
 
-// Sample course data
-const courses = [
-  {
-    id: 1,
-    title: "Trust Fundamentals",
-    description: "Understanding the biblical foundation of trust relationships and your role as a trustee in God's kingdom economy.",
-    progress: 75,
-    lessons: 8,
-    duration: "2.5 hours",
-    level: "Foundational",
-    status: "enrolled",
-    nextLesson: "Creating Your Trust Declaration"
-  },
-  {
-    id: 2,
-    title: "Banking & Financial Management",
-    description: "Learn practical trust banking, account management, and financial stewardship principles for kingdom wealth building.",
-    progress: 45,
-    lessons: 12,
-    duration: "4 hours",
-    level: "Intermediate",
-    status: "enrolled",
-    nextLesson: "Opening Trust Bank Accounts"
-  },
-  {
-    id: 3,
-    title: "Investment Strategy for Trustees",
-    description: "Biblical investment principles, asset allocation, and growing trust assets through wise stewardship.",
-    progress: 0,
-    lessons: 15,
-    duration: "5 hours",
-    level: "Advanced",
-    status: "locked",
-    prerequisite: "Complete Banking & Financial Management"
-  },
-  {
-    id: 4,
-    title: "Cryptocurrency & Digital Assets",
-    description: "Understanding digital currencies, blockchain technology, and incorporating crypto assets into trust portfolios.",
-    progress: 0,
-    lessons: 10,
-    duration: "3.5 hours",
-    level: "Advanced",
-    status: "available"
-  },
-  {
-    id: 5,
-    title: "Legacy & Estate Planning",
-    description: "Generational wealth transfer, inheritance planning, and building lasting kingdom legacies.",
-    progress: 0,
-    lessons: 14,
-    duration: "4.5 hours",
-    level: "Advanced",
-    status: "available"
-  },
-  {
-    id: 6,
-    title: "Asset Protection Strategies",
-    description: "Protecting trust assets, legal compliance, and maintaining proper trustee responsibilities.",
-    progress: 20,
-    lessons: 11,
-    duration: "3.5 hours",
-    level: "Intermediate",
-    status: "enrolled",
-    nextLesson: "Trust Asset Segregation"
-  }
-];
+interface CourseData {
+  id: string;
+  title: string;
+  description: string;
+  level: string;
+  duration: string | null;
+  category: string;
+  lessonCount?: number;
+}
 
-const achievements = [
-  { title: "First Course Completed", description: "Completed Trust Fundamentals", icon: Trophy, earned: true },
-  { title: "Banking Specialist", description: "Mastered trust banking principles", icon: GraduationCap, earned: false },
-  { title: "Investment Scholar", description: "Completed advanced investment course", icon: BookOpen, earned: false },
-];
+interface Enrollment {
+  id: string;
+  userId: string;
+  courseId: string;
+  enrolledAt: string;
+  completedAt: string | null;
+  progress: number | null;
+  course: CourseData;
+}
 
-export default function MyCourses() {
+interface CourseProgress {
+  totalSections: number;
+  completedSections: number;
+}
+
+function MyCourseContent() {
+  const { user, isAuthenticated } = useAuth();
+  const { toast } = useToast();
   const [activeTab, setActiveTab] = useState<'enrolled' | 'available' | 'completed'>('enrolled');
 
-  const enrolledCourses = courses.filter(course => course.status === 'enrolled');
-  const availableCourses = courses.filter(course => course.status === 'available');
-  const completedCourses = courses.filter(course => course.progress === 100);
+  // Fetch enrollments
+  const { data: enrollments = [], isLoading: enrollmentsLoading } = useQuery<Enrollment[]>({
+    queryKey: ['/api/my-enrollments'],
+    enabled: isAuthenticated,
+  });
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'enrolled': return 'bg-blue-100 text-blue-800';
-      case 'available': return 'bg-green-100 text-green-800';
-      case 'locked': return 'bg-gray-100 text-gray-600';
-      default: return 'bg-gray-100 text-gray-600';
+  // Fetch all published courses for "Available" tab
+  const { data: allCourses = [], isLoading: coursesLoading } = useQuery<CourseData[]>({
+    queryKey: ['/api/courses'],
+    enabled: isAuthenticated,
+  });
+
+  // Fetch progress for each enrolled course
+  const enrolledCourseIds = enrollments.map(e => e.courseId);
+  const progressQueries = useQueries({
+    queries: enrollments.map(enrollment => ({
+      queryKey: ['/api/courses', enrollment.courseId, 'progress'] as const,
+      enabled: isAuthenticated && !!enrollment.courseId,
+    })),
+  });
+
+  // Build progress map
+  const progressMap: Record<string, number> = {};
+  enrollments.forEach((enrollment, i) => {
+    const progressData = progressQueries[i]?.data as CourseProgress | undefined;
+    if (progressData && progressData.totalSections > 0) {
+      progressMap[enrollment.courseId] = Math.round(
+        (progressData.completedSections / progressData.totalSections) * 100
+      );
+    } else {
+      progressMap[enrollment.courseId] = 0;
     }
-  };
+  });
+
+  const enrolledInProgress = enrollments.filter(e => (progressMap[e.courseId] ?? 0) < 100);
+  const completedEnrollments = enrollments.filter(e => (progressMap[e.courseId] ?? 0) >= 100);
+  const enrolledCourseIdSet = new Set(enrolledCourseIds);
+  const availableCourses = allCourses.filter(c => !enrolledCourseIdSet.has(c.id));
+
+  // Enrollment mutation for available courses
+  const enrollMutation = useMutation({
+    mutationFn: async (courseId: string) => {
+      const response = await apiRequest("POST", `/api/enrollments`, { courseId });
+      return response.json();
+    },
+    onSuccess: (data, courseId) => {
+      window.location.href = `/course/${courseId}/lesson/1`;
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Unable to enroll",
+        description: error.message || "Please try again later.",
+        variant: "destructive",
+      });
+    },
+  });
 
   const getLevelColor = (level: string) => {
-    switch (level) {
-      case 'Foundational': return 'bg-covenant-gold/10 text-covenant-blue';
-      case 'Intermediate': return 'bg-blue-100 text-blue-800';
-      case 'Advanced': return 'bg-purple-100 text-purple-800';
-      default: return 'bg-gray-100 text-gray-600';
-    }
+    const lower = level.toLowerCase();
+    if (lower === 'foundational' || lower === 'beginner') return 'bg-covenant-gold/10 text-covenant-blue';
+    if (lower === 'intermediate') return 'bg-blue-100 text-blue-800';
+    if (lower === 'advanced') return 'bg-purple-100 text-purple-800';
+    return 'bg-gray-100 text-gray-600';
   };
+
+  const isLoading = enrollmentsLoading || coursesLoading;
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-covenant-light via-white to-covenant-light flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-covenant-gold mx-auto mb-4"></div>
+          <p className="text-gray-700">Loading your courses...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-covenant-light via-white to-covenant-light">
@@ -147,7 +157,7 @@ export default function MyCourses() {
                     <BookOpen className="h-6 w-6 text-covenant-gold" />
                   </div>
                   <div>
-                    <p className="text-2xl font-bold text-covenant-blue">{enrolledCourses.length}</p>
+                    <p className="text-2xl font-bold text-covenant-blue">{enrolledInProgress.length}</p>
                     <p className="text-covenant-gray">Courses In Progress</p>
                   </div>
                 </div>
@@ -161,7 +171,7 @@ export default function MyCourses() {
                     <CheckCircle className="h-6 w-6 text-green-600" />
                   </div>
                   <div>
-                    <p className="text-2xl font-bold text-covenant-blue">{completedCourses.length}</p>
+                    <p className="text-2xl font-bold text-covenant-blue">{completedEnrollments.length}</p>
                     <p className="text-covenant-gray">Courses Completed</p>
                   </div>
                 </div>
@@ -172,11 +182,11 @@ export default function MyCourses() {
               <CardContent className="p-6">
                 <div className="flex items-center">
                   <div className="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center mr-4">
-                    <Trophy className="h-6 w-6 text-purple-600" />
+                    <Users className="h-6 w-6 text-purple-600" />
                   </div>
                   <div>
-                    <p className="text-2xl font-bold text-covenant-blue">{achievements.filter(a => a.earned).length}</p>
-                    <p className="text-covenant-gray">Achievements Earned</p>
+                    <p className="text-2xl font-bold text-covenant-blue">{availableCourses.length}</p>
+                    <p className="text-covenant-gray">Available Courses</p>
                   </div>
                 </div>
               </CardContent>
@@ -189,51 +199,174 @@ export default function MyCourses() {
               <button
                 onClick={() => setActiveTab('enrolled')}
                 className={`px-6 py-3 rounded-md font-medium transition-colors ${
-                  activeTab === 'enrolled' 
-                    ? 'bg-covenant-blue text-white' 
+                  activeTab === 'enrolled'
+                    ? 'bg-covenant-blue text-white'
                     : 'text-covenant-gray hover:text-covenant-blue'
                 }`}
               >
-                In Progress ({enrolledCourses.length})
-              </button>
-              <button
-                onClick={() => setActiveTab('available')}
-                className={`px-6 py-3 rounded-md font-medium transition-colors ${
-                  activeTab === 'available' 
-                    ? 'bg-covenant-blue text-white' 
-                    : 'text-covenant-gray hover:text-covenant-blue'
-                }`}
-              >
-                Available ({availableCourses.length})
+                In Progress ({enrolledInProgress.length})
               </button>
               <button
                 onClick={() => setActiveTab('completed')}
                 className={`px-6 py-3 rounded-md font-medium transition-colors ${
-                  activeTab === 'completed' 
-                    ? 'bg-covenant-blue text-white' 
+                  activeTab === 'completed'
+                    ? 'bg-covenant-blue text-white'
                     : 'text-covenant-gray hover:text-covenant-blue'
                 }`}
               >
-                Completed ({completedCourses.length})
+                Completed ({completedEnrollments.length})
+              </button>
+              <button
+                onClick={() => setActiveTab('available')}
+                className={`px-6 py-3 rounded-md font-medium transition-colors ${
+                  activeTab === 'available'
+                    ? 'bg-covenant-blue text-white'
+                    : 'text-covenant-gray hover:text-covenant-blue'
+                }`}
+              >
+                Available ({availableCourses.length})
               </button>
             </div>
           </div>
 
           {/* Course Grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-            {(activeTab === 'enrolled' ? enrolledCourses : 
-              activeTab === 'available' ? availableCourses : completedCourses).map((course) => (
+            {activeTab === 'enrolled' && enrolledInProgress.length === 0 && (
+              <div className="col-span-full">
+                <Card>
+                  <CardContent className="py-12 text-center">
+                    <BookOpen className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">No courses in progress</h3>
+                    <p className="text-gray-600 mb-4">Browse available courses to start learning.</p>
+                    <Button onClick={() => setActiveTab('available')} variant="outline">
+                      View Available Courses
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+
+            {activeTab === 'completed' && completedEnrollments.length === 0 && (
+              <div className="col-span-full">
+                <Card>
+                  <CardContent className="py-12 text-center">
+                    <CheckCircle className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">No completed courses yet</h3>
+                    <p className="text-gray-600">Keep learning to complete your first course!</p>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+
+            {activeTab === 'available' && availableCourses.length === 0 && (
+              <div className="col-span-full">
+                <Card>
+                  <CardContent className="py-12 text-center">
+                    <GraduationCap className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">You're enrolled in all courses!</h3>
+                    <p className="text-gray-600">Great job! Check back later for new courses.</p>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+
+            {activeTab === 'enrolled' && enrolledInProgress.map((enrollment) => {
+              const course = enrollment.course;
+              const progress = progressMap[enrollment.courseId] ?? 0;
+              return (
+                <Card key={enrollment.id} className="border-covenant-light hover:border-covenant-gold transition-all hover:shadow-lg">
+                  <CardHeader>
+                    <div className="flex justify-between items-start mb-2">
+                      <Badge className={getLevelColor(course.level)}>
+                        {course.level}
+                      </Badge>
+                    </div>
+                    <CardTitle className="text-covenant-blue text-lg">{course.title}</CardTitle>
+                    <CardDescription className="text-sm">
+                      {course.description}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div>
+                        <div className="flex justify-between text-sm mb-1">
+                          <span className="text-covenant-gray">Progress</span>
+                          <span className="text-covenant-blue font-medium">{progress}%</span>
+                        </div>
+                        <Progress value={progress} className="h-2" />
+                      </div>
+
+                      <div className="flex items-center justify-between text-sm text-covenant-gray">
+                        {course.duration && (
+                          <div className="flex items-center">
+                            <Clock className="h-4 w-4 mr-1" />
+                            <span>{course.duration}</span>
+                          </div>
+                        )}
+                      </div>
+
+                      <Link href={`/course/${enrollment.courseId}/lesson/1`}>
+                        <Button
+                          className="w-full bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue"
+                        >
+                          <Play className="h-4 w-4 mr-2" />
+                          Continue Learning
+                        </Button>
+                      </Link>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+
+            {activeTab === 'completed' && completedEnrollments.map((enrollment) => {
+              const course = enrollment.course;
+              return (
+                <Card key={enrollment.id} className="border-covenant-light hover:border-covenant-gold transition-all hover:shadow-lg">
+                  <CardHeader>
+                    <div className="flex justify-between items-start mb-2">
+                      <Badge className={getLevelColor(course.level)}>
+                        {course.level}
+                      </Badge>
+                      <CheckCircle className="h-5 w-5 text-green-500" />
+                    </div>
+                    <CardTitle className="text-covenant-blue text-lg">{course.title}</CardTitle>
+                    <CardDescription className="text-sm">
+                      {course.description}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div>
+                        <div className="flex justify-between text-sm mb-1">
+                          <span className="text-covenant-gray">Progress</span>
+                          <span className="text-green-600 font-medium">100%</span>
+                        </div>
+                        <Progress value={100} className="h-2" />
+                      </div>
+
+                      <Link href={`/course/${enrollment.courseId}/lesson/1`}>
+                        <Button
+                          variant="outline"
+                          className="w-full border-covenant-blue text-covenant-blue"
+                        >
+                          <BookOpen className="h-4 w-4 mr-2" />
+                          Review Course
+                        </Button>
+                      </Link>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+
+            {activeTab === 'available' && availableCourses.map((course) => (
               <Card key={course.id} className="border-covenant-light hover:border-covenant-gold transition-all hover:shadow-lg">
                 <CardHeader>
                   <div className="flex justify-between items-start mb-2">
                     <Badge className={getLevelColor(course.level)}>
                       {course.level}
                     </Badge>
-                    {course.status === 'locked' ? (
-                      <Lock className="h-5 w-5 text-gray-400" />
-                    ) : (
-                      <Unlock className="h-5 w-5 text-covenant-gold" />
-                    )}
                   </div>
                   <CardTitle className="text-covenant-blue text-lg">{course.title}</CardTitle>
                   <CardDescription className="text-sm">
@@ -242,111 +375,28 @@ export default function MyCourses() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {course.status === 'enrolled' && (
-                      <div>
-                        <div className="flex justify-between text-sm mb-1">
-                          <span className="text-covenant-gray">Progress</span>
-                          <span className="text-covenant-blue font-medium">{course.progress}%</span>
-                        </div>
-                        <Progress value={course.progress} className="h-2" />
-                      </div>
-                    )}
-
                     <div className="flex items-center justify-between text-sm text-covenant-gray">
-                      <div className="flex items-center">
-                        <BookOpen className="h-4 w-4 mr-1" />
-                        <span>{course.lessons} lessons</span>
-                      </div>
-                      <div className="flex items-center">
-                        <Clock className="h-4 w-4 mr-1" />
-                        <span>{course.duration}</span>
-                      </div>
+                      {course.duration && (
+                        <div className="flex items-center">
+                          <Clock className="h-4 w-4 mr-1" />
+                          <span>{course.duration}</span>
+                        </div>
+                      )}
                     </div>
 
-                    {course.status === 'enrolled' && course.nextLesson && (
-                      <div className="bg-covenant-light p-3 rounded-lg">
-                        <p className="text-sm text-covenant-blue font-medium">Next Lesson:</p>
-                        <p className="text-sm text-covenant-gray">{course.nextLesson}</p>
-                      </div>
-                    )}
-
-                    {course.status === 'locked' && course.prerequisite && (
-                      <div className="bg-gray-50 p-3 rounded-lg">
-                        <p className="text-sm text-gray-600">
-                          <Lock className="h-4 w-4 inline mr-1" />
-                          {course.prerequisite}
-                        </p>
-                      </div>
-                    )}
-
-                    {course.status === 'enrolled' ? (
-                      <Link href={`/course/${course.id}`}>
-                        <Button 
-                          className="w-full bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue"
-                        >
-                          <Play className="h-4 w-4 mr-2" />
-                          Continue Learning
-                        </Button>
-                      </Link>
-                    ) : course.status === 'available' ? (
-                      <Button 
-                        className="w-full bg-covenant-blue hover:bg-covenant-blue/80 text-white"
-                      >
-                        <BookOpen className="h-4 w-4 mr-2" />
-                        Enroll Now
-                      </Button>
-                    ) : (
-                      <Button 
-                        className="w-full bg-gray-300 text-gray-500 cursor-not-allowed"
-                        disabled
-                      >
-                        <Lock className="h-4 w-4 mr-2" />
-                        Locked
-                      </Button>
-                    )}
+                    <Button
+                      className="w-full bg-covenant-blue hover:bg-covenant-blue/80 text-white"
+                      onClick={() => enrollMutation.mutate(course.id)}
+                      disabled={enrollMutation.isPending}
+                    >
+                      <BookOpen className="h-4 w-4 mr-2" />
+                      {enrollMutation.isPending ? "Enrolling..." : "Enroll Now"}
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
             ))}
           </div>
-
-          {/* Achievements Section */}
-          <Card className="mb-12">
-            <CardHeader>
-              <CardTitle className="text-covenant-blue">Achievements</CardTitle>
-              <CardDescription>Track your learning milestones and accomplishments</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid md:grid-cols-3 gap-4">
-                {achievements.map((achievement, index) => (
-                  <div 
-                    key={index} 
-                    className={`p-4 rounded-lg border-2 transition-colors ${
-                      achievement.earned 
-                        ? 'border-covenant-gold bg-covenant-gold/10' 
-                        : 'border-gray-200 bg-gray-50'
-                    }`}
-                  >
-                    <div className="flex items-center mb-2">
-                      <achievement.icon className={`h-6 w-6 mr-2 ${
-                        achievement.earned ? 'text-covenant-gold' : 'text-gray-400'
-                      }`} />
-                      <p className={`font-medium ${
-                        achievement.earned ? 'text-covenant-blue' : 'text-gray-500'
-                      }`}>
-                        {achievement.title}
-                      </p>
-                    </div>
-                    <p className={`text-sm ${
-                      achievement.earned ? 'text-covenant-gray' : 'text-gray-400'
-                    }`}>
-                      {achievement.description}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
 
           <ScriptureQuote
             quote="Study to shew thyself approved unto God, a workman that needeth not to be ashamed, rightly dividing the word of truth."
@@ -356,5 +406,13 @@ export default function MyCourses() {
         </div>
       </section>
     </div>
+  );
+}
+
+export default function MyCourses() {
+  return (
+    <RequireAuth>
+      <MyCourseContent />
+    </RequireAuth>
   );
 }
