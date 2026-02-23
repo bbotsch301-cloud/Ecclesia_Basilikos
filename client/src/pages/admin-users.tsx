@@ -9,9 +9,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { 
-  Users, 
-  Search, 
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Users,
+  Search,
   Filter,
   MoreHorizontal,
   Edit,
@@ -23,7 +25,9 @@ import {
   CheckCircle,
   ArrowLeft,
   UserCheck,
-  UserX
+  UserX,
+  Mail,
+  Send
 } from "lucide-react";
 import { Link } from "wouter";
 import { useToast } from "@/hooks/use-toast";
@@ -49,6 +53,10 @@ export default function AdminUsers() {
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isEmailDialogOpen, setIsEmailDialogOpen] = useState(false);
+  const [emailSubject, setEmailSubject] = useState("");
+  const [emailBody, setEmailBody] = useState("");
+  const [showEmailConfirm, setShowEmailConfirm] = useState(false);
 
   const { data: users, isLoading: usersLoading } = useQuery<User[]>({
     queryKey: ['/api/admin/users'],
@@ -116,6 +124,33 @@ export default function AdminUsers() {
     },
   });
 
+  const sendBulkEmailMutation = useMutation({
+    mutationFn: async ({ subject, html }: { subject: string; html: string }) => {
+      return apiRequest('POST', '/api/admin/users/email', { subject, html });
+    },
+    onSuccess: async (response) => {
+      const result = await response.json();
+      toast({
+        title: "Email Sent",
+        description: `Email sent to ${result.sent} user(s) successfully.`,
+      });
+      setIsEmailDialogOpen(false);
+      setShowEmailConfirm(false);
+      setEmailSubject("");
+      setEmailBody("");
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to send email. Please try again.",
+        variant: "destructive",
+      });
+      setShowEmailConfirm(false);
+    },
+  });
+
+  const activeUserCount = users?.filter(u => u.isActive && u.email).length || 0;
+
   const filteredUsers = users?.filter(user => {
     const matchesSearch = user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -155,15 +190,24 @@ export default function AdminUsers() {
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">User Management</h1>
             <p className="text-gray-600 dark:text-gray-300">Manage user accounts, roles, and permissions</p>
           </div>
-          <Button
-            onClick={() => toast({
-              title: "Coming Soon",
-              description: "User invite functionality will be available in a future update.",
-            })}
-          >
-            <UserPlus className="h-4 w-4 mr-2" />
-            Invite User
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setIsEmailDialogOpen(true)}
+            >
+              <Mail className="h-4 w-4 mr-2" />
+              Send Email to All
+            </Button>
+            <Button
+              onClick={() => toast({
+                title: "Coming Soon",
+                description: "User invite functionality will be available in a future update.",
+              })}
+            >
+              <UserPlus className="h-4 w-4 mr-2" />
+              Invite User
+            </Button>
+          </div>
         </div>
         {/* Filters */}
         <Card className="mb-6">
@@ -452,6 +496,82 @@ export default function AdminUsers() {
               {updateRoleMutation.isPending ? "Updating..." : "Update Role"}
             </Button>
           </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Send Email to All Dialog */}
+      <Dialog open={isEmailDialogOpen} onOpenChange={(open) => {
+        setIsEmailDialogOpen(open);
+        if (!open) {
+          setShowEmailConfirm(false);
+          setEmailSubject("");
+          setEmailBody("");
+        }
+      }}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Send Email to All Users</DialogTitle>
+            <DialogDescription>
+              This email will be sent to {activeUserCount} active user(s).
+            </DialogDescription>
+          </DialogHeader>
+
+          {!showEmailConfirm ? (
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="email-subject">Subject</Label>
+                <Input
+                  id="email-subject"
+                  placeholder="Enter email subject..."
+                  value={emailSubject}
+                  onChange={(e) => setEmailSubject(e.target.value)}
+                />
+              </div>
+              <div>
+                <Label htmlFor="email-body">Message (HTML supported)</Label>
+                <Textarea
+                  id="email-body"
+                  placeholder="Enter your message..."
+                  value={emailBody}
+                  onChange={(e) => setEmailBody(e.target.value)}
+                  rows={8}
+                />
+              </div>
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setIsEmailDialogOpen(false)}>
+                  Cancel
+                </Button>
+                <Button
+                  onClick={() => setShowEmailConfirm(true)}
+                  disabled={!emailSubject.trim() || !emailBody.trim()}
+                >
+                  <Send className="h-4 w-4 mr-2" />
+                  Review & Send
+                </Button>
+              </DialogFooter>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <div className="rounded-md border p-4 bg-amber-50 dark:bg-amber-950 text-sm">
+                <p className="font-medium text-amber-800 dark:text-amber-200 mb-2">
+                  Please confirm you want to send this email:
+                </p>
+                <p><strong>Subject:</strong> {emailSubject}</p>
+                <p><strong>Recipients:</strong> {activeUserCount} active user(s)</p>
+              </div>
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setShowEmailConfirm(false)}>
+                  Back
+                </Button>
+                <Button
+                  onClick={() => sendBulkEmailMutation.mutate({ subject: emailSubject, html: emailBody })}
+                  disabled={sendBulkEmailMutation.isPending}
+                >
+                  {sendBulkEmailMutation.isPending ? "Sending..." : "Confirm & Send"}
+                </Button>
+              </DialogFooter>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
       </div>

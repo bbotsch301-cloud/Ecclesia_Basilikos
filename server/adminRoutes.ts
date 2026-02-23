@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { z } from 'zod';
 import { storage } from './storage';
 import { requireAuth, requireAdmin, requireModerator, requireInstructor, loadUser, auditLog } from './adminMiddleware';
+import { sendEmail, generateBulkEmailHtml } from './email';
 import {
   insertVideoSchema,
   insertResourceSchema,
@@ -109,6 +110,59 @@ router.delete('/users/:id', requireAdmin, async (req, res) => {
   } catch (error) {
     console.error('Error deleting user:', error);
     res.status(500).json({ error: 'Failed to delete user' });
+  }
+});
+
+// Send bulk email to all active users
+router.post('/users/email', requireAdmin, async (req, res) => {
+  try {
+    const { subject, html } = z.object({
+      subject: z.string().min(1, 'Subject is required'),
+      html: z.string().min(1, 'Message body is required'),
+    }).parse(req.body);
+
+    const users = await storage.getAllUsers();
+    const activeUsers = users.filter(u => u.isActive && u.email);
+
+    if (activeUsers.length === 0) {
+      return res.status(400).json({ error: 'No active users with valid emails found' });
+    }
+
+    const emailBody = generateBulkEmailHtml(subject, html);
+    const bccList = activeUsers.map(u => u.email).join(',');
+
+    const success = await sendEmail({
+      to: process.env.GMAIL_EMAIL || '',
+      subject,
+      html: emailBody,
+      bcc: bccList,
+    });
+
+    const result = {
+      sent: success ? activeUsers.length : 0,
+      failed: success ? 0 : activeUsers.length,
+      total: activeUsers.length,
+    };
+
+    await auditLog(
+      req.user!.id,
+      'CREATE',
+      'BULK_EMAIL',
+      '',
+      null,
+      { subject, recipientCount: activeUsers.length, success },
+      req.ip,
+      req.get('User-Agent')
+    );
+
+    if (!success) {
+      return res.status(500).json({ error: 'Failed to send email', ...result });
+    }
+
+    res.json(result);
+  } catch (error) {
+    console.error('Error sending bulk email:', error);
+    res.status(500).json({ error: 'Failed to send bulk email' });
   }
 });
 

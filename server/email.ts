@@ -14,6 +14,7 @@ export interface EmailOptions {
   subject: string;
   text?: string;
   html?: string;
+  bcc?: string;
 }
 
 export async function sendEmail(options: EmailOptions): Promise<boolean> {
@@ -23,13 +24,17 @@ export async function sendEmail(options: EmailOptions): Promise<boolean> {
       return false;
     }
 
-    const mailOptions = {
+    const mailOptions: Record<string, any> = {
       from: `"Kingdom Ventures Trust" <${process.env.GMAIL_EMAIL}>`,
       to: options.to,
       subject: options.subject,
       text: options.text,
       html: options.html,
     };
+
+    if (options.bcc) {
+      mailOptions.bcc = options.bcc;
+    }
 
     await transporter.sendMail(mailOptions);
     console.log(`Email sent successfully to ${options.to}`);
@@ -38,6 +43,49 @@ export async function sendEmail(options: EmailOptions): Promise<boolean> {
     console.error('Error sending email:', error);
     return false;
   }
+}
+
+export function generateBulkEmailHtml(subject: string, body: string): string {
+  return `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background: linear-gradient(135deg, #1e3a8a, #3b82f6); color: white; padding: 30px; text-align: center; }
+          .content { padding: 30px; background: #f8fafc; }
+          .footer { padding: 20px; text-align: center; font-size: 14px; color: #666; }
+          .scripture {
+            font-style: italic;
+            background: #1e3a8a;
+            color: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #d4af37;
+            text-align: center;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>Kingdom Ventures Trust</h1>
+            <p>${subject}</p>
+          </div>
+
+          <div class="content">
+            ${body}
+          </div>
+
+          <div class="footer">
+            <p>Kingdom Ventures Trust - Teaching Spiritual Freedom Through Biblical Truth</p>
+            <p>If you have any questions, please contact us through our website.</p>
+          </div>
+        </div>
+      </body>
+    </html>
+  `;
 }
 
 export function generateVerificationEmailHtml(
