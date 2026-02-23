@@ -1,11 +1,24 @@
 import express, { type Request, Response, NextFunction } from "express";
+import helmet from "helmet";
+import cookieParser from "cookie-parser";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { initializeEmailTemplates } from "./initializeEmailTemplates";
+import { csrfProtection } from "./csrf";
 
 const app = express();
+
+// Security headers
+app.use(helmet({
+  contentSecurityPolicy: false, // CSP is complex with a SPA; enable once you define a policy
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+
+// CSRF protection for API routes
+app.use("/api", csrfProtection);
 
 app.use((req, res, next) => {
   const start = Date.now();

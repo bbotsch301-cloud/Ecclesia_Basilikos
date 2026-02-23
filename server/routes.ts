@@ -29,13 +29,18 @@ import {
 import { z } from "zod";
 import { ObjectStorageService } from "./objectStorage";
 import proofVaultRoutes from "./proofVaultRoutes";
+import { rateLimit } from "./rateLimit";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Session middleware
   app.use(sessionMiddleware);
 
+  // Rate limiters for public endpoints
+  const authLimiter = rateLimit("auth", 10, 15 * 60_000);       // 10 req / 15 min per IP
+  const contactLimiter = rateLimit("contact", 5, 15 * 60_000);  // 5 req / 15 min per IP
+
   // Authentication routes
-  app.post("/api/auth/register", async (req, res) => {
+  app.post("/api/auth/register", authLimiter, async (req, res) => {
     try {
       const userData = insertUserSchema.parse(req.body);
       
@@ -82,6 +87,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         // Reload user to reflect verified state in response
         const verifiedUser = await storage.getUser(user.id);
         if (verifiedUser) {
+          req.session.userId = verifiedUser.id;
           const { password: _pw, emailVerificationToken: _tok, ...safeUser } = verifiedUser;
           return res.json({
             success: true,
@@ -91,9 +97,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       }
       
+      req.session.userId = user.id;
       const { password, emailVerificationToken, ...userWithoutSensitiveData } = user;
-      res.json({ 
-        success: true, 
+      res.json({
+        success: true,
         user: userWithoutSensitiveData,
         message: "Registration successful! Please check your email to verify your account."
       });
@@ -107,7 +114,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/auth/login", async (req, res) => {
+  app.post("/api/auth/login", authLimiter, async (req, res) => {
     try {
       const { email, password } = loginSchema.parse(req.body);
       
@@ -187,6 +194,81 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Password reset: request
+  app.post("/api/auth/forgot-password", authLimiter, async (req, res) => {
+    try {
+      const { email } = z.object({ email: z.string().email() }).parse(req.body);
+
+      // Always return success to avoid user enumeration
+      const user = await storage.getUserByEmail(email);
+      if (!user) {
+        return res.json({ success: true, message: "If that email is registered, a reset link has been sent." });
+      }
+
+      const { randomUUID } = await import("crypto");
+      const token = randomUUID();
+      const expires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+      await storage.setPasswordResetToken(user.id, token, expires);
+
+      const resetUrl = `${req.protocol}://${req.get("host")}/reset-password?token=${token}`;
+
+      const { sendEmail } = await import("./email");
+      await sendEmail({
+        to: email,
+        subject: "Password Reset - Ecclesia Basilikos",
+        html: `
+          <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:20px">
+            <h2>Password Reset Request</h2>
+            <p>Hello ${user.firstName},</p>
+            <p>We received a request to reset your password. Click the button below to set a new password:</p>
+            <div style="text-align:center;margin:30px 0">
+              <a href="${resetUrl}" style="display:inline-block;background:#d4af37;color:#fff;padding:12px 30px;text-decoration:none;border-radius:5px;font-weight:bold">Reset Password</a>
+            </div>
+            <p>This link will expire in 1 hour. If you did not request this, you can safely ignore this email.</p>
+          </div>`,
+      });
+
+      res.json({ success: true, message: "If that email is registered, a reset link has been sent." });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ errors: error.errors });
+      }
+      console.error("Forgot password error:", error);
+      res.status(500).json({ error: "Failed to process password reset request" });
+    }
+  });
+
+  // Password reset: execute
+  app.post("/api/auth/reset-password", authLimiter, async (req, res) => {
+    try {
+      const { token, password } = z.object({
+        token: z.string(),
+        password: z.string().min(6),
+      }).parse(req.body);
+
+      const user = await storage.getUserByPasswordResetToken(token);
+      if (!user) {
+        return res.status(400).json({ error: "Invalid or expired reset token" });
+      }
+
+      if (user.passwordResetExpires && new Date() > user.passwordResetExpires) {
+        return res.status(400).json({ error: "Reset token has expired" });
+      }
+
+      const bcrypt = await import("bcryptjs");
+      const hashedPassword = await bcrypt.hash(password, 10);
+      await storage.resetPassword(user.id, hashedPassword);
+
+      res.json({ success: true, message: "Password has been reset successfully. You can now log in." });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ errors: error.errors });
+      }
+      console.error("Reset password error:", error);
+      res.status(500).json({ error: "Failed to reset password" });
+    }
+  });
+
   // Course routes
   app.get("/api/courses", optionalAuth, async (req, res) => {
     try {
@@ -214,90 +296,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Enrollment routes
-  app.post("/api/enrollments", optionalAuth, async (req, res) => {
+  app.post("/api/enrollments", requireAuth, async (req, res) => {
     try {
-      // For development - create a temp user or get existing user
-      let userId = (req as any).user?.id;
-      
-      if (!userId) {
-        // Create temporary user for development
-        const tempUser = await storage.getUserByEmail('temp@example.com');
-        if (!tempUser) {
-          const newTempUser = await storage.createUser({
-            email: 'temp@example.com',
-            password: 'temppassword',
-            firstName: 'Temp',
-            lastName: 'User'
-          });
-          userId = newTempUser.id;
-        } else {
-          userId = tempUser.id;
-        }
-      }
-      
+      const userId = (req as any).user.id;
       const { courseId } = insertEnrollmentSchema.parse(req.body);
-      
-      // Ensure course exists first, create if needed
+
       const course = await storage.getCourse(courseId);
       if (!course) {
-        // Create the course based on our sample data
-        const sampleCourses = [
-          {
-            id: "1",
-            title: "Trust Fundamentals",
-            description: "Understanding the biblical foundation of trust relationships and your role as a trustee in God's kingdom economy.",
-            category: "Foundation",
-            level: "Foundational"
-          },
-          {
-            id: "2", 
-            title: "Banking & Financial Management",
-            description: "Learn practical trust banking, account management, and financial stewardship principles for kingdom wealth building.",
-            category: "Finance",
-            level: "Intermediate"
-          },
-          {
-            id: "3",
-            title: "Investment Strategy for Trustees", 
-            description: "Biblical investment principles, asset allocation, and growing trust assets through wise stewardship.",
-            category: "Investment",
-            level: "Advanced"
-          },
-          {
-            id: "4",
-            title: "Cryptocurrency & Digital Assets",
-            description: "Understanding digital currencies, blockchain technology, and incorporating crypto assets into trust portfolios.",
-            category: "Technology",
-            level: "Advanced"
-          },
-          {
-            id: "5",
-            title: "Legacy & Estate Planning",
-            description: "Generational wealth transfer, inheritance planning, and building lasting kingdom legacies for your children's children.",
-            category: "Planning",
-            level: "Advanced"
-          },
-          {
-            id: "6",
-            title: "Asset Protection Strategies",
-            description: "Protecting trust assets, legal compliance, and maintaining proper trustee responsibilities in all circumstances.",
-            category: "Protection",
-            level: "Intermediate"
-          }
-        ];
-        
-        const sampleCourse = sampleCourses.find(c => c.id === courseId);
-        if (sampleCourse) {
-          await storage.createCourse({
-            ...sampleCourse,
-            createdById: userId,
-            isPublished: true
-          });
-        } else {
-          return res.status(404).json({ error: "Course not found" });
-        }
+        return res.status(404).json({ error: "Course not found" });
       }
-      
+
       // Check if already enrolled
       const isEnrolled = await storage.isUserEnrolled(userId, courseId);
       if (isEnrolled) {
@@ -346,7 +354,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Contact form submission
-  app.post("/api/contact", async (req, res) => {
+  app.post("/api/contact", contactLimiter, async (req, res) => {
     try {
       const contactData = insertContactSchema.parse(req.body);
       const contact = await storage.createContact(contactData);
@@ -361,7 +369,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Newsletter subscription
-  app.post("/api/newsletter", async (req, res) => {
+  app.post("/api/newsletter", contactLimiter, async (req, res) => {
     try {
       const newsletterData = insertNewsletterSchema.parse(req.body);
       
@@ -805,6 +813,19 @@ startxref
     } catch (error) {
       console.error("Dictionary stats error:", error);
       res.status(500).json({ error: "Failed to fetch dictionary stats" });
+    }
+  });
+
+  // Batch endpoint for client-side search engine index (must be before :id route)
+  app.get("/api/dictionary/batch", async (req, res) => {
+    try {
+      const offset = parseInt(req.query.offset as string) || 0;
+      const limit = parseInt(req.query.limit as string) || 500;
+      const results = await storage.getDictionaryBatch(offset, limit);
+      res.json(results);
+    } catch (error) {
+      console.error("Dictionary batch error:", error);
+      res.status(500).json({ error: "Failed to fetch dictionary batch" });
     }
   });
 

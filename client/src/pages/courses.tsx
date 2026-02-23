@@ -1,42 +1,20 @@
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
-import { insertUserSchema, loginSchema } from "@shared/schema";
-import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { apiRequest, queryClient } from "@/lib/queryClient";
-import { 
-  BookOpen, 
-  Download, 
-  TrendingUp, 
-  Users, 
-  User, 
-  LogIn, 
+import { apiRequest } from "@/lib/queryClient";
+import {
+  BookOpen,
+  Users,
+  User,
   GraduationCap,
-  ChevronRight,
-  Building,
   Shield
 } from "lucide-react";
 import ScriptureQuote from "@/components/ui/scripture-quote";
-
-const registrationSchema = insertUserSchema.extend({
-  confirmPassword: z.string().min(6),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
-});
-
-type RegistrationData = z.infer<typeof registrationSchema>;
 
 // Sample course data for the Kingdom Builder Academy program
 const availableCourses = [
@@ -46,12 +24,12 @@ const availableCourses = [
     description: "Learn what a trust actually is, why people use them, and how they work in simple terms. Perfect for complete beginners who have never heard of trusts before.",
     lessons: 8,
     duration: "2.5 hours",
-    level: "Foundational", 
+    level: "Foundational",
     featured: true
   },
   {
     id: 2,
-    title: "Banking & Financial Management", 
+    title: "Banking & Financial Management",
     description: "Learn practical trust banking, account management, and financial stewardship principles for kingdom wealth building.",
     lessons: 12,
     duration: "4 hours",
@@ -99,30 +77,8 @@ const availableCourses = [
 export default function Courses() {
   const { user, isAuthenticated, isLoading } = useAuth();
   const { toast } = useToast();
-  const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
-  const [showAuthDialog, setShowAuthDialog] = useState(false);
+  const [, navigate] = useLocation();
   const [selectedLevel, setSelectedLevel] = useState<'all' | 'foundational' | 'intermediate' | 'advanced'>('all');
-
-  const loginForm = useForm({
-    resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
-
-  const registerForm = useForm<RegistrationData>({
-    resolver: zodResolver(registrationSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-      confirmPassword: "",
-      firstName: "",
-      lastName: "",
-    },
-  });
-
-  const { login, register: registerUser, logout, isLoggingIn, isRegistering } = useAuth();
 
   // Fetch user enrollments
   const { data: enrollments = [] } = useQuery<Array<{ courseId: string; enrolledAt: string }>>({
@@ -145,10 +101,10 @@ export default function Courses() {
   // Get button text based on enrollment status
   const getButtonText = (courseId: string, isPending: boolean = false) => {
     if (isPending) return "Starting Course...";
-    
+
     const status = getEnrollmentStatus(courseId);
     switch (status) {
-      case "login": return "Login to Begin";
+      case "login": return "Begin Learning";
       case "enrolled": return "Continue Learning";
       case "enroll": return "Begin Learning";
       default: return "Begin Learning";
@@ -162,7 +118,6 @@ export default function Courses() {
       return response.json();
     },
     onSuccess: (data, courseId) => {
-      // Auto-navigate to first lesson after successful enrollment
       window.location.href = `/course/${courseId}/lesson/1`;
     },
     onError: (error: any) => {
@@ -174,68 +129,19 @@ export default function Courses() {
     },
   });
 
-  const onLogin = async (data: z.infer<typeof loginSchema>) => {
-    try {
-      await login(data);
-      setShowAuthDialog(false);
-      toast({
-        title: "Welcome back!",
-        description: "You have successfully logged in.",
-      });
-    } catch (error: any) {
-      toast({
-        title: "Login Failed",
-        description: error.message || "Invalid email or password",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const onRegister = async (data: RegistrationData) => {
-    try {
-      const { confirmPassword, ...userData } = data;
-      await registerUser(userData);
-      setShowAuthDialog(false);
-      toast({
-        title: "Welcome to Royal Academy!",
-        description: "Your account has been created successfully.",
-      });
-    } catch (error: any) {
-      toast({
-        title: "Registration Failed",
-        description: error.message || "Failed to create account",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const handleLogout = async () => {
-    try {
-      await logout();
-      toast({
-        title: "Logged out successfully",
-        description: "You have been signed out of your account.",
-      });
-    } catch (error) {
-      console.error("Logout error:", error);
-    }
-  };
-
-  const handleBeginLearning = async (courseId: string, courseTitle: string) => {
+  const handleBeginLearning = async (courseId: string) => {
     const status = getEnrollmentStatus(courseId);
-    
+
     if (status === "login") {
-      setShowAuthDialog(true);
+      navigate("/login?redirect=/courses");
       return;
     }
-    
+
     if (status === "enrolled") {
-      // Navigate directly to first lesson
       window.location.href = `/course/${courseId}/lesson/1`;
       return;
     }
-    
-    // Auto-enroll and navigate to course content
+
     try {
       await enrollMutation.mutateAsync(courseId.toString());
     } catch (error) {
@@ -243,10 +149,10 @@ export default function Courses() {
     }
   };
 
-  const filteredCourses = selectedLevel === 'all' 
-    ? availableCourses 
-    : availableCourses.filter(course => 
-        course.level.toLowerCase() === selectedLevel.replace('foundational', 'foundational')
+  const filteredCourses = selectedLevel === 'all'
+    ? availableCourses
+    : availableCourses.filter(course =>
+        course.level.toLowerCase() === selectedLevel
       );
 
   const getLevelColor = (level: string) => {
@@ -258,7 +164,6 @@ export default function Courses() {
     }
   };
 
-  // Show loading state while checking authentication
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-covenant-light via-white to-covenant-light flex items-center justify-center">
@@ -290,166 +195,6 @@ export default function Courses() {
                 <strong>Foundation:</strong> Before beginning course instruction, explore the <a href="/repository" className="text-royal-gold hover:underline">Covenant Repository</a> to understand the critical distinctions between Babylon's counterfeits and Kingdom realities.
               </p>
             </div>
-
-            {isAuthenticated ? (
-              <div className="flex items-center justify-center space-x-4 mt-8">
-                <div className="flex items-center space-x-2 bg-green-600/20 text-green-200 px-4 py-2 rounded-lg">
-                  <User className="h-5 w-5" />
-                  <span>Welcome back, {user?.firstName}!</span>
-                </div>
-                <Button 
-                  onClick={handleLogout} 
-                  variant="outline" 
-                  className="border-white text-white hover:bg-white hover:text-royal-navy"
-                >
-                  Logout
-                </Button>
-              </div>
-            ) : (
-              <div className="mt-8">
-                <Dialog open={showAuthDialog} onOpenChange={setShowAuthDialog}>
-                  <DialogTrigger asChild>
-                    <Button size="lg" className="royal-button px-8 py-3 font-semibold">
-                      <LogIn className="h-5 w-5 mr-2" />
-                      Access Royal Academy
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-md">
-                    <DialogHeader>
-                      <DialogTitle>
-                        {authMode === 'login' ? 'Student Login' : 'Create Student Account'}
-                      </DialogTitle>
-                      <DialogDescription>
-                        {authMode === 'login' 
-                          ? 'Sign in to access Royal Academy'
-                          : 'Join Royal Academy to begin Kingdom education'
-                        }
-                      </DialogDescription>
-                    </DialogHeader>
-                    
-                    <Tabs value={authMode} onValueChange={(value) => setAuthMode(value as 'login' | 'register')}>
-                      <TabsList className="grid w-full grid-cols-2">
-                        <TabsTrigger value="login">Login</TabsTrigger>
-                        <TabsTrigger value="register">Register</TabsTrigger>
-                      </TabsList>
-                      
-                      <TabsContent value="login" className="space-y-4">
-                        <Form {...loginForm}>
-                          <form onSubmit={loginForm.handleSubmit(onLogin)} className="space-y-4">
-                            <FormField
-                              control={loginForm.control}
-                              name="email"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel>Email</FormLabel>
-                                  <FormControl>
-                                    <Input placeholder="Enter your email" {...field} />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-                            <FormField
-                              control={loginForm.control}
-                              name="password"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel>Password</FormLabel>
-                                  <FormControl>
-                                    <Input type="password" placeholder="Enter your password" {...field} />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-                            <Button type="submit" className="w-full royal-button" disabled={isLoggingIn}>
-                              {isLoggingIn ? "Signing in..." : "Sign In"}
-                            </Button>
-                          </form>
-                        </Form>
-                      </TabsContent>
-                      
-                      <TabsContent value="register" className="space-y-4">
-                        <Form {...registerForm}>
-                          <form onSubmit={registerForm.handleSubmit(onRegister)} className="space-y-4">
-                            <div className="grid grid-cols-2 gap-4">
-                              <FormField
-                                control={registerForm.control}
-                                name="firstName"
-                                render={({ field }) => (
-                                  <FormItem>
-                                    <FormLabel>First Name</FormLabel>
-                                    <FormControl>
-                                      <Input placeholder="First name" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                  </FormItem>
-                                )}
-                              />
-                              <FormField
-                                control={registerForm.control}
-                                name="lastName"
-                                render={({ field }) => (
-                                  <FormItem>
-                                    <FormLabel>Last Name</FormLabel>
-                                    <FormControl>
-                                      <Input placeholder="Last name" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                  </FormItem>
-                                )}
-                              />
-                            </div>
-                            <FormField
-                              control={registerForm.control}
-                              name="email"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel>Email</FormLabel>
-                                  <FormControl>
-                                    <Input placeholder="Enter your email" {...field} />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-                            <FormField
-                              control={registerForm.control}
-                              name="password"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel>Password</FormLabel>
-                                  <FormControl>
-                                    <Input type="password" placeholder="Create password" {...field} />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-                            <FormField
-                              control={registerForm.control}
-                              name="confirmPassword"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel>Confirm Password</FormLabel>
-                                  <FormControl>
-                                    <Input type="password" placeholder="Confirm password" {...field} />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-                            <Button type="submit" className="w-full bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue" disabled={isRegistering}>
-                              {isRegistering ? "Joining..." : "Join Learn to Steward"}
-                            </Button>
-                          </form>
-                        </Form>
-                      </TabsContent>
-                    </Tabs>
-                  </DialogContent>
-                </Dialog>
-              </div>
-            )}
           </div>
         </div>
       </section>
@@ -468,10 +213,10 @@ export default function Courses() {
                       {course.level}
                     </Badge>
                   </div>
-                  
+
                   <h3 className="text-3xl font-playfair font-bold mb-4">{course.title}</h3>
                   <p className="text-lg text-blue-100 mb-6 max-w-3xl">{course.description}</p>
-                  
+
                   <div className="flex flex-wrap items-center gap-6 mb-8">
                     <div className="flex items-center text-blue-200">
                       <BookOpen className="h-5 w-5 mr-2" />
@@ -482,11 +227,11 @@ export default function Courses() {
                       <span>{course.duration}</span>
                     </div>
                   </div>
-                  
-                  <Button 
-                    size="lg" 
+
+                  <Button
+                    size="lg"
                     className="bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue px-8 py-3 font-semibold"
-                    onClick={() => handleBeginLearning(course.id.toString(), course.title)}
+                    onClick={() => handleBeginLearning(course.id.toString())}
                     disabled={enrollMutation.isPending}
                   >
                     <GraduationCap className="h-5 w-5 mr-2" />
@@ -505,15 +250,15 @@ export default function Courses() {
             <p className="text-lg text-covenant-gray max-w-3xl mx-auto mb-8">
               Choose from our comprehensive curriculum designed to equip you as a faithful trustee
             </p>
-            
+
             <div className="flex justify-center">
               <div className="bg-white rounded-lg p-1 shadow-md">
                 <Button
                   variant="ghost"
                   onClick={() => setSelectedLevel('all')}
                   className={`px-6 py-3 rounded-md font-medium transition-colors ${
-                    selectedLevel === 'all' 
-                      ? 'bg-covenant-blue text-white' 
+                    selectedLevel === 'all'
+                      ? 'bg-covenant-blue text-white'
                       : 'text-covenant-gray hover:text-covenant-blue'
                   }`}
                 >
@@ -523,8 +268,8 @@ export default function Courses() {
                   variant="ghost"
                   onClick={() => setSelectedLevel('foundational')}
                   className={`px-6 py-3 rounded-md font-medium transition-colors ${
-                    selectedLevel === 'foundational' 
-                      ? 'bg-covenant-blue text-white' 
+                    selectedLevel === 'foundational'
+                      ? 'bg-covenant-blue text-white'
                       : 'text-covenant-gray hover:text-covenant-blue'
                   }`}
                 >
@@ -534,8 +279,8 @@ export default function Courses() {
                   variant="ghost"
                   onClick={() => setSelectedLevel('intermediate')}
                   className={`px-6 py-3 rounded-md font-medium transition-colors ${
-                    selectedLevel === 'intermediate' 
-                      ? 'bg-covenant-blue text-white' 
+                    selectedLevel === 'intermediate'
+                      ? 'bg-covenant-blue text-white'
                       : 'text-covenant-gray hover:text-covenant-blue'
                   }`}
                 >
@@ -545,8 +290,8 @@ export default function Courses() {
                   variant="ghost"
                   onClick={() => setSelectedLevel('advanced')}
                   className={`px-6 py-3 rounded-md font-medium transition-colors ${
-                    selectedLevel === 'advanced' 
-                      ? 'bg-covenant-blue text-white' 
+                    selectedLevel === 'advanced'
+                      ? 'bg-covenant-blue text-white'
                       : 'text-covenant-gray hover:text-covenant-blue'
                   }`}
                 >
@@ -586,10 +331,10 @@ export default function Courses() {
                         <span>{course.duration}</span>
                       </div>
                     </div>
-                    
-                    <Button 
+
+                    <Button
                       className="w-full bg-covenant-blue hover:bg-covenant-blue/80 text-white"
-                      onClick={() => handleBeginLearning(course.id.toString(), course.title)}
+                      onClick={() => handleBeginLearning(course.id.toString())}
                       disabled={enrollMutation.isPending}
                     >
                       <GraduationCap className="h-4 w-4 mr-2" />

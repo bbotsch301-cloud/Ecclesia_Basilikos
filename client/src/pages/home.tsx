@@ -74,13 +74,13 @@ export default function Home() {
             animate={heroAnimate}
             transition={heroTransition(1.0)}
           >
-            <Link href="/courses">
+            <Link href="/signup">
               <Button
                 size="lg"
                 className="royal-button text-xl px-12 py-6 shadow-2xl hover:scale-105 transition-transform"
               >
                 <BookOpen className="mr-3 h-7 w-7" />
-                Enter the Covenant Path
+                Join the Covenant Path
               </Button>
             </Link>
           </motion.div>
@@ -446,13 +446,13 @@ export default function Home() {
 
           <RevealOnScroll delay={0.8}>
             <div className="inline-block rounded-lg animate-glow-pulse">
-              <Link href="/courses">
+              <Link href="/signup">
                 <Button
                   size="lg"
                   className="royal-button text-2xl px-16 py-8 shadow-2xl hover:scale-105 transition-transform"
                 >
                   <BookOpen className="mr-3 h-8 w-8" />
-                  Enter the Covenant Path
+                  Join the Covenant Path
                 </Button>
               </Link>
             </div>

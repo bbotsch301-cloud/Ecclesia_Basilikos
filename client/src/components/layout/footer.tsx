@@ -63,42 +63,6 @@ export default function Footer() {
                   Ecclesia Nation
                 </Link>
               </li>
-              <li>
-                <Link href="/courses" className="text-gray-300 hover:text-royal-gold transition-colors">
-                  Royal Academy
-                </Link>
-              </li>
-              <li>
-                <Link href="/repository" className="text-gray-300 hover:text-royal-gold transition-colors">
-                  Covenant Repository
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-playfair font-semibold text-lg mb-4">Resources</h4>
-            <ul className="space-y-2">
-              <li>
-                <Link href="/repository" className="text-gray-300 hover:text-royal-gold transition-colors">
-                  Two Kingdoms Teaching
-                </Link>
-              </li>
-              <li>
-                <Link href="/repository" className="text-gray-300 hover:text-royal-gold transition-colors">
-                  Covenant Documents
-                </Link>
-              </li>
-              <li>
-                <Link href="/forum" className="text-gray-300 hover:text-royal-gold transition-colors">
-                  Embassy Forum
-                </Link>
-              </li>
-              <li>
-                <Link href="/courses" className="text-gray-300 hover:text-royal-gold transition-colors">
-                  Kingdom Studies
-                </Link>
-              </li>
             </ul>
           </div>
 

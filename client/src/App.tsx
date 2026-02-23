@@ -34,6 +34,11 @@ import ProofVaultNew from "@/pages/proof-vault-new";
 import ProofVaultDetail from "@/pages/proof-vault-detail";
 import ProofVaultVerify from "@/pages/proof-vault-verify";
 import RequireAdmin from "@/components/RequireAdmin";
+import ForgotPassword from "@/pages/forgot-password";
+import ResetPassword from "@/pages/reset-password";
+import Login from "@/pages/login";
+import Signup from "@/pages/signup";
+import Welcome from "@/pages/welcome";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -60,6 +65,11 @@ function Router() {
           <Route path="/course/:courseId" component={CourseLesson} />
           <Route path="/course/:courseId/lesson/:lessonId" component={CourseLesson} />
           <Route path="/verify-email" component={VerifyEmail} />
+          <Route path="/login" component={Login} />
+          <Route path="/signup" component={Signup} />
+          <Route path="/welcome" component={Welcome} />
+          <Route path="/forgot-password" component={ForgotPassword} />
+          <Route path="/reset-password" component={ResetPassword} />
           {/* Proof Vault routes */}
           <Route path="/proof-vault" component={ProofVault} />
           <Route path="/proof-vault/new" component={ProofVaultNew} />

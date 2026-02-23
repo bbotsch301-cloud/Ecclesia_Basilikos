@@ -1,6 +1,8 @@
 import session from "express-session";
+import connectPgSimple from "connect-pg-simple";
 import { Request, Response, NextFunction } from "express";
 import { storage } from "./storage";
+import { pool } from "./db";
 
 declare module "express-session" {
   interface SessionData {
@@ -8,7 +10,14 @@ declare module "express-session" {
   }
 }
 
+const PgStore = connectPgSimple(session);
+
 export const sessionMiddleware = session({
+  store: new PgStore({
+    pool,
+    tableName: "session",       // auto-created on first run
+    createTableIfMissing: true,
+  }),
   secret: (() => {
     const secret = process.env.SESSION_SECRET;
     if (!secret) throw new Error("SESSION_SECRET env var is required");
@@ -19,6 +28,7 @@ export const sessionMiddleware = session({
   cookie: {
     secure: process.env.NODE_ENV === "production",
     httpOnly: true,
+    sameSite: "lax",
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
   },
 });

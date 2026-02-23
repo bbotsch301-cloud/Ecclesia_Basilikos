@@ -2,23 +2,38 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Crown } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Menu, Crown, LogIn, UserPlus, LogOut, BookOpen, FileText, Shield, Home, ChevronDown } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 const navigation = [
   { name: "Home", href: "/" },
   { name: "The Mandate", href: "/mandate" },
   { name: "Ecclesia Nation", href: "/nation" },
-  { name: "Royal Academy", href: "/courses" },
-  { name: "Covenant Repository", href: "/repository" },
   { name: "Downloads", href: "/downloads" },
+  { name: "Resources", href: "/resources" },
   { name: "Proof Vault", href: "/proof-vault" },
-  { name: "Embassy Forum", href: "/forum" },
   { name: "Contact & Stewardship", href: "/contact" },
 ];
 
 export default function Navbar() {
-  const [location] = useLocation();
+  const [location, navigate] = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const { user, isAuthenticated, logout } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate("/");
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
+
+  const initials = user
+    ? `${(user.firstName || "")[0] || ""}${(user.lastName || "")[0] || ""}`.toUpperCase()
+    : "";
 
   return (
     <nav className="bg-white dark:bg-royal-navy shadow-lg fixed w-full top-0 z-50 border-b-2 border-royal-gold/30">
@@ -51,6 +66,56 @@ export default function Navbar() {
                 {item.name}
               </Link>
             ))}
+
+            {/* Auth buttons (desktop) */}
+            {isAuthenticated ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="flex items-center gap-2 ml-2">
+                    <Avatar className="w-8 h-8">
+                      <AvatarFallback className="bg-royal-navy text-white text-xs font-cinzel">
+                        {initials}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="font-cinzel text-xs text-royal-navy dark:text-gray-300 hidden 2xl:inline">
+                      {user?.firstName}
+                    </span>
+                    <ChevronDown className="w-3 h-3 text-gray-500" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem onClick={() => navigate("/welcome")}>
+                    <Home className="w-4 h-4 mr-2" /> Dashboard
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/my-courses")}>
+                    <BookOpen className="w-4 h-4 mr-2" /> My Courses
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/resources")}>
+                    <FileText className="w-4 h-4 mr-2" /> Resources
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/proof-vault")}>
+                    <Shield className="w-4 h-4 mr-2" /> Proof Vault
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleLogout} className="text-red-600 focus:text-red-600">
+                    <LogOut className="w-4 h-4 mr-2" /> Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <div className="flex items-center gap-2 ml-2">
+                <Link href="/login">
+                  <Button variant="ghost" size="sm" className="font-cinzel text-xs">
+                    <LogIn className="w-4 h-4 mr-1" /> Sign In
+                  </Button>
+                </Link>
+                <Link href="/signup">
+                  <Button size="sm" className="bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel text-xs font-bold">
+                    <UserPlus className="w-4 h-4 mr-1" /> Join
+                  </Button>
+                </Link>
+              </div>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -62,21 +127,80 @@ export default function Navbar() {
                 </Button>
               </SheetTrigger>
               <SheetContent>
-                <div className="flex flex-col space-y-4 mt-8">
-                  {navigation.map((item) => (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      onClick={() => setIsOpen(false)}
-                      className={`text-left py-2 transition-colors font-cinzel ${
-                        location === item.href
-                          ? "text-royal-gold"
-                          : "text-royal-navy dark:text-gray-300 hover:text-royal-gold"
-                      }`}
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
+                <div className="flex flex-col h-full">
+                  {/* User info at top (if logged in) */}
+                  {isAuthenticated && user && (
+                    <div className="flex items-center gap-3 mb-6 pb-4 border-b">
+                      <Avatar className="w-10 h-10">
+                        <AvatarFallback className="bg-royal-navy text-white text-sm font-cinzel">
+                          {initials}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <p className="font-cinzel font-bold text-royal-navy text-sm">
+                          {user.firstName} {user.lastName}
+                        </p>
+                        <p className="text-xs text-gray-500">{user.email}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Nav links */}
+                  <div className="flex flex-col space-y-4 mt-2 flex-1">
+                    {navigation.map((item) => (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        onClick={() => setIsOpen(false)}
+                        className={`text-left py-2 transition-colors font-cinzel ${
+                          location === item.href
+                            ? "text-royal-gold"
+                            : "text-royal-navy dark:text-gray-300 hover:text-royal-gold"
+                        }`}
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
+
+                    {isAuthenticated && (
+                      <>
+                        <div className="border-t pt-4 mt-2">
+                          <Link href="/welcome" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">
+                            <Home className="w-4 h-4" /> Dashboard
+                          </Link>
+                          <Link href="/my-courses" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">
+                            <BookOpen className="w-4 h-4" /> My Courses
+                          </Link>
+                        </div>
+                      </>
+                    )}
+                  </div>
+
+                  {/* Auth buttons at bottom */}
+                  <div className="border-t pt-4 mt-auto">
+                    {isAuthenticated ? (
+                      <Button
+                        variant="outline"
+                        className="w-full text-red-600 border-red-200 hover:bg-red-50"
+                        onClick={() => { handleLogout(); setIsOpen(false); }}
+                      >
+                        <LogOut className="w-4 h-4 mr-2" /> Sign Out
+                      </Button>
+                    ) : (
+                      <div className="space-y-2">
+                        <Link href="/login" onClick={() => setIsOpen(false)}>
+                          <Button variant="outline" className="w-full font-cinzel">
+                            <LogIn className="w-4 h-4 mr-2" /> Sign In
+                          </Button>
+                        </Link>
+                        <Link href="/signup" onClick={() => setIsOpen(false)}>
+                          <Button className="w-full bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold">
+                            <UserPlus className="w-4 h-4 mr-2" /> Join
+                          </Button>
+                        </Link>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </SheetContent>
             </Sheet>

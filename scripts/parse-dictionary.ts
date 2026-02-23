@@ -34,8 +34,8 @@ const PDF_PATH = path.resolve(
   "../attached_assets/blacks_law_4th_1771721957899.pdf"
 );
 
-// Dictionary content starts on page 77 — skip everything before
-const DICTIONARY_START_PAGE = 77;
+// Dictionary content starts on page 79 — skip everything before
+const DICTIONARY_START_PAGE = 79;
 
 // Pattern to detect dictionary term headers: ALL-CAPS words
 const TERM_HEADER_RE = /^([A-Z][A-Z\s\-'.,\/&()]{1,})[.,]?\s/;
@@ -96,8 +96,60 @@ function extractContext(definition: string): { context: string | null; text: str
 }
 
 /**
- * Parse the PDF page-by-page using a custom render callback.
- * This gives us accurate page numbers and lets us skip front matter reliably.
+ * Column-aware text item used during rendering.
+ */
+interface TextItem {
+  str: string;
+  x: number;
+  y: number;
+}
+
+/**
+ * Column midpoint — items with x < this go to the left column, others to the right.
+ */
+const COLUMN_SPLIT_X = 150;
+
+/**
+ * Running headers appear at the very top of the page (high Y values in PDF coords).
+ * Page numbers / footers appear at the very bottom (low Y values).
+ */
+const HEADER_Y_THRESHOLD = 655;
+const FOOTER_Y_THRESHOLD = 50;
+
+/**
+ * Render a single column of text items into lines.
+ * Items are already sorted top-to-bottom. We detect line breaks when
+ * the Y coordinate changes by more than 2 units.
+ */
+function renderColumn(items: TextItem[]): string {
+  if (items.length === 0) return "";
+
+  // Sort by Y descending (top of page first in PDF coords), then X ascending
+  items.sort((a, b) => {
+    const dy = b.y - a.y;
+    if (Math.abs(dy) > 2) return dy > 0 ? 1 : -1;
+    return a.x - b.x;
+  });
+
+  let text = "";
+  let lastY: number | null = null;
+
+  for (const item of items) {
+    if (lastY !== null && Math.abs(item.y - lastY) > 2) {
+      text += "\n";
+    }
+    text += item.str;
+    lastY = item.y;
+  }
+
+  return text;
+}
+
+/**
+ * Parse the PDF page-by-page using a column-aware custom render callback.
+ * Black's Law Dictionary 4th Ed uses a two-column layout. We split text items
+ * into left and right columns by X coordinate, render each separately, then
+ * concatenate left-column text before right-column text per page.
  */
 async function parsePDF(): Promise<ParsedEntry[]> {
   console.log("Reading PDF from:", PDF_PATH);
@@ -109,22 +161,49 @@ async function parsePDF(): Promise<ParsedEntry[]> {
   const buffer = fs.readFileSync(PDF_PATH);
   console.log("Parsing PDF page-by-page (this may take a while)...");
 
-  // Collect text per page using a custom pagerender function
+  // Collect text per page using a closure — pagerender return values
+  // are concatenated by pdf-parse, but we also store them ourselves.
   const pageTexts: Map<number, string> = new Map();
 
   function renderPage(pageData: any) {
+    const pageNum: number = pageData.pageIndex + 1; // pageIndex is 0-based
+
     return pageData.getTextContent().then((textContent: any) => {
-      let pageText = "";
-      let lastY: number | null = null;
+      const leftItems: TextItem[] = [];
+      const rightItems: TextItem[] = [];
+
       for (const item of textContent.items) {
-        // Detect line breaks via Y coordinate changes
-        if (lastY !== null && Math.abs(item.transform[5] - lastY) > 2) {
-          pageText += "\n";
+        if (!item.str || item.str.trim() === "") continue;
+
+        const x: number = item.transform[4];
+        const y: number = item.transform[5];
+
+        // Filter out running headers and page footers
+        if (y > HEADER_Y_THRESHOLD) continue;
+        if (y < FOOTER_Y_THRESHOLD) continue;
+
+        const ti: TextItem = { str: item.str, x, y };
+
+        if (x < COLUMN_SPLIT_X) {
+          leftItems.push(ti);
+        } else {
+          rightItems.push(ti);
         }
-        pageText += item.str;
-        lastY = item.transform[5];
       }
-      return pageText;
+
+      const leftText = renderColumn(leftItems);
+      const rightText = renderColumn(rightItems);
+
+      // Combine left column first, then right column
+      const parts: string[] = [];
+      if (leftText) parts.push(leftText);
+      if (rightText) parts.push(rightText);
+      const combined = parts.join("\n");
+
+      pageTexts.set(pageNum, combined);
+
+      // Return something for pdf-parse (it concatenates return values)
+      return combined;
     });
   }
 
@@ -133,92 +212,121 @@ async function parsePDF(): Promise<ParsedEntry[]> {
     pagerender: renderPage,
   });
 
-  console.log(`PDF parsed: ${data.numpages} pages`);
+  console.log(`PDF parsed: ${data.numpages} pages, collected ${pageTexts.size} page texts`);
 
-  // data.text contains all pages' rendered text concatenated.
-  // But we need per-page text. The custom render gives us per-page text
-  // via the return value, but pdf-parse concatenates them into data.text
-  // with page separator. We need a different approach.
+  // Helper: finalize an entry, handling hyphenated term names and word-break joins
+  function finalizeEntry(
+    term: string,
+    definition: string[],
+    page: number | null
+  ): ParsedEntry | null {
+    let fullDef = definition.join(" ").trim();
+    let finalTerm = term;
 
-  // Actually pdf-parse concatenates render results with \n\n between pages.
-  // But we can't reliably split on that. Instead, let's re-parse using
-  // the pagerender to collect per-page text directly.
+    // If term ends with '-', the first word of the definition is a continuation
+    if (finalTerm.endsWith("-") && fullDef.length > 0) {
+      const m = fullDef.match(/^([A-Z]+)([.,]\s*)([\s\S]*)/);
+      if (m) {
+        finalTerm = finalTerm.slice(0, -1) + m[1]; // join hyphenated word
+        fullDef = m[3].trim();
+      }
+    }
 
-  // Better approach: parse with max pages one at a time for front matter skip,
-  // then bulk parse the rest.
+    // Fix hyphenated word breaks in definitions (e.g. "knowl- edge" → "knowledge")
+    fullDef = fullDef.replace(/(\w)- (\w)/g, "$1$2").trim();
 
-  // Simplest reliable approach: use the lines-per-page estimate since we know
-  // the total pages and total lines.
-  const allText = data.text;
-  const allLines = allText.split("\n");
-  const totalLines = allLines.length;
-  const totalPages = data.numpages;
-  const linesPerPage = totalLines / totalPages;
+    if (fullDef.length <= 5) return null;
 
-  // Skip to the line corresponding to page 77
-  const skipToLine = Math.floor((DICTIONARY_START_PAGE - 1) * linesPerPage);
-  console.log(`Total lines: ${totalLines}, lines/page: ${linesPerPage.toFixed(1)}`);
-  console.log(`Skipping to line ${skipToLine} (page ${DICTIONARY_START_PAGE})`);
+    const { context, text } = extractContext(fullDef);
+    return {
+      term: finalTerm,
+      definition: text || fullDef,
+      subContext: context,
+      pageNumber: page,
+    };
+  }
 
+  // Now iterate through pages sequentially starting from DICTIONARY_START_PAGE
   const entries: ParsedEntry[] = [];
   let currentTerm: string | null = null;
   let currentDefinition: string[] = [];
   let currentPage: number | null = null;
 
-  for (let i = skipToLine; i < totalLines; i++) {
-    const trimmed = allLines[i].trim();
+  for (let pageNum = DICTIONARY_START_PAGE; pageNum <= data.numpages; pageNum++) {
+    const pageText = pageTexts.get(pageNum);
+    if (!pageText) continue;
 
-    // Estimate current page
-    const estPage = Math.floor(i / linesPerPage) + 1;
+    const lines = pageText.split("\n");
 
-    // Skip empty lines and very short lines (page numbers, headers)
-    if (!trimmed || trimmed.length <= 1) continue;
+    for (const line of lines) {
+      const trimmed = line.trim();
 
-    // Check if this line starts a new term
-    const potentialTerm = isTermHeader(trimmed);
+      // Skip empty lines and very short lines
+      if (!trimmed || trimmed.length <= 1) continue;
 
-    if (potentialTerm) {
-      // Save the previous entry
-      if (currentTerm && currentDefinition.length > 0) {
-        const fullDef = currentDefinition.join(" ").trim();
-        if (fullDef.length > 5) {
-          const { context, text } = extractContext(fullDef);
-          entries.push({
-            term: currentTerm,
-            definition: text || fullDef,
-            subContext: context,
-            pageNumber: currentPage,
-          });
+      // Check if previous content ended with a hyphen (word break across lines)
+      const lastDefLine =
+        currentDefinition.length > 0
+          ? currentDefinition[currentDefinition.length - 1]
+          : null;
+      const prevHyphen =
+        (currentTerm?.endsWith("-") && currentDefinition.length === 0) ||
+        (lastDefLine?.endsWith("-") ?? false);
+
+      // Check if this line starts a new term
+      const potentialTerm = isTermHeader(trimmed);
+
+      if (potentialTerm && !prevHyphen) {
+        const afterTerm = trimmed
+          .slice(potentialTerm.length)
+          .replace(/^[.,\s]+/, "")
+          .trim();
+        const lineIsAllCaps = !/[a-z]/.test(trimmed);
+
+        if (currentTerm && currentDefinition.length === 0) {
+          // Previous term has no definition yet — possible multi-line term
+          if (lineIsAllCaps) {
+            // Entire line is uppercase: merge into current term name
+            currentTerm =
+              currentTerm +
+              " " +
+              trimmed.replace(/[.,]+$/, "").trim();
+          } else {
+            // Uppercase prefix + lowercase definition: extend term, start definition
+            currentTerm = currentTerm + " " + potentialTerm;
+            if (afterTerm) {
+              currentDefinition.push(afterTerm);
+            }
+          }
+        } else {
+          // Normal case: save previous entry and start a new term
+          if (currentTerm && currentDefinition.length > 0) {
+            const entry = finalizeEntry(
+              currentTerm,
+              currentDefinition,
+              currentPage
+            );
+            if (entry) entries.push(entry);
+          }
+
+          currentTerm = potentialTerm;
+          currentDefinition = [];
+          currentPage = pageNum;
+
+          if (afterTerm) {
+            currentDefinition.push(afterTerm);
+          }
         }
+      } else if (currentTerm) {
+        currentDefinition.push(trimmed);
       }
-
-      // Start new term
-      currentTerm = potentialTerm;
-      currentDefinition = [];
-      currentPage = estPage;
-
-      // Check for definition text on the same line
-      const afterTerm = trimmed.slice(potentialTerm.length).replace(/^[.,\s]+/, "").trim();
-      if (afterTerm) {
-        currentDefinition.push(afterTerm);
-      }
-    } else if (currentTerm) {
-      currentDefinition.push(trimmed);
     }
   }
 
   // Don't forget the last entry
   if (currentTerm && currentDefinition.length > 0) {
-    const fullDef = currentDefinition.join(" ").trim();
-    if (fullDef.length > 5) {
-      const { context, text } = extractContext(fullDef);
-      entries.push({
-        term: currentTerm,
-        definition: text || fullDef,
-        subContext: context,
-        pageNumber: currentPage,
-      });
-    }
+    const entry = finalizeEntry(currentTerm, currentDefinition, currentPage);
+    if (entry) entries.push(entry);
   }
 
   return entries;
