@@ -109,7 +109,7 @@ export default function Forum() {
 
   if (categoriesLoading) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="pt-16 container mx-auto px-4 py-8">
         <div className="flex justify-center items-center min-h-64">
           <div className="text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-600 mx-auto mb-4"></div>
@@ -121,7 +121,7 @@ export default function Forum() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="pt-16 container mx-auto px-4 py-8">
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-4">

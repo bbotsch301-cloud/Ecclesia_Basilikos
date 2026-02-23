@@ -120,7 +120,7 @@ function MyCourseContent() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-covenant-light via-white to-covenant-light flex items-center justify-center">
+      <div className="pt-16 min-h-screen bg-gradient-to-b from-covenant-light via-white to-covenant-light flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-covenant-gold mx-auto mb-4"></div>
           <p className="text-gray-700">Loading your courses...</p>
@@ -130,7 +130,7 @@ function MyCourseContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-covenant-light via-white to-covenant-light">
+    <div className="pt-16 min-h-screen bg-gradient-to-b from-covenant-light via-white to-covenant-light">
       {/* Header */}
       <section className="bg-covenant-blue text-white py-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

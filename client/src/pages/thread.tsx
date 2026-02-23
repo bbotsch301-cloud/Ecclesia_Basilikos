@@ -155,7 +155,7 @@ export default function ThreadPage() {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="pt-16 container mx-auto px-4 py-8">
         <div className="flex justify-center items-center min-h-64">
           <div className="text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-600 mx-auto mb-4"></div>
@@ -168,7 +168,7 @@ export default function ThreadPage() {
 
   if (error || !data?.thread) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="pt-16 container mx-auto px-4 py-8">
         <Card className="max-w-md mx-auto">
           <CardContent className="pt-6 text-center">
             <MessageSquare className="h-12 w-12 text-gray-400 mx-auto mb-4" />
@@ -193,7 +193,7 @@ export default function ThreadPage() {
   const canEditThread = isThreadOwner || canModerate;
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div className="pt-16 container mx-auto px-4 py-8 max-w-4xl">
       {/* Back link */}
       <Link href="/forum" className="inline-flex items-center text-gray-600 hover:text-amber-600 mb-6">
         <ArrowLeft className="h-4 w-4 mr-1" />

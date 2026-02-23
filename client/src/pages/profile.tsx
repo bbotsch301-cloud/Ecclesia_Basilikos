@@ -88,7 +88,7 @@ function ProfileContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+    <div className="pt-16 min-h-screen bg-gradient-to-b from-slate-50 to-white">
       <section className="bg-royal-navy text-white py-8">
         <div className="max-w-3xl mx-auto px-4">
           <div className="flex items-center gap-4">

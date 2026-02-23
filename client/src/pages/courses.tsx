@@ -133,7 +133,7 @@ export default function Courses() {
 
   if (isLoading || coursesLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-covenant-light via-white to-covenant-light flex items-center justify-center">
+      <div className="pt-16 min-h-screen bg-gradient-to-b from-covenant-light via-white to-covenant-light flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-covenant-gold mx-auto mb-4"></div>
           <p className="text-gray-700">Loading Royal Academy...</p>
@@ -143,7 +143,7 @@ export default function Courses() {
   }
 
   return (
-    <div className="min-h-screen marble-bg">
+    <div className="min-h-screen marble-bg pt-16">
       {/* Hero Section */}
       <section className="bg-royal-navy text-white py-20 border-b-2 border-royal-gold">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

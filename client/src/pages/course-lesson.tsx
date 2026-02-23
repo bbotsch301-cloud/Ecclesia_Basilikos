@@ -96,7 +96,7 @@ function CourseLessonContent() {
 
   if (courseLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-covenant-light via-white to-covenant-light flex items-center justify-center">
+      <div className="pt-16 min-h-screen bg-gradient-to-b from-covenant-light via-white to-covenant-light flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-covenant-gold mx-auto mb-4"></div>
           <p className="text-gray-700">Loading course...</p>
@@ -107,7 +107,7 @@ function CourseLessonContent() {
 
   if (courseError || !courseData) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-covenant-light via-white to-covenant-light flex items-center justify-center">
+      <div className="pt-16 min-h-screen bg-gradient-to-b from-covenant-light via-white to-covenant-light flex items-center justify-center">
         <Card className="max-w-md mx-4">
           <CardContent className="pt-6 text-center">
             <h1 className="text-2xl font-bold text-covenant-blue mb-4">Course Not Found</h1>
@@ -154,7 +154,7 @@ function CourseLessonContent() {
   const youtubeId = getYouTubeEmbedId(currentLesson?.videoUrl ?? null);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-covenant-light via-white to-covenant-light">
+    <div className="pt-16 min-h-screen bg-gradient-to-b from-covenant-light via-white to-covenant-light">
       {/* Course Header */}
       <section className="bg-covenant-blue text-white py-8">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

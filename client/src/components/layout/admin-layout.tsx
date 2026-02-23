@@ -66,9 +66,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-16">
       {/* Mobile sidebar toggle */}
-      <div className="lg:hidden fixed top-16 left-0 right-0 z-40 bg-white dark:bg-gray-800 border-b px-4 py-2 flex items-center">
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-white dark:bg-gray-800 border-b px-4 py-2 flex items-center">
         <Button variant="ghost" size="sm" onClick={() => setSidebarOpen(!sidebarOpen)}>
           {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           <span className="ml-2 text-sm font-medium">Admin Menu</span>
