@@ -33,13 +33,21 @@ export default function Home() {
       <div className="relative bg-gradient-to-br from-royal-navy via-royal-burgundy to-royal-navy py-24 md:py-36 animate-hero-gradient">
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <motion.p
+            className="font-cinzel text-xs md:text-sm tracking-[0.3em] uppercase text-royal-gold/80 mb-4"
+            initial={heroInitial}
+            animate={heroAnimate}
+            transition={heroTransition(0)}
+          >
+            The New Covenant · Identity · Stewardship
+          </motion.p>
           <motion.h1
             className="font-cinzel-decorative text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight"
             initial={heroInitial}
             animate={heroAnimate}
             transition={heroTransition(0)}
           >
-            You Were Never Meant to Live From Permission
+            Sonship Was Restored So Stewardship Could Begin
           </motion.h1>
 
           <motion.h2
