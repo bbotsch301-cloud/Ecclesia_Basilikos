@@ -6,15 +6,11 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Menu, Crown, LogIn, UserPlus, LogOut, BookOpen, FileText, Shield, Home, ChevronDown, Settings, User } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-import { useCtaHref } from "@/hooks/useCtaHref";
 
 const navigation = [
   { name: "Home", href: "/" },
   { name: "The Mandate", href: "/mandate" },
   { name: "Ecclesia Nation", href: "/nation" },
-  { name: "Downloads", href: "/downloads" },
-  { name: "Resources", href: "/resources" },
-  { name: "Proof Vault", href: "/proof-vault", useCta: true },
   { name: "Contact & Stewardship", href: "/contact" },
 ];
 
@@ -22,7 +18,6 @@ export default function Navbar() {
   const [location, navigate] = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const { user, isAuthenticated, logout } = useAuth();
-  const ctaHref = useCtaHref();
 
   const handleLogout = async () => {
     try {
@@ -56,7 +51,7 @@ export default function Navbar() {
           {/* Desktop Navigation */}
           <div className="hidden xl:flex items-center space-x-2 lg:space-x-4">
             {navigation.map((item) => {
-              const href = item.useCta ? ctaHref : item.href;
+              const href = item.href;
               return (
                 <Link
                   key={item.name}
@@ -166,7 +161,7 @@ export default function Navbar() {
                   {/* Nav links */}
                   <div className="flex flex-col space-y-4 mt-2 flex-1">
                     {navigation.map((item) => {
-                      const href = item.useCta ? ctaHref : item.href;
+                      const href = item.href;
                       return (
                         <Link
                           key={item.name}
