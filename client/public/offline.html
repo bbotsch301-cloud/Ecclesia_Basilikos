@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offline - Ecclesia Basilikos</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      background: #0f1b3d;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+    }
+    .container { max-width: 480px; }
+    h1 { color: #d4af37; font-size: 1.75rem; margin-bottom: 1rem; }
+    p { color: #cbd5e1; line-height: 1.6; margin-bottom: 1.5rem; }
+    button {
+      background: #d4af37;
+      color: #0f1b3d;
+      border: none;
+      padding: 0.75rem 2rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 0.375rem;
+      cursor: pointer;
+    }
+    button:hover { background: #e5c349; }
+    .scripture {
+      margin-top: 2rem;
+      font-style: italic;
+      color: #d4af37;
+      font-size: 0.875rem;
+    }
+    .scripture cite { display: block; color: #94a3b8; font-size: 0.75rem; margin-top: 0.25rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>You are currently offline</h1>
+    <p>It appears your device has lost its internet connection. Please check your connection and try again.</p>
+    <button onclick="window.location.reload()">Try Again</button>
+    <div class="scripture">
+      "Be still, and know that I am God"
+      <cite>Psalm 46:10</cite>
+    </div>
+  </div>
+</body>
+</html>

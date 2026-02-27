@@ -6,6 +6,7 @@ import { db } from "./db";
 import { proofs, createProofHashSchema } from "@shared/schema";
 import { eq, and, desc, sql } from "drizzle-orm";
 import { requireAuth } from "./auth";
+import logger from "./logger";
 import {
   stampHash,
   upgradeProof,
@@ -157,7 +158,7 @@ router.post("/proofs", conditionalUpload, async (req: Request, res: Response) =>
 
     res.status(201).json(proof);
   } catch (error: any) {
-    console.error("Error creating proof:", error);
+    logger.error({ err: error }, "Error creating proof:");
     res.status(500).json({ error: "Failed to create proof" });
   }
 });
@@ -195,7 +196,7 @@ router.get("/proofs", async (req: Request, res: Response) => {
 
     res.json(filtered);
   } catch (error: any) {
-    console.error("Error listing proofs:", error);
+    logger.error({ err: error }, "Error listing proofs:");
     res.status(500).json({ error: "Failed to list proofs" });
   }
 });
@@ -222,7 +223,7 @@ router.get("/proofs/:id", async (req: Request, res: Response) => {
 
     res.json({ ...proof, otsInfo });
   } catch (error: any) {
-    console.error("Error fetching proof:", error);
+    logger.error({ err: error }, "Error fetching proof:");
     res.status(500).json({ error: "Failed to fetch proof" });
   }
 });
@@ -285,7 +286,7 @@ router.post("/proofs/:id/upgrade", async (req: Request, res: Response) => {
       status: result.status,
     });
   } catch (error: any) {
-    console.error("Error upgrading proof:", error);
+    logger.error({ err: error }, "Error upgrading proof:");
     res.status(500).json({ error: "Failed to upgrade proof" });
   }
 });
@@ -344,7 +345,7 @@ router.post("/proofs/upgrade-all", async (req: Request, res: Response) => {
       total: pendingProofs.length,
     });
   } catch (error: any) {
-    console.error("Error upgrading all proofs:", error);
+    logger.error({ err: error }, "Error upgrading all proofs:");
     res.status(500).json({ error: "Failed to upgrade proofs" });
   }
 });
@@ -441,7 +442,7 @@ router.post("/verify", conditionalUpload, async (req: Request, res: Response) =>
         : "Hash does not match the stored proof",
     });
   } catch (error: any) {
-    console.error("Error verifying proof:", error);
+    logger.error({ err: error }, "Error verifying proof:");
     res.status(500).json({ error: "Failed to verify proof" });
   }
 });
@@ -550,7 +551,7 @@ Status meanings:
 
     await archive.finalize();
   } catch (error: any) {
-    console.error("Error creating bundle:", error);
+    logger.error({ err: error }, "Error creating bundle:");
     if (!res.headersSent) {
       res.status(500).json({ error: "Failed to create proof bundle" });
     }

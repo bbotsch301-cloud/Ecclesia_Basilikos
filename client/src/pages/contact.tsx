@@ -29,6 +29,7 @@ export default function Contact() {
   const { toast } = useToast();
   
   const form = useForm<ContactForm>({
+    mode: "onBlur",
     resolver: zodResolver(contactSchema),
     defaultValues: {
       name: "",

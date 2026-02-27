@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Menu, Crown, LogIn, UserPlus, LogOut, BookOpen, FileText, Shield, Home, ChevronDown, Settings, User } from "lucide-react";
+import { Menu, Crown, LogIn, UserPlus, LogOut, BookOpen, FileText, Shield, Home, ChevronDown, Settings, User, Search } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import NotificationBell from "@/components/NotificationBell";
+import SearchDialog from "@/components/SearchDialog";
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -66,6 +68,10 @@ export default function Navbar() {
                 </Link>
               );
             })}
+
+            {/* Search & Notifications (desktop) */}
+            <SearchDialog />
+            {isAuthenticated && <NotificationBell />}
 
             {/* Auth buttons (desktop) */}
             {isAuthenticated ? (

@@ -49,6 +49,7 @@ export default function Downloads() {
   const handleDownload = async (item: DownloadType) => {
     if (item.fileUrl) {
       apiRequest("POST", `/api/downloads/${item.id}/track`).catch(console.error);
+      import("@/lib/analytics").then(m => m.trackEvent("Download", { title: item.title }));
       window.open(item.fileUrl, '_blank');
     } else {
       toast({

@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
+import { lazy, Suspense } from "react";
+const RichTextEditor = lazy(() => import("@/components/RichTextEditor"));
 import { Input } from "@/components/ui/input";
 import {
   AlertDialog,
@@ -434,16 +436,18 @@ export default function ThreadPage() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmitReply} className="space-y-4">
-              <Textarea
-                placeholder="Write your reply..."
-                value={replyContent}
-                onChange={(e) => setReplyContent(e.target.value)}
-                rows={4}
-              />
+              <Suspense fallback={<Textarea placeholder="Loading editor..." rows={4} disabled />}>
+                <RichTextEditor
+                  content={replyContent}
+                  onChange={setReplyContent}
+                  placeholder="Write your reply..."
+                  minHeight="120px"
+                />
+              </Suspense>
               <Button
                 type="submit"
                 className="bg-amber-600 hover:bg-amber-700"
-                disabled={replyMutation.isPending || replyContent.trim().length < 3}
+                disabled={replyMutation.isPending || replyContent.replace(/<[^>]*>/g, '').trim().length < 3}
               >
                 {replyMutation.isPending ? "Posting..." : "Post Reply"}
               </Button>

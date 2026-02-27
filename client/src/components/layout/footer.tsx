@@ -90,9 +90,17 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-gray-600 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="text-gray-300 mb-4 md:mb-0">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="text-gray-300">
               © {new Date().getFullYear()} Ecclesia Basilikos. Embassy of the Eternal Kingdom.
+            </div>
+            <div className="flex items-center gap-4 text-sm">
+              <Link href="/terms" className="text-gray-300 hover:text-royal-gold transition-colors">
+                Terms of Service
+              </Link>
+              <Link href="/privacy" className="text-gray-300 hover:text-royal-gold transition-colors">
+                Privacy Policy
+              </Link>
             </div>
             <div className="text-center">
               <blockquote className="font-georgia italic text-royal-gold text-sm mb-1">

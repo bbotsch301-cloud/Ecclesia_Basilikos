@@ -43,6 +43,9 @@ import {
   type InsertSectionProgress,
   type DictionaryEntry,
   type InsertDictionaryEntry,
+  type Notification,
+  type InsertNotification,
+  type ThreadSubscription,
   users,
   contacts,
   newsletter_subscribers,
@@ -64,7 +67,9 @@ import {
   videoAttachments,
   videoProgress,
   sectionProgress,
-  dictionaryEntries
+  dictionaryEntries,
+  notifications,
+  threadSubscriptions
 } from "@shared/schema";
 import { eq, and, desc, sql, or, inArray } from "drizzle-orm";
 import { db } from "./db";
@@ -214,6 +219,25 @@ export interface IStorage {
   getDictionaryStats(): Promise<{ totalEntries: number; letters: string[] }>;
   getAllDictionaryTerms(): Promise<Pick<DictionaryEntry, 'id' | 'term' | 'termLower' | 'letter'>[]>;
   getDictionaryBatch(offset: number, limit: number): Promise<DictionaryEntry[]>;
+
+  // Notifications
+  createNotification(notification: InsertNotification): Promise<Notification>;
+  getUserNotifications(userId: string, limit?: number): Promise<Notification[]>;
+  markNotificationRead(id: string): Promise<Notification>;
+  markAllNotificationsRead(userId: string): Promise<void>;
+  getUnreadNotificationCount(userId: string): Promise<number>;
+
+  // Global search
+  searchGlobal(query: string): Promise<{ courses: any[]; threads: any[]; downloads: any[] }>;
+
+  // Thread subscriptions
+  subscribeToThread(userId: string, threadId: string): Promise<ThreadSubscription>;
+  unsubscribeFromThread(userId: string, threadId: string): Promise<void>;
+  isSubscribedToThread(userId: string, threadId: string): Promise<boolean>;
+  getThreadSubscribers(threadId: string): Promise<string[]>;
+
+  // Public profile
+  getPublicProfile(userId: string): Promise<{ user: any; threadCount: number; replyCount: number } | null>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1214,6 +1238,139 @@ export class DatabaseStorage implements IStorage {
       .orderBy(dictionaryEntries.termLower)
       .offset(offset)
       .limit(maxLimit);
+  }
+
+  // Notifications
+  async createNotification(notification: InsertNotification): Promise<Notification> {
+    const [n] = await db.insert(notifications).values(notification).returning();
+    return n;
+  }
+
+  async getUserNotifications(userId: string, limit: number = 30): Promise<Notification[]> {
+    return db.select().from(notifications)
+      .where(eq(notifications.userId, userId))
+      .orderBy(desc(notifications.createdAt))
+      .limit(limit);
+  }
+
+  async markNotificationRead(id: string): Promise<Notification> {
+    const [n] = await db.update(notifications)
+      .set({ isRead: true })
+      .where(eq(notifications.id, id))
+      .returning();
+    return n;
+  }
+
+  async markAllNotificationsRead(userId: string): Promise<void> {
+    await db.update(notifications)
+      .set({ isRead: true })
+      .where(and(eq(notifications.userId, userId), eq(notifications.isRead, false)));
+  }
+
+  async getUnreadNotificationCount(userId: string): Promise<number> {
+    const [result] = await db.select({ count: sql<number>`count(*)` })
+      .from(notifications)
+      .where(and(eq(notifications.userId, userId), eq(notifications.isRead, false)));
+    return result?.count || 0;
+  }
+
+  // Global search
+  async searchGlobal(query: string): Promise<{ courses: any[]; threads: any[]; downloads: any[] }> {
+    const term = query.trim();
+    if (term.length < 2) return { courses: [], threads: [], downloads: [] };
+
+    const pattern = `%${term}%`;
+
+    const [courseResults, threadResults, downloadResults] = await Promise.all([
+      db.select({ id: courses.id, title: courses.title, description: courses.description, category: courses.category })
+        .from(courses)
+        .where(and(
+          eq(courses.isPublished, true),
+          or(sql`${courses.title} ILIKE ${pattern}`, sql`${courses.description} ILIKE ${pattern}`)
+        ))
+        .limit(5),
+      db.select({
+          id: forum_threads.id,
+          title: forum_threads.title,
+          categoryId: forum_threads.categoryId,
+          createdAt: forum_threads.createdAt,
+        })
+        .from(forum_threads)
+        .where(or(sql`${forum_threads.title} ILIKE ${pattern}`, sql`${forum_threads.content} ILIKE ${pattern}`))
+        .orderBy(desc(forum_threads.createdAt))
+        .limit(5),
+      db.select({ id: downloads.id, title: downloads.title, description: downloads.description, category: downloads.category })
+        .from(downloads)
+        .where(and(
+          eq(downloads.isPublished, true),
+          or(sql`${downloads.title} ILIKE ${pattern}`, sql`${downloads.description} ILIKE ${pattern}`)
+        ))
+        .limit(5),
+    ]);
+
+    return {
+      courses: courseResults,
+      threads: threadResults,
+      downloads: downloadResults,
+    };
+  }
+
+  // Thread subscriptions
+  async subscribeToThread(userId: string, threadId: string): Promise<ThreadSubscription> {
+    const [sub] = await db.insert(threadSubscriptions)
+      .values({ userId, threadId })
+      .onConflictDoNothing()
+      .returning();
+    // If conflict (already subscribed), fetch existing
+    if (!sub) {
+      const [existing] = await db.select().from(threadSubscriptions)
+        .where(and(eq(threadSubscriptions.userId, userId), eq(threadSubscriptions.threadId, threadId)));
+      return existing;
+    }
+    return sub;
+  }
+
+  async unsubscribeFromThread(userId: string, threadId: string): Promise<void> {
+    await db.delete(threadSubscriptions)
+      .where(and(eq(threadSubscriptions.userId, userId), eq(threadSubscriptions.threadId, threadId)));
+  }
+
+  async isSubscribedToThread(userId: string, threadId: string): Promise<boolean> {
+    const [sub] = await db.select({ id: threadSubscriptions.id }).from(threadSubscriptions)
+      .where(and(eq(threadSubscriptions.userId, userId), eq(threadSubscriptions.threadId, threadId)));
+    return !!sub;
+  }
+
+  async getThreadSubscribers(threadId: string): Promise<string[]> {
+    const subs = await db.select({ userId: threadSubscriptions.userId }).from(threadSubscriptions)
+      .where(eq(threadSubscriptions.threadId, threadId));
+    return subs.map(s => s.userId);
+  }
+
+  // Public profile
+  async getPublicProfile(userId: string): Promise<{ user: any; threadCount: number; replyCount: number } | null> {
+    const [user] = await db.select({
+      id: users.id,
+      username: users.username,
+      firstName: users.firstName,
+      lastName: users.lastName,
+      role: users.role,
+      createdAt: users.createdAt,
+    }).from(users).where(eq(users.id, userId));
+
+    if (!user) return null;
+
+    const [threadStats] = await db.select({ count: sql<number>`count(*)` })
+      .from(forum_threads).where(eq(forum_threads.authorId, userId));
+
+    const [replyStats] = await db.select({ count: sql<number>`count(*)` })
+      .from(forum_replies).where(eq(forum_replies.authorId, userId));
+
+    return {
+      user,
+      threadCount: threadStats?.count || 0,
+      replyCount: replyStats?.count || 0,
+    };
   }
 }
 

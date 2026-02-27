@@ -48,6 +48,17 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
   next();
 };
 
+export const requireInstructor = async (req: Request, res: Response, next: NextFunction) => {
+  const user = (req as any).user;
+  if (!user) {
+    return res.status(401).json({ error: "Authentication required" });
+  }
+  if (!['admin', 'moderator', 'instructor'].includes(user.role || '')) {
+    return res.status(403).json({ error: "Instructor access required" });
+  }
+  next();
+};
+
 export const optionalAuth = async (req: Request, res: Response, next: NextFunction) => {
   if (req.session.userId) {
     const user = await storage.getUser(req.session.userId);

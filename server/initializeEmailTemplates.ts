@@ -1,4 +1,5 @@
 import { storage } from "./storage";
+import logger from "./logger";
 
 const emailTemplateDefaults = [
   {
@@ -124,7 +125,7 @@ export async function initializeEmailTemplates() {
     for (const template of emailTemplateDefaults) {
       const exists = existingTemplates.find(t => t.contentKey === template.contentKey);
       if (!exists) {
-        console.log(`Creating email template: ${template.contentKey}`);
+        logger.info(`Creating email template: ${template.contentKey}`);
         await storage.upsertPageContent({
           ...template,
           updatedById: systemUser.id
@@ -132,8 +133,8 @@ export async function initializeEmailTemplates() {
       }
     }
     
-    console.log('Email templates initialized successfully');
+    logger.info('Email templates initialized successfully');
   } catch (error) {
-    console.error('Failed to initialize email templates:', error);
+    logger.error({ err: error }, 'Failed to initialize email templates');
   }
 }

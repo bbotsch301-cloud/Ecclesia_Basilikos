@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { lazy, Suspense } from "react";
+const RichTextEditor = lazy(() => import("@/components/RichTextEditor"));
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -71,6 +73,7 @@ export default function AdminContent() {
   const [activeTab, setActiveTab] = useState<"content" | "email-templates">("content");
 
   const form = useForm<ContentFormData>({
+    mode: "onBlur",
     resolver: zodResolver(contentSchema),
     defaultValues: {
       pageName: "",
@@ -580,14 +583,27 @@ export default function AdminContent() {
                   <FormItem>
                     <FormLabel>Content Value</FormLabel>
                     <FormControl>
-                      <Textarea 
-                        placeholder="URL for images, text content, or HTML markup"
-                        className="min-h-[100px]"
-                        {...field} 
-                      />
+                      {form.watch("contentType") === "html" ? (
+                        <Suspense fallback={<Textarea placeholder="Loading editor..." className="min-h-[100px]" disabled />}>
+                          <RichTextEditor
+                            content={field.value}
+                            onChange={field.onChange}
+                            placeholder="Write HTML content..."
+                            minHeight="200px"
+                          />
+                        </Suspense>
+                      ) : (
+                        <Textarea
+                          placeholder="URL for images, text content, or HTML markup"
+                          className="min-h-[100px]"
+                          {...field}
+                        />
+                      )}
                     </FormControl>
                     <FormDescription>
-                      The actual content (URL for images, text for text content, HTML for HTML content)
+                      {form.watch("contentType") === "html"
+                        ? "Use the rich text editor above to format your content"
+                        : "The actual content (URL for images, text for text content)"}
                     </FormDescription>
                     <FormMessage />
                   </FormItem>

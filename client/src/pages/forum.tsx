@@ -55,6 +55,7 @@ export default function Forum() {
   const threadsLoading = selectedCategory ? categoryThreadsLoading : allThreadsLoading;
 
   const form = useForm<CreateThreadForm>({
+    mode: "onBlur",
     resolver: zodResolver(createThreadSchema),
     defaultValues: {
       title: "",

@@ -29,6 +29,7 @@ export default function TrustDownload() {
   const [downloadUrl, setDownloadUrl] = useState("");
   
   const form = useForm<EmailForm>({
+    mode: "onBlur",
     resolver: zodResolver(emailSchema),
     defaultValues: {
       email: "",

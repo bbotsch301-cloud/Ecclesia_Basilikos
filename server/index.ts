@@ -1,17 +1,40 @@
 import express, { type Request, Response, NextFunction } from "express";
 import helmet from "helmet";
+import compression from "compression";
 import cookieParser from "cookie-parser";
 import path from "path";
 import { registerRoutes } from "./routes";
-import { setupVite, serveStatic, log } from "./vite";
+import { setupVite, serveStatic } from "./vite";
 import { initializeEmailTemplates } from "./initializeEmailTemplates";
 import { csrfProtection } from "./csrf";
+import logger from "./logger";
+import { requestId } from "./requestId";
 
 const app = express();
 
+// Gzip/Brotli compression
+app.use(compression());
+
+// Request IDs
+app.use(requestId);
+
 // Security headers
 app.use(helmet({
-  contentSecurityPolicy: false, // CSP is complex with a SPA; enable once you define a policy
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdnjs.cloudflare.com"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"],
+      imgSrc: ["'self'", "data:", "blob:", "https:"],
+      mediaSrc: ["'self'", "https:"],
+      frameSrc: ["'self'", "https://www.youtube.com", "https://www.youtube-nocookie.com", "https://player.vimeo.com"],
+      connectSrc: ["'self'"],
+      objectSrc: ["'none'"],
+      baseUri: ["'self'"],
+      formAction: ["'self'"],
+    },
+  },
 }));
 
 app.use(express.json());
@@ -21,30 +44,21 @@ app.use(cookieParser());
 // CSRF protection for API routes
 app.use("/api", csrfProtection);
 
+// Request logging
 app.use((req, res, next) => {
   const start = Date.now();
-  const path = req.path;
-  let capturedJsonResponse: Record<string, any> | undefined = undefined;
-
-  const originalResJson = res.json;
-  res.json = function (bodyJson, ...args) {
-    capturedJsonResponse = bodyJson;
-    return originalResJson.apply(res, [bodyJson, ...args]);
-  };
+  const reqPath = req.path;
 
   res.on("finish", () => {
-    const duration = Date.now() - start;
-    if (path.startsWith("/api")) {
-      let logLine = `${req.method} ${path} ${res.statusCode} in ${duration}ms`;
-      if (capturedJsonResponse) {
-        logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`;
-      }
-
-      if (logLine.length > 80) {
-        logLine = logLine.slice(0, 79) + "…";
-      }
-
-      log(logLine);
+    if (reqPath.startsWith("/api")) {
+      const duration = Date.now() - start;
+      logger.info({
+        method: req.method,
+        path: reqPath,
+        status: res.statusCode,
+        duration,
+        requestId: req.id,
+      }, `${req.method} ${reqPath} ${res.statusCode} in ${duration}ms`);
     }
   });
 
@@ -53,7 +67,7 @@ app.use((req, res, next) => {
 
 (async () => {
   const server = await registerRoutes(app);
-  
+
   // Initialize email templates
   await initializeEmailTemplates();
 
@@ -62,14 +76,12 @@ app.use((req, res, next) => {
     const message = err.message || "Internal Server Error";
 
     if (err instanceof SyntaxError && status === 400 && 'body' in err) {
-      log(`JSON Parse Error: ${err.message}`);
+      logger.warn({ err }, "JSON parse error");
       return res.status(400).json({ message: "Invalid JSON" });
     }
 
+    logger.error({ err, status }, message);
     res.status(status).json({ message });
-    if (app.get("env") === "development") {
-      console.error(err);
-    }
   });
 
   // Serve resource PDFs statically (must be before Vite/SPA catch-all)
@@ -92,12 +104,12 @@ app.use((req, res, next) => {
 
   server.on("error", (err: NodeJS.ErrnoException) => {
     if (err.code === "EADDRINUSE") {
-      log(`Port ${port} is in use, retrying in 2 seconds...`);
+      logger.warn(`Port ${port} is in use, retrying in 2 seconds...`);
       setTimeout(() => {
         server.listen({ port, host: "0.0.0.0", reusePort: true });
       }, 2000);
     } else {
-      console.error(err);
+      logger.fatal({ err }, "Server error");
       process.exit(1);
     }
   });
@@ -107,6 +119,6 @@ app.use((req, res, next) => {
     host: "0.0.0.0",
     reusePort: true,
   }, () => {
-    log(`serving on port ${port}`);
+    logger.info(`Server listening on port ${port}`);
   });
 })();

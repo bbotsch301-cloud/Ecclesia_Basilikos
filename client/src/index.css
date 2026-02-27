@@ -89,6 +89,16 @@
     font-family: var(--font-playfair);
     @apply tracking-tight;
   }
+
+  a:focus-visible,
+  button:focus-visible,
+  [role="button"]:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid var(--royal-gold);
+    outline-offset: 2px;
+  }
 }
 
 @layer components {

@@ -76,10 +76,25 @@ export function serveStatic(app: Express) {
     );
   }
 
-  app.use(express.static(distPath));
+  // Hashed assets (JS/CSS) get long-term caching
+  app.use("/assets", express.static(path.resolve(distPath, "assets"), {
+    maxAge: "1y",
+    immutable: true,
+  }));
+
+  // Everything else (HTML, public files) — no cache
+  app.use(express.static(distPath, {
+    maxAge: 0,
+    setHeaders: (res, filePath) => {
+      if (filePath.endsWith(".html")) {
+        res.setHeader("Cache-Control", "no-cache");
+      }
+    },
+  }));
 
   // fall through to index.html if the file doesn't exist
   app.use("*", (_req, res) => {
+    res.setHeader("Cache-Control", "no-cache");
     res.sendFile(path.resolve(distPath, "index.html"));
   });
 }

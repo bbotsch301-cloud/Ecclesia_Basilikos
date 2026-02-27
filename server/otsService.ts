@@ -16,6 +16,7 @@
  */
 
 import { createHash } from "crypto";
+import logger from "./logger";
 
 const CALENDAR_URLS = [
   "https://a.pool.opentimestamps.org",
@@ -129,7 +130,7 @@ export async function stampHash(sha256Hex: string): Promise<OtsStampResult> {
       clearTimeout(timeout);
 
       if (!response.ok) {
-        console.warn(
+        logger.warn(
           `OTS calendar ${calendarUrl} returned ${response.status}`
         );
         continue;
@@ -146,7 +147,7 @@ export async function stampHash(sha256Hex: string): Promise<OtsStampResult> {
         calendarUrl,
       };
     } catch (err: any) {
-      console.warn(
+      logger.warn(
         `OTS calendar ${calendarUrl} failed: ${err.message}`
       );
       continue;
@@ -285,9 +286,9 @@ export async function upgradeProof(
           continue;
         }
 
-        console.warn(`OTS upgrade from ${upgradeUrl} returned ${response.status}`);
+        logger.warn(`OTS upgrade from ${upgradeUrl} returned ${response.status}`);
       } catch (err: any) {
-        console.warn(`OTS upgrade from ${upgradeUrl} failed: ${err.message}`);
+        logger.warn(`OTS upgrade from ${upgradeUrl} failed: ${err.message}`);
         continue;
       }
     }
@@ -403,7 +404,7 @@ function parseOtsProofDetailed(proofBytes: Buffer): DetailedProofInfo {
 
     result.valid = true;
   } catch (err) {
-    console.warn("Error in detailed OTS parse:", err);
+    logger.warn({ err }, "Error in detailed OTS parse");
   }
 
   return result;
@@ -525,12 +526,12 @@ function parseOperationChain(
 
     } else if (tag === OP_KECCAK256) {
       // Keccak256 is rarely used in OTS and not natively supported in Node.js crypto
-      console.warn("Keccak256 operation encountered, not supported");
+      logger.warn("Keccak256 operation encountered, not supported");
       break;
 
     } else {
       // Unknown tag, stop parsing this branch
-      console.warn(`Unknown OTS operation tag: 0x${tag.toString(16)} at offset ${offset}`);
+      logger.warn(`Unknown OTS operation tag: 0x${tag.toString(16)} at offset ${offset}`);
       break;
     }
   }

@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { storage } from './storage';
 import { requireAuth, requireAdmin, requireModerator, requireInstructor, loadUser, auditLog } from './adminMiddleware';
 import { sendEmail, generateBulkEmailHtml } from './email';
+import logger from './logger';
 import {
   insertVideoSchema,
   insertResourceSchema,
@@ -29,7 +30,7 @@ router.get('/users', requireAdmin, async (req, res) => {
     const users = await storage.getAllUsers();
     res.json(users);
   } catch (error) {
-    console.error('Error fetching users:', error);
+    logger.error({ err: error }, 'Error fetching users:');
     res.status(500).json({ error: 'Failed to fetch users' });
   }
 });
@@ -56,7 +57,7 @@ router.patch('/users/:id/role', requireAdmin, async (req, res) => {
     
     res.json(updatedUser);
   } catch (error) {
-    console.error('Error updating user role:', error);
+    logger.error({ err: error }, 'Error updating user role:');
     res.status(500).json({ error: 'Failed to update user role' });
   }
 });
@@ -82,7 +83,7 @@ router.patch('/users/:id/toggle-active', requireAdmin, async (req, res) => {
     
     res.json(updatedUser);
   } catch (error) {
-    console.error('Error toggling user status:', error);
+    logger.error({ err: error }, 'Error toggling user status:');
     res.status(500).json({ error: 'Failed to toggle user status' });
   }
 });
@@ -108,7 +109,7 @@ router.delete('/users/:id', requireAdmin, async (req, res) => {
     
     res.json({ success: true });
   } catch (error) {
-    console.error('Error deleting user:', error);
+    logger.error({ err: error }, 'Error deleting user:');
     res.status(500).json({ error: 'Failed to delete user' });
   }
 });
@@ -161,7 +162,7 @@ router.post('/users/email', requireAdmin, async (req, res) => {
 
     res.json(result);
   } catch (error) {
-    console.error('Error sending bulk email:', error);
+    logger.error({ err: error }, 'Error sending bulk email:');
     res.status(500).json({ error: 'Failed to send bulk email' });
   }
 });
@@ -176,7 +177,7 @@ router.get('/videos', requireInstructor, async (req, res) => {
     const videos = await storage.getAllVideos();
     res.json(videos);
   } catch (error) {
-    console.error('Error fetching videos:', error);
+    logger.error({ err: error }, 'Error fetching videos:');
     res.status(500).json({ error: 'Failed to fetch videos' });
   }
 });
@@ -203,7 +204,7 @@ router.post('/videos', requireInstructor, async (req, res) => {
     
     res.status(201).json(video);
   } catch (error) {
-    console.error('Error creating video:', error);
+    logger.error({ err: error }, 'Error creating video:');
     res.status(500).json({ error: 'Failed to create video' });
   }
 });
@@ -230,7 +231,7 @@ router.patch('/videos/:id', requireInstructor, async (req, res) => {
     
     res.json(updatedVideo);
   } catch (error) {
-    console.error('Error updating video:', error);
+    logger.error({ err: error }, 'Error updating video:');
     res.status(500).json({ error: 'Failed to update video' });
   }
 });
@@ -256,7 +257,7 @@ router.patch('/videos/:id/toggle-published', requireInstructor, async (req, res)
     
     res.json(updatedVideo);
   } catch (error) {
-    console.error('Error toggling video status:', error);
+    logger.error({ err: error }, 'Error toggling video status:');
     res.status(500).json({ error: 'Failed to toggle video status' });
   }
 });
@@ -282,7 +283,7 @@ router.delete('/videos/:id', requireAdmin, async (req, res) => {
     
     res.json({ success: true });
   } catch (error) {
-    console.error('Error deleting video:', error);
+    logger.error({ err: error }, 'Error deleting video:');
     res.status(500).json({ error: 'Failed to delete video' });
   }
 });
@@ -297,7 +298,7 @@ router.get('/resources', requireInstructor, async (req, res) => {
     const resources = await storage.getAllResources();
     res.json(resources);
   } catch (error) {
-    console.error('Error fetching resources:', error);
+    logger.error({ err: error }, 'Error fetching resources:');
     res.status(500).json({ error: 'Failed to fetch resources' });
   }
 });
@@ -324,7 +325,7 @@ router.post('/resources', requireInstructor, async (req, res) => {
     
     res.status(201).json(resource);
   } catch (error) {
-    console.error('Error creating resource:', error);
+    logger.error({ err: error }, 'Error creating resource:');
     res.status(500).json({ error: 'Failed to create resource' });
   }
 });
@@ -351,7 +352,7 @@ router.patch('/resources/:id', requireInstructor, async (req, res) => {
     
     res.json(updatedResource);
   } catch (error) {
-    console.error('Error updating resource:', error);
+    logger.error({ err: error }, 'Error updating resource:');
     res.status(500).json({ error: 'Failed to update resource' });
   }
 });
@@ -377,7 +378,7 @@ router.patch('/resources/:id/toggle-published', requireInstructor, async (req, r
     
     res.json(updatedResource);
   } catch (error) {
-    console.error('Error toggling resource status:', error);
+    logger.error({ err: error }, 'Error toggling resource status:');
     res.status(500).json({ error: 'Failed to toggle resource status' });
   }
 });
@@ -403,7 +404,7 @@ router.delete('/resources/:id', requireAdmin, async (req, res) => {
     
     res.json({ success: true });
   } catch (error) {
-    console.error('Error deleting resource:', error);
+    logger.error({ err: error }, 'Error deleting resource:');
     res.status(500).json({ error: 'Failed to delete resource' });
   }
 });
@@ -431,7 +432,7 @@ router.post('/courses', requireInstructor, async (req, res) => {
 
     res.status(201).json(course);
   } catch (error) {
-    console.error('Error creating course:', error);
+    logger.error({ err: error }, 'Error creating course:');
     res.status(500).json({ error: 'Failed to create course' });
   }
 });
@@ -458,7 +459,7 @@ router.patch('/courses/:id', requireInstructor, async (req, res) => {
     
     res.json(updatedCourse);
   } catch (error) {
-    console.error('Error updating course:', error);
+    logger.error({ err: error }, 'Error updating course:');
     res.status(500).json({ error: 'Failed to update course' });
   }
 });
@@ -484,7 +485,7 @@ router.patch('/courses/:id/toggle-published', requireInstructor, async (req, res
     
     res.json(updatedCourse);
   } catch (error) {
-    console.error('Error toggling course status:', error);
+    logger.error({ err: error }, 'Error toggling course status:');
     res.status(500).json({ error: 'Failed to toggle course status' });
   }
 });
@@ -510,7 +511,7 @@ router.delete('/courses/:id', requireAdmin, async (req, res) => {
     
     res.json({ success: true });
   } catch (error) {
-    console.error('Error deleting course:', error);
+    logger.error({ err: error }, 'Error deleting course:');
     res.status(500).json({ error: 'Failed to delete course' });
   }
 });
@@ -536,7 +537,7 @@ router.post('/courses/:courseId/lessons', requireInstructor, async (req, res) =>
     
     res.status(201).json(lesson);
   } catch (error) {
-    console.error('Error creating lesson:', error);
+    logger.error({ err: error }, 'Error creating lesson:');
     res.status(500).json({ error: 'Failed to create lesson' });
   }
 });
@@ -563,7 +564,7 @@ router.patch('/lessons/:id', requireInstructor, async (req, res) => {
     
     res.json(updatedLesson);
   } catch (error) {
-    console.error('Error updating lesson:', error);
+    logger.error({ err: error }, 'Error updating lesson:');
     res.status(500).json({ error: 'Failed to update lesson' });
   }
 });
@@ -589,7 +590,7 @@ router.delete('/lessons/:id', requireAdmin, async (req, res) => {
     
     res.json({ success: true });
   } catch (error) {
-    console.error('Error deleting lesson:', error);
+    logger.error({ err: error }, 'Error deleting lesson:');
     res.status(500).json({ error: 'Failed to delete lesson' });
   }
 });
@@ -617,7 +618,7 @@ router.post('/forum/categories', requireModerator, async (req, res) => {
     
     res.status(201).json(category);
   } catch (error) {
-    console.error('Error creating forum category:', error);
+    logger.error({ err: error }, 'Error creating forum category:');
     res.status(500).json({ error: 'Failed to create forum category' });
   }
 });
@@ -644,7 +645,7 @@ router.patch('/forum/categories/:id', requireModerator, async (req, res) => {
     
     res.json(updatedCategory);
   } catch (error) {
-    console.error('Error updating forum category:', error);
+    logger.error({ err: error }, 'Error updating forum category:');
     res.status(500).json({ error: 'Failed to update forum category' });
   }
 });
@@ -670,7 +671,7 @@ router.delete('/forum/categories/:id', requireAdmin, async (req, res) => {
     
     res.json({ success: true });
   } catch (error) {
-    console.error('Error deleting forum category:', error);
+    logger.error({ err: error }, 'Error deleting forum category:');
     res.status(500).json({ error: 'Failed to delete forum category' });
   }
 });
@@ -696,7 +697,7 @@ router.patch('/forum/threads/:id/toggle-pinned', requireModerator, async (req, r
     
     res.json(updatedThread);
   } catch (error) {
-    console.error('Error toggling thread pinned:', error);
+    logger.error({ err: error }, 'Error toggling thread pinned:');
     res.status(500).json({ error: 'Failed to toggle thread pinned' });
   }
 });
@@ -722,7 +723,7 @@ router.patch('/forum/threads/:id/toggle-locked', requireModerator, async (req, r
     
     res.json(updatedThread);
   } catch (error) {
-    console.error('Error toggling thread locked:', error);
+    logger.error({ err: error }, 'Error toggling thread locked:');
     res.status(500).json({ error: 'Failed to toggle thread locked' });
   }
 });
@@ -748,7 +749,7 @@ router.delete('/forum/threads/:id', requireModerator, async (req, res) => {
     
     res.json({ success: true });
   } catch (error) {
-    console.error('Error deleting forum thread:', error);
+    logger.error({ err: error }, 'Error deleting forum thread:');
     res.status(500).json({ error: 'Failed to delete forum thread' });
   }
 });
@@ -773,7 +774,7 @@ router.delete('/forum/replies/:id', requireModerator, async (req, res) => {
     
     res.json({ success: true });
   } catch (error) {
-    console.error('Error deleting forum reply:', error);
+    logger.error({ err: error }, 'Error deleting forum reply:');
     res.status(500).json({ error: 'Failed to delete forum reply' });
   }
 });
@@ -788,7 +789,7 @@ router.get('/stats', requireAdmin, async (req, res) => {
     const stats = await storage.getSystemStats();
     res.json(stats);
   } catch (error) {
-    console.error('Error fetching system stats:', error);
+    logger.error({ err: error }, 'Error fetching system stats:');
     res.status(500).json({ error: 'Failed to fetch system stats' });
   }
 });
@@ -799,7 +800,7 @@ router.get('/activity', requireAdmin, async (req, res) => {
     const activity = await storage.getRecentActivity();
     res.json(activity);
   } catch (error) {
-    console.error('Error fetching recent activity:', error);
+    logger.error({ err: error }, 'Error fetching recent activity:');
     res.status(500).json({ error: 'Failed to fetch recent activity' });
   }
 });
@@ -814,7 +815,7 @@ router.get('/page-content', requireAdmin, async (req, res) => {
     const pageContent = await storage.getAllPageContent();
     res.json(pageContent);
   } catch (error) {
-    console.error('Error fetching page content:', error);
+    logger.error({ err: error }, 'Error fetching page content:');
     res.status(500).json({ error: 'Failed to fetch page content' });
   }
 });
@@ -826,7 +827,7 @@ router.get('/page-content/:pageName', requireAdmin, async (req, res) => {
     const pageContent = await storage.getPageContent(pageName);
     res.json(pageContent);
   } catch (error) {
-    console.error('Error fetching page content:', error);
+    logger.error({ err: error }, 'Error fetching page content:');
     res.status(500).json({ error: 'Failed to fetch page content' });
   }
 });
@@ -854,7 +855,7 @@ router.post('/page-content', requireAdmin, async (req, res) => {
     
     res.status(201).json(pageContent);
   } catch (error) {
-    console.error('Error creating page content:', error);
+    logger.error({ err: error }, 'Error creating page content:');
     res.status(500).json({ error: 'Failed to create page content' });
   }
 });
@@ -884,7 +885,7 @@ router.patch('/page-content/:id', requireAdmin, async (req, res) => {
     
     res.json(updatedContent);
   } catch (error) {
-    console.error('Error updating page content:', error);
+    logger.error({ err: error }, 'Error updating page content:');
     res.status(500).json({ error: 'Failed to update page content' });
   }
 });
@@ -910,7 +911,7 @@ router.delete('/page-content/:id', requireAdmin, async (req, res) => {
     
     res.json({ success: true });
   } catch (error) {
-    console.error('Error deleting page content:', error);
+    logger.error({ err: error }, 'Error deleting page content:');
     res.status(500).json({ error: 'Failed to delete page content' });
   }
 });
@@ -925,7 +926,7 @@ router.get('/downloads', requireAdmin, async (req, res) => {
     const allDownloads = await storage.getAllDownloads();
     res.json(allDownloads);
   } catch (error) {
-    console.error('Error fetching downloads:', error);
+    logger.error({ err: error }, 'Error fetching downloads:');
     res.status(500).json({ error: 'Failed to fetch downloads' });
   }
 });
@@ -938,7 +939,7 @@ router.get('/downloads/:id', requireAdmin, async (req, res) => {
     }
     res.json(download);
   } catch (error) {
-    console.error('Error fetching download:', error);
+    logger.error({ err: error }, 'Error fetching download:');
     res.status(500).json({ error: 'Failed to fetch download' });
   }
 });
@@ -961,7 +962,7 @@ router.post('/downloads', requireAdmin, async (req, res) => {
 
     res.status(201).json(download);
   } catch (error) {
-    console.error('Error creating download:', error);
+    logger.error({ err: error }, 'Error creating download:');
     res.status(500).json({ error: 'Failed to create download' });
   }
 });
@@ -986,7 +987,7 @@ router.put('/downloads/:id', requireAdmin, async (req, res) => {
 
     res.json(updated);
   } catch (error) {
-    console.error('Error updating download:', error);
+    logger.error({ err: error }, 'Error updating download:');
     res.status(500).json({ error: 'Failed to update download' });
   }
 });
@@ -1010,7 +1011,7 @@ router.patch('/downloads/:id/toggle-published', requireAdmin, async (req, res) =
 
     res.json(updated);
   } catch (error) {
-    console.error('Error toggling download published:', error);
+    logger.error({ err: error }, 'Error toggling download published:');
     res.status(500).json({ error: 'Failed to toggle download published' });
   }
 });
@@ -1034,7 +1035,7 @@ router.delete('/downloads/:id', requireAdmin, async (req, res) => {
 
     res.json({ success: true });
   } catch (error) {
-    console.error('Error deleting download:', error);
+    logger.error({ err: error }, 'Error deleting download:');
     res.status(500).json({ error: 'Failed to delete download' });
   }
 });

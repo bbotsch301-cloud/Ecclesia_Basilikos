@@ -35,6 +35,7 @@ export default function Signup() {
   }, [isAuthenticated, navigate]);
 
   const form = useForm<RegistrationData>({
+    mode: "onBlur",
     resolver: zodResolver(registrationSchema),
     defaultValues: { email: "", password: "", confirmPassword: "", firstName: "", lastName: "" },
   });
@@ -43,6 +44,7 @@ export default function Signup() {
     try {
       const { confirmPassword, ...userData } = data;
       await registerUser(userData);
+      (await import("@/lib/analytics")).trackEvent("Signup");
       toast({ title: "Welcome!", description: "Your account has been created successfully." });
     } catch (error: any) {
       toast({

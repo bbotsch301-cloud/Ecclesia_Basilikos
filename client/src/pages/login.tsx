@@ -29,6 +29,7 @@ export default function Login() {
   }, [isAuthenticated, navigate, redirectTo]);
 
   const form = useForm<z.infer<typeof loginSchema>>({
+    mode: "onBlur",
     resolver: zodResolver(loginSchema),
     defaultValues: { email: "", password: "" },
   });

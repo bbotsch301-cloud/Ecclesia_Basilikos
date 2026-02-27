@@ -45,6 +45,7 @@ export default function NewCovenantIntro() {
   const progressPercentage = (completedSections.length / 6) * 100;
 
   const loginForm = useForm({
+    mode: "onBlur",
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
@@ -53,6 +54,7 @@ export default function NewCovenantIntro() {
   });
 
   const registerForm = useForm({
+    mode: "onBlur",
     resolver: zodResolver(registrationSchema),
     defaultValues: {
       firstName: "",

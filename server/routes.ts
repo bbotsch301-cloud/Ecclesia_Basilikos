@@ -10,7 +10,7 @@ declare global {
 }
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { sessionMiddleware, requireAuth, optionalAuth } from "./auth";
+import { sessionMiddleware, requireAuth, requireInstructor, optionalAuth } from "./auth";
 import adminRoutes from "./adminRoutes";
 import {
   insertContactSchema,
@@ -29,15 +29,22 @@ import {
 import { z } from "zod";
 import { ObjectStorageService } from "./objectStorage";
 import proofVaultRoutes from "./proofVaultRoutes";
+import path from "path";
 import { rateLimit } from "./rateLimit";
+import { sanitizeHtml, sanitizePlainText } from "./sanitize";
+import logger from "./logger";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Session middleware
   app.use(sessionMiddleware);
 
-  // Rate limiters for public endpoints
-  const authLimiter = rateLimit("auth", 10, 15 * 60_000);       // 10 req / 15 min per IP
-  const contactLimiter = rateLimit("contact", 5, 15 * 60_000);  // 5 req / 15 min per IP
+  // Rate limiters
+  const authLimiter = rateLimit("auth", 10, 15 * 60_000);            // 10 req / 15 min per IP
+  const contactLimiter = rateLimit("contact", 5, 15 * 60_000);       // 5 req / 15 min per IP
+  const forumLimiter = rateLimit("forum", 10, 60_000);               // 10 req / 1 min per IP
+  const uploadLimiter = rateLimit("upload", 5, 60_000);              // 5 req / 1 min per IP
+  const newsletterLimiter = rateLimit("newsletter", 5, 15 * 60_000); // 5 req / 15 min per IP
+  const trustDownloadLimiter = rateLimit("trust-dl", 5, 15 * 60_000);// 5 req / 15 min per IP
 
   // Authentication routes
   app.post("/api/auth/register", authLimiter, async (req, res) => {
@@ -82,7 +89,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
       
       if (!emailSent) {
-        console.error('Failed to send verification email — auto-verifying user');
+        logger.error('Failed to send verification email — auto-verifying user');
         await storage.verifyUserEmail(user.id);
         // Reload user to reflect verified state in response
         const verifiedUser = await storage.getUser(user.id);
@@ -108,7 +115,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (error instanceof z.ZodError) {
         res.status(400).json({ errors: error.errors });
       } else {
-        console.error("Registration error:", error);
+        logger.error({ err: error }, "Registration error:");
         res.status(500).json({ error: "Registration failed" });
       }
     }
@@ -141,7 +148,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (error instanceof z.ZodError) {
         res.status(400).json({ errors: error.errors });
       } else {
-        console.error("Login error:", error);
+        logger.error({ err: error }, "Login error:");
         res.status(500).json({ error: "Login failed" });
       }
     }
@@ -189,7 +196,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         message: "Email verified successfully! You can now log in."
       });
     } catch (error) {
-      console.error("Email verification error:", error);
+      logger.error({ err: error }, "Email verification error:");
       res.status(500).json({ error: "Email verification failed" });
     }
   });
@@ -233,7 +240,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (error instanceof z.ZodError) {
         return res.status(400).json({ errors: error.errors });
       }
-      console.error("Forgot password error:", error);
+      logger.error({ err: error }, "Forgot password error:");
       res.status(500).json({ error: "Failed to process password reset request" });
     }
   });
@@ -264,7 +271,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (error instanceof z.ZodError) {
         return res.status(400).json({ errors: error.errors });
       }
-      console.error("Reset password error:", error);
+      logger.error({ err: error }, "Reset password error:");
       res.status(500).json({ error: "Failed to reset password" });
     }
   });
@@ -290,7 +297,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if ((error as any)?.code === '23505') {
         return res.status(409).json({ error: "Username already taken" });
       }
-      console.error("Profile update error:", error);
+      logger.error({ err: error }, "Profile update error:");
       res.status(500).json({ error: "Failed to update profile" });
     }
   });
@@ -316,7 +323,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (error instanceof z.ZodError) {
         return res.status(400).json({ errors: error.errors });
       }
-      console.error("Change password error:", error);
+      logger.error({ err: error }, "Change password error:");
       res.status(500).json({ error: "Failed to change password" });
     }
   });
@@ -327,7 +334,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const courses = await storage.getCoursesWithLessonCount();
       res.json(courses);
     } catch (error) {
-      console.error("Get courses error:", error);
+      logger.error({ err: error }, "Get courses error:");
       res.status(500).json({ error: "Failed to fetch courses" });
     }
   });
@@ -342,7 +349,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const lessons = await storage.getCourseLessons(req.params.id);
       res.json({ ...course, lessons });
     } catch (error) {
-      console.error("Get course error:", error);
+      logger.error({ err: error }, "Get course error:");
       res.status(500).json({ error: "Failed to fetch course" });
     }
   });
@@ -354,7 +361,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const published = allDownloads.filter(d => d.isPublished);
       res.json(published);
     } catch (error) {
-      console.error("Get course downloads error:", error);
+      logger.error({ err: error }, "Get course downloads error:");
       res.status(500).json({ error: "Failed to fetch course downloads" });
     }
   });
@@ -382,7 +389,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (error instanceof z.ZodError) {
         res.status(400).json({ errors: error.errors });
       } else {
-        console.error("Enrollment error:", error);
+        logger.error({ err: error }, "Enrollment error:");
         res.status(500).json({ error: "Enrollment failed" });
       }
     }
@@ -394,7 +401,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const enrollments = await storage.getUserEnrollments(userId);
       res.json(enrollments);
     } catch (error) {
-      console.error("Get enrollments error:", error);
+      logger.error({ err: error }, "Get enrollments error:");
       res.status(500).json({ error: "Failed to fetch enrollments" });
     }
   });
@@ -412,7 +419,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         res.json(downloads);
       }
     } catch (error) {
-      console.error("Get downloads error:", error);
+      logger.error({ err: error }, "Get downloads error:");
       res.status(500).json({ error: "Failed to fetch downloads" });
     }
   });
@@ -446,13 +453,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (error instanceof z.ZodError) {
         return res.status(400).json({ errors: error.errors });
       }
-      console.error("Unsubscribe error:", error);
+      logger.error({ err: error }, "Unsubscribe error:");
       res.status(500).json({ error: "Failed to unsubscribe" });
     }
   });
 
   // Newsletter subscription
-  app.post("/api/newsletter", contactLimiter, async (req, res) => {
+  app.post("/api/newsletter", newsletterLimiter, async (req, res) => {
     try {
       const newsletterData = insertNewsletterSchema.parse(req.body);
       
@@ -484,7 +491,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const contacts = await storage.getAllContacts();
       res.json(contacts);
     } catch (error) {
-      console.error("Error fetching contacts:", error);
+      logger.error({ err: error }, "Error fetching contacts:");
       res.status(500).json({ error: "Failed to fetch contacts" });
     }
   });
@@ -495,7 +502,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const publishedVideos = await storage.getPublishedVideos();
       res.json(publishedVideos);
     } catch (error) {
-      console.error("Error fetching published videos:", error);
+      logger.error({ err: error }, "Error fetching published videos:");
       res.status(500).json({ error: "Failed to fetch videos" });
     }
   });
@@ -506,7 +513,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const publishedResources = await storage.getPublishedResources();
       res.json(publishedResources);
     } catch (error) {
-      console.error("Error fetching published resources:", error);
+      logger.error({ err: error }, "Error fetching published resources:");
       res.status(500).json({ error: "Failed to fetch resources" });
     }
   });
@@ -519,7 +526,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const threads = await storage.getRecentForumThreads();
       res.json(threads);
     } catch (error) {
-      console.error("Error fetching recent forum threads:", error);
+      logger.error({ err: error }, "Error fetching recent forum threads:");
       res.status(500).json({ error: "Failed to fetch threads" });
     }
   });
@@ -530,7 +537,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const categories = await storage.getForumCategories();
       res.json(categories);
     } catch (error) {
-      console.error("Error fetching forum categories:", error);
+      logger.error({ err: error }, "Error fetching forum categories:");
       res.status(500).json({ error: "Failed to fetch categories" });
     }
   });
@@ -545,19 +552,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const threads = await storage.getForumThreadsByCategory(categoryId);
       res.json(threads);
     } catch (error) {
-      console.error("Error fetching forum threads:", error);
+      logger.error({ err: error }, "Error fetching forum threads:");
       res.status(500).json({ error: "Failed to fetch threads" });
     }
   });
 
   // Create a new thread
-  app.post("/api/forum/threads", requireAuth, async (req, res) => {
+  app.post("/api/forum/threads", requireAuth, forumLimiter, async (req, res) => {
     try {
-      const threadData = insertForumThreadSchema.parse(req.body);
+      const threadData = insertForumThreadSchema.omit({ authorId: true }).parse(req.body);
       const user = req.user as User;
-      
+
       const thread = await storage.createForumThread({
         ...threadData,
+        title: sanitizePlainText(threadData.title),
+        content: sanitizeHtml(threadData.content),
         authorId: user.id,
       });
       
@@ -566,7 +575,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (error instanceof z.ZodError) {
         res.status(400).json({ errors: error.errors });
       } else {
-        console.error("Error creating forum thread:", error);
+        logger.error({ err: error }, "Error creating forum thread:");
         res.status(500).json({ error: "Failed to create thread" });
       }
     }
@@ -591,30 +600,58 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       res.json({ thread, replies });
     } catch (error) {
-      console.error("Error fetching forum thread:", error);
+      logger.error({ err: error }, "Error fetching forum thread:");
       res.status(500).json({ error: "Failed to fetch thread" });
     }
   });
 
   // Create a reply to a thread
-  app.post("/api/forum/threads/:threadId/replies", requireAuth, async (req, res) => {
+  app.post("/api/forum/threads/:threadId/replies", requireAuth, forumLimiter, async (req, res) => {
     try {
       const { threadId } = req.params;
-      const replyData = insertForumReplySchema.parse(req.body);
+      const replyData = insertForumReplySchema.omit({ authorId: true, threadId: true }).parse(req.body);
       const user = req.user as User;
-      
+
+      const thread = await storage.getForumThreadById(threadId);
       const reply = await storage.createForumReply({
         ...replyData,
+        content: sanitizeHtml(replyData.content),
         threadId,
         authorId: user.id,
       });
-      
+
+      // Notify thread author and subscribers about the reply
+      if (thread) {
+        const notifyUserIds = new Set<string>();
+
+        // Thread author (unless self-reply)
+        if (thread.authorId !== user.id) {
+          notifyUserIds.add(thread.authorId);
+        }
+
+        // Thread subscribers (async, non-blocking)
+        storage.getThreadSubscribers(threadId).then((subscriberIds) => {
+          for (const subId of subscriberIds) {
+            if (subId !== user.id) notifyUserIds.add(subId);
+          }
+          for (const uid of Array.from(notifyUserIds)) {
+            storage.createNotification({
+              userId: uid,
+              type: "forum_reply",
+              title: "New reply to your thread",
+              message: `${user.firstName || "Someone"} replied to "${thread.title}"`,
+              linkUrl: `/forum/thread/${threadId}`,
+            }).catch((err) => logger.warn({ err }, "Failed to create reply notification"));
+          }
+        }).catch((err) => logger.warn({ err }, "Failed to fetch thread subscribers"));
+      }
+
       res.json({ success: true, reply });
     } catch (error) {
       if (error instanceof z.ZodError) {
         res.status(400).json({ errors: error.errors });
       } else {
-        console.error("Error creating forum reply:", error);
+        logger.error({ err: error }, "Error creating forum reply:");
         res.status(500).json({ error: "Failed to create reply" });
       }
     }
@@ -637,11 +674,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         content: z.string().min(1).optional(),
       }).parse(req.body);
 
-      const updated = await storage.updateForumThread(threadId, { title, content });
+      const updated = await storage.updateForumThread(threadId, {
+        title: title ? sanitizePlainText(title) : title,
+        content: content ? sanitizeHtml(content) : content,
+      });
       res.json({ success: true, thread: updated });
     } catch (error) {
       if (error instanceof z.ZodError) return res.status(400).json({ errors: error.errors });
-      console.error("Error updating thread:", error);
+      logger.error({ err: error }, "Error updating thread:");
       res.status(500).json({ error: "Failed to update thread" });
     }
   });
@@ -660,7 +700,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       await storage.deleteForumThread(threadId);
       res.json({ success: true });
     } catch (error) {
-      console.error("Error deleting thread:", error);
+      logger.error({ err: error }, "Error deleting thread:");
       res.status(500).json({ error: "Failed to delete thread" });
     }
   });
@@ -678,11 +718,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!isOwner && !isMod) return res.status(403).json({ error: "Not authorized" });
 
       const { content } = z.object({ content: z.string().min(1) }).parse(req.body);
-      const updated = await storage.updateForumReply(replyId, { content });
+      const updated = await storage.updateForumReply(replyId, { content: sanitizeHtml(content) });
       res.json({ success: true, reply: updated });
     } catch (error) {
       if (error instanceof z.ZodError) return res.status(400).json({ errors: error.errors });
-      console.error("Error updating reply:", error);
+      logger.error({ err: error }, "Error updating reply:");
       res.status(500).json({ error: "Failed to update reply" });
     }
   });
@@ -701,7 +741,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       await storage.deleteForumReply(replyId);
       res.json({ success: true });
     } catch (error) {
-      console.error("Error deleting reply:", error);
+      logger.error({ err: error }, "Error deleting reply:");
       res.status(500).json({ error: "Failed to delete reply" });
     }
   });
@@ -709,7 +749,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Page Content Management routes are in adminRoutes.ts (mounted at /api/admin)
 
   // Object Storage Upload Endpoint (requires authentication)
-  app.post("/api/objects/upload", requireAuth, async (req, res) => {
+  app.post("/api/objects/upload", requireAuth, uploadLimiter, async (req, res) => {
     try {
       const user = req.user as User;
       if (!['admin', 'instructor'].includes(user.role || '')) {
@@ -719,7 +759,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const uploadURL = await objectStorageService.getObjectEntityUploadURL();
       res.json({ uploadURL });
     } catch (error) {
-      console.error("Error getting upload URL:", error);
+      logger.error({ err: error }, "Error getting upload URL:");
       res.status(500).json({ error: "Failed to get upload URL" });
     }
   });
@@ -730,7 +770,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const publishedDownloads = await storage.getPublishedDownloads();
       res.json(publishedDownloads);
     } catch (error) {
-      console.error("Error fetching published downloads:", error);
+      logger.error({ err: error }, "Error fetching published downloads:");
       res.status(500).json({ error: "Failed to fetch downloads" });
     }
   });
@@ -740,13 +780,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const updated = await storage.incrementDownloadCount(req.params.id);
       res.json({ downloadCount: updated.downloadCount });
     } catch (error) {
-      console.error("Error tracking download:", error);
+      logger.error({ err: error }, "Error tracking download:");
       res.status(500).json({ error: "Failed to track download" });
     }
   });
 
   // Trust Document Download Endpoints
-  app.post("/api/trust-download-signup", async (req, res) => {
+  app.post("/api/trust-download-signup", trustDownloadLimiter, async (req, res) => {
     try {
       const downloadData = insertTrustDownloadSchema.parse({
         ...req.body,
@@ -776,96 +816,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (error instanceof z.ZodError) {
         res.status(400).json({ errors: error.errors });
       } else {
-        console.error("Error processing trust download signup:", error);
+        logger.error({ err: error }, "Error processing trust download signup:");
         res.status(500).json({ error: "Failed to process signup" });
       }
     }
   });
 
-  // Serve the trust document PDF
+  // Serve the trust document PDF from resources
   app.get("/api/trust-document-pdf", (req, res) => {
-    // For now, redirect to a sample PDF or serve a placeholder
-    // In production, this would serve the actual trust document
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', 'attachment; filename="new-covenant-trust-document.pdf"');
-    
-    // Create a simple PDF placeholder response
-    const pdfContent = `%PDF-1.4
-1 0 obj
-<<
-/Type /Catalog
-/Pages 2 0 R
->>
-endobj
-
-2 0 obj
-<<
-/Type /Pages
-/Kids [3 0 R]
-/Count 1
->>
-endobj
-
-3 0 obj
-<<
-/Type /Page
-/Parent 2 0 R
-/MediaBox [0 0 612 792]
-/Contents 4 0 R
-/Resources <<
-/Font <<
-/F1 5 0 R
->>
->>
->>
-endobj
-
-4 0 obj
-<<
-/Length 200
->>
-stream
-BT
-/F1 24 Tf
-100 700 Td
-(New Covenant Trust Document) Tj
-0 -50 Td
-/F1 12 Tf
-(This is a placeholder for the actual trust document.) Tj
-0 -20 Td
-(The complete biblical foundation and implementation) Tj
-0 -20 Td
-(guide will be available here.) Tj
-ET
-endstream
-endobj
-
-5 0 obj
-<<
-/Type /Font
-/Subtype /Type1
-/BaseFont /Helvetica
->>
-endobj
-
-xref
-0 6
-0000000000 65535 f 
-0000000015 00000 n 
-0000000062 00000 n 
-0000000118 00000 n 
-0000000266 00000 n 
-0000000516 00000 n 
-trailer
-<<
-/Size 6
-/Root 1 0 R
->>
-startxref
-585
-%%EOF`;
-    
-    res.send(Buffer.from(pdfContent));
+    const pdfPath = path.resolve(import.meta.dirname, "../resources/Public-Declaration-of-Trust.pdf");
+    res.download(pdfPath, "new-covenant-trust-document.pdf", (err) => {
+      if (err && !res.headersSent) {
+        res.status(404).json({ error: "Trust document not found" });
+      }
+    });
   });
 
   // Trust document downloads admin endpoint
@@ -879,7 +843,7 @@ startxref
       const downloads = await storage.getAllTrustDownloads();
       res.json(downloads);
     } catch (error) {
-      console.error("Error fetching trust downloads:", error);
+      logger.error({ err: error }, "Error fetching trust downloads:");
       res.status(500).json({ error: "Failed to fetch trust downloads" });
     }
   });
@@ -892,18 +856,14 @@ startxref
       const sections = await storage.getCourseSections(req.params.courseId);
       res.json(sections);
     } catch (error) {
-      console.error("Error fetching course sections:", error);
+      logger.error({ err: error }, "Error fetching course sections:");
       res.status(500).json({ error: "Failed to fetch course sections" });
     }
   });
 
   // Create a new course section (instructor+)
-  app.post("/api/courses/:courseId/sections", requireAuth, async (req, res) => {
+  app.post("/api/courses/:courseId/sections", requireAuth, requireInstructor, async (req, res) => {
     try {
-      const user = req.user as User;
-      if (!['admin', 'moderator', 'instructor'].includes(user.role || '')) {
-        return res.status(403).json({ error: "Instructor access required" });
-      }
       const sectionData = insertCourseSectionSchema.parse({
         ...req.body,
         courseId: req.params.courseId,
@@ -915,19 +875,15 @@ startxref
       if (error instanceof z.ZodError) {
         res.status(400).json({ errors: error.errors });
       } else {
-        console.error("Error creating course section:", error);
+        logger.error({ err: error }, "Error creating course section:");
         res.status(500).json({ error: "Failed to create course section" });
       }
     }
   });
 
   // Update course section (instructor+)
-  app.put("/api/sections/:id", requireAuth, async (req, res) => {
+  app.put("/api/sections/:id", requireAuth, requireInstructor, async (req, res) => {
     try {
-      const user = req.user as User;
-      if (!['admin', 'moderator', 'instructor'].includes(user.role || '')) {
-        return res.status(403).json({ error: "Instructor access required" });
-      }
       const updates = insertCourseSectionSchema.partial().parse(req.body);
       const section = await storage.updateCourseSection(req.params.id, updates);
       res.json(section);
@@ -935,7 +891,7 @@ startxref
       if (error instanceof z.ZodError) {
         res.status(400).json({ errors: error.errors });
       } else {
-        console.error("Error updating course section:", error);
+        logger.error({ err: error }, "Error updating course section:");
         res.status(500).json({ error: "Failed to update course section" });
       }
     }
@@ -948,7 +904,7 @@ startxref
       const progress = await storage.getCourseProgressForUser(userId, req.params.courseId);
       res.json(progress);
     } catch (error) {
-      console.error("Error fetching course progress:", error);
+      logger.error({ err: error }, "Error fetching course progress:");
       res.status(500).json({ error: "Failed to fetch course progress" });
     }
   });
@@ -960,7 +916,7 @@ startxref
       const progress = await storage.completeSectionForUser(userId, req.params.sectionId);
       res.json(progress);
     } catch (error) {
-      console.error("Error completing section:", error);
+      logger.error({ err: error }, "Error completing section:");
       res.status(500).json({ error: "Failed to complete section" });
     }
   });
@@ -977,7 +933,7 @@ startxref
       if (error instanceof z.ZodError) {
         res.status(400).json({ errors: error.errors });
       } else {
-        console.error("Error updating video progress:", error);
+        logger.error({ err: error }, "Error updating video progress:");
         res.status(500).json({ error: "Failed to update video progress" });
       }
     }
@@ -990,7 +946,7 @@ startxref
       const progress = await storage.getUserVideoProgress(userId, req.params.videoId);
       res.json(progress || { watchedDuration: 0, isCompleted: false });
     } catch (error) {
-      console.error("Error fetching video progress:", error);
+      logger.error({ err: error }, "Error fetching video progress:");
       res.status(500).json({ error: "Failed to fetch video progress" });
     }
   });
@@ -1003,7 +959,7 @@ startxref
       const results = await storage.searchDictionary(q, limit);
       res.json(results);
     } catch (error) {
-      console.error("Dictionary search error:", error);
+      logger.error({ err: error }, "Dictionary search error:");
       res.status(500).json({ error: "Failed to search dictionary" });
     }
   });
@@ -1013,7 +969,7 @@ startxref
       const stats = await storage.getDictionaryStats();
       res.json(stats);
     } catch (error) {
-      console.error("Dictionary stats error:", error);
+      logger.error({ err: error }, "Dictionary stats error:");
       res.status(500).json({ error: "Failed to fetch dictionary stats" });
     }
   });
@@ -1026,7 +982,7 @@ startxref
       const results = await storage.getDictionaryBatch(offset, limit);
       res.json(results);
     } catch (error) {
-      console.error("Dictionary batch error:", error);
+      logger.error({ err: error }, "Dictionary batch error:");
       res.status(500).json({ error: "Failed to fetch dictionary batch" });
     }
   });
@@ -1039,8 +995,117 @@ startxref
       }
       res.json(entry);
     } catch (error) {
-      console.error("Dictionary entry error:", error);
+      logger.error({ err: error }, "Dictionary entry error:");
       res.status(500).json({ error: "Failed to fetch dictionary entry" });
+    }
+  });
+
+  // ─── Notification routes ───
+
+  app.get("/api/notifications", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+      const notifs = await storage.getUserNotifications(user.id);
+      res.json(notifs);
+    } catch (error) {
+      logger.error({ err: error }, "Error fetching notifications");
+      res.status(500).json({ error: "Failed to fetch notifications" });
+    }
+  });
+
+  app.get("/api/notifications/unread-count", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+      const count = await storage.getUnreadNotificationCount(user.id);
+      res.json({ count });
+    } catch (error) {
+      logger.error({ err: error }, "Error fetching unread count");
+      res.status(500).json({ error: "Failed to fetch unread count" });
+    }
+  });
+
+  app.patch("/api/notifications/:id/read", requireAuth, async (req, res) => {
+    try {
+      const notif = await storage.markNotificationRead(req.params.id);
+      res.json(notif);
+    } catch (error) {
+      logger.error({ err: error }, "Error marking notification read");
+      res.status(500).json({ error: "Failed to update notification" });
+    }
+  });
+
+  app.post("/api/notifications/mark-all-read", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+      await storage.markAllNotificationsRead(user.id);
+      res.json({ success: true });
+    } catch (error) {
+      logger.error({ err: error }, "Error marking all notifications read");
+      res.status(500).json({ error: "Failed to update notifications" });
+    }
+  });
+
+  // ─── Global search ───
+
+  app.get("/api/search", async (req, res) => {
+    try {
+      const q = typeof req.query.q === "string" ? req.query.q : "";
+      if (q.trim().length < 2) {
+        return res.json({ courses: [], threads: [], downloads: [] });
+      }
+      const results = await storage.searchGlobal(q);
+      res.json(results);
+    } catch (error) {
+      logger.error({ err: error }, "Error in global search");
+      res.status(500).json({ error: "Search failed" });
+    }
+  });
+
+  // ─── Public profile ───
+
+  app.get("/api/users/:userId/profile", async (req, res) => {
+    try {
+      const profile = await storage.getPublicProfile(req.params.userId);
+      if (!profile) return res.status(404).json({ error: "User not found" });
+      res.json(profile);
+    } catch (error) {
+      logger.error({ err: error }, "Error fetching public profile");
+      res.status(500).json({ error: "Failed to fetch profile" });
+    }
+  });
+
+  // ─── Thread subscriptions ───
+
+  app.post("/api/forum/threads/:threadId/subscribe", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+      const sub = await storage.subscribeToThread(user.id, req.params.threadId);
+      res.json(sub);
+    } catch (error) {
+      logger.error({ err: error }, "Error subscribing to thread");
+      res.status(500).json({ error: "Failed to subscribe" });
+    }
+  });
+
+  app.delete("/api/forum/threads/:threadId/subscribe", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+      await storage.unsubscribeFromThread(user.id, req.params.threadId);
+      res.json({ success: true });
+    } catch (error) {
+      logger.error({ err: error }, "Error unsubscribing from thread");
+      res.status(500).json({ error: "Failed to unsubscribe" });
+    }
+  });
+
+  app.get("/api/forum/threads/:threadId/subscription", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+      const subscribed = await storage.isSubscribedToThread(user.id, req.params.threadId);
+      res.json({ subscribed });
+    } catch (error) {
+      logger.error({ err: error }, "Error checking subscription");
+      res.status(500).json({ error: "Failed to check subscription" });
     }
   });
 

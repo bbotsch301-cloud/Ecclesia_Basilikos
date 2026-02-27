@@ -114,6 +114,7 @@ export default function AdminVideos() {
 
   // Forms
   const videoForm = useForm({
+    mode: "onBlur",
     resolver: zodResolver(videoFormSchema),
     defaultValues: {
       title: "",
@@ -130,6 +131,7 @@ export default function AdminVideos() {
   });
 
   const resourceForm = useForm({
+    mode: "onBlur",
     resolver: zodResolver(resourceFormSchema),
     defaultValues: {
       title: "",

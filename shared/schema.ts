@@ -58,7 +58,9 @@ export const courses = pgTable("courses", {
   createdById: varchar("created_by_id").notNull().references(() => users.id),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-});
+}, (table) => [
+  index("courses_is_published_idx").on(table.isPublished),
+]);
 
 // Videos table for standalone videos and teachings
 export const videos = pgTable("videos", {
@@ -119,6 +121,8 @@ export const videoProgress = pgTable("video_progress", {
   createdAt: timestamp("created_at").defaultNow(),
 }, (table) => [
   uniqueIndex("uq_video_progress_user_video").on(table.userId, table.videoId),
+  index("video_progress_user_id_idx").on(table.userId),
+  index("video_progress_video_id_idx").on(table.videoId),
 ]);
 
 // Course section progress
@@ -159,7 +163,9 @@ export const lessons = pgTable("lessons", {
   order: integer("order").notNull().default(0),
   duration: text("duration"), // e.g., "30 minutes"
   createdAt: timestamp("created_at").defaultNow(),
-});
+}, (table) => [
+  index("lessons_course_id_idx").on(table.courseId),
+]);
 
 export const enrollments = pgTable("enrollments", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -170,6 +176,8 @@ export const enrollments = pgTable("enrollments", {
   progress: integer("progress").default(0), // percentage 0-100
 }, (table) => [
   uniqueIndex("uq_enrollments_user_course").on(table.userId, table.courseId),
+  index("enrollments_user_id_idx").on(table.userId),
+  index("enrollments_course_id_idx").on(table.courseId),
 ]);
 
 export const lesson_progress = pgTable("lesson_progress", {
@@ -203,7 +211,10 @@ export const downloads = pgTable("downloads", {
   courseId: varchar("course_id").references(() => courses.id),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-});
+}, (table) => [
+  index("downloads_is_published_idx").on(table.isPublished),
+  index("downloads_category_idx").on(table.category),
+]);
 
 // Page content management
 export const page_content = pgTable("page_content", {
@@ -244,7 +255,11 @@ export const forum_threads = pgTable("forum_threads", {
   lastReplyUserId: varchar("last_reply_user_id").references(() => users.id),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-});
+}, (table) => [
+  index("forum_threads_category_id_idx").on(table.categoryId),
+  index("forum_threads_author_id_idx").on(table.authorId),
+  index("forum_threads_created_at_idx").on(table.createdAt),
+]);
 
 export const forum_replies = pgTable("forum_replies", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -256,7 +271,10 @@ export const forum_replies = pgTable("forum_replies", {
   editedAt: timestamp("edited_at"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-});
+}, (table) => [
+  index("forum_replies_thread_id_idx").on(table.threadId),
+  index("forum_replies_author_id_idx").on(table.authorId),
+]);
 
 export const forum_likes = pgTable("forum_likes", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -678,6 +696,63 @@ export const insertDictionaryEntrySchema = createInsertSchema(dictionaryEntries)
 
 export type InsertDictionaryEntry = z.infer<typeof insertDictionaryEntrySchema>;
 export type DictionaryEntry = typeof dictionaryEntries.$inferSelect;
+
+// Notifications
+export const notificationTypeEnum = pgEnum('notification_type', ['forum_reply', 'course_update', 'system', 'welcome']);
+
+export const notifications = pgTable("notifications", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: 'cascade' }),
+  type: notificationTypeEnum("type").notNull(),
+  title: text("title").notNull(),
+  message: text("message").notNull(),
+  linkUrl: text("link_url"),
+  isRead: boolean("is_read").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("notifications_user_id_idx").on(table.userId),
+  index("notifications_user_unread_idx").on(table.userId, table.isRead),
+]);
+
+export const notificationRelations = relations(notifications, ({ one }) => ({
+  user: one(users, {
+    fields: [notifications.userId],
+    references: [users.id],
+  }),
+}));
+
+export const insertNotificationSchema = createInsertSchema(notifications).omit({
+  id: true,
+  isRead: true,
+  createdAt: true,
+});
+
+export type InsertNotification = z.infer<typeof insertNotificationSchema>;
+export type Notification = typeof notifications.$inferSelect;
+
+// Thread subscriptions (follow/unfollow threads)
+export const threadSubscriptions = pgTable("thread_subscriptions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: 'cascade' }),
+  threadId: varchar("thread_id").notNull().references(() => forum_threads.id, { onDelete: 'cascade' }),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  uniqueIndex("uq_thread_subscriptions_user_thread").on(table.userId, table.threadId),
+  index("thread_subscriptions_thread_id_idx").on(table.threadId),
+]);
+
+export const threadSubscriptionRelations = relations(threadSubscriptions, ({ one }) => ({
+  user: one(users, {
+    fields: [threadSubscriptions.userId],
+    references: [users.id],
+  }),
+  thread: one(forum_threads, {
+    fields: [threadSubscriptions.threadId],
+    references: [forum_threads.id],
+  }),
+}));
+
+export type ThreadSubscription = typeof threadSubscriptions.$inferSelect;
 
 // Video management types
 export type InsertCourseSection = z.infer<typeof insertCourseSectionSchema>;

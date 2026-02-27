@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+import logger from './logger';
 
 // Create Gmail transporter
 const transporter = nodemailer.createTransport({
@@ -17,32 +18,44 @@ export interface EmailOptions {
   bcc?: string;
 }
 
+const MAX_RETRIES = 3;
+const BASE_DELAY_MS = 500;
+
 export async function sendEmail(options: EmailOptions): Promise<boolean> {
-  try {
-    if (!process.env.GMAIL_EMAIL || !process.env.GMAIL_APP_PASSWORD) {
-      console.error('Gmail credentials not configured');
-      return false;
-    }
-
-    const mailOptions: Record<string, any> = {
-      from: `"Kingdom Ventures Trust" <${process.env.GMAIL_EMAIL}>`,
-      to: options.to,
-      subject: options.subject,
-      text: options.text,
-      html: options.html,
-    };
-
-    if (options.bcc) {
-      mailOptions.bcc = options.bcc;
-    }
-
-    await transporter.sendMail(mailOptions);
-    console.log(`Email sent successfully to ${options.to}`);
-    return true;
-  } catch (error) {
-    console.error('Error sending email:', error);
+  if (!process.env.GMAIL_EMAIL || !process.env.GMAIL_APP_PASSWORD) {
+    logger.error('Gmail credentials not configured');
     return false;
   }
+
+  const mailOptions: Record<string, any> = {
+    from: `"Kingdom Ventures Trust" <${process.env.GMAIL_EMAIL}>`,
+    to: options.to,
+    subject: options.subject,
+    text: options.text,
+    html: options.html,
+  };
+
+  if (options.bcc) {
+    mailOptions.bcc = options.bcc;
+  }
+
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      await transporter.sendMail(mailOptions);
+      logger.info({ to: options.to, attempt }, 'Email sent successfully');
+      return true;
+    } catch (error) {
+      logger.warn({ err: error, to: options.to, attempt, maxRetries: MAX_RETRIES }, 'Email send attempt failed');
+      if (attempt < MAX_RETRIES) {
+        const delay = BASE_DELAY_MS * Math.pow(2, attempt - 1);
+        await new Promise((resolve) => setTimeout(resolve, delay));
+      } else {
+        logger.error({ err: error, to: options.to }, 'Email delivery failed after all retries');
+      }
+    }
+  }
+
+  return false;
 }
 
 export function generateBulkEmailHtml(subject: string, body: string): string {

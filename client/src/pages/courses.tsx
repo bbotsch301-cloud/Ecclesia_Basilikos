@@ -107,6 +107,7 @@ export default function Courses() {
 
     try {
       await enrollMutation.mutateAsync(courseId);
+      (await import("@/lib/analytics")).trackEvent("Enrollment", { courseId });
     } catch (error) {
       console.error("Auto-enrollment error:", error);
     }

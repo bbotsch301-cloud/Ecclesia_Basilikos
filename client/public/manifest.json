@@ -1,0 +1,27 @@
+{
+  "name": "Ecclesia Basilikos - Embassy of the Eternal Kingdom",
+  "short_name": "Ecclesia Basilikos",
+  "description": "Royal priesthood, divine citizenship, and covenant freedom under the New Covenant.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f1b3d",
+  "theme_color": "#0f1b3d",
+  "icons": [
+    {
+      "src": "/pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

@@ -101,6 +101,7 @@ export default function AdminDownloads() {
   const [detailView, setDetailView] = useState<DownloadType | null>(null);
 
   const form = useForm<DownloadFormData>({
+    mode: "onBlur",
     resolver: zodResolver(downloadFormSchema),
     defaultValues: {
       title: "",

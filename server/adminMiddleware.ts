@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import logger from './logger';
 import type { User } from '@shared/schema';
 
 // Extend Express Request to include user
@@ -67,7 +68,7 @@ export const loadUser = async (req: Request, res: Response, next: NextFunction) 
         req.user = user;
       }
     } catch (error) {
-      console.error('Error loading user:', error);
+      logger.error({ err: error }, 'Error loading user:');
     }
   }
   next();
@@ -97,6 +98,6 @@ export const auditLog = async (
       userAgent: userAgent ?? null,
     });
   } catch (error) {
-    console.error('Error creating audit log:', error);
+    logger.error({ err: error }, 'Error creating audit log:');
   }
 };
