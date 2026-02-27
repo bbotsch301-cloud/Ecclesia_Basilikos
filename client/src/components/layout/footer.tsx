@@ -92,7 +92,7 @@ export default function Footer() {
         <div className="border-t border-gray-600 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="text-gray-300 mb-4 md:mb-0">
-              © 2025 Ecclesia Basilikos. Embassy of the Eternal Kingdom.
+              © {new Date().getFullYear()} Ecclesia Basilikos. Embassy of the Eternal Kingdom.
             </div>
             <div className="text-center">
               <blockquote className="font-georgia italic text-royal-gold text-sm mb-1">

@@ -13,6 +13,7 @@ import StaggerContainer, {
   staggerItemVariants,
   emphasisItemVariants,
 } from "@/components/ui/stagger-container";
+import sealImage from "@assets/EB_1772210493582.png";
 
 export default function Home() {
   usePageTitle();
@@ -30,9 +31,17 @@ export default function Home() {
   return (
     <div className="pt-16">
       {/* Section 1: Hero */}
-      <div className="relative bg-gradient-to-br from-royal-navy via-royal-burgundy to-royal-navy py-24 md:py-36 animate-hero-gradient">
+      <div className="relative bg-gradient-to-br from-royal-navy via-royal-burgundy to-royal-navy pt-4 pb-24 md:pt-6 md:pb-36 animate-hero-gradient">
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <motion.img
+            src={sealImage}
+            alt="Ecclesia Basilikos Seal"
+            className="w-[21rem] h-[21rem] md:w-[27rem] md:h-[27rem] mx-auto -mb-28 -mt-24 object-contain"
+            initial={heroInitial}
+            animate={heroAnimate}
+            transition={heroTransition(0)}
+          />
           <motion.p
             className="font-cinzel text-xs md:text-sm tracking-[0.3em] uppercase text-white mb-4"
             initial={heroInitial}

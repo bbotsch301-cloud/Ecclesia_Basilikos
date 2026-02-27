@@ -1,31 +1,15 @@
-import { Link, useLocation } from "wouter";
+import { Link } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { BookOpen, FileText, Shield, Users, Download, GraduationCap, Loader2, Mail, Settings } from "lucide-react";
-import { useEffect } from "react";
+import { BookOpen, FileText, Shield, Users, Download, GraduationCap, Mail, Settings } from "lucide-react";
 import { usePageTitle } from "@/hooks/usePageTitle";
+import RequireAuth from "@/components/RequireAuth";
 
-export default function Welcome() {
+function WelcomeContent() {
   usePageTitle("Dashboard");
-  const { user, isAuthenticated, isLoading } = useAuth();
-  const [, navigate] = useLocation();
+  const { user } = useAuth();
 
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      navigate("/login?redirect=/welcome");
-    }
-  }, [isLoading, isAuthenticated, navigate]);
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center pt-16">
-        <Loader2 className="w-8 h-8 animate-spin text-royal-gold" />
-      </div>
-    );
-  }
-
-  if (!isAuthenticated || !user) return null;
+  if (!user) return null;
 
   const pathways = [
     { title: "Downloads", description: "Documents, declarations & resources", href: "/downloads", icon: Download, disabled: false },
@@ -104,5 +88,13 @@ export default function Welcome() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function Welcome() {
+  return (
+    <RequireAuth>
+      <WelcomeContent />
+    </RequireAuth>
   );
 }

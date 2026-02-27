@@ -12,8 +12,8 @@ const navigation = [
   { name: "Home", href: "/" },
   { name: "The Mandate", href: "/mandate" },
   { name: "Ecclesia Nation", href: "/nation" },
-  { name: "Downloads", href: "/downloads", useCta: true },
-  { name: "Resources", href: "/resources", useCta: true },
+  { name: "Downloads", href: "/downloads" },
+  { name: "Resources", href: "/resources" },
   { name: "Proof Vault", href: "/proof-vault", useCta: true },
   { name: "Contact & Stewardship", href: "/contact" },
 ];
