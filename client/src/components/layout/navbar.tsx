@@ -6,14 +6,15 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Menu, Crown, LogIn, UserPlus, LogOut, BookOpen, FileText, Shield, Home, ChevronDown, Settings, User } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { useCtaHref } from "@/hooks/useCtaHref";
 
 const navigation = [
   { name: "Home", href: "/" },
   { name: "The Mandate", href: "/mandate" },
   { name: "Ecclesia Nation", href: "/nation" },
-  { name: "Downloads", href: "/downloads" },
-  { name: "Resources", href: "/resources" },
-  { name: "Proof Vault", href: "/proof-vault" },
+  { name: "Downloads", href: "/downloads", useCta: true },
+  { name: "Resources", href: "/resources", useCta: true },
+  { name: "Proof Vault", href: "/proof-vault", useCta: true },
   { name: "Contact & Stewardship", href: "/contact" },
 ];
 
@@ -21,6 +22,7 @@ export default function Navbar() {
   const [location, navigate] = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const { user, isAuthenticated, logout } = useAuth();
+  const ctaHref = useCtaHref();
 
   const handleLogout = async () => {
     try {
@@ -53,19 +55,22 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden xl:flex items-center space-x-2 lg:space-x-4">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={`transition-colors font-medium font-cinzel text-xs whitespace-nowrap ${
-                  location === item.href
-                    ? "text-royal-gold"
-                    : "text-royal-navy dark:text-gray-300 hover:text-royal-gold"
-                }`}
-              >
-                {item.name}
-              </Link>
-            ))}
+            {navigation.map((item) => {
+              const href = item.useCta ? ctaHref : item.href;
+              return (
+                <Link
+                  key={item.name}
+                  href={href}
+                  className={`transition-colors font-medium font-cinzel text-xs whitespace-nowrap ${
+                    location === item.href
+                      ? "text-royal-gold"
+                      : "text-royal-navy dark:text-gray-300 hover:text-royal-gold"
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              );
+            })}
 
             {/* Auth buttons (desktop) */}
             {isAuthenticated ? (
@@ -93,10 +98,10 @@ export default function Navbar() {
                   <DropdownMenuItem onClick={() => navigate("/my-courses")}>
                     <BookOpen className="w-4 h-4 mr-2" /> My Courses
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate("/resources")}>
+                  <DropdownMenuItem onClick={() => navigate(ctaHref)}>
                     <FileText className="w-4 h-4 mr-2" /> Resources
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate("/proof-vault")}>
+                  <DropdownMenuItem onClick={() => navigate(ctaHref)}>
                     <Shield className="w-4 h-4 mr-2" /> Proof Vault
                   </DropdownMenuItem>
                   {user?.role === 'admin' && (
@@ -158,20 +163,23 @@ export default function Navbar() {
 
                   {/* Nav links */}
                   <div className="flex flex-col space-y-4 mt-2 flex-1">
-                    {navigation.map((item) => (
-                      <Link
-                        key={item.name}
-                        href={item.href}
-                        onClick={() => setIsOpen(false)}
-                        className={`text-left py-2 transition-colors font-cinzel ${
-                          location === item.href
-                            ? "text-royal-gold"
-                            : "text-royal-navy dark:text-gray-300 hover:text-royal-gold"
-                        }`}
-                      >
-                        {item.name}
-                      </Link>
-                    ))}
+                    {navigation.map((item) => {
+                      const href = item.useCta ? ctaHref : item.href;
+                      return (
+                        <Link
+                          key={item.name}
+                          href={href}
+                          onClick={() => setIsOpen(false)}
+                          className={`text-left py-2 transition-colors font-cinzel ${
+                            location === item.href
+                              ? "text-royal-gold"
+                              : "text-royal-navy dark:text-gray-300 hover:text-royal-gold"
+                          }`}
+                        >
+                          {item.name}
+                        </Link>
+                      );
+                    })}
 
                     {isAuthenticated && (
                       <>
