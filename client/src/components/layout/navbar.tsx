@@ -95,14 +95,16 @@ export default function Navbar() {
                   <DropdownMenuItem onClick={() => navigate("/profile")}>
                     <User className="w-4 h-4 mr-2" /> Profile
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate("/my-courses")}>
+                  <DropdownMenuItem disabled className="opacity-50">
                     <BookOpen className="w-4 h-4 mr-2" /> My Courses
+                    <span className="ml-auto text-[10px] text-gray-400">Soon</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate(ctaHref)}>
+                  <DropdownMenuItem onClick={() => navigate("/resources")}>
                     <FileText className="w-4 h-4 mr-2" /> Resources
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate(ctaHref)}>
+                  <DropdownMenuItem disabled className="opacity-50">
                     <Shield className="w-4 h-4 mr-2" /> Proof Vault
+                    <span className="ml-auto text-[10px] text-gray-400">Soon</span>
                   </DropdownMenuItem>
                   {user?.role === 'admin' && (
                     <>
@@ -190,9 +192,10 @@ export default function Navbar() {
                           <Link href="/profile" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">
                             <User className="w-4 h-4" /> Profile
                           </Link>
-                          <Link href="/my-courses" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">
+                          <span className="flex items-center gap-2 py-2 text-gray-400 font-cinzel cursor-not-allowed opacity-50">
                             <BookOpen className="w-4 h-4" /> My Courses
-                          </Link>
+                            <span className="ml-auto text-[10px]">Coming Soon</span>
+                          </span>
                           {user?.role === 'admin' && (
                             <Link href="/admin" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">
                               <Settings className="w-4 h-4" /> Admin Panel
