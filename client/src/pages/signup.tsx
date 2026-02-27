@@ -65,7 +65,7 @@ export default function Signup() {
 
   const benefits = [
     { icon: BookOpen, text: "Royal Academy courses" },
-    { icon: FileText, text: "Freedom Resources & templates" },
+    { icon: FileText, text: "Educational resources & templates" },
     { icon: Shield, text: "Proof Vault document timestamping" },
     { icon: Users, text: "Embassy Forum community" },
     { icon: Download, text: "Exclusive downloads" },

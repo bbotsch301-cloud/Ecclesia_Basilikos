@@ -1,6 +1,7 @@
 import express, { type Request, Response, NextFunction } from "express";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
+import path from "path";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { initializeEmailTemplates } from "./initializeEmailTemplates";
@@ -70,6 +71,9 @@ app.use((req, res, next) => {
       console.error(err);
     }
   });
+
+  // Serve resource PDFs statically (must be before Vite/SPA catch-all)
+  app.use("/resources", express.static(path.resolve(import.meta.dirname, "../resources")));
 
   // importantly only setup vite in development and after
   // setting up all the other routes so the catch-all route

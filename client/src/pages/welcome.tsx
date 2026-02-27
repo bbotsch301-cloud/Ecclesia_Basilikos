@@ -13,7 +13,7 @@ function WelcomeContent() {
 
   const pathways = [
     { title: "Downloads", description: "Documents, declarations & resources", href: "/downloads", icon: Download, disabled: false },
-    { title: "Freedom Resources", description: "Templates, guides & legal tools", href: "/resources", icon: FileText, disabled: false },
+    { title: "Educational Resources", description: "Templates, guides & educational materials", href: "/resources", icon: FileText, disabled: false },
     { title: "Royal Academy", description: "Courses in trust, stewardship & covenant authority", href: "/courses", icon: BookOpen, disabled: true },
     { title: "Proof Vault", description: "Timestamp & verify your documents", href: "/proof-vault", icon: Shield, disabled: true },
     { title: "Embassy Forum", description: "Fellowship with the covenant community", href: "/forum", icon: Users, disabled: true },

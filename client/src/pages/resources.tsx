@@ -4,10 +4,38 @@ import HeroSection from "@/components/ui/hero-section";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
-import { FileText, Download, LogIn, UserPlus } from "lucide-react";
+import { FileText, Download, LogIn, UserPlus, Star, BookOpen, Archive } from "lucide-react";
 import DictionarySearch from "@/components/dictionary-search";
 import type { Resource } from "@shared/schema";
 import { usePageTitle } from "@/hooks/usePageTitle";
+
+// Display order and metadata for each tier
+const tierConfig: Record<string, { order: number; icon: typeof Star; subtitle: string; accent: string; cardBorder: string; cardBg: string }> = {
+  "Essential Reading": {
+    order: 1,
+    icon: Star,
+    subtitle: "Start here — foundational documents for understanding trusts, common law, and your lawful standing.",
+    accent: "text-yellow-600",
+    cardBorder: "border-yellow-200 hover:border-yellow-400",
+    cardBg: "bg-yellow-50/50",
+  },
+  "Core Trust & Legal Resources": {
+    order: 2,
+    icon: BookOpen,
+    subtitle: "Working documents — trust templates, banking law, legal identity, and administration guides.",
+    accent: "text-covenant-gold",
+    cardBorder: "border-gray-100 hover:border-covenant-gold/30",
+    cardBg: "bg-white",
+  },
+  "Supplementary Reference": {
+    order: 3,
+    icon: Archive,
+    subtitle: "Supporting material — dictionaries, historical legislation, and additional reference documents.",
+    accent: "text-gray-500",
+    cardBorder: "border-gray-100 hover:border-gray-300",
+    cardBg: "bg-white",
+  },
+};
 
 export default function Resources() {
   usePageTitle("Resources");
@@ -27,21 +55,16 @@ export default function Resources() {
     resourcesByCategory[resource.category].push(resource);
   });
 
-  const getFileTypeBadgeColor = (fileType: string) => {
-    switch (fileType.toLowerCase()) {
-      case 'pdf': return 'bg-red-100 text-red-800';
-      case 'audio': return 'bg-purple-100 text-purple-800';
-      case 'video': return 'bg-blue-100 text-blue-800';
-      case 'image': return 'bg-green-100 text-green-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
-  };
+  // Sort tiers by configured order
+  const sortedTiers = Object.entries(resourcesByCategory).sort(([a], [b]) => {
+    return (tierConfig[a]?.order ?? 99) - (tierConfig[b]?.order ?? 99);
+  });
 
   return (
     <div className="pt-16">
       <HeroSection
-        title="Freedom Resources"
-        description="Search Black's Law Dictionary and access covenant freedom tools"
+        title="Additional Educational Resources"
+        description="Search Black's Law Dictionary and access educational materials"
         backgroundImage="https://images.unsplash.com/photo-1543002588-bfa74002ed7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
       />
 
@@ -61,9 +84,9 @@ export default function Resources() {
             <>
               {/* Welcome Section for Authenticated Users */}
               <div className="text-center mb-16">
-                <h2 className="font-playfair text-3xl font-bold text-covenant-blue mb-4">Your Freedom Resources</h2>
+                <h2 className="font-playfair text-3xl font-bold text-covenant-blue mb-4">Your Educational Resources</h2>
                 <p className="text-lg text-covenant-gray max-w-3xl mx-auto">
-                  Access exclusive templates, guides, and tools to help you walk in complete covenant freedom.
+                  Access exclusive templates, guides, and educational materials to deepen your understanding.
                 </p>
               </div>
 
@@ -72,7 +95,7 @@ export default function Resources() {
                   <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-covenant-gold mx-auto mb-4"></div>
                   <p className="text-gray-600">Loading resources...</p>
                 </div>
-              ) : Object.keys(resourcesByCategory).length === 0 ? (
+              ) : sortedTiers.length === 0 ? (
                 <div className="text-center py-12">
                   <FileText className="h-16 w-16 text-gray-300 mx-auto mb-4" />
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">Resources Coming Soon</h3>
@@ -81,34 +104,53 @@ export default function Resources() {
                   </p>
                 </div>
               ) : (
-                <div className="grid lg:grid-cols-3 gap-8 mb-16">
-                  {Object.entries(resourcesByCategory).map(([category, resources]) => (
-                    <div key={category} className="bg-white p-8 rounded-xl shadow-lg">
-                      <div className="text-covenant-gold mb-6 text-center">
-                        <FileText className="h-10 w-10 mx-auto" />
+                <div className="space-y-16 mb-16">
+                  {sortedTiers.map(([category, resources]) => {
+                    const config = tierConfig[category] || tierConfig["Supplementary Reference"];
+                    const TierIcon = config.icon;
+
+                    return (
+                      <div key={category}>
+                        {/* Tier header */}
+                        <div className="mb-6">
+                          <div className="flex items-center gap-3 mb-2">
+                            <TierIcon className={`h-6 w-6 ${config.accent}`} />
+                            <h3 className="font-playfair text-2xl font-bold text-covenant-blue">{category}</h3>
+                            <Badge variant="outline" className="text-xs font-normal">{resources.length} documents</Badge>
+                          </div>
+                          <p className="text-sm text-gray-500 ml-9">{config.subtitle}</p>
+                        </div>
+
+                        {/* Resource cards */}
+                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                          {resources.map((resource) => (
+                            <a
+                              key={resource.id}
+                              href={resource.fileUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              download
+                              className={`block p-4 rounded-lg shadow-sm border hover:shadow-md transition-all ${config.cardBg} ${config.cardBorder}`}
+                            >
+                              <div className="flex items-start justify-between gap-2 mb-2">
+                                <span className="font-semibold text-covenant-blue text-sm leading-tight">{resource.title}</span>
+                                <Badge className="flex-shrink-0 bg-red-100 text-red-800 text-xs">
+                                  {resource.fileType.toUpperCase()}
+                                </Badge>
+                              </div>
+                              {resource.description && (
+                                <p className="text-xs text-gray-500 leading-relaxed mb-3">{resource.description}</p>
+                              )}
+                              <div className={`flex items-center text-xs font-medium ${config.accent}`}>
+                                <Download className="mr-1.5 flex-shrink-0" size={12} />
+                                Download PDF
+                              </div>
+                            </a>
+                          ))}
+                        </div>
                       </div>
-                      <h3 className="font-playfair text-2xl font-bold text-covenant-blue mb-4 text-center">{category}</h3>
-                      <div className="space-y-4">
-                        {resources.map((resource) => (
-                          <a
-                            key={resource.id}
-                            href={resource.fileUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center p-3 bg-covenant-light rounded-lg hover:bg-gray-100 transition-colors"
-                          >
-                            <Download className="text-covenant-gold mr-3 flex-shrink-0" size={16} />
-                            <div className="flex-1 min-w-0">
-                              <span className="text-covenant-gray text-sm">{resource.title}</span>
-                            </div>
-                            <Badge className={`ml-2 ${getFileTypeBadgeColor(resource.fileType)} text-xs`}>
-                              {resource.fileType.toUpperCase()}
-                            </Badge>
-                          </a>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </>
@@ -120,8 +162,8 @@ export default function Resources() {
                   <FileText className="h-16 w-16 text-gray-400 mx-auto mb-4" />
                   <h2 className="text-2xl font-bold text-gray-900 mb-2">Members Only</h2>
                   <p className="text-gray-600">
-                    Freedom Resources are exclusively available to members.
-                    Sign in or create an account to access your covenant freedom tools.
+                    Educational resources are exclusively available to members.
+                    Sign in or create an account to access additional materials.
                   </p>
                 </div>
 
