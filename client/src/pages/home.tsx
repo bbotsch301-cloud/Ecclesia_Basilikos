@@ -56,7 +56,7 @@ export default function Home() {
             animate={heroAnimate}
             transition={heroTransition(0.2)}
           >
-            You Were Meant to Live From Sonship
+            What Was Given in Love Is Now Held in Trust
           </motion.h2>
 
           <motion.p
