@@ -28,12 +28,12 @@ export default function Welcome() {
   if (!isAuthenticated || !user) return null;
 
   const pathways = [
-    { title: "Royal Academy", description: "Courses in trust, stewardship & covenant authority", href: "/courses", icon: BookOpen },
-    { title: "Freedom Resources", description: "Templates, guides & legal tools", href: "/resources", icon: FileText },
-    { title: "Proof Vault", description: "Timestamp & verify your documents", href: "/proof-vault", icon: Shield },
-    { title: "Embassy Forum", description: "Fellowship with the covenant community", href: "/forum", icon: Users },
-    { title: "Downloads", description: "Documents, declarations & resources", href: "/downloads", icon: Download },
-    { title: "My Courses", description: "Continue your learning journey", href: "/my-courses", icon: GraduationCap },
+    { title: "Downloads", description: "Documents, declarations & resources", href: "/downloads", icon: Download, disabled: false },
+    { title: "Freedom Resources", description: "Templates, guides & legal tools", href: "/resources", icon: FileText, disabled: false },
+    { title: "Royal Academy", description: "Courses in trust, stewardship & covenant authority", href: "/courses", icon: BookOpen, disabled: true },
+    { title: "Proof Vault", description: "Timestamp & verify your documents", href: "/proof-vault", icon: Shield, disabled: true },
+    { title: "Embassy Forum", description: "Fellowship with the covenant community", href: "/forum", icon: Users, disabled: true },
+    { title: "My Courses", description: "Continue your learning journey", href: "/my-courses", icon: GraduationCap, disabled: true },
   ];
 
   return (
@@ -63,17 +63,28 @@ export default function Welcome() {
 
         {/* Pathway Cards */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {pathways.map((p) => (
-            <Link key={p.href} href={p.href}>
-              <Card className="royal-card hover:border-royal-gold transition-all cursor-pointer h-full">
-                <CardContent className="p-8">
-                  <p.icon className="w-12 h-12 text-royal-burgundy mb-4" />
+          {pathways.map((p) => {
+            const card = (
+              <Card className={`royal-card transition-all h-full ${p.disabled ? "opacity-50 cursor-not-allowed" : "hover:border-royal-gold cursor-pointer"}`}>
+                <CardContent className="p-8 relative">
+                  {p.disabled && (
+                    <span className="absolute top-3 right-3 text-xs font-semibold bg-gray-200 text-gray-500 px-2 py-1 rounded-full">
+                      Coming Soon
+                    </span>
+                  )}
+                  <p.icon className={`w-12 h-12 mb-4 ${p.disabled ? "text-gray-400" : "text-royal-burgundy"}`} />
                   <h3 className="font-cinzel text-xl font-bold text-royal-navy mb-2">{p.title}</h3>
                   <p className="text-gray-600">{p.description}</p>
                 </CardContent>
               </Card>
-            </Link>
-          ))}
+            );
+
+            return p.disabled ? (
+              <div key={p.href}>{card}</div>
+            ) : (
+              <Link key={p.href} href={p.href}>{card}</Link>
+            );
+          })}
         </div>
 
         {user.role === 'admin' && (
