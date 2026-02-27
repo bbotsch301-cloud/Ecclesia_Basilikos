@@ -34,7 +34,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.p
-            className="font-cinzel text-xs md:text-sm tracking-[0.3em] uppercase text-royal-gold/80 mb-4"
+            className="font-cinzel text-xs md:text-sm tracking-[0.3em] uppercase text-white mb-4"
             initial={heroInitial}
             animate={heroAnimate}
             transition={heroTransition(0)}
