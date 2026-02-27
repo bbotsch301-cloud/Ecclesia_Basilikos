@@ -8,6 +8,7 @@ import {
 import { motion, useReducedMotion } from "framer-motion";
 import RevealOnScroll from "@/components/ui/reveal-on-scroll";
 import { usePageTitle } from "@/hooks/usePageTitle";
+import { useCtaHref } from "@/hooks/useCtaHref";
 import StaggerContainer, {
   staggerItemVariants,
   emphasisItemVariants,
@@ -15,6 +16,7 @@ import StaggerContainer, {
 
 export default function Home() {
   usePageTitle();
+  const ctaHref = useCtaHref();
   const shouldReduceMotion = useReducedMotion();
 
   const heroInitial = shouldReduceMotion ? {} : { opacity: 0, y: 30 };
@@ -55,7 +57,7 @@ export default function Home() {
             animate={heroAnimate}
             transition={heroTransition(0.4)}
           >
-            The New Covenant did not come to reform how you function within the old creation. It came to establish a new estate of life — one where identity, authority, provision, and security are received, not requested.
+            The New Covenant was not established to reform how you function within the old creation. It was established to inaugurate a new estate of life — one where identity, authority, provision, and security are received, not requested.
           </motion.p>
 
           <motion.div
@@ -76,7 +78,7 @@ export default function Home() {
             animate={heroAnimate}
             transition={heroTransition(1.0)}
           >
-            <Link href="/signup">
+            <Link href={ctaHref}>
               <Button
                 size="lg"
                 className="royal-button text-xl px-12 py-6 shadow-2xl hover:scale-105 transition-transform"
@@ -448,7 +450,7 @@ export default function Home() {
 
           <RevealOnScroll delay={0.8}>
             <div className="inline-block rounded-lg animate-glow-pulse">
-              <Link href="/signup">
+              <Link href={ctaHref}>
                 <Button
                   size="lg"
                   className="royal-button text-2xl px-16 py-8 shadow-2xl hover:scale-105 transition-transform"

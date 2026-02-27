@@ -6,9 +6,11 @@ import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { Crown, Scale, Shield, Globe, Scroll, Book } from "lucide-react";
 import { usePageTitle } from "@/hooks/usePageTitle";
+import { useCtaHref } from "@/hooks/useCtaHref";
 
 export default function Nation() {
   usePageTitle("Ecclesia Nation");
+  const ctaHref = useCtaHref();
   const citizenshipFeatures = [
     {
       icon: Crown,
@@ -72,7 +74,7 @@ export default function Nation() {
         }}
         primaryButton={{
           text: "Learn Kingdom Principles",
-          href: "/repository"
+          href: ctaHref
         }}
         secondaryButton={{
           text: "Read the Mandate",
@@ -236,7 +238,7 @@ export default function Nation() {
             Your citizenship is not derived from birth certificates or state registration. You are born again, sealed by the Spirit, and your name is written in the Lamb's Book of Life. Walk in the authority of your heavenly citizenship.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/courses">
+            <Link href={ctaHref}>
               <Button className="royal-button text-lg px-8 py-4" data-testid="button-join">
                 Begin Kingdom Training
               </Button>

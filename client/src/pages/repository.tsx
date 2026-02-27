@@ -3,10 +3,13 @@ import RoyalHero from "@/components/ui/royal-hero";
 import ComparisonCard from "@/components/ui/comparison-card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { comparisons, getFeaturedComparisons, getComparisonsByCategory } from "@shared/comparisonData";
+import { Link } from "wouter";
 import { usePageTitle } from "@/hooks/usePageTitle";
+import { useCtaHref } from "@/hooks/useCtaHref";
 
 export default function Repository() {
   usePageTitle("Repository");
+  const ctaHref = useCtaHref();
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'identity' | 'priesthood' | 'government' | 'economy' | 'legal'>('all');
   
   const featuredComparisons = getFeaturedComparisons();
@@ -101,11 +104,11 @@ export default function Repository() {
           <p className="text-xl text-gray-200 mb-8">
             Enroll in the Royal Academy to receive structured teaching on these foundational truths
           </p>
-          <a href="/courses">
+          <Link href={ctaHref}>
             <button className="royal-button text-lg px-8 py-4" data-testid="button-enroll">
               Enter the Royal Academy
             </button>
-          </a>
+          </Link>
         </div>
       </div>
     </div>

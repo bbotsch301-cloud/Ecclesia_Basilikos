@@ -5,9 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { Crown, Scroll, Shield, Flame } from "lucide-react";
 import { usePageTitle } from "@/hooks/usePageTitle";
+import { useCtaHref } from "@/hooks/useCtaHref";
 
 export default function Mandate() {
   usePageTitle("The Mandate");
+  const ctaHref = useCtaHref();
   return (
     <div className="pt-16">
       <RoyalHero
@@ -16,7 +18,7 @@ export default function Mandate() {
         description="Called out of Babylon to build the everlasting Kingdom that shall never be destroyed"
         primaryButton={{
           text: "Enter the Kingdom",
-          href: "/courses"
+          href: ctaHref
         }}
         secondaryButton={{
           text: "View Repository",
@@ -217,7 +219,7 @@ export default function Mandate() {
           </div>
 
           <div className="text-center">
-            <Link href="/courses">
+            <Link href={ctaHref}>
               <Button className="royal-button text-lg px-8 py-4" data-testid="button-answer-call">
                 Answer the Call
               </Button>
