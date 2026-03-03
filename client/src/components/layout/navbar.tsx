@@ -45,7 +45,7 @@ export default function Navbar() {
                 <Crown className="w-8 h-8 mr-3" />
               </div>
             </div>
-            <span className="font-cinzel-decorative font-bold text-xl text-royal-navy dark:text-royal-gold">
+            <span className="font-cinzel-decorative font-bold text-lg sm:text-xl text-royal-navy dark:text-royal-gold truncate max-w-[150px] xs:max-w-none">
               Ecclesia Basilikos
             </span>
           </Link>
