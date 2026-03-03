@@ -57,6 +57,8 @@ const AdminUsers = lazy(() => import("@/pages/admin-users"));
 const AdminContactMessages = lazy(() => import("@/pages/admin-contact-messages"));
 const AdminCourses = lazy(() => import("@/pages/admin-courses"));
 const AdminForum = lazy(() => import("@/pages/admin-forum"));
+const AdminNewsletter = lazy(() => import("@/pages/admin-newsletter"));
+const Dashboard = lazy(() => import("@/pages/dashboard"));
 
 function PageLoader() {
   return (
@@ -90,6 +92,7 @@ function Router() {
             <Route path="/downloads" component={Downloads} />
             <Route path="/new-covenant-intro" component={NewCovenantIntro} />
             <Route path="/courses">{() => <SectionErrorBoundary><Courses /></SectionErrorBoundary>}</Route>
+            <Route path="/dashboard">{() => <SectionErrorBoundary><Dashboard /></SectionErrorBoundary>}</Route>
             <Route path="/my-courses">{() => <SectionErrorBoundary><MyCourses /></SectionErrorBoundary>}</Route>
             <Route path="/course/:courseId">{() => <SectionErrorBoundary><CourseLesson /></SectionErrorBoundary>}</Route>
             <Route path="/course/:courseId/lesson/:lessonId">{() => <SectionErrorBoundary><CourseLesson /></SectionErrorBoundary>}</Route>
@@ -118,6 +121,7 @@ function Router() {
             <Route path="/admin/users">{() => <RequireAdmin><SectionErrorBoundary><AdminUsers /></SectionErrorBoundary></RequireAdmin>}</Route>
             <Route path="/admin/forum">{() => <RequireAdmin><SectionErrorBoundary><AdminForum /></SectionErrorBoundary></RequireAdmin>}</Route>
             <Route path="/admin/contacts">{() => <RequireAdmin><SectionErrorBoundary><AdminContactMessages /></SectionErrorBoundary></RequireAdmin>}</Route>
+            <Route path="/admin/newsletter">{() => <RequireAdmin><SectionErrorBoundary><AdminNewsletter /></SectionErrorBoundary></RequireAdmin>}</Route>
             <Route path="/admin">{() => <RequireAdmin><SectionErrorBoundary><AdminDashboard /></SectionErrorBoundary></RequireAdmin>}</Route>
             <Route component={NotFound} />
           </Switch>

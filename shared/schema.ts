@@ -766,3 +766,71 @@ export type VideoProgress = typeof videoProgress.$inferSelect;
 
 export type InsertSectionProgress = z.infer<typeof insertSectionProgressSchema>;
 export type SectionProgress = typeof sectionProgress.$inferSelect;
+
+// Comments (polymorphic for videos and lessons)
+export const comments = pgTable("comments", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  targetType: text("target_type").notNull(), // 'video' | 'lesson'
+  targetId: varchar("target_id").notNull(),
+  content: text("content").notNull(),
+  authorId: varchar("author_id").notNull().references(() => users.id),
+  isEdited: boolean("is_edited").default(false),
+  editedAt: timestamp("edited_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => [
+  index("comments_target_idx").on(table.targetType, table.targetId),
+  index("comments_author_id_idx").on(table.authorId),
+]);
+
+export const commentRelations = relations(comments, ({ one }) => ({
+  author: one(users, {
+    fields: [comments.authorId],
+    references: [users.id],
+  }),
+}));
+
+export const insertCommentSchema = createInsertSchema(comments).omit({
+  id: true,
+  isEdited: true,
+  editedAt: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type InsertComment = z.infer<typeof insertCommentSchema>;
+export type Comment = typeof comments.$inferSelect;
+
+// Newsletter Campaigns
+export const newsletter_campaigns = pgTable("newsletter_campaigns", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  subject: text("subject").notNull(),
+  body: text("body").notNull(),
+  status: text("status").default('draft'), // 'draft' | 'sent'
+  sentAt: timestamp("sent_at"),
+  recipientCount: integer("recipient_count"),
+  createdById: varchar("created_by_id").notNull().references(() => users.id),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => [
+  index("newsletter_campaigns_status_idx").on(table.status),
+]);
+
+export const newsletterCampaignRelations = relations(newsletter_campaigns, ({ one }) => ({
+  createdBy: one(users, {
+    fields: [newsletter_campaigns.createdById],
+    references: [users.id],
+  }),
+}));
+
+export const insertNewsletterCampaignSchema = createInsertSchema(newsletter_campaigns).omit({
+  id: true,
+  status: true,
+  sentAt: true,
+  recipientCount: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type InsertNewsletterCampaign = z.infer<typeof insertNewsletterCampaignSchema>;
+export type NewsletterCampaign = typeof newsletter_campaigns.$inferSelect;

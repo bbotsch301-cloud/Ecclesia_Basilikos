@@ -90,7 +90,7 @@ export default function Navbar() {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48">
-                  <DropdownMenuItem onClick={() => navigate("/welcome")}>
+                  <DropdownMenuItem onClick={() => navigate("/dashboard")}>
                     <Home className="w-4 h-4 mr-2" /> Dashboard
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => navigate("/profile")}>
@@ -187,7 +187,7 @@ export default function Navbar() {
                     {isAuthenticated && (
                       <>
                         <div className="border-t pt-4 mt-2">
-                          <Link href="/welcome" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">
+                          <Link href="/dashboard" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">
                             <Home className="w-4 h-4" /> Dashboard
                           </Link>
                           <Link href="/profile" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">

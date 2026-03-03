@@ -13,6 +13,7 @@ import {
   X,
   Eye,
   MessagesSquare,
+  Mail,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -25,6 +26,7 @@ const adminNav = [
   { name: "Content", href: "/admin/content", icon: FileText },
   { name: "Forum", href: "/admin/forum", icon: MessagesSquare },
   { name: "Contacts", href: "/admin/contacts", icon: MessageSquare },
+  { name: "Newsletter", href: "/admin/newsletter", icon: Mail },
   { name: "Trust Downloads", href: "/admin/trust-downloads", icon: Shield },
 ];
 

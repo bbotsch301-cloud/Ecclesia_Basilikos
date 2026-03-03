@@ -1045,6 +1045,99 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // ─── Dashboard ───
+
+  app.get("/api/dashboard/stats", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+      const stats = await storage.getDashboardStats(user.id);
+      const recentActivity = await storage.getRecentUserActivity(user.id, 10);
+      res.json({ ...stats, recentActivity });
+    } catch (error) {
+      logger.error({ err: error }, "Error fetching dashboard stats");
+      res.status(500).json({ error: "Failed to fetch dashboard stats" });
+    }
+  });
+
+  // ─── Comments ───
+
+  app.get("/api/comments", optionalAuth, async (req, res) => {
+    try {
+      const { targetType, targetId } = req.query;
+      if (!targetType || !targetId || typeof targetType !== 'string' || typeof targetId !== 'string') {
+        return res.status(400).json({ error: "targetType and targetId are required" });
+      }
+      const commentsList = await storage.getCommentsByTarget(targetType, targetId);
+      res.json(commentsList);
+    } catch (error) {
+      logger.error({ err: error }, "Error fetching comments");
+      res.status(500).json({ error: "Failed to fetch comments" });
+    }
+  });
+
+  app.post("/api/comments", requireAuth, forumLimiter, async (req, res) => {
+    try {
+      const user = req.user as User;
+      const { targetType, targetId, content } = z.object({
+        targetType: z.enum(['video', 'lesson']),
+        targetId: z.string().min(1),
+        content: z.string().min(1),
+      }).parse(req.body);
+
+      const comment = await storage.createComment({
+        targetType,
+        targetId,
+        content: sanitizeHtml(content),
+        authorId: user.id,
+      });
+      res.json({ success: true, comment });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ errors: error.errors });
+      }
+      logger.error({ err: error }, "Error creating comment");
+      res.status(500).json({ error: "Failed to create comment" });
+    }
+  });
+
+  app.put("/api/comments/:id", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+      const comment = await storage.getComment(req.params.id);
+      if (!comment) return res.status(404).json({ error: "Comment not found" });
+
+      const isOwner = comment.authorId === user.id;
+      const isMod = ['admin', 'moderator'].includes(user.role || '');
+      if (!isOwner && !isMod) return res.status(403).json({ error: "Not authorized" });
+
+      const { content } = z.object({ content: z.string().min(1) }).parse(req.body);
+      const updated = await storage.updateComment(req.params.id, { content: sanitizeHtml(content) });
+      res.json({ success: true, comment: updated });
+    } catch (error) {
+      if (error instanceof z.ZodError) return res.status(400).json({ errors: error.errors });
+      logger.error({ err: error }, "Error updating comment");
+      res.status(500).json({ error: "Failed to update comment" });
+    }
+  });
+
+  app.delete("/api/comments/:id", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+      const comment = await storage.getComment(req.params.id);
+      if (!comment) return res.status(404).json({ error: "Comment not found" });
+
+      const isOwner = comment.authorId === user.id;
+      const isMod = ['admin', 'moderator'].includes(user.role || '');
+      if (!isOwner && !isMod) return res.status(403).json({ error: "Not authorized" });
+
+      await storage.deleteComment(req.params.id);
+      res.json({ success: true });
+    } catch (error) {
+      logger.error({ err: error }, "Error deleting comment");
+      res.status(500).json({ error: "Failed to delete comment" });
+    }
+  });
+
   // ─── Global search ───
 
   app.get("/api/search", async (req, res) => {

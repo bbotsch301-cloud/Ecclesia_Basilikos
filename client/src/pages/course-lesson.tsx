@@ -20,6 +20,7 @@ import {
   Video
 } from "lucide-react";
 import ScriptureQuote from "@/components/ui/scripture-quote";
+import CommentSection from "@/components/CommentSection";
 
 interface Lesson {
   id: string;
@@ -343,6 +344,11 @@ function CourseLessonContent() {
                       </div>
                     </CardContent>
                   </Card>
+                )}
+
+                {/* Comments */}
+                {currentLesson && (
+                  <CommentSection targetType="lesson" targetId={currentLesson.id} />
                 )}
 
                 {/* Navigation */}

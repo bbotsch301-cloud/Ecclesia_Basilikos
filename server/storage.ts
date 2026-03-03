@@ -46,6 +46,10 @@ import {
   type Notification,
   type InsertNotification,
   type ThreadSubscription,
+  type Comment,
+  type InsertComment,
+  type NewsletterCampaign,
+  type InsertNewsletterCampaign,
   users,
   contacts,
   newsletter_subscribers,
@@ -69,7 +73,9 @@ import {
   sectionProgress,
   dictionaryEntries,
   notifications,
-  threadSubscriptions
+  threadSubscriptions,
+  comments,
+  newsletter_campaigns
 } from "@shared/schema";
 import { eq, and, desc, sql, or, inArray } from "drizzle-orm";
 import { db } from "./db";
@@ -238,6 +244,31 @@ export interface IStorage {
 
   // Public profile
   getPublicProfile(userId: string): Promise<{ user: any; threadCount: number; replyCount: number } | null>;
+
+  // Dashboard
+  getDashboardStats(userId: string): Promise<{
+    coursesInProgress: number;
+    coursesCompleted: number;
+    forumPosts: number;
+    videosWatched: number;
+  }>;
+  getRecentUserActivity(userId: string, limit?: number): Promise<any[]>;
+
+  // Comments
+  getCommentsByTarget(targetType: string, targetId: string): Promise<(Comment & { author: { id: string; firstName: string; lastName: string; username: string | null; role: string | null } })[]>;
+  createComment(data: InsertComment): Promise<Comment>;
+  getComment(id: string): Promise<Comment | undefined>;
+  updateComment(id: string, data: { content: string }): Promise<Comment>;
+  deleteComment(id: string): Promise<void>;
+
+  // Newsletter Campaigns
+  getAllNewsletterCampaigns(): Promise<NewsletterCampaign[]>;
+  getNewsletterCampaign(id: string): Promise<NewsletterCampaign | undefined>;
+  createNewsletterCampaign(data: InsertNewsletterCampaign): Promise<NewsletterCampaign>;
+  updateNewsletterCampaign(id: string, data: Partial<InsertNewsletterCampaign>): Promise<NewsletterCampaign>;
+  markNewsletterCampaignSent(id: string, recipientCount: number): Promise<NewsletterCampaign>;
+  deleteNewsletterCampaign(id: string): Promise<void>;
+  getAllNewsletterSubscribers(): Promise<Newsletter[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1371,6 +1402,194 @@ export class DatabaseStorage implements IStorage {
       threadCount: threadStats?.count || 0,
       replyCount: replyStats?.count || 0,
     };
+  }
+
+  // Dashboard
+  async getDashboardStats(userId: string): Promise<{
+    coursesInProgress: number;
+    coursesCompleted: number;
+    forumPosts: number;
+    videosWatched: number;
+  }> {
+    const [inProgressResult] = await db.select({ count: sql<number>`count(*)` })
+      .from(enrollments)
+      .where(and(eq(enrollments.userId, userId), sql`${enrollments.completedAt} IS NULL`));
+
+    const [completedResult] = await db.select({ count: sql<number>`count(*)` })
+      .from(enrollments)
+      .where(and(eq(enrollments.userId, userId), sql`${enrollments.completedAt} IS NOT NULL`));
+
+    const [threadCount] = await db.select({ count: sql<number>`count(*)` })
+      .from(forum_threads).where(eq(forum_threads.authorId, userId));
+
+    const [replyCount] = await db.select({ count: sql<number>`count(*)` })
+      .from(forum_replies).where(eq(forum_replies.authorId, userId));
+
+    const [videosResult] = await db.select({ count: sql<number>`count(*)` })
+      .from(videoProgress)
+      .where(and(eq(videoProgress.userId, userId), eq(videoProgress.isCompleted, true)));
+
+    return {
+      coursesInProgress: inProgressResult?.count || 0,
+      coursesCompleted: completedResult?.count || 0,
+      forumPosts: (threadCount?.count || 0) + (replyCount?.count || 0),
+      videosWatched: videosResult?.count || 0,
+    };
+  }
+
+  async getRecentUserActivity(userId: string, limit: number = 10): Promise<any[]> {
+    // Get recent enrollments
+    const recentEnrollments = await db.select({
+      id: enrollments.id,
+      type: sql<string>`'enrollment'`,
+      title: courses.title,
+      date: enrollments.enrolledAt,
+    })
+      .from(enrollments)
+      .innerJoin(courses, eq(enrollments.courseId, courses.id))
+      .where(eq(enrollments.userId, userId))
+      .orderBy(desc(enrollments.enrolledAt))
+      .limit(limit);
+
+    // Get recent forum threads
+    const recentThreads = await db.select({
+      id: forum_threads.id,
+      type: sql<string>`'forum_thread'`,
+      title: forum_threads.title,
+      date: forum_threads.createdAt,
+    })
+      .from(forum_threads)
+      .where(eq(forum_threads.authorId, userId))
+      .orderBy(desc(forum_threads.createdAt))
+      .limit(limit);
+
+    // Get recent forum replies
+    const recentReplies = await db.select({
+      id: forum_replies.id,
+      type: sql<string>`'forum_reply'`,
+      title: forum_threads.title,
+      date: forum_replies.createdAt,
+    })
+      .from(forum_replies)
+      .innerJoin(forum_threads, eq(forum_replies.threadId, forum_threads.id))
+      .where(eq(forum_replies.authorId, userId))
+      .orderBy(desc(forum_replies.createdAt))
+      .limit(limit);
+
+    // Get recent video watches
+    const recentVideos = await db.select({
+      id: videoProgress.id,
+      type: sql<string>`'video_watch'`,
+      title: videos.title,
+      date: videoProgress.lastWatchedAt,
+    })
+      .from(videoProgress)
+      .innerJoin(videos, eq(videoProgress.videoId, videos.id))
+      .where(eq(videoProgress.userId, userId))
+      .orderBy(desc(videoProgress.lastWatchedAt))
+      .limit(limit);
+
+    // Combine and sort by date
+    const allActivity = [
+      ...recentEnrollments,
+      ...recentThreads,
+      ...recentReplies,
+      ...recentVideos,
+    ].sort((a, b) => {
+      const dateA = a.date ? new Date(a.date).getTime() : 0;
+      const dateB = b.date ? new Date(b.date).getTime() : 0;
+      return dateB - dateA;
+    });
+
+    return allActivity.slice(0, limit);
+  }
+
+  // Comments
+  async getCommentsByTarget(targetType: string, targetId: string): Promise<(Comment & { author: { id: string; firstName: string; lastName: string; username: string | null; role: string | null } })[]> {
+    const results = await db
+      .select({
+        comment: comments,
+        author: {
+          id: users.id,
+          firstName: users.firstName,
+          lastName: users.lastName,
+          username: users.username,
+          role: users.role,
+        },
+      })
+      .from(comments)
+      .innerJoin(users, eq(comments.authorId, users.id))
+      .where(and(eq(comments.targetType, targetType), eq(comments.targetId, targetId)))
+      .orderBy(comments.createdAt);
+
+    return results.map(r => ({
+      ...r.comment,
+      author: r.author,
+    }));
+  }
+
+  async createComment(data: InsertComment): Promise<Comment> {
+    const [comment] = await db.insert(comments).values(data).returning();
+    return comment;
+  }
+
+  async getComment(id: string): Promise<Comment | undefined> {
+    const [comment] = await db.select().from(comments).where(eq(comments.id, id));
+    return comment;
+  }
+
+  async updateComment(id: string, data: { content: string }): Promise<Comment> {
+    const [comment] = await db.update(comments)
+      .set({ content: data.content, isEdited: true, editedAt: new Date(), updatedAt: new Date() })
+      .where(eq(comments.id, id))
+      .returning();
+    return comment;
+  }
+
+  async deleteComment(id: string): Promise<void> {
+    await db.delete(comments).where(eq(comments.id, id));
+  }
+
+  // Newsletter Campaigns
+  async getAllNewsletterCampaigns(): Promise<NewsletterCampaign[]> {
+    return await db.select().from(newsletter_campaigns)
+      .orderBy(desc(newsletter_campaigns.createdAt));
+  }
+
+  async getNewsletterCampaign(id: string): Promise<NewsletterCampaign | undefined> {
+    const [campaign] = await db.select().from(newsletter_campaigns)
+      .where(eq(newsletter_campaigns.id, id));
+    return campaign;
+  }
+
+  async createNewsletterCampaign(data: InsertNewsletterCampaign): Promise<NewsletterCampaign> {
+    const [campaign] = await db.insert(newsletter_campaigns).values(data).returning();
+    return campaign;
+  }
+
+  async updateNewsletterCampaign(id: string, data: Partial<InsertNewsletterCampaign>): Promise<NewsletterCampaign> {
+    const [campaign] = await db.update(newsletter_campaigns)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(newsletter_campaigns.id, id))
+      .returning();
+    return campaign;
+  }
+
+  async markNewsletterCampaignSent(id: string, recipientCount: number): Promise<NewsletterCampaign> {
+    const [campaign] = await db.update(newsletter_campaigns)
+      .set({ status: 'sent', sentAt: new Date(), recipientCount, updatedAt: new Date() })
+      .where(eq(newsletter_campaigns.id, id))
+      .returning();
+    return campaign;
+  }
+
+  async deleteNewsletterCampaign(id: string): Promise<void> {
+    await db.delete(newsletter_campaigns).where(eq(newsletter_campaigns.id, id));
+  }
+
+  async getAllNewsletterSubscribers(): Promise<Newsletter[]> {
+    return await db.select().from(newsletter_subscribers)
+      .orderBy(desc(newsletter_subscribers.subscribed_at));
   }
 }
 

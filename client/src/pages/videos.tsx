@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Play, Clock, X } from "lucide-react";
 import type { Video } from "@shared/schema";
 import { usePageTitle } from "@/hooks/usePageTitle";
+import CommentSection from "@/components/CommentSection";
 
 function getEmbedUrl(video: Video): string | null {
   if (video.embedUrl) {
@@ -242,6 +243,9 @@ export default function Videos() {
             })()}
             {selectedVideo?.description && (
               <p className="text-covenant-gray mt-4">{selectedVideo.description}</p>
+            )}
+            {selectedVideo && (
+              <CommentSection targetType="video" targetId={selectedVideo.id} />
             )}
           </div>
         </DialogContent>

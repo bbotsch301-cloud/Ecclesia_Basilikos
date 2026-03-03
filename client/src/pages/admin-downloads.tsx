@@ -30,6 +30,8 @@ import {
   Copy,
   RefreshCw,
   Filter,
+  Sparkles,
+  Loader2,
 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -76,6 +78,38 @@ function parseJsonArray(value: string | null | undefined): string[] {
     return value.split("\n").map(s => s.trim()).filter(Boolean);
   }
   return [];
+}
+
+function formatFileSize(bytes: number | null | undefined): string {
+  if (!bytes || bytes === 0) return "";
+  const units = ["B", "KB", "MB", "GB"];
+  let size = bytes;
+  let unitIndex = 0;
+  while (size >= 1024 && unitIndex < units.length - 1) {
+    size /= 1024;
+    unitIndex++;
+  }
+  return `${size % 1 === 0 ? size : size.toFixed(1)} ${units[unitIndex]}`;
+}
+
+function extensionToFileType(ext: string): string {
+  const map: Record<string, string> = {
+    pdf: "PDF",
+    doc: "DOC",
+    docx: "DOCX",
+    mp3: "MP3",
+    mp4: "MP4",
+  };
+  return map[ext.toLowerCase().replace(".", "")] || "";
+}
+
+function filenameToTitle(name: string): string {
+  // Remove extension, replace dashes/underscores with spaces, title-case
+  const withoutExt = name.replace(/\.[^.]+$/, "");
+  return withoutExt
+    .replace(/[-_]+/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase())
+    .trim();
 }
 
 function formatDate(dateStr: string | Date | null | undefined): string {
@@ -203,6 +237,54 @@ export default function AdminDownloads() {
       toast({ title: "Error", description: error.message || "Failed to toggle publish status", variant: "destructive" });
     },
   });
+
+  const [aiGenerating, setAiGenerating] = useState(false);
+
+  const handleAiGenerate = async () => {
+    const fileUrl = form.getValues("fileUrl");
+    const title = form.getValues("title");
+    const fileType = form.getValues("fileType");
+    const fileSize = form.getValues("fileSize");
+
+    if (!fileUrl) {
+      toast({ title: "Upload a file first", description: "Please upload a file before generating metadata.", variant: "destructive" });
+      return;
+    }
+
+    // Extract filename from URL
+    const fileName = fileUrl.split('/').pop() || fileUrl;
+
+    setAiGenerating(true);
+    try {
+      const res = await apiRequest('POST', '/api/admin/downloads/ai-generate', {
+        fileName,
+        fileType: fileType || 'PDF',
+        fileSize: fileSize || undefined,
+        title: title || undefined,
+      });
+      const metadata = await res.json();
+
+      // Populate form fields with AI-generated content
+      if (metadata.description) form.setValue("description", metadata.description);
+      if (metadata.category) form.setValue("category", metadata.category);
+      if (metadata.iconType) form.setValue("iconType", metadata.iconType);
+      if (metadata.whenToUse && Array.isArray(metadata.whenToUse)) {
+        form.setValue("whenToUse", metadata.whenToUse.join('\n'));
+      }
+      if (metadata.contents && Array.isArray(metadata.contents)) {
+        form.setValue("contents", metadata.contents.join('\n'));
+      }
+      if (metadata.whyItMatters) form.setValue("whyItMatters", metadata.whyItMatters);
+      if (metadata.scriptureText) form.setValue("scriptureText", metadata.scriptureText);
+      if (metadata.scriptureReference) form.setValue("scriptureReference", metadata.scriptureReference);
+
+      toast({ title: "AI Generated", description: "Content fields have been populated. Feel free to edit them." });
+    } catch (error: any) {
+      toast({ title: "AI Generation Failed", description: error.message || "Failed to generate metadata. Please try again or fill in manually.", variant: "destructive" });
+    } finally {
+      setAiGenerating(false);
+    }
+  };
 
   const closeDialog = () => {
     setDialogOpen(false);
@@ -1073,10 +1155,28 @@ export default function AdminDownloads() {
                             ? `/objects${objectPath.slice(uploadsIndex)}`
                             : `/objects${objectPath}`;
                           form.setValue("fileUrl", normalizedPath, { shouldValidate: true });
-                          toast({ title: "File uploaded", description: "File uploaded successfully" });
                         } catch {
                           form.setValue("fileUrl", uploadURL, { shouldValidate: true });
                         }
+
+                        // Auto-fill title from filename if empty
+                        if (!form.getValues("title") && uploadedFile.name) {
+                          form.setValue("title", filenameToTitle(uploadedFile.name));
+                        }
+
+                        // Auto-fill file type from extension
+                        const ext = uploadedFile.extension || uploadedFile.name?.split(".").pop() || "";
+                        const detectedType = extensionToFileType(ext);
+                        if (detectedType) {
+                          form.setValue("fileType", detectedType);
+                        }
+
+                        // Auto-fill file size
+                        if (uploadedFile.size) {
+                          form.setValue("fileSize", formatFileSize(uploadedFile.size));
+                        }
+
+                        toast({ title: "File uploaded", description: "File uploaded — title, type, and size auto-filled" });
                       }
                     }}
                   >
@@ -1085,6 +1185,23 @@ export default function AdminDownloads() {
                   </ObjectUploader>
                   <span className="text-sm text-gray-400">or</span>
                 </div>
+                {form.watch("fileUrl") && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={handleAiGenerate}
+                    disabled={aiGenerating}
+                    className="border-purple-300 text-purple-700 hover:bg-purple-50 dark:border-purple-600 dark:text-purple-400 dark:hover:bg-purple-950"
+                  >
+                    {aiGenerating ? (
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    ) : (
+                      <Sparkles className="h-4 w-4 mr-2" />
+                    )}
+                    {aiGenerating ? "Generating..." : "Generate with AI"}
+                  </Button>
+                )}
                 <FormField
                   control={form.control}
                   name="fileUrl"

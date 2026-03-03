@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { storage } from './storage';
 import { requireAuth, requireAdmin, requireModerator, requireInstructor, loadUser, auditLog } from './adminMiddleware';
 import { sendEmail, generateBulkEmailHtml } from './email';
+import { generateDownloadMetadata } from './ai';
 import logger from './logger';
 import {
   insertVideoSchema,
@@ -1037,6 +1038,217 @@ router.delete('/downloads/:id', requireAdmin, async (req, res) => {
   } catch (error) {
     logger.error({ err: error }, 'Error deleting download:');
     res.status(500).json({ error: 'Failed to delete download' });
+  }
+});
+
+// ================================
+// AI-GENERATED DOWNLOAD METADATA
+// ================================
+
+// Simple in-memory rate limiter for AI endpoint
+const aiRateLimits = new Map<string, number[]>();
+
+router.post('/downloads/ai-generate', requireAdmin, async (req, res) => {
+  try {
+    // Rate limiting: 5 requests per minute per user
+    const userId = req.user!.id;
+    const now = Date.now();
+    const windowMs = 60_000;
+    const maxRequests = 5;
+
+    const timestamps = aiRateLimits.get(userId) || [];
+    const recent = timestamps.filter(t => now - t < windowMs);
+
+    if (recent.length >= maxRequests) {
+      return res.status(429).json({ error: 'Too many AI generation requests. Please wait a minute.' });
+    }
+
+    recent.push(now);
+    aiRateLimits.set(userId, recent);
+
+    const { fileName, fileType, fileSize, title } = z.object({
+      fileName: z.string().min(1),
+      fileType: z.string().min(1),
+      fileSize: z.string().optional(),
+      title: z.string().optional(),
+    }).parse(req.body);
+
+    const metadata = await generateDownloadMetadata({ fileName, fileType, fileSize, title });
+    res.json(metadata);
+  } catch (error: any) {
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({ error: 'Invalid request data', details: error.errors });
+    }
+    logger.error({ err: error }, 'Error generating AI download metadata');
+    const message = error.message?.includes('ANTHROPIC_API_KEY')
+      ? 'AI service is not configured'
+      : 'Failed to generate metadata';
+    res.status(500).json({ error: message });
+  }
+});
+
+// ================================
+// NEWSLETTER CAMPAIGNS (ADMIN ONLY)
+// ================================
+
+// Get all newsletter subscribers
+router.get('/newsletter-subscribers', requireAdmin, async (req, res) => {
+  try {
+    const subscribers = await storage.getAllNewsletterSubscribers();
+    res.json({ subscribers, count: subscribers.length });
+  } catch (error) {
+    logger.error({ err: error }, 'Error fetching newsletter subscribers:');
+    res.status(500).json({ error: 'Failed to fetch subscribers' });
+  }
+});
+
+// Get all campaigns
+router.get('/newsletter-campaigns', requireAdmin, async (req, res) => {
+  try {
+    const campaigns = await storage.getAllNewsletterCampaigns();
+    res.json(campaigns);
+  } catch (error) {
+    logger.error({ err: error }, 'Error fetching newsletter campaigns:');
+    res.status(500).json({ error: 'Failed to fetch campaigns' });
+  }
+});
+
+// Create draft campaign
+router.post('/newsletter-campaigns', requireAdmin, async (req, res) => {
+  try {
+    const { subject, body } = z.object({
+      subject: z.string().min(1, 'Subject is required'),
+      body: z.string().min(1, 'Body is required'),
+    }).parse(req.body);
+
+    const campaign = await storage.createNewsletterCampaign({
+      subject,
+      body,
+      createdById: req.user!.id,
+    });
+
+    await auditLog(
+      req.user!.id,
+      'CREATE',
+      'NEWSLETTER_CAMPAIGN',
+      campaign.id,
+      null,
+      { subject },
+      req.ip,
+      req.get('User-Agent')
+    );
+
+    res.status(201).json(campaign);
+  } catch (error) {
+    if (error instanceof z.ZodError) return res.status(400).json({ errors: error.errors });
+    logger.error({ err: error }, 'Error creating newsletter campaign:');
+    res.status(500).json({ error: 'Failed to create campaign' });
+  }
+});
+
+// Get single campaign
+router.get('/newsletter-campaigns/:id', requireAdmin, async (req, res) => {
+  try {
+    const campaign = await storage.getNewsletterCampaign(req.params.id);
+    if (!campaign) return res.status(404).json({ error: 'Campaign not found' });
+    res.json(campaign);
+  } catch (error) {
+    logger.error({ err: error }, 'Error fetching newsletter campaign:');
+    res.status(500).json({ error: 'Failed to fetch campaign' });
+  }
+});
+
+// Update draft campaign
+router.put('/newsletter-campaigns/:id', requireAdmin, async (req, res) => {
+  try {
+    const campaign = await storage.getNewsletterCampaign(req.params.id);
+    if (!campaign) return res.status(404).json({ error: 'Campaign not found' });
+    if (campaign.status === 'sent') return res.status(400).json({ error: 'Cannot edit a sent campaign' });
+
+    const { subject, body } = z.object({
+      subject: z.string().min(1).optional(),
+      body: z.string().min(1).optional(),
+    }).parse(req.body);
+
+    const updated = await storage.updateNewsletterCampaign(req.params.id, { subject, body } as any);
+    res.json(updated);
+  } catch (error) {
+    if (error instanceof z.ZodError) return res.status(400).json({ errors: error.errors });
+    logger.error({ err: error }, 'Error updating newsletter campaign:');
+    res.status(500).json({ error: 'Failed to update campaign' });
+  }
+});
+
+// Send campaign
+router.post('/newsletter-campaigns/:id/send', requireAdmin, async (req, res) => {
+  try {
+    const campaign = await storage.getNewsletterCampaign(req.params.id);
+    if (!campaign) return res.status(404).json({ error: 'Campaign not found' });
+    if (campaign.status === 'sent') return res.status(400).json({ error: 'Campaign already sent' });
+
+    const subscribers = await storage.getAllNewsletterSubscribers();
+    if (subscribers.length === 0) {
+      return res.status(400).json({ error: 'No subscribers to send to' });
+    }
+
+    const emailBody = generateBulkEmailHtml(campaign.subject, campaign.body);
+    const bccList = subscribers.map(s => s.email).join(',');
+
+    const success = await sendEmail({
+      to: process.env.GMAIL_EMAIL || '',
+      subject: campaign.subject,
+      html: emailBody,
+      bcc: bccList,
+    });
+
+    if (!success) {
+      return res.status(500).json({ error: 'Failed to send campaign email' });
+    }
+
+    // Update campaign status
+    await storage.markNewsletterCampaignSent(req.params.id, subscribers.length);
+
+    await auditLog(
+      req.user!.id,
+      'CREATE',
+      'NEWSLETTER_SEND',
+      req.params.id,
+      null,
+      { subject: campaign.subject, recipientCount: subscribers.length },
+      req.ip,
+      req.get('User-Agent')
+    );
+
+    res.json({ success: true, recipientCount: subscribers.length });
+  } catch (error) {
+    logger.error({ err: error }, 'Error sending newsletter campaign:');
+    res.status(500).json({ error: 'Failed to send campaign' });
+  }
+});
+
+// Delete campaign
+router.delete('/newsletter-campaigns/:id', requireAdmin, async (req, res) => {
+  try {
+    const campaign = await storage.getNewsletterCampaign(req.params.id);
+    if (!campaign) return res.status(404).json({ error: 'Campaign not found' });
+
+    await storage.deleteNewsletterCampaign(req.params.id);
+
+    await auditLog(
+      req.user!.id,
+      'DELETE',
+      'NEWSLETTER_CAMPAIGN',
+      req.params.id,
+      { subject: campaign.subject },
+      null,
+      req.ip,
+      req.get('User-Agent')
+    );
+
+    res.json({ success: true });
+  } catch (error) {
+    logger.error({ err: error }, 'Error deleting newsletter campaign:');
+    res.status(500).json({ error: 'Failed to delete campaign' });
   }
 });
 
