@@ -60,6 +60,7 @@ const AdminDownloads = lazy(() => import("@/pages/admin-downloads"));
 const AdminUsers = lazy(() => import("@/pages/admin-users"));
 const AdminContactMessages = lazy(() => import("@/pages/admin-contact-messages"));
 const AdminCourses = lazy(() => import("@/pages/admin-courses"));
+const AdminCourseEditor = lazy(() => import("@/pages/admin-course-editor"));
 const AdminForum = lazy(() => import("@/pages/admin-forum"));
 const AdminNewsletter = lazy(() => import("@/pages/admin-newsletter"));
 const Dashboard = lazy(() => import("@/pages/dashboard"));
@@ -123,7 +124,8 @@ function Router() {
             {/* Admin routes - client-side gate + server-side requireAdmin middleware */}
             <Route path="/admin/content">{() => <RequireAdmin><SectionErrorBoundary><AdminContent /></SectionErrorBoundary></RequireAdmin>}</Route>
             <Route path="/admin/trust-downloads">{() => <RequireAdmin><SectionErrorBoundary><AdminTrustDownloads /></SectionErrorBoundary></RequireAdmin>}</Route>
-            <Route path="/admin/courses">{() => <RequireAdmin><SectionErrorBoundary><AdminCourses /></SectionErrorBoundary></RequireAdmin>}</Route>
+            <Route path="/admin/courses">{() => <RequireAdmin><SectionErrorBoundary><AdminCourseEditor /></SectionErrorBoundary></RequireAdmin>}</Route>
+            <Route path="/admin/courses/:courseId/edit">{() => <RequireAdmin><SectionErrorBoundary><AdminCourseEditor /></SectionErrorBoundary></RequireAdmin>}</Route>
             <Route path="/admin/videos">{() => <RequireAdmin><SectionErrorBoundary><AdminVideos /></SectionErrorBoundary></RequireAdmin>}</Route>
             <Route path="/admin/downloads">{() => <RequireAdmin><SectionErrorBoundary><AdminDownloads /></SectionErrorBoundary></RequireAdmin>}</Route>
             <Route path="/admin/users">{() => <RequireAdmin><SectionErrorBoundary><AdminUsers /></SectionErrorBoundary></RequireAdmin>}</Route>

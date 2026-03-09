@@ -14,13 +14,14 @@ import {
   Eye,
   MessagesSquare,
   Mail,
+  Pencil,
 } from "lucide-react";
 import { useState } from "react";
 
 const adminNav = [
   { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { name: "Users", href: "/admin/users", icon: Users },
-  { name: "Courses", href: "/admin/courses", icon: BookOpen },
+  { name: "Course Editor", href: "/admin/courses", icon: Pencil },
   { name: "Videos & Resources", href: "/admin/videos", icon: Video },
   { name: "Downloads", href: "/admin/downloads", icon: Download },
   { name: "Content", href: "/admin/content", icon: FileText },
