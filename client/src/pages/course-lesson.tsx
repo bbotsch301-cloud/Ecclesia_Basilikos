@@ -1,4 +1,5 @@
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { useQuery } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { useParams, Link } from "wouter";
@@ -313,19 +314,31 @@ function CourseLessonContent() {
                     dark:prose-hr:border-gray-700
                   ">
                     <ReactMarkdown
+                      remarkPlugins={[remarkGfm]}
                       components={{
                         table: ({ children }) => (
-                          <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700 my-6">
-                            <table className="min-w-full">{children}</table>
+                          <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700 my-6 shadow-sm">
+                            <table className="min-w-full border-collapse">{children}</table>
                           </div>
                         ),
+                        thead: ({ children }) => (
+                          <thead className="bg-royal-navy dark:bg-gray-800">{children}</thead>
+                        ),
+                        tbody: ({ children }) => (
+                          <tbody className="divide-y divide-gray-100 dark:divide-gray-800">{children}</tbody>
+                        ),
+                        tr: ({ children }) => (
+                          <tr className="even:bg-gray-50 dark:even:bg-gray-900/50 hover:bg-gray-100 dark:hover:bg-gray-800/50 transition-colors">
+                            {children}
+                          </tr>
+                        ),
                         th: ({ children }) => (
-                          <th className="px-4 py-3 text-left text-sm font-cinzel font-semibold bg-royal-navy text-white first:rounded-tl-lg last:rounded-tr-lg">
+                          <th className="px-4 py-3 text-left text-sm font-cinzel font-semibold text-white whitespace-nowrap">
                             {children}
                           </th>
                         ),
                         td: ({ children }) => (
-                          <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300 border-b border-gray-100 dark:border-gray-800">
+                          <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">
                             {children}
                           </td>
                         ),
@@ -360,8 +373,13 @@ function CourseLessonContent() {
                             {children}
                           </strong>
                         ),
+                        em: ({ children }) => (
+                          <em className="italic text-gray-600 dark:text-gray-400">
+                            {children}
+                          </em>
+                        ),
                         ul: ({ children }) => (
-                          <ul className="my-4 space-y-2 list-none pl-0">
+                          <ul className="my-4 space-y-2 list-disc pl-6 marker:text-royal-gold">
                             {children}
                           </ul>
                         ),
@@ -371,9 +389,8 @@ function CourseLessonContent() {
                           </ol>
                         ),
                         li: ({ children }) => (
-                          <li className="text-gray-700 dark:text-gray-300 leading-relaxed pl-1 flex items-start gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-royal-gold mt-2.5 shrink-0" />
-                            <span className="flex-1">{children}</span>
+                          <li className="text-gray-700 dark:text-gray-300 leading-relaxed pl-1">
+                            {children}
                           </li>
                         ),
                         a: ({ href, children }) => (
@@ -383,6 +400,24 @@ function CourseLessonContent() {
                         ),
                         hr: () => (
                           <hr className="border-gray-200 dark:border-gray-700 my-8" />
+                        ),
+                        code: ({ children, className }) => {
+                          const isBlock = className?.includes('language-');
+                          if (isBlock) {
+                            return (
+                              <code className={`${className} text-sm`}>{children}</code>
+                            );
+                          }
+                          return (
+                            <code className="bg-gray-100 dark:bg-gray-800 text-red-700 dark:text-amber-400 px-1.5 py-0.5 rounded text-sm font-mono">
+                              {children}
+                            </code>
+                          );
+                        },
+                        pre: ({ children }) => (
+                          <pre className="bg-gray-900 text-gray-100 rounded-xl p-4 my-6 overflow-x-auto shadow-md text-sm">
+                            {children}
+                          </pre>
                         ),
                       }}
                     >

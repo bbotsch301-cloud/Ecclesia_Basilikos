@@ -42,7 +42,7 @@ A **trust** is a legal arrangement that separates **legal title** (ownership in 
 
 **Black's Law Dictionary (11th Edition)** defines "trust" as:
 
-> *"The right, enforceable solely in equity, to the beneficial enjoyment of property to which another person holds the legal title; a property interest held by one person (the trustee) at the request of another (the settlor) for the benefit of a third party (the beneficiary)."*
+> "The right, enforceable solely in equity, to the beneficial enjoyment of property to which another person holds the legal title; a property interest held by one person (the trustee) at the request of another (the settlor) for the benefit of a third party (the beneficiary)."
 
 When assets are properly held in trust:
 
@@ -58,7 +58,7 @@ The **Statute of Uses (1536), 27 Hen. VIII, c. 10** attempted to abolish uses bu
 
 **George Bogert, Trusts (6th Ed.):**
 
-> *"The trust is one of the most flexible instruments in the entire range of Anglo-American law. Its adaptability is limited only by the ingenuity of the draftsman and the requirements of public policy."*
+> "The trust is one of the most flexible instruments in the entire range of Anglo-American law. Its adaptability is limited only by the ingenuity of the draftsman and the requirements of public policy."
 
 ## Legal Framework
 
@@ -78,7 +78,7 @@ Trusts are primarily governed by:
 
 **Restatement (Third) of Trusts §2** — Definition:
 
-> *"A trust... is a fiduciary relationship with respect to property, arising from a manifestation of intention to create that relationship and subjecting the person who holds title to the property to duties to deal with it for the benefit of charity or for one or more persons, at least one of whom is not the sole trustee."*
+> "A trust... is a fiduciary relationship with respect to property, arising from a manifestation of intention to create that relationship and subjecting the person who holds title to the property to duties to deal with it for the benefit of charity or for one or more persons, at least one of whom is not the sole trustee."
 
 **Restatement (Third) of Trusts §5** — Creation:
 
@@ -108,7 +108,7 @@ Before diving into trust mechanics, it is essential to understand a foundational
 
 The **legal person** — the ALL CAPS NAME that appears on your birth certificate, Social Security card, and driver's license — is the entity that participates in commerce. This is the "person" that opens bank accounts, signs contracts, holds corporate titles, and interacts with government agencies. Your SSN, bank accounts, corporate entities, and credit profile all represent **commercial vessels** — they are instruments of the legal person, not the living individual.
 
-> *"You are in the world but not of the world."* — This theological principle directly parallels the sovereignty framework. The living man or woman exists on the land, while the legal person operates in the commercial system.
+> "You are in the world but not of the world." — This theological principle directly parallels the sovereignty framework. The living man or woman exists on the land, while the legal person operates in the commercial system.
 
 ### Commercial Vessels and Public Commerce
 
@@ -139,11 +139,11 @@ Every trust has three essential parties. Understanding their legal definitions, 
 
 **Black's Law Dictionary (11th Edition)** defines "settlor" as:
 
-> *"A person who creates a trust; one who transfers property to a trustee to hold subject to the terms of the trust. Also termed grantor; trustor; donor; creator."*
+> "A person who creates a trust; one who transfers property to a trustee to hold subject to the terms of the trust. Also termed grantor; trustor; donor; creator."
 
 **Restatement (Third) of Trusts §3:**
 
-> *"A trust can be created by any person having capacity to transfer the trust property."*
+> "A trust can be created by any person having capacity to transfer the trust property."
 
 ### Legal Requirements
 
@@ -181,11 +181,11 @@ A **grantor trust** is taxed to the grantor personally. A **non-grantor trust** 
 
 **Black's Law Dictionary (11th Edition)** defines "trustee" as:
 
-> *"One who holds the legal title to property for the benefit of another; the person appointed, or required by law, to execute a trust."*
+> "One who holds the legal title to property for the benefit of another; the person appointed, or required by law, to execute a trust."
 
 **Restatement (Third) of Trusts §31:**
 
-> *"A trustee is a person who holds property in a fiduciary capacity for the benefit of others."*
+> "A trustee is a person who holds property in a fiduciary capacity for the benefit of others."
 
 ### Fiduciary Duty
 
@@ -193,11 +193,11 @@ The trustee's duty is the highest duty known to law — the **fiduciary duty**. 
 
 **Black's Law Dictionary** defines "fiduciary" as:
 
-> *"A person who is required to act for the benefit of another person on all matters within the scope of their relationship; one who owes to another the duties of good faith, loyalty, due care, and disclosure."*
+> "A person who is required to act for the benefit of another person on all matters within the scope of their relationship; one who owes to another the duties of good faith, loyalty, due care, and disclosure."
 
 **Meinhard v. Salmon, 249 N.Y. 458 (1928)** (Chief Judge Cardozo):
 
-> *"A trustee is held to something stricter than the morals of the market place. Not honesty alone, but the punctilio of an honor the most sensitive, is then the standard of behavior."*
+> "A trustee is held to something stricter than the morals of the market place. Not honesty alone, but the punctilio of an honor the most sensitive, is then the standard of behavior."
 
 ### Specific Trustee Duties
 
@@ -224,17 +224,17 @@ A trustee who breaches fiduciary duty is personally liable for:
 
 **Bogert, Trusts and Trustees §541:**
 
-> *"The trustee who commits a breach of trust is personally liable for the consequences of the breach, whether or not the trustee acted in good faith."*
+> "The trustee who commits a breach of trust is personally liable for the consequences of the breach, whether or not the trustee acted in good faith."
 
 ## The Beneficiary
 
 **Black's Law Dictionary (11th Edition)** defines "beneficiary" as:
 
-> *"A person for whose benefit property is held in trust."*
+> "A person for whose benefit property is held in trust."
 
 **Restatement (Third) of Trusts §48:**
 
-> *"A person is a beneficiary of a trust if the settlor manifested an intention to give the person a beneficial interest in the trust property."*
+> "A person is a beneficiary of a trust if the settlor manifested an intention to give the person a beneficial interest in the trust property."
 
 ### Beneficiary's Rights
 
@@ -258,15 +258,15 @@ Under the **Uniform Trust Code §813** and common law:
 
 **Restatement (Third) of Trusts §58:**
 
-> *"A spendthrift provision is valid if it restrains both voluntary and involuntary transfer of a beneficiary's interest."*
+> "A spendthrift provision is valid if it restrains both voluntary and involuntary transfer of a beneficiary's interest."
 
 **UTC §502(a):**
 
-> *"A spendthrift provision is valid only if it restrains both voluntary and involuntary transfer of a beneficiary's interest."*
+> "A spendthrift provision is valid only if it restrains both voluntary and involuntary transfer of a beneficiary's interest."
 
 A spendthrift clause prevents creditors of the beneficiary from reaching trust assets. This is one of the most powerful asset protection features of a properly drafted trust. The clause typically reads:
 
-> *"No interest in the income or principal of this trust shall be anticipated, assigned, encumbered, or subject to any creditor's claim or to legal process prior to its actual receipt by the beneficiary."*
+> "No interest in the income or principal of this trust shall be anticipated, assigned, encumbered, or subject to any creditor's claim or to legal process prior to its actual receipt by the beneficiary."
 
 **Exceptions to spendthrift protection** (creditors who CAN reach trust assets despite spendthrift clause):
 - Child support and alimony obligations — **UTC §503(b)(1)**
@@ -284,7 +284,7 @@ The power of the trust lies in the **separation of legal and equitable title**:
 
 **Restatement (Third) of Trusts §42:**
 
-> *"Trust property is not subject to the personal obligations of the trustee."*
+> "Trust property is not subject to the personal obligations of the trustee."
 
 This separation is the engine of asset protection.
 
@@ -335,10 +335,10 @@ The separation of legal and equitable title (discussed above) is the mechanical 
 ### Definition
 
 **Black's Law Dictionary (11th Edition):**
-> *"Irrevocable trust: A trust that cannot be terminated by the settlor once it is created. In most states, a trust will be deemed irrevocable unless the settlor specifies otherwise."*
+> "Irrevocable trust: A trust that cannot be terminated by the settlor once it is created. In most states, a trust will be deemed irrevocable unless the settlor specifies otherwise."
 
 **UTC §602(a):**
-> *"Unless the terms of a trust expressly provide that the trust is revocable, the settlor may not revoke or amend the trust."*
+> "Unless the terms of a trust expressly provide that the trust is revocable, the settlor may not revoke or amend the trust."
 
 Note: Under the UTC (adopted by most states), **trusts are presumed irrevocable** unless the instrument says otherwise. This is the opposite of the common law rule in some jurisdictions.
 
@@ -372,10 +372,10 @@ The grantor may be treated as owner for tax purposes if sufficient control is re
 ### Definition
 
 **Restatement (Third) of Trusts §2, Comment a:**
-> *"An express trust is a trust created by the expressed intention of the owner of property... It is distinguished from trusts that arise by operation of law."*
+> "An express trust is a trust created by the expressed intention of the owner of property... It is distinguished from trusts that arise by operation of law."
 
 **Black's Law Dictionary:**
-> *"Express trust: A trust created with the settlor's express intent, usually declared in writing; a trust created by the direct and positive acts of the parties, by some writing, deed, or will, or oral declaration."*
+> "Express trust: A trust created with the settlor's express intent, usually declared in writing; a trust created by the direct and positive acts of the parties, by some writing, deed, or will, or oral declaration."
 
 ### Legal Characteristics
 
@@ -412,7 +412,7 @@ An express trust must satisfy four elements (the "four certainties" in tradition
 A common law trust is a trust that derives its authority not from statute but from centuries of common law precedent. It is sometimes called a "pure trust" or "unincorporated business organization."
 
 **Bogert, Trusts and Trustees §1:**
-> *"The common law trust is one of the most ancient institutions of English jurisprudence."*
+> "The common law trust is one of the most ancient institutions of English jurisprudence."
 
 ### Legal Characteristics
 
@@ -428,7 +428,7 @@ A common law trust is a trust that derives its authority not from statute but fr
 ### IRS Classification Warning
 
 **Treasury Regulation §301.7701-4(b):**
-> *"There are other arrangements which are known as trusts because the legal title to property is conveyed to trustees for the benefit of beneficiaries, but which are not classified as trusts for purposes of the Internal Revenue Code because they are not simply arrangements to protect or conserve the property for the beneficiaries..."*
+> "There are other arrangements which are known as trusts because the legal title to property is conveyed to trustees for the benefit of beneficiaries, but which are not classified as trusts for purposes of the Internal Revenue Code because they are not simply arrangements to protect or conserve the property for the beneficiaries..."
 
 The IRS may classify a common law trust as a **"business trust"** — taxed as a corporation — if it conducts business or has transferable beneficial interests. Proper structuring is essential.
 
@@ -448,7 +448,7 @@ This case is critical for anyone establishing a common law trust — the structu
 ### Definition
 
 **Black's Law Dictionary:**
-> *"Land trust: A land-ownership arrangement by which a trustee holds both legal and equitable title to the land while the beneficiary retains the power of direction and the right to manage and receive income from the property."*
+> "Land trust: A land-ownership arrangement by which a trustee holds both legal and equitable title to the land while the beneficiary retains the power of direction and the right to manage and receive income from the property."
 
 ### Legal Basis
 
@@ -481,12 +481,12 @@ Confirmed that a land trust conveys both legal and equitable title to the truste
 ### Definition
 
 **Restatement (Third) of Trusts §58:**
-> *"A spendthrift trust is a trust in which the settlor includes a provision that prevents the beneficiary from transferring his or her interest in the trust and also prevents creditors from attaching the trust assets to satisfy the beneficiary's debts."*
+> "A spendthrift trust is a trust in which the settlor includes a provision that prevents the beneficiary from transferring his or her interest in the trust and also prevents creditors from attaching the trust assets to satisfy the beneficiary's debts."
 
 ### Key Statute: UTC §502
 
-> *"(a) A spendthrift provision is valid only if it restrains both voluntary and involuntary transfer of a beneficiary's interest.*
-> *(b) A term of a trust providing that the interest of a beneficiary is held subject to a 'spendthrift trust,' or words of similar import, is sufficient to restrain both voluntary and involuntary transfer."*
+> "(a) A spendthrift provision is valid only if it restrains both voluntary and involuntary transfer of a beneficiary's interest.
+> (b) A term of a trust providing that the interest of a beneficiary is held subject to a 'spendthrift trust,' or words of similar import, is sufficient to restrain both voluntary and involuntary transfer."
 
 ### Exceptions (UTC §503)
 
@@ -601,11 +601,11 @@ When combined with the trust structures discussed in this course, PMAs create a 
 
 **Restatement (Third) of Trusts §40:**
 
-> *"Any interest in property that is transferable can be held in trust."*
+> "Any interest in property that is transferable can be held in trust."
 
 **Black's Law Dictionary** defines "trust property" (corpus or res) as:
 
-> *"Property that is held in trust; the body or principal of a trust."*
+> "Property that is held in trust; the body or principal of a trust."
 
 The principle is simple: **if it can be owned, it can be held in trust.** The trust property (also called the "corpus" or "res") can include any form of asset — real, personal, tangible, or intangible.
 
@@ -618,7 +618,7 @@ The principle is simple: **if it can be owned, it can be held in trust.** The tr
 **Recording:** The deed must be recorded in the county recorder's office where the property is located.
 
 **Example deed language:**
-> *"[Grantor Name] hereby conveys and warrants to [Trustee Name], as Trustee of the [Trust Name] Trust, dated [Date], the following described real property..."*
+> "[Grantor Name] hereby conveys and warrants to [Trustee Name], as Trustee of the [Trust Name] Trust, dated [Date], the following described real property..."
 
 **Legal considerations:**
 - **Title insurance** — notify your title insurance company; some policies require it
@@ -631,7 +631,7 @@ The principle is simple: **if it can be owned, it can be held in trust.** The tr
 **Transfer method:** Open a new account in the trust's name or re-title an existing account.
 
 **Account titling:**
-> *"[Trust Name] Trust, dated [Date], [Trustee Name], Trustee"*
+> "[Trust Name] Trust, dated [Date], [Trustee Name], Trustee"
 
 **Required documentation:** Banks typically require:
 - A copy of the trust instrument (or a **certification of trust** under **UTC §1013**)
@@ -650,7 +650,7 @@ The principle is simple: **if it can be owned, it can be held in trust.** The tr
 **Transfer method:** Complete a title transfer through your state's DMV, changing the title to the trustee of the trust.
 
 **New title should read:**
-> *"[Trustee Name], Trustee of the [Trust Name] Trust"*
+> "[Trustee Name], Trustee of the [Trust Name] Trust"
 
 **Insurance:** Notify your insurance company of the change in ownership. The trust (or trustee in trust capacity) should be the named insured.
 
@@ -661,7 +661,7 @@ The principle is simple: **if it can be owned, it can be held in trust.** The tr
 **Items include:** Furniture, art, jewelry, collectibles, equipment, tools, etc.
 
 **Example language:**
-> *"For good and valuable consideration, [Grantor] hereby transfers, assigns, and conveys to [Trustee], as Trustee of the [Trust Name] Trust, all right, title, and interest in the following personal property: [description]."*
+> "For good and valuable consideration, [Grantor] hereby transfers, assigns, and conveys to [Trustee], as Trustee of the [Trust Name] Trust, all right, title, and interest in the following personal property: [description]."
 
 ### 5. Intellectual Property
 
@@ -701,11 +701,11 @@ A trust without funded assets is an empty legal shell. The trust instrument, no 
 
 **Restatement (Third) of Trusts §2, Comment f:**
 
-> *"A trust cannot exist without trust property. A declaration of trust that does not identify specific property to be held in trust does not create a trust."*
+> "A trust cannot exist without trust property. A declaration of trust that does not identify specific property to be held in trust does not create a trust."
 
 **UTC §401:**
 
-> *"A trust may be created only to the extent there is trust property."*
+> "A trust may be created only to the extent there is trust property."
 
 ## Schedule of Trust Assets
 
@@ -739,12 +739,12 @@ Maintain a **Schedule of Trust Assets** — an exhibit to the trust instrument t
 ## What Is a Trust Instrument?
 
 **Black's Law Dictionary (11th Edition):**
-> *"Trust instrument: The document by which a trust is created; a document (such as a deed of trust or declaration of trust) that sets forth the terms under which the trust property is to be managed and distributed."*
+> "Trust instrument: The document by which a trust is created; a document (such as a deed of trust or declaration of trust) that sets forth the terms under which the trust property is to be managed and distributed."
 
 The trust instrument is the governing document of the trust. It is the law of the trust — every right, duty, power, and limitation flows from this document.
 
 **UTC §103(18):**
-> *"'Terms of a trust' means the manifestation of the settlor's intent regarding a trust's provisions as expressed in the trust instrument or as may be established by other evidence that would be admissible in a judicial proceeding."*
+> "'Terms of a trust' means the manifestation of the settlor's intent regarding a trust's provisions as expressed in the trust instrument or as may be established by other evidence that would be admissible in a judicial proceeding."
 
 ## Essential Components
 
@@ -752,25 +752,25 @@ The trust instrument is the governing document of the trust. It is the law of th
 
 The opening clause that manifests the settlor's intent to create the trust:
 
-> *"I, [Grantor Name], hereby declare and establish this Trust, and do hereby transfer and assign to [Trustee Name], as Trustee, the property described in Schedule A attached hereto, to be held, administered, and distributed in accordance with the following terms and provisions."*
+> "I, [Grantor Name], hereby declare and establish this Trust, and do hereby transfer and assign to [Trustee Name], as Trustee, the property described in Schedule A attached hereto, to be held, administered, and distributed in accordance with the following terms and provisions."
 
 **Restatement (Third) of Trusts §13:**
-> *"A trust is created only if the settlor properly manifests an intention to create a trust."*
+> "A trust is created only if the settlor properly manifests an intention to create a trust."
 
 ### 2. Name of the Trust
 
 The trust should have a clear, identifiable name:
 
-> *"This trust shall be known as the [Name] Trust, established on [Date]."*
+> "This trust shall be known as the [Name] Trust, established on [Date]."
 
 Avoid names that suggest the trust is a business entity, as this may affect IRS classification under **Treasury Regulation §301.7701-4**.
 
 ### 3. Statement of Purpose
 
-> *"The purpose of this Trust is to hold, manage, invest, and distribute the trust property for the benefit of the Beneficiaries named herein, and for such other lawful purposes as may be consistent with this instrument."*
+> "The purpose of this Trust is to hold, manage, invest, and distribute the trust property for the benefit of the Beneficiaries named herein, and for such other lawful purposes as may be consistent with this instrument."
 
 **Restatement (Third) of Trusts §27:**
-> *"A trust is valid only if its purpose is lawful, is not contrary to public policy, and is possible to achieve."*
+> "A trust is valid only if its purpose is lawful, is not contrary to public policy, and is possible to achieve."
 
 ### 4. Identification of Parties
 
@@ -781,16 +781,16 @@ Clearly identify all parties:
 **Beneficiaries:** Full legal names (or description of a class — "my children")
 
 **Restatement (Third) of Trusts §44:**
-> *"A trust is not created unless the beneficiaries are defined with reasonable certainty or the class of persons to benefit is described sufficiently to enable the court to identify them."*
+> "A trust is not created unless the beneficiaries are defined with reasonable certainty or the class of persons to benefit is described sufficiently to enable the court to identify them."
 
 ### 5. Trust Property (Corpus/Res)
 
 Reference to the trust property, typically via a Schedule:
 
-> *"The initial trust property consists of the assets listed on Schedule A attached hereto and incorporated by reference."*
+> "The initial trust property consists of the assets listed on Schedule A attached hereto and incorporated by reference."
 
 **UTC §401:**
-> *"A trust may be created only to the extent there is trust property."*
+> "A trust may be created only to the extent there is trust property."
 
 ### 6. Powers of the Trustee
 
@@ -805,7 +805,7 @@ Enumerate the trustee's powers specifically. Standard powers include:
 - Power to execute documents on behalf of the trust
 
 **UTC §815:**
-> *"A trustee, without authorization by the court, may exercise: (1) powers conferred by the terms of the trust; and (2) except as limited by the terms of the trust... all powers over the trust property which an unmarried competent owner has over individually owned property."*
+> "A trustee, without authorization by the court, may exercise: (1) powers conferred by the terms of the trust; and (2) except as limited by the terms of the trust... all powers over the trust property which an unmarried competent owner has over individually owned property."
 
 **Caution under Grantor Trust Rules:**
 Certain powers retained by the grantor may cause the trust to be classified as a grantor trust under **26 USC §§671-679**:
@@ -822,63 +822,63 @@ Certain powers retained by the grantor may cause the trust to be classified as a
 
 While duties arise by operation of law (see Lesson 2), explicitly stating them in the instrument provides clarity:
 
-> *"The Trustee shall administer this Trust in accordance with its terms and in the interest of the Beneficiaries. The Trustee shall exercise the care, skill, and caution of a reasonably prudent person."*
+> "The Trustee shall administer this Trust in accordance with its terms and in the interest of the Beneficiaries. The Trustee shall exercise the care, skill, and caution of a reasonably prudent person."
 
 ### 8. Distribution Terms
 
 The distribution provisions are the heart of the trust. Common standards include:
 
 **Mandatory distributions:**
-> *"The Trustee shall distribute all net income to the Beneficiary quarterly."*
+> "The Trustee shall distribute all net income to the Beneficiary quarterly."
 
 **Discretionary distributions:**
-> *"The Trustee may distribute principal as the Trustee deems advisable for the health, education, maintenance, and support of the Beneficiary."*
+> "The Trustee may distribute principal as the Trustee deems advisable for the health, education, maintenance, and support of the Beneficiary."
 
 The "HEMS" standard (**Health, Education, Maintenance, Support**) is significant because under **26 USC §2041** and **§2514**, a power limited by an ascertainable standard does not constitute a general power of appointment — preserving estate tax benefits.
 
 ### 9. Successor Trustee
 
-> *"In the event the Trustee is unable or unwilling to serve, [Successor Name] shall serve as Successor Trustee."*
+> "In the event the Trustee is unable or unwilling to serve, [Successor Name] shall serve as Successor Trustee."
 
 **UTC §704(c):**
-> *"If a vacancy occurs in a trusteeship, and the vacancy is not filled within a reasonable time, the court may appoint a successor trustee."*
+> "If a vacancy occurs in a trusteeship, and the vacancy is not filled within a reasonable time, the court may appoint a successor trustee."
 
 Always name at least one successor. Consider naming a process for appointing additional successors:
 
-> *"If no named successor trustee is able or willing to serve, the remaining beneficiaries, by majority vote, may appoint a successor trustee."*
+> "If no named successor trustee is able or willing to serve, the remaining beneficiaries, by majority vote, may appoint a successor trustee."
 
 ### 10. Governing Law
 
-> *"This Trust shall be governed by and construed in accordance with the laws of the State of [State], without regard to its conflict of laws principles."*
+> "This Trust shall be governed by and construed in accordance with the laws of the State of [State], without regard to its conflict of laws principles."
 
 This clause determines which state's trust law applies. Choose a state with favorable trust laws (e.g., South Dakota, Delaware, Nevada, and Alaska have particularly favorable trust statutes).
 
 ### 11. Amendment and Revocation
 
 **For a revocable trust:**
-> *"The Grantor reserves the right to amend, modify, or revoke this Trust, in whole or in part, by written instrument delivered to the Trustee."*
+> "The Grantor reserves the right to amend, modify, or revoke this Trust, in whole or in part, by written instrument delivered to the Trustee."
 
 **For an irrevocable trust:**
-> *"This Trust is irrevocable and may not be amended, modified, or revoked by the Grantor."*
+> "This Trust is irrevocable and may not be amended, modified, or revoked by the Grantor."
 
 **UTC §602(a):** Unless expressly stated as revocable, a trust is irrevocable.
 
 ### 12. Spendthrift Provision
 
-> *"No beneficiary shall have the power to anticipate, pledge, assign, or otherwise encumber his or her interest in the income or principal of this Trust. No interest of any beneficiary shall be subject to claims of creditors, or to attachment, execution, bankruptcy proceedings, or any other legal process."*
+> "No beneficiary shall have the power to anticipate, pledge, assign, or otherwise encumber his or her interest in the income or principal of this Trust. No interest of any beneficiary shall be subject to claims of creditors, or to attachment, execution, bankruptcy proceedings, or any other legal process."
 
 See Lesson 3 for full analysis of spendthrift protections under **UTC §502** and **Restatement (Third) §58**.
 
 ### 13. Severability
 
-> *"If any provision of this Trust is held invalid or unenforceable, the remaining provisions shall continue in full force and effect."*
+> "If any provision of this Trust is held invalid or unenforceable, the remaining provisions shall continue in full force and effect."
 
 ### 14. Signature and Execution
 
 The trust instrument must be signed by the grantor and, in most jurisdictions, by the trustee (acknowledging acceptance). Notarization is recommended though not always required.
 
 **Restatement (Third) of Trusts §15:**
-> *"No particular form of words or conduct is necessary for the creation of a trust. A trust may be created by a writing, by an oral statement, or by conduct."*
+> "No particular form of words or conduct is necessary for the creation of a trust. A trust may be created by a writing, by an oral statement, or by conduct."
 
 However, for real property, the **Statute of Frauds** (present in every state) requires a written instrument.
 
@@ -919,10 +919,10 @@ This combination — the trust instrument as the legal vessel, the PMA as the pr
 **"A trust without assets is an empty vessel."**
 
 **UTC §401:**
-> *"A trust may be created only to the extent there is trust property."*
+> "A trust may be created only to the extent there is trust property."
 
 **Restatement (Third) of Trusts §2, Comment f:**
-> *"A declaration of trust that does not identify specific property to be held in trust does not create a trust."*
+> "A declaration of trust that does not identify specific property to be held in trust does not create a trust."
 
 No matter how perfectly drafted the trust instrument, it protects nothing until assets are actually transferred into it. "Funding" the trust — the process of transferring assets from personal ownership to trust ownership — is the most critical step after creation.
 
@@ -934,7 +934,7 @@ No matter how perfectly drafted the trust instrument, it protects nothing until 
 Execute a deed (warranty deed, quitclaim deed, or grant deed) conveying the property from the grantor to the trustee.
 
 **Deed language:**
-> *"[Grantor], for good and valuable consideration, does hereby grant, bargain, sell, and convey to [Trustee Name], as Trustee of the [Trust Name] Trust dated [Date], the following described real property: [legal description]."*
+> "[Grantor], for good and valuable consideration, does hereby grant, bargain, sell, and convey to [Trustee Name], as Trustee of the [Trust Name] Trust dated [Date], the following described real property: [legal description]."
 
 **Step 2: Record the deed**
 File the deed with the county recorder's office. Recording provides constructive notice to the world of the trust's ownership.
@@ -959,7 +959,7 @@ Contact the bank and request the account be re-titled to the trust. Provide:
 Open a new account in the trust's name and transfer funds from the personal account.
 
 **Account title format:**
-> *"[Trust Name] Trust, dated [Date], [Trustee Name], Trustee"*
+> "[Trust Name] Trust, dated [Date], [Trustee Name], Trustee"
 
 **EIN Requirements:**
 - **Revocable/grantor trust:** May use grantor's SSN (no separate EIN required during grantor's lifetime)
@@ -985,7 +985,7 @@ Contact the brokerage firm to:
 
 Execute a **General Assignment of Personal Property:**
 
-> *"For good and valuable consideration, [Grantor] hereby assigns, transfers, and conveys to [Trustee Name], as Trustee of the [Trust Name] Trust dated [Date], all of Grantor's right, title, and interest in and to the personal property described in Schedule B attached hereto."*
+> "For good and valuable consideration, [Grantor] hereby assigns, transfers, and conveys to [Trustee Name], as Trustee of the [Trust Name] Trust dated [Date], all of Grantor's right, title, and interest in and to the personal property described in Schedule B attached hereto."
 
 Attach a detailed schedule listing each item.
 
@@ -1047,7 +1047,7 @@ After transferring each asset, verify:
 Creating and funding a trust is only the beginning. The trust must be **properly administered** on an ongoing basis, or its protections can be compromised — or worse, the trustee can face personal liability.
 
 **UTC §801:**
-> *"Upon acceptance of a trusteeship, the trustee shall administer the trust in good faith, in accordance with its terms and purposes and the interests of the beneficiaries, and in accordance with this [Code]."*
+> "Upon acceptance of a trusteeship, the trustee shall administer the trust in good faith, in accordance with its terms and purposes and the interests of the beneficiaries, and in accordance with this [Code]."
 
 ## Core Administrative Duties
 
@@ -1056,15 +1056,15 @@ Creating and funding a trust is only the beginning. The trust must be **properly
 Trust assets, income, and expenses must be **kept separate** from the trustee's personal assets.
 
 **UTC §810(d):**
-> *"A trustee shall keep adequate records of the administration of the trust."*
+> "A trustee shall keep adequate records of the administration of the trust."
 
 **Restatement (Third) of Trusts §83:**
-> *"A trustee has a duty to maintain clear, complete, and accurate books and records regarding the trust and its administration."*
+> "A trustee has a duty to maintain clear, complete, and accurate books and records regarding the trust and its administration."
 
 **Commingling prohibition:** If the trustee mixes trust funds with personal funds, the trust's legal protections may be pierced.
 
 **National Academy of Sciences v. Cambridge Trust Co., 370 Mass. 303 (1976):**
-> *"Commingling of trust and personal funds constitutes a breach of fiduciary duty."*
+> "Commingling of trust and personal funds constitutes a breach of fiduciary duty."
 
 ### 2. Conduct All Business in the Trust Name
 
@@ -1081,7 +1081,7 @@ The trust must have its own bank account(s). All trust income must be deposited 
 ### 4. Keep Accountings
 
 **UTC §813(c):**
-> *"A trustee shall send to the distributees or permissible distributees of trust income or principal, and to other qualified or nonqualified beneficiaries who request it, at least annually... a report of the trust property, liabilities, receipts, and disbursements."*
+> "A trustee shall send to the distributees or permissible distributees of trust income or principal, and to other qualified or nonqualified beneficiaries who request it, at least annually... a report of the trust property, liabilities, receipts, and disbursements."
 
 The accounting should include:
 - Beginning balance of all trust assets
@@ -1108,7 +1108,7 @@ The accounting should include:
 ### 6. Prudent Investment
 
 **UTC §901 (Uniform Prudent Investor Act):**
-> *"A trustee shall invest and manage trust assets as a prudent investor would, by considering the purposes, terms, distribution requirements, and other circumstances of the trust."*
+> "A trustee shall invest and manage trust assets as a prudent investor would, by considering the purposes, terms, distribution requirements, and other circumstances of the trust."
 
 **Key principles of the Prudent Investor Rule:**
 
@@ -1120,10 +1120,10 @@ The accounting should include:
 ### 7. Duty to Inform Beneficiaries
 
 **UTC §813(a):**
-> *"A trustee shall keep the qualified beneficiaries of the trust reasonably informed about the administration of the trust and of the material facts necessary for them to protect their interests."*
+> "A trustee shall keep the qualified beneficiaries of the trust reasonably informed about the administration of the trust and of the material facts necessary for them to protect their interests."
 
 **UTC §813(b):**
-> *"Within 60 days after accepting a trusteeship, the trustee shall notify the qualified beneficiaries of the acceptance and of the trustee's name, address, and telephone number."*
+> "Within 60 days after accepting a trusteeship, the trustee shall notify the qualified beneficiaries of the acceptance and of the trustee's name, address, and telephone number."
 
 ## Annual Trust Review Checklist
 
@@ -1158,12 +1158,12 @@ Conduct a thorough annual review:
 A trustee who acts in good faith may limit personal exposure:
 
 **UTC §1008:**
-> *"A term of a trust relieving a trustee of liability for breach of trust is unenforceable to the extent that it: (1) relieves the trustee of liability for breach of trust committed in bad faith or with reckless indifference; or (2) was inserted as the result of an abuse by the trustee of a fiduciary or confidential relationship."*
+> "A term of a trust relieving a trustee of liability for breach of trust is unenforceable to the extent that it: (1) relieves the trustee of liability for breach of trust committed in bad faith or with reckless indifference; or (2) was inserted as the result of an abuse by the trustee of a fiduciary or confidential relationship."
 
 This means **exculpation clauses** can protect against negligence but not against bad faith or reckless conduct.
 
 **UTC §1010:**
-> *"A trustee is personally liable for torts committed in the course of administering a trust, or for obligations arising from ownership or control of trust property, only if the trustee is personally at fault."*
+> "A trustee is personally liable for torts committed in the course of administering a trust, or for obligations arising from ownership or control of trust property, only if the trustee is personally at fault."
 
 ## Comprehensive Legal Authority
 

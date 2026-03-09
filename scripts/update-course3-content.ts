@@ -20,7 +20,7 @@ American law recognizes **two distinct types of citizenship** — a fact confirm
 
 **Black's Law Dictionary (11th Edition)** defines "citizen" as:
 
-> *"A person who, by either birth or naturalization, is a member of a political community, owing allegiance to the community and being entitled to enjoy all its civil rights and protections."*
+> "A person who, by either birth or naturalization, is a member of a political community, owing allegiance to the community and being entitled to enjoy all its civil rights and protections."
 
 But this general definition conceals a critical distinction that the Supreme Court has repeatedly addressed.
 
@@ -32,19 +32,19 @@ A **state citizen** is a person who is a citizen of one of the several states of
 
 **Black's Law Dictionary** defines "state citizen" as:
 
-> *"A person who is a citizen of a particular state and entitled to all the rights and privileges guaranteed to citizens of that state by its constitution."*
+> "A person who is a citizen of a particular state and entitled to all the rights and privileges guaranteed to citizens of that state by its constitution."
 
 ### Constitutional Basis
 
 **Article IV, Section 2, Clause 1** of the United States Constitution:
 
-> *"The Citizens of each State shall be entitled to all Privileges and Immunities of Citizens in the several States."*
+> "The Citizens of each State shall be entitled to all Privileges and Immunities of Citizens in the several States."
 
 This clause presupposes the existence of state citizens. It was ratified in 1788 — before the 14th Amendment (1868) and before any concept of "federal citizenship" existed in the Constitution.
 
 The **Privileges and Immunities Clause** was interpreted in **Corfield v. Coryell, 6 F. Cas. 546 (C.C.E.D. Pa. 1823)** by Justice Bushrod Washington (riding circuit), who described the "privileges and immunities" of state citizens as:
 
-> *"Protection by the government, the enjoyment of life and liberty, with the right to acquire and possess property of every kind, and to pursue and obtain happiness and safety... The right of a citizen of one state to pass through, or to reside in any other state, for purposes of trade, agriculture, professional pursuits, or otherwise."*
+> "Protection by the government, the enjoyment of life and liberty, with the right to acquire and possess property of every kind, and to pursue and obtain happiness and safety... The right of a citizen of one state to pass through, or to reside in any other state, for purposes of trade, agriculture, professional pursuits, or otherwise."
 
 ### Rights of State Citizens
 
@@ -68,7 +68,7 @@ A **federal citizen** (also called a "citizen of the United States" under the 14
 
 **14th Amendment, Section 1** (ratified 1868):
 
-> *"All persons born or naturalized in the United States, and subject to the jurisdiction thereof, are citizens of the United States and of the State wherein they reside."*
+> "All persons born or naturalized in the United States, and subject to the jurisdiction thereof, are citizens of the United States and of the State wherein they reside."
 
 ### Critical Phrase: "Subject to the Jurisdiction Thereof"
 
@@ -77,7 +77,7 @@ This phrase is the key to understanding federal citizenship. Not everyone born i
 **Elk v. Wilkins, 112 U.S. 94 (1884):**
 The Supreme Court held that a Native American born in the United States was **not** a citizen under the 14th Amendment because he was not "subject to the jurisdiction" of the United States at birth:
 
-> *"The persons declared to be citizens are 'all persons born or naturalized in the United States, and subject to the jurisdiction thereof.' The evident meaning of these last words is not merely subject in some respect or degree to the jurisdiction of the United States, but completely subject to their political jurisdiction and owing them direct and immediate allegiance."*
+> "The persons declared to be citizens are 'all persons born or naturalized in the United States, and subject to the jurisdiction thereof.' The evident meaning of these last words is not merely subject in some respect or degree to the jurisdiction of the United States, but completely subject to their political jurisdiction and owing them direct and immediate allegiance."
 
 This confirms that "subject to the jurisdiction" means **complete political subjection** — not mere physical presence.
 
@@ -87,11 +87,11 @@ This confirms that "subject to the jurisdiction" means **complete political subj
 
 This is the **most important case** on the distinction between state and federal citizenship. The Supreme Court explicitly held:
 
-> *"It is quite clear, then, that there is a citizenship of the United States, and a citizenship of a State, which are distinct from each other, and which depend upon different characteristics or circumstances in the individual."*
+> "It is quite clear, then, that there is a citizenship of the United States, and a citizenship of a State, which are distinct from each other, and which depend upon different characteristics or circumstances in the individual."
 
 The Court further held:
 
-> *"We think this distinction and its explicit recognition in this Amendment of great weight in this argument, because the next paragraph of this same section, which is the one mainly relied on by the plaintiffs in error, speaks only of privileges or immunities of citizens of the United States, and does not speak of those of citizens of the several States."*
+> "We think this distinction and its explicit recognition in this Amendment of great weight in this argument, because the next paragraph of this same section, which is the one mainly relied on by the plaintiffs in error, speaks only of privileges or immunities of citizens of the United States, and does not speak of those of citizens of the several States."
 
 **Key holding:** The 14th Amendment created a **new** category of citizenship — federal citizenship — which is separate and distinct from the pre-existing state citizenship. The privileges and immunities of federal citizens are **not the same** as the privileges and immunities of state citizens.
 
@@ -99,17 +99,17 @@ The Court further held:
 
 The Supreme Court reinforced the distinction:
 
-> *"We have in our political system a government of the United States and a government of each of the several States. Each one of these governments is distinct from the others, and each has citizens of its own who owe it allegiance, and whose rights, within its jurisdiction, it must protect."*
+> "We have in our political system a government of the United States and a government of each of the several States. Each one of these governments is distinct from the others, and each has citizens of its own who owe it allegiance, and whose rights, within its jurisdiction, it must protect."
 
-> *"The same person may be at the same time a citizen of the United States and a citizen of a State, but his rights of citizenship under one of these governments will be different from those he has under the other."*
+> "The same person may be at the same time a citizen of the United States and a citizen of a State, but his rights of citizenship under one of these governments will be different from those he has under the other."
 
 ### Minor v. Happersett, 88 U.S. (21 Wall.) 162 (1875)
 
 The Court defined citizenship prior to the 14th Amendment:
 
-> *"The Constitution does not, in words, say who shall be citizens of the several States... Additions might always be made to the citizenship of the United States in two ways: first, by birth, and second, by naturalization... new citizens may be born or they may be created by naturalization. The Constitution does not in terms prescribe who shall be... citizens of the United States."*
+> "The Constitution does not, in words, say who shall be citizens of the several States... Additions might always be made to the citizenship of the United States in two ways: first, by birth, and second, by naturalization... new citizens may be born or they may be created by naturalization. The Constitution does not in terms prescribe who shall be... citizens of the United States."
 
-> *"There cannot be a nation without a people. The very idea of a political community such as a nation is implies an association of persons for the promotion of their general welfare. Each one of the persons associated becomes a member of the nation formed by the association."*
+> "There cannot be a nation without a people. The very idea of a political community such as a nation is implies an association of persons for the promotion of their general welfare. Each one of the persons associated becomes a member of the nation formed by the association."
 
 ## Comparison Table
 
@@ -136,7 +136,7 @@ The right to travel freely and to possess a passport is well established:
 
 **Kent v. Dulles, 357 U.S. 116 (1958):**
 
-> *"The right to travel is a part of the 'liberty' of which the citizen cannot be deprived without due process of law under the Fifth Amendment."*
+> "The right to travel is a part of the 'liberty' of which the citizen cannot be deprived without due process of law under the Fifth Amendment."
 
 **Saenz v. Roe, 526 U.S. 489 (1999):**
 The Court recognized the right to travel as a component of the Privileges or Immunities Clause of the 14th Amendment.
@@ -201,7 +201,7 @@ You are simultaneously: **a physical being, a legal actor, and a spiritual being
 
 ### The Text
 
-> *"The Citizens of each State shall be entitled to all Privileges and Immunities of Citizens in the several States."*
+> "The Citizens of each State shall be entitled to all Privileges and Immunities of Citizens in the several States."
 
 ### Analysis
 
@@ -217,27 +217,27 @@ This clause, ratified in 1788, is the **original citizenship clause** of the Con
 
 Justice Bushrod Washington provided the most comprehensive early definition:
 
-> *"We feel no hesitation in confining these expressions to those privileges and immunities which are, in their nature, fundamental; which belong, of right, to the citizens of all free governments; and which have, at all times, been enjoyed by the citizens of the several states which compose this Union..."*
+> "We feel no hesitation in confining these expressions to those privileges and immunities which are, in their nature, fundamental; which belong, of right, to the citizens of all free governments; and which have, at all times, been enjoyed by the citizens of the several states which compose this Union..."
 
 He then enumerated:
 
-> *"What these fundamental principles are, it would perhaps be more tedious than difficult to enumerate. They may, however, be all comprehended under the following general heads: Protection by the government; the enjoyment of life and liberty, with the right to acquire and possess property of every kind, and to pursue and obtain happiness and safety; subject nevertheless to such restraints as the government may justly prescribe for the general good of the whole. The right of a citizen of one state to pass through, or to reside in any other state, for purposes of trade, agriculture, professional pursuits, or otherwise; to claim the benefit of the writ of habeas corpus; to institute and maintain actions of any kind in the courts of the state; to take, hold and dispose of property, either real or personal..."*
+> "What these fundamental principles are, it would perhaps be more tedious than difficult to enumerate. They may, however, be all comprehended under the following general heads: Protection by the government; the enjoyment of life and liberty, with the right to acquire and possess property of every kind, and to pursue and obtain happiness and safety; subject nevertheless to such restraints as the government may justly prescribe for the general good of the whole. The right of a citizen of one state to pass through, or to reside in any other state, for purposes of trade, agriculture, professional pursuits, or otherwise; to claim the benefit of the writ of habeas corpus; to institute and maintain actions of any kind in the courts of the state; to take, hold and dispose of property, either real or personal..."
 
 **Paul v. Virginia, 75 U.S. (8 Wall.) 168 (1869):**
 
-> *"The privileges and immunities secured to citizens of each State in the several States by the provision in question are those privileges and immunities which are common to the citizens in the latter States under their constitution and laws by virtue of their being citizens."*
+> "The privileges and immunities secured to citizens of each State in the several States by the provision in question are those privileges and immunities which are common to the citizens in the latter States under their constitution and laws by virtue of their being citizens."
 
 ## The 14th Amendment — A New Category of Citizenship
 
 ### The Full Text of Section 1
 
-> *"All persons born or naturalized in the United States, and subject to the jurisdiction thereof, are citizens of the United States and of the State wherein they reside. No State shall make or enforce any law which shall abridge the privileges or immunities of citizens of the United States; nor shall any State deprive any person of life, liberty, or property, without due process of law; nor deny to any person within its jurisdiction the equal protection of the laws."*
+> "All persons born or naturalized in the United States, and subject to the jurisdiction thereof, are citizens of the United States and of the State wherein they reside. No State shall make or enforce any law which shall abridge the privileges or immunities of citizens of the United States; nor shall any State deprive any person of life, liberty, or property, without due process of law; nor deny to any person within its jurisdiction the equal protection of the laws."
 
 ### Clause-by-Clause Analysis
 
 #### Citizenship Clause
 
-> *"All persons born or naturalized in the United States, and subject to the jurisdiction thereof, are citizens of the United States and of the State wherein they reside."*
+> "All persons born or naturalized in the United States, and subject to the jurisdiction thereof, are citizens of the United States and of the State wherein they reside."
 
 **Key phrase: "and subject to the jurisdiction thereof"**
 
@@ -245,21 +245,21 @@ This is not a throwaway phrase. It is a **limiting condition**. Not all persons 
 
 **Elk v. Wilkins, 112 U.S. 94 (1884):**
 
-> *"The evident meaning of these last words is not merely subject in some respect or degree to the jurisdiction of the United States, but completely subject to their political jurisdiction, and owing them direct and immediate allegiance."*
+> "The evident meaning of these last words is not merely subject in some respect or degree to the jurisdiction of the United States, but completely subject to their political jurisdiction, and owing them direct and immediate allegiance."
 
 The Court denied citizenship to John Elk, a Native American born within the geographical United States, because he was not "completely subject to" federal political jurisdiction at birth.
 
 **Senator Lyman Trumbull** (co-author of the 14th Amendment), during Senate debate (1866):
 
-> *"'Subject to the jurisdiction thereof' means 'not owing allegiance to anybody else.'"*
+> "'Subject to the jurisdiction thereof' means 'not owing allegiance to anybody else.'"
 
 **Senator Jacob Howard** (who introduced the amendment in the Senate):
 
-> *"This amendment which I have offered is simply declaratory of what I regard as the law of the land already, that every person born within the limits of the United States, and subject to their jurisdiction, is... a citizen of the United States. This will not, of course, include persons born in the United States who are foreigners, aliens, who belong to the families of ambassadors or foreign ministers accredited to the Government of the United States, but will include every other class of persons."*
+> "This amendment which I have offered is simply declaratory of what I regard as the law of the land already, that every person born within the limits of the United States, and subject to their jurisdiction, is... a citizen of the United States. This will not, of course, include persons born in the United States who are foreigners, aliens, who belong to the families of ambassadors or foreign ministers accredited to the Government of the United States, but will include every other class of persons."
 
 #### The Privileges or Immunities Clause
 
-> *"No State shall make or enforce any law which shall abridge the privileges or immunities of citizens of the United States."*
+> "No State shall make or enforce any law which shall abridge the privileges or immunities of citizens of the United States."
 
 Note the subtle but critical difference from Article IV:
 
@@ -273,9 +273,9 @@ Note the subtle but critical difference from Article IV:
 
 The Court held that the "privileges or immunities of citizens of the United States" (14th Amendment) are **much narrower** than the "Privileges and Immunities of Citizens in the several States" (Article IV):
 
-> *"Lest it should be said that no such privileges and immunities are to be found if those we have been considering are excluded, we venture to suggest some which owe their existence to the Federal government, its National character, its Constitution, or its laws.*
+> "Lest it should be said that no such privileges and immunities are to be found if those we have been considering are excluded, we venture to suggest some which owe their existence to the Federal government, its National character, its Constitution, or its laws.
 >
-> *The right to come to the seat of government to assert any claim... the right of free access to its seaports... to the sub-treasuries, land offices, and courts of justice in the several States... the right to use the navigable waters of the United States... the privilege of the writ of habeas corpus... the right to become a citizen of any State of the Union by a bona fide residence therein..."*
+> The right to come to the seat of government to assert any claim... the right of free access to its seaports... to the sub-treasuries, land offices, and courts of justice in the several States... the right to use the navigable waters of the United States... the privilege of the writ of habeas corpus... the right to become a citizen of any State of the Union by a bona fide residence therein..."
 
 These are **federal** privileges — far narrower than the fundamental rights of state citizens.
 
@@ -286,13 +286,13 @@ The 14th Amendment says citizens of "the State wherein they **reside**" — not 
 **Black's Law Dictionary** distinguishes:
 
 **Domicile:**
-> *"The place at which a person has been physically present and that the person regards as home; a person's true, fixed, principal, and permanent home, to which that person intends to return and remain even though currently residing elsewhere."*
+> "The place at which a person has been physically present and that the person regards as home; a person's true, fixed, principal, and permanent home, to which that person intends to return and remain even though currently residing elsewhere."
 
 **Residence:**
-> *"The act or fact of living in a given place for some time. The place where one actually lives, as distinguished from a domicile."*
+> "The act or fact of living in a given place for some time. The place where one actually lives, as distinguished from a domicile."
 
 **Restatement (Second) of Conflict of Laws §11:**
-> *"Domicile is a place, usually a person's home, to which the rules of Conflict of Laws sometimes accord determinative significance because of the person's identification with that place."*
+> "Domicile is a place, usually a person's home, to which the rules of Conflict of Laws sometimes accord determinative significance because of the person's identification with that place."
 
 The distinction matters: **domicile** establishes your permanent legal connection to a state. **Residence** is merely where you happen to be living at a given time. State citizenship is connected to **domicile**, not mere residence.
 
@@ -316,13 +316,13 @@ The Supreme Court held that domicile, not residence, determines a person's legal
 **Dred Scott v. Sandford, 60 U.S. (19 How.) 393 (1857):**
 Although overturned by the 14th Amendment on the specific question of Black citizenship, the case contains extensive discussion of the nature of citizenship. Chief Justice Taney wrote:
 
-> *"The words 'people of the United States' and 'citizens' are synonymous terms... They are what we familiarly call the 'sovereign people,' and every citizen is one of this people, and a constituent member of this sovereignty."*
+> "The words 'people of the United States' and 'citizens' are synonymous terms... They are what we familiarly call the 'sovereign people,' and every citizen is one of this people, and a constituent member of this sovereignty."
 
 This pre-14th Amendment understanding of citizenship as membership in the sovereign political community — the state — is instructive.
 
 **Boyd v. Nebraska ex rel. Thayer, 143 U.S. 135 (1892):**
 
-> *"A citizen of the United States is a citizen of the Federal Government and also a citizen of the State in which he resides... He is a citizen of the one, and a citizen of the other, under different characteristics."*
+> "A citizen of the United States is a citizen of the Federal Government and also a citizen of the State in which he resides... He is a citizen of the one, and a citizen of the other, under different characteristics."
 
 ## Jurisdiction as Spiritual Architecture
 
@@ -383,15 +383,15 @@ The Supreme Court, in a 5-4 decision by Justice Miller, **upheld the monopoly** 
 
 **On two distinct citizenships:**
 
-> *"It is quite clear, then, that there is a citizenship of the United States, and a citizenship of a State, which are distinct from each other, and which depend upon different characteristics or circumstances in the individual."*
+> "It is quite clear, then, that there is a citizenship of the United States, and a citizenship of a State, which are distinct from each other, and which depend upon different characteristics or circumstances in the individual."
 
 **On the purpose of the 14th Amendment:**
 
-> *"The most cursory glance at these articles discloses a unity of purpose, when taken in connection with the history of the times... We doubt very much whether any action of a State not directed by way of discrimination against the negroes as a class, or on account of their race, will ever be held to come within the purview of this provision."*
+> "The most cursory glance at these articles discloses a unity of purpose, when taken in connection with the history of the times... We doubt very much whether any action of a State not directed by way of discrimination against the negroes as a class, or on account of their race, will ever be held to come within the purview of this provision."
 
 **On the narrow scope of 14th Amendment privileges or immunities:**
 
-> *"Having shown that the privileges and immunities relied on in the argument are those which belong to citizens of the States as such, and that they are left to the State governments for security and protection, and not by this article placed under the special care of the Federal government, we may hold ourselves excused from defining the privileges and immunities of citizens of the United States which no State can abridge, until some case involving those privileges may make it necessary to do so."*
+> "Having shown that the privileges and immunities relied on in the argument are those which belong to citizens of the States as such, and that they are left to the State governments for security and protection, and not by this article placed under the special care of the Federal government, we may hold ourselves excused from defining the privileges and immunities of citizens of the United States which no State can abridge, until some case involving those privileges may make it necessary to do so."
 
 ### Significance
 This case establishes that:
@@ -410,13 +410,13 @@ The Supreme Court held that the rights in question — assembly, bearing arms �
 
 ### Key Passages
 
-> *"The government of the United States is one of delegated powers alone. Its authority is defined and limited by the Constitution. All powers not granted to it by that instrument are reserved to the States or the people."*
+> "The government of the United States is one of delegated powers alone. Its authority is defined and limited by the Constitution. All powers not granted to it by that instrument are reserved to the States or the people."
 
-> *"The right of the people peaceably to assemble for lawful purposes existed long before the adoption of the Constitution of the United States... It was not, therefore, a right granted to the people by the Constitution."*
+> "The right of the people peaceably to assemble for lawful purposes existed long before the adoption of the Constitution of the United States... It was not, therefore, a right granted to the people by the Constitution."
 
-> *"Citizens are the members of the political community to which they belong. They are the people who compose the community, and who, in their associated capacity, have established or submitted themselves to the dominion of a government for the promotion of their general welfare and the protection of their individual as well as their collective rights."*
+> "Citizens are the members of the political community to which they belong. They are the people who compose the community, and who, in their associated capacity, have established or submitted themselves to the dominion of a government for the promotion of their general welfare and the protection of their individual as well as their collective rights."
 
-> *"We have in our political system a government of the United States and a government of each of the several States. Each one of these governments is distinct from the others, and each has citizens of its own who owe it allegiance and whose rights, within its jurisdiction, it must protect. The same person may be at the same time a citizen of the United States and a citizen of a State, but his rights of citizenship under one of these governments will be different from those he has under the other."*
+> "We have in our political system a government of the United States and a government of each of the several States. Each one of these governments is distinct from the others, and each has citizens of its own who owe it allegiance and whose rights, within its jurisdiction, it must protect. The same person may be at the same time a citizen of the United States and a citizen of a State, but his rights of citizenship under one of these governments will be different from those he has under the other."
 
 ### Significance
 Cruikshank confirms:
@@ -435,9 +435,9 @@ The Supreme Court held that Elk was **not** a citizen under the 14th Amendment b
 
 ### Key Passages
 
-> *"The evident meaning of these last words is not merely subject in some respect or degree to the jurisdiction of the United States, but completely subject to their political jurisdiction, and owing them direct and immediate allegiance."*
+> "The evident meaning of these last words is not merely subject in some respect or degree to the jurisdiction of the United States, but completely subject to their political jurisdiction, and owing them direct and immediate allegiance."
 
-> *"Indians born within the territorial limits of the United States, members of, and owing immediate allegiance to, one of the Indian Tribes, (an alien, though dependent, power,) although in a geographical sense born in the United States, are no more 'born in the United States and subject to the jurisdiction thereof,' within the meaning of the first section of the Fourteenth Amendment, than the children of subjects of any foreign government born within the domain of that government."*
+> "Indians born within the territorial limits of the United States, members of, and owing immediate allegiance to, one of the Indian Tribes, (an alien, though dependent, power,) although in a geographical sense born in the United States, are no more 'born in the United States and subject to the jurisdiction thereof,' within the meaning of the first section of the Fourteenth Amendment, than the children of subjects of any foreign government born within the domain of that government."
 
 ### Significance
 This case is critical because it defines "subject to the jurisdiction thereof" as meaning **complete political subjection and direct allegiance**. This is not merely being physically present in or subject to the laws of the United States — it requires a political relationship of allegiance.
@@ -452,9 +452,9 @@ The Court held that while Minor was a citizen, citizenship did not automatically
 
 ### Key Passages
 
-> *"The Constitution does not in words say who shall be citizens of the several States... There cannot be a nation without a people. The very idea of a political community such as a nation is implies an association of persons for the promotion of their general welfare."*
+> "The Constitution does not in words say who shall be citizens of the several States... There cannot be a nation without a people. The very idea of a political community such as a nation is implies an association of persons for the promotion of their general welfare."
 
-> *"Whoever, then, was one of the people of either of these States when the Constitution of the United States was adopted, became ipso facto a citizen — a member of the nation created by its adoption. He was one of the persons associating together to form the nation, and was, consequently, one of its original citizens. As to this there has never been a doubt."*
+> "Whoever, then, was one of the people of either of these States when the Constitution of the United States was adopted, became ipso facto a citizen — a member of the nation created by its adoption. He was one of the persons associating together to form the nation, and was, consequently, one of its original citizens. As to this there has never been a doubt."
 
 ### Significance
 Minor confirms that:
@@ -469,9 +469,9 @@ This case is rightfully condemned for its holding that persons of African descen
 
 ### Relevant Passages on Citizenship
 
-> *"The words 'people of the United States' and 'citizens' are synonymous terms, and mean the same thing. They both describe the political body who, according to our republican institutions, form the sovereignty and who hold the power and conduct the Government through their representatives."*
+> "The words 'people of the United States' and 'citizens' are synonymous terms, and mean the same thing. They both describe the political body who, according to our republican institutions, form the sovereignty and who hold the power and conduct the Government through their representatives."
 
-> *"The question is simply this: Can a negro, whose ancestors were imported into this country, and sold as slaves, become a member of the political community formed and brought into existence by the Constitution of the United States?"*
+> "The question is simply this: Can a negro, whose ancestors were imported into this country, and sold as slaves, become a member of the political community formed and brought into existence by the Constitution of the United States?"
 
 ### Significance for This Course
 The case illustrates that citizenship, at the founding, was understood as **membership in a sovereign political community** — the state. It was not a grant from the federal government but a status arising from membership in the body politic.
@@ -484,7 +484,7 @@ The State Department denied a passport to Rockwell Kent due to his alleged Commu
 ### Holding
 The Supreme Court held that the right to travel is a liberty protected by the Fifth Amendment:
 
-> *"The right to travel is a part of the 'liberty' of which the citizen cannot be deprived without due process of law under the Fifth Amendment... Freedom of movement across frontiers in either direction, and inside frontiers as well, was a part of our heritage. Travel abroad, like travel within the country, may be necessary for a livelihood. It may be as close to the heart of the individual as the choice of what he eats, or wears, or reads. Freedom of movement is basic in our scheme of values."*
+> "The right to travel is a part of the 'liberty' of which the citizen cannot be deprived without due process of law under the Fifth Amendment... Freedom of movement across frontiers in either direction, and inside frontiers as well, was a part of our heritage. Travel abroad, like travel within the country, may be necessary for a livelihood. It may be as close to the heart of the individual as the choice of what he eats, or wears, or reads. Freedom of movement is basic in our scheme of values."
 
 ### Significance
 This case establishes that:
@@ -497,7 +497,7 @@ This case establishes that:
 ### Holding
 The Supreme Court struck down California's welfare residency requirement, holding that the right to travel has three components:
 
-> *"(1) the right of a citizen of one State to enter and to leave another State, (2) the right to be treated as a welcome visitor rather than an unfriendly alien when temporarily present in the second State, and (3) for those travelers who elect to become permanent residents, the right to be treated like other citizens of that State."*
+> "(1) the right of a citizen of one State to enter and to leave another State, (2) the right to be treated as a welcome visitor rather than an unfriendly alien when temporarily present in the second State, and (3) for those travelers who elect to become permanent residents, the right to be treated like other citizens of that State."
 
 The third component was grounded in the **Privileges or Immunities Clause of the 14th Amendment** — one of the few times the Court has given that clause significant effect.
 
@@ -528,11 +528,11 @@ The third component was grounded in the **Privileges or Immunities Clause of the
 
 **Restatement (Second) of Conflict of Laws §11:**
 
-> *"Domicile is a place, usually a person's home, to which the rules of Conflict of Laws sometimes accord determinative significance because of the person's identification with that place."*
+> "Domicile is a place, usually a person's home, to which the rules of Conflict of Laws sometimes accord determinative significance because of the person's identification with that place."
 
 **Black's Law Dictionary (11th Edition):**
 
-> *"Domicile: The place at which a person has been physically present and that the person regards as home; a person's true, fixed, principal, and permanent home, to which that person intends to return and remain even though currently residing elsewhere."*
+> "Domicile: The place at which a person has been physically present and that the person regards as home; a person's true, fixed, principal, and permanent home, to which that person intends to return and remain even though currently residing elsewhere."
 
 ## Domicile vs. Residence
 
@@ -549,16 +549,16 @@ This distinction is critical and has been recognized by every court in the count
 
 **Restatement (Second) of Conflict of Laws §18:**
 
-> *"To acquire a domicile of choice in a place, a person must be physically present there and must intend to make that place his home for the time at least."*
+> "To acquire a domicile of choice in a place, a person must be physically present there and must intend to make that place his home for the time at least."
 
 **Texas v. Florida, 306 U.S. 398 (1939):**
 The Supreme Court held that domicile, not residence, determines a person's legal home:
 
-> *"The domicile of a person is his legal home, and it is his fixed place of habitation."*
+> "The domicile of a person is his legal home, and it is his fixed place of habitation."
 
 **District of Columbia v. Murphy, 314 U.S. 441 (1941):**
 
-> *"Residence simply requires bodily presence as an inhabitant in a given place; domicile requires bodily presence in that place and also an intention to make it one's domicile."*
+> "Residence simply requires bodily presence as an inhabitant in a given place; domicile requires bodily presence in that place and also an intention to make it one's domicile."
 
 ## Two Elements of Domicile
 
@@ -585,7 +585,7 @@ You must intend to make the state your permanent home — the place you intend t
 
 **Mitchell v. United States, 88 U.S. (21 Wall.) 350 (1874):**
 
-> *"[T]he place where a man lives is properly taken to be his domicile until facts adduced establish the contrary... A change of domicile is an actual removal to another habitation in another jurisdiction, coupled with an intention of remaining there."*
+> "[T]he place where a man lives is properly taken to be his domicile until facts adduced establish the contrary... A change of domicile is an actual removal to another habitation in another jurisdiction, coupled with an intention of remaining there."
 
 ## The Declaration of Domicile
 
@@ -608,7 +608,7 @@ A proper declaration should include:
 
 ### Sample Language
 
-> *"I, [Full Legal Name], do hereby declare under penalty of perjury that my domicile is in the State of [State], located at [Address]. I have established this as my true, fixed, principal, and permanent home. I intend to reside here indefinitely and to return here whenever absent. I claim all rights, privileges, and immunities of a citizen of the State of [State]."*
+> "I, [Full Legal Name], do hereby declare under penalty of perjury that my domicile is in the State of [State], located at [Address]. I have established this as my true, fixed, principal, and permanent home. I intend to reside here indefinitely and to return here whenever absent. I claim all rights, privileges, and immunities of a citizen of the State of [State]."
 
 ## Common Mistakes in Domicile Establishment
 
@@ -632,7 +632,7 @@ Your domicile determines which state has **personal jurisdiction** over you for:
 
 **Milliken v. Meyer, 311 U.S. 457 (1940):**
 
-> *"Domicile in the state is alone sufficient to bring an absent defendant within the reach of the state's jurisdiction for purposes of a personal judgment by means of appropriate substituted service."*
+> "Domicile in the state is alone sufficient to bring an absent defendant within the reach of the state's jurisdiction for purposes of a personal judgment by means of appropriate substituted service."
 
 ## Choosing Your Vessels: From Public to Private
 
@@ -678,13 +678,13 @@ The **DS-11** is the Application for a U.S. Passport. It is filed by first-time 
 
 **Statutory authority:** Passports are issued under **22 USC §212**:
 
-> *"No passport shall be granted or issued to or verified for any other persons than those owing allegiance, whether citizens or not, to the United States."*
+> "No passport shall be granted or issued to or verified for any other persons than those owing allegiance, whether citizens or not, to the United States."
 
 Note the language: "persons... owing allegiance... to the United States." The statute encompasses citizens of the United States — including state citizens who are part of the Union.
 
 **8 USC §1101(a)(22):**
 
-> *"The term 'national of the United States' means (A) a citizen of the United States, or (B) a person who, though not a citizen of the United States, owes permanent allegiance to the United States."*
+> "The term 'national of the United States' means (A) a citizen of the United States, or (B) a person who, though not a citizen of the United States, owes permanent allegiance to the United States."
 
 ## Key Fields on the DS-11
 
@@ -782,10 +782,10 @@ Expedited processing: 2-3 weeks (additional fee)
 The right to a passport is well established:
 
 **Kent v. Dulles, 357 U.S. 116 (1958):**
-> *"The right to travel is a part of the 'liberty' of which the citizen cannot be deprived without due process of law under the Fifth Amendment."*
+> "The right to travel is a part of the 'liberty' of which the citizen cannot be deprived without due process of law under the Fifth Amendment."
 
 **Haig v. Agee, 453 U.S. 280 (1981):**
-> *"The freedom to travel outside the United States must be distinguished from the right to travel within the United States."*
+> "The freedom to travel outside the United States must be distinguished from the right to travel within the United States."
 
 The Court acknowledged that while Congress may impose some restrictions on international travel, the right to a passport is a protected liberty interest.
 
@@ -826,7 +826,7 @@ In law, **documentation creates evidence**. Without documentation, your status a
 
 **Federal Rules of Evidence, Rule 803(6)** — Records of a Regularly Conducted Activity:
 
-> *"A record of an act, event, condition, opinion, or diagnosis if: (A) the record was made at or near the time by — or from information transmitted by — someone with knowledge; (B) the record was kept in the course of a regularly conducted activity of a business, organization, occupation, or calling, whether or not for profit..."*
+> "A record of an act, event, condition, opinion, or diagnosis if: (A) the record was made at or near the time by — or from information transmitted by — someone with knowledge; (B) the record was kept in the course of a regularly conducted activity of a business, organization, occupation, or calling, whether or not for profit..."
 
 Your personal records, maintained consistently and contemporaneously, qualify as evidence under this rule.
 
@@ -852,7 +852,7 @@ Your personal records, maintained consistently and contemporaneously, qualify as
 
 **Sample declaration:**
 
-> *"DECLARATION OF DOMICILE*
+> "DECLARATION OF DOMICILE*
 >
 > *I, [Full Legal Name], being of lawful age and sound mind, do hereby make this Declaration of Domicile under penalty of perjury:*
 >
@@ -889,7 +889,7 @@ Your personal records, maintained consistently and contemporaneously, qualify as
 
 **Sample affidavit:**
 
-> *"AFFIDAVIT OF CITIZENSHIP STATUS*
+> "AFFIDAVIT OF CITIZENSHIP STATUS*
 >
 > *I, [Full Legal Name], being first duly sworn upon oath, do hereby depose and state:*
 >
@@ -978,7 +978,7 @@ A passport is **evidence** of your status — it is not the source of it. Your c
 
 **Minor v. Happersett, 88 U.S. 162 (1875):**
 
-> *"Whoever, then, was one of the people of either of these States when the Constitution of the United States was adopted, became ipso facto a citizen — a member of the nation created by its adoption."*
+> "Whoever, then, was one of the people of either of these States when the Constitution of the United States was adopted, became ipso facto a citizen — a member of the nation created by its adoption."
 
 Citizenship is a **status** — a legal standing that carries rights, privileges, and immunities. The passport is merely the government's acknowledgment of that status.
 
@@ -1105,7 +1105,7 @@ Once someone starts asking that question, they begin looking at money, law, iden
 
 The combination of all three pillars — **lawful money redemption**, **trust and asset protection**, and **state-citizen status** — creates a comprehensive framework for operating as a sovereign being **within** (but not unconsciously subject to) the current system.
 
-> *"We have many tools for cultivating outer sovereignty in the current paradigm. It does take some time and focus to learn the pathways to liberation, just as it takes time and attention to cultivate inner sovereignty."*
+> "We have many tools for cultivating outer sovereignty in the current paradigm. It does take some time and focus to learn the pathways to liberation, just as it takes time and attention to cultivate inner sovereignty."
 
 The passport is not the end of the journey — it is a milestone. The deeper work is ongoing: becoming conscious of every agreement you make, every structure you participate in, and every layer of authority you submit to. That is the true meaning of sovereignty.
 

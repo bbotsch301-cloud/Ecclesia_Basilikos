@@ -24,7 +24,7 @@ Lawful money is the constitutionally recognized currency of the United States �
 
 **Black's Law Dictionary (11th Edition)** defines "lawful money" as:
 
-> *"Money that is legal tender for the payment of debts; currency authorized by law. Specif., money that is not only a legally authorized medium of exchange but is also a medium that a creditor is compelled to accept in payment of a debt."*
+> "Money that is legal tender for the payment of debts; currency authorized by law. Specif., money that is not only a legally authorized medium of exchange but is also a medium that a creditor is compelled to accept in payment of a debt."
 
 This definition distinguishes lawful money from mere "legal tender." While all lawful money may serve as legal tender, not all legal tender constitutes lawful money. Federal Reserve Notes are legal tender under **31 USC §5103**, but they are classified as *obligations* — not money — under **12 USC §411**.
 
@@ -32,11 +32,11 @@ This definition distinguishes lawful money from mere "legal tender." While all l
 
 The power to coin money is vested exclusively in Congress under **Article I, Section 8, Clause 5** of the United States Constitution:
 
-> *"The Congress shall have Power... To coin Money, regulate the Value thereof, and of foreign Coin, and fix the Standard of Weights and Measures."*
+> "The Congress shall have Power... To coin Money, regulate the Value thereof, and of foreign Coin, and fix the Standard of Weights and Measures."
 
 The Framers understood "money" to mean gold and silver coin. **Article I, Section 10, Clause 1** reinforces this:
 
-> *"No State shall... make any Thing but gold and silver Coin a Tender in Payment of Debts."*
+> "No State shall... make any Thing but gold and silver Coin a Tender in Payment of Debts."
 
 The Supreme Court in **Hepburn v. Griswold, 75 U.S. (8 Wall.) 603 (1870)** initially held that Congress lacked the power to make paper notes legal tender for pre-existing debts. Although this was partially reversed in the **Legal Tender Cases** — **Knox v. Lee, 79 U.S. (12 Wall.) 457 (1871)** and **Juilliard v. Greenman, 110 U.S. 421 (1884)** — the Court never held that Federal Reserve Notes *are* money. The Court merely held that Congress had the power to *declare* them legal tender.
 
@@ -51,12 +51,12 @@ Federal Reserve Notes are defined by statute as **"obligations of the United Sta
 
 **Black's Law Dictionary** defines "obligation" as:
 
-> *"A legal or moral duty to do or not do something. A formal, binding agreement or acknowledgment of a liability to pay a certain amount or to do a certain thing for a particular person or set of persons."*
+> "A legal or moral duty to do or not do something. A formal, binding agreement or acknowledgment of a liability to pay a certain amount or to do a certain thing for a particular person or set of persons."
 
 ### Lawful Money
 Lawful money, by contrast, is non-debt currency. It is substance, not promise. Under the **Coinage Act of 1792 (1 Stat. 246)**, Congress established the dollar as a specific weight of silver:
 
-> *"The Dollar or Unit shall be of the value of a Spanish milled dollar as the same is now current, and to contain three hundred and seventy-one grains and four sixteenth parts of a grain of pure silver."*
+> "The Dollar or Unit shall be of the value of a Spanish milled dollar as the same is now current, and to contain three hundred and seventy-one grains and four sixteenth parts of a grain of pure silver."
 
 This definition has never been repealed. See also **31 USC §5112**, which authorizes the minting of gold and silver coins that remain lawful money of the United States.
 
@@ -141,7 +141,7 @@ Every claim in this course is supported by statute, case law, or established leg
 
 The complete text of **12 United States Code §411** reads:
 
-> *"Federal reserve notes, to be issued at the discretion of the Board of Governors of the Federal Reserve System for the purpose of making advances to Federal reserve banks through the Federal reserve agents as hereinafter set forth and for no other purpose, are authorized. The said notes shall be obligations of the United States and shall be receivable by all national and member banks and Federal reserve banks and for all taxes, customs, and other public dues. They shall be redeemed in lawful money on demand at the Treasury Department of the United States, in the city of Washington, District of Columbia, or at any Federal Reserve bank."*
+> "Federal reserve notes, to be issued at the discretion of the Board of Governors of the Federal Reserve System for the purpose of making advances to Federal reserve banks through the Federal reserve agents as hereinafter set forth and for no other purpose, are authorized. The said notes shall be obligations of the United States and shall be receivable by all national and member banks and Federal reserve banks and for all taxes, customs, and other public dues. They shall be redeemed in lawful money on demand at the Treasury Department of the United States, in the city of Washington, District of Columbia, or at any Federal Reserve bank."
 
 This statute is part of the **Federal Reserve Act of 1913 (38 Stat. 251)**, specifically **Section 16**. It has been codified at Title 12, Chapter 3, Subchapter XII of the United States Code.
 
@@ -149,7 +149,7 @@ This statute is part of the **Federal Reserve Act of 1913 (38 Stat. 251)**, spec
 
 ### Clause 1: Purpose and Authorization
 
-> *"Federal reserve notes, to be issued at the discretion of the Board of Governors of the Federal Reserve System for the purpose of making advances to Federal reserve banks through the Federal reserve agents as hereinafter set forth and for no other purpose, are authorized."*
+> "Federal reserve notes, to be issued at the discretion of the Board of Governors of the Federal Reserve System for the purpose of making advances to Federal reserve banks through the Federal reserve agents as hereinafter set forth and for no other purpose, are authorized."
 
 **Key legal points:**
 
@@ -159,7 +159,7 @@ This statute is part of the **Federal Reserve Act of 1913 (38 Stat. 251)**, spec
 
 ### Clause 2: Nature of the Obligation
 
-> *"The said notes shall be obligations of the United States and shall be receivable by all national and member banks and Federal reserve banks and for all taxes, customs, and other public dues."*
+> "The said notes shall be obligations of the United States and shall be receivable by all national and member banks and Federal reserve banks and for all taxes, customs, and other public dues."
 
 **Key legal points:**
 
@@ -171,7 +171,7 @@ This statute is part of the **Federal Reserve Act of 1913 (38 Stat. 251)**, spec
 
 ### Clause 3: The Right of Redemption
 
-> *"They shall be redeemed in lawful money on demand at the Treasury Department of the United States, in the city of Washington, District of Columbia, or at any Federal Reserve bank."*
+> "They shall be redeemed in lawful money on demand at the Treasury Department of the United States, in the city of Washington, District of Columbia, or at any Federal Reserve bank."
 
 **Key legal points:**
 
@@ -193,7 +193,7 @@ The Federal Reserve Act was signed by President Woodrow Wilson on **December 23,
 
 **Representative Charles A. Lindbergh Sr.** stated during the Congressional debates:
 
-> *"This Act establishes the most gigantic trust on earth. When the President signs this bill, the invisible government by the Monetary Power will be legalized."*
+> "This Act establishes the most gigantic trust on earth. When the President signs this bill, the invisible government by the Monetary Power will be legalized."
 
 The **Gold Reserve Act of 1934 (48 Stat. 337)** and **Executive Order 6102 (1933)** suspended gold redemption for individuals, but **did not repeal 12 USC §411**. The statute remains in full force. Redemption in lawful money continues through the demand mechanism.
 
@@ -264,13 +264,13 @@ Note the UCC's definition of money is functional ("medium of exchange") rather t
 ### Black's Law Dictionary Definitions
 
 **Federal Reserve Note:**
-> *"A form of currency issued by Federal Reserve Banks, constituting the predominant form of paper money in the United States."* — Black's Law Dictionary, 11th Ed.
+> "A form of currency issued by Federal Reserve Banks, constituting the predominant form of paper money in the United States." — Black's Law Dictionary, 11th Ed.
 
 **Note:**
-> *"A written promise by one party to pay money to another party or to bearer. A note is a two-party negotiable instrument."* — Black's Law Dictionary, 11th Ed.
+> "A written promise by one party to pay money to another party or to bearer. A note is a two-party negotiable instrument." — Black's Law Dictionary, 11th Ed.
 
 **Money:**
-> *"The medium of exchange authorized or adopted by a government as part of its currency; esp., domestic currency. Assets that can be easily converted to cash."* — Black's Law Dictionary, 11th Ed.
+> "The medium of exchange authorized or adopted by a government as part of its currency; esp., domestic currency. Assets that can be easily converted to cash." — Black's Law Dictionary, 11th Ed.
 
 Observe: A "note" is a *promise to pay money*. A Federal Reserve Note is therefore, by definition, a *promise to pay* — not the payment itself.
 
@@ -283,7 +283,7 @@ The distinction between Federal Reserve Notes and United States currency is visi
 
 These two seals represent two entirely different systems of money. The simplicity of the choice cannot be overstated:
 
-> *"It is so simple — just choose US Bank Notes, which are not subject to income tax."*
+> "It is so simple — just choose US Bank Notes, which are not subject to income tax."
 
 The challenge is not complexity — it is **awareness**. Most people never examine what they are holding or consider that they have a choice in the matter.
 
@@ -367,7 +367,7 @@ Modern coinage statutes (**31 USC §5112**) continue to authorize gold and silve
 **Bronson v. Rodes, 74 U.S. (7 Wall.) 229 (1868):**
 The Supreme Court held that a contract payable in gold or silver coin was enforceable on its terms, distinguishing coined money from paper currency:
 
-> *"Coin is money, and money is the standard of value… Legal tender notes are promises to pay dollars, not dollars themselves."*
+> "Coin is money, and money is the standard of value… Legal tender notes are promises to pay dollars, not dollars themselves."
 
 **Lane County v. Oregon, 74 U.S. (7 Wall.) 71 (1868):**
 The Court held that states could require taxes to be paid in gold and silver coin, recognizing that constitutional money and legal tender notes are distinct categories.
@@ -412,9 +412,9 @@ The Federal Reserve has acknowledged the nature of its notes in its own publicat
 
 **Federal Reserve Bank of Chicago, "Modern Money Mechanics" (1961, revised 1992):**
 
-> *"Neither paper currency nor deposits have value as commodities. Intrinsically, a dollar bill is just a piece of paper, deposits merely book entries."*
+> "Neither paper currency nor deposits have value as commodities. Intrinsically, a dollar bill is just a piece of paper, deposits merely book entries."
 
-> *"What, then, makes these instruments — checks, paper money, and coins — acceptable at face value in payment of all debts and for other monetary uses? Mainly, it is the confidence people have that they will be able to exchange such money for other financial assets and for real goods and services whenever they choose to do so."*
+> "What, then, makes these instruments — checks, paper money, and coins — acceptable at face value in payment of all debts and for other monetary uses? Mainly, it is the confidence people have that they will be able to exchange such money for other financial assets and for real goods and services whenever they choose to do so."
 
 This confirms that FRNs have no intrinsic value — their acceptance is based on confidence, not substance.
 
@@ -449,19 +449,19 @@ A **restrictive endorsement** is a legal mechanism under the **Uniform Commercia
 
 **UCC §3-206(a)** provides:
 
-> *"An endorsement limiting payment to a particular person or otherwise prohibiting further transfer or negotiation of the instrument is not effective to prevent further transfer or negotiation of the instrument."*
+> "An endorsement limiting payment to a particular person or otherwise prohibiting further transfer or negotiation of the instrument is not effective to prevent further transfer or negotiation of the instrument."
 
 **UCC §3-206(c)** provides:
 
-> *"If an instrument bears an endorsement... described in Section 4-201(b), the person who purchases the instrument has notice that the instrument has been deposited in a particular account."*
+> "If an instrument bears an endorsement... described in Section 4-201(b), the person who purchases the instrument has notice that the instrument has been deposited in a particular account."
 
 More specifically, **UCC §3-206(c)** addresses conditional and restrictive endorsements:
 
-> *"If an instrument bears an endorsement using words to the effect that payment is to be deposited to the account of a named person, the following rules apply..."*
+> "If an instrument bears an endorsement using words to the effect that payment is to be deposited to the account of a named person, the following rules apply..."
 
 **Black's Law Dictionary** defines "restrictive endorsement" as:
 
-> *"An endorsement that limits the further negotiability of an instrument. For example, 'for deposit only' or 'pay to [name] only.'"*
+> "An endorsement that limits the further negotiability of an instrument. For example, 'for deposit only' or 'pay to [name] only.'"
 
 The lawful money endorsement is a restrictive endorsement because it limits the nature of the payment — demanding redemption in lawful money rather than accepting Federal Reserve credit.
 
@@ -560,7 +560,7 @@ Record every endorsed deposit in a dedicated ledger (see Lesson 6):
 
 Send a **written notice** to your bank establishing your standing demand. This letter should state:
 
-> *"To [Bank Name]: This letter serves as my standing demand pursuant to 12 USC §411 that all deposits to my account [Account Number] be redeemed in lawful money of the United States. This demand applies to all current and future deposits. Please place this notice in my account file."*
+> "To [Bank Name]: This letter serves as my standing demand pursuant to 12 USC §411 that all deposits to my account [Account Number] be redeemed in lawful money of the United States. This demand applies to all current and future deposits. Please place this notice in my account file."
 
 Send this via **certified mail, return receipt requested** to establish proof of delivery.
 
@@ -591,7 +591,7 @@ If a bank questions your endorsement:
 
 **If a bank teller resists your indorsement**, use this phrase:
 
-> *"Are you dishonoring the check?"*
+> "Are you dishonoring the check?"
 
 This question invokes UCC terminology. Under the UCC, to "dishonor" an instrument is to refuse to pay or accept it. Banks are legally required to process properly endorsed instruments. By framing their resistance as a potential dishonor, you put them on notice that they may be violating their obligations.
 
@@ -643,7 +643,7 @@ Inconsistent practice undermines the legal presumption you are establishing. If 
 
 **Black's Law Dictionary** defines "election" as:
 
-> *"The exercise of a choice; the act of choosing from several possible rights or remedies."*
+> "The exercise of a choice; the act of choosing from several possible rights or remedies."
 
 Your endorsement is an election — a deliberate, documented choice to demand lawful money. Make it every time, without exception.
 
@@ -672,10 +672,10 @@ Your endorsement is an election — a deliberate, documented choice to demand la
 
 ### 26 USC §61 — Gross Income Defined
 
-> *"Except as otherwise provided in this subtitle, gross income means all income from whatever source derived, including (but not limited to) the following items:*
-> *(1) Compensation for services, including fees, commissions, fringe benefits, and similar items;*
-> *(2) Gross income derived from business;*
-> *(3) Gains derived from dealings in property..."*
+> "Except as otherwise provided in this subtitle, gross income means all income from whatever source derived, including (but not limited to) the following items:
+> (1) Compensation for services, including fees, commissions, fringe benefits, and similar items;
+> (2) Gross income derived from business;
+> (3) Gains derived from dealings in property..."
 
 This is the broadest possible definition. But note: the statute says **"all income"** — it does not say "all receipts" or "all money received." The Supreme Court has consistently distinguished between income and mere receipts.
 
@@ -685,29 +685,29 @@ The Supreme Court has defined income in several landmark cases:
 
 **Eisner v. Macomber, 252 U.S. 189 (1920):**
 
-> *"Income may be defined as the gain derived from capital, from labor, or from both combined, provided it be understood to include profit gained through a sale or conversion of capital assets."*
+> "Income may be defined as the gain derived from capital, from labor, or from both combined, provided it be understood to include profit gained through a sale or conversion of capital assets."
 
 Key word: **"gain."** Income is not all money received — it is the gain derived from an activity.
 
 **Commissioner v. Glenshaw Glass Co., 348 U.S. 426 (1955):**
 
-> *"Congress applied no limitations as to the source of taxable receipts, nor restrictive labels as to their nature. It intended to tax all gains except those specifically exempted."*
+> "Congress applied no limitations as to the source of taxable receipts, nor restrictive labels as to their nature. It intended to tax all gains except those specifically exempted."
 
 This broadened the definition to include windfall gains, but still uses the word **"gains"** — not "receipts."
 
 **Doyle v. Mitchell Bros., 247 U.S. 179 (1918):**
 
-> *"'Income' as used in the statute should be given a meaning so as not to include everything that comes in. The true function of the words 'gains' and 'profits' is to limit the meaning of the word 'income.'"*
+> "'Income' as used in the statute should be given a meaning so as not to include everything that comes in. The true function of the words 'gains' and 'profits' is to limit the meaning of the word 'income.'"
 
 ### The Revenue Connection
 
 **26 USC §7701(a)(9)** defines "United States" for purposes of the Internal Revenue Code:
 
-> *"The term 'United States' when used in a geographical sense includes only the States and the District of Columbia."*
+> "The term 'United States' when used in a geographical sense includes only the States and the District of Columbia."
 
 **26 USC §7701(a)(26)** defines "trade or business":
 
-> *"The term 'trade or business' includes the performance of the functions of a public office."*
+> "The term 'trade or business' includes the performance of the functions of a public office."
 
 Note the word "includes" — under statutory construction, this is a term of limitation, not expansion, when used in a definition. See **Montello Salt Co. v. Utah, 221 U.S. 452 (1911)**.
 
@@ -732,15 +732,15 @@ The theoretical framework connecting lawful money redemption to tax implications
 **Brushaber v. Union Pacific R.R., 240 U.S. 1 (1916):**
 The Supreme Court held that the 16th Amendment did not create a new taxing power but merely removed the requirement of apportionment for taxes on income. This means the income tax is an excise — a tax on a privilege.
 
-> *"The provisions of the Sixteenth Amendment conferred no new power of taxation, but simply prohibited the previous complete and plenary power of income taxation possessed by Congress from the beginning from being taken out of the category of indirect taxation."*
+> "The provisions of the Sixteenth Amendment conferred no new power of taxation, but simply prohibited the previous complete and plenary power of income taxation possessed by Congress from the beginning from being taken out of the category of indirect taxation."
 
 **Stanton v. Baltic Mining Co., 240 U.S. 103 (1916):**
 
-> *"The Sixteenth Amendment... does not extend the taxing power to new or excepted subjects."*
+> "The Sixteenth Amendment... does not extend the taxing power to new or excepted subjects."
 
 **Flint v. Stone Tracy Co., 220 U.S. 107 (1911):**
 
-> *"Excises are taxes laid upon the manufacture, sale or consumption of commodities within the country, upon licenses to pursue certain occupations and upon corporate privileges."*
+> "Excises are taxes laid upon the manufacture, sale or consumption of commodities within the country, upon licenses to pursue certain occupations and upon corporate privileges."
 
 If the income tax is an excise on a privilege, then the question becomes: what privilege is being taxed? The use of the Federal Reserve credit system — private credit — may constitute that privilege.
 
@@ -911,14 +911,14 @@ Since your lawful money practice relates to the characterization of income, inde
 
 Consider preparing an annual **affidavit** — a sworn statement under penalty of perjury — attesting to your lawful money practice:
 
-> *"I, [Your Full Name], being of lawful age and competent to testify, do hereby affirm under penalty of perjury that during the calendar year [Year]:*
+> "I, [Your Full Name], being of lawful age and competent to testify, do hereby affirm under penalty of perjury that during the calendar year [Year]:
 >
-> *1. I endorsed every negotiable instrument deposited to my accounts with the demand: 'Redeemed in Lawful Money Pursuant to Title 12 USC §411.'*
-> *2. I maintained a contemporaneous ledger of all such redemptions.*
-> *3. My standing demand for lawful money was on file with [Bank Name].*
-> *4. The total amount redeemed in lawful money was $[Amount].*
+> 1. I endorsed every negotiable instrument deposited to my accounts with the demand: 'Redeemed in Lawful Money Pursuant to Title 12 USC §411.'
+> 2. I maintained a contemporaneous ledger of all such redemptions.
+> 3. My standing demand for lawful money was on file with [Bank Name].
+> 4. The total amount redeemed in lawful money was $[Amount].
 >
-> *I declare under penalty of perjury under the laws of the United States of America that the foregoing is true and correct."*
+> I declare under penalty of perjury under the laws of the United States of America that the foregoing is true and correct."
 
 Under **28 USC §1746**, a declaration under penalty of perjury has the same legal force as a notarized affidavit when made within the United States.
 
@@ -961,7 +961,7 @@ If a bank teller questions the endorsement, request to speak with the branch man
 **No.** The demand for lawful money is a **legal election** — you are demanding that the funds be characterized as lawful money rather than Federal Reserve credit. You are not demanding physical delivery of coins.
 
 **Black's Law Dictionary** defines "redemption" as:
-> *"The act or an instance of reclaiming or regaining possession by paying a specific price; the payment of a defaulted mortgage debt by a borrower who does not want to lose the property."*
+> "The act or an instance of reclaiming or regaining possession by paying a specific price; the payment of a defaulted mortgage debt by a borrower who does not want to lose the property."
 
 In this context, redemption means converting the legal character of what you receive from private credit (FRN obligation) to lawful money. The demand itself accomplishes the redemption.
 
@@ -1001,7 +1001,7 @@ The Ninth Circuit acknowledged that Federal Reserve Notes are obligations, disti
 
 **Bronson v. Rodes, 74 U.S. (7 Wall.) 229 (1868):**
 The Supreme Court held that coined money and paper currency are legally distinct:
-> *"Coin is money, and money is the standard of value… Legal tender notes are promises to pay dollars, not dollars themselves."*
+> "Coin is money, and money is the standard of value… Legal tender notes are promises to pay dollars, not dollars themselves."
 
 **Lane County v. Oregon, 74 U.S. (7 Wall.) 71 (1868):**
 States may require taxes in gold and silver coin — recognizing the distinction between constitutional money and paper legal tender.
