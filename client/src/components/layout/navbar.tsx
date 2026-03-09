@@ -11,8 +11,9 @@ import SearchDialog from "@/components/SearchDialog";
 
 const navigation = [
   { name: "Home", href: "/" },
-  { name: "The Mandate", href: "/mandate" },
-  { name: "Ecclesia Nation", href: "/nation" },
+  { name: "Lawful Money", href: "/lawful-money" },
+  { name: "Trust & Assets", href: "/trust-assets" },
+  { name: "State Passport", href: "/state-passport" },
   { name: "Contact & Stewardship", href: "/contact" },
 ];
 
@@ -96,9 +97,8 @@ export default function Navbar() {
                   <DropdownMenuItem onClick={() => navigate("/profile")}>
                     <User className="w-4 h-4 mr-2" /> Profile
                   </DropdownMenuItem>
-                  <DropdownMenuItem disabled className="opacity-50">
-                    <BookOpen className="w-4 h-4 mr-2" /> My Courses
-                    <span className="ml-auto text-[10px] text-gray-400">Soon</span>
+                  <DropdownMenuItem onClick={() => navigate("/learning-path")}>
+                    <BookOpen className="w-4 h-4 mr-2" /> Learning Path
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => navigate("/resources")}>
                     <FileText className="w-4 h-4 mr-2" /> Resources
@@ -193,10 +193,9 @@ export default function Navbar() {
                           <Link href="/profile" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">
                             <User className="w-4 h-4" /> Profile
                           </Link>
-                          <span className="flex items-center gap-2 py-2 text-gray-400 font-cinzel cursor-not-allowed opacity-50">
-                            <BookOpen className="w-4 h-4" /> My Courses
-                            <span className="ml-auto text-[10px]">Coming Soon</span>
-                          </span>
+                          <Link href="/learning-path" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">
+                            <BookOpen className="w-4 h-4" /> Learning Path
+                          </Link>
                           {user?.role === 'admin' && (
                             <Link href="/admin" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">
                               <Settings className="w-4 h-4" /> Admin Panel

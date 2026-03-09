@@ -31,6 +31,10 @@ const MyCourses = lazy(() => import("@/pages/my-courses"));
 const CourseLesson = lazy(() => import("@/pages/course-lesson"));
 const VerifyEmail = lazy(() => import("@/pages/verify-email"));
 const Mandate = lazy(() => import("@/pages/mandate"));
+const LawfulMoney = lazy(() => import("@/pages/lawful-money"));
+const LearningPath = lazy(() => import("@/pages/learning-path"));
+const TrustAssets = lazy(() => import("@/pages/trust-assets"));
+const StatePassport = lazy(() => import("@/pages/state-passport"));
 const Repository = lazy(() => import("@/pages/repository"));
 const Downloads = lazy(() => import("@/pages/downloads"));
 const ProofVault = lazy(() => import("@/pages/proof-vault"));
@@ -80,6 +84,10 @@ function Router() {
           <Switch>
             <Route path="/" component={Home} />
             <Route path="/about" component={About} />
+            <Route path="/lawful-money" component={LawfulMoney} />
+            <Route path="/learning-path" component={LearningPath} />
+            <Route path="/trust-assets" component={TrustAssets} />
+            <Route path="/state-passport" component={StatePassport} />
             <Route path="/mandate" component={Mandate} />
             <Route path="/repository" component={Repository} />
             <Route path="/videos" component={Videos} />

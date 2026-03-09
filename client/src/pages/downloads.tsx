@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { Download, FileText, Scale, Shield, BookOpen, Scroll, Crown, ChevronRight, Clock, Users, CheckCircle, ArrowLeft, Loader2 } from "lucide-react";
+import { Download, FileText, Scale, Shield, BookOpen, Scroll, Crown, ChevronRight, Clock, Users, CheckCircle, ArrowLeft, Loader2, Banknote, Globe } from "lucide-react";
 import type { Download as DownloadType } from "@shared/schema";
 import { usePageTitle } from "@/hooks/usePageTitle";
 
@@ -16,6 +16,8 @@ const iconMap: Record<string, any> = {
   scale: Scale,
   crown: Crown,
   "file-text": FileText,
+  banknote: Banknote,
+  globe: Globe,
 };
 
 function getIcon(iconType: string | null) {
@@ -28,13 +30,18 @@ function parseJsonArray(value: string | null): string[] {
     const parsed = JSON.parse(value);
     if (Array.isArray(parsed)) return parsed;
   } catch {
-    // If it's not valid JSON, it might be a raw string from an older record or manual entry
     return value.split("\n").map(s => s.trim()).filter(Boolean);
   }
   return [];
 }
 
-const categories = ["All", "Foundation", "Legal Templates", "Study Guides", "Prayers & Declarations"];
+const pillarCategories = [
+  { key: "Lawful Money", icon: Banknote, color: "text-yellow-600", bgColor: "bg-yellow-50" },
+  { key: "Trust & Assets", icon: Shield, color: "text-red-700", bgColor: "bg-red-50" },
+  { key: "State Passport", icon: Globe, color: "text-blue-700", bgColor: "bg-blue-50" },
+];
+
+const extraCategories = ["Foundation", "Legal Templates", "Study Guides"];
 
 export default function Downloads() {
   usePageTitle("Downloads");
@@ -59,33 +66,66 @@ export default function Downloads() {
     }
   };
 
-  const filteredItems = activeCategory === "All" 
-    ? downloadItems 
+  const filteredItems = activeCategory === "All"
+    ? downloadItems
     : downloadItems.filter(item => item.category === activeCategory);
 
   const whenToUseList = selectedItem ? parseJsonArray(selectedItem.whenToUse) : [];
   const contentsList = selectedItem ? parseJsonArray(selectedItem.contents) : [];
 
+  // Count items per pillar
+  const pillarCounts = pillarCategories.map(p => ({
+    ...p,
+    count: downloadItems.filter(d => d.category === p.key).length,
+  }));
+
   return (
     <div className="pt-16">
+      {/* Hero */}
       <div className="relative bg-gradient-to-br from-royal-navy via-royal-burgundy to-royal-navy py-16 md:py-24">
-        <div className="absolute inset-0 bg-black/20"></div>
+        <div className="absolute inset-0 bg-black/20" />
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Badge className="mb-4 bg-royal-gold/20 text-royal-gold border-2 border-royal-gold font-semibold px-6 py-2 text-base backdrop-blur-sm">
-            Covenant Resources
+            Templates & Documents
           </Badge>
           <h1 className="font-cinzel-decorative text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
-            Kingdom Downloads
+            Downloads
           </h1>
           <p className="text-lg md:text-xl text-gray-200 max-w-3xl mx-auto leading-relaxed">
-            Essential documents, study guides, and declarations for walking in covenant freedom. Select a resource to learn more before downloading.
+            Practical templates, guides, and forms for each pillar — Lawful Money Redemption, Trust & Asset Protection, and State-Citizen Passport.
           </p>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Pillar Quick Stats */}
+        <div className="grid sm:grid-cols-3 gap-4 mb-8">
+          {pillarCounts.map(({ key, icon: Icon, color, bgColor, count }) => (
+            <button
+              key={key}
+              onClick={() => { setActiveCategory(key); setSelectedItem(null); }}
+              className={`p-4 rounded-xl border-2 transition-all text-left ${
+                activeCategory === key
+                  ? "border-royal-gold bg-royal-gold/5 shadow-md"
+                  : "border-gray-200 dark:border-gray-700 hover:border-royal-gold/50 hover:shadow-sm"
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <div className={`w-10 h-10 rounded-full ${bgColor} flex items-center justify-center`}>
+                  <Icon className={`w-5 h-5 ${color}`} />
+                </div>
+                <div>
+                  <h3 className="font-cinzel font-bold text-sm text-royal-navy dark:text-gray-200">{key}</h3>
+                  <p className="text-xs text-gray-500">{count} document{count !== 1 ? "s" : ""}</p>
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
+
+        {/* Category Filter */}
         <div className="flex flex-wrap gap-2 mb-8 justify-center">
-          {categories.map(cat => (
+          {["All", ...pillarCategories.map(p => p.key), ...extraCategories].map(cat => (
             <button
               key={cat}
               onClick={() => { setActiveCategory(cat); setSelectedItem(null); }}
@@ -107,17 +147,18 @@ export default function Downloads() {
         ) : filteredItems.length === 0 ? (
           <div className="flex items-center justify-center py-20">
             <div className="text-center max-w-md">
-              <Scroll className="w-12 h-12 text-royal-gold mx-auto mb-4" />
+              <FileText className="w-12 h-12 text-royal-gold mx-auto mb-4" />
               <h3 className="font-cinzel text-xl font-bold text-royal-navy dark:text-royal-gold mb-2">No Documents Available</h3>
               <p className="text-gray-500 dark:text-gray-400">Documents are being prepared for this category. Check back soon.</p>
             </div>
           </div>
         ) : (
           <div className="grid lg:grid-cols-12 gap-8">
+            {/* Document List */}
             <div className={`${selectedItem ? 'hidden lg:block' : ''} lg:col-span-4`}>
               <div className="sticky top-24">
                 <h2 className="font-cinzel text-lg font-bold text-royal-navy dark:text-royal-gold mb-4 px-1">
-                  Available Documents
+                  {activeCategory === "All" ? "All Documents" : activeCategory}
                 </h2>
                 <div className="overflow-y-auto max-h-[calc(100vh-280px)] pr-1">
                   <div className="space-y-2">
@@ -169,6 +210,7 @@ export default function Downloads() {
               </div>
             </div>
 
+            {/* Document Detail */}
             <div className="lg:col-span-8">
               {selectedItem ? (
                 <div className="space-y-6">
@@ -293,7 +335,7 @@ export default function Downloads() {
                                 {selectedItem.fileType} document{selectedItem.fileSize ? ` · ${selectedItem.fileSize}` : ''}
                               </p>
                             </div>
-                            <Button 
+                            <Button
                               size="lg"
                               onClick={() => handleDownload(selectedItem)}
                               className="bg-royal-gold hover:bg-royal-gold-bright text-royal-navy font-cinzel font-bold px-8 shadow-lg hover:shadow-xl transition-all hover:scale-105"
@@ -311,13 +353,13 @@ export default function Downloads() {
                 <div className="flex items-center justify-center h-full min-h-[400px]">
                   <div className="text-center max-w-md">
                     <div className="p-6 bg-royal-gold/10 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
-                      <Scroll className="w-12 h-12 text-royal-gold" />
+                      <FileText className="w-12 h-12 text-royal-gold" />
                     </div>
                     <h3 className="font-cinzel-decorative text-2xl font-bold text-royal-navy dark:text-royal-gold mb-3">
                       Select a Document
                     </h3>
                     <p className="text-gray-500 dark:text-gray-400 leading-relaxed">
-                      Choose a document from the list to learn more about it, understand when and why to use it, and download it for your covenant journey.
+                      Choose a document from the list to learn more about it and download templates, guides, and forms for your foundation work.
                     </p>
                   </div>
                 </div>

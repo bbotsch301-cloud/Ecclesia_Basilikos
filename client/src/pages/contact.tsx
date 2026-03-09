@@ -308,10 +308,10 @@ export default function Contact() {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="trust-setup">Trust Setup Guidance</SelectItem>
-                            <SelectItem value="ambassadorial">Ambassadorial Support</SelectItem>
+                            <SelectItem value="lawful-money">Lawful Money Redemption</SelectItem>
+                            <SelectItem value="trust-setup">Trust & Asset Protection</SelectItem>
+                            <SelectItem value="state-passport">State-Citizen Passport</SelectItem>
                             <SelectItem value="property-transfer">Property Transfer Strategy</SelectItem>
-                            <SelectItem value="succession">Succession Planning</SelectItem>
                             <SelectItem value="mentorship">Ongoing Mentorship</SelectItem>
                             <SelectItem value="general">General Inquiry</SelectItem>
                           </SelectContent>
@@ -409,14 +409,17 @@ export default function Contact() {
                   We recommend starting with our foundational content:
                 </p>
                 <div className="space-y-2">
-                  <a href="/mandate" className="block text-royal-burgundy hover:text-royal-gold transition-colors font-semibold">
-                    → Read The Mandate
+                  <a href="/lawful-money" className="block text-royal-burgundy hover:text-royal-gold transition-colors font-semibold">
+                    → Pillar 1: Lawful Money Redemption
                   </a>
-                  <a href="/repository" className="block text-royal-burgundy hover:text-royal-gold transition-colors font-semibold">
-                    → Study the Covenant Repository
+                  <a href="/trust-assets" className="block text-royal-burgundy hover:text-royal-gold transition-colors font-semibold">
+                    → Pillar 2: Trust & Asset Protection
                   </a>
-                  <a href="/courses" className="block text-royal-burgundy hover:text-royal-gold transition-colors font-semibold">
-                    → Explore Royal Academy Courses
+                  <a href="/state-passport" className="block text-royal-burgundy hover:text-royal-gold transition-colors font-semibold">
+                    → Pillar 3: State-Citizen Passport
+                  </a>
+                  <a href="/learning-path" className="block text-royal-burgundy hover:text-royal-gold transition-colors font-semibold">
+                    → View the Full Learning Path
                   </a>
                 </div>
                 <p className="text-gray-600 text-sm mt-4">

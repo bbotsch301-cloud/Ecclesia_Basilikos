@@ -1,3 +1,4 @@
+import ReactMarkdown from "react-markdown";
 import { useQuery } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { useParams, Link } from "wouter";
@@ -282,7 +283,9 @@ function CourseLessonContent() {
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <div className="whitespace-pre-wrap">{currentLesson.content}</div>
+                        <div className="prose prose-gray dark:prose-invert max-w-none prose-headings:font-cinzel prose-headings:text-royal-navy dark:prose-headings:text-royal-gold prose-strong:text-royal-navy dark:prose-strong:text-gray-200 prose-a:text-royal-gold">
+                          <ReactMarkdown>{currentLesson.content}</ReactMarkdown>
+                        </div>
                       </CardContent>
                     </Card>
                   </div>

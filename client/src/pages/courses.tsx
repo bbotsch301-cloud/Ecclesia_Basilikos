@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
@@ -9,12 +10,28 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import {
   BookOpen,
-  Users,
-  User,
+  Banknote,
+  Shield,
+  Globe,
+  ArrowRight,
+  CheckCircle,
+  Clock,
+  Loader2,
   GraduationCap,
-  Shield
+  Play,
+  FileText,
+  Users,
+  Target,
+  Layers,
+  ChevronDown,
+  ChevronUp,
+  Download,
+  MessageSquare,
+  Lock,
+  Zap,
+  Award,
+  BarChart3,
 } from "lucide-react";
-import ScriptureQuote from "@/components/ui/scripture-quote";
 import { usePageTitle } from "@/hooks/usePageTitle";
 
 interface CourseWithLessonCount {
@@ -31,56 +48,133 @@ interface CourseWithLessonCount {
   createdAt: string;
 }
 
+interface CourseDetail {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  level: string;
+  duration: string | null;
+  lessons: { id: string; title: string; description: string | null; order: number; duration: string | null }[];
+}
+
+interface Enrollment {
+  courseId: string;
+  enrolledAt: string;
+  progress: number | null;
+  completedAt: string | null;
+}
+
+const pillarMeta: Record<string, {
+  icon: typeof Banknote;
+  color: string;
+  bgColor: string;
+  gradient: string;
+  borderActive: string;
+  href: string;
+  order: number;
+  tagline: string;
+  statute: string;
+  outcomes: string[];
+  templates: string[];
+}> = {
+  "Lawful Money": {
+    icon: Banknote,
+    color: "text-yellow-600",
+    bgColor: "bg-yellow-50",
+    gradient: "from-yellow-600 to-amber-700",
+    borderActive: "border-yellow-400",
+    href: "/lawful-money",
+    order: 1,
+    tagline: "Redeem Federal Reserve Notes for lawful money under 12 USC §411",
+    statute: "12 USC §411",
+    outcomes: [
+      "Understand the legal distinction between Federal Reserve Notes and lawful money",
+      "Master the proper restrictive endorsement language for checks and deposits",
+      "Learn the redemption process step by step with your bank",
+      "Build a compliant documentation system (ledger, records, correspondence)",
+      "Know the constitutional and statutory basis for lawful money redemption",
+      "Handle bank objections and escalation procedures with confidence",
+      "Understand the tax implications and reporting considerations",
+    ],
+    templates: ["Endorsement Guide", "Redemption Ledger"],
+  },
+  "Trust & Assets": {
+    icon: Shield,
+    color: "text-red-700",
+    bgColor: "bg-red-50",
+    gradient: "from-red-700 to-red-900",
+    borderActive: "border-red-400",
+    href: "/trust-assets",
+    order: 2,
+    tagline: "Protect assets using proper trust structures and administration",
+    statute: "Common Law Trust",
+    outcomes: [
+      "Understand the three roles: Grantor, Trustee, and Beneficiary",
+      "Know the different types of trusts and when each is appropriate",
+      "Learn how to properly transfer assets into a trust",
+      "Master ongoing trust administration and record-keeping",
+      "Understand the legal protections trusts provide against claims",
+      "Navigate banking and financial accounts held in trust",
+      "Maintain compliance while maximizing asset protection",
+    ],
+    templates: ["Trust Checklist", "Asset Schedule"],
+  },
+  "State Passport": {
+    icon: Globe,
+    color: "text-blue-700",
+    bgColor: "bg-blue-50",
+    gradient: "from-blue-700 to-blue-900",
+    borderActive: "border-blue-400",
+    href: "/state-passport",
+    order: 3,
+    tagline: "Establish state-citizen status and obtain a passport reflecting it",
+    statute: "14th Amendment / Slaughter-House Cases",
+    outcomes: [
+      "Understand the constitutional distinction between state and federal citizenship",
+      "Study key case law: Slaughter-House Cases, United States v. Cruikshank",
+      "Learn the process of establishing proper domicile in your state",
+      "Complete the DS-11 passport application with correct declarations",
+      "Prepare supporting documentation for your application",
+      "Handle objections or requests for additional information",
+      "Understand the rights and protections of state-citizen status",
+    ],
+    templates: ["Domicile Declaration", "DS-11 Walkthrough"],
+  },
+};
+
 export default function Courses() {
   usePageTitle("Courses");
-  const { user, isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
   const { toast } = useToast();
   const [, navigate] = useLocation();
-  const [selectedLevel, setSelectedLevel] = useState<string>('all');
+  const [expandedCourse, setExpandedCourse] = useState<string | null>(null);
 
-  // Fetch courses from API
   const { data: courses = [], isLoading: coursesLoading } = useQuery<CourseWithLessonCount[]>({
-    queryKey: ['/api/courses'],
+    queryKey: ["/api/courses"],
   });
 
-  // Fetch user enrollments
-  const { data: enrollments = [] } = useQuery<Array<{ courseId: string; enrolledAt: string }>>({
+  const { data: enrollments = [] } = useQuery<Enrollment[]>({
     queryKey: ["/api/my-enrollments"],
     enabled: isAuthenticated,
   });
 
-  // Check if user is enrolled in a course
-  const isEnrolledInCourse = (courseId: string) => {
-    return enrollments.some((enrollment) => enrollment.courseId === courseId);
+  // Fetch expanded course details
+  const { data: courseDetail } = useQuery<CourseDetail>({
+    queryKey: [`/api/courses/${expandedCourse}`],
+    enabled: !!expandedCourse,
+  });
+
+  const getEnrollment = (courseId: string) => {
+    return enrollments.find((e) => e.courseId === courseId);
   };
 
-  // Get enrollment status for button text
-  const getEnrollmentStatus = (courseId: string) => {
-    if (!isAuthenticated) return "login";
-    if (isEnrolledInCourse(courseId)) return "enrolled";
-    return "enroll";
-  };
-
-  // Get button text based on enrollment status
-  const getButtonText = (courseId: string, isPending: boolean = false) => {
-    if (isPending) return "Starting Course...";
-
-    const status = getEnrollmentStatus(courseId);
-    switch (status) {
-      case "login": return "Begin Learning";
-      case "enrolled": return "Continue Learning";
-      case "enroll": return "Begin Learning";
-      default: return "Begin Learning";
-    }
-  };
-
-  // Course auto-enrollment mutation
   const enrollMutation = useMutation({
     mutationFn: async (courseId: string) => {
       const response = await apiRequest("POST", `/api/enrollments`, { courseId });
       return response.json();
     },
-    onSuccess: (data, courseId) => {
+    onSuccess: (_data, courseId) => {
       window.location.href = `/course/${courseId}/lesson/1`;
     },
     onError: (error: any) => {
@@ -93,14 +187,13 @@ export default function Courses() {
   });
 
   const handleBeginLearning = async (courseId: string) => {
-    const status = getEnrollmentStatus(courseId);
-
-    if (status === "login") {
+    if (!isAuthenticated) {
       navigate("/login?redirect=/courses");
       return;
     }
 
-    if (status === "enrolled") {
+    const enrollment = getEnrollment(courseId);
+    if (enrollment) {
       window.location.href = `/course/${courseId}/lesson/1`;
       return;
     }
@@ -113,234 +206,558 @@ export default function Courses() {
     }
   };
 
-  // Extract unique levels from courses
-  const levels = Array.from(new Set(courses.map(c => c.level))).sort();
+  const pillarCourses = courses
+    .filter((c) => pillarMeta[c.category])
+    .sort((a, b) => (pillarMeta[a.category]?.order ?? 99) - (pillarMeta[b.category]?.order ?? 99));
 
-  const filteredCourses = selectedLevel === 'all'
-    ? courses
-    : courses.filter(course =>
-        course.level.toLowerCase() === selectedLevel.toLowerCase()
-      );
+  const otherCourses = courses.filter((c) => !pillarMeta[c.category]);
 
-  const featuredCourse = courses.length > 0 ? courses[0] : null;
-
-  const getLevelColor = (level: string) => {
-    const lower = level.toLowerCase();
-    if (lower === 'foundational' || lower === 'beginner') return 'bg-covenant-gold/10 text-covenant-blue';
-    if (lower === 'intermediate') return 'bg-blue-100 text-blue-800';
-    if (lower === 'advanced') return 'bg-purple-100 text-purple-800';
-    return 'bg-gray-100 text-gray-600';
-  };
+  const totalLessons = pillarCourses.reduce((sum, c) => sum + c.lessonCount, 0);
 
   if (isLoading || coursesLoading) {
     return (
-      <div className="pt-16 min-h-screen bg-gradient-to-b from-covenant-light via-white to-covenant-light flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-covenant-gold mx-auto mb-4"></div>
-          <p className="text-gray-700">Loading Royal Academy...</p>
-        </div>
+      <div className="pt-16 min-h-screen flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-royal-gold" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen marble-bg pt-16">
-      {/* Hero Section */}
-      <section className="bg-royal-navy text-white py-20 border-b-2 border-royal-gold">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <div className="flex justify-center mb-6">
-              <GraduationCap className="h-16 w-16 text-royal-gold" />
-            </div>
-            <h1 className="text-4xl md:text-6xl font-cinzel-decorative font-bold mb-6">
-              Royal Academy
+    <div className="min-h-screen pt-16">
+      {/* Hero */}
+      <section className="relative bg-gradient-to-br from-royal-navy via-royal-burgundy to-royal-navy py-20 md:py-28 overflow-hidden">
+        <div className="absolute inset-0 bg-black/20" />
+        {/* Decorative elements */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-royal-gold/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-royal-burgundy/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <Badge className="mb-5 bg-royal-gold/20 text-royal-gold border-2 border-royal-gold font-semibold px-6 py-2 text-base backdrop-blur-sm">
+              Three Pillars Education
+            </Badge>
+            <h1 className="font-cinzel-decorative text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-5 leading-tight">
+              Foundation Courses
             </h1>
-            <p className="text-xl md:text-2xl max-w-4xl mx-auto leading-relaxed mb-8">
-              Comprehensive Kingdom education equipping royal priests to operate under divine covenant authority
+            <p className="text-lg md:text-xl text-gray-200 max-w-3xl mx-auto leading-relaxed mb-8">
+              Master each pillar through structured, step-by-step courses. Each course breaks down complex legal and practical concepts into clear, actionable lessons.
             </p>
-            <div className="bg-royal-burgundy/30 border border-royal-gold/30 rounded-lg p-4 max-w-2xl mx-auto">
-              <p className="text-gray-200 text-sm">
-                <strong>Foundation:</strong> Before beginning course instruction, explore the <a href="/repository" className="text-royal-gold hover:underline">Covenant Repository</a> to understand the critical distinctions between Babylon's counterfeits and Kingdom realities.
-              </p>
+          </div>
+
+          {/* Hero Stats */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center border border-white/10">
+              <p className="text-3xl font-bold text-royal-gold">{pillarCourses.length}</p>
+              <p className="text-sm text-gray-300 font-cinzel">Core Courses</p>
+            </div>
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center border border-white/10">
+              <p className="text-3xl font-bold text-royal-gold">{totalLessons}</p>
+              <p className="text-sm text-gray-300 font-cinzel">Total Lessons</p>
+            </div>
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center border border-white/10">
+              <p className="text-3xl font-bold text-royal-gold">3</p>
+              <p className="text-sm text-gray-300 font-cinzel">Pillars</p>
+            </div>
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center border border-white/10">
+              <p className="text-3xl font-bold text-royal-gold">Free</p>
+              <p className="text-sm text-gray-300 font-cinzel">All Courses</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Course Catalog */}
-      <section className="py-16">
+      {/* How It Works */}
+      <section className="py-16 bg-gray-50 dark:bg-royal-navy-light/50 border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-
-          {courses.length === 0 ? (
-            <Card className="max-w-lg mx-auto">
-              <CardContent className="py-12 text-center">
-                <GraduationCap className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">Courses Coming Soon</h3>
-                <p className="text-gray-600">
-                  We are preparing our curriculum. Check back soon for new courses.
-                </p>
-              </CardContent>
-            </Card>
-          ) : (
-            <>
-              {/* Featured Course */}
-              {featuredCourse && (
-                <div className="mb-16">
-                  <Card className="bg-gradient-to-r from-covenant-blue to-covenant-dark-blue border-0 overflow-hidden">
-                    <CardContent className="p-8 text-white">
-                      <div className="flex items-center mb-4">
-                        <Badge className="bg-covenant-gold text-covenant-blue mr-4">Featured Course</Badge>
-                        <Badge className={`${getLevelColor(featuredCourse.level)} ml-2`}>
-                          {featuredCourse.level}
-                        </Badge>
-                      </div>
-
-                      <h3 className="text-3xl font-playfair font-bold mb-4">{featuredCourse.title}</h3>
-                      <p className="text-lg text-blue-100 mb-6 max-w-3xl">{featuredCourse.description}</p>
-
-                      <div className="flex flex-wrap items-center gap-6 mb-8">
-                        <div className="flex items-center text-blue-200">
-                          <BookOpen className="h-5 w-5 mr-2" />
-                          <span>{featuredCourse.lessonCount} lessons</span>
-                        </div>
-                        {featuredCourse.duration && (
-                          <div className="flex items-center text-blue-200">
-                            <User className="h-5 w-5 mr-2" />
-                            <span>{featuredCourse.duration}</span>
-                          </div>
-                        )}
-                      </div>
-
-                      <Button
-                        size="lg"
-                        className="bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue px-8 py-3 font-semibold"
-                        onClick={() => handleBeginLearning(featuredCourse.id)}
-                        disabled={enrollMutation.isPending}
-                      >
-                        <GraduationCap className="h-5 w-5 mr-2" />
-                        {getButtonText(featuredCourse.id, enrollMutation.isPending)}
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </div>
-              )}
-
-              {/* Course Filter */}
-              <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-playfair font-bold text-covenant-blue mb-4">
-                  All Courses
-                </h2>
-                <p className="text-lg text-covenant-gray max-w-3xl mx-auto mb-8">
-                  Choose from our comprehensive curriculum designed to equip you as a faithful trustee
-                </p>
-
-                {levels.length > 1 && (
-                  <div className="flex justify-center">
-                    <div className="bg-white rounded-lg p-1 shadow-md">
-                      <Button
-                        variant="ghost"
-                        onClick={() => setSelectedLevel('all')}
-                        className={`px-6 py-3 rounded-md font-medium transition-colors ${
-                          selectedLevel === 'all'
-                            ? 'bg-covenant-blue text-white'
-                            : 'text-covenant-gray hover:text-covenant-blue'
-                        }`}
-                      >
-                        All Courses
-                      </Button>
-                      {levels.map((level) => (
-                        <Button
-                          key={level}
-                          variant="ghost"
-                          onClick={() => setSelectedLevel(level.toLowerCase())}
-                          className={`px-6 py-3 rounded-md font-medium transition-colors ${
-                            selectedLevel === level.toLowerCase()
-                              ? 'bg-covenant-blue text-white'
-                              : 'text-covenant-gray hover:text-covenant-blue'
-                          }`}
-                        >
-                          {level}
-                        </Button>
-                      ))}
-                    </div>
+          <div className="text-center mb-10">
+            <h2 className="font-cinzel text-2xl md:text-3xl font-bold text-royal-navy dark:text-royal-gold mb-3">
+              How Your Learning Works
+            </h2>
+            <p className="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
+              Each pillar follows a structured path from understanding to implementation.
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { icon: BookOpen, title: "Choose a Pillar", desc: "Start with any pillar — we recommend beginning with Lawful Money as the foundation." },
+              { icon: Layers, title: "Work Through Lessons", desc: "Each course has 7 structured lessons that build on each other sequentially." },
+              { icon: Download, title: "Use the Templates", desc: "Download practical templates and forms to implement what you learn in each lesson." },
+              { icon: Award, title: "Complete & Advance", desc: "Finish all three pillars to establish your complete foundation." },
+            ].map((step, i) => (
+              <div key={i} className="text-center">
+                <div className="relative mx-auto mb-4">
+                  <div className="w-16 h-16 rounded-full bg-royal-gold/10 flex items-center justify-center mx-auto">
+                    <step.icon className="w-7 h-7 text-royal-gold" />
                   </div>
-                )}
+                  <div className="absolute -top-1 -right-1 w-7 h-7 rounded-full bg-royal-navy text-white text-xs font-bold flex items-center justify-center">
+                    {i + 1}
+                  </div>
+                </div>
+                <h3 className="font-cinzel font-bold text-royal-navy dark:text-gray-200 mb-1">{step.title}</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{step.desc}</p>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-              {/* Course Grid */}
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-                {filteredCourses.map(course => (
-                  <Card key={course.id} className="border-covenant-light hover:border-covenant-gold transition-all hover:shadow-lg">
-                    <CardHeader>
-                      <div className="flex justify-between items-start mb-2">
-                        <Badge className={getLevelColor(course.level)}>
-                          {course.level}
-                        </Badge>
+      {/* Main Course Content */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {courses.length === 0 ? (
+          <div className="text-center py-20">
+            <GraduationCap className="h-16 w-16 text-royal-gold mx-auto mb-4" />
+            <h3 className="font-cinzel text-2xl font-bold text-royal-navy mb-2">Courses Coming Soon</h3>
+            <p className="text-gray-500 max-w-md mx-auto">
+              We are preparing structured courses for each pillar. Check back soon.
+            </p>
+          </div>
+        ) : (
+          <>
+            {/* Section Header */}
+            <div className="text-center mb-10">
+              <h2 className="font-cinzel text-2xl md:text-3xl font-bold text-royal-navy dark:text-royal-gold mb-3">
+                The Three Pillar Courses
+              </h2>
+              <p className="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
+                Each course is a deep-dive into one pillar. Select a course to see the full curriculum, learning outcomes, and available templates.
+              </p>
+            </div>
+
+            {/* Pillar Courses */}
+            <div className="space-y-8 mb-16">
+              {pillarCourses.map((course, index) => {
+                const meta = pillarMeta[course.category];
+                if (!meta) return null;
+                const Icon = meta.icon;
+                const enrollment = getEnrollment(course.id);
+                const progress = enrollment?.progress || 0;
+                const isCompleted = !!enrollment?.completedAt;
+                const isStarted = !!enrollment;
+                const isExpanded = expandedCourse === course.id;
+                const detail = isExpanded && courseDetail?.id === course.id ? courseDetail : null;
+
+                return (
+                  <div key={course.id} className="group">
+                    {/* Pillar Number Label */}
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${meta.gradient} flex items-center justify-center text-white text-sm font-bold`}>
+                        {index + 1}
                       </div>
-                      <CardTitle className="text-covenant-blue">{course.title}</CardTitle>
-                      <CardDescription>{course.description}</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-4">
-                        <div className="flex items-center justify-between text-sm text-covenant-gray">
-                          <div className="flex items-center">
-                            <BookOpen className="h-4 w-4 mr-1" />
-                            <span>{course.lessonCount} lessons</span>
+                      <span className="font-cinzel text-sm font-semibold text-gray-400 uppercase tracking-wider">
+                        Pillar {index + 1} — {meta.statute}
+                      </span>
+                      {isCompleted && (
+                        <Badge className="bg-green-100 text-green-700 border-green-300">
+                          <CheckCircle className="w-3 h-3 mr-1" /> Completed
+                        </Badge>
+                      )}
+                      {isStarted && !isCompleted && (
+                        <Badge className="bg-royal-gold/10 text-royal-gold border-royal-gold/30">
+                          <BarChart3 className="w-3 h-3 mr-1" /> {progress}% Complete
+                        </Badge>
+                      )}
+                    </div>
+
+                    <Card className={`overflow-hidden border-2 transition-all ${
+                      isCompleted ? "border-green-300" :
+                      isStarted ? "border-royal-gold/50" :
+                      "border-gray-200 dark:border-gray-700 hover:border-royal-gold/30"
+                    }`}>
+                      {/* Main Course Card */}
+                      <div className="grid lg:grid-cols-5">
+                        {/* Pillar sidebar */}
+                        <div className={`bg-gradient-to-br ${meta.gradient} p-8 lg:p-10 flex flex-col justify-center items-center text-center text-white`}>
+                          <div className="w-20 h-20 rounded-full bg-white/15 flex items-center justify-center mb-4">
+                            <Icon className="w-10 h-10" />
                           </div>
-                          {course.duration && (
-                            <div className="flex items-center">
-                              <User className="h-4 w-4 mr-1" />
-                              <span>{course.duration}</span>
+                          <h3 className="font-cinzel-decorative font-bold text-xl mb-2">
+                            {course.category}
+                          </h3>
+                          <p className="text-sm text-white/70 leading-relaxed">
+                            {meta.tagline}
+                          </p>
+
+                          {isStarted && !isCompleted && (
+                            <div className="mt-4 w-full max-w-[200px]">
+                              <Progress value={progress} className="h-2 bg-white/20" />
+                              <p className="text-xs text-white/60 mt-1">{progress}% complete</p>
                             </div>
                           )}
                         </div>
 
-                        <Button
-                          className="w-full bg-covenant-blue hover:bg-covenant-blue/80 text-white"
-                          onClick={() => handleBeginLearning(course.id)}
-                          disabled={enrollMutation.isPending}
-                        >
-                          <GraduationCap className="h-4 w-4 mr-2" />
-                          {getButtonText(course.id, enrollMutation.isPending)}
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </>
-          )}
+                        {/* Course content */}
+                        <div className="lg:col-span-4 p-6 lg:p-8">
+                          <div className="flex flex-wrap items-center gap-2 mb-3">
+                            <Badge variant="secondary" className="font-cinzel text-xs">
+                              {course.level}
+                            </Badge>
+                            <span className="text-xs text-gray-400 flex items-center gap-1">
+                              <BookOpen className="w-3 h-3" /> {course.lessonCount} lessons
+                            </span>
+                            {course.duration && (
+                              <span className="text-xs text-gray-400 flex items-center gap-1">
+                                <Clock className="w-3 h-3" /> {course.duration}
+                              </span>
+                            )}
+                            <Badge variant="outline" className="text-xs text-green-600 border-green-300">
+                              Free
+                            </Badge>
+                          </div>
 
-          {/* Student Dashboard Link */}
-          <div className="text-center mb-12">
-            <Card className="bg-covenant-light border-covenant-gold">
-              <CardContent className="p-8">
-                <div className="flex justify-center mb-4">
-                  <Users className="h-12 w-12 text-covenant-gold" />
+                          <h3 className="font-cinzel text-xl md:text-2xl font-bold text-royal-navy dark:text-royal-gold mb-3">
+                            {course.title}
+                          </h3>
+                          <p className="text-gray-600 dark:text-gray-300 mb-5 leading-relaxed">
+                            {course.description}
+                          </p>
+
+                          {/* What You'll Learn Preview */}
+                          <div className="mb-5">
+                            <h4 className="font-cinzel font-semibold text-sm text-royal-navy dark:text-gray-200 mb-3 flex items-center gap-2">
+                              <Target className="w-4 h-4 text-royal-gold" /> What You'll Learn
+                            </h4>
+                            <div className="grid sm:grid-cols-2 gap-2">
+                              {meta.outcomes.slice(0, 4).map((outcome, i) => (
+                                <div key={i} className="flex items-start gap-2">
+                                  <CheckCircle className="w-4 h-4 text-royal-gold flex-shrink-0 mt-0.5" />
+                                  <span className="text-sm text-gray-600 dark:text-gray-400">{outcome}</span>
+                                </div>
+                              ))}
+                            </div>
+                            {meta.outcomes.length > 4 && !isExpanded && (
+                              <p className="text-xs text-royal-gold mt-2 font-cinzel">
+                                + {meta.outcomes.length - 4} more learning outcomes
+                              </p>
+                            )}
+                          </div>
+
+                          {/* Action Buttons */}
+                          <div className="flex flex-wrap items-center gap-3">
+                            <Button
+                              onClick={() => handleBeginLearning(course.id)}
+                              disabled={enrollMutation.isPending}
+                              size="lg"
+                              className="bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold px-8 shadow-md hover:shadow-lg transition-all"
+                            >
+                              {enrollMutation.isPending ? (
+                                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                              ) : isCompleted ? (
+                                <CheckCircle className="w-4 h-4 mr-2" />
+                              ) : isStarted ? (
+                                <Play className="w-4 h-4 mr-2" />
+                              ) : (
+                                <GraduationCap className="w-4 h-4 mr-2" />
+                              )}
+                              {isCompleted ? "Review Course" : isStarted ? "Continue Learning" : "Start This Course"}
+                            </Button>
+
+                            <Button
+                              variant="outline"
+                              onClick={() => setExpandedCourse(isExpanded ? null : course.id)}
+                              className="font-cinzel text-sm border-royal-gold/30 text-royal-gold hover:bg-royal-gold/5"
+                            >
+                              {isExpanded ? (
+                                <><ChevronUp className="w-4 h-4 mr-1" /> Hide Details</>
+                              ) : (
+                                <><ChevronDown className="w-4 h-4 mr-1" /> View Curriculum</>
+                              )}
+                            </Button>
+
+                            <Link href={meta.href}>
+                              <Button variant="ghost" className="text-gray-500 font-cinzel text-sm">
+                                Pillar Overview <ArrowRight className="w-4 h-4 ml-1" />
+                              </Button>
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Expanded Curriculum Section */}
+                      {isExpanded && (
+                        <div className="border-t border-gray-200 dark:border-gray-700">
+                          <div className="grid lg:grid-cols-3 divide-y lg:divide-y-0 lg:divide-x divide-gray-200 dark:divide-gray-700">
+                            {/* Full Curriculum */}
+                            <div className="lg:col-span-2 p-6 lg:p-8">
+                              <h4 className="font-cinzel font-bold text-lg text-royal-navy dark:text-royal-gold mb-4 flex items-center gap-2">
+                                <Layers className="w-5 h-5 text-royal-gold" /> Full Curriculum
+                              </h4>
+
+                              {detail?.lessons ? (
+                                <div className="space-y-3">
+                                  {detail.lessons
+                                    .sort((a, b) => a.order - b.order)
+                                    .map((lesson, i) => (
+                                    <div key={lesson.id} className="flex items-start gap-3 p-3 rounded-lg bg-gray-50 dark:bg-royal-navy/30">
+                                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${
+                                        isStarted ? "bg-royal-gold/10 text-royal-gold" : "bg-gray-200 dark:bg-gray-700 text-gray-500"
+                                      }`}>
+                                        {i + 1}
+                                      </div>
+                                      <div className="flex-1 min-w-0">
+                                        <p className="font-medium text-sm text-royal-navy dark:text-gray-200">
+                                          {lesson.title}
+                                        </p>
+                                        {lesson.description && (
+                                          <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-1">
+                                            {lesson.description}
+                                          </p>
+                                        )}
+                                      </div>
+                                      {lesson.duration && (
+                                        <span className="text-xs text-gray-400 flex items-center gap-1 shrink-0">
+                                          <Clock className="w-3 h-3" /> {lesson.duration}
+                                        </span>
+                                      )}
+                                    </div>
+                                  ))}
+                                </div>
+                              ) : (
+                                <div className="space-y-3">
+                                  {Array.from({ length: course.lessonCount }).map((_, i) => (
+                                    <div key={i} className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 dark:bg-royal-navy/30 animate-pulse">
+                                      <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700" />
+                                      <div className="flex-1 h-4 bg-gray-200 dark:bg-gray-700 rounded" />
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Side Panel: Outcomes + Templates */}
+                            <div className="p-6 lg:p-8 space-y-6">
+                              {/* All Learning Outcomes */}
+                              <div>
+                                <h4 className="font-cinzel font-bold text-sm text-royal-navy dark:text-royal-gold mb-3 flex items-center gap-2">
+                                  <Target className="w-4 h-4 text-royal-gold" /> Learning Outcomes
+                                </h4>
+                                <ul className="space-y-2">
+                                  {meta.outcomes.map((outcome, i) => (
+                                    <li key={i} className="flex items-start gap-2">
+                                      <CheckCircle className="w-3.5 h-3.5 text-royal-gold flex-shrink-0 mt-0.5" />
+                                      <span className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">{outcome}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+
+                              {/* Templates */}
+                              <div>
+                                <h4 className="font-cinzel font-bold text-sm text-royal-navy dark:text-royal-gold mb-3 flex items-center gap-2">
+                                  <FileText className="w-4 h-4 text-royal-gold" /> Included Templates
+                                </h4>
+                                <div className="space-y-2">
+                                  {meta.templates.map((template, i) => (
+                                    <div key={i} className="flex items-center gap-2 p-2 rounded-lg bg-royal-gold/5 border border-royal-gold/20">
+                                      <Download className="w-3.5 h-3.5 text-royal-gold" />
+                                      <span className="text-xs font-medium text-royal-navy dark:text-gray-300">{template}</span>
+                                    </div>
+                                  ))}
+                                </div>
+                                <Link href="/downloads">
+                                  <Button variant="ghost" size="sm" className="text-royal-gold font-cinzel text-xs mt-2 p-0 h-auto">
+                                    All downloads <ArrowRight className="w-3 h-3 ml-1" />
+                                  </Button>
+                                </Link>
+                              </div>
+
+                              {/* Quick Links */}
+                              <div className="pt-4 border-t border-gray-200 dark:border-gray-700 space-y-2">
+                                <Link href={meta.href}>
+                                  <Button variant="ghost" size="sm" className="w-full justify-start text-xs font-cinzel text-gray-600 dark:text-gray-400 hover:text-royal-gold">
+                                    <BookOpen className="w-3.5 h-3.5 mr-2" /> Read the pillar guide
+                                  </Button>
+                                </Link>
+                                <Link href="/forum">
+                                  <Button variant="ghost" size="sm" className="w-full justify-start text-xs font-cinzel text-gray-600 dark:text-gray-400 hover:text-royal-gold">
+                                    <MessageSquare className="w-3.5 h-3.5 mr-2" /> Discuss in the forum
+                                  </Button>
+                                </Link>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </Card>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Other courses if any */}
+            {otherCourses.length > 0 && (
+              <div className="mb-16">
+                <div className="text-center mb-8">
+                  <h2 className="font-cinzel text-2xl font-bold text-royal-navy dark:text-royal-gold mb-2">
+                    Additional Courses
+                  </h2>
+                  <p className="text-gray-500 dark:text-gray-400">Supplementary courses beyond the three pillars</p>
                 </div>
-                <h3 className="text-2xl font-playfair font-bold text-covenant-blue mb-4">
-                  Already Enrolled?
-                </h3>
-                <p className="text-covenant-gray mb-6">
-                  Access your enrolled courses, track your progress, and continue your learning journey.
-                </p>
-                <Link href="/my-courses">
-                  <Button size="lg" className="bg-covenant-gold hover:bg-covenant-gold/80 text-covenant-blue px-8 py-3 font-semibold">
-                    <BookOpen className="h-5 w-5 mr-2" />
-                    Go to My Courses
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {otherCourses.map((course) => {
+                    const enrollment = getEnrollment(course.id);
+                    const isStarted = !!enrollment;
+                    const isCompleted = !!enrollment?.completedAt;
+
+                    return (
+                      <Card key={course.id} className="hover:shadow-lg transition-all border border-gray-200 dark:border-gray-700">
+                        <CardContent className="p-6">
+                          <Badge variant="secondary" className="mb-3 text-xs">{course.level}</Badge>
+                          <h3 className="font-cinzel font-bold text-royal-navy dark:text-gray-200 mb-2">{course.title}</h3>
+                          <p className="text-sm text-gray-500 dark:text-gray-400 mb-4 line-clamp-2">{course.description}</p>
+                          <div className="flex items-center gap-3 text-xs text-gray-400 mb-4">
+                            <span className="flex items-center gap-1"><BookOpen className="w-3 h-3" /> {course.lessonCount} lessons</span>
+                            {course.duration && <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {course.duration}</span>}
+                          </div>
+                          <Button
+                            className="w-full bg-royal-navy hover:bg-royal-navy/90 text-white font-cinzel"
+                            onClick={() => handleBeginLearning(course.id)}
+                            disabled={enrollMutation.isPending}
+                          >
+                            {isCompleted ? "Review" : isStarted ? "Continue" : "Begin Learning"}
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* Recommended Path */}
+        <section className="mb-16">
+          <Card className="bg-gradient-to-r from-royal-gold/5 to-royal-gold/10 border-royal-gold/20">
+            <CardContent className="p-8">
+              <div className="grid md:grid-cols-3 gap-8 items-center">
+                <div className="md:col-span-2">
+                  <h3 className="font-cinzel text-xl font-bold text-royal-navy dark:text-royal-gold mb-3 flex items-center gap-2">
+                    <Zap className="w-5 h-5 text-royal-gold" /> Recommended Order
+                  </h3>
+                  <div className="space-y-3">
+                    {[
+                      { num: 1, label: "Lawful Money Redemption", reason: "Establishes your understanding of lawful vs. legal tender — the monetary foundation." },
+                      { num: 2, label: "Trust & Asset Protection", reason: "With lawful money understood, learn to protect what you earn through trust structures." },
+                      { num: 3, label: "State-Citizen Passport", reason: "With assets protected, establish your proper status and documentation." },
+                    ].map((item) => (
+                      <div key={item.num} className="flex items-start gap-3">
+                        <div className="w-7 h-7 rounded-full bg-royal-gold text-royal-navy flex items-center justify-center text-sm font-bold shrink-0">
+                          {item.num}
+                        </div>
+                        <div>
+                          <p className="font-cinzel font-semibold text-sm text-royal-navy dark:text-gray-200">{item.label}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">{item.reason}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="text-center">
+                  <Link href="/learning-path">
+                    <Button size="lg" className="bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold px-8 shadow-md">
+                      <BookOpen className="w-5 h-5 mr-2" /> Full Learning Path
+                    </Button>
+                  </Link>
+                  <p className="text-xs text-gray-500 mt-2">Track progress across all pillars</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+
+        {/* FAQ Section */}
+        <section className="mb-16">
+          <div className="text-center mb-8">
+            <h2 className="font-cinzel text-2xl font-bold text-royal-navy dark:text-royal-gold mb-2">
+              Common Questions
+            </h2>
+          </div>
+          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            {[
+              {
+                q: "Are the courses really free?",
+                a: "Yes. All three pillar courses are completely free. We believe this foundational knowledge should be accessible to everyone.",
+              },
+              {
+                q: "Do I need to take them in order?",
+                a: "We recommend starting with Lawful Money as it establishes core concepts, but you can begin with any pillar that's most relevant to your situation.",
+              },
+              {
+                q: "How long does each course take?",
+                a: "Each course has 7 lessons. Most people complete a course in 1-2 weeks at their own pace. There are no deadlines.",
+              },
+              {
+                q: "Do I get a certificate?",
+                a: "Your dashboard tracks completion of each pillar. When all three are complete, your foundation is established and reflected in your profile.",
+              },
+              {
+                q: "Can I download materials for offline use?",
+                a: "Yes. Each pillar has associated templates and guides available in the Downloads section that you can save and print.",
+              },
+              {
+                q: "Where can I ask questions?",
+                a: "Each pillar has a dedicated forum category where you can discuss topics, share experiences, and get answers from the community.",
+              },
+            ].map((faq, i) => (
+              <div key={i} className="p-5 rounded-xl bg-white dark:bg-royal-navy-light border border-gray-200 dark:border-gray-700">
+                <h4 className="font-cinzel font-bold text-sm text-royal-navy dark:text-royal-gold mb-2">{faq.q}</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{faq.a}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Final CTA */}
+        <Card className="bg-gradient-to-r from-royal-navy to-royal-burgundy border-0 overflow-hidden relative">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-royal-gold/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+          <CardContent className="p-10 text-center relative">
+            <GraduationCap className="w-12 h-12 text-royal-gold mx-auto mb-4" />
+            <h3 className="font-cinzel-decorative text-2xl md:text-3xl font-bold text-white mb-3">
+              Ready to Build Your Foundation?
+            </h3>
+            <p className="text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+              Start with any pillar and work at your own pace. Each course is designed to take you from understanding to implementation with clear, actionable steps.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              {!isAuthenticated ? (
+                <>
+                  <Link href="/signup">
+                    <Button size="lg" className="bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold px-10 shadow-lg">
+                      Create Free Account
+                    </Button>
+                  </Link>
+                  <Link href="/login">
+                    <Button size="lg" variant="outline" className="border-royal-gold/50 text-royal-gold hover:bg-white/10 font-cinzel">
+                      Sign In
+                    </Button>
+                  </Link>
+                </>
+              ) : pillarCourses.length > 0 ? (
+                <Button
+                  size="lg"
+                  className="bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold px-10 shadow-lg"
+                  onClick={() => {
+                    // Find first non-started or in-progress course
+                    const next = pillarCourses.find(c => {
+                      const e = getEnrollment(c.id);
+                      return !e || !e.completedAt;
+                    });
+                    if (next) handleBeginLearning(next.id);
+                  }}
+                >
+                  <Play className="w-5 h-5 mr-2" /> Start Next Course
+                </Button>
+              ) : (
+                <Link href="/learning-path">
+                  <Button size="lg" className="bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold px-10 shadow-lg">
+                    View Learning Path
                   </Button>
                 </Link>
-              </CardContent>
-            </Card>
-          </div>
-
-          <ScriptureQuote
-            quote="A good man leaveth an inheritance to his children's children: and the wealth of the sinner is laid up for the just."
-            reference="Proverbs 13:22 (KJV)"
-            className="mb-8"
-          />
-        </div>
-      </section>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

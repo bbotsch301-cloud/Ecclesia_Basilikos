@@ -54,13 +54,18 @@ export default function Footer() {
             <h4 className="font-playfair font-semibold text-lg mb-4">Quick Links</h4>
             <ul className="space-y-2">
               <li>
-                <Link href="/mandate" className="text-gray-300 hover:text-royal-gold transition-colors">
-                  The Mandate
+                <Link href="/lawful-money" className="text-gray-300 hover:text-royal-gold transition-colors">
+                  Lawful Money Redemption
                 </Link>
               </li>
               <li>
-                <Link href="/nation" className="text-gray-300 hover:text-royal-gold transition-colors">
-                  Ecclesia Nation
+                <Link href="/trust-assets" className="text-gray-300 hover:text-royal-gold transition-colors">
+                  Trust & Asset Protection
+                </Link>
+              </li>
+              <li>
+                <Link href="/state-passport" className="text-gray-300 hover:text-royal-gold transition-colors">
+                  State-Citizen Passport
                 </Link>
               </li>
             </ul>

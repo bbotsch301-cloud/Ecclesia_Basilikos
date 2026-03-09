@@ -2,8 +2,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "wouter";
 import {
-  Crown, Shield, Heart, Users, BookOpen, Cross,
-  Key, Home as HomeIcon, ScrollText
+  Shield, BookOpen, Banknote, Globe,
+  ArrowRight, CheckCircle, AlertTriangle, Lock,
+  Scale, FileText, Building, Users, Eye,
+  ChevronRight, Landmark, CircleDot
 } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import RevealOnScroll from "@/components/ui/reveal-on-scroll";
@@ -30,458 +32,709 @@ export default function Home() {
 
   return (
     <div className="pt-16">
-      {/* Section 1: Hero */}
-      <div className="relative bg-gradient-to-br from-royal-navy via-royal-burgundy to-royal-navy pt-4 pb-24 md:pt-6 md:pb-36 animate-hero-gradient">
-        <div className="absolute inset-0 bg-black/20"></div>
+      {/* ═══════════════════════════════════════════════════════════════
+          SECTION 1: HERO
+          ═══════════════════════════════════════════════════════════════ */}
+      <div className="relative bg-gradient-to-br from-royal-navy via-royal-burgundy to-royal-navy pt-4 pb-28 md:pt-6 md:pb-40 animate-hero-gradient overflow-hidden">
+        <div className="absolute inset-0 bg-black/25"></div>
+
+        {/* Subtle pattern overlay */}
+        <div className="absolute inset-0 opacity-5" style={{
+          backgroundImage: "radial-gradient(circle at 25% 25%, white 1px, transparent 1px)",
+          backgroundSize: "50px 50px",
+        }}></div>
+
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.img
             src={sealImage}
             alt="Ecclesia Basilikos Seal"
-            className="w-[21rem] h-[21rem] md:w-[27rem] md:h-[27rem] mx-auto -mb-28 -mt-24 object-contain"
+            className="w-[18rem] h-[18rem] md:w-[24rem] md:h-[24rem] mx-auto -mb-20 -mt-20 object-contain drop-shadow-2xl"
             initial={heroInitial}
             animate={heroAnimate}
             transition={heroTransition(0)}
           />
-          <motion.p
-            className="font-cinzel text-xs md:text-sm tracking-[0.3em] uppercase text-white mb-4"
-            initial={heroInitial}
-            animate={heroAnimate}
-            transition={heroTransition(0)}
-          >
-            The New Covenant · Identity · Stewardship
-          </motion.p>
+
           <motion.h1
             className="font-cinzel-decorative text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight"
             initial={heroInitial}
             animate={heroAnimate}
-            transition={heroTransition(0)}
+            transition={heroTransition(0.15)}
           >
-            Sonship Was Restored So Stewardship Could Begin
+            Reclaim What Was Always Yours
           </motion.h1>
 
           <motion.h2
-            className="font-cinzel text-2xl md:text-3xl animate-gold-shimmer mb-10"
+            className="font-cinzel text-xl md:text-2xl animate-gold-shimmer mb-8"
             initial={heroInitial}
             animate={heroAnimate}
-            transition={heroTransition(0.2)}
+            transition={heroTransition(0.25)}
           >
-            What Was Given in Love Is Now Held in Trust
+            Your Money · Your Assets · Your Status
           </motion.h2>
 
           <motion.p
-            className="text-lg md:text-xl text-gray-200 max-w-3xl mx-auto leading-relaxed mb-8"
+            className="text-lg md:text-xl text-gray-200 max-w-3xl mx-auto leading-relaxed mb-10"
             initial={heroInitial}
             animate={heroAnimate}
             transition={heroTransition(0.4)}
           >
-            The New Covenant was not established to reform how you function within the old creation. It was established to inaugurate a new estate of life — one where identity, authority, provision, and security are received, not requested.
+            You have been operating inside a system designed to hold everything in your name while giving you control over nothing. Three pillars. Three shifts. One foundation.
           </motion.p>
 
           <motion.div
-            className="bg-white/10 backdrop-blur-sm border border-royal-gold/30 rounded-lg p-6 mb-10 max-w-2xl mx-auto"
+            className="flex flex-col sm:flex-row gap-4 justify-center"
             initial={heroInitial}
             animate={heroAnimate}
-            transition={heroTransition(0.7)}
+            transition={heroTransition(0.6)}
           >
-            <p className="font-georgia italic text-gray-200 text-lg">
-              "But as many as received him, to them gave he power to become the sons of God, even to them that believe on his name."
-            </p>
-            <p className="text-royal-gold mt-2 font-semibold">— John 1:12</p>
-          </motion.div>
-
-          <motion.div
-            className="inline-block rounded-lg animate-glow-pulse"
-            initial={heroInitial}
-            animate={heroAnimate}
-            transition={heroTransition(1.0)}
-          >
-            <Link href={ctaHref}>
+            <div className="inline-block rounded-lg animate-glow-pulse">
+              <Link href="/lawful-money">
+                <Button
+                  size="lg"
+                  className="royal-button text-lg md:text-xl px-10 py-6 shadow-2xl hover:scale-105 transition-transform"
+                >
+                  <Banknote className="mr-3 h-6 w-6" />
+                  Start with Pillar 1
+                  <ArrowRight className="ml-3 h-5 w-5" />
+                </Button>
+              </Link>
+            </div>
+            <Link href="/contact">
               <Button
                 size="lg"
-                className="royal-button text-xl px-12 py-6 shadow-2xl hover:scale-105 transition-transform"
+                variant="outline"
+                className="text-lg md:text-xl px-10 py-6 bg-white/15 border-royal-gold/50 text-royal-gold hover:bg-white/25 transition-all"
               >
-                <BookOpen className="mr-3 h-7 w-7" />
-                Join the Covenant Path
+                <Users className="mr-3 h-6 w-6" />
+                Get Guidance
               </Button>
             </Link>
           </motion.div>
         </div>
       </div>
 
-      {/* Section 2: Why Something Always Felt Off */}
+      {/* ═══════════════════════════════════════════════════════════════
+          SECTION 2: THE PROBLEM
+          ═══════════════════════════════════════════════════════════════ */}
       <div className="py-24 bg-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <RevealOnScroll>
-            <div className="text-center mb-12">
+            <div className="text-center mb-16">
               <h2 className="font-cinzel-decorative text-3xl md:text-4xl font-bold text-royal-navy mb-6">
-                Why Something Always Felt Off
+                The System Was Not Built for You
               </h2>
-              <p className="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">
-                You were told you were sons and daughters. You were called heirs. You were named ambassadors. But the life you were given to live never matched the identity you were given to carry.
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                Everything you think you own is held under a framework you never agreed to. Your money is debt. Your property is titled in a fiction. Your citizenship places you under a jurisdiction you never chose.
               </p>
             </div>
           </RevealOnScroll>
 
-          <StaggerContainer staggerDelay={0.12} className="space-y-6 max-w-3xl mx-auto mb-12">
+          <StaggerContainer staggerDelay={0.12} className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-16">
             {[
-              { called: "Called sons", lived: "but lived as dependents" },
-              { called: "Called heirs", lived: "but operated as applicants" },
-              { called: "Called ambassadors", lived: "but moved by permission" },
-              { called: "Called free", lived: "but structured lives around control" },
+              {
+                icon: Banknote,
+                title: "Your Money Isn't Money",
+                description:
+                  "Federal Reserve Notes are debt obligations — not lawful money. Every transaction you make using them is conducted in private credit, creating legal presumptions and tax obligations you never understood.",
+              },
+              {
+                icon: Building,
+                title: "Your Assets Aren't Protected",
+                description:
+                  "Anything held in your personal name is exposed to liens, levies, lawsuits, and seizure. You don't truly own what can be taken from you by operation of law without your consent.",
+              },
+              {
+                icon: FileText,
+                title: "Your Status Isn't What You Think",
+                description:
+                  "The 14th Amendment created a federal citizenship that places you under congressional jurisdiction. Your original status — state citizen of the republic — has been obscured, not destroyed.",
+              },
             ].map((item, index) => (
-              <motion.div key={index} variants={staggerItemVariants} className="border-l-4 border-royal-burgundy pl-6 py-3">
-                <p className="text-lg text-gray-800">
-                  <span className="font-semibold text-royal-navy">{item.called}</span> — {item.lived}.
-                </p>
+              <motion.div key={index} variants={staggerItemVariants}>
+                <Card className="royal-card h-full border-t-4 border-t-royal-burgundy">
+                  <CardContent className="p-8">
+                    <div className="w-12 h-12 rounded-full bg-royal-burgundy/10 flex items-center justify-center mb-5">
+                      <item.icon className="w-6 h-6 text-royal-burgundy" />
+                    </div>
+                    <h3 className="font-cinzel text-lg font-bold text-royal-navy mb-3">
+                      {item.title}
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed">
+                      {item.description}
+                    </p>
+                  </CardContent>
+                </Card>
               </motion.div>
             ))}
           </StaggerContainer>
 
-          <RevealOnScroll delay={0.3}>
+          <RevealOnScroll>
             <div className="text-center">
-              <p className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
-                The issue was never faith. It was never sincerity.{" "}
-                <span className="font-bold text-royal-navy">It was alignment.</span>
+              <p className="text-xl md:text-2xl font-semibold text-royal-navy max-w-3xl mx-auto">
+                This is not conspiracy. This is how the system is structured.{" "}
+                <span className="text-royal-burgundy">And it can be changed — lawfully.</span>
               </p>
             </div>
           </RevealOnScroll>
         </div>
       </div>
 
-      {/* Section 3: Two Ways of Existing */}
-      <div className="py-24 marble-bg">
+      {/* ═══════════════════════════════════════════════════════════════
+          SECTION 3: THE THREE PILLARS — MAIN FEATURE
+          ═══════════════════════════════════════════════════════════════ */}
+      <div className="py-28 marble-bg">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <RevealOnScroll>
-            <div className="text-center mb-12">
-              <h2 className="font-cinzel-decorative text-3xl md:text-4xl font-bold text-royal-navy mb-6">
-                Two Ways of Existing
+            <div className="text-center mb-8">
+              <span className="inline-flex items-center gap-2 font-cinzel text-xs tracking-[0.3em] uppercase text-royal-burgundy bg-royal-burgundy/10 px-5 py-2 rounded-full mb-5">
+                <Shield className="w-3.5 h-3.5" />
+                The Foundation
+              </span>
+              <h2 className="font-cinzel-decorative text-3xl md:text-5xl font-bold text-royal-navy mb-6">
+                Three Pillars of Alignment
               </h2>
-              <p className="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">
-                Scripture speaks of two estates — one born of the flesh, one born of the Spirit. These are not preferences. They are foundations. Everything built on them follows their nature.
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                Each pillar addresses a critical area where you have been unknowingly
+                operating under the wrong framework. Together, they form the
+                foundation everything else is built upon.
               </p>
             </div>
           </RevealOnScroll>
 
-          <StaggerContainer staggerDelay={0.2} className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-12">
-            <motion.div variants={staggerItemVariants}>
-              <Card className="royal-card h-full">
-                <CardContent className="p-8">
-                  <h3 className="font-cinzel text-xl font-bold text-royal-burgundy mb-6">The Former Estate</h3>
-                  <ul className="space-y-3 text-gray-700 text-lg">
-                    <li>Representation by proxy</li>
-                    <li>Administration by institution</li>
-                    <li>Security by contract</li>
-                  </ul>
-                </CardContent>
-              </Card>
-            </motion.div>
-
-            <motion.div variants={staggerItemVariants}>
-              <Card className="royal-card h-full">
-                <CardContent className="p-8">
-                  <h3 className="font-cinzel text-xl font-bold text-royal-navy mb-6">The New Estate</h3>
-                  <ul className="space-y-3 text-gray-700 text-lg">
-                    <li>Sonship by the Spirit</li>
-                    <li>Inheritance by covenant</li>
-                    <li>Security by trust</li>
-                  </ul>
-                </CardContent>
-              </Card>
-            </motion.div>
-          </StaggerContainer>
-
+          {/* Pillar 1 — Lawful Money */}
           <RevealOnScroll>
-            <div className="bg-white/60 backdrop-blur-sm border border-royal-gold/30 rounded-lg p-6 max-w-2xl mx-auto mb-8">
-              <p className="font-georgia italic text-gray-700 text-lg">
-                "That which is born of the flesh is flesh; and that which is born of the Spirit is spirit."
-              </p>
-              <p className="text-royal-burgundy mt-2 font-semibold">— John 3:6</p>
+            <div className="max-w-5xl mx-auto mt-16">
+              <Link href="/lawful-money">
+                <Card className="royal-card hover:border-royal-gold transition-all cursor-pointer group overflow-hidden">
+                  <CardContent className="p-0">
+                    <div className="grid md:grid-cols-5">
+                      <div className="md:col-span-2 bg-gradient-to-br from-royal-navy to-royal-burgundy p-8 md:p-10 flex flex-col justify-center text-white">
+                        <span className="inline-block self-start text-xs font-semibold text-royal-gold bg-royal-gold/15 px-3 py-1 rounded-full mb-4">
+                          Pillar 1
+                        </span>
+                        <Banknote className="w-14 h-14 text-royal-gold mb-4" />
+                        <h3 className="font-cinzel-decorative text-2xl md:text-3xl font-bold mb-2">
+                          Lawful Money Redemption
+                        </h3>
+                        <p className="text-sm text-royal-gold font-cinzel font-semibold">
+                          12 USC § 411
+                        </p>
+                      </div>
+                      <div className="md:col-span-3 p-8 md:p-10 flex flex-col justify-center">
+                        <p className="text-gray-700 leading-relaxed mb-6">
+                          Every Federal Reserve Note is a debt instrument issued by a private
+                          banking system. Under 12 USC § 411, you have the statutory right to
+                          demand redemption in lawful money — non-debt currency authorized under
+                          the Constitution. This single act changes the legal character of every
+                          transaction.
+                        </p>
+                        <ul className="space-y-3 mb-6">
+                          {[
+                            "Remove the presumption of private credit usage",
+                            "Establish your financial standing under public law",
+                            "Affect how income is characterized for tax purposes",
+                            "Exercise a right — not file a petition",
+                          ].map((item, i) => (
+                            <li key={i} className="flex items-start gap-3 text-sm text-gray-600">
+                              <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                        <div className="flex items-center gap-2 text-royal-gold font-cinzel text-sm font-semibold group-hover:gap-3 transition-all">
+                          Learn How Lawful Money Redemption Works
+                          <ArrowRight className="w-4 h-4" />
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
             </div>
           </RevealOnScroll>
 
-          <RevealOnScroll delay={0.2}>
-            <div className="text-center">
-              <p className="text-xl font-semibold text-royal-navy max-w-3xl mx-auto">
-                The New Covenant does not improve the former. It establishes the latter.
-              </p>
+          {/* Pillar 2 — Trust */}
+          <RevealOnScroll>
+            <div className="max-w-5xl mx-auto mt-8">
+              <Link href="/trust-assets">
+                <Card className="royal-card hover:border-royal-gold transition-all cursor-pointer group overflow-hidden">
+                  <CardContent className="p-0">
+                    <div className="grid md:grid-cols-5">
+                      <div className="md:col-span-3 p-8 md:p-10 flex flex-col justify-center order-2 md:order-1">
+                        <p className="text-gray-700 leading-relaxed mb-6">
+                          Anything held in your personal name is fully exposed — to creditors,
+                          government claims, lawsuits, and probate. A properly structured trust
+                          separates legal title from beneficial interest. The trust owns the
+                          assets. You receive the benefits. That separation is your protection.
+                        </p>
+                        <ul className="space-y-3 mb-6">
+                          {[
+                            "Separate legal title from personal liability",
+                            "Shield assets from judgments, liens, and creditor claims",
+                            "Avoid probate — private, efficient, and immediate",
+                            "Hold real property, accounts, vehicles, and business interests",
+                          ].map((item, i) => (
+                            <li key={i} className="flex items-start gap-3 text-sm text-gray-600">
+                              <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                        <div className="flex items-center gap-2 text-royal-gold font-cinzel text-sm font-semibold group-hover:gap-3 transition-all">
+                          Learn How Trust Protection Works
+                          <ArrowRight className="w-4 h-4" />
+                        </div>
+                      </div>
+                      <div className="md:col-span-2 bg-gradient-to-br from-royal-burgundy to-royal-navy p-8 md:p-10 flex flex-col justify-center text-white order-1 md:order-2">
+                        <span className="inline-block self-start text-xs font-semibold text-royal-gold bg-royal-gold/15 px-3 py-1 rounded-full mb-4">
+                          Pillar 2
+                        </span>
+                        <Shield className="w-14 h-14 text-royal-gold mb-4" />
+                        <h3 className="font-cinzel-decorative text-2xl md:text-3xl font-bold mb-2">
+                          Trust & Asset Protection
+                        </h3>
+                        <p className="text-sm text-royal-gold font-cinzel font-semibold">
+                          Securing What Was Given
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            </div>
+          </RevealOnScroll>
+
+          {/* Pillar 3 — Passport */}
+          <RevealOnScroll>
+            <div className="max-w-5xl mx-auto mt-8">
+              <Link href="/state-passport">
+                <Card className="royal-card hover:border-royal-gold transition-all cursor-pointer group overflow-hidden">
+                  <CardContent className="p-0">
+                    <div className="grid md:grid-cols-5">
+                      <div className="md:col-span-2 bg-gradient-to-br from-royal-navy to-royal-burgundy p-8 md:p-10 flex flex-col justify-center text-white">
+                        <span className="inline-block self-start text-xs font-semibold text-royal-gold bg-royal-gold/15 px-3 py-1 rounded-full mb-4">
+                          Pillar 3
+                        </span>
+                        <Globe className="w-14 h-14 text-royal-gold mb-4" />
+                        <h3 className="font-cinzel-decorative text-2xl md:text-3xl font-bold mb-2">
+                          State-Citizen Passport
+                        </h3>
+                        <p className="text-sm text-royal-gold font-cinzel font-semibold">
+                          Reclaiming Your Status
+                        </p>
+                      </div>
+                      <div className="md:col-span-3 p-8 md:p-10 flex flex-col justify-center">
+                        <p className="text-gray-700 leading-relaxed mb-6">
+                          There are two types of citizenship in America — and you have been
+                          defaulted into one without your knowledge. State citizenship predates
+                          the 14th Amendment and carries unalienable rights, not civil privileges.
+                          Your passport can reflect your true political status in the republic.
+                        </p>
+                        <ul className="space-y-3 mb-6">
+                          {[
+                            "Establish your standing under original constitutional jurisdiction",
+                            "Operate under unalienable rights — not legislative privileges",
+                            "Declare your domicile in one of the several states",
+                            "Document your status through the passport application process",
+                          ].map((item, i) => (
+                            <li key={i} className="flex items-start gap-3 text-sm text-gray-600">
+                              <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                        <div className="flex items-center gap-2 text-royal-gold font-cinzel text-sm font-semibold group-hover:gap-3 transition-all">
+                          Learn How State-Citizen Status Works
+                          <ArrowRight className="w-4 h-4" />
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
             </div>
           </RevealOnScroll>
         </div>
       </div>
 
-      {/* Section 4: How the Father Restored Sonship */}
+      {/* ═══════════════════════════════════════════════════════════════
+          SECTION 4: THE SHIFT — BEFORE / AFTER
+          ═══════════════════════════════════════════════════════════════ */}
       <RevealOnScroll>
         <div className="py-24 bg-gradient-to-r from-royal-burgundy via-royal-navy to-royal-burgundy">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <Cross className="w-20 h-20 text-royal-gold mx-auto mb-8 animate-gentle-float" />
-            <h2 className="font-cinzel-decorative text-3xl md:text-5xl font-bold text-white mb-8">
-              How the Father Restored Sonship
-            </h2>
-
-            <div className="space-y-8 max-w-3xl mx-auto">
-              <p className="text-lg md:text-xl text-gray-200 leading-relaxed">
-                Christ did not come to negotiate with the former estate. He came to bear its full liability — every debt, every claim, every bond — and to exhaust it entirely in His body on the cross.
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="font-cinzel-decorative text-3xl md:text-4xl font-bold text-white mb-6">
+                The Shift This Creates
+              </h2>
+              <p className="text-lg text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                Each pillar moves you from the system's default position to your
+                lawful standing. This is what alignment looks like in practice.
               </p>
-
-              <p className="text-lg md:text-xl text-gray-200 leading-relaxed">
-                In doing so, He did not reform the old creation. He closed it. And He rose to establish a new estate — one rooted in sonship, sealed by the Spirit, and administered by covenant.
-              </p>
-
-              <div className="bg-white/10 backdrop-blur-sm border border-royal-gold/30 rounded-lg p-6 max-w-2xl mx-auto">
-                <p className="font-georgia italic text-gray-200 text-lg">
-                  "Therefore if any man be in Christ, he is a new creature: old things are passed away; behold, all things are become new."
-                </p>
-                <p className="text-royal-gold mt-2 font-semibold">— 2 Corinthians 5:17</p>
-              </div>
             </div>
+
+            <StaggerContainer staggerDelay={0.15} className="space-y-4 max-w-4xl mx-auto">
+              {[
+                {
+                  before: "Using private credit (Federal Reserve Notes)",
+                  after: "Redeeming in lawful money (12 USC § 411)",
+                  icon: Banknote,
+                },
+                {
+                  before: "Assets held in personal name — fully exposed",
+                  after: "Assets held in trust — lawfully protected",
+                  icon: Shield,
+                },
+                {
+                  before: "Federal citizen — subject to congressional jurisdiction",
+                  after: "State citizen — standing under original constitution",
+                  icon: Globe,
+                },
+                {
+                  before: "Operating by permission and privilege",
+                  after: "Operating by right and standing",
+                  icon: Scale,
+                },
+                {
+                  before: "System controls your identity, property, and status",
+                  after: "You hold your identity, property, and status in trust",
+                  icon: Lock,
+                },
+              ].map((item, index) => (
+                <motion.div key={index} variants={staggerItemVariants}>
+                  <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-5 md:p-6">
+                    <div className="grid md:grid-cols-[1fr,auto,1fr] gap-4 items-center">
+                      <div className="flex items-start gap-3">
+                        <AlertTriangle className="w-4 h-4 text-red-400 flex-shrink-0 mt-1" />
+                        <p className="text-gray-300 text-sm md:text-base">{item.before}</p>
+                      </div>
+                      <div className="hidden md:flex items-center justify-center">
+                        <ChevronRight className="w-6 h-6 text-royal-gold" />
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0 mt-1" />
+                        <p className="text-white font-medium text-sm md:text-base">{item.after}</p>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </StaggerContainer>
           </div>
         </div>
       </RevealOnScroll>
 
-      {/* Section 5: This Is Not a Movement */}
+      {/* ═══════════════════════════════════════════════════════════════
+          SECTION 5: WHAT YOU GET — CONCRETE OUTCOMES
+          ═══════════════════════════════════════════════════════════════ */}
       <div className="py-24 bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <RevealOnScroll>
-            <div className="royal-divider mb-12"></div>
+            <div className="text-center mb-16">
+              <h2 className="font-cinzel-decorative text-3xl md:text-4xl font-bold text-royal-navy mb-6">
+                What You Will Learn
+              </h2>
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                This is not theory. Each pillar comes with specific knowledge,
+                processes, and documentation you can act on.
+              </p>
+            </div>
           </RevealOnScroll>
 
-          <RevealOnScroll>
-            <h2 className="font-cinzel-decorative text-3xl md:text-4xl font-bold text-royal-navy mb-10">
-              This Is Not a Movement
-            </h2>
-          </RevealOnScroll>
-
-          <StaggerContainer staggerDelay={0.25} initialDelay={0.2} className="space-y-6 text-xl text-gray-700 max-w-2xl mx-auto leading-relaxed">
-            <motion.p variants={staggerItemVariants}>This is not a protest.</motion.p>
-            <motion.p variants={staggerItemVariants}>This is not a workaround.</motion.p>
-            <motion.p variants={staggerItemVariants}>This is not a strategy.</motion.p>
-            <motion.p variants={emphasisItemVariants} className="text-2xl font-semibold text-royal-navy pt-4">
-              This is not resistance. It is <span className="text-royal-burgundy">alignment</span>.
-            </motion.p>
+          <StaggerContainer staggerDelay={0.1} className="grid md:grid-cols-2 gap-5 max-w-4xl mx-auto">
+            {[
+              {
+                icon: FileText,
+                text: "The full text and meaning of 12 USC § 411",
+              },
+              {
+                icon: Banknote,
+                text: "How to write a proper restrictive endorsement on every deposit",
+              },
+              {
+                icon: Scale,
+                text: "The legal distinction between private credit and public money",
+              },
+              {
+                icon: Shield,
+                text: "How trust structures separate legal title from beneficial interest",
+              },
+              {
+                icon: Building,
+                text: "The difference between irrevocable, express, common law, and land trusts",
+              },
+              {
+                icon: Lock,
+                text: "How to transfer real property, accounts, and vehicles into trust",
+              },
+              {
+                icon: Globe,
+                text: "The constitutional basis for state citizenship vs. federal citizenship",
+              },
+              {
+                icon: Landmark,
+                text: "How to complete the DS-11 passport application with proper status language",
+              },
+              {
+                icon: Eye,
+                text: "Key case law: Slaughter-House Cases, United States v. Cruikshank",
+              },
+              {
+                icon: Users,
+                text: "Access to community support, guidance, and fellowship throughout the process",
+              },
+            ].map((item, index) => (
+              <motion.div key={index} variants={staggerItemVariants}>
+                <div className="flex items-start gap-4 p-4 rounded-lg hover:bg-gray-50 transition-colors">
+                  <div className="w-10 h-10 rounded-lg bg-royal-navy/5 flex items-center justify-center flex-shrink-0">
+                    <item.icon className="w-5 h-5 text-royal-navy" />
+                  </div>
+                  <p className="text-gray-700 leading-relaxed pt-1.5">
+                    {item.text}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
           </StaggerContainer>
-
-          <RevealOnScroll delay={1.2}>
-            <div className="royal-divider mt-12"></div>
-          </RevealOnScroll>
         </div>
       </div>
 
-      {/* Section 6: Life Ordered by Trust */}
+      {/* ═══════════════════════════════════════════════════════════════
+          SECTION 6: PHASE ROADMAP
+          ═══════════════════════════════════════════════════════════════ */}
       <div className="py-24 marble-bg">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <RevealOnScroll>
-            <div className="text-center mb-12">
+            <div className="text-center mb-16">
               <h2 className="font-cinzel-decorative text-3xl md:text-4xl font-bold text-royal-navy mb-6">
-                Life Ordered by Trust
+                The Journey Ahead
+              </h2>
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                The foundation must be set first. What follows builds upon it — but nothing
+                can be built without this ground being laid.
+              </p>
+            </div>
+          </RevealOnScroll>
+
+          <StaggerContainer staggerDelay={0.2} className="max-w-3xl mx-auto space-y-6">
+            {/* Foundation — Active */}
+            <motion.div variants={staggerItemVariants}>
+              <Card className="border-2 border-royal-gold shadow-lg">
+                <CardContent className="p-6 md:p-8">
+                  <div className="flex items-start gap-5">
+                    <div className="w-14 h-14 rounded-full bg-royal-gold flex items-center justify-center flex-shrink-0">
+                      <span className="font-cinzel text-lg font-bold text-royal-navy">01</span>
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-2">
+                        <h3 className="font-cinzel text-xl font-bold text-royal-navy">
+                          Foundation
+                        </h3>
+                        <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-green-700 bg-green-100 px-3 py-1 rounded-full">
+                          <CircleDot className="w-3 h-3" />
+                          Start Here
+                        </span>
+                      </div>
+                      <p className="text-gray-600 leading-relaxed mb-3">
+                        Lawful Money Redemption, Trust & Asset Protection, and State-Citizen Passport. These three pillars establish your financial standing, protect your assets, and confirm your political status.
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        <Link href="/lawful-money" className="text-xs font-cinzel font-semibold text-royal-gold hover:text-royal-burgundy transition-colors">
+                          Lawful Money →
+                        </Link>
+                        <Link href="/trust-assets" className="text-xs font-cinzel font-semibold text-royal-gold hover:text-royal-burgundy transition-colors">
+                          Trust & Assets →
+                        </Link>
+                        <Link href="/state-passport" className="text-xs font-cinzel font-semibold text-royal-gold hover:text-royal-burgundy transition-colors">
+                          State Passport →
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            {/* Phase 2 — Coming */}
+            <motion.div variants={staggerItemVariants}>
+              <Card className="border border-gray-200 opacity-75">
+                <CardContent className="p-6 md:p-8">
+                  <div className="flex items-start gap-5">
+                    <div className="w-14 h-14 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
+                      <span className="font-cinzel text-lg font-bold text-gray-500">02</span>
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-2">
+                        <h3 className="font-cinzel text-xl font-bold text-gray-500">
+                          Phase 2 — Structure
+                        </h3>
+                        <span className="text-xs font-semibold text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+                          Coming Soon
+                        </span>
+                      </div>
+                      <p className="text-gray-400 leading-relaxed">
+                        Covenant identity, ecclesia assembly, kingdom governance, and the divine mandate. Building the structure upon the foundation.
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            {/* Phase 3 — Coming */}
+            <motion.div variants={staggerItemVariants}>
+              <Card className="border border-gray-200 opacity-60">
+                <CardContent className="p-6 md:p-8">
+                  <div className="flex items-start gap-5">
+                    <div className="w-14 h-14 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
+                      <span className="font-cinzel text-lg font-bold text-gray-400">03</span>
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-2">
+                        <h3 className="font-cinzel text-xl font-bold text-gray-400">
+                          Phase 3 — Operation
+                        </h3>
+                        <span className="text-xs font-semibold text-gray-400 bg-gray-100 px-3 py-1 rounded-full">
+                          Coming Soon
+                        </span>
+                      </div>
+                      <p className="text-gray-400 leading-relaxed">
+                        Full stewardship operation, academy courses, covenant repository, embassy forum, and proof vault. Living and operating from the new estate.
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </StaggerContainer>
+        </div>
+      </div>
+
+      {/* ═══════════════════════════════════════════════════════════════
+          SECTION 7: COMMON QUESTIONS
+          ═══════════════════════════════════════════════════════════════ */}
+      <div className="py-24 bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <RevealOnScroll>
+            <div className="text-center mb-16">
+              <h2 className="font-cinzel-decorative text-3xl md:text-4xl font-bold text-royal-navy mb-6">
+                Common Questions
               </h2>
             </div>
           </RevealOnScroll>
 
-          <StaggerContainer staggerDelay={0.15} className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-12">
+          <StaggerContainer staggerDelay={0.12} className="space-y-6 max-w-3xl mx-auto">
             {[
               {
-                icon: Heart,
-                title: "Identity is received, not asserted",
+                q: "Is lawful money redemption legal?",
+                a: "Yes. 12 USC § 411 is current, standing federal law. It expressly states that Federal Reserve Notes \"shall be redeemed in lawful money on demand.\" Redemption is the exercise of a statutory right — not a loophole, petition, or protest.",
               },
               {
-                icon: Shield,
-                title: "Authority is exercised, not demanded",
+                q: "Do I need a lawyer to set up a trust?",
+                a: "We provide education on trust law, structure, and administration so you understand what you are doing and why. We encourage members to study diligently and seek qualified counsel when appropriate. Knowledge comes first — then action.",
               },
               {
-                icon: Crown,
-                title: "Provision is stewarded, not owned",
+                q: "Can the government refuse a state-citizen passport?",
+                a: "The right to a passport is well established. The process involves completing the standard DS-11 application with the correct understanding of domicile, status, and language. We educate on what the law says and how the application works.",
               },
               {
-                icon: HomeIcon,
-                title: "Security is rested in, not defended",
+                q: "Is this anti-government?",
+                a: "No. This is about understanding the system as it is written — not as you were told it works. Every action here is grounded in existing statute, constitutional law, and legal precedent. This is alignment with the law, not resistance to it.",
+              },
+              {
+                q: "How long does this take?",
+                a: "The foundation is self-paced. Some members begin practicing lawful money redemption within days. Trust establishment takes more preparation. The passport process involves a formal application. We provide guidance and community support throughout.",
               },
             ].map((item, index) => (
               <motion.div key={index} variants={staggerItemVariants}>
-                <Card className="royal-card h-full">
-                  <CardContent className="p-8 flex items-start gap-5">
-                    <item.icon className="w-10 h-10 text-royal-burgundy flex-shrink-0 mt-1" />
-                    <p className="text-lg text-gray-800 font-semibold leading-relaxed">
-                      {item.title}
+                <Card className="royal-card">
+                  <CardContent className="p-6 md:p-8">
+                    <h3 className="font-cinzel text-base font-bold text-royal-navy mb-3">
+                      {item.q}
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed">
+                      {item.a}
                     </p>
                   </CardContent>
                 </Card>
               </motion.div>
             ))}
           </StaggerContainer>
-
-          <RevealOnScroll delay={0.3}>
-            <div className="text-center">
-              <p className="text-xl font-semibold text-royal-navy max-w-3xl mx-auto">
-                Structure follows identity. It never precedes it.
-              </p>
-            </div>
-          </RevealOnScroll>
         </div>
       </div>
 
-      {/* Section 7: How You Know You're Living From the Right Estate */}
-      <div className="py-24 bg-gradient-to-br from-royal-navy via-royal-burgundy to-royal-navy">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      {/* ═══════════════════════════════════════════════════════════════
+          SECTION 8: FINAL CTA
+          ═══════════════════════════════════════════════════════════════ */}
+      <div className="py-32 bg-gradient-to-br from-royal-navy via-royal-burgundy to-royal-navy relative overflow-hidden">
+        {/* Subtle pattern */}
+        <div className="absolute inset-0 opacity-5" style={{
+          backgroundImage: "radial-gradient(circle at 75% 75%, white 1px, transparent 1px)",
+          backgroundSize: "60px 60px",
+        }}></div>
+
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <RevealOnScroll>
-            <h2 className="font-cinzel-decorative text-3xl md:text-4xl font-bold text-white mb-10">
-              How You Know You're Living From the Right Estate
+            <h2 className="font-cinzel-decorative text-4xl md:text-5xl font-bold text-white mb-6">
+              The Foundation Starts Here
             </h2>
-          </RevealOnScroll>
-
-          <StaggerContainer staggerDelay={0.3} className="space-y-8 text-lg md:text-xl text-gray-200 leading-relaxed max-w-3xl mx-auto">
-            <motion.p variants={staggerItemVariants}>
-              When you no longer feel the need to defend what God has given you — you are resting.
-            </motion.p>
-            <motion.p variants={staggerItemVariants}>
-              When provision does not produce anxiety, and authority does not produce arrogance — you are aligned.
-            </motion.p>
-            <motion.p variants={staggerItemVariants}>
-              When your response to pressure is not fear, but peace — you are living from the new estate.
-            </motion.p>
-          </StaggerContainer>
-
-          <RevealOnScroll delay={1.2}>
-            <p className="text-2xl md:text-3xl text-royal-gold font-semibold mt-12 max-w-3xl mx-auto">
-              The fruit of sonship is not urgency — it is peace.
+            <p className="text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto leading-relaxed mb-4">
+              Three pillars. Three shifts. One foundation.
             </p>
           </RevealOnScroll>
-        </div>
-      </div>
 
-      {/* Section 8: Life Ordered by Covenant — Pathway Cards */}
-      <div className="py-24 bg-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <RevealOnScroll>
-            <div className="text-center mb-16">
-              <h2 className="font-cinzel-decorative text-3xl md:text-4xl font-bold text-royal-navy mb-6">
-                Life Ordered by Covenant
-              </h2>
-            </div>
+          <RevealOnScroll delay={0.2}>
+            <StaggerContainer staggerDelay={0.15} className="flex flex-col md:flex-row gap-4 justify-center items-center my-12 max-w-3xl mx-auto">
+              {[
+                { icon: Banknote, label: "Lawful Money", href: "/lawful-money" },
+                { icon: Shield, label: "Trust & Assets", href: "/trust-assets" },
+                { icon: Globe, label: "State Passport", href: "/state-passport" },
+              ].map((item, index) => (
+                <motion.div key={index} variants={staggerItemVariants} className="flex-1 w-full md:w-auto">
+                  <Link href={item.href}>
+                    <div className="bg-white/10 backdrop-blur-sm border border-royal-gold/30 rounded-lg p-5 text-center hover:bg-white/15 transition-all cursor-pointer group">
+                      <item.icon className="w-8 h-8 text-royal-gold mx-auto mb-2" />
+                      <p className="font-cinzel text-sm font-semibold text-white group-hover:text-royal-gold transition-colors">
+                        {item.label}
+                      </p>
+                    </div>
+                  </Link>
+                </motion.div>
+              ))}
+            </StaggerContainer>
           </RevealOnScroll>
 
-          <StaggerContainer staggerDelay={0.1} className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <motion.div variants={staggerItemVariants}>
-              <Link href="/mandate">
-                <Card className="royal-card hover:border-royal-gold transition-all cursor-pointer h-full">
-                  <CardContent className="p-8">
-                    <ScrollText className="w-12 h-12 text-royal-burgundy mb-4" />
-                    <h3 className="font-cinzel text-xl font-bold text-royal-navy mb-3">The Mandate</h3>
-                    <p className="text-gray-700">
-                      Understanding the divine commission of sonship.
-                    </p>
-                  </CardContent>
-                </Card>
-              </Link>
-            </motion.div>
-
-            <motion.div variants={staggerItemVariants}>
-              <Link href="/nation">
-                <Card className="royal-card hover:border-royal-gold transition-all cursor-pointer h-full">
-                  <CardContent className="p-8">
-                    <Crown className="w-12 h-12 text-royal-burgundy mb-4" />
-                    <h3 className="font-cinzel text-xl font-bold text-royal-navy mb-3">Ecclesia</h3>
-                    <p className="text-gray-700">
-                      Life as the called-out assembly, not isolated believers.
-                    </p>
-                  </CardContent>
-                </Card>
-              </Link>
-            </motion.div>
-
-            <motion.div variants={staggerItemVariants}>
-              <Link href="/courses">
-                <Card className="royal-card hover:border-royal-gold transition-all cursor-pointer h-full">
-                  <CardContent className="p-8">
-                    <BookOpen className="w-12 h-12 text-royal-burgundy mb-4" />
-                    <h3 className="font-cinzel text-xl font-bold text-royal-navy mb-3">Royal Academy</h3>
-                    <p className="text-gray-700">
-                      Formation in identity, authority, and stewardship.
-                    </p>
-                  </CardContent>
-                </Card>
-              </Link>
-            </motion.div>
-
-            <motion.div variants={staggerItemVariants}>
-              <Link href="/repository">
-                <Card className="royal-card hover:border-royal-gold transition-all cursor-pointer h-full">
-                  <CardContent className="p-8">
-                    <Shield className="w-12 h-12 text-royal-burgundy mb-4" />
-                    <h3 className="font-cinzel text-xl font-bold text-royal-navy mb-3">Covenant Repository</h3>
-                    <p className="text-gray-700">
-                      Records, declarations, and biblical comparisons.
-                    </p>
-                  </CardContent>
-                </Card>
-              </Link>
-            </motion.div>
-
-            <motion.div variants={staggerItemVariants}>
-              <Link href="/forum">
-                <Card className="royal-card hover:border-royal-gold transition-all cursor-pointer h-full">
-                  <CardContent className="p-8">
-                    <Users className="w-12 h-12 text-royal-burgundy mb-4" />
-                    <h3 className="font-cinzel text-xl font-bold text-royal-navy mb-3">Embassy Forum</h3>
-                    <p className="text-gray-700">
-                      Fellowship among those walking this path.
-                    </p>
-                  </CardContent>
-                </Card>
-              </Link>
-            </motion.div>
-
-            <motion.div variants={staggerItemVariants}>
+          <RevealOnScroll delay={0.5}>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="inline-block rounded-lg animate-glow-pulse">
+                <Link href="/lawful-money">
+                  <Button
+                    size="lg"
+                    className="royal-button text-xl px-12 py-7 shadow-2xl hover:scale-105 transition-transform"
+                  >
+                    <Banknote className="mr-3 h-7 w-7" />
+                    Begin with Pillar 1
+                    <ArrowRight className="ml-3 h-6 w-6" />
+                  </Button>
+                </Link>
+              </div>
               <Link href="/contact">
-                <Card className="royal-card hover:border-royal-gold transition-all cursor-pointer h-full">
-                  <CardContent className="p-8">
-                    <Key className="w-12 h-12 text-royal-burgundy mb-4" />
-                    <h3 className="font-cinzel text-xl font-bold text-royal-navy mb-3">Stewardship Onboarding</h3>
-                    <p className="text-gray-700">
-                      Guided alignment of life, role, and responsibility.
-                    </p>
-                  </CardContent>
-                </Card>
-              </Link>
-            </motion.div>
-          </StaggerContainer>
-        </div>
-      </div>
-
-      {/* Section 9: The Invitation */}
-      <div className="py-32 bg-gradient-to-br from-royal-navy via-royal-burgundy to-royal-navy">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <RevealOnScroll>
-            <h2 className="font-cinzel-decorative text-4xl md:text-5xl font-bold text-white mb-10">
-              The Invitation
-            </h2>
-          </RevealOnScroll>
-
-          <StaggerContainer staggerDelay={0.2} className="space-y-6 text-lg md:text-xl text-gray-200 leading-relaxed max-w-3xl mx-auto mb-12">
-            <motion.p variants={staggerItemVariants}>You are not escaping anything.</motion.p>
-            <motion.p variants={staggerItemVariants}>You are not fighting anything.</motion.p>
-            <motion.p variants={staggerItemVariants}>You are not fixing anything.</motion.p>
-            <motion.p variants={emphasisItemVariants} className="text-2xl md:text-3xl text-royal-gold font-semibold pt-4">
-              You are aligning with what the Father has already established.
-            </motion.p>
-          </StaggerContainer>
-
-          <RevealOnScroll delay={0.8}>
-            <div className="inline-block rounded-lg animate-glow-pulse">
-              <Link href={ctaHref}>
                 <Button
                   size="lg"
-                  className="royal-button text-2xl px-16 py-8 shadow-2xl hover:scale-105 transition-transform"
+                  variant="outline"
+                  className="text-xl px-12 py-7 bg-white/15 border-royal-gold/50 text-royal-gold hover:bg-white/25 transition-all"
                 >
-                  <BookOpen className="mr-3 h-8 w-8" />
-                  Join the Covenant Path
+                  <Users className="mr-3 h-7 w-7" />
+                  Get Guidance
                 </Button>
               </Link>
             </div>
           </RevealOnScroll>
 
-          <RevealOnScroll delay={1.0}>
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed mt-10">
-              The covenant was established before you arrived. Alignment simply allows you to live from it.
+          <RevealOnScroll delay={0.7}>
+            <p className="text-gray-400 text-base max-w-xl mx-auto leading-relaxed mt-10">
+              Ecclesia Basilikos provides education and community — not legal or tax advice.
+              Your journey is your own, supported by knowledge and fellowship.
             </p>
           </RevealOnScroll>
         </div>
