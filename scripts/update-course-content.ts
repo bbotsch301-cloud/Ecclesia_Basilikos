@@ -666,18 +666,17 @@ The restrictive endorsement serves as your **written demand** — a notice prese
 
 ## Step-by-Step Process
 
-### Step 1: Prepare Your Endorsement Stamp
+### Step 1: Write Your Endorsement
 
-Obtain a self-inking rubber stamp with the following text:
+On the back of each instrument, write the following in the endorsement area (red ink recommended but not required):
 
 \`\`\`
-Redeemed in Lawful Money
-Pursuant to Title 12 USC §411
-[Your Name]
-[Your Account Number]
+Deposited For Credit On Account.
+Redeemed In Lawful Money Per 12 U.S.C. § 411
+by: [Your Name], grantor, all rights reserved
 \`\`\`
 
-Alternatively, you may write this by hand on each instrument.
+You may handwrite this on each instrument — no special tools are required. For convenience, you may optionally order a self-inking rubber stamp with this language (typically $15-30 from any office supply vendor), but a stamp is not necessary. What matters is that the language is present and legible on the instrument at the time of deposit.
 
 ### Step 2: Endorse Every Instrument
 
