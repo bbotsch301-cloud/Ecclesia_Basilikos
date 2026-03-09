@@ -1,6 +1,6 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { useParams, useLocation, Link } from "wouter";
+import { useParams, useLocation } from "wouter";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,9 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -23,24 +22,15 @@ import {
   Eye,
   EyeOff,
   ChevronLeft,
-  ChevronRight,
-  ChevronDown,
-  ChevronUp,
   GraduationCap,
   Video,
   FileText,
   Pencil,
   X,
-  Check,
-  Upload,
   ExternalLink,
-  GripVertical,
-  ArrowUp,
-  ArrowDown,
   Loader2,
   LayoutDashboard,
   PlayCircle,
-  Copy,
   Search,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -125,6 +115,9 @@ function CourseListView() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/courses"] });
     },
+    onError: (error: Error) => {
+      toast({ title: "Error", description: error.message || "Failed to update publish status", variant: "destructive" });
+    },
   });
 
   const deleteCourseMutation = useMutation({
@@ -132,6 +125,9 @@ function CourseListView() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/courses"] });
       toast({ title: "Deleted", description: "Course has been deleted." });
+    },
+    onError: (error: Error) => {
+      toast({ title: "Error", description: error.message || "Failed to delete course", variant: "destructive" });
     },
   });
 
@@ -461,8 +457,18 @@ function CourseDetailEditor() {
     imageUrl: "",
   });
 
-  // Lesson form
+  // Lesson edit form (for inline editing existing lessons)
   const [lessonForm, setLessonForm] = useState({
+    title: "",
+    description: "",
+    content: "",
+    videoUrl: "",
+    order: 0,
+    duration: "",
+  });
+
+  // Separate form for the "Add Lesson" dialog to avoid clobbering edit state
+  const [newLessonForm, setNewLessonForm] = useState({
     title: "",
     description: "",
     content: "",
@@ -483,15 +489,16 @@ function CourseDetailEditor() {
     : lessons[0] || null;
 
   // Select first lesson by default
+  const firstLessonId = lessons.length > 0 ? lessons[0].id : null;
   useEffect(() => {
-    if (!selectedLessonId && lessons.length > 0) {
-      setSelectedLessonId(lessons[0].id);
+    if (!selectedLessonId && firstLessonId) {
+      setSelectedLessonId(firstLessonId);
     }
-  }, [lessons.length, selectedLessonId]);
+  }, [firstLessonId, selectedLessonId]);
 
-  // Initialize course edit form
+  // Initialize course edit form only when not actively editing
   useEffect(() => {
-    if (courseData) {
+    if (courseData && !isEditingCourse) {
       setCourseEditForm({
         title: courseData.title,
         description: courseData.description,
@@ -502,7 +509,7 @@ function CourseDetailEditor() {
         imageUrl: courseData.imageUrl || "",
       });
     }
-  }, [courseData]);
+  }, [courseData, isEditingCourse]);
 
   // Initialize lesson form when selecting a lesson for editing
   useEffect(() => {
@@ -540,6 +547,9 @@ function CourseDetailEditor() {
       queryClient.invalidateQueries({ queryKey: ["/api/courses", courseId] });
       queryClient.invalidateQueries({ queryKey: ["/api/courses"] });
     },
+    onError: (error: Error) => {
+      toast({ title: "Error", description: error.message || "Failed to update publish status", variant: "destructive" });
+    },
   });
 
   const createLessonMutation = useMutation({
@@ -576,6 +586,9 @@ function CourseDetailEditor() {
       queryClient.invalidateQueries({ queryKey: ["/api/courses", courseId] });
       toast({ title: "Lesson Deleted" });
       setSelectedLessonId(null);
+    },
+    onError: (error: Error) => {
+      toast({ title: "Error", description: error.message || "Failed to delete lesson", variant: "destructive" });
     },
   });
 
@@ -675,12 +688,12 @@ function CourseDetailEditor() {
                 Edit Details
               </Button>
             )}
-            <Link href={`/course/${courseId}`} target="_blank">
+            <a href={`/course/${courseId}`} target="_blank" rel="noopener noreferrer">
               <Button size="sm" variant="outline">
                 <ExternalLink className="h-3 w-3 mr-1" />
                 Preview
               </Button>
-            </Link>
+            </a>
           </div>
         </div>
 
@@ -747,7 +760,7 @@ function CourseDetailEditor() {
                 size="sm"
                 variant="ghost"
                 onClick={() => {
-                  setLessonForm({
+                  setNewLessonForm({
                     title: "",
                     description: "",
                     content: "",
@@ -815,7 +828,7 @@ function CourseDetailEditor() {
                       variant="outline"
                       className="mt-3"
                       onClick={() => {
-                        setLessonForm({
+                        setNewLessonForm({
                           title: "",
                           description: "",
                           content: "",
@@ -1142,8 +1155,8 @@ function CourseDetailEditor() {
               <label className="text-sm font-medium">Title *</label>
               <Input
                 placeholder="Lesson title"
-                value={lessonForm.title}
-                onChange={(e) => setLessonForm({ ...lessonForm, title: e.target.value })}
+                value={newLessonForm.title}
+                onChange={(e) => setNewLessonForm({ ...newLessonForm, title: e.target.value })}
                 className="mt-1"
               />
             </div>
@@ -1151,8 +1164,8 @@ function CourseDetailEditor() {
               <label className="text-sm font-medium">Description</label>
               <Textarea
                 placeholder="Brief lesson description"
-                value={lessonForm.description}
-                onChange={(e) => setLessonForm({ ...lessonForm, description: e.target.value })}
+                value={newLessonForm.description}
+                onChange={(e) => setNewLessonForm({ ...newLessonForm, description: e.target.value })}
                 className="mt-1"
                 rows={2}
               />
@@ -1162,8 +1175,8 @@ function CourseDetailEditor() {
                 <label className="text-sm font-medium">Order</label>
                 <Input
                   type="number"
-                  value={lessonForm.order}
-                  onChange={(e) => setLessonForm({ ...lessonForm, order: parseInt(e.target.value) || 0 })}
+                  value={newLessonForm.order}
+                  onChange={(e) => setNewLessonForm({ ...newLessonForm, order: parseInt(e.target.value) || 0 })}
                   className="mt-1"
                 />
               </div>
@@ -1171,8 +1184,8 @@ function CourseDetailEditor() {
                 <label className="text-sm font-medium">Video URL</label>
                 <Input
                   placeholder="YouTube or video URL"
-                  value={lessonForm.videoUrl}
-                  onChange={(e) => setLessonForm({ ...lessonForm, videoUrl: e.target.value })}
+                  value={newLessonForm.videoUrl}
+                  onChange={(e) => setNewLessonForm({ ...newLessonForm, videoUrl: e.target.value })}
                   className="mt-1"
                 />
               </div>
@@ -1180,8 +1193,8 @@ function CourseDetailEditor() {
             <div className="flex justify-end gap-3 pt-2 border-t">
               <Button variant="outline" onClick={() => setLessonDialogOpen(false)}>Cancel</Button>
               <Button
-                onClick={() => createLessonMutation.mutate(lessonForm)}
-                disabled={createLessonMutation.isPending || !lessonForm.title}
+                onClick={() => createLessonMutation.mutate(newLessonForm)}
+                disabled={createLessonMutation.isPending || !newLessonForm.title}
                 className="bg-royal-navy hover:bg-royal-navy/90"
               >
                 {createLessonMutation.isPending ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Plus className="h-4 w-4 mr-2" />}
