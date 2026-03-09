@@ -11,7 +11,7 @@ const passportLessons = [
   {
     order: 1,
     title: "Introduction — Two Types of Citizenship",
-    duration: "30 min",
+    duration: null,
     content: `# Two Types of Citizenship Under American Law
 
 ## The Foundational Distinction
@@ -187,7 +187,7 @@ You are simultaneously: **a physical being, a legal actor, and a spiritual being
   {
     order: 2,
     title: "Constitutional Basis — Article IV & the 14th Amendment",
-    duration: "35 min",
+    duration: null,
     content: `# Constitutional Basis — Article IV and the 14th Amendment
 
 ## Article IV, Section 2 — The Privileges and Immunities Clause
@@ -313,7 +313,7 @@ The three jurisdictions of Water, Land, and Air — introduced in Lesson 1 — t
   {
     order: 3,
     title: "Key Case Law — Comprehensive Analysis",
-    duration: "35 min",
+    duration: null,
     content: `# Key Case Law — Comprehensive Analysis
 
 This lesson provides an exhaustive analysis of the most important Supreme Court cases supporting the distinction between state and federal citizenship.
@@ -469,7 +469,7 @@ The third component was grounded in the **Privileges or Immunities Clause of the
   {
     order: 4,
     title: "Establishing Your Domicile",
-    duration: "25 min",
+    duration: null,
     content: `# Establishing Your Domicile
 
 ## Why Domicile Matters
@@ -619,7 +619,7 @@ Together, these create a coherent framework for operating as a **private**, **so
   {
     order: 5,
     title: "The DS-11 Passport Application",
-    duration: "30 min",
+    duration: null,
     content: `# The DS-11 Passport Application
 
 ## Overview
@@ -767,7 +767,7 @@ These are specific, enumerated grounds — not general discretionary denial.
   {
     order: 6,
     title: "Supporting Documentation & Affidavits",
-    duration: "25 min",
+    duration: null,
     content: `# Supporting Documentation & Affidavits
 
 ## The Role of Documentation
@@ -919,7 +919,7 @@ Maintain a dedicated portfolio containing:
   {
     order: 7,
     title: "After the Passport — Living from Your Status",
-    duration: "20 min",
+    duration: null,
     content: `# After the Passport — Living from Your Status
 
 ## Status Exists Independent of the Document

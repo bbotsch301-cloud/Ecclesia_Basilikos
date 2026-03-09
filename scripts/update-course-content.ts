@@ -15,7 +15,7 @@ const lawfulMoneyLessons = [
   {
     order: 1,
     title: "Introduction — What Is Lawful Money?",
-    duration: "25 min",
+    duration: null,
     content: `# What Is Lawful Money?
 
 Lawful money is the constitutionally recognized currency of the United States — fundamentally distinct from Federal Reserve Notes, which are debt instruments issued through a central banking system. Understanding this distinction is not a matter of opinion; it is a matter of statutory and constitutional law.
@@ -150,7 +150,7 @@ Every claim in this course is supported by statute, case law, or established leg
   {
     order: 2,
     title: "The Statute — 12 USC § 411 Explained",
-    duration: "30 min",
+    duration: null,
     content: `# 12 USC §411 — Issuance to Reserve Banks; Nature of Obligation; Redemption
 
 ## The Full Statutory Text
@@ -299,7 +299,7 @@ The motion to strike out carried. The Founders **deliberately removed** the powe
   {
     order: 3,
     title: "Federal Reserve Notes vs. Lawful Money",
-    duration: "30 min",
+    duration: null,
     content: `# Federal Reserve Notes vs. Lawful Money — A Legal Analysis
 
 Understanding the distinction between Federal Reserve Notes (FRNs) and lawful money requires examining their legal characteristics under statute, case law, and the Uniform Commercial Code.
@@ -556,7 +556,7 @@ This confirms that FRNs have no intrinsic value — their acceptance is based on
   {
     order: 4,
     title: "The Restrictive Endorsement — How to Redeem",
-    duration: "30 min",
+    duration: null,
     content: `# The Restrictive Endorsement — Exercising Your Right Under 12 USC §411
 
 ## What Is a Restrictive Endorsement?
@@ -812,7 +812,7 @@ Your endorsement is an election — a deliberate, documented choice to demand la
   {
     order: 5,
     title: "Tax Implications of Lawful Money Redemption",
-    duration: "30 min",
+    duration: null,
     content: `# Tax Implications of Lawful Money Redemption
 
 > **Important:** This lesson explores the legal theory behind lawful money and taxation. It does not constitute tax advice. No court has definitively ruled that lawful money redemption eliminates income tax liability. The IRS position is that all income is taxable regardless of the form of money received. Consult a qualified tax professional before making any decisions based on this material. Be aware of the frivolous return penalty under 26 USC §6702 ($5,000).
@@ -998,7 +998,7 @@ If states can issue their own instruments for taxes, the question arises: why do
   {
     order: 6,
     title: "Documentation & Record Keeping",
-    duration: "20 min",
+    duration: null,
     content: `# Documentation & Record Keeping for Lawful Money Redemption
 
 ## Why Documentation Is Legally Critical
@@ -1149,7 +1149,7 @@ Document every transaction where a bank claims to have "loaned" you something. T
   {
     order: 7,
     title: "Common Questions, Case Law & Objections",
-    duration: "25 min",
+    duration: null,
     content: `# Common Questions, Case Law & Objections
 
 ## Frequently Asked Questions

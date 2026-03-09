@@ -11,7 +11,7 @@ const trustLessons = [
   {
     order: 1,
     title: "Introduction — Why Assets Must Be Protected",
-    duration: "25 min",
+    duration: null,
     content: `# Why Assets Must Be Protected
 
 ## The Legal Reality of Personal Ownership
@@ -130,7 +130,7 @@ The trust structures taught in this course provide the lawful, time-tested mecha
   {
     order: 2,
     title: "Trust Structure — Grantor, Trustee, Beneficiary",
-    duration: "30 min",
+    duration: null,
     content: `# Trust Structure — The Three Essential Roles
 
 Every trust has three essential parties. Understanding their legal definitions, duties, and relationships is the foundation of trust law.
@@ -324,7 +324,7 @@ The separation of legal and equitable title (discussed above) is the mechanical 
   {
     order: 3,
     title: "Types of Trusts — Legal Characteristics",
-    duration: "35 min",
+    duration: null,
     content: `# Types of Trusts — Legal Characteristics and Selection
 
 ## 1. Irrevocable Trust
@@ -591,7 +591,7 @@ When combined with the trust structures discussed in this course, PMAs create a 
   {
     order: 4,
     title: "What Can Be Placed in Trust — Assets & Transfer",
-    duration: "25 min",
+    duration: null,
     content: `# What Can Be Placed in Trust
 
 ## The General Rule
@@ -698,7 +698,7 @@ Maintain a **Schedule of Trust Assets** — an exhibit to the trust instrument t
   {
     order: 5,
     title: "The Trust Instrument — Drafting Essentials",
-    duration: "30 min",
+    duration: null,
     content: `# The Trust Instrument — Drafting Essentials
 
 ## What Is a Trust Instrument?
@@ -876,7 +876,7 @@ This combination — the trust instrument as the legal vessel, the PMA as the pr
   {
     order: 6,
     title: "Asset Transfer & Funding the Trust",
-    duration: "25 min",
+    duration: null,
     content: `# Asset Transfer & Funding the Trust
 
 This lesson covers the **mechanics** — the step-by-step process for transferring each asset type into a trust. For an overview of what assets can be placed in trust and the rules governing each type, see Lesson 4.
@@ -994,7 +994,7 @@ After transferring each asset, verify:
   {
     order: 7,
     title: "Ongoing Trust Administration & Compliance",
-    duration: "25 min",
+    duration: null,
     content: `# Ongoing Trust Administration & Compliance
 
 ## The Trustee's Ongoing Obligations
