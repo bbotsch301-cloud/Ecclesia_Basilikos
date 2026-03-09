@@ -84,40 +84,6 @@ The Ninth Circuit acknowledged the distinction between lawful money and Federal 
 | **Public Money** | Money coined or issued under constitutional authority | Art. I, §8, cl. 5 |
 | **Coin** | A piece of metal stamped by government authority for use as money | 31 USC §5112 |
 
-## Money as Covenant
-
-If Federal Reserve Notes represent debt participation, then using them is not merely an economic act — it is entering a **contractual relationship** with the debt system. Every time you transact with FRNs without objection, you silently agree to the terms of that system.
-
-Money is not just currency — it is **agreement**. Every transaction involves two simultaneous exchanges:
-
-1. An exchange of **value** (goods, services, labor)
-2. An exchange of **jurisdiction** (which system of rules governs the transaction)
-
-In this sense, money functions as a **covenantal instrument** — a medium that binds parties not only economically but legally and even morally.
-
-### The Covenantal History of Money
-
-This understanding is not new. In biblical times:
-
-- **Silver and gold** were covenantal money — their value was tied to weight, purity, and trust between parties
-- **Temple treasuries** stored covenantal wealth — money held in sacred trust for the community
-- **Debts were forgiven** during jubilee cycles (every 49/50 years), preventing the permanent enslavement of any person or family through debt accumulation (Leviticus 25:10)
-
-Money, in this older framework, was not just economic — it was **moral and relational**. It carried obligations that went beyond the transaction itself.
-
-### The Debt-Based Energy System
-
-Consider the modern economy through this lens. The entire financial system operates as a **debt-based energy system**:
-
-- Money is created as debt (every dollar in circulation originates as a loan from the Federal Reserve or commercial banks)
-- That debt carries **interest**, which means more must be repaid than was created
-- This requires **constant expansion** — growth is not optional, it is mandatory for the system to avoid collapse
-- The system cannot rest, cannot pause, cannot forgive — it must always grow
-
-This resembles what older traditions called **servitude to Mammon** — a system that demands perpetual labor and expansion. It is the structural opposite of the **biblical Sabbath principle**, which commands periodic rest, release, and restoration.
-
-> The distinction between lawful money and Federal Reserve Notes is not merely legal or economic — it is covenantal. Choosing lawful money is choosing to step outside a system of perpetual debt obligation.
-
 ## What the Courts Have Ruled: Money Defined
 
 The courts have spoken extensively on what constitutes "money" under law. These rulings establish beyond question that money is substance — not paper promises.
@@ -262,17 +228,7 @@ The **Gold Reserve Act of 1934 (48 Stat. 337)** and **Executive Order 6102 (1933
 
 ## Supporting Case Law
 
-**Milam v. United States, 524 F.2d 629 (9th Cir. 1974):**
-The court acknowledged the distinction between Federal Reserve Notes and lawful money, noting that the Federal Reserve Note is an obligation.
-
-**Julliard v. Greenman, 110 U.S. 421 (1884):**
-The Supreme Court upheld Congress's power to issue legal tender notes but distinguished between the government's power to declare something legal tender and the nature of the instrument itself.
-
-**Knox v. Lee (Legal Tender Cases), 79 U.S. 457 (1871):**
-Established that Congress has the power to issue paper currency and make it legal tender, but the Court did not hold that such notes constituted lawful money — only that they could be declared tender for debts.
-
-**Hepburn v. Griswold, 75 U.S. 603 (1870):**
-Chief Justice Chase held that making paper notes legal tender for pre-existing debts exceeded Congressional power. Though overturned by Knox v. Lee, the legal reasoning regarding the nature of paper currency remains instructive.
+As discussed in Lesson 1, the Legal Tender Cases (Hepburn v. Griswold, Knox v. Lee, Juilliard v. Greenman) established that while Congress may declare paper notes legal tender, such notes do not constitute lawful money. The Ninth Circuit in Milam v. U.S., 524 F.2d 629 (9th Cir. 1974) further confirmed that Federal Reserve Notes are obligations, not lawful money. See Lesson 1 for full analysis of these foundational cases.
 
 ## The Critical Takeaway
 
@@ -352,11 +308,7 @@ Understanding the distinction between Federal Reserve Notes (FRNs) and lawful mo
 
 ### Statutory Classification
 
-Under **12 USC §411**, Federal Reserve Notes are classified as **"obligations of the United States."**
-
-Under **31 USC §5103**, they are classified as **"legal tender for all debts, public charges, taxes, and dues."**
-
-These two classifications are not contradictory — they describe different attributes. An instrument can be both an obligation (debt) and legal tender (acceptable for payment). A Treasury bond is an obligation and can be used to satisfy certain debts, but no one would call it "money."
+As established in Lesson 1, FRNs are classified as obligations — not money — under **12 USC §411**. They are also classified as **"legal tender for all debts, public charges, taxes, and dues"** under **31 USC §5103**. These two classifications are not contradictory — they describe different attributes. An instrument can be both an obligation (debt) and legal tender (acceptable for payment). A Treasury bond is an obligation and can be used to satisfy certain debts, but no one would call it "money."
 
 ### UCC Classification
 
@@ -596,10 +548,10 @@ This confirms that FRNs have no intrinsic value — their acceptance is based on
 | UCC §1-201(24) | Definition of money | Medium of exchange (functional) |
 | Bronson v. Rodes | 74 U.S. 229 (1868) | Coin is money; notes are promises |
 | Lane County v. Oregon | 74 U.S. 71 (1868) | Constitutional money vs. legal tender |
-| Milam v. U.S. | 524 F.2d 629 (9th Cir. 1974) | FRN is obligation, not lawful money |
-| Hepburn v. Griswold | 75 U.S. 603 (1870) | Paper legal tender exceeds constitutional power |
-| Knox v. Lee | 79 U.S. 457 (1871) | Congress may declare legal tender |
-| Juilliard v. Greenman | 110 U.S. 421 (1884) | Legal tender power upheld |`,
+| Milam v. U.S. | 524 F.2d 629 (9th Cir. 1974) | FRN is obligation, not lawful money (see Lesson 1) |
+| Hepburn v. Griswold | 75 U.S. 603 (1870) | Paper legal tender exceeds constitutional power (see Lesson 1) |
+| Knox v. Lee | 79 U.S. 457 (1871) | Congress may declare legal tender (see Lesson 1) |
+| Juilliard v. Greenman | 110 U.S. 421 (1884) | Legal tender power upheld (see Lesson 1) |`,
   },
   {
     order: 4,
@@ -864,7 +816,7 @@ Your endorsement is an election — a deliberate, documented choice to demand la
     duration: "30 min",
     content: `# Tax Implications of Lawful Money Redemption
 
-**IMPORTANT NOTICE:** This lesson is educational. It is not tax advice, legal advice, or guidance on how to file tax returns. Consult a qualified tax professional regarding your individual circumstances. The information below presents the legal framework for understanding how the type of money received may affect income characterization.
+> **Important:** This lesson explores the legal theory behind lawful money and taxation. It does not constitute tax advice. No court has definitively ruled that lawful money redemption eliminates income tax liability. The IRS position is that all income is taxable regardless of the form of money received. Consult a qualified tax professional before making any decisions based on this material. Be aware of the frivolous return penalty under 26 USC §6702 ($5,000).
 
 ## The Statutory Framework for Income
 
@@ -1027,14 +979,6 @@ This is a critical distinction. When you use Federal Reserve Notes, debts are **
 **Poindexter v. Greenbow, 114 US 70; Chaffin v. Taylor, 116 US 567; Houston & Texas Central R.R. v. Texas, 177 US 66** — "The states are not forbidden to issue coupons receivable for taxes, nor execute instruments binding themselves to pay money at a future day for services rendered or money borrowed."
 
 If states can issue their own instruments for taxes, the question arises: why do states borrow from private banks? States issue bonds, banks buy the bonds by creating a new demand deposit (and nothing is actually deposited), and when it comes time to pay the bonds, the state acts as a collection agent for the bank.
-
-## Important Caveats
-
-- **No court has definitively ruled** that lawful money redemption eliminates income tax liability. This is an area of developing legal theory.
-- **The IRS position** is that all wages and income are taxable regardless of the form of money received.
-- **Penalties may apply** for filing returns that claim positions the IRS considers frivolous. See **26 USC §6702** (frivolous tax return penalty of $5,000).
-- **This course presents the legal framework** — the statutes, case law, and definitions. How you apply this information is your personal responsibility.
-- **Always consult a qualified tax professional** before making decisions about tax filing.
 
 ## Summary of Legal Authorities
 
@@ -1377,57 +1321,53 @@ Throughout American history, presidents, congressmen, and financial leaders have
 
 **John Adams** (1787, in a letter to Thomas Jefferson): "All the perplexities, confusion and distress in America arise not from defects in the Constitution, not from want of honor or virtue, so much as downright ignorance of the nature of coin, credit and circulation."
 
-**Congressman Charles A. Lindbergh, Sr.** (on the Federal Reserve Act of 1913): "This Act establishes the most gigantic trust on earth. When the President signs this bill the invisible government of the Monetary Power will be legalized."
-
-**Senator Louis T. McFadden** (22-year Chairman of the U.S. Banking Currency Commission): "The Federal Reserve banks are one of the most corrupt institutions the world has ever seen."
-
-**Mayer Anselm Rothschild** (patriarch of the House of Rothschild): "Permit me to issue and control the money of a nation, and I care not who makes its laws."
-
 **John Maynard Keynes**: "By a continuing process of inflation, governments can confiscate, secretly and unobserved, an important part of the wealth of their citizens. There is no subtler, no surer means of overturning the existing basis of society than to debauch the currency."
-
-**James Buchanan** (January 22, 1840): "This sound state of the currency will have another most happy effect upon the laboring man. He will receive his wages in gold and silver; and this will induce him to lay up for future use such portion of them as he can spare."
 
 **Henry Ford, Sr.**: "If the people of the nation understood our banking and monetary system, I believe there would be a revolution before tomorrow morning."
 
 ## The Banking Mechanism Exposed
 
-### How Banks Create "Money" from Nothing
-
-**The Bankers Handbook** (page 530): "A new type of installment credit appeared in banks. It became known as check credit or revolving check credit. The check was merely the instrument by which the loan account was activated. It did not go through all the processes that an ordinary check does. However, it had the appearance of an ordinary check, and was so used by the customer and the person to whom he gave the check."
-
-The bank creates a bookkeeping entry to originate the "loan." The checks are not actually checks — they merely have the **appearance** of checks. This constitutes what common law defines as a **cheat**: the obtaining of money or property by means of false tokens, symbols, or devices. See: **State v. Renick, 33 Or 584, 56 P 275, 44 L.R.A. 266**.
-
-### Credit Is Not Money
-
-**National Bank v. Atkinson, 55 Fed. Rep. 571** — "Banks extend credit, not money."
-
-**State v. Woodward, 93 SO 826, 208 Ala 31** — "Fair and reasonable value means the best price in money — cash being the antonym of credit."
-
-**Federal Reserve Bank of New York, "Story of Checks," page 20** — "Checkbook money is not legal tender."
-
-**Federal Reserve Bank of New York, "Money's Economic Balance," page 17** — "Commercial banks are important financial institutions because they can create money — checkbook money." The Federal Reserve openly admits banks **create** money through lending.
-
-### The Government's Own Position
-
-**Continental American Bank v. U.S., C.C.A. La. (1947) 161 F.2d 93** — "Where the Federal Government is a party to commercial paper, it is bound by the same rules which govern private persons."
-
-**U.S. v. First National Bank, 138 F.2d 681** — "The government assumes all responsibilities of private persons when it issues commercial paper."
-
-**Preston v. Keene, 14 Pet 133** — "The thing given or taken in exchange must be specific and so distinguishable from things of like kind as to be clearly known and identifiable."
-
-### The Biblical Standard
-
-The standard of honest weights and measures is not merely a secular legal principle — it has ancient roots:
-
-> "Thou shalt not have in thy bag divers weights, a great and a small. Thou shalt not have in thine house divers measures, a great and a small. But thou shalt have a perfect and just weight, a perfect and just measure shalt thou have: that thy days may be lengthened in the land which the Lord thy God giveth thee." — **Deuteronomy 25:13-15**
-
-A monetary system built on debt instruments of fluctuating value — where the "dollar" means something different every day — violates the most fundamental principle of just weights and measures.
+As explored in Lesson 3, banks create money through bookkeeping entries rather than lending existing deposits. The Federal Reserve itself acknowledges this: "Commercial banks are important financial institutions because they can create money — checkbook money" (Federal Reserve Bank of New York, "Money's Economic Balance," page 17). The key legal principle is that "Banks extend credit, not money" (**National Bank v. Atkinson, 55 Fed. Rep. 571**). See Lesson 3 for detailed case law on this topic.
 
 ## The Jerome Daly Case
 
 **Jerome Daly v. First National Bank of Montgomery, Minnesota** (Credit River Township, December 7-9, 1968) — Justice Martin V. Mahoney ruled that Federal Reserve Notes were **fiat money and not legal tender**. The court found that the bank had not provided lawful consideration for the mortgage because it had simply created the money through a bookkeeping entry.
 
-While this was a lower court decision and has been disputed, it remains one of the most direct judicial statements on the nature of Federal Reserve Notes.
+**Important caveat:** This lower court ruling is frequently cited but was never appealed to a higher court and has no binding precedential value. It remains one of the most direct judicial statements on the nature of Federal Reserve Notes, but should not be relied upon as authoritative case law.
+
+## The Philosophical Dimension: Money as Covenant
+
+If Federal Reserve Notes represent debt participation, then using them is not merely an economic act — it is entering a **contractual relationship** with the debt system. Every time you transact with FRNs without objection, you silently agree to the terms of that system.
+
+Money is not just currency — it is **agreement**. Every transaction involves two simultaneous exchanges:
+
+1. An exchange of **value** (goods, services, labor)
+2. An exchange of **jurisdiction** (which system of rules governs the transaction)
+
+In this sense, money functions as a **covenantal instrument** — a medium that binds parties not only economically but legally and even morally.
+
+### The Covenantal History of Money
+
+This understanding is not new. In biblical times:
+
+- **Silver and gold** were covenantal money — their value was tied to weight, purity, and trust between parties
+- **Temple treasuries** stored covenantal wealth — money held in sacred trust for the community
+- **Debts were forgiven** during jubilee cycles (every 49/50 years), preventing the permanent enslavement of any person or family through debt accumulation (Leviticus 25:10)
+
+Money, in this older framework, was not just economic — it was **moral and relational**. It carried obligations that went beyond the transaction itself.
+
+### The Debt-Based Energy System
+
+Consider the modern economy through this lens. The entire financial system operates as a **debt-based energy system**:
+
+- Money is created as debt (every dollar in circulation originates as a loan from the Federal Reserve or commercial banks)
+- That debt carries **interest**, which means more must be repaid than was created
+- This requires **constant expansion** — growth is not optional, it is mandatory for the system to avoid collapse
+- The system cannot rest, cannot pause, cannot forgive — it must always grow
+
+This resembles what older traditions called **servitude to Mammon** — a system that demands perpetual labor and expansion. It is the structural opposite of the **biblical Sabbath principle**, which commands periodic rest, release, and restoration.
+
+> The distinction between lawful money and Federal Reserve Notes is not merely legal or economic — it is covenantal. Choosing lawful money is choosing to step outside a system of perpetual debt obligation.
 
 ## The Deeper Framework: Systems of Agreement
 

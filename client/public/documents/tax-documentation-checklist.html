@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tax Documentation Checklist — Ecclesia Basilikos</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;500;600&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  @page { size: portrait; margin: 0.75in; }
+  body { font-family: 'Inter', sans-serif; color: #1a1a2e; background: #fff; padding: 0.75in; font-size: 11px; line-height: 1.6; }
+
+  .header { border-bottom: 3px solid #001a33; padding-bottom: 14px; margin-bottom: 20px; }
+  .header h1 { font-family: 'Cinzel', serif; font-size: 24px; color: #001a33; }
+  .header .subtitle { font-size: 11px; color: #666; margin-top: 4px; }
+  .header .legal-ref { font-family: 'Cinzel', serif; font-size: 12px; color: #D4AF37; font-weight: 700; margin-top: 4px; }
+
+  .info-row { display: flex; gap: 20px; margin-bottom: 16px; }
+  .info-row .field { display: flex; align-items: baseline; gap: 6px; }
+  .info-row label { font-weight: 600; color: #001a33; white-space: nowrap; font-size: 11px; }
+  .info-row .line { border-bottom: 1px solid #999; min-width: 160px; height: 16px; }
+
+  h2 { font-family: 'Cinzel', serif; font-size: 14px; color: #001a33; margin: 24px 0 12px; padding: 8px 12px; background: #001a33; color: #fff; letter-spacing: 0.5px; }
+  h3 { font-family: 'Cinzel', serif; font-size: 12px; color: #001a33; margin: 16px 0 8px; }
+
+  .checklist { list-style: none; margin: 0 0 16px 0; padding: 0; }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 12px;
+    border-bottom: 1px solid #eee;
+    font-size: 11px;
+  }
+  .checklist li:nth-child(even) { background: #f8f6f0; }
+
+  .checkbox {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #001a33;
+    border-radius: 2px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .item-text { flex: 1; }
+  .item-text strong { color: #001a33; }
+  .item-text .cite { font-size: 9px; color: #888; font-style: italic; display: block; margin-top: 2px; }
+
+  .note-box {
+    background: #f8f6f0;
+    border-left: 3px solid #D4AF37;
+    padding: 12px 16px;
+    margin: 16px 0;
+    font-size: 10px;
+    line-height: 1.6;
+  }
+  .note-box strong { color: #001a33; }
+
+  .warning-box {
+    background: #fff5f5;
+    border-left: 3px solid #cc0000;
+    padding: 12px 16px;
+    margin: 16px 0;
+    font-size: 10px;
+  }
+  .warning-box strong { color: #cc0000; }
+
+  .timeline { margin: 12px 0; }
+  .timeline-item {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+    font-size: 11px;
+  }
+  .timeline-dot {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #D4AF37;
+    color: #001a33;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .timeline-content { flex: 1; }
+  .timeline-content strong { color: #001a33; }
+
+  .footer { margin-top: 24px; padding-top: 14px; border-top: 2px solid #001a33; font-size: 9px; color: #666; display: flex; justify-content: space-between; }
+  .footer .branding { font-family: 'Cinzel', serif; color: #D4AF37; font-size: 10px; }
+
+  @media print { body { padding: 0; } }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Tax Documentation Checklist</h1>
+  <div class="subtitle">Annual Record-Keeping Requirements for Lawful Money Redeemers</div>
+  <div class="legal-ref">12 U.S.C. &sect; 411 &bull; 26 U.S.C. &sect; 61 &bull; FRE 803(6)</div>
+</div>
+
+<div class="info-row">
+  <div class="field"><label>Tax Year:</label><div class="line" style="min-width: 80px;"></div></div>
+  <div class="field"><label>Prepared By:</label><div class="line"></div></div>
+  <div class="field"><label>Date:</label><div class="line" style="min-width: 100px;"></div></div>
+</div>
+
+<h2>Section 1: Core Documentation</h2>
+
+<ul class="checklist">
+  <li>
+    <div class="checkbox"></div>
+    <div class="item-text">
+      <strong>Lawful Money Redemption Ledger</strong> — Complete for the full tax year, with running totals, all entries dated and sourced
+      <span class="cite">Supports: FRE 803(6) contemporaneous business record</span>
+    </div>
+  </li>
+  <li>
+    <div class="checkbox"></div>
+    <div class="item-text">
+      <strong>Copies of All Endorsed Checks</strong> — Front and back, showing the restrictive endorsement language
+      <span class="cite">Authority: UCC &sect;&sect; 3-206, 4-205</span>
+    </div>
+  </li>
+  <li>
+    <div class="checkbox"></div>
+    <div class="item-text">
+      <strong>Bank Statements (all 12 months)</strong> — For every account receiving lawful money deposits
+      <span class="cite">Corroborates ledger entries</span>
+    </div>
+  </li>
+  <li>
+    <div class="checkbox"></div>
+    <div class="item-text">
+      <strong>Annual Affidavit of Lawful Money Demand</strong> — Signed and dated (notarized if possible), covering the full year
+      <span class="cite">Authority: 28 U.S.C. &sect; 1746</span>
+    </div>
+  </li>
+  <li>
+    <div class="checkbox"></div>
+    <div class="item-text">
+      <strong>Standing Demand Letter to Bank</strong> — Copy of letter sent to bank (certified mail), requesting all deposits be treated as lawful money
+      <span class="cite">Authority: 12 U.S.C. &sect; 411</span>
+    </div>
+  </li>
+  <li>
+    <div class="checkbox"></div>
+    <div class="item-text">
+      <strong>Certified Mail Receipts</strong> — Green cards (return receipts) for all correspondence sent to bank
+      <span class="cite">Proves delivery and date of notice</span>
+    </div>
+  </li>
+</ul>
+
+<h2>Section 2: Bank Correspondence</h2>
+
+<ul class="checklist">
+  <li>
+    <div class="checkbox"></div>
+    <div class="item-text">
+      <strong>Bank Response Letters</strong> — Any written responses from your bank regarding your lawful money demand
+    </div>
+  </li>
+  <li>
+    <div class="checkbox"></div>
+    <div class="item-text">
+      <strong>Account Opening Documents</strong> — If you opened a new account specifically for lawful money deposits
+    </div>
+  </li>
+  <li>
+    <div class="checkbox"></div>
+    <div class="item-text">
+      <strong>Electronic Payment Processor Records</strong> — Screenshots of address line 2 or notes field showing lawful money language
+    </div>
+  </li>
+  <li>
+    <div class="checkbox"></div>
+    <div class="item-text">
+      <strong>Direct Deposit Authorization Forms</strong> — Copies with lawful money stipulation noted
+    </div>
+  </li>
+</ul>
+
+<h2>Section 3: Tax Filing Documentation</h2>
+
+<ul class="checklist">
+  <li>
+    <div class="checkbox"></div>
+    <div class="item-text">
+      <strong>W-2 Forms</strong> — All W-2s received from employers for the tax year
+      <span class="cite">Shows income reported and tax withheld</span>
+    </div>
+  </li>
+  <li>
+    <div class="checkbox"></div>
+    <div class="item-text">
+      <strong>1099 Forms</strong> — All 1099s (1099-MISC, 1099-NEC, 1099-INT, etc.) for the tax year
+    </div>
+  </li>
+  <li>
+    <div class="checkbox"></div>
+    <div class="item-text">
+      <strong>Copy of Filed 1040</strong> — Your completed tax return for the year
+    </div>
+  </li>
+  <li>
+    <div class="checkbox"></div>
+    <div class="item-text">
+      <strong>Summary Calculation</strong> — Showing total lawful money redeemed vs. total income reported, with reconciliation
+    </div>
+  </li>
+  <li>
+    <div class="checkbox"></div>
+    <div class="item-text">
+      <strong>Professional Consultation Records</strong> — Notes or correspondence with any tax professional consulted
+    </div>
+  </li>
+</ul>
+
+<h2>Section 4: Year-End Summary</h2>
+
+<ul class="checklist">
+  <li>
+    <div class="checkbox"></div>
+    <div class="item-text">
+      <strong>Annual Summary Statement</strong> — Total deposits redeemed, total by category (payroll, business income, other), running total from prior years
+    </div>
+  </li>
+  <li>
+    <div class="checkbox"></div>
+    <div class="item-text">
+      <strong>Ledger Reconciled to Bank Statements</strong> — Verify ledger totals match actual bank statement deposits
+    </div>
+  </li>
+  <li>
+    <div class="checkbox"></div>
+    <div class="item-text">
+      <strong>All Records Organized and Filed</strong> — Physical binder or digital folder, clearly labeled by year
+    </div>
+  </li>
+</ul>
+
+<div class="warning-box">
+  <strong>Important:</strong> This checklist does not constitute legal or tax advice. Consult a qualified tax professional before filing. The lawful money redemption strategy does <strong>not</strong> address Social Security or Medicare (FICA) taxes. Be aware of the <strong>26 U.S.C. &sect; 6702</strong> frivolous return penalty ($5,000). Ensure all filings are made in good faith with proper documentation.
+</div>
+
+<h2>Annual Timeline</h2>
+
+<div class="timeline">
+  <div class="timeline-item">
+    <div class="timeline-dot">1</div>
+    <div class="timeline-content"><strong>January</strong> — Begin new year's ledger. Confirm standing demand letter is current with bank. Order new stamp ink if needed.</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-dot">2</div>
+    <div class="timeline-content"><strong>Monthly</strong> — Reconcile ledger to bank statements. File endorsed check copies. Note any electronic deposits with documentation.</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-dot">3</div>
+    <div class="timeline-content"><strong>December</strong> — Prepare year-end summary. Calculate total redeemed. Sign and notarize annual affidavit.</div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-dot">4</div>
+    <div class="timeline-content"><strong>January-April (following year)</strong> — File tax return with professional guidance. Retain all records indefinitely.</div>
+  </div>
+</div>
+
+<div class="note-box">
+  <strong>Retention Period:</strong> Retain all lawful money records <strong>indefinitely</strong>. The IRS can audit up to 3 years (6 years if substantial understatement), but maintaining a complete historical record strengthens your position. Store originals in a secure, climate-controlled location. Keep digital backups (scanned copies) in a separate location.
+</div>
+
+<div class="footer">
+  <div>For educational purposes only. Not legal or tax advice. &bull; Authorities: 12 U.S.C. &sect; 411, 26 U.S.C. &sect; 61, 28 U.S.C. &sect; 1746, FRE 803(6)</div>
+  <div class="branding">Ecclesia Basilikos</div>
+</div>
+
+</body>
+</html>

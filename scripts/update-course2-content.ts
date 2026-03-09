@@ -268,10 +268,7 @@ A spendthrift clause prevents creditors of the beneficiary from reaching trust a
 
 > "No interest in the income or principal of this trust shall be anticipated, assigned, encumbered, or subject to any creditor's claim or to legal process prior to its actual receipt by the beneficiary."
 
-**Exceptions to spendthrift protection** (creditors who CAN reach trust assets despite spendthrift clause):
-- Child support and alimony obligations — **UTC §503(b)(1)**
-- Government claims (tax liens, Medicaid) — **UTC §503(b)(2)**
-- Self-settled trusts (where grantor is also beneficiary) — **UTC §505(a)(2)**
+Spendthrift protections have exceptions (discussed in detail in Lesson 3).
 
 ## The Separation Principle
 
@@ -613,99 +610,67 @@ The principle is simple: **if it can be owned, it can be held in trust.** The tr
 
 ### 1. Real Property (Land and Buildings)
 
-**Transfer method:** Execute a new **deed** (warranty deed, quitclaim deed, or grant deed depending on jurisdiction) conveying the property from the grantor to the trustee of the trust.
+Real property — land and any structures affixed to it — is the most common asset placed in trust.
 
-**Recording:** The deed must be recorded in the county recorder's office where the property is located.
+**Governing law:** Real property transfers are governed by the law of the state where the property is located, regardless of where the trust is formed.
 
-**Example deed language:**
-> "[Grantor Name] hereby conveys and warrants to [Trustee Name], as Trustee of the [Trust Name] Trust, dated [Date], the following described real property..."
-
-**Legal considerations:**
-- **Title insurance** — notify your title insurance company; some policies require it
+**Key rules and limitations:**
 - **Due-on-sale clause** — **12 USC §1701j-3** (the Garn-St. Germain Depository Institutions Act of 1982) provides that a transfer to a trust in which the borrower remains a beneficiary does **not** trigger the due-on-sale clause
+- **Title insurance** — some policies require notification of a transfer; failure to notify may affect coverage
 - **Property taxes** — transfer to a trust generally does not trigger reassessment in most states (verify your state's laws)
-- **Homestead exemption** — may need to verify eligibility is maintained after transfer
+- **Homestead exemption** — eligibility must be verified after transfer; rules vary by state
+
+The actual mechanics of transferring real property (deeds, recording, etc.) are covered in Lesson 6.
 
 ### 2. Bank Accounts and Financial Instruments
 
-**Transfer method:** Open a new account in the trust's name or re-title an existing account.
-
-**Account titling:**
-> "[Trust Name] Trust, dated [Date], [Trustee Name], Trustee"
-
-**Required documentation:** Banks typically require:
-- A copy of the trust instrument (or a **certification of trust** under **UTC §1013**)
-- Trustee identification
-- Trust EIN (Employer Identification Number) if a non-grantor trust — obtain from IRS using **Form SS-4**
-
-**Types of financial instruments that can be held in trust:**
+Trusts can hold virtually any financial instrument:
 - Checking and savings accounts
 - Certificates of deposit
 - Brokerage accounts
 - Stocks, bonds, and mutual funds
 - Money market accounts
 
+**Key rules:**
+- Banks may require a **certification of trust** under **UTC §1013** rather than the full trust instrument
+- A non-grantor trust must obtain its own **EIN** (Employer Identification Number) via **IRS Form SS-4**
+
 ### 3. Vehicles
 
-**Transfer method:** Complete a title transfer through your state's DMV, changing the title to the trustee of the trust.
-
-**New title should read:**
-> "[Trustee Name], Trustee of the [Trust Name] Trust"
-
-**Insurance:** Notify your insurance company of the change in ownership. The trust (or trustee in trust capacity) should be the named insured.
+Motor vehicles can be titled in the name of the trustee. Insurance must reflect trust ownership — the trust (or trustee in trust capacity) should be the named insured.
 
 ### 4. Personal Property (Tangible)
 
-**Transfer method:** Execute a **Bill of Sale** or **Assignment of Personal Property** transferring ownership to the trust.
-
-**Items include:** Furniture, art, jewelry, collectibles, equipment, tools, etc.
-
-**Example language:**
-> "For good and valuable consideration, [Grantor] hereby transfers, assigns, and conveys to [Trustee], as Trustee of the [Trust Name] Trust, all right, title, and interest in the following personal property: [description]."
+Furniture, art, jewelry, collectibles, equipment, tools, and other tangible personal property can all be held in trust.
 
 ### 5. Intellectual Property
 
-**Transfer method:** Execute an **Assignment of Intellectual Property** to the trust.
-
-**For patents:** File the assignment with the U.S. Patent and Trademark Office (**37 CFR §3.1**)
-**For copyrights:** Record the assignment with the U.S. Copyright Office (**17 USC §205**)
-**For trademarks:** File assignment with USPTO (**37 CFR §3.1**)
+Patents, copyrights, and trademarks can be held in trust, but each has specific recording requirements with the relevant federal agency:
+- **Patents and trademarks:** U.S. Patent and Trademark Office (**37 CFR §3.1**)
+- **Copyrights:** U.S. Copyright Office (**17 USC §205**)
 
 ### 6. Business Interests
 
-**Transfer method depends on entity type:**
+LLC membership interests, partnership interests, corporate stock, and sole proprietorship assets can all be placed in trust.
 
-| Entity | Transfer Document |
-|--------|------------------|
-| LLC membership interest | Assignment of membership interest + amend operating agreement |
-| Partnership interest | Assignment of partnership interest + amend partnership agreement |
-| Corporation stock | Stock transfer (endorse stock certificate + issue new certificate) |
-| Sole proprietorship | Bill of sale for assets; may require new registrations |
-
-**Important:** Review the operating agreement, partnership agreement, or corporate bylaws for any restrictions on transfer. Many agreements require consent of other members/partners.
+**Important:** Review the operating agreement, partnership agreement, or corporate bylaws for any restrictions on transfer. Many agreements require consent of other members/partners before an interest can be assigned to a trust.
 
 ### 7. Life Insurance Policies
 
-**Transfer method:** Change the **owner** of the policy to the trust (or trustee as trustee). This is done by contacting the insurance company and completing an ownership change form.
+Life insurance policies can be owned by a trust, with the trust named as both owner and beneficiary.
 
 **Irrevocable Life Insurance Trust (ILIT):**
 Under **26 USC §2042**, life insurance proceeds are included in the insured's gross estate if the insured holds any "incidents of ownership" at death. By transferring the policy to an irrevocable trust (ILIT), the proceeds may be excluded from the taxable estate.
 
-**Caution:** Under **26 USC §2035(a)**, if the insured transfers the policy within three years of death, the proceeds are still included in the estate (the "three-year rule").
+**Caution — the three-year rule:** Under **26 USC §2035(a)**, if the insured transfers the policy within three years of death, the proceeds are still included in the estate.
+
+### 8. Retirement Accounts (Special Restriction)
+
+**Retirement accounts (IRA, 401(k)) generally should NOT be transferred into a trust** during the owner's lifetime. Doing so can trigger immediate taxation as a deemed distribution under **26 USC §408(d)**. Instead, name the trust as the **beneficiary** of the retirement account.
 
 ## The Cardinal Rule
 
-**"If it's not in the trust, it's not protected."**
-
-A trust without funded assets is an empty legal shell. The trust instrument, no matter how well drafted, protects nothing until property is actually transferred.
-
-**Restatement (Third) of Trusts §2, Comment f:**
-
-> "A trust cannot exist without trust property. A declaration of trust that does not identify specific property to be held in trust does not create a trust."
-
-**UTC §401:**
-
-> "A trust may be created only to the extent there is trust property."
+**"If it's not in the trust, it's not protected."** A trust without funded assets is an empty legal shell — **UTC §401** and **Restatement (Third) of Trusts §2, Comment f** both confirm that a trust cannot exist without trust property. The actual process of transferring each asset type is covered in Lesson 6.
 
 ## Schedule of Trust Assets
 
@@ -914,17 +879,7 @@ This combination — the trust instrument as the legal vessel, the PMA as the pr
     duration: "25 min",
     content: `# Asset Transfer & Funding the Trust
 
-## The Fundamental Rule
-
-**"A trust without assets is an empty vessel."**
-
-**UTC §401:**
-> "A trust may be created only to the extent there is trust property."
-
-**Restatement (Third) of Trusts §2, Comment f:**
-> "A declaration of trust that does not identify specific property to be held in trust does not create a trust."
-
-No matter how perfectly drafted the trust instrument, it protects nothing until assets are actually transferred into it. "Funding" the trust — the process of transferring assets from personal ownership to trust ownership — is the most critical step after creation.
+This lesson covers the **mechanics** — the step-by-step process for transferring each asset type into a trust. For an overview of what assets can be placed in trust and the rules governing each type, see Lesson 4.
 
 ## Transfer Methods by Asset Type
 
@@ -940,7 +895,7 @@ Execute a deed (warranty deed, quitclaim deed, or grant deed) conveying the prop
 File the deed with the county recorder's office. Recording provides constructive notice to the world of the trust's ownership.
 
 **Step 3: Update related documents**
-- Notify mortgage servicer (transfer does NOT trigger due-on-sale under **12 USC §1701j-3** if grantor remains a beneficiary)
+- Notify mortgage servicer (as discussed in Lesson 4, the Garn-St. Germain Act exempts trust transfers from the due-on-sale clause)
 - Update property insurance to name the trust
 - Verify homestead exemption eligibility
 - Update any rental agreements to reflect trust ownership
@@ -1185,52 +1140,9 @@ This means **exculpation clauses** can protect against negligence but not agains
 | Restatement (Third) | §§76-84 | Trustee duties |
 | Meinhard v. Salmon | 249 N.Y. 458 (1928) | "Punctilio of an honor" standard |
 
-## The Sovereignty Framework: Conscious Participation
+## Conscious Stewardship
 
-Trust administration is more than a set of legal duties — it is an invitation to **conscious stewardship** of your assets, your agreements, and your participation in the systems that shape modern life.
-
-### Unconscious Participation
-
-Most systems operate because people participate **unconsciously**. Money, law, culture, and institutions exist because people believe in them and use them — often without questioning the terms of their participation. Banks operate because people deposit. Governments tax because people comply. Debt grows because people borrow without examining the underlying agreements.
-
-### The Moment of Awakening
-
-Once someone becomes aware of the system, they begin asking fundamental questions:
-
-- **What agreements am I making?** — Every bank account, every contract, every tax filing is an agreement
-- **What structures am I participating in?** — Corporations, government programs, financial institutions all have terms
-- **Where does my authority actually come from?** — Is it delegated by the state, or is it inherent in your nature as a living man or woman?
-
-That awareness is described as **awakening** — the moment when unconscious obligation transforms into conscious choice.
-
-### Debt Systems and Civilization
-
-Debt systems shape civilization. Governments, households, students, and corporations all carry debt in a hierarchy of obligations. This is not new — it mirrors ancient debt empires:
-
-- **Babylon** — temple debt systems that controlled agriculture and trade
-- **Rome** — debt bondage (nexum) that enslaved debtors to creditors
-- **Medieval Europe** — feudal obligations and church tithes that bound serfs to land and lords
-
-The modern system is a **technological version of ancient debt empires**. The mechanisms are more sophisticated — credit scores, fractional reserve banking, securitized debt — but the underlying dynamic is the same: obligations created through agreements that most people never fully read or understand.
-
-### The Biggest Insight
-
-The biggest insight of the sovereignty framework is this: **systems of power operate through agreements, not force**. You are not compelled to open a bank account, sign a mortgage, or obtain a credit card. You agree to these things — often without understanding the full terms.
-
-The corollary is equally powerful: **withdraw agreement, and systems change**. This does not mean withdrawing from society or refusing all participation. It means participating **consciously** — choosing which agreements to enter, understanding their terms, and structuring your affairs to reflect your values and protect your autonomy.
-
-### Trust Administration as Conscious Stewardship
-
-This is where trust administration transcends mere compliance. Every act of trust administration — maintaining records, making distributions, filing returns, reviewing assets — is an act of **conscious stewardship** rather than unconscious obligation.
-
-When you administer a trust with awareness:
-
-- **Record-keeping** becomes an exercise in clarity and sovereignty, not bureaucratic burden
-- **Distributions** become intentional acts of generosity and purpose, not automatic payments
-- **Tax compliance** becomes a conscious choice about how you interface with public systems, not blind obedience
-- **Asset review** becomes stewardship of the resources entrusted to your care, not mere inventory
-
-The trust is not just a legal structure — it is a **practice of conscious participation** in the systems that govern commerce, property, and exchange. Administered with awareness, it becomes one of the most powerful tools for aligning your financial life with your deepest values.`,
+Trust administration is ultimately an act of conscious participation in the systems that govern property and wealth. Unlike unconscious engagement with financial structures — where obligations accumulate without awareness — maintaining a trust requires intentional, informed action. This awareness extends beyond mere compliance: it represents a fundamental shift from passive participation to active stewardship of your resources, your obligations, and your legacy.`,
   },
 ];
 

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lawful Money Redemption Ledger — Ecclesia Basilikos</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;500;600&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  @page {
+    size: landscape;
+    margin: 0.5in;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    color: #1a1a2e;
+    background: #fff;
+    padding: 0.5in;
+    font-size: 11px;
+    line-height: 1.4;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 3px solid #001a33;
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+  }
+
+  .header h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 22px;
+    color: #001a33;
+    letter-spacing: 1px;
+  }
+
+  .header .subtitle {
+    font-size: 11px;
+    color: #666;
+    margin-top: 2px;
+  }
+
+  .header .legal-ref {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    color: #D4AF37;
+    font-weight: 700;
+  }
+
+  .info-row {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 12px;
+    font-size: 11px;
+  }
+
+  .info-row .field {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+
+  .info-row label {
+    font-weight: 600;
+    color: #001a33;
+    white-space: nowrap;
+  }
+
+  .info-row .line {
+    border-bottom: 1px solid #999;
+    min-width: 180px;
+    height: 16px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 16px;
+  }
+
+  thead th {
+    background: #001a33;
+    color: #fff;
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 8px 6px;
+    text-align: left;
+    border: 1px solid #001a33;
+  }
+
+  tbody td {
+    border: 1px solid #ccc;
+    padding: 10px 6px;
+    font-size: 10px;
+    height: 28px;
+    vertical-align: middle;
+  }
+
+  tbody tr:nth-child(even) {
+    background: #f8f6f0;
+  }
+
+  tbody tr:hover {
+    background: #fffbea;
+  }
+
+  .col-date { width: 8%; }
+  .col-source { width: 14%; }
+  .col-instrument { width: 8%; }
+  .col-amount { width: 9%; text-align: right; }
+  .col-endorsement { width: 6%; text-align: center; }
+  .col-deposit { width: 8%; }
+  .col-bank { width: 12%; }
+  .col-confirmation { width: 10%; }
+  .col-running { width: 9%; text-align: right; }
+  .col-notes { width: 16%; }
+
+  td.amount, th.amount { text-align: right; padding-right: 10px; }
+  td.center, th.center { text-align: center; }
+
+  .footer {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 2px solid #001a33;
+    display: flex;
+    justify-content: space-between;
+    font-size: 9px;
+    color: #666;
+  }
+
+  .footer .legal {
+    max-width: 65%;
+    line-height: 1.5;
+  }
+
+  .footer .legal strong {
+    color: #001a33;
+  }
+
+  .footer .branding {
+    text-align: right;
+    font-family: 'Cinzel', serif;
+    color: #D4AF37;
+    font-size: 10px;
+  }
+
+  .summary-box {
+    display: flex;
+    gap: 16px;
+    margin-top: 12px;
+    margin-bottom: 8px;
+  }
+
+  .summary-item {
+    border: 1px solid #D4AF37;
+    padding: 8px 16px;
+    font-size: 10px;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .summary-item label {
+    font-weight: 600;
+    color: #001a33;
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    text-transform: uppercase;
+  }
+
+  .summary-item .value {
+    border-bottom: 1px solid #999;
+    min-width: 100px;
+    height: 16px;
+  }
+
+  .instructions {
+    background: #f8f6f0;
+    border-left: 3px solid #D4AF37;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    font-size: 9px;
+    line-height: 1.6;
+    color: #444;
+  }
+
+  .instructions strong {
+    color: #001a33;
+  }
+
+  @media print {
+    body { padding: 0; }
+    .no-print { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>Lawful Money Redemption Ledger</h1>
+    <div class="subtitle">Record of All Funds Redeemed Pursuant to Federal Statute</div>
+  </div>
+  <div class="legal-ref">12 U.S.C. &sect; 411</div>
+</div>
+
+<div class="info-row">
+  <div class="field">
+    <label>Account Holder:</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Bank Name:</label>
+    <div class="line"></div>
+  </div>
+  <div class="field">
+    <label>Account No.:</label>
+    <div class="line" style="min-width: 120px;"></div>
+  </div>
+  <div class="field">
+    <label>Period:</label>
+    <div class="line" style="min-width: 100px;"></div>
+    <span>to</span>
+    <div class="line" style="min-width: 100px;"></div>
+  </div>
+</div>
+
+<div class="instructions">
+  <strong>Instructions:</strong> Record every deposit redeemed in lawful money. For each entry: (1) Record the date of deposit. (2) Identify the source (employer, client, etc.). (3) Note the instrument type (check, direct deposit, wire). (4) Record the exact dollar amount. (5) Confirm the endorsement was applied. (6) Note the deposit method and bank branch. (7) Record any confirmation or receipt number. (8) Maintain a running total. This ledger constitutes a contemporaneous business record under <strong>Federal Rules of Evidence 803(6)</strong> and supports your demand under <strong>12 U.S.C. &sect; 411</strong>.
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th class="col-date">Date</th>
+      <th class="col-source">Source / Payor</th>
+      <th class="col-instrument">Instrument</th>
+      <th class="col-amount amount">Amount ($)</th>
+      <th class="col-endorsement center">Endorsed?</th>
+      <th class="col-deposit">Deposit Method</th>
+      <th class="col-bank">Bank / Branch</th>
+      <th class="col-confirmation">Confirmation #</th>
+      <th class="col-running amount">Running Total</th>
+      <th class="col-notes">Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td></td><td></td><td></td><td class="amount"></td><td class="center"></td><td></td><td></td><td></td><td class="amount"></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td class="amount"></td><td class="center"></td><td></td><td></td><td></td><td class="amount"></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td class="amount"></td><td class="center"></td><td></td><td></td><td></td><td class="amount"></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td class="amount"></td><td class="center"></td><td></td><td></td><td></td><td class="amount"></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td class="amount"></td><td class="center"></td><td></td><td></td><td></td><td class="amount"></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td class="amount"></td><td class="center"></td><td></td><td></td><td></td><td class="amount"></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td class="amount"></td><td class="center"></td><td></td><td></td><td></td><td class="amount"></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td class="amount"></td><td class="center"></td><td></td><td></td><td></td><td class="amount"></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td class="amount"></td><td class="center"></td><td></td><td></td><td></td><td class="amount"></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td class="amount"></td><td class="center"></td><td></td><td></td><td></td><td class="amount"></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td class="amount"></td><td class="center"></td><td></td><td></td><td></td><td class="amount"></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td class="amount"></td><td class="center"></td><td></td><td></td><td></td><td class="amount"></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td class="amount"></td><td class="center"></td><td></td><td></td><td></td><td class="amount"></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td class="amount"></td><td class="center"></td><td></td><td></td><td></td><td class="amount"></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td class="amount"></td><td class="center"></td><td></td><td></td><td></td><td class="amount"></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td class="amount"></td><td class="center"></td><td></td><td></td><td></td><td class="amount"></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td class="amount"></td><td class="center"></td><td></td><td></td><td></td><td class="amount"></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td class="amount"></td><td class="center"></td><td></td><td></td><td></td><td class="amount"></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td class="amount"></td><td class="center"></td><td></td><td></td><td></td><td class="amount"></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td class="amount"></td><td class="center"></td><td></td><td></td><td></td><td class="amount"></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td class="amount"></td><td class="center"></td><td></td><td></td><td></td><td class="amount"></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td class="amount"></td><td class="center"></td><td></td><td></td><td></td><td class="amount"></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td class="amount"></td><td class="center"></td><td></td><td></td><td></td><td class="amount"></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td class="amount"></td><td class="center"></td><td></td><td></td><td></td><td class="amount"></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td class="amount"></td><td class="center"></td><td></td><td></td><td></td><td class="amount"></td><td></td></tr>
+  </tbody>
+</table>
+
+<div class="summary-box">
+  <div class="summary-item">
+    <label>Total Redeemed This Period:</label>
+    <div class="value"></div>
+  </div>
+  <div class="summary-item">
+    <label>Total Redeemed Year-to-Date:</label>
+    <div class="value"></div>
+  </div>
+  <div class="summary-item">
+    <label>Page:</label>
+    <div class="value" style="min-width: 40px;"></div>
+    <span>of</span>
+    <div class="value" style="min-width: 40px;"></div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="legal">
+    <strong>Legal Basis:</strong> This ledger documents the exercise of the right to demand lawful money under 12 U.S.C. &sect; 411. Maintained as a contemporaneous business record per FRE 803(6). Retain indefinitely. &bull; <strong>Stanek v. White, 215 NW 784:</strong> "Payment of debts is imperative for the right of contract/property to exist, for without payment (delivery of money), the debt still exists." &bull; This document is for educational purposes only and does not constitute legal or financial advice.
+  </div>
+  <div class="branding">
+    Ecclesia Basilikos
+  </div>
+</div>
+
+</body>
+</html>

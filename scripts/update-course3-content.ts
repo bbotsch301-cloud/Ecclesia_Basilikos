@@ -132,14 +132,7 @@ The type of citizenship you claim — and the **domicile** you establish — det
 3. **How your passport reflects your status** — a passport can reflect state-citizen status
 4. **How you interact with government agencies** — as a state citizen, not a federal subject
 
-The right to travel freely and to possess a passport is well established:
-
-**Kent v. Dulles, 357 U.S. 116 (1958):**
-
-> "The right to travel is a part of the 'liberty' of which the citizen cannot be deprived without due process of law under the Fifth Amendment."
-
-**Saenz v. Roe, 526 U.S. 489 (1999):**
-The Court recognized the right to travel as a component of the Privileges or Immunities Clause of the 14th Amendment.
+The right to travel freely and to possess a passport is well established. In *Kent v. Dulles* (357 U.S. 116, 1958), the Supreme Court held that the right to travel is a constitutionally protected liberty interest (see Lesson 5 for full analysis). *Saenz v. Roe* (526 U.S. 489, 1999) further recognized the right to travel as a component of the Privileges or Immunities Clause.
 
 ## The Public-to-Private Path
 
@@ -243,11 +236,7 @@ He then enumerated:
 
 This is not a throwaway phrase. It is a **limiting condition**. Not all persons born in the United States are 14th Amendment citizens — only those who are also "subject to the jurisdiction thereof."
 
-**Elk v. Wilkins, 112 U.S. 94 (1884):**
-
-> "The evident meaning of these last words is not merely subject in some respect or degree to the jurisdiction of the United States, but completely subject to their political jurisdiction, and owing them direct and immediate allegiance."
-
-The Court denied citizenship to John Elk, a Native American born within the geographical United States, because he was not "completely subject to" federal political jurisdiction at birth.
+As established in Lesson 1, *Elk v. Wilkins* (112 U.S. 94, 1884) confirmed that "subject to the jurisdiction thereof" requires complete political subjection and direct allegiance — not mere physical presence. The Court denied citizenship to a Native American born within U.S. borders on this basis.
 
 **Senator Lyman Trumbull** (co-author of the 14th Amendment), during Senate debate (1866):
 
@@ -269,35 +258,11 @@ Note the subtle but critical difference from Article IV:
 | "Citizens of each **State**" | "citizens of the **United States**" |
 | Broadly encompasses fundamental rights | Narrowly interpreted (Slaughter-House) |
 
-**Slaughter-House Cases, 83 U.S. 36 (1873):**
-
-The Court held that the "privileges or immunities of citizens of the United States" (14th Amendment) are **much narrower** than the "Privileges and Immunities of Citizens in the several States" (Article IV):
-
-> "Lest it should be said that no such privileges and immunities are to be found if those we have been considering are excluded, we venture to suggest some which owe their existence to the Federal government, its National character, its Constitution, or its laws.
->
-> The right to come to the seat of government to assert any claim... the right of free access to its seaports... to the sub-treasuries, land offices, and courts of justice in the several States... the right to use the navigable waters of the United States... the privilege of the writ of habeas corpus... the right to become a citizen of any State of the Union by a bona fide residence therein..."
-
-These are **federal** privileges — far narrower than the fundamental rights of state citizens.
+As established in Lesson 1, the *Slaughter-House Cases* (83 U.S. 36, 1873) confirmed two distinct citizenships and held that the "privileges or immunities" of 14th Amendment citizens are **much narrower** than the fundamental rights of state citizens under Article IV. The federal privileges are limited to matters like access to federal seaports, courts, and the writ of habeas corpus — far narrower than the fundamental rights catalogued in *Corfield v. Coryell*.
 
 #### The Domicile vs. Residence Distinction
 
-The 14th Amendment says citizens of "the State wherein they **reside**" — not the state of their **domicile**.
-
-**Black's Law Dictionary** distinguishes:
-
-**Domicile:**
-> "The place at which a person has been physically present and that the person regards as home; a person's true, fixed, principal, and permanent home, to which that person intends to return and remain even though currently residing elsewhere."
-
-**Residence:**
-> "The act or fact of living in a given place for some time. The place where one actually lives, as distinguished from a domicile."
-
-**Restatement (Second) of Conflict of Laws §11:**
-> "Domicile is a place, usually a person's home, to which the rules of Conflict of Laws sometimes accord determinative significance because of the person's identification with that place."
-
-The distinction matters: **domicile** establishes your permanent legal connection to a state. **Residence** is merely where you happen to be living at a given time. State citizenship is connected to **domicile**, not mere residence.
-
-**Texas v. Florida, 306 U.S. 398 (1939):**
-The Supreme Court held that domicile, not residence, determines a person's legal home for purposes of state jurisdiction.
+The 14th Amendment says citizens of "the State wherein they **reside**" — not the state of their **domicile**. This word choice is significant: **domicile** establishes your permanent legal connection to a state, while **residence** is merely where you happen to be living at a given time. State citizenship is connected to **domicile**, not mere residence. For the full legal definitions and case law on this critical distinction, see Lesson 4 ("Establishing Your Domicile").
 
 ## The Two Citizenships Compared
 
@@ -326,25 +291,7 @@ This pre-14th Amendment understanding of citizenship as membership in the sovere
 
 ## Jurisdiction as Spiritual Architecture
 
-The jurisdiction concept takes on a deeper, even spiritual, dimension when we consider the full picture:
-
-| Realm | Meaning | Law Type |
-|-------|---------|----------|
-| **Water** | Commerce (Public) | Maritime/Admiralty/Commercial Law |
-| **Land** | Common Law (Private) | Natural Law, Equity |
-| **Air** | Spiritual/Ecclesiastical (Ministry) | God's Law, Faith |
-
-### Multiple Layers of Reality
-
-Many traditions — philosophical, religious, and indigenous — describe **three realms of existence**: the physical, the social/institutional, and the spiritual. The jurisdiction model is really saying the same thing: **humans operate in multiple layers of reality simultaneously**.
-
-When we speak of "Water jurisdiction," we are talking about the material plane — commerce, currency, contracts, survival. When we speak of "Land jurisdiction," we are talking about the social and institutional plane — rights, governance, community agreements, common law. And when we speak of "Air jurisdiction," we enter the domain of the spiritual — faith, divine law, and the ultimate source of authority.
-
-### The Jurisdiction of Air
-
-The jurisdiction of **Air** becomes the ultimate conduit of sovereignty when we connect with **Source Consciousness above** and **Mother Earth below**. In this understanding, we are not merely legal persons arguing over constitutional clauses — we are spiritual beings navigating a world of layered authorities.
-
-Through this connection, we learn to **stand in the integrity of the truth of who we are**, and become **emissaries of conscious awareness as sacred sovereign creators**. The constitutional framework is not just a legal tool — it is a reflection of a deeper architecture of reality, one that honors the full spectrum of human experience from commerce to community to the divine.
+The three jurisdictions of Water, Land, and Air — introduced in Lesson 1 — take on additional constitutional significance in the context of Article IV and the 14th Amendment. The Privileges and Immunities Clause (Article IV) operates primarily in the realm of Land jurisdiction (common law, private rights), while the 14th Amendment's "privileges or immunities" operate in the realm of Water jurisdiction (public commerce, federal regulation). Understanding which citizenship you claim is, in part, understanding which jurisdictional realm you are choosing to stand in.
 
 ## Summary
 
@@ -381,24 +328,27 @@ The Supreme Court, in a 5-4 decision by Justice Miller, **upheld the monopoly** 
 
 ### Key Passages
 
-**On two distinct citizenships:**
+As introduced in Lesson 1, the Court confirmed two distinct citizenships. Here we examine additional passages and the broader doctrinal implications.
 
-> "It is quite clear, then, that there is a citizenship of the United States, and a citizenship of a State, which are distinct from each other, and which depend upon different characteristics or circumstances in the individual."
-
-**On the purpose of the 14th Amendment:**
+**On the limited purpose of the 14th Amendment:**
 
 > "The most cursory glance at these articles discloses a unity of purpose, when taken in connection with the history of the times... We doubt very much whether any action of a State not directed by way of discrimination against the negroes as a class, or on account of their race, will ever be held to come within the purview of this provision."
 
-**On the narrow scope of 14th Amendment privileges or immunities:**
+This passage reveals the Court's understanding that the 14th Amendment was **remedial**, not expansive — designed to address the specific injustice of slavery, not to restructure the entire federal-state relationship.
+
+**On the protection of state rights remaining with the states:**
 
 > "Having shown that the privileges and immunities relied on in the argument are those which belong to citizens of the States as such, and that they are left to the State governments for security and protection, and not by this article placed under the special care of the Federal government, we may hold ourselves excused from defining the privileges and immunities of citizens of the United States which no State can abridge, until some case involving those privileges may make it necessary to do so."
 
+**The doctrinal aftermath:** The Slaughter-House majority's narrow reading of the 14th Amendment's Privileges or Immunities Clause effectively rendered it dormant for over a century. It was not until *Saenz v. Roe* (1999) — more than 125 years later — that the Court gave the clause any meaningful independent force.
+
 ### Significance
 This case establishes that:
-1. State and federal citizenship are **distinct**
+1. State and federal citizenship are **distinct** (as introduced in Lesson 1)
 2. The fundamental rights catalogued in Corfield v. Coryell belong to **state** citizens
-3. The 14th Amendment did not transfer those rights to federal protection
+3. The 14th Amendment was **remedial** in purpose, not a general expansion of federal power
 4. Federal "privileges or immunities" are narrow and limited to matters of federal concern
+5. The Privileges or Immunities Clause was effectively **dormant** until Saenz v. Roe (1999)
 
 ## Case 2: United States v. Cruikshank, 92 U.S. 542 (1876)
 
@@ -640,17 +590,17 @@ As we learn to choose which jurisdictions we would like to play and work in, we 
 
 ### Operating on the Land, in the Private
 
-The most powerful configuration for sovereignty involves operating **on the land**, **in the private**, within a **Private Membership Association (PMA)**, with a **Private Express Trust** as a vessel for interfacing with commercial institutions. Rather than using the public vessel (the ALL CAPS entity) as our sole point of contact with the financial and legal system, we create private structures that can engage with commerce on our terms.
+The most powerful configuration for sovereignty involves operating **on the land**, **in the private**, within a **Private Membership Association (PMA)** — a common-law organization for private exchange among members — with a **Private Express Trust** as a vessel for interfacing with commercial institutions. Rather than using the public vessel (the ALL CAPS entity) as our sole point of contact with the financial and legal system, we create private structures that can engage with commerce on our terms.
 
 ### The Core Journey
 
 Moving from **public to private** is the core journey of sovereignty. In the public realm, you are presumed to be a federal citizen, subject to the full weight of commercial and admiralty jurisdiction. In the private realm, you stand on the land, under common law, with your rights intact.
 
-The combination of **establishing domicile** (this lesson), **redeeming lawful money** (Pillar 1), and **working within the private container of a PMA and trust** (Pillar 2) sets you on the path. Each piece reinforces the others:
+The combination of **establishing domicile** (this lesson), **redeeming lawful money** (Pillar 1 — Lawful Money Redemption — see the companion course), and **working within the private container of a PMA and trust** (Pillar 2 — Trust & Asset Protection — see the companion course) sets you on the path. Each piece reinforces the others:
 
 - **Domicile** establishes where you stand — your state, your land, your jurisdiction
-- **Lawful money** changes the character of the currency you use — from private credit back to constitutional money
-- **The PMA and trust** provide the private vessel through which you conduct your affairs in commerce without surrendering your standing
+- **Lawful money** (Pillar 1 — Lawful Money Redemption — see the companion course) changes the character of the currency you use — from private credit back to constitutional money
+- **The PMA and trust** (Pillar 2 — Trust & Asset Protection — see the companion course) provide the private vessel through which you conduct your affairs in commerce without surrendering your standing
 
 Together, these create a coherent framework for operating as a **private**, **sovereign** individual within the larger commercial system.
 
@@ -963,7 +913,7 @@ Maintain a dedicated portfolio containing:
 | 28 USC §1738 | Full Faith and Credit | Interstate recognition of records |
 | FRE 803(6) | Business records exception | Admissibility of maintained records |
 | Fla. Stat. §222.17 | Florida domicile declaration | Statutory domicile filing |
-| Slaughter-House Cases | 83 U.S. 36 (1873) | Two citizenships — basis for status claim |
+| Slaughter-House Cases | 83 U.S. 36 (1873) | Two citizenships (see Lessons 1 & 3) |
 | Corfield v. Coryell | 6 F. Cas. 546 (1823) | Rights of state citizens |`,
   },
   {
@@ -1001,7 +951,7 @@ Your state citizenship is connected to your **domicile**. Maintaining it require
 - If you move, formally establishing domicile in the new state
 - Filing an updated Declaration of Domicile if you change states
 
-**Remember:** You can have only **one domicile** at a time. See **Restatement (Second) of Conflict of Laws §18**.
+**Remember:** You can have only **one domicile** at a time (see Lesson 4 for full definitions and legal authorities on domicile).
 
 ### 3. Understand Jurisdictional Implications
 
@@ -1022,32 +972,8 @@ Maintain your documentation portfolio:
 - Keep your Declaration of Domicile current
 - Update records if you change address within your state
 - Preserve copies of your passport
-- Maintain records of your lawful money practice (if following Pillar 1)
-- Keep trust records current (if following Pillar 2)
-
-## How the Three Pillars Connect
-
-The three pillars form an integrated foundation:
-
-### Pillar 1: Lawful Money Redemption
-- **What it does:** Changes the character of money you receive from private credit to lawful money
-- **Legal basis:** 12 USC §411
-- **Connection:** Operating in lawful money aligns your financial activity with constitutional principles
-
-### Pillar 2: Trust & Asset Protection
-- **What it does:** Separates legal title from equitable interest, protecting assets from personal liability
-- **Legal basis:** Restatement (Third) of Trusts; Uniform Trust Code; common law
-- **Connection:** Assets protected in trust are shielded regardless of which jurisdiction claims authority over you personally
-
-### Pillar 3: State-Citizen Passport
-- **What it does:** Establishes your status as a citizen of your state under Article IV
-- **Legal basis:** Slaughter-House Cases, Cruikshank, Elk v. Wilkins, Article IV §2
-- **Connection:** Your status determines which rights you possess and which jurisdiction governs your affairs
-
-Together, these three pillars create a foundation:
-1. **Your money** is characterized as lawful money (not private credit)
-2. **Your assets** are protected in trust (separated from personal liability)
-3. **Your status** is established as a state citizen (with broader rights under Article IV)
+- Maintain records of your lawful money practice (if following Pillar 1 — Lawful Money Redemption — see the companion course)
+- Keep trust records current (if following Pillar 2 — Trust & Asset Protection — see the companion course)
 
 ## Continuing Education
 
@@ -1071,107 +997,25 @@ Before taking any legal action based on this course:
 
 ## The Deeper Meaning: Sovereignty as Awakening
 
-### Unconscious Participation
-
-The biggest spiritual conclusion from this entire framework is this: **most systems operate because people participate unconsciously**.
-
-Whether it is money, law, culture, or institutions — they exist because people **believe in them and use them**. The dollar has value because millions of people agree it does. The legal system has authority because people submit to it. Corporations wield power because individuals participate in their structures without question.
-
-Once someone becomes aware, they begin asking: **What agreements am I making? What structures am I participating in? Where does my authority actually come from?**
-
-This is described across traditions as **awakening**.
-
-### Two Economic Orders
+### Babylon vs. Kingdom
 
 The Bible describes two contrasting economic orders:
 
-**Babylon** — the system of debt, trade empires, merchant power, and global commerce. In Babylon, wealth is accumulated through obligation, interest, and control. The entire modern financial system — fractional reserve banking, fiat currency, debt-based money — mirrors the Babylonian model.
+**Babylon** — the system of debt, trade empires, merchant power, and global commerce. Wealth is accumulated through obligation, interest, and control. The modern financial system — fractional reserve banking, fiat currency, debt-based money — mirrors the Babylonian model.
 
-**Kingdom** — the system of stewardship, covenant, jubilee, and forgiveness of debt. In the Kingdom model, wealth is held in trust for the benefit of all. Debts are periodically forgiven. The land cannot be permanently sold because it belongs to God. People are stewards, not owners.
+**Kingdom** — the system of stewardship, covenant, jubilee, and forgiveness of debt. Wealth is held in trust for the benefit of all. Debts are periodically forgiven. People are stewards, not owners.
 
-One system **accumulates obligation**; the other emphasizes **release and restoration**.
+One system **accumulates obligation**; the other emphasizes **release and restoration**. The three pillars of this program — lawful money, trust protection, and state-citizen status — are practical steps from one model toward the other.
 
-### The Power of Agreement
-
-Systems of power operate through **agreements, not force**. The moment people withdraw agreement, systems change — monarchies collapse, currencies fail, empires dissolve.
-
-Authority ultimately flows from **collective belief and participation**. The question is not whether these systems are "real" — they are, because we make them so. The question is: **how much of our world is built on structures we never consciously agreed to?**
-
-Once someone starts asking that question, they begin looking at money, law, identity, institutions, and sovereignty in a completely different way.
-
-### Inner and Outer Sovereignty
+### Inner Sovereignty
 
 **Outer sovereignty stands on a foundation of inner sovereignty.** The legal tools we study in this course — domicile, citizenship status, passports, affidavits — are outer structures. They are powerful and necessary. But they are most effective when they arise from an inner clarity about who you are and what you stand for.
 
-The combination of all three pillars — **lawful money redemption**, **trust and asset protection**, and **state-citizen status** — creates a comprehensive framework for operating as a sovereign being **within** (but not unconsciously subject to) the current system.
-
-> "We have many tools for cultivating outer sovereignty in the current paradigm. It does take some time and focus to learn the pathways to liberation, just as it takes time and attention to cultivate inner sovereignty."
-
 The passport is not the end of the journey — it is a milestone. The deeper work is ongoing: becoming conscious of every agreement you make, every structure you participate in, and every layer of authority you submit to. That is the true meaning of sovereignty.
 
-## Complete Course Citation Index
+## Course Citation Index
 
-### Constitutional Provisions
-| Provision | Subject |
-|-----------|---------|
-| Art. I, §8, cl. 5 | Power to coin money |
-| Art. I, §10, cl. 1 | States limited to gold and silver tender |
-| Art. IV, §2 | Privileges and Immunities of state citizens |
-| 5th Amendment | Due process; liberty |
-| 14th Amendment, §1 | Federal citizenship; privileges or immunities |
-
-### Federal Statutes
-| Statute | Subject |
-|---------|---------|
-| 12 USC §411 | FRN redemption in lawful money |
-| 22 USC §212 | Passport issuance authority |
-| 26 USC §61 | Gross income defined |
-| 28 USC §1332 | Diversity jurisdiction (citizenship) |
-| 28 USC §1738 | Full Faith and Credit |
-| 28 USC §1746 | Unsworn declarations |
-| 31 USC §5103 | Legal tender |
-| 31 USC §5112 | Coinage |
-
-### Supreme Court Cases
-| Case | Citation | Subject |
-|------|----------|---------|
-| Corfield v. Coryell | 6 F. Cas. 546 (1823) | Art. IV privileges defined |
-| Barron v. Baltimore | 32 U.S. 243 (1833) | Bill of Rights scope |
-| Dred Scott v. Sandford | 60 U.S. 393 (1857) | Nature of citizenship (historical) |
-| Bronson v. Rodes | 74 U.S. 229 (1868) | Coin vs. notes |
-| Lane County v. Oregon | 74 U.S. 71 (1868) | State tax in coin |
-| Hepburn v. Griswold | 75 U.S. 603 (1870) | Paper tender |
-| Knox v. Lee | 79 U.S. 457 (1871) | Legal tender power |
-| Slaughter-House Cases | 83 U.S. 36 (1873) | Two distinct citizenships |
-| Mitchell v. United States | 88 U.S. 350 (1874) | Change of domicile |
-| Minor v. Happersett | 88 U.S. 162 (1875) | Pre-14th Am. citizenship |
-| Cruikshank | 92 U.S. 542 (1876) | Different rights per citizenship |
-| Elk v. Wilkins | 112 U.S. 94 (1884) | "Subject to jurisdiction" defined |
-| Juilliard v. Greenman | 110 U.S. 421 (1884) | Legal tender upheld |
-| Boyd v. Nebraska | 143 U.S. 135 (1892) | Dual citizenship characteristics |
-| Eisner v. Macomber | 252 U.S. 189 (1920) | Income = gain |
-| Brushaber v. Union Pacific | 240 U.S. 1 (1916) | 16th Amendment scope |
-| Meinhard v. Salmon | 249 N.Y. 458 (1928) | Fiduciary duty standard |
-| Morrissey v. Commissioner | 296 U.S. 344 (1935) | Trust vs. association |
-| Helvering v. Clifford | 309 U.S. 331 (1940) | Grantor trust doctrine |
-| Milliken v. Meyer | 311 U.S. 457 (1940) | Domicile and jurisdiction |
-| DC v. Murphy | 314 U.S. 441 (1941) | Domicile definition |
-| Texas v. Florida | 306 U.S. 398 (1939) | Domicile as legal home |
-| Glenshaw Glass | 348 U.S. 426 (1955) | Income definition broadened |
-| Kent v. Dulles | 357 U.S. 116 (1958) | Right to travel |
-| Aptheker v. Sec. of State | 378 U.S. 500 (1964) | Passport due process |
-| Haig v. Agee | 453 U.S. 280 (1981) | Travel right acknowledged |
-| Saenz v. Roe | 526 U.S. 489 (1999) | Three components of right to travel |
-| Lexecon v. Milberg Weiss | 523 U.S. 26 (1998) | "Shall" is mandatory |
-
-### Restatements and Treatises
-| Source | Subject |
-|--------|---------|
-| Restatement (Third) of Trusts | Trust law principles |
-| Restatement (Second) of Conflict of Laws | Domicile rules |
-| Uniform Trust Code | Model trust legislation |
-| Black's Law Dictionary (11th Ed.) | Legal definitions |
-| Bogert, Trusts and Trustees | Trust treatise |`,
+For a complete listing of all legal authorities cited in this course, refer to the individual lesson materials.`,
   },
 ];
 
