@@ -222,6 +222,7 @@ export interface IStorage {
   getRecentForumThreads(): Promise<Array<ForumThread & { author: User; category: ForumCategory }>>;
   searchForumThreads(query: string): Promise<Array<ForumThread & { author: Pick<User, 'id' | 'firstName' | 'lastName' | 'username'>; category: ForumCategory }>>;
   getCoursesWithLessonCount(): Promise<(Course & { lessonCount: number })[]>;
+  getAllCoursesWithLessonCount(): Promise<(Course & { lessonCount: number })[]>;
 
   // Forum: edit/delete helpers
   getForumReply(id: string): Promise<ForumReply | undefined>;
@@ -1332,6 +1333,22 @@ export class DatabaseStorage implements IStorage {
       .from(courses)
       .leftJoin(lessons, eq(courses.id, lessons.courseId))
       .where(eq(courses.isPublished, true))
+      .groupBy(courses.id);
+
+    return result.map(r => ({
+      ...r.course,
+      lessonCount: r.lessonCount || 0,
+    }));
+  }
+
+  async getAllCoursesWithLessonCount(): Promise<(Course & { lessonCount: number })[]> {
+    const result = await db
+      .select({
+        course: courses,
+        lessonCount: sql<number>`count(${lessons.id})::int`,
+      })
+      .from(courses)
+      .leftJoin(lessons, eq(courses.id, lessons.courseId))
       .groupBy(courses.id);
 
     return result.map(r => ({

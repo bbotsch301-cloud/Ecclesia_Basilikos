@@ -92,7 +92,7 @@ function CourseListView() {
   });
 
   const { data: courses, isLoading } = useQuery<CourseData[]>({
-    queryKey: ["/api/courses"],
+    queryKey: ["/api/admin/courses"],
   });
 
   const createCourseMutation = useMutation({
@@ -100,7 +100,7 @@ function CourseListView() {
       return apiRequest("POST", "/api/admin/courses", data);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/courses"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/courses"] });
       toast({ title: "Course Created", description: "Course has been created successfully." });
       setCourseDialogOpen(false);
       setCourseForm({ title: "", description: "", category: "", level: "beginner", duration: "", price: 0, imageUrl: "" });
@@ -113,7 +113,7 @@ function CourseListView() {
   const togglePublishedMutation = useMutation({
     mutationFn: async (id: string) => apiRequest("PATCH", `/api/admin/courses/${id}/toggle-published`),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/courses"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/courses"] });
     },
     onError: (error: Error) => {
       toast({ title: "Error", description: error.message || "Failed to update publish status", variant: "destructive" });
@@ -123,7 +123,7 @@ function CourseListView() {
   const deleteCourseMutation = useMutation({
     mutationFn: async (id: string) => apiRequest("DELETE", `/api/admin/courses/${id}`),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/courses"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/courses"] });
       toast({ title: "Deleted", description: "Course has been deleted." });
     },
     onError: (error: Error) => {
@@ -532,7 +532,7 @@ function CourseDetailEditor() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/courses", courseId] });
-      queryClient.invalidateQueries({ queryKey: ["/api/courses"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/courses"] });
       toast({ title: "Course Updated" });
       setIsEditingCourse(false);
     },
@@ -545,7 +545,7 @@ function CourseDetailEditor() {
     mutationFn: async () => apiRequest("PATCH", `/api/admin/courses/${courseId}/toggle-published`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/courses", courseId] });
-      queryClient.invalidateQueries({ queryKey: ["/api/courses"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/courses"] });
     },
     onError: (error: Error) => {
       toast({ title: "Error", description: error.message || "Failed to update publish status", variant: "destructive" });

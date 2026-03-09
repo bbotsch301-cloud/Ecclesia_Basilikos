@@ -414,6 +414,17 @@ router.delete('/resources/:id', requireAdmin, async (req, res) => {
 // COURSE MANAGEMENT (INSTRUCTOR+)
 // ================================
 
+// Get all courses (including unpublished) for admin editor
+router.get('/courses', requireInstructor, async (req, res) => {
+  try {
+    const courses = await storage.getAllCoursesWithLessonCount();
+    res.json(courses);
+  } catch (error) {
+    logger.error({ err: error }, 'Error fetching all courses:');
+    res.status(500).json({ error: 'Failed to fetch courses' });
+  }
+});
+
 // Create course
 router.post('/courses', requireInstructor, async (req, res) => {
   try {
