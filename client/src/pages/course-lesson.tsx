@@ -288,7 +288,7 @@ function CourseLessonContent() {
                     prose-strong:text-gray-900 prose-strong:font-semibold
                     prose-em:text-gray-600
                     prose-a:text-royal-gold prose-a:no-underline hover:prose-a:underline
-                    prose-blockquote:border-l-4 prose-blockquote:border-royal-gold prose-blockquote:bg-amber-50 prose-blockquote:py-3 prose-blockquote:px-5 prose-blockquote:rounded-r-lg prose-blockquote:not-italic prose-blockquote:text-gray-700 prose-blockquote:my-6
+                    prose-blockquote:border-l-4 prose-blockquote:border-royal-gold prose-blockquote:bg-amber-50 prose-blockquote:py-3 prose-blockquote:px-5 prose-blockquote:rounded-r-lg prose-blockquote:not-italic prose-blockquote:text-gray-700 prose-blockquote:my-6 prose-blockquote:before:content-none prose-blockquote:after:content-none
                     prose-code:bg-gray-100 prose-code:text-red-700 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:font-normal prose-code:before:content-none prose-code:after:content-none
                     prose-pre:bg-gray-900 prose-pre:text-gray-100 prose-pre:rounded-xl prose-pre:shadow-md
                     prose-ul:my-4 prose-ul:space-y-1
