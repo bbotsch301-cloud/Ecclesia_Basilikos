@@ -6,6 +6,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { insertUserSchema } from "@shared/schema";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
@@ -37,7 +39,7 @@ export default function Signup() {
   const form = useForm<RegistrationData>({
     mode: "onBlur",
     resolver: zodResolver(registrationSchema),
-    defaultValues: { email: "", password: "", confirmPassword: "", firstName: "", lastName: "" },
+    defaultValues: { email: "", password: "", confirmPassword: "", firstName: "", lastName: "", termsAccepted: undefined as unknown as true },
   });
 
   const onSubmit = async (data: RegistrationData) => {
@@ -182,6 +184,35 @@ export default function Signup() {
                           <Input type="password" placeholder="Confirm password" {...field} />
                         </FormControl>
                         <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="termsAccepted"
+                    render={({ field }) => (
+                      <FormItem>
+                        <div className="border border-gray-200 rounded-lg p-4">
+                          <div className="flex items-start gap-3">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value === true}
+                                onCheckedChange={(checked) => field.onChange(checked === true ? true : undefined)}
+                              />
+                            </FormControl>
+                            <Label className="text-sm text-gray-700 leading-relaxed cursor-pointer font-normal" onClick={() => field.onChange(field.value === true ? undefined : true)}>
+                              I agree to the{" "}
+                              <Link href="/terms" className="text-royal-gold hover:underline font-medium">
+                                Terms of Service
+                              </Link>{" "}
+                              and{" "}
+                              <Link href="/privacy" className="text-royal-gold hover:underline font-medium">
+                                Privacy Policy
+                              </Link>
+                            </Label>
+                          </div>
+                          <FormMessage className="mt-2 ml-7" />
+                        </div>
                       </FormItem>
                     )}
                   />

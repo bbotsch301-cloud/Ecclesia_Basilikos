@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
@@ -12,7 +12,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MessageSquare, Users, Eye, Clock, Plus, Pin } from "lucide-react";
+import { MessageSquare, Users, Eye, Clock, Plus, Pin, Search, X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -34,6 +34,27 @@ export default function Forum() {
   const queryClient = useQueryClient();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleSearchChange = useCallback((value: string) => {
+    setSearchInput(value);
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+    debounceTimerRef.current = setTimeout(() => {
+      setDebouncedSearch(value.trim());
+    }, 300);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
+  }, []);
 
   const { data: categories = [], isLoading: categoriesLoading } = useQuery<ForumCategory[]>({
     queryKey: ['/api/forum/categories'],
@@ -51,8 +72,20 @@ export default function Forum() {
     enabled: !selectedCategory,
   });
 
-  const threads = selectedCategory ? categoryThreads : allThreads;
-  const threadsLoading = selectedCategory ? categoryThreadsLoading : allThreadsLoading;
+  const isSearching = debouncedSearch.length >= 2;
+
+  const { data: searchResults = [], isLoading: searchLoading } = useQuery<Array<ForumThread & { author: User; category: ForumCategory }>>({
+    queryKey: ['/api/forum/search', debouncedSearch],
+    queryFn: async () => {
+      const res = await fetch(`/api/forum/search?q=${encodeURIComponent(debouncedSearch)}`);
+      if (!res.ok) throw new Error("Search failed");
+      return res.json();
+    },
+    enabled: isSearching,
+  });
+
+  const threads = isSearching ? searchResults : (selectedCategory ? categoryThreads : allThreads);
+  const threadsLoading = isSearching ? searchLoading : (selectedCategory ? categoryThreadsLoading : allThreadsLoading);
 
   const form = useForm<CreateThreadForm>({
     mode: "onBlur",
@@ -134,6 +167,7 @@ export default function Forum() {
               Connect with fellow believers and discuss covenant truths
             </p>
           </div>
+          <div className="flex items-center gap-2">
           {isAuthenticated && (
             <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
               <DialogTrigger asChild>
@@ -217,6 +251,31 @@ export default function Forum() {
               </DialogContent>
             </Dialog>
           )}
+          </div>
+        </div>
+        {/* Search Bar */}
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Input
+            placeholder="Search forum threads..."
+            value={searchInput}
+            onChange={(e) => handleSearchChange(e.target.value)}
+            className="pl-10 pr-10"
+          />
+          {searchInput && (
+            <button
+              onClick={() => {
+                setSearchInput("");
+                setDebouncedSearch("");
+                if (debounceTimerRef.current) {
+                  clearTimeout(debounceTimerRef.current);
+                }
+              }}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
         </div>
       </div>
 
@@ -282,11 +341,15 @@ export default function Forum() {
             <Card>
               <CardContent className="py-12 text-center">
                 <MessageSquare className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">No discussions yet</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  {isSearching ? "No results found" : "No discussions yet"}
+                </h3>
                 <p className="text-gray-600 mb-4">
-                  Be the first to start a conversation{selectedCategory ? ' in this category' : ''}.
+                  {isSearching
+                    ? `No threads matching "${debouncedSearch}".`
+                    : `Be the first to start a conversation${selectedCategory ? ' in this category' : ''}.`}
                 </p>
-                {isAuthenticated && (
+                {!isSearching && isAuthenticated && (
                   <Button
                     onClick={() => setIsCreateDialogOpen(true)}
                     className="bg-amber-600 hover:bg-amber-700"

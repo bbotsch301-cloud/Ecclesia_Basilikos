@@ -574,25 +574,102 @@ router.patch('/lessons/:id', requireInstructor, async (req, res) => {
 router.delete('/lessons/:id', requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
-    
+
     const oldLesson = await storage.getCourseLessons('').then(lessons => lessons.find(l => l.id === id));
     await storage.deleteLesson(id);
-    
+
     await auditLog(
-      req.user!.id, 
-      'DELETE', 
-      'LESSON', 
-      id, 
-      oldLesson, 
+      req.user!.id,
+      'DELETE',
+      'LESSON',
+      id,
+      oldLesson,
       null,
       req.ip,
       req.get('User-Agent')
     );
-    
+
     res.json({ success: true });
   } catch (error) {
     logger.error({ err: error }, 'Error deleting lesson:');
     res.status(500).json({ error: 'Failed to delete lesson' });
+  }
+});
+
+// Reorder lessons
+router.patch('/courses/:courseId/lessons/reorder', requireInstructor, async (req, res) => {
+  try {
+    const { courseId } = req.params;
+    const { lessonIds } = z.object({ lessonIds: z.array(z.string()) }).parse(req.body);
+    await storage.reorderLessons(courseId, lessonIds);
+    await auditLog(req.user!.id, 'UPDATE', 'COURSE', courseId, null, { action: 'reorder_lessons' }, req.ip, req.get('User-Agent'));
+    res.json({ success: true });
+  } catch (error) {
+    logger.error({ err: error }, 'Error reordering lessons:');
+    res.status(500).json({ error: 'Failed to reorder lessons' });
+  }
+});
+
+// Duplicate lesson
+router.post('/lessons/:id/duplicate', requireInstructor, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const newLesson = await storage.duplicateLesson(id);
+    await auditLog(req.user!.id, 'CREATE', 'LESSON', newLesson.id, null, newLesson, req.ip, req.get('User-Agent'));
+    res.status(201).json(newLesson);
+  } catch (error) {
+    logger.error({ err: error }, 'Error duplicating lesson:');
+    res.status(500).json({ error: 'Failed to duplicate lesson' });
+  }
+});
+
+// Course enrollment stats
+router.get('/courses/:courseId/stats', requireInstructor, async (req, res) => {
+  try {
+    const stats = await storage.getCourseStats(req.params.courseId);
+    res.json(stats);
+  } catch (error) {
+    logger.error({ err: error }, 'Error fetching course stats:');
+    res.status(500).json({ error: 'Failed to fetch course stats' });
+  }
+});
+
+// Audit log for specific entity
+router.get('/audit-log', requireAdmin, async (req, res) => {
+  try {
+    const { entityType, entityId } = z.object({
+      entityType: z.string(),
+      entityId: z.string(),
+    }).parse(req.query);
+    const logs = await storage.getAuditLogForEntity(entityType, entityId);
+    res.json(logs);
+  } catch (error) {
+    logger.error({ err: error }, 'Error fetching audit log:');
+    res.status(500).json({ error: 'Failed to fetch audit log' });
+  }
+});
+
+// Bulk delete lessons
+router.post('/courses/:courseId/lessons/bulk-delete', requireAdmin, async (req, res) => {
+  try {
+    const { lessonIds } = z.object({ lessonIds: z.array(z.string()) }).parse(req.body);
+    await storage.bulkDeleteLessons(lessonIds);
+    await auditLog(req.user!.id, 'DELETE', 'LESSON', req.params.courseId, { lessonIds }, null, req.ip, req.get('User-Agent'));
+    res.json({ success: true });
+  } catch (error) {
+    logger.error({ err: error }, 'Error bulk deleting lessons:');
+    res.status(500).json({ error: 'Failed to bulk delete lessons' });
+  }
+});
+
+// Course categories
+router.get('/courses/categories', requireInstructor, async (req, res) => {
+  try {
+    const categories = await storage.getCourseCategories();
+    res.json(categories);
+  } catch (error) {
+    logger.error({ err: error }, 'Error fetching categories:');
+    res.status(500).json({ error: 'Failed to fetch categories' });
   }
 });
 

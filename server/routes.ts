@@ -49,15 +49,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Authentication routes
   app.post("/api/auth/register", authLimiter, async (req, res) => {
     try {
-      const userData = insertUserSchema.parse(req.body);
-      
+      const { termsAccepted, ...userData } = insertUserSchema.parse(req.body);
+
       // Check if user already exists
       const existingUser = await storage.getUserByEmail(userData.email);
       if (existingUser) {
         return res.status(400).json({ error: "Email already registered" });
       }
 
-      const user = await storage.createUser(userData);
+      const user = await storage.createUser({ ...userData, termsAcceptedAt: new Date() });
       
       // Send verification email
       const verificationUrl = `${req.protocol}://${req.get('host')}/verify-email?token=${user.emailVerificationToken}`;
@@ -95,6 +95,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const verifiedUser = await storage.getUser(user.id);
         if (verifiedUser) {
           req.session.userId = verifiedUser.id;
+
+          // Create welcome notification
+          await storage.createNotification({
+            userId: verifiedUser.id,
+            type: 'welcome',
+            title: 'Welcome to Ecclesia Basilikos!',
+            message: 'Start your journey by exploring our courses and downloading essential documents.',
+            linkUrl: '/dashboard',
+          });
+
+          // Send welcome email (non-blocking)
+          const { sendEmail: sendWelcome, generateWelcomeEmailHtml } = await import('./email');
+          sendWelcome({
+            to: verifiedUser.email,
+            subject: 'Welcome to Ecclesia Basilikos - Your Journey Begins',
+            html: generateWelcomeEmailHtml(verifiedUser.firstName),
+          }).catch((err) => logger.warn({ err }, 'Failed to send welcome email'));
+
           const { password: _pw, emailVerificationToken: _tok, ...safeUser } = verifiedUser;
           return res.json({
             success: true,
@@ -103,7 +121,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           });
         }
       }
-      
+
       req.session.userId = user.id;
       const { password, emailVerificationToken, ...userWithoutSensitiveData } = user;
       res.json({
@@ -190,9 +208,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Verify the user
       await storage.verifyUserEmail(user.id);
-      
-      res.json({ 
-        success: true, 
+
+      // Create welcome notification
+      await storage.createNotification({
+        userId: user.id,
+        type: 'welcome',
+        title: 'Welcome to Ecclesia Basilikos!',
+        message: 'Start your journey by exploring our courses and downloading essential documents.',
+        linkUrl: '/dashboard',
+      });
+
+      // Send welcome email (non-blocking)
+      const { sendEmail: sendWelcome, generateWelcomeEmailHtml } = await import('./email');
+      sendWelcome({
+        to: user.email,
+        subject: 'Welcome to Ecclesia Basilikos - Your Journey Begins',
+        html: generateWelcomeEmailHtml(user.firstName),
+      }).catch((err) => logger.error({ err }, 'Failed to send welcome email'));
+
+      res.json({
+        success: true,
         message: "Email verified successfully! You can now log in."
       });
     } catch (error) {
@@ -520,6 +555,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Forum routes
 
+  // Search forum threads
+  app.get("/api/forum/search", async (req, res) => {
+    try {
+      const q = typeof req.query.q === "string" ? req.query.q.trim() : "";
+      if (q.length < 2) {
+        return res.status(400).json({ error: "Search query must be at least 2 characters" });
+      }
+      const threads = await storage.searchForumThreads(q);
+      res.json(threads);
+    } catch (error) {
+      logger.error({ err: error }, "Error searching forum threads:");
+      res.status(500).json({ error: "Failed to search threads" });
+    }
+  });
+
   // Get all recent threads (across all categories)
   app.get("/api/forum/threads", async (req, res) => {
     try {
@@ -775,13 +825,54 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/downloads/:id/track", async (req, res) => {
+  app.post("/api/downloads/:id/track", optionalAuth, async (req, res) => {
     try {
-      const updated = await storage.incrementDownloadCount(req.params.id);
+      const id = req.params.id;
+      const updated = await storage.incrementDownloadCount(id);
+      if (req.user) {
+        await storage.trackUserDownload(req.user.id, id, req.ip);
+      }
       res.json({ downloadCount: updated.downloadCount });
     } catch (error) {
       logger.error({ err: error }, "Error tracking download:");
       res.status(500).json({ error: "Failed to track download" });
+    }
+  });
+
+  // Auth-gated file download endpoint
+  app.get("/api/downloads/:id/file", requireAuth, async (req, res) => {
+    try {
+      const user = req.user!;
+      if (!user.isEmailVerified) {
+        return res.status(403).json({ error: "Please verify your email before downloading files" });
+      }
+
+      const id = req.params.id;
+      const download = await storage.getDownload(id);
+
+      if (!download || (!download.isPublished && user.role !== 'admin')) {
+        return res.status(404).json({ error: "Download not found" });
+      }
+
+      await storage.trackUserDownload(user.id, id, req.ip);
+      await storage.incrementDownloadCount(id);
+
+      res.json({ fileUrl: download.fileUrl, fileName: download.title });
+    } catch (error) {
+      logger.error({ err: error }, "Error downloading file:");
+      res.status(500).json({ error: "Failed to download file" });
+    }
+  });
+
+  // User download history endpoint
+  app.get("/api/my-downloads", requireAuth, async (req, res) => {
+    try {
+      const userId = req.user!.id;
+      const history = await storage.getUserDownloadHistory(userId);
+      res.json(history);
+    } catch (error) {
+      logger.error({ err: error }, "Error fetching download history:");
+      res.status(500).json({ error: "Failed to fetch download history" });
     }
   });
 

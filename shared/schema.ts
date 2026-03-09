@@ -26,6 +26,7 @@ export const users = pgTable("users", {
   passwordResetToken: text("password_reset_token"),
   passwordResetExpires: timestamp("password_reset_expires"),
   lastLoginAt: timestamp("last_login_at"),
+  termsAcceptedAt: timestamp("terms_accepted_at"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -54,6 +55,7 @@ export const courses = pgTable("courses", {
   duration: text("duration"), // e.g., "4 weeks", "8 hours"
   price: integer("price").default(0), // in cents, 0 for free
   imageUrl: text("image_url"),
+  scheduledPublishAt: timestamp("scheduled_publish_at"),
   isPublished: boolean("is_published").default(false),
   createdById: varchar("created_by_id").notNull().references(() => users.id),
   createdAt: timestamp("created_at").defaultNow(),
@@ -216,6 +218,18 @@ export const downloads = pgTable("downloads", {
   index("downloads_category_idx").on(table.category),
 ]);
 
+// Per-user download tracking
+export const userDownloads = pgTable("user_downloads", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  downloadId: varchar("download_id").notNull().references(() => downloads.id),
+  downloadedAt: timestamp("downloaded_at").defaultNow(),
+  ipAddress: text("ip_address"),
+}, (table) => [
+  index("user_downloads_user_id_idx").on(table.userId),
+  index("user_downloads_download_id_idx").on(table.downloadId),
+]);
+
 // Page content management
 export const page_content = pgTable("page_content", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -314,6 +328,7 @@ export const userRelations = relations(users, ({ many }) => ({
   auditLogs: many(admin_audit_log),
   videoProgress: many(videoProgress),
   sectionProgress: many(sectionProgress),
+  userDownloads: many(userDownloads),
 }));
 
 export const courseRelations = relations(courses, ({ one, many }) => ({
@@ -377,7 +392,24 @@ export const sectionProgressRelations = relations(sectionProgress, ({ one }) => 
   }),
 }));
 
+export const downloadRelations = relations(downloads, ({ one, many }) => ({
+  course: one(courses, {
+    fields: [downloads.courseId],
+    references: [courses.id],
+  }),
+  userDownloads: many(userDownloads),
+}));
 
+export const userDownloadRelations = relations(userDownloads, ({ one }) => ({
+  user: one(users, {
+    fields: [userDownloads.userId],
+    references: [users.id],
+  }),
+  download: one(downloads, {
+    fields: [userDownloads.downloadId],
+    references: [downloads.id],
+  }),
+}));
 
 export const resourceRelations = relations(resources, ({ one }) => ({
   creator: one(users, {
@@ -431,7 +463,10 @@ export const forumReplyRelations = relations(forum_replies, ({ one, many }) => (
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
   isActive: true,
+  termsAcceptedAt: true,
   createdAt: true,
+}).extend({
+  termsAccepted: z.literal(true, { errorMap: () => ({ message: "You must accept the terms" }) }),
 });
 
 export const loginSchema = z.object({
@@ -474,6 +509,14 @@ export const insertDownloadSchema = createInsertSchema(downloads).omit({
   createdAt: true,
   updatedAt: true,
 });
+
+export const insertUserDownloadSchema = createInsertSchema(userDownloads).omit({
+  id: true,
+  downloadedAt: true,
+});
+
+export type InsertUserDownload = z.infer<typeof insertUserDownloadSchema>;
+export type UserDownload = typeof userDownloads.$inferSelect;
 
 export const insertForumCategorySchema = createInsertSchema(forum_categories).omit({
   id: true,

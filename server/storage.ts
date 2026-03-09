@@ -50,6 +50,7 @@ import {
   type InsertComment,
   type NewsletterCampaign,
   type InsertNewsletterCampaign,
+  type UserDownload,
   users,
   contacts,
   newsletter_subscribers,
@@ -75,7 +76,8 @@ import {
   notifications,
   threadSubscriptions,
   comments,
-  newsletter_campaigns
+  newsletter_campaigns,
+  userDownloads
 } from "@shared/schema";
 import { eq, and, desc, sql, or, inArray } from "drizzle-orm";
 import { db } from "./db";
@@ -88,7 +90,7 @@ export interface IStorage {
   getUserByEmail(email: string): Promise<User | undefined>;
   getUserByVerificationToken(token: string): Promise<User | undefined>;
   getUserByPasswordResetToken(token: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
+  createUser(user: Omit<InsertUser, 'termsAccepted'> & { termsAcceptedAt?: Date }): Promise<User>;
   updateUser(userId: string, updates: Partial<InsertUser>): Promise<User>;
   setPasswordResetToken(userId: string, token: string, expires: Date): Promise<void>;
   resetPassword(userId: string, hashedPassword: string): Promise<void>;
@@ -124,7 +126,10 @@ export interface IStorage {
   deleteDownload(id: string): Promise<void>;
   incrementDownloadCount(id: string): Promise<Download>;
   toggleDownloadPublished(id: string): Promise<Download>;
-  
+  trackUserDownload(userId: string, downloadId: string, ipAddress?: string): Promise<void>;
+  getUserDownloadHistory(userId: string): Promise<any[]>;
+  acceptTerms(userId: string): Promise<void>;
+
   // Admin: User Management
   getAllUsers(): Promise<User[]>;
   updateUserRole(userId: string, role: string): Promise<User>;
@@ -151,6 +156,12 @@ export interface IStorage {
   createLesson(lesson: InsertLesson): Promise<Lesson>;
   updateLesson(id: string, lesson: Partial<InsertLesson>): Promise<Lesson>;
   deleteLesson(id: string): Promise<void>;
+  reorderLessons(courseId: string, lessonIds: string[]): Promise<void>;
+  duplicateLesson(lessonId: string): Promise<Lesson>;
+  getCourseStats(courseId: string): Promise<{ enrollmentCount: number; completedCount: number; lessonStats: Array<{ lessonId: string; completedCount: number; totalStudents: number }> }>;
+  getAuditLogForEntity(entityType: string, entityId: string): Promise<AdminAuditLog[]>;
+  bulkDeleteLessons(lessonIds: string[]): Promise<void>;
+  getCourseCategories(): Promise<string[]>;
 
   // Video Management
   createCourseSection(section: InsertCourseSection): Promise<CourseSection>;
@@ -209,6 +220,7 @@ export interface IStorage {
   getPublishedVideos(): Promise<Video[]>;
   getPublishedResources(): Promise<Resource[]>;
   getRecentForumThreads(): Promise<Array<ForumThread & { author: User; category: ForumCategory }>>;
+  searchForumThreads(query: string): Promise<Array<ForumThread & { author: Pick<User, 'id' | 'firstName' | 'lastName' | 'username'>; category: ForumCategory }>>;
   getCoursesWithLessonCount(): Promise<(Course & { lessonCount: number })[]>;
 
   // Forum: edit/delete helpers
@@ -332,7 +344,7 @@ export class DatabaseStorage implements IStorage {
     return user;
   }
 
-  async createUser(insertUser: InsertUser): Promise<User> {
+  async createUser(insertUser: Omit<InsertUser, 'termsAccepted'> & { termsAcceptedAt?: Date }): Promise<User> {
     const hashedPassword = await bcrypt.hash(insertUser.password, 10);
     const verificationToken = randomUUID();
     const verificationExpires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
@@ -519,6 +531,38 @@ export class DatabaseStorage implements IStorage {
       .where(eq(downloads.id, id))
       .returning();
     return updated;
+  }
+
+  async trackUserDownload(userId: string, downloadId: string, ipAddress?: string): Promise<void> {
+    await db
+      .insert(userDownloads)
+      .values({ userId, downloadId, ipAddress: ipAddress ?? null });
+  }
+
+  async getUserDownloadHistory(userId: string): Promise<any[]> {
+    return await db
+      .select({
+        id: userDownloads.id,
+        userId: userDownloads.userId,
+        downloadId: userDownloads.downloadId,
+        downloadedAt: userDownloads.downloadedAt,
+        ipAddress: userDownloads.ipAddress,
+        title: downloads.title,
+        fileType: downloads.fileType,
+        category: downloads.category,
+      })
+      .from(userDownloads)
+      .innerJoin(downloads, eq(userDownloads.downloadId, downloads.id))
+      .where(eq(userDownloads.userId, userId))
+      .orderBy(desc(userDownloads.downloadedAt))
+      .limit(100);
+  }
+
+  async acceptTerms(userId: string): Promise<void> {
+    await db
+      .update(users)
+      .set({ termsAcceptedAt: new Date() })
+      .where(eq(users.id, userId));
   }
 
   async getCourseDownloads(courseId: string): Promise<Download[]> {
@@ -796,6 +840,68 @@ export class DatabaseStorage implements IStorage {
   async deleteLesson(id: string): Promise<void> {
     await db.delete(lesson_progress).where(eq(lesson_progress.lessonId, id));
     await db.delete(lessons).where(eq(lessons.id, id));
+  }
+
+  async reorderLessons(courseId: string, lessonIds: string[]): Promise<void> {
+    for (let i = 0; i < lessonIds.length; i++) {
+      await db.update(lessons).set({ order: i + 1 }).where(and(eq(lessons.id, lessonIds[i]), eq(lessons.courseId, courseId)));
+    }
+  }
+
+  async duplicateLesson(lessonId: string): Promise<Lesson> {
+    const [original] = await db.select().from(lessons).where(eq(lessons.id, lessonId));
+    if (!original) throw new Error("Lesson not found");
+    const [newLesson] = await db.insert(lessons).values({
+      courseId: original.courseId,
+      title: `${original.title} (Copy)`,
+      description: original.description,
+      content: original.content,
+      videoUrl: original.videoUrl,
+      order: original.order + 1,
+      duration: original.duration,
+    }).returning();
+    return newLesson;
+  }
+
+  async getCourseStats(courseId: string): Promise<{ enrollmentCount: number; completedCount: number; lessonStats: Array<{ lessonId: string; completedCount: number; totalStudents: number }> }> {
+    const enrollmentRows = await db.select().from(enrollments).where(eq(enrollments.courseId, courseId));
+    const enrollmentCount = enrollmentRows.length;
+    const completedCount = enrollmentRows.filter(e => e.completedAt !== null).length;
+
+    // Get lessons for this course
+    const courseLessons = await db.select().from(lessons).where(eq(lessons.courseId, courseId));
+    const lessonIds = courseLessons.map(l => l.id);
+
+    // Get progress for these lessons
+    const progressRows = lessonIds.length > 0
+      ? await db.select().from(lesson_progress).where(inArray(lesson_progress.lessonId, lessonIds))
+      : [];
+
+    const lessonStats = courseLessons.map(l => ({
+      lessonId: l.id,
+      completedCount: progressRows.filter(p => p.lessonId === l.id && p.completed).length,
+      totalStudents: enrollmentCount,
+    }));
+
+    return { enrollmentCount, completedCount, lessonStats };
+  }
+
+  async getAuditLogForEntity(entityType: string, entityId: string): Promise<AdminAuditLog[]> {
+    return db.select().from(admin_audit_log)
+      .where(and(eq(admin_audit_log.entityType, entityType), eq(admin_audit_log.entityId, entityId)))
+      .orderBy(desc(admin_audit_log.createdAt))
+      .limit(50);
+  }
+
+  async bulkDeleteLessons(lessonIds: string[]): Promise<void> {
+    if (lessonIds.length === 0) return;
+    await db.delete(lesson_progress).where(inArray(lesson_progress.lessonId, lessonIds));
+    await db.delete(lessons).where(inArray(lessons.id, lessonIds));
+  }
+
+  async getCourseCategories(): Promise<string[]> {
+    const rows = await db.selectDistinct({ category: courses.category }).from(courses).orderBy(courses.category);
+    return rows.map(r => r.category);
   }
 
   // Admin: Forum Management
@@ -1179,6 +1285,40 @@ export class DatabaseStorage implements IStorage {
     return threads.map(t => ({
       ...t.thread,
       author: t.author,
+      category: t.category,
+    }));
+  }
+
+  async searchForumThreads(query: string): Promise<Array<ForumThread & { author: Pick<User, 'id' | 'firstName' | 'lastName' | 'username'>; category: ForumCategory }>> {
+    const searchPattern = `%${query}%`;
+
+    const threads = await db
+      .select({
+        thread: forum_threads,
+        author: {
+          id: users.id,
+          firstName: users.firstName,
+          lastName: users.lastName,
+          username: users.username,
+        },
+        category: forum_categories,
+        relevance: sql<number>`CASE WHEN ${forum_threads.title} ILIKE ${searchPattern} THEN 1 ELSE 2 END`,
+      })
+      .from(forum_threads)
+      .innerJoin(users, eq(forum_threads.authorId, users.id))
+      .innerJoin(forum_categories, eq(forum_threads.categoryId, forum_categories.id))
+      .where(
+        or(
+          sql`${forum_threads.title} ILIKE ${searchPattern}`,
+          sql`${forum_threads.content} ILIKE ${searchPattern}`
+        )
+      )
+      .orderBy(sql`CASE WHEN ${forum_threads.title} ILIKE ${searchPattern} THEN 1 ELSE 2 END`, desc(forum_threads.createdAt))
+      .limit(50);
+
+    return threads.map(t => ({
+      ...t.thread,
+      author: t.author as any,
       category: t.category,
     }));
   }

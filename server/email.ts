@@ -104,6 +104,88 @@ export function generateBulkEmailHtml(subject: string, body: string): string {
   `;
 }
 
+export function generateWelcomeEmailHtml(firstName: string): string {
+  const dashboardUrl = `${process.env.BASE_URL || ''}/dashboard`;
+
+  return `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background: linear-gradient(135deg, #1e3a8a, #3b82f6); color: white; padding: 30px; text-align: center; }
+          .content { padding: 30px; background: #f8fafc; }
+          .button {
+            display: inline-block;
+            background: #d4af37;
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-weight: bold;
+          }
+          .footer { padding: 20px; text-align: center; font-size: 14px; color: #666; }
+          .scripture {
+            font-style: italic;
+            background: #1e3a8a;
+            color: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #d4af37;
+            text-align: center;
+          }
+          .feature-list { list-style: none; padding: 0; }
+          .feature-list li { padding: 8px 0; padding-left: 24px; position: relative; }
+          .feature-list li::before { content: "\\2713"; position: absolute; left: 0; color: #d4af37; font-weight: bold; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>Welcome to Ecclesia Basilikos!</h1>
+            <p>Your Journey to Spiritual Freedom Begins Now</p>
+          </div>
+
+          <div class="content">
+            <h2>Hello ${firstName},</h2>
+
+            <p>Your email has been verified and your account is now fully active. We're thrilled to have you as part of the Ecclesia Basilikos community!</p>
+
+            <p>Here's what's available to you:</p>
+
+            <ul class="feature-list">
+              <li><strong>Courses</strong> — Comprehensive courses on trust administration, biblical foundations, and covenant relationships</li>
+              <li><strong>Downloadable Resources</strong> — Essential documents, templates, and guides for your journey</li>
+              <li><strong>Forum Community</strong> — Connect with fellow members, ask questions, and share insights</li>
+              <li><strong>Proof Vault</strong> — Securely store and manage your important documents and endorsements</li>
+            </ul>
+
+            <div style="text-align: center;">
+              <a href="${dashboardUrl}" class="button">Go to Your Dashboard</a>
+            </div>
+
+            <div class="scripture">
+              "And ye shall know the truth, and the truth shall make you free."<br>
+              <strong>- John 8:32 (KJV)</strong>
+            </div>
+
+            <p>We recommend starting with our courses to build a strong foundation. If you have any questions, our community forum is a great place to connect with others on the same journey.</p>
+
+            <p>Blessings on your journey,<br><strong>The Ecclesia Basilikos Team</strong></p>
+          </div>
+
+          <div class="footer">
+            <p>Ecclesia Basilikos - Teaching Spiritual Freedom Through Biblical Truth</p>
+            <p>If you have any questions, please contact us through our website.</p>
+          </div>
+        </div>
+      </body>
+    </html>
+  `;
+}
+
 export function generateVerificationEmailHtml(
   firstName: string, 
   verificationUrl: string,

@@ -10,6 +10,8 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 import { BookOpen, Crown, Heart, Shield, CheckCircle, ArrowRight, Play, Video, LogIn, UserPlus } from "lucide-react";
 import { Link } from "wouter";
 import { useForm } from "react-hook-form";
@@ -62,6 +64,7 @@ export default function NewCovenantIntro() {
       email: "",
       password: "",
       confirmPassword: "",
+      termsAccepted: undefined as unknown as true,
     },
   });
 
@@ -370,6 +373,35 @@ export default function NewCovenantIntro() {
                                             <Input type="password" placeholder="Confirm password" {...field} />
                                           </FormControl>
                                           <FormMessage />
+                                        </FormItem>
+                                      )}
+                                    />
+                                    <FormField
+                                      control={registerForm.control}
+                                      name="termsAccepted"
+                                      render={({ field }) => (
+                                        <FormItem>
+                                          <div className="border border-gray-200 rounded-lg p-3">
+                                            <div className="flex items-start gap-3">
+                                              <FormControl>
+                                                <Checkbox
+                                                  checked={field.value === true}
+                                                  onCheckedChange={(checked) => field.onChange(checked === true ? true : undefined)}
+                                                />
+                                              </FormControl>
+                                              <Label className="text-sm text-gray-700 leading-relaxed cursor-pointer font-normal" onClick={() => field.onChange(field.value === true ? undefined : true)}>
+                                                I agree to the{" "}
+                                                <Link href="/terms" className="text-covenant-gold hover:underline font-medium">
+                                                  Terms of Service
+                                                </Link>{" "}
+                                                and{" "}
+                                                <Link href="/privacy" className="text-covenant-gold hover:underline font-medium">
+                                                  Privacy Policy
+                                                </Link>
+                                              </Label>
+                                            </div>
+                                            <FormMessage className="mt-2 ml-7" />
+                                          </div>
                                         </FormItem>
                                       )}
                                     />
