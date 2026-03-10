@@ -49,6 +49,7 @@ interface CourseWithLessons {
 interface CourseProgress {
   totalSections: number;
   completedSections: number;
+  completedSectionIds: string[];
 }
 
 interface CourseDownload {
@@ -112,6 +113,26 @@ function CourseLessonContent() {
     },
   });
 
+  const markLessonComplete = useMutation({
+    mutationFn: async (sectionId: string) => {
+      await apiRequest('POST', `/api/sections/${sectionId}/complete`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/courses', courseId, 'progress'] });
+      toast({
+        title: "Lesson Complete",
+        description: "Your progress has been saved.",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to mark lesson as complete. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
   usePageTitle(courseData?.title ? `${courseData.title}` : "Course");
 
   if (courseLoading) {
@@ -164,6 +185,10 @@ function CourseLessonContent() {
     ? Math.round((progressData.completedSections / progressData.totalSections) * 100)
     : 0;
 
+  const currentLessonAlreadyCompleted = isAuthenticated && currentLesson && progressData
+    ? (progressData.completedSectionIds ?? []).includes(currentLesson.id)
+    : false;
+
   const youtubeId = getYouTubeEmbedId(currentLesson?.videoUrl ?? null);
 
   return (
@@ -214,7 +239,7 @@ function CourseLessonContent() {
                 {lessons.map((lesson, i) => {
                   const isActive = currentLesson?.id === lesson.id;
                   const isCompleted = isAuthenticated && progressData
-                    ? i < (progressData.completedSections ?? 0)
+                    ? (progressData.completedSectionIds ?? []).includes(lesson.id)
                     : false;
                   return (
                     <Link
@@ -530,14 +555,31 @@ function CourseLessonContent() {
                 )}
               </div>
 
-              <div>
+              <div className="flex items-center gap-3">
                 {nextLesson ? (
-                  <Link href={`/course/${courseId}/lesson/${nextLesson.id}`}>
-                    <Button className="bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold">
-                      Next Lesson
-                      <ChevronRight className="h-4 w-4 ml-1" />
-                    </Button>
-                  </Link>
+                  <>
+                    {isAuthenticated && currentLesson && (
+                      <Button
+                        variant="outline"
+                        className="font-cinzel text-sm border-green-500 text-green-600 hover:bg-green-50 dark:hover:bg-green-950 disabled:opacity-50"
+                        disabled={currentLessonAlreadyCompleted || markLessonComplete.isPending}
+                        onClick={() => {
+                          if (currentLesson) {
+                            markLessonComplete.mutate(currentLesson.id);
+                          }
+                        }}
+                      >
+                        <CheckCircle className="h-4 w-4 mr-2" />
+                        {currentLessonAlreadyCompleted ? "Completed" : markLessonComplete.isPending ? "Saving..." : "Mark Lesson Complete"}
+                      </Button>
+                    )}
+                    <Link href={`/course/${courseId}/lesson/${nextLesson.id}`}>
+                      <Button className="bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold">
+                        Next Lesson
+                        <ChevronRight className="h-4 w-4 ml-1" />
+                      </Button>
+                    </Link>
+                  </>
                 ) : (
                   <Button
                     className="bg-green-600 hover:bg-green-700 text-white font-cinzel font-bold"

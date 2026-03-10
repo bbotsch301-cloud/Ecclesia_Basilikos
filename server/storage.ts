@@ -187,7 +187,7 @@ export interface IStorage {
   updateVideoProgress(userId: string, videoId: string, progress: Partial<InsertVideoProgress>): Promise<VideoProgress>;
   getUserSectionProgress(userId: string, sectionId: string): Promise<SectionProgress | undefined>;
   completeSectionForUser(userId: string, sectionId: string): Promise<SectionProgress>;
-  getCourseProgressForUser(userId: string, courseId: string): Promise<{ totalSections: number; completedSections: number }>;
+  getCourseProgressForUser(userId: string, courseId: string): Promise<{ totalSections: number; completedSections: number; completedSectionIds: string[] }>;
   
   // Admin: Forum Management
   createForumCategory(category: InsertForumCategory): Promise<ForumCategory>;
@@ -251,6 +251,7 @@ export interface IStorage {
 
   // Notifications
   createNotification(notification: InsertNotification): Promise<Notification>;
+  getNotification(id: string): Promise<Notification | undefined>;
   getUserNotifications(userId: string, limit?: number): Promise<Notification[]>;
   markNotificationRead(id: string): Promise<Notification>;
   markAllNotificationsRead(userId: string): Promise<void>;
@@ -1257,14 +1258,14 @@ export class DatabaseStorage implements IStorage {
     }
   }
 
-  async getCourseProgressForUser(userId: string, courseId: string): Promise<{ totalSections: number; completedSections: number }> {
+  async getCourseProgressForUser(userId: string, courseId: string): Promise<{ totalSections: number; completedSections: number; completedSectionIds: string[] }> {
     // Get total sections for course
     const totalSections = await db.select({ count: sql<number>`count(*)` })
       .from(courseSections)
       .where(eq(courseSections.courseId, courseId));
 
-    // Get completed sections for user
-    const completedSections = await db.select({ count: sql<number>`count(*)` })
+    // Get completed sections for user (with IDs)
+    const completedRows = await db.select({ sectionId: sectionProgress.sectionId })
       .from(sectionProgress)
       .innerJoin(courseSections, eq(sectionProgress.sectionId, courseSections.id))
       .where(and(
@@ -1273,9 +1274,12 @@ export class DatabaseStorage implements IStorage {
         eq(sectionProgress.isCompleted, true)
       ));
 
+    const completedSectionIds = completedRows.map(r => r.sectionId);
+
     return {
       totalSections: totalSections[0]?.count || 0,
-      completedSections: completedSections[0]?.count || 0,
+      completedSections: completedSectionIds.length,
+      completedSectionIds,
     };
   }
   // Forum: edit/delete helpers
@@ -1494,6 +1498,11 @@ export class DatabaseStorage implements IStorage {
       .where(eq(notifications.userId, userId))
       .orderBy(desc(notifications.createdAt))
       .limit(limit);
+  }
+
+  async getNotification(id: string): Promise<Notification | undefined> {
+    const [n] = await db.select().from(notifications).where(eq(notifications.id, id));
+    return n;
   }
 
   async markNotificationRead(id: string): Promise<Notification> {

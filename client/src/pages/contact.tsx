@@ -14,6 +14,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { Mail, Send, Shield, ScrollText, Users, BookOpen, CheckCircle, Crown } from "lucide-react";
 import { usePageTitle } from "@/hooks/usePageTitle";
+import { useAuth } from "@/hooks/useAuth";
 
 const contactSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -27,13 +28,19 @@ type ContactForm = z.infer<typeof contactSchema>;
 export default function Contact() {
   usePageTitle("Contact");
   const { toast } = useToast();
-  
+  const { user } = useAuth();
+
+  const defaultName = user
+    ? `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim()
+    : "";
+  const defaultEmail = user?.email ?? "";
+
   const form = useForm<ContactForm>({
     mode: "onBlur",
     resolver: zodResolver(contactSchema),
     defaultValues: {
-      name: "",
-      email: "",
+      name: defaultName,
+      email: defaultEmail,
       subject: "",
       message: ""
     }

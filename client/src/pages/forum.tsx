@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, lazy, Suspense } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useSearch } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
@@ -9,7 +9,6 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
@@ -23,6 +22,8 @@ import type { ForumCategory, ForumThread, User } from "@shared/schema";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import UpgradePrompt from "@/components/UpgradePrompt";
 import { Skeleton } from "@/components/ui/skeleton";
+
+const RichTextEditor = lazy(() => import("@/components/RichTextEditor"));
 
 const createThreadSchema = z.object({
   title: z.string().min(5, "Title must be at least 5 characters"),
@@ -367,7 +368,20 @@ export default function Forum() {
                               <FormItem>
                                 <FormLabel>Content</FormLabel>
                                 <FormControl>
-                                  <Textarea placeholder="Share your thoughts..." rows={5} {...field} />
+                                  <Suspense
+                                    fallback={
+                                      <div className="border rounded-lg p-4 min-h-[120px] flex items-center justify-center">
+                                        <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
+                                      </div>
+                                    }
+                                  >
+                                    <RichTextEditor
+                                      content={field.value}
+                                      onChange={(val) => form.setValue("content", val, { shouldValidate: true })}
+                                      placeholder="Share your thoughts..."
+                                      minHeight="120px"
+                                    />
+                                  </Suspense>
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -445,7 +459,26 @@ export default function Forum() {
                               <FormItem><FormLabel>Title</FormLabel><FormControl><Input placeholder="What's on your mind?" {...field} /></FormControl><FormMessage /></FormItem>
                             )} />
                             <FormField control={form.control} name="content" render={({ field }) => (
-                              <FormItem><FormLabel>Content</FormLabel><FormControl><Textarea placeholder="Share your thoughts..." rows={5} {...field} /></FormControl><FormMessage /></FormItem>
+                              <FormItem>
+                                <FormLabel>Content</FormLabel>
+                                <FormControl>
+                                  <Suspense
+                                    fallback={
+                                      <div className="border rounded-lg p-4 min-h-[120px] flex items-center justify-center">
+                                        <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
+                                      </div>
+                                    }
+                                  >
+                                    <RichTextEditor
+                                      content={field.value}
+                                      onChange={(val) => form.setValue("content", val, { shouldValidate: true })}
+                                      placeholder="Share your thoughts..."
+                                      minHeight="120px"
+                                    />
+                                  </Suspense>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
                             )} />
                             <Button type="submit" className="w-full bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-semibold" disabled={createThreadMutation.isPending}>
                               {createThreadMutation.isPending ? "Posting..." : "Post Thread"}
@@ -663,7 +696,7 @@ function ThreadRow({
       }`}
     >
       {/* Avatar */}
-      <Link href={`/forum/thread/${thread.id}`} className="shrink-0 hidden sm:block">
+      <Link href={`/user/${thread.author.id}`} className="shrink-0 hidden sm:block">
         <Avatar className="h-10 w-10">
           <AvatarFallback className="bg-royal-navy/10 text-royal-navy dark:text-royal-gold font-semibold text-sm">
             {getUserInitials(thread.author)}
@@ -691,7 +724,7 @@ function ThreadRow({
           </h3>
         </Link>
         <p className="text-gray-500 text-xs mt-0.5 truncate">
-          <span className="font-medium text-gray-600 dark:text-gray-400">{getUserDisplayName(thread.author)}</span>
+          <Link href={`/user/${thread.author.id}`} className="font-medium text-gray-600 dark:text-gray-400 hover:text-royal-gold transition-colors">{getUserDisplayName(thread.author)}</Link>
           <span className="mx-1.5 text-gray-300">&middot;</span>
           {timeAgo(thread.createdAt)}
           {thread.lastReplyAt && (thread.replyCount ?? 0) > 0 && (

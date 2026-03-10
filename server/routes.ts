@@ -1340,6 +1340,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.patch("/api/notifications/:id/read", requireAuth, async (req, res) => {
     try {
+      const user = req.user as User;
+      const existing = await storage.getNotification(req.params.id);
+      if (!existing || existing.userId !== user.id) {
+        return res.status(404).json({ error: "Notification not found" });
+      }
       const notif = await storage.markNotificationRead(req.params.id);
       res.json(notif);
     } catch (error) {

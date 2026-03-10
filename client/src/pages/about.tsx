@@ -14,6 +14,22 @@ export default function About() {
         backgroundImage="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1920&h=1080&q=80"
       />
 
+      {/* About Us / Our Mission */}
+      <div className="py-16 bg-parchment">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="font-cinzel-decorative text-3xl font-bold text-royal-navy mb-6">Our Mission</h2>
+          <p className="text-lg text-gray-700 leading-relaxed mb-6">
+            Ecclesia Basilikos is an educational platform dedicated to teaching the principles of covenant trust administration, lawful money redemption, and state-citizen rights. Our mission is to equip individuals with knowledge rooted in biblical principles and constitutional law.
+          </p>
+          <p className="text-lg text-gray-700 leading-relaxed mb-6">
+            Founded by a community of covenant educators and trust practitioners, we provide courses, resources, and community support for those seeking to understand their rights and responsibilities.
+          </p>
+          <p className="text-lg text-gray-700 leading-relaxed">
+            Our teaching is organized around three pillars — Lawful Money Redemption, Trust &amp; Asset Protection, and the State-Citizen Passport — forming a complete framework for those walking this path.
+          </p>
+        </div>
+      </div>
+
       <div className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center mb-20">

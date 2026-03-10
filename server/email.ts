@@ -442,18 +442,18 @@ export function sendOnboardingEmail(to: string, firstName: string): void {
             <p>Our educational content is organized around three foundational pillars:</p>
 
             <div class="pillar">
-              <h4>Trust Administration</h4>
-              <p>Learn the principles and practices of trust administration, including essential documents and procedures.</p>
+              <h4>Lawful Money Redemption</h4>
+              <p>Understand your statutory right under 12 USC §411 to redeem Federal Reserve Notes for lawful money, and how redemption affects your financial standing and jurisdiction.</p>
             </div>
 
             <div class="pillar">
-              <h4>Biblical Foundations</h4>
-              <p>Explore the scriptural basis for covenant relationships and spiritual freedom.</p>
+              <h4>Trust &amp; Asset Protection</h4>
+              <p>Learn how to use properly structured trusts to separate legal title from beneficial interest, protect assets from personal liability, and administer them according to common law principles.</p>
             </div>
 
             <div class="pillar">
-              <h4>Covenant Relationships</h4>
-              <p>Understand the practical application of covenant principles in everyday life.</p>
+              <h4>State-Citizen Passport</h4>
+              <p>Explore the constitutional distinction between state citizenship and federal citizenship, and how to document your proper political status and domicile through the passport process.</p>
             </div>
 
             <h3>Where to Start</h3>

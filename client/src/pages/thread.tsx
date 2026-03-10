@@ -271,7 +271,7 @@ export default function ThreadPage() {
                         {thread.title}
                       </h1>
                       <div className="flex items-center gap-2 flex-wrap text-sm text-gray-500">
-                        <span className="font-medium text-gray-700">{getUserDisplayName(thread.author)}</span>
+                        <Link href={`/user/${thread.author.id}`} className="font-medium text-gray-700 hover:text-royal-gold transition-colors">{getUserDisplayName(thread.author)}</Link>
                         <span className="text-gray-300">&middot;</span>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -456,9 +456,9 @@ export default function ThreadPage() {
                               </AvatarFallback>
                             </Avatar>
                             <div>
-                              <p className="font-medium text-gray-900 text-sm">
+                              <Link href={`/user/${reply.author.id}`} className="font-medium text-gray-900 text-sm hover:text-royal-gold transition-colors">
                                 {getUserDisplayName(reply.author)}
-                              </p>
+                              </Link>
                               <Tooltip>
                                 <TooltipTrigger asChild>
                                   <p className="text-xs text-gray-400 cursor-default">

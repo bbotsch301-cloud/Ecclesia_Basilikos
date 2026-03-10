@@ -179,11 +179,39 @@ export default function Courses() {
       navigate(`/course/${courseId}`);
     },
     onError: (error: any) => {
-      toast({
-        title: "Unable to Start Course",
-        description: error.message || "Please try again later.",
-        variant: "destructive",
-      });
+      const msg: string = error?.message || "";
+      // Parse the JSON body embedded in the error message (format: "403: {...}")
+      let parsedBody: { error?: string; code?: string } = {};
+      try {
+        const jsonStart = msg.indexOf("{");
+        if (jsonStart !== -1) {
+          parsedBody = JSON.parse(msg.slice(jsonStart));
+        }
+      } catch {
+        // ignore parse errors
+      }
+      const serverMessage = parsedBody.error || msg;
+      const serverCode = parsedBody.code || "";
+
+      if (serverMessage.toLowerCase().includes("verification") || serverMessage.toLowerCase().includes("verify")) {
+        toast({
+          title: "Email Verification Required",
+          description: "Please verify your email address before starting a course. Check your inbox for a verification link.",
+          variant: "destructive",
+        });
+      } else if (serverCode.toLowerCase().includes("premium") || serverMessage.toLowerCase().includes("premium")) {
+        toast({
+          title: "Premium Subscription Required",
+          description: "This course requires a premium subscription. Visit /pricing to upgrade.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Unable to Start Course",
+          description: serverMessage || "Please try again later.",
+          variant: "destructive",
+        });
+      }
     },
   });
 
