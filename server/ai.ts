@@ -36,7 +36,7 @@ interface DownloadMetadata {
 export async function generateDownloadMetadata(fileInfo: FileInfo): Promise<DownloadMetadata> {
   const anthropic = getClient();
 
-  const prompt = `You are an assistant for a faith-based legal and educational resource platform called "New Covenant Trust." The platform provides documents, templates, study guides, prayers, and legal resources grounded in Biblical principles and common law.
+  const prompt = `You are an assistant for a faith-based legal and educational resource platform called "Ecclesia Basilikos." The platform provides documents, templates, study guides, prayers, and legal resources grounded in Biblical principles and common law.
 
 Given the following uploaded file information, generate metadata for the download listing:
 

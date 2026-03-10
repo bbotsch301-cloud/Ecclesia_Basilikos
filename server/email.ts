@@ -55,7 +55,7 @@ export async function sendEmail(options: EmailOptions): Promise<boolean> {
   }
 
   const mailOptions: Record<string, any> = {
-    from: `"Kingdom Ventures Trust" <${process.env.GMAIL_EMAIL}>`,
+    from: `"Ecclesia Basilikos" <${process.env.GMAIL_EMAIL}>`,
     to: options.to,
     subject: options.subject,
     text: options.text,
@@ -119,7 +119,7 @@ export function generateBulkEmailHtml(subject: string, body: string): string {
       <body>
         <div class="container">
           <div class="header">
-            <h1>Kingdom Ventures Trust</h1>
+            <h1>Ecclesia Basilikos</h1>
             <p>${subject}</p>
           </div>
 
@@ -128,7 +128,7 @@ export function generateBulkEmailHtml(subject: string, body: string): string {
           </div>
 
           <div class="footer">
-            <p>Kingdom Ventures Trust - Teaching Spiritual Freedom Through Biblical Truth</p>
+            <p>Ecclesia Basilikos - Teaching Spiritual Freedom Through Biblical Truth</p>
             <p>If you have any questions, please contact us through our website.</p>
             <p style="margin-top:12px;font-size:12px;color:#999;">
               <a href="${getBaseUrl()}/newsletter/unsubscribe" style="color:#999;text-decoration:underline;">Unsubscribe</a> from future emails.
@@ -255,7 +255,7 @@ export function sendForumReplyNotificationEmail(
       <body>
         <div class="container">
           <div class="header">
-            <h1>Kingdom Ventures Trust</h1>
+            <h1>Ecclesia Basilikos</h1>
             <p>New Forum Reply</p>
           </div>
           <div class="content">
@@ -266,7 +266,7 @@ export function sendForumReplyNotificationEmail(
             <p style="font-size: 13px; color: #888;">Or copy this link: ${threadUrl}</p>
           </div>
           <div class="footer">
-            <p>Kingdom Ventures Trust - Teaching Spiritual Freedom Through Biblical Truth</p>
+            <p>Ecclesia Basilikos - Teaching Spiritual Freedom Through Biblical Truth</p>
           </div>
         </div>
       </body>
@@ -336,14 +336,14 @@ export function generateVerificationEmailHtml(
       <body>
         <div class="container">
           <div class="header">
-            <h1>${template.headerTitle || 'Welcome to Kingdom Ventures Trust'}</h1>
+            <h1>${template.headerTitle || 'Welcome to Ecclesia Basilikos'}</h1>
             <p>${template.headerSubtitle || 'Your Journey to Spiritual Freedom Begins Here'}</p>
           </div>
           
           <div class="content">
             <h2>${(template.greeting || 'Hello {{firstName}}').replace('{{firstName}}', firstName)},</h2>
             
-            <p>${template.mainMessage || 'Thank you for joining Kingdom Ventures Trust! We\'re excited to have you begin your journey of understanding true spiritual freedom and your covenant relationship with Christ.'}</p>
+            <p>${template.mainMessage || 'Thank you for joining Ecclesia Basilikos! We\'re excited to have you begin your journey of understanding true spiritual freedom and your covenant relationship with Christ.'}</p>
             
             <p>${template.instructionText || 'To complete your registration and access our educational resources, please verify your email address by clicking the button below:'}</p>
             
@@ -367,11 +367,11 @@ export function generateVerificationEmailHtml(
               <li>Downloadable resources and documents</li>`)}
             </ul>
             
-            <p>${template.closingMessage || 'Blessings on your journey,<br><strong>The Kingdom Ventures Trust Team</strong>'}</p>
+            <p>${template.closingMessage || 'Blessings on your journey,<br><strong>The Ecclesia Basilikos Team</strong>'}</p>
           </div>
-          
+
           <div class="footer">
-            <p>${template.footerText || 'Kingdom Ventures Trust - Teaching Spiritual Freedom Through Biblical Truth'}</p>
+            <p>${template.footerText || 'Ecclesia Basilikos - Teaching Spiritual Freedom Through Biblical Truth'}</p>
             <p>${template.footerSubtext || 'If you have any questions, please contact us through our website.'}</p>
           </div>
         </div>

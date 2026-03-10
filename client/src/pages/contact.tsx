@@ -361,7 +361,7 @@ export default function Contact() {
                 <div className="space-y-4">
                   <div className="flex items-center">
                     <Mail className="text-royal-gold text-xl mr-4" />
-                    <span className="text-gray-700">KingdomVenturesTrust@gmail.com</span>
+                    <span className="text-gray-700">contact@ecclesiabasilikos.com</span>
                   </div>
                   <p className="text-gray-600 text-sm mt-4">
                     We typically respond within 24-48 hours. For urgent matters, please note that in your message subject.

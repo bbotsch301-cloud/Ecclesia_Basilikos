@@ -9,12 +9,14 @@ import {
 import { motion } from "framer-motion";
 import RevealOnScroll from "@/components/ui/reveal-on-scroll";
 import { usePageTitle } from "@/hooks/usePageTitle";
+import { useAuth } from "@/hooks/useAuth";
 import StaggerContainer, {
   staggerItemVariants,
 } from "@/components/ui/stagger-container";
 
 export default function TrustAssets() {
   usePageTitle("Trust & Asset Protection");
+  const { isAuthenticated } = useAuth();
 
   return (
     <div className="pt-16">
@@ -448,10 +450,23 @@ export default function TrustAssets() {
 
           <RevealOnScroll delay={0.3}>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="inline-block rounded-lg animate-glow-pulse">
+                <Link href={isAuthenticated ? "/dashboard" : "/signup"}>
+                  <Button
+                    size="lg"
+                    className="royal-button text-lg px-10 py-6 shadow-2xl hover:scale-105 transition-transform"
+                  >
+                    <Users className="mr-3 h-6 w-6" />
+                    {isAuthenticated ? "Go to Dashboard" : "Join Free"}
+                    <ArrowRight className="ml-3 h-5 w-5" />
+                  </Button>
+                </Link>
+              </div>
               <Link href="/state-passport">
                 <Button
                   size="lg"
-                  className="royal-button text-lg px-10 py-6 shadow-2xl hover:scale-105 transition-transform"
+                  variant="outline"
+                  className="text-lg px-10 py-6 border-royal-gold/50 text-white hover:bg-white/10 transition-all"
                 >
                   <FileText className="mr-3 h-6 w-6" />
                   Next: State-Citizen Passport
@@ -462,10 +477,9 @@ export default function TrustAssets() {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="text-lg px-10 py-6 border-royal-gold/50 text-white hover:bg-white/10 transition-all"
+                  className="text-lg px-10 py-6 border-white/30 text-white/70 hover:bg-white/10 transition-all"
                 >
-                  <BookOpen className="mr-3 h-6 w-6" />
-                  Get Guidance
+                  Contact Us
                 </Button>
               </Link>
             </div>

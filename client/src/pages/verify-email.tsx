@@ -73,7 +73,7 @@ export default function VerifyEmail() {
           <div className="space-y-3">
             <Button 
               onClick={() => window.location.href = '/dashboard'}
-              className="w-full bg-covenant-gold hover:bg-covenant-gold/90 text-white"
+              className="w-full bg-royal-gold hover:bg-royal-gold/90 text-white"
               data-testid="button-go-to-courses"
             >
               Go to Dashboard

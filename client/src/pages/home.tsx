@@ -88,25 +88,25 @@ export default function Home() {
             transition={heroTransition(0.6)}
           >
             <div className="inline-block rounded-lg animate-glow-pulse">
-              <Link href="/lawful-money">
+              <Link href={ctaHref}>
                 <Button
                   size="lg"
                   className="royal-button text-lg md:text-xl px-10 py-6 shadow-2xl hover:scale-105 transition-transform"
                 >
-                  <Banknote className="mr-3 h-6 w-6" />
-                  Start with Pillar 1
+                  <Users className="mr-3 h-6 w-6" />
+                  {ctaHref === "/signup" ? "Join Free" : "Go to Dashboard"}
                   <ArrowRight className="ml-3 h-5 w-5" />
                 </Button>
               </Link>
             </div>
-            <Link href="/contact">
+            <Link href="/lawful-money">
               <Button
                 size="lg"
                 variant="outline"
                 className="text-lg md:text-xl px-10 py-6 bg-white/15 border-royal-gold/50 text-royal-gold hover:bg-white/25 transition-all"
               >
-                <Users className="mr-3 h-6 w-6" />
-                Get Guidance
+                <Banknote className="mr-3 h-6 w-6" />
+                Start with Pillar 1
               </Button>
             </Link>
           </motion.div>

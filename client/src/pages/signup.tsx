@@ -11,8 +11,8 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
-import { Crown, Loader2, BookOpen, FileText, Shield, Users, Download, GraduationCap } from "lucide-react";
-import { useEffect } from "react";
+import { Crown, Loader2, BookOpen, FileText, Shield, Users, Download, GraduationCap, Mail } from "lucide-react";
+import { useEffect, useState } from "react";
 import { usePageTitle } from "@/hooks/usePageTitle";
 
 const registrationSchema = insertUserSchema.extend({
@@ -29,6 +29,8 @@ export default function Signup() {
   const { isAuthenticated, isLoading, register: registerUser, isRegistering } = useAuth();
   const { toast } = useToast();
   const [, navigate] = useLocation();
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
+  const [registeredEmail, setRegisteredEmail] = useState('');
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -47,7 +49,12 @@ export default function Signup() {
       const { confirmPassword, ...userData } = data;
       await registerUser(userData);
       (await import("@/lib/analytics")).trackEvent("Signup");
-      toast({ title: "Welcome!", description: "Your account has been created successfully." });
+      setRegisteredEmail(userData.email);
+      setRegistrationSuccess(true);
+      toast({
+        title: "Account created!",
+        description: "Please check your email to verify your account before signing in.",
+      });
     } catch (error: any) {
       toast({
         title: "Registration Failed",
@@ -66,6 +73,43 @@ export default function Signup() {
   }
 
   if (isAuthenticated) return null;
+
+  if (registrationSuccess) {
+    return (
+      <div className="min-h-screen flex items-center justify-center pt-16 bg-gray-50 px-4">
+        <Card className="w-full max-w-md text-center">
+          <CardContent className="pt-10 pb-10 space-y-6">
+            <div className="flex justify-center">
+              <Mail className="w-16 h-16 text-royal-gold" />
+            </div>
+            <div className="space-y-2">
+              <h1 className="font-cinzel-decorative text-2xl font-bold text-royal-navy">Check Your Email</h1>
+              <p className="text-gray-600 leading-relaxed">
+                We sent a verification link to{" "}
+                <span className="font-semibold text-royal-navy">{registeredEmail}</span>.
+                Click the link in that email to verify your account and get started.
+              </p>
+              <p className="text-sm text-gray-500">
+                Didn't receive it? Check your spam folder or{" "}
+                <button
+                  className="text-royal-gold hover:underline font-medium"
+                  onClick={() => { setRegistrationSuccess(false); setRegisteredEmail(''); }}
+                >
+                  try signing up again
+                </button>.
+              </p>
+            </div>
+            <Button
+              className="w-full bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold"
+              onClick={() => navigate("/welcome")}
+            >
+              Continue to Welcome
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   const benefits = [
     { icon: BookOpen, text: "Trust pillar course access" },

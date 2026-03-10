@@ -91,7 +91,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const user = await storage.createUser({ ...userData, termsAcceptedAt: new Date() });
       
       // Send verification email
-      const verificationUrl = `${req.protocol}://${req.get('host')}/verify-email?token=${user.emailVerificationToken}`;
+      const verificationUrl = `${process.env.BASE_URL || `${req.protocol}://${req.get('host')}`}/verify-email?token=${user.emailVerificationToken}`;
       
       // Get email template from page content
       const emailTemplateContent = await storage.getPageContent('email-templates');
@@ -115,7 +115,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { sendEmail, generateVerificationEmailHtml } = await import('./email');
       const emailSent = await sendEmail({
         to: user.email,
-        subject: emailTemplate.subject || 'Verify Your Email - Kingdom Ventures Trust',
+        subject: emailTemplate.subject || 'Verify Your Email - Ecclesia Basilikos',
         html: generateVerificationEmailHtml(user.firstName, verificationUrl, emailTemplate)
       });
       
@@ -268,6 +268,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Verify the user
       await storage.verifyUserEmail(user.id);
 
+      // Log the user in so they land on the dashboard authenticated
+      req.session.userId = user.id;
+
       // Create welcome notification
       await storage.createNotification({
         userId: user.id,
@@ -290,7 +293,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       res.json({
         success: true,
-        message: "Email verified successfully! You can now log in."
+        message: "Email verified successfully! Welcome to Ecclesia Basilikos."
       });
     } catch (error) {
       logger.error({ err: error }, "Email verification error:");
@@ -788,6 +791,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const user = req.user as User;
 
       const thread = await storage.getForumThreadById(threadId);
+
+      if (!thread) {
+        return res.status(404).json({ error: "Thread not found." });
+      }
+
+      if (thread.isLocked) {
+        return res.status(403).json({ error: "This thread is locked and no longer accepting replies." });
+      }
+
       const reply = await storage.createForumReply({
         ...replyData,
         content: sanitizeHtml(replyData.content),

@@ -5,14 +5,14 @@ const emailTemplateDefaults = [
   {
     pageName: 'email-templates',
     contentKey: 'verification_subject',
-    contentValue: 'Verify Your Email - Kingdom Ventures Trust',
+    contentValue: 'Verify Your Email - Ecclesia Basilikos',
     contentType: 'text' as const,
     description: 'Subject line for email verification emails'
   },
   {
     pageName: 'email-templates',
     contentKey: 'verification_header_title',
-    contentValue: 'Welcome to Kingdom Ventures Trust',
+    contentValue: 'Welcome to Ecclesia Basilikos',
     contentType: 'text' as const,
     description: 'Header title in verification email'
   },
@@ -33,7 +33,7 @@ const emailTemplateDefaults = [
   {
     pageName: 'email-templates',
     contentKey: 'verification_main_message',
-    contentValue: 'Thank you for joining Kingdom Ventures Trust! We\'re excited to have you begin your journey of understanding true spiritual freedom and your covenant relationship with Christ.',
+    contentValue: 'Thank you for joining Ecclesia Basilikos! We\'re excited to have you begin your journey of understanding true spiritual freedom and your covenant relationship with Christ.',
     contentType: 'text' as const,
     description: 'Main welcome message'
   },
@@ -86,14 +86,14 @@ const emailTemplateDefaults = [
   {
     pageName: 'email-templates',
     contentKey: 'verification_closing_message',
-    contentValue: 'Blessings on your journey,<br><strong>The Kingdom Ventures Trust Team</strong>',
+    contentValue: 'Blessings on your journey,<br><strong>The Ecclesia Basilikos Team</strong>',
     contentType: 'html' as const,
     description: 'Closing message with team signature'
   },
   {
     pageName: 'email-templates',
     contentKey: 'verification_footer_text',
-    contentValue: 'Kingdom Ventures Trust - Teaching Spiritual Freedom Through Biblical Truth',
+    contentValue: 'Ecclesia Basilikos - Teaching Spiritual Freedom Through Biblical Truth',
     contentType: 'text' as const,
     description: 'Footer main text'
   },
