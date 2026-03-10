@@ -1,4 +1,5 @@
 import { QueryClient, QueryFunction } from "@tanstack/react-query";
+import { reportError } from "@/lib/error-tracking";
 
 async function throwIfResNotOk(res: Response) {
   if (!res.ok) {
@@ -67,7 +68,7 @@ export const queryClient = new QueryClient({
     mutations: {
       retry: false,
       onError: (error: Error) => {
-        console.error("Mutation error:", error.message);
+        reportError(error, { source: "react-query-mutation" });
       },
     },
   },

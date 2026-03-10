@@ -57,12 +57,14 @@ export default function Navbar() {
           <div className="hidden xl:flex items-center space-x-2 lg:space-x-4">
             {navigation.map((item) => {
               const href = item.href;
+              const isActive = location === item.href;
               return (
                 <Link
                   key={item.name}
                   href={href}
+                  aria-current={isActive ? "page" : undefined}
                   className={`transition-colors font-medium font-cinzel text-xs whitespace-nowrap ${
-                    location === item.href
+                    isActive
                       ? "text-royal-gold"
                       : "text-royal-navy dark:text-gray-300 hover:text-royal-gold"
                   }`}
@@ -100,8 +102,8 @@ export default function Navbar() {
                   <DropdownMenuItem onClick={() => navigate("/profile")}>
                     <User className="w-4 h-4 mr-2" /> Profile
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate("/learning-path")}>
-                    <BookOpen className="w-4 h-4 mr-2" /> Learning Path
+                  <DropdownMenuItem onClick={() => navigate("/courses")}>
+                    <BookOpen className="w-4 h-4 mr-2" /> Courses
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => navigate("/resources")}>
                     <FileText className="w-4 h-4 mr-2" /> Resources
@@ -152,7 +154,7 @@ export default function Navbar() {
           <div className="xl:hidden">
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon">
+                <Button variant="ghost" size="icon" aria-label="Open menu">
                   <Menu className="h-6 w-6" />
                 </Button>
               </SheetTrigger>
@@ -180,13 +182,15 @@ export default function Navbar() {
                   <div className="flex flex-col space-y-4 mt-2 flex-1">
                     {navigation.map((item) => {
                       const href = item.href;
+                      const isActive = location === item.href;
                       return (
                         <Link
                           key={item.name}
                           href={href}
                           onClick={() => setIsOpen(false)}
+                          aria-current={isActive ? "page" : undefined}
                           className={`text-left py-2 transition-colors font-cinzel ${
-                            location === item.href
+                            isActive
                               ? "text-royal-gold"
                               : "text-royal-navy dark:text-gray-300 hover:text-royal-gold"
                           }`}
@@ -205,8 +209,8 @@ export default function Navbar() {
                           <Link href="/profile" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">
                             <User className="w-4 h-4" /> Profile
                           </Link>
-                          <Link href="/learning-path" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">
-                            <BookOpen className="w-4 h-4" /> Learning Path
+                          <Link href="/courses" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">
+                            <BookOpen className="w-4 h-4" /> Courses
                           </Link>
                           {user?.role === 'admin' && (
                             <Link href="/admin" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">

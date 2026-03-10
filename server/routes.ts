@@ -1,4 +1,4 @@
-import type { Express, Request } from "express";
+import type { Express, Request, Response, NextFunction } from "express";
 
 // Extend Request type to include user property
 declare global {
@@ -34,8 +34,38 @@ import { rateLimit } from "./rateLimit";
 import { sanitizeHtml, sanitizePlainText } from "./sanitize";
 import { isPremiumUser, requireSubscription } from "./subscriptionMiddleware";
 import logger from "./logger";
+import { sendForumReplyNotificationEmail } from "./email";
+
+// Middleware: require verified email for sensitive actions
+function requireVerifiedEmail(req: Request, res: Response, next: NextFunction) {
+  const user = req.user as User | undefined;
+  if (!user || !user.isEmailVerified) {
+    return res.status(403).json({ error: "Email verification required. Please verify your email before performing this action." });
+  }
+  next();
+}
+
+// Account lockout: track failed login attempts per email
+const loginAttempts = new Map<string, { count: number; lockedUntil: number | null }>();
+const MAX_LOGIN_ATTEMPTS = 5;
+const LOCKOUT_DURATION_MS = 15 * 60_000; // 15 minutes
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Health check endpoints (no auth required)
+  app.get("/health", (_req, res) => {
+    res.json({ status: "ok", timestamp: new Date().toISOString() });
+  });
+
+  app.get("/ready", async (_req, res) => {
+    try {
+      const { pool } = await import("./db");
+      await pool.query("SELECT 1");
+      res.json({ ready: true });
+    } catch {
+      res.status(503).json({ ready: false });
+    }
+  });
+
   // Session middleware
   app.use(sessionMiddleware);
 
@@ -143,11 +173,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/auth/login", authLimiter, async (req, res) => {
     try {
       const { email, password } = loginSchema.parse(req.body);
-      
+
+      // Account lockout check
+      const normalizedEmail = email.toLowerCase();
+      const attempts = loginAttempts.get(normalizedEmail);
+      if (attempts?.lockedUntil) {
+        if (Date.now() < attempts.lockedUntil) {
+          const minutesLeft = Math.ceil((attempts.lockedUntil - Date.now()) / 60_000);
+          return res.status(429).json({
+            error: `Account temporarily locked due to too many failed login attempts. Try again in ${minutesLeft} minute(s).`
+          });
+        }
+        // Lockout expired, reset
+        loginAttempts.delete(normalizedEmail);
+      }
+
       const user = await storage.validateUser(email, password);
       if (!user) {
+        // Track failed attempt
+        const current = loginAttempts.get(normalizedEmail) || { count: 0, lockedUntil: null };
+        current.count += 1;
+        if (current.count >= MAX_LOGIN_ATTEMPTS) {
+          current.lockedUntil = Date.now() + LOCKOUT_DURATION_MS;
+          loginAttempts.set(normalizedEmail, current);
+          return res.status(429).json({
+            error: "Account temporarily locked due to too many failed login attempts. Try again in 15 minutes."
+          });
+        }
+        loginAttempts.set(normalizedEmail, current);
         return res.status(401).json({ error: "Invalid email or password" });
       }
+
+      // Successful login — clear any failed attempts
+      loginAttempts.delete(normalizedEmail);
 
       // Allow login even if email not yet verified — verification is advisory
       // when email service may not be configured
@@ -157,10 +215,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       req.session.userId = user.id;
-      
+
       // Update last login
       await storage.updateUser(user.id, { lastLoginAt: new Date() });
-      
+
       const { password: _, emailVerificationToken: _token, ...userWithoutSensitive } = user;
       res.json({ success: true, user: userWithoutSensitive });
     } catch (error) {
@@ -220,12 +278,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
 
       // Send welcome email (non-blocking)
-      const { sendEmail: sendWelcome, generateWelcomeEmailHtml } = await import('./email');
+      const { sendEmail: sendWelcome, generateWelcomeEmailHtml, sendOnboardingEmail } = await import('./email');
       sendWelcome({
         to: user.email,
         subject: 'Welcome to Ecclesia Basilikos - Your Journey Begins',
         html: generateWelcomeEmailHtml(user.firstName),
       }).catch((err) => logger.error({ err }, 'Failed to send welcome email'));
+
+      // Schedule onboarding "Getting Started" email (5-minute delay, non-blocking)
+      sendOnboardingEmail(user.email, user.firstName);
 
       res.json({
         success: true,
@@ -286,7 +347,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { token, password } = z.object({
         token: z.string(),
-        password: z.string().min(6),
+        password: z.string().min(8, "Password must be at least 8 characters"),
       }).parse(req.body);
 
       const user = await storage.getUserByPasswordResetToken(token);
@@ -320,6 +381,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         firstName: z.string().min(1).optional(),
         lastName: z.string().min(1).optional(),
         username: z.string().min(3).optional(),
+        emailNotifications: z.boolean().optional(),
       }).parse(req.body);
 
       const updated = await storage.updateUser(user.id, updates);
@@ -403,7 +465,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Enrollment routes
-  app.post("/api/enrollments", requireAuth, async (req, res) => {
+  app.post("/api/enrollments", requireAuth, requireVerifiedEmail, async (req, res) => {
     try {
       const userId = (req as any).user.id;
       const { courseId } = insertEnrollmentSchema.parse(req.body);
@@ -636,7 +698,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Create a new thread
-  app.post("/api/forum/threads", requireAuth, requireSubscription, forumLimiter, async (req, res) => {
+  app.post("/api/forum/threads", requireAuth, requireVerifiedEmail, requireSubscription, forumLimiter, async (req, res) => {
     try {
       const threadData = insertForumThreadSchema.omit({ authorId: true }).parse(req.body);
       const user = req.user as User;
@@ -711,7 +773,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Create a reply to a thread
-  app.post("/api/forum/threads/:threadId/replies", requireAuth, requireSubscription, forumLimiter, async (req, res) => {
+  app.post("/api/forum/threads/:threadId/replies", requireAuth, requireVerifiedEmail, requireSubscription, forumLimiter, async (req, res) => {
     try {
       const { threadId } = req.params;
       const replyData = insertForumReplySchema.omit({ authorId: true, threadId: true }).parse(req.body);
@@ -735,18 +797,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
 
         // Thread subscribers (async, non-blocking)
-        storage.getThreadSubscribers(threadId).then((subscriberIds) => {
+        storage.getThreadSubscribers(threadId).then(async (subscriberIds) => {
           for (const subId of subscriberIds) {
             if (subId !== user.id) notifyUserIds.add(subId);
           }
+          const replierName = user.firstName || "Someone";
           for (const uid of Array.from(notifyUserIds)) {
             storage.createNotification({
               userId: uid,
               type: "forum_reply",
               title: "New reply to your thread",
-              message: `${user.firstName || "Someone"} replied to "${thread.title}"`,
+              message: `${replierName} replied to "${thread.title}"`,
               linkUrl: `/forum/thread/${threadId}`,
             }).catch((err) => logger.warn({ err }, "Failed to create reply notification"));
+
+            // Send email notification (non-blocking)
+            storage.getUser(uid).then((recipient) => {
+              if (recipient && recipient.isEmailVerified && recipient.emailNotifications !== false) {
+                sendForumReplyNotificationEmail(
+                  recipient.email,
+                  replierName,
+                  thread.title,
+                  threadId,
+                );
+              }
+            }).catch((err) => logger.warn({ err }, "Failed to send forum reply email"));
           }
         }).catch((err) => logger.warn({ err }, "Failed to fetch thread subscribers"));
       }
@@ -954,12 +1029,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Auth-gated file download endpoint
-  app.get("/api/downloads/:id/file", requireAuth, async (req, res) => {
+  app.get("/api/downloads/:id/file", requireAuth, requireVerifiedEmail, async (req, res) => {
     try {
       const user = req.user!;
-      if (!user.isEmailVerified) {
-        return res.status(403).json({ error: "Please verify your email before downloading files" });
-      }
 
       const id = req.params.id;
       const download = await storage.getDownload(id);
@@ -1165,7 +1237,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/dictionary/search", async (req, res) => {
     try {
       const q = typeof req.query.q === "string" ? req.query.q : "";
-      const limit = parseInt(req.query.limit as string) || 20;
+      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
       const results = await storage.searchDictionary(q, limit);
       res.json(results);
     } catch (error) {
@@ -1188,7 +1260,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/dictionary/batch", async (req, res) => {
     try {
       const offset = parseInt(req.query.offset as string) || 0;
-      const limit = parseInt(req.query.limit as string) || 500;
+      const limit = Math.min(parseInt(req.query.limit as string) || 500, 100);
       const results = await storage.getDictionaryBatch(offset, limit);
       res.json(results);
     } catch (error) {
@@ -1285,7 +1357,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/comments", requireAuth, requireSubscription, forumLimiter, async (req, res) => {
+  app.post("/api/comments", requireAuth, requireVerifiedEmail, requireSubscription, forumLimiter, async (req, res) => {
     try {
       const user = req.user as User;
       const { targetType, targetId, content } = z.object({
@@ -1453,6 +1525,124 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ error: "Failed to fetch subscription history" });
     }
   });
+
+  // Self-service subscription cancellation (for non-Stripe/admin-granted subscriptions)
+  app.post("/api/subscription/cancel", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+
+      if (user.subscriptionTier !== 'premium' || user.subscriptionStatus !== 'active') {
+        return res.status(400).json({ error: "No active subscription to cancel" });
+      }
+
+      // If the user has a Stripe subscription, they should use the Stripe portal
+      if (user.stripeSubscriptionId) {
+        return res.status(400).json({
+          error: "Your subscription is managed through Stripe. Please use the Stripe customer portal to cancel.",
+        });
+      }
+
+      const now = new Date();
+      // Set end date to 30 days from now to allow continued access
+      const endDate = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+
+      // Update the user's subscription status
+      await storage.updateUserSubscription(user.id, {
+        subscriptionStatus: 'cancelled',
+        subscriptionEndDate: endDate,
+      });
+
+      // Determine the original source from the most recent active subscription record
+      const history = await storage.getSubscriptionHistory(user.id);
+      const activeRecord = history.find(r => r.status === 'active');
+      const source = activeRecord?.source || 'manual';
+
+      // Create a cancellation subscription record
+      await storage.createSubscriptionRecord({
+        userId: user.id,
+        tier: 'premium',
+        status: 'cancelled',
+        source,
+        startDate: user.subscriptionStartDate || now,
+        endDate,
+        cancelledAt: now,
+        notes: 'Self-service cancellation by user',
+      });
+
+      logger.info({ userId: user.id }, "User cancelled their subscription");
+
+      res.json({
+        success: true,
+        message: "Subscription cancelled. You will retain access until " + endDate.toLocaleDateString(),
+        endDate: endDate.toISOString(),
+      });
+    } catch (error) {
+      logger.error({ err: error, userId: (req.user as User).id }, "Error cancelling subscription");
+      res.status(500).json({ error: "Failed to cancel subscription" });
+    }
+  });
+
+  // ─── Stripe integration routes ───
+
+  // Check if Stripe is enabled (used by frontend to show/hide payment buttons)
+  app.get("/api/stripe/status", async (_req, res) => {
+    try {
+      const { isStripeEnabled } = await import("./stripe");
+      res.json({
+        enabled: isStripeEnabled(),
+        priceId: process.env.STRIPE_PRICE_ID || null,
+      });
+    } catch {
+      res.json({ enabled: false });
+    }
+  });
+
+  // Create Stripe Checkout session for subscription
+  app.post("/api/stripe/create-checkout-session", requireAuth, async (req, res) => {
+    try {
+      const { createCheckoutSession, isStripeEnabled } = await import("./stripe");
+      if (!isStripeEnabled()) {
+        return res.status(503).json({ error: "Stripe is not configured" });
+      }
+
+      const user = req.user as User;
+      const priceId = req.body.priceId || process.env.STRIPE_PRICE_ID;
+
+      if (!priceId || typeof priceId !== "string") {
+        return res.status(400).json({ error: "priceId is required (set STRIPE_PRICE_ID env var or pass in body)" });
+      }
+
+      const url = await createCheckoutSession(user.id, user.email, priceId);
+      res.json({ url });
+    } catch (error: any) {
+      logger.error({ err: error }, "Error creating checkout session");
+      res.status(500).json({ error: error.message || "Failed to create checkout session" });
+    }
+  });
+
+  // Create Stripe Customer Portal session for managing subscription
+  app.post("/api/stripe/create-portal-session", requireAuth, async (req, res) => {
+    try {
+      const { createBillingPortalSession, isStripeEnabled } = await import("./stripe");
+      if (!isStripeEnabled()) {
+        return res.status(503).json({ error: "Stripe is not configured" });
+      }
+
+      const user = req.user as User;
+      if (!user.stripeCustomerId) {
+        return res.status(400).json({ error: "No Stripe customer found. Please subscribe first." });
+      }
+
+      const url = await createBillingPortalSession(user.stripeCustomerId);
+      res.json({ url });
+    } catch (error: any) {
+      logger.error({ err: error }, "Error creating portal session");
+      res.status(500).json({ error: error.message || "Failed to create portal session" });
+    }
+  });
+
+  // Note: The POST /api/stripe/webhook route is registered in server/index.ts
+  // BEFORE express.json() middleware, because it requires raw body for signature verification.
 
   // Proof Vault routes
   app.use('/api/proof-vault', proofVaultRoutes);

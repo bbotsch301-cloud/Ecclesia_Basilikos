@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { Switch, Route } from "wouter";
+import { Switch, Route, Redirect } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -27,12 +27,10 @@ const ThreadPage = lazy(() => import("@/pages/thread"));
 const TrustDownload = lazy(() => import("@/pages/trust-download"));
 const NewCovenantIntro = lazy(() => import("@/pages/new-covenant-intro"));
 const Courses = lazy(() => import("@/pages/courses"));
-const MyCourses = lazy(() => import("@/pages/my-courses"));
 const CourseLesson = lazy(() => import("@/pages/course-lesson"));
 const VerifyEmail = lazy(() => import("@/pages/verify-email"));
 const Mandate = lazy(() => import("@/pages/mandate"));
 const LawfulMoney = lazy(() => import("@/pages/lawful-money"));
-const LearningPath = lazy(() => import("@/pages/learning-path"));
 const TrustAssets = lazy(() => import("@/pages/trust-assets"));
 const StatePassport = lazy(() => import("@/pages/state-passport"));
 const Repository = lazy(() => import("@/pages/repository"));
@@ -89,7 +87,7 @@ function Router() {
             <Route path="/" component={Home} />
             <Route path="/about" component={About} />
             <Route path="/lawful-money" component={LawfulMoney} />
-            <Route path="/learning-path" component={LearningPath} />
+            <Route path="/learning-path">{() => <Redirect to="/courses" />}</Route>
             <Route path="/trust-assets" component={TrustAssets} />
             <Route path="/state-passport" component={StatePassport} />
             <Route path="/mandate" component={Mandate} />
@@ -105,7 +103,7 @@ function Router() {
             <Route path="/new-covenant-intro" component={NewCovenantIntro} />
             <Route path="/courses">{() => <SectionErrorBoundary><Courses /></SectionErrorBoundary>}</Route>
             <Route path="/dashboard">{() => <SectionErrorBoundary><Dashboard /></SectionErrorBoundary>}</Route>
-            <Route path="/my-courses">{() => <SectionErrorBoundary><MyCourses /></SectionErrorBoundary>}</Route>
+            <Route path="/my-courses">{() => <Redirect to="/courses" />}</Route>
             <Route path="/course/:courseId">{() => <SectionErrorBoundary><CourseLesson /></SectionErrorBoundary>}</Route>
             <Route path="/course/:courseId/lesson/:lessonId">{() => <SectionErrorBoundary><CourseLesson /></SectionErrorBoundary>}</Route>
             <Route path="/verify-email" component={VerifyEmail} />

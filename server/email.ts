@@ -1,6 +1,20 @@
 import nodemailer from 'nodemailer';
 import logger from './logger';
 
+/**
+ * Returns the BASE_URL or throws a clear error if it is empty.
+ * Use this whenever generating links for emails.
+ */
+export function getBaseUrl(): string {
+  const url = process.env.BASE_URL;
+  if (!url) {
+    throw new Error(
+      "BASE_URL environment variable is not set. Cannot generate email links without it."
+    );
+  }
+  return url;
+}
+
 // Create Gmail transporter
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -9,6 +23,19 @@ const transporter = nodemailer.createTransport({
     pass: process.env.GMAIL_APP_PASSWORD,
   },
 });
+
+// Verify SMTP connection on startup
+if (process.env.GMAIL_EMAIL && process.env.GMAIL_APP_PASSWORD) {
+  transporter.verify()
+    .then(() => {
+      logger.info('SMTP connection verified successfully — email service is ready');
+    })
+    .catch((err) => {
+      logger.error({ err }, 'SMTP connection verification failed — emails may not be delivered');
+    });
+} else {
+  logger.warn('Gmail credentials not configured — email service is disabled');
+}
 
 export interface EmailOptions {
   to: string;
@@ -42,7 +69,7 @@ export async function sendEmail(options: EmailOptions): Promise<boolean> {
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     try {
       await transporter.sendMail(mailOptions);
-      logger.info({ to: options.to, attempt }, 'Email sent successfully');
+      logger.info({ to: options.to, subject: options.subject, attempt, timestamp: new Date().toISOString() }, 'Email sent successfully');
       return true;
     } catch (error) {
       logger.warn({ err: error, to: options.to, attempt, maxRetries: MAX_RETRIES }, 'Email send attempt failed');
@@ -50,7 +77,16 @@ export async function sendEmail(options: EmailOptions): Promise<boolean> {
         const delay = BASE_DELAY_MS * Math.pow(2, attempt - 1);
         await new Promise((resolve) => setTimeout(resolve, delay));
       } else {
-        logger.error({ err: error, to: options.to }, 'Email delivery failed after all retries');
+        // Fallback: log full email details (minus HTML body) so admin can manually follow up
+        logger.error({
+          err: error,
+          to: options.to,
+          subject: options.subject,
+          bcc: options.bcc || null,
+          hasHtml: !!options.html,
+          hasText: !!options.text,
+          timestamp: new Date().toISOString(),
+        }, 'EMAIL DELIVERY FAILED after all retries — admin manual follow-up required');
       }
     }
   }
@@ -95,7 +131,7 @@ export function generateBulkEmailHtml(subject: string, body: string): string {
             <p>Kingdom Ventures Trust - Teaching Spiritual Freedom Through Biblical Truth</p>
             <p>If you have any questions, please contact us through our website.</p>
             <p style="margin-top:12px;font-size:12px;color:#999;">
-              <a href="${process.env.BASE_URL || ''}/newsletter/unsubscribe" style="color:#999;text-decoration:underline;">Unsubscribe</a> from future emails.
+              <a href="${getBaseUrl()}/newsletter/unsubscribe" style="color:#999;text-decoration:underline;">Unsubscribe</a> from future emails.
             </p>
           </div>
         </div>
@@ -105,7 +141,7 @@ export function generateBulkEmailHtml(subject: string, body: string): string {
 }
 
 export function generateWelcomeEmailHtml(firstName: string): string {
-  const dashboardUrl = `${process.env.BASE_URL || ''}/dashboard`;
+  const dashboardUrl = `${getBaseUrl()}/dashboard`;
 
   return `
     <!DOCTYPE html>
@@ -184,6 +220,64 @@ export function generateWelcomeEmailHtml(firstName: string): string {
       </body>
     </html>
   `;
+}
+
+export function sendForumReplyNotificationEmail(
+  to: string,
+  replierName: string,
+  threadTitle: string,
+  threadId: string,
+): void {
+  const threadUrl = `${getBaseUrl()}/forum/thread/${threadId}`;
+  const subject = `New reply in: ${threadTitle}`;
+  const html = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background: linear-gradient(135deg, #1e3a8a, #3b82f6); color: white; padding: 30px; text-align: center; }
+          .content { padding: 30px; background: #f8fafc; }
+          .button {
+            display: inline-block;
+            background: #d4af37;
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-weight: bold;
+          }
+          .footer { padding: 20px; text-align: center; font-size: 14px; color: #666; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>Kingdom Ventures Trust</h1>
+            <p>New Forum Reply</p>
+          </div>
+          <div class="content">
+            <p>${replierName} replied to the thread <strong>"${threadTitle}"</strong>.</p>
+            <div style="text-align: center;">
+              <a href="${threadUrl}" class="button">View Thread</a>
+            </div>
+            <p style="font-size: 13px; color: #888;">Or copy this link: ${threadUrl}</p>
+          </div>
+          <div class="footer">
+            <p>Kingdom Ventures Trust - Teaching Spiritual Freedom Through Biblical Truth</p>
+          </div>
+        </div>
+      </body>
+    </html>
+  `;
+  const text = `${replierName} replied to the thread '${threadTitle}'. Click here to view: ${threadUrl}`;
+
+  // Fire-and-forget: non-blocking, errors caught silently
+  sendEmail({ to, subject, html, text }).catch((err) =>
+    logger.warn({ err, to }, "Failed to send forum reply notification email")
+  );
 }
 
 export function generateVerificationEmailHtml(
@@ -284,4 +378,122 @@ export function generateVerificationEmailHtml(
       </body>
     </html>
   `;
+}
+
+/**
+ * Sends a "Getting Started" onboarding email with quick links and guidance.
+ * Intended to be called after email verification with a delay so it doesn't
+ * arrive at the same time as the welcome email.
+ */
+export function sendOnboardingEmail(to: string, firstName: string): void {
+  const baseUrl = getBaseUrl();
+  const coursesUrl = `${baseUrl}/courses`;
+  const forumUrl = `${baseUrl}/forum`;
+  const downloadsUrl = `${baseUrl}/downloads`;
+
+  const subject = 'Getting Started with Ecclesia Basilikos';
+  const html = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background: linear-gradient(135deg, #1e3a8a, #3b82f6); color: white; padding: 30px; text-align: center; }
+          .content { padding: 30px; background: #f8fafc; }
+          .button {
+            display: inline-block;
+            background: #d4af37;
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px 5px;
+            font-weight: bold;
+          }
+          .footer { padding: 20px; text-align: center; font-size: 14px; color: #666; }
+          .pillar { background: white; border-left: 4px solid #d4af37; padding: 15px; margin: 10px 0; }
+          .pillar h4 { margin: 0 0 5px 0; color: #1e3a8a; }
+          .pillar p { margin: 0; font-size: 14px; }
+          .scripture {
+            font-style: italic;
+            background: #1e3a8a;
+            color: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #d4af37;
+            text-align: center;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>Getting Started</h1>
+            <p>Your Quick Guide to Ecclesia Basilikos</p>
+          </div>
+
+          <div class="content">
+            <h2>Hello ${firstName},</h2>
+
+            <p>Now that your account is set up, here's a quick guide to help you make the most of your experience.</p>
+
+            <h3>The Three Pillars</h3>
+            <p>Our educational content is organized around three foundational pillars:</p>
+
+            <div class="pillar">
+              <h4>Trust Administration</h4>
+              <p>Learn the principles and practices of trust administration, including essential documents and procedures.</p>
+            </div>
+
+            <div class="pillar">
+              <h4>Biblical Foundations</h4>
+              <p>Explore the scriptural basis for covenant relationships and spiritual freedom.</p>
+            </div>
+
+            <div class="pillar">
+              <h4>Covenant Relationships</h4>
+              <p>Understand the practical application of covenant principles in everyday life.</p>
+            </div>
+
+            <h3>Where to Start</h3>
+            <p>We recommend beginning with our first course to build a strong foundation. From there, you can explore downloadable resources and connect with the community in our forum.</p>
+
+            <div style="text-align: center; margin: 25px 0;">
+              <a href="${coursesUrl}" class="button">Browse Courses</a>
+              <a href="${forumUrl}" class="button">Join the Forum</a>
+              <a href="${downloadsUrl}" class="button">Downloads</a>
+            </div>
+
+            <div class="scripture">
+              "Study to shew thyself approved unto God, a workman that needeth not to be ashamed, rightly dividing the word of truth."<br>
+              <strong>- 2 Timothy 2:15 (KJV)</strong>
+            </div>
+
+            <p>If you have any questions along the way, our community forum is a great place to connect with fellow members and get answers.</p>
+
+            <p>Blessings on your journey,<br><strong>The Ecclesia Basilikos Team</strong></p>
+          </div>
+
+          <div class="footer">
+            <p>Ecclesia Basilikos - Teaching Spiritual Freedom Through Biblical Truth</p>
+            <p>If you have any questions, please contact us through our website.</p>
+          </div>
+        </div>
+      </body>
+    </html>
+  `;
+
+  const text = `Hello ${firstName},\n\nNow that your account is set up, here's a quick guide to help you get started.\n\nBrowse Courses: ${coursesUrl}\nJoin the Forum: ${forumUrl}\nDownloads: ${downloadsUrl}\n\nWe recommend starting with our first course to build a strong foundation.\n\nBlessings,\nThe Ecclesia Basilikos Team`;
+
+  // Schedule with 5-minute delay so it doesn't arrive with the welcome email
+  const FIVE_MINUTES = 5 * 60 * 1000;
+  setTimeout(() => {
+    logger.info({ to, type: 'onboarding' }, 'Sending scheduled onboarding email');
+    sendEmail({ to, subject, html, text }).catch((err) =>
+      logger.error({ err, to }, 'Failed to send onboarding email')
+    );
+  }, FIVE_MINUTES);
+
+  logger.info({ to, scheduledIn: '5 minutes' }, 'Onboarding email scheduled');
 }

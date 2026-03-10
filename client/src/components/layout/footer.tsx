@@ -37,7 +37,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-royal-navy text-white py-16 border-t-2 border-royal-gold">
+    <footer className="bg-royal-navy text-white py-16 border-t-2 border-royal-gold" role="contentinfo" aria-label="Site footer">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           <div>
@@ -74,7 +74,7 @@ export default function Footer() {
           <div>
             <h4 className="font-playfair font-semibold text-lg mb-4">Stay Connected</h4>
             <p className="text-gray-300 mb-4">Get updates on new teachings and resources</p>
-            <form onSubmit={handleNewsletterSubmit} className="flex">
+            <form onSubmit={handleNewsletterSubmit} className="flex" aria-label="Newsletter subscription">
               <Input
                 type="email"
                 placeholder="Your email"
@@ -82,6 +82,7 @@ export default function Footer() {
                 onChange={(e) => setEmail(e.target.value)}
                 className="flex-1 rounded-r-none text-royal-navy"
                 required
+                aria-label="Email address for newsletter"
               />
               <Button
                 type="submit"
@@ -99,14 +100,20 @@ export default function Footer() {
             <div className="text-gray-300">
               © {new Date().getFullYear()} Ecclesia Basilikos. Embassy of the Eternal Kingdom.
             </div>
-            <div className="flex items-center gap-4 text-sm">
+            <nav className="flex items-center gap-4 text-sm" aria-label="Footer navigation">
+              <Link href="/about" className="text-gray-300 hover:text-royal-gold transition-colors">
+                About
+              </Link>
+              <Link href="/contact" className="text-gray-300 hover:text-royal-gold transition-colors">
+                Contact
+              </Link>
               <Link href="/terms" className="text-gray-300 hover:text-royal-gold transition-colors">
                 Terms of Service
               </Link>
               <Link href="/privacy" className="text-gray-300 hover:text-royal-gold transition-colors">
                 Privacy Policy
               </Link>
-            </div>
+            </nav>
             <div className="text-center">
               <blockquote className="font-georgia italic text-royal-gold text-sm mb-1">
                 "And in the days of these kings shall the God of heaven set up a kingdom, which shall never be destroyed"

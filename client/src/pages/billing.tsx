@@ -1,14 +1,28 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Crown, CreditCard, Calendar, Loader2 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Crown, CreditCard, Calendar, Loader2, XCircle, ExternalLink } from "lucide-react";
 import { Link } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import PremiumBadge from "@/components/PremiumBadge";
 import RequireAuth from "@/components/RequireAuth";
+import { apiRequest } from "@/lib/queryClient";
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 interface SubscriptionStatus {
   tier: string;
@@ -33,6 +47,11 @@ interface SubscriptionRecord {
 function BillingContent() {
   usePageTitle("Billing");
   const { user, isPremium } = useAuth();
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+  const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
+  const [portalLoading, setPortalLoading] = useState(false);
+  const [portalError, setPortalError] = useState<string | null>(null);
 
   const { data: subStatus, isLoading: statusLoading } = useQuery<SubscriptionStatus>({
     queryKey: ["/api/subscription/status"],
@@ -40,6 +59,59 @@ function BillingContent() {
 
   const { data: history = [], isLoading: historyLoading } = useQuery<SubscriptionRecord[]>({
     queryKey: ["/api/subscription/history"],
+  });
+
+  const { data: stripeStatus } = useQuery<{ enabled: boolean }>({
+    queryKey: ["/api/stripe/status"],
+    staleTime: 60_000,
+  });
+
+  const stripeEnabled = stripeStatus?.enabled ?? false;
+  const hasStripeCustomer = !!user?.stripeCustomerId;
+
+  async function handleManageSubscription() {
+    setPortalLoading(true);
+    setPortalError(null);
+    try {
+      const res = await apiRequest("POST", "/api/stripe/create-portal-session", {});
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        setPortalError("Failed to open billing portal. Please try again.");
+      }
+    } catch (err: any) {
+      setPortalError(err.message || "Failed to open billing portal. Please try again.");
+      setPortalLoading(false);
+    }
+  }
+
+  const cancelMutation = useMutation({
+    mutationFn: async () => {
+      const res = await apiRequest("POST", "/api/subscription/cancel");
+      if (!res.ok) {
+        const body = await res.json();
+        throw new Error(body.error || "Failed to cancel subscription");
+      }
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/subscription/status"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/subscription/history"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
+      toast({
+        title: "Subscription Cancelled",
+        description: "Your subscription has been cancelled. You will retain access until the end of your billing period.",
+      });
+      setCancelDialogOpen(false);
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Cancellation Failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
   });
 
   if (statusLoading) {
@@ -103,12 +175,89 @@ function BillingContent() {
               <CardTitle className="font-cinzel text-lg">Manage Subscription</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-500 mb-4">
-                Subscription management via Stripe is coming soon. Contact support for any changes.
+              {stripeEnabled && hasStripeCustomer ? (
+                <div>
+                  <p className="text-sm text-gray-500 mb-4">
+                    Manage your subscription, update payment methods, or view invoices through the Stripe customer portal.
+                  </p>
+                  <Button
+                    variant="outline"
+                    className="font-cinzel"
+                    onClick={handleManageSubscription}
+                    disabled={portalLoading}
+                  >
+                    {portalLoading ? (
+                      <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Opening Portal...</>
+                    ) : (
+                      <><ExternalLink className="w-4 h-4 mr-2" /> Manage via Stripe</>
+                    )}
+                  </Button>
+                  {portalError && (
+                    <p className="text-sm text-red-600 mt-2">{portalError}</p>
+                  )}
+                </div>
+              ) : (
+                <div>
+                  <p className="text-sm text-gray-500 mb-4">
+                    Your subscription is managed by an administrator. Contact support for any changes.
+                  </p>
+                  <Button variant="outline" disabled className="font-cinzel">
+                    Admin-Managed Subscription
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Cancel Subscription */}
+        {isPremium && subStatus?.status === 'active' && (
+          <Card className="mb-8 border border-red-200">
+            <CardHeader>
+              <CardTitle className="font-cinzel text-lg flex items-center gap-2 text-red-700">
+                <XCircle className="w-5 h-5" />
+                Cancel Subscription
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-gray-600 mb-4">
+                If you wish to cancel your subscription, you will retain access to premium content until the end of your current billing period.
+                This action cannot be undone.
               </p>
-              <Button variant="outline" disabled className="font-cinzel">
-                Manage via Stripe (Coming Soon)
-              </Button>
+              <AlertDialog open={cancelDialogOpen} onOpenChange={setCancelDialogOpen}>
+                <AlertDialogTrigger asChild>
+                  <Button variant="destructive" className="font-cinzel">
+                    Cancel Subscription
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Are you sure you want to cancel?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Your premium access will continue until the end of your current billing period.
+                      After that, you will be downgraded to the free Citizen plan and lose access to
+                      premium courses, downloads, forum posting, and the Proof Vault.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Keep Subscription</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={() => cancelMutation.mutate()}
+                      className="bg-red-600 hover:bg-red-700"
+                      disabled={cancelMutation.isPending}
+                    >
+                      {cancelMutation.isPending ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          Cancelling...
+                        </>
+                      ) : (
+                        "Yes, Cancel Subscription"
+                      )}
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </CardContent>
           </Card>
         )}

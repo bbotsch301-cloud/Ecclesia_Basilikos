@@ -15,10 +15,10 @@ function WelcomeContent() {
   const pathways = [
     { title: "Downloads", description: "Documents, declarations & resources", href: "/downloads", icon: Download, disabled: false },
     { title: "Educational Resources", description: "Templates, guides & educational materials", href: "/resources", icon: FileText, disabled: false },
-    { title: "Royal Academy", description: "Courses in trust, stewardship & covenant authority", href: "/courses", icon: BookOpen, disabled: true },
+    { title: "Royal Academy", description: "Explore courses in trust, stewardship & covenant authority", href: "/courses", icon: BookOpen, disabled: false },
     { title: "Proof Vault", description: "Timestamp & verify your documents", href: "/proof-vault", icon: Shield, disabled: true },
-    { title: "Embassy Forum", description: "Fellowship with the covenant community", href: "/forum", icon: Users, disabled: true },
-    { title: "My Courses", description: "Continue your learning journey", href: "/my-courses", icon: GraduationCap, disabled: true },
+    { title: "Embassy Forum", description: "Join discussions with the covenant community", href: "/forum", icon: Users, disabled: false },
+    { title: "My Courses", description: "Continue your learning journey", href: "/courses", icon: GraduationCap, disabled: false },
   ];
 
   return (

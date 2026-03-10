@@ -80,7 +80,10 @@ import {
   threadSubscriptions,
   comments,
   newsletter_campaigns,
-  userDownloads
+  userDownloads,
+  proofs,
+  type Proof,
+  type InsertProof,
 } from "@shared/schema";
 import { eq, and, desc, sql, or, inArray } from "drizzle-orm";
 import { db } from "./db";
@@ -93,6 +96,7 @@ export interface IStorage {
   getUserByEmail(email: string): Promise<User | undefined>;
   getUserByVerificationToken(token: string): Promise<User | undefined>;
   getUserByPasswordResetToken(token: string): Promise<User | undefined>;
+  getUserByStripeCustomerId(customerId: string): Promise<User | undefined>;
   createUser(user: Omit<InsertUser, 'termsAccepted'> & { termsAcceptedAt?: Date }): Promise<User>;
   updateUser(userId: string, updates: Partial<InsertUser>): Promise<User>;
   setPasswordResetToken(userId: string, token: string, expires: Date): Promise<void>;
@@ -335,6 +339,11 @@ export class DatabaseStorage implements IStorage {
 
   async getUserByPasswordResetToken(token: string): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.passwordResetToken, token));
+    return user;
+  }
+
+  async getUserByStripeCustomerId(customerId: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.stripeCustomerId, customerId));
     return user;
   }
 
@@ -876,9 +885,11 @@ export class DatabaseStorage implements IStorage {
   }
 
   async reorderLessons(courseId: string, lessonIds: string[]): Promise<void> {
-    for (let i = 0; i < lessonIds.length; i++) {
-      await db.update(lessons).set({ order: i + 1 }).where(and(eq(lessons.id, lessonIds[i]), eq(lessons.courseId, courseId)));
-    }
+    await Promise.all(
+      lessonIds.map((id, i) =>
+        db.update(lessons).set({ order: i + 1 }).where(and(eq(lessons.id, id), eq(lessons.courseId, courseId)))
+      )
+    );
   }
 
   async duplicateLesson(lessonId: string): Promise<Lesson> {
@@ -947,17 +958,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async deleteForumCategory(id: string): Promise<void> {
-    // Delete all threads and replies in this category first
-    const threadsInCategory = await db.select({ id: forum_threads.id })
-      .from(forum_threads)
-      .where(eq(forum_threads.categoryId, id));
-    
-    for (const thread of threadsInCategory) {
-      await db.delete(forum_replies).where(eq(forum_replies.threadId, thread.id));
-      await db.delete(forum_likes).where(eq(forum_likes.threadId, thread.id));
-    }
-    
-    await db.delete(forum_threads).where(eq(forum_threads.categoryId, id));
+    // Cascade deletes handle threads → replies → likes automatically
     await db.delete(forum_categories).where(eq(forum_categories.id, id));
   }
 
@@ -984,20 +985,19 @@ export class DatabaseStorage implements IStorage {
   }
 
   async deleteForumThread(id: string): Promise<void> {
-    await db.delete(forum_replies).where(eq(forum_replies.threadId, id));
-    await db.delete(forum_likes).where(eq(forum_likes.threadId, id));
+    // Cascade deletes handle replies → likes and thread subscriptions automatically
     await db.delete(forum_threads).where(eq(forum_threads.id, id));
   }
 
   async deleteForumReply(id: string): Promise<void> {
-    // Get the thread ID before deleting
+    // Get the thread ID before deleting so we can update the count
     const [reply] = await db.select({ threadId: forum_replies.threadId })
       .from(forum_replies)
       .where(eq(forum_replies.id, id));
-    
-    await db.delete(forum_likes).where(eq(forum_likes.replyId, id));
+
+    // Cascade deletes handle likes automatically
     await db.delete(forum_replies).where(eq(forum_replies.id, id));
-    
+
     // Update thread reply count
     if (reply) {
       await db.update(forum_threads)
@@ -1648,7 +1648,6 @@ export class DatabaseStorage implements IStorage {
       username: users.username,
       firstName: users.firstName,
       lastName: users.lastName,
-      role: users.role,
       createdAt: users.createdAt,
     }).from(users).where(eq(users.id, userId));
 
@@ -1890,6 +1889,43 @@ export class DatabaseStorage implements IStorage {
         eq(users.subscriptionStatus, 'active'),
       ))
       .orderBy(desc(users.subscriptionStartDate));
+  }
+
+  // Proof Vault operations
+  async createProof(data: InsertProof): Promise<Proof> {
+    const [proof] = await db.insert(proofs).values(data).returning();
+    return proof;
+  }
+
+  async getProof(id: string, userId: string): Promise<Proof | undefined> {
+    const [proof] = await db.select().from(proofs)
+      .where(and(eq(proofs.id, id), eq(proofs.userId, userId)));
+    return proof;
+  }
+
+  async getUserProofs(userId: string): Promise<Proof[]> {
+    return db.select().from(proofs)
+      .where(eq(proofs.userId, userId))
+      .orderBy(desc(proofs.createdAt));
+  }
+
+  async getUserProofsByStatus(userId: string, status: string): Promise<Proof[]> {
+    return db.select().from(proofs)
+      .where(and(eq(proofs.userId, userId), eq(proofs.status, status as any)))
+      .orderBy(desc(proofs.createdAt));
+  }
+
+  async updateProof(id: string, updates: Partial<{ status: string; otsProof: string | null; lastUpgradeAttemptAt: Date; updatedAt: Date; errorMessage: string | null }>): Promise<Proof> {
+    const [updated] = await db.update(proofs)
+      .set(updates as any)
+      .where(eq(proofs.id, id))
+      .returning();
+    return updated;
+  }
+
+  async findProofsByHash(sha256: string, userId: string): Promise<Proof[]> {
+    return db.select().from(proofs)
+      .where(and(eq(proofs.sha256, sha256), eq(proofs.userId, userId)));
   }
 
   async getSubscriptionStats(): Promise<{ totalPremium: number; totalFree: number; recentSubscriptions: number }> {

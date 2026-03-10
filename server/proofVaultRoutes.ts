@@ -2,12 +2,11 @@ import { Router, Request, Response, NextFunction } from "express";
 import multer from "multer";
 import { createHash } from "crypto";
 import archiver from "archiver";
-import { db } from "./db";
-import { proofs, createProofHashSchema } from "@shared/schema";
-import { eq, and, desc, sql } from "drizzle-orm";
+import { createProofHashSchema } from "@shared/schema";
 import { requireAuth } from "./auth";
 import { requireSubscription } from "./subscriptionMiddleware";
 import logger from "./logger";
+import { storage } from "./storage";
 import {
   stampHash,
   upgradeProof,
@@ -139,23 +138,19 @@ router.post("/proofs", requireSubscription, conditionalUpload, async (req: Reque
     // Create OTS timestamp
     const otsResult = await stampHash(sha256Hex);
 
-    // Insert proof record
-    const [proof] = await db
-      .insert(proofs)
-      .values({
-        userId,
-        mode,
-        originalFilename,
-        mimeType,
-        sizeBytes,
-        sha256: sha256Hex,
-        provider: "opentimestamps",
-        status: otsResult.status,
-        otsProof: otsResult.proofData || null,
-        label,
-        errorMessage: otsResult.error || null,
-      })
-      .returning();
+    // Insert proof record via storage layer
+    const proof = await storage.createProof({
+      userId,
+      mode,
+      originalFilename,
+      mimeType,
+      sizeBytes,
+      sha256: sha256Hex,
+      provider: "opentimestamps",
+      status: otsResult.status as any,
+      otsProof: otsResult.proofData || null,
+      label,
+    });
 
     res.status(201).json(proof);
   } catch (error: any) {
@@ -172,22 +167,15 @@ router.get("/proofs", async (req: Request, res: Response) => {
     const statusFilter = req.query.status as string | undefined;
     const search = req.query.search as string | undefined;
 
-    let query = db
-      .select()
-      .from(proofs)
-      .where(eq(proofs.userId, userId))
-      .orderBy(desc(proofs.createdAt));
-
-    const results = await query;
+    let results = await storage.getUserProofs(userId);
 
     // Apply filters in memory (simple for MVP)
-    let filtered = results;
     if (statusFilter && ["pending", "confirmed", "failed"].includes(statusFilter)) {
-      filtered = filtered.filter((p) => p.status === statusFilter);
+      results = results.filter((p) => p.status === statusFilter);
     }
     if (search) {
       const s = search.toLowerCase();
-      filtered = filtered.filter(
+      results = results.filter(
         (p) =>
           p.sha256.toLowerCase().includes(s) ||
           p.originalFilename?.toLowerCase().includes(s) ||
@@ -195,7 +183,7 @@ router.get("/proofs", async (req: Request, res: Response) => {
       );
     }
 
-    res.json(filtered);
+    res.json(results);
   } catch (error: any) {
     logger.error({ err: error }, "Error listing proofs:");
     res.status(500).json({ error: "Failed to list proofs" });
@@ -207,10 +195,7 @@ router.get("/proofs", async (req: Request, res: Response) => {
 router.get("/proofs/:id", async (req: Request, res: Response) => {
   try {
     const userId = (req as any).user.id;
-    const [proof] = await db
-      .select()
-      .from(proofs)
-      .where(and(eq(proofs.id, req.params.id), eq(proofs.userId, userId)));
+    const proof = await storage.getProof(req.params.id, userId);
 
     if (!proof) {
       return res.status(404).json({ error: "Proof not found" });
@@ -241,10 +226,7 @@ router.post("/proofs/:id/upgrade", async (req: Request, res: Response) => {
       });
     }
 
-    const [proof] = await db
-      .select()
-      .from(proofs)
-      .where(and(eq(proofs.id, req.params.id), eq(proofs.userId, userId)));
+    const proof = await storage.getProof(req.params.id, userId);
 
     if (!proof) {
       return res.status(404).json({ error: "Proof not found" });
@@ -262,18 +244,14 @@ router.post("/proofs/:id/upgrade", async (req: Request, res: Response) => {
 
     const result = await upgradeProof(proof.otsProof);
 
-    // Update the proof record
-    const [updated] = await db
-      .update(proofs)
-      .set({
-        status: result.status,
-        otsProof: result.proofData,
-        lastUpgradeAttemptAt: new Date(),
-        updatedAt: new Date(),
-        errorMessage: result.error || null,
-      })
-      .where(eq(proofs.id, proof.id))
-      .returning();
+    // Update the proof record via storage layer
+    const updated = await storage.updateProof(proof.id, {
+      status: result.status,
+      otsProof: result.proofData,
+      lastUpgradeAttemptAt: new Date(),
+      updatedAt: new Date(),
+      errorMessage: result.error || null,
+    });
 
     res.json({
       message: result.upgraded
@@ -304,10 +282,7 @@ router.post("/proofs/upgrade-all", async (req: Request, res: Response) => {
       });
     }
 
-    const pendingProofs = await db
-      .select()
-      .from(proofs)
-      .where(and(eq(proofs.userId, userId), eq(proofs.status, "pending")));
+    const pendingProofs = await storage.getUserProofsByStatus(userId, "pending");
 
     let upgraded = 0;
     let failed = 0;
@@ -320,16 +295,13 @@ router.post("/proofs/upgrade-all", async (req: Request, res: Response) => {
       }
       try {
         const result = await upgradeProof(proof.otsProof);
-        await db
-          .update(proofs)
-          .set({
-            status: result.status,
-            otsProof: result.proofData,
-            lastUpgradeAttemptAt: new Date(),
-            updatedAt: new Date(),
-            errorMessage: result.error || null,
-          })
-          .where(eq(proofs.id, proof.id));
+        await storage.updateProof(proof.id, {
+          status: result.status,
+          otsProof: result.proofData,
+          lastUpgradeAttemptAt: new Date(),
+          updatedAt: new Date(),
+          errorMessage: result.error || null,
+        });
 
         if (result.upgraded) upgraded++;
         else unchanged++;
@@ -387,19 +359,10 @@ router.post("/verify", conditionalUpload, async (req: Request, res: Response) =>
     // Find matching proofs
     let matchingProofs;
     if (proofId) {
-      matchingProofs = await db
-        .select()
-        .from(proofs)
-        .where(
-          and(eq(proofs.id, proofId), eq(proofs.userId, userId))
-        );
+      const proof = await storage.getProof(proofId, userId);
+      matchingProofs = proof ? [proof] : [];
     } else {
-      matchingProofs = await db
-        .select()
-        .from(proofs)
-        .where(
-          and(eq(proofs.sha256, sha256Hex), eq(proofs.userId, userId))
-        );
+      matchingProofs = await storage.findProofsByHash(sha256Hex, userId);
     }
 
     if (matchingProofs.length === 0) {
@@ -453,10 +416,7 @@ router.post("/verify", conditionalUpload, async (req: Request, res: Response) =>
 router.get("/proofs/:id/bundle", async (req: Request, res: Response) => {
   try {
     const userId = (req as any).user.id;
-    const [proof] = await db
-      .select()
-      .from(proofs)
-      .where(and(eq(proofs.id, req.params.id), eq(proofs.userId, userId)));
+    const proof = await storage.getProof(req.params.id, userId);
 
     if (!proof) {
       return res.status(404).json({ error: "Proof not found" });

@@ -1186,12 +1186,10 @@ You are not escaping anything. You are not fighting anything. You are aligning w
   console.log("\n🗂️  Seeding forum categories...\n");
 
   const forumCats = [
-    { name: "Lawful Money Redemption", description: "Discussion about 12 USC § 411, endorsements, and lawful money practice", color: "#D4AF37", order: 1 },
-    { name: "Trust & Asset Protection", description: "Questions and discussion about trust structures, asset transfers, and administration", color: "#8B1538", order: 2 },
-    { name: "State-Citizen Passport", description: "Discussion about state citizenship, domicile, and the passport process", color: "#001a33", order: 3 },
-    { name: "Implementation & Experience", description: "Share your progress, ask practical questions, and learn from others' experience", color: "#16a34a", order: 4 },
-    { name: "General Discussion", description: "Open discussion about the foundation, principles, and related topics", color: "#6366f1", order: 5 },
-    { name: "Introductions", description: "Introduce yourself to the community", color: "#f59e0b", order: 6 },
+    { name: "Lawful Money", description: "Discussion about 12 USC § 411, endorsements, and lawful money practice", color: "#D4AF37", order: 1 },
+    { name: "Trust & Assets", description: "Questions and discussion about trust structures, asset transfers, and administration", color: "#8B1538", order: 2 },
+    { name: "State Passport", description: "Discussion about state citizenship, domicile, and the passport process", color: "#001a33", order: 3 },
+    { name: "General Discussion", description: "Introductions, shared experiences, and open discussion about the foundation", color: "#6366f1", order: 4 },
   ];
 
   for (const cat of forumCats) {

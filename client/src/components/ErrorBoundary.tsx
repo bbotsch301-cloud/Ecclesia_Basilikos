@@ -1,5 +1,6 @@
 import { ErrorBoundary as ReactErrorBoundary, type FallbackProps } from "react-error-boundary";
 import type { ReactNode } from "react";
+import { reportError } from "@/lib/error-tracking";
 
 function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
   return (
@@ -23,9 +24,14 @@ function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
   );
 }
 
+function handleError(error: unknown, info: { componentStack?: string | null }) {
+  const err = error instanceof Error ? error : new Error(String(error));
+  reportError(err, { componentStack: info.componentStack ?? undefined });
+}
+
 export function AppErrorBoundary({ children }: { children: ReactNode }) {
   return (
-    <ReactErrorBoundary FallbackComponent={ErrorFallback}>
+    <ReactErrorBoundary FallbackComponent={ErrorFallback} onError={handleError}>
       {children}
     </ReactErrorBoundary>
   );
@@ -33,7 +39,7 @@ export function AppErrorBoundary({ children }: { children: ReactNode }) {
 
 export function SectionErrorBoundary({ children }: { children: ReactNode }) {
   return (
-    <ReactErrorBoundary FallbackComponent={ErrorFallback}>
+    <ReactErrorBoundary FallbackComponent={ErrorFallback} onError={handleError}>
       {children}
     </ReactErrorBoundary>
   );

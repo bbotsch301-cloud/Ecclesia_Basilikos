@@ -36,6 +36,7 @@ export const users = pgTable("users", {
   stripeSubscriptionId: text("stripe_subscription_id"),
   premiumGrantedBy: varchar("premium_granted_by"),
   premiumGrantedAt: timestamp("premium_granted_at"),
+  emailNotifications: boolean("email_notifications").default(true),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -270,7 +271,7 @@ export const forum_threads = pgTable("forum_threads", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   title: text("title").notNull(),
   content: text("content").notNull(),
-  categoryId: varchar("category_id").notNull().references(() => forum_categories.id),
+  categoryId: varchar("category_id").notNull().references(() => forum_categories.id, { onDelete: 'cascade' }),
   authorId: varchar("author_id").notNull().references(() => users.id),
   isPinned: boolean("is_pinned").default(false),
   isLocked: boolean("is_locked").default(false),
@@ -289,7 +290,7 @@ export const forum_threads = pgTable("forum_threads", {
 export const forum_replies = pgTable("forum_replies", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   content: text("content").notNull(),
-  threadId: varchar("thread_id").notNull().references(() => forum_threads.id),
+  threadId: varchar("thread_id").notNull().references(() => forum_threads.id, { onDelete: 'cascade' }),
   authorId: varchar("author_id").notNull().references(() => users.id),
   parentReplyId: varchar("parent_reply_id"), // for nested replies - self-reference added separately
   isEdited: boolean("is_edited").default(false),
@@ -304,8 +305,8 @@ export const forum_replies = pgTable("forum_replies", {
 export const forum_likes = pgTable("forum_likes", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   userId: varchar("user_id").notNull().references(() => users.id),
-  threadId: varchar("thread_id").references(() => forum_threads.id),
-  replyId: varchar("reply_id").references(() => forum_replies.id),
+  threadId: varchar("thread_id").references(() => forum_threads.id, { onDelete: 'cascade' }),
+  replyId: varchar("reply_id").references(() => forum_replies.id, { onDelete: 'cascade' }),
   createdAt: timestamp("created_at").defaultNow(),
 }, (table) => [
   uniqueIndex("uq_forum_likes_thread").on(table.userId, table.threadId),
@@ -477,12 +478,13 @@ export const insertUserSchema = createInsertSchema(users).omit({
   termsAcceptedAt: true,
   createdAt: true,
 }).extend({
+  password: z.string().min(8, "Password must be at least 8 characters"),
   termsAccepted: z.literal(true, { errorMap: () => ({ message: "You must accept the terms" }) }),
 });
 
 export const loginSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(6),
+  password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
 export const insertContactSchema = createInsertSchema(contacts).omit({
@@ -752,6 +754,7 @@ export type InsertDictionaryEntry = z.infer<typeof insertDictionaryEntrySchema>;
 export type DictionaryEntry = typeof dictionaryEntries.$inferSelect;
 
 // Notifications
+// NOTE: 'course_update' is unused in application code but retained to avoid a DB migration.
 export const notificationTypeEnum = pgEnum('notification_type', ['forum_reply', 'course_update', 'system', 'welcome']);
 
 export const notifications = pgTable("notifications", {

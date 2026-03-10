@@ -21,6 +21,7 @@ import {
   Loader2,
 } from "lucide-react";
 import CommentSection from "@/components/CommentSection";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 
 interface Lesson {
   id: string;
@@ -149,10 +150,15 @@ function CourseLessonContent() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
-              <Link href="/courses" className="inline-flex items-center text-gray-300 hover:text-royal-gold text-sm mb-2 transition-colors">
-                <ChevronLeft className="h-4 w-4 mr-1" />
-                Back to Courses
-              </Link>
+              <div className="mb-2 [&_a]:text-gray-300 [&_span.text-gray-500]:text-gray-300 [&_span.text-gray-700]:text-white">
+                <Breadcrumbs
+                  items={[
+                    { label: "Courses", href: "/courses" },
+                    { label: courseData.title, href: `/course/${courseId}` },
+                    ...(currentLesson ? [{ label: currentLesson.title }] : []),
+                  ]}
+                />
+              </div>
               <h1 className="text-2xl md:text-3xl font-cinzel font-bold">{courseData.title}</h1>
               <p className="text-gray-300 mt-1 text-sm max-w-2xl">{courseData.description}</p>
             </div>

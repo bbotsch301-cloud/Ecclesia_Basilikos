@@ -12,7 +12,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { User, Shield, Mail, Calendar, Save, Lock, Crown, CreditCard } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { User, Shield, Mail, Calendar, Save, Lock, Crown, CreditCard, Bell } from "lucide-react";
 
 function ProfileContent() {
   const { user, isPremium } = useAuth();
@@ -23,6 +24,8 @@ function ProfileContent() {
   const [firstName, setFirstName] = useState(user?.firstName || "");
   const [lastName, setLastName] = useState(user?.lastName || "");
   const [username, setUsername] = useState(user?.username || "");
+
+  const [emailNotifications, setEmailNotifications] = useState(user?.emailNotifications !== false);
 
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -55,6 +58,26 @@ function ProfileContent() {
       toast({ title: "Error", description: error.message || "Failed to change password", variant: "destructive" });
     },
   });
+
+  const notificationMutation = useMutation({
+    mutationFn: async (enabled: boolean) => {
+      return await apiRequest("PATCH", "/api/auth/profile", { emailNotifications: enabled });
+    },
+    onSuccess: () => {
+      toast({ title: "Settings updated", description: "Email notification preference saved." });
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
+    },
+    onError: (error: any) => {
+      // Revert the toggle on error
+      setEmailNotifications((prev) => !prev);
+      toast({ title: "Error", description: error.message || "Failed to update notification settings", variant: "destructive" });
+    },
+  });
+
+  const handleToggleEmailNotifications = (checked: boolean) => {
+    setEmailNotifications(checked);
+    notificationMutation.mutate(checked);
+  };
 
   const handleProfileSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -230,6 +253,30 @@ function ProfileContent() {
                 {passwordMutation.isPending ? "Changing..." : "Change Password"}
               </Button>
             </form>
+          </CardContent>
+        </Card>
+
+        {/* Notification Preferences Card */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Bell className="h-5 w-5" /> Notification Preferences
+            </CardTitle>
+            <CardDescription>Control how you receive notifications</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center justify-between">
+              <div>
+                <Label htmlFor="emailNotifications" className="text-sm font-medium">Email Notifications</Label>
+                <p className="text-sm text-gray-500">Receive email notifications for forum replies and other activity</p>
+              </div>
+              <Switch
+                id="emailNotifications"
+                checked={emailNotifications}
+                onCheckedChange={handleToggleEmailNotifications}
+                disabled={notificationMutation.isPending}
+              />
+            </div>
           </CardContent>
         </Card>
       </div>

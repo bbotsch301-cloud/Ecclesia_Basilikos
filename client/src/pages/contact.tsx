@@ -418,8 +418,8 @@ export default function Contact() {
                   <a href="/state-passport" className="block text-royal-burgundy hover:text-royal-gold transition-colors font-semibold">
                     → Pillar 3: State-Citizen Passport
                   </a>
-                  <a href="/learning-path" className="block text-royal-burgundy hover:text-royal-gold transition-colors font-semibold">
-                    → View the Full Learning Path
+                  <a href="/courses" className="block text-royal-burgundy hover:text-royal-gold transition-colors font-semibold">
+                    → View Courses & Learning Path
                   </a>
                 </div>
                 <p className="text-gray-600 text-sm mt-4">

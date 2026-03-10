@@ -28,7 +28,6 @@ import {
   Download,
   MessageSquare,
   Lock,
-  Zap,
   Award,
   BarChart3,
   Crown,
@@ -146,7 +145,7 @@ const pillarMeta: Record<string, {
 };
 
 export default function Courses() {
-  usePageTitle("Courses");
+  usePageTitle("Courses & Learning Path");
   const { isAuthenticated, isLoading, isPremium } = useAuth();
   const { toast } = useToast();
   const [, navigate] = useLocation();
@@ -216,6 +215,11 @@ export default function Courses() {
 
   const totalLessons = pillarCourses.reduce((sum, c) => sum + c.lessonCount, 0);
 
+  const completedPillars = pillarCourses.filter((c) => {
+    const e = getEnrollment(c.id);
+    return e?.completedAt;
+  }).length;
+
   if (isLoading || coursesLoading) {
     return (
       <div className="pt-16 min-h-screen flex items-center justify-center">
@@ -236,14 +240,28 @@ export default function Courses() {
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <Badge className="mb-5 bg-royal-gold/20 text-royal-gold border-2 border-royal-gold font-semibold px-6 py-2 text-base backdrop-blur-sm">
-              Three Pillars Education
+              Three Pillars · Three Courses · One Foundation
             </Badge>
             <h1 className="font-cinzel-decorative text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-5 leading-tight">
-              Foundation Courses
+              Courses & Learning Path
             </h1>
             <p className="text-lg md:text-xl text-gray-200 max-w-3xl mx-auto leading-relaxed mb-8">
-              Master each pillar through structured, step-by-step courses. Each course breaks down complex legal and practical concepts into clear, actionable lessons.
+              Master each pillar through structured, step-by-step courses. Work through them in order — each builds on the one before it.
             </p>
+
+            {isAuthenticated && (
+              <div className="max-w-md mx-auto mb-8">
+                <div className="bg-white/10 backdrop-blur-sm border border-royal-gold/30 rounded-lg p-4">
+                  <div className="flex items-center justify-between text-sm mb-2">
+                    <span className="text-gray-300">Overall Progress</span>
+                    <span className="text-royal-gold font-semibold">
+                      {completedPillars} / 3 Pillars Complete
+                    </span>
+                  </div>
+                  <Progress value={(completedPillars / 3) * 100} className="h-2" />
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Hero Stats */}
@@ -649,46 +667,6 @@ export default function Courses() {
           </>
         )}
 
-        {/* Recommended Path */}
-        <section className="mb-16">
-          <Card className="bg-gradient-to-r from-royal-gold/5 to-royal-gold/10 border-royal-gold/20">
-            <CardContent className="p-8">
-              <div className="grid md:grid-cols-3 gap-8 items-center">
-                <div className="md:col-span-2">
-                  <h3 className="font-cinzel text-xl font-bold text-royal-navy dark:text-royal-gold mb-3 flex items-center gap-2">
-                    <Zap className="w-5 h-5 text-royal-gold" /> Recommended Order
-                  </h3>
-                  <div className="space-y-3">
-                    {[
-                      { num: 1, label: "Lawful Money Redemption", reason: "Establishes your understanding of lawful vs. legal tender — the monetary foundation." },
-                      { num: 2, label: "Trust & Asset Protection", reason: "With lawful money understood, learn to protect what you earn through trust structures." },
-                      { num: 3, label: "State-Citizen Passport", reason: "With assets protected, establish your proper status and documentation." },
-                    ].map((item) => (
-                      <div key={item.num} className="flex items-start gap-3">
-                        <div className="w-7 h-7 rounded-full bg-royal-gold text-royal-navy flex items-center justify-center text-sm font-bold shrink-0">
-                          {item.num}
-                        </div>
-                        <div>
-                          <p className="font-cinzel font-semibold text-sm text-royal-navy dark:text-gray-200">{item.label}</p>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">{item.reason}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className="text-center">
-                  <Link href="/learning-path">
-                    <Button size="lg" className="bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold px-8 shadow-md">
-                      <BookOpen className="w-5 h-5 mr-2" /> Full Learning Path
-                    </Button>
-                  </Link>
-                  <p className="text-xs text-gray-500 mt-2">Track progress across all pillars</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </section>
-
         {/* FAQ Section */}
         <section className="mb-16">
           <div className="text-center mb-8">
@@ -771,13 +749,7 @@ export default function Courses() {
                 >
                   <Play className="w-5 h-5 mr-2" /> Start Next Course
                 </Button>
-              ) : (
-                <Link href="/learning-path">
-                  <Button size="lg" className="bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold px-10 shadow-lg">
-                    View Learning Path
-                  </Button>
-                </Link>
-              )}
+              ) : null}
             </div>
           </CardContent>
         </Card>

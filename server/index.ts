@@ -23,7 +23,7 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'unsafe-inline'"],
+      scriptSrc: ["'self'"],
       styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdnjs.cloudflare.com"],
       fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"],
       imgSrc: ["'self'", "data:", "blob:", "https:"],
@@ -37,12 +37,41 @@ app.use(helmet({
   },
 }));
 
+// Stripe webhook needs raw body for signature verification - must be before express.json()
+app.post(
+  "/api/stripe/webhook",
+  express.raw({ type: "application/json" }),
+  async (req: Request, res: Response) => {
+    try {
+      const { handleWebhookEvent, isStripeEnabled } = await import("./stripe");
+      if (!isStripeEnabled()) {
+        return res.status(503).json({ error: "Stripe is not configured" });
+      }
+      const signature = req.headers["stripe-signature"];
+      if (!signature || typeof signature !== "string") {
+        return res.status(400).json({ error: "Missing stripe-signature header" });
+      }
+      await handleWebhookEvent(req.body as Buffer, signature);
+      res.json({ received: true });
+    } catch (error: any) {
+      logger.error({ err: error }, "Stripe webhook error");
+      res.status(400).json({ error: error.message || "Webhook processing failed" });
+    }
+  },
+);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 // CSRF protection for API routes
 app.use("/api", csrfProtection);
+
+// Prevent caching of API responses (sensitive data)
+app.use("/api", (_req, res, next) => {
+  res.setHeader("Cache-Control", "no-store");
+  next();
+});
 
 // Request logging
 app.use((req, res, next) => {
@@ -64,6 +93,11 @@ app.use((req, res, next) => {
 
   next();
 });
+
+// Startup validation
+if (process.env.NODE_ENV === "production" && !process.env.BASE_URL) {
+  logger.warn("BASE_URL is not set. Email links and redirects may not work correctly in production.");
+}
 
 (async () => {
   const server = await registerRoutes(app);

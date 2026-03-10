@@ -1,11 +1,14 @@
+import { useState } from "react";
 import { Link } from "wouter";
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, Crown, Users, ArrowRight } from "lucide-react";
+import { CheckCircle, Crown, Users, ArrowRight, Loader2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import PremiumBadge from "@/components/PremiumBadge";
+import { apiRequest } from "@/lib/queryClient";
 
 const freeTierFeatures = [
   "Trust document downloads",
@@ -29,6 +32,34 @@ const premiumFeatures = [
 export default function Pricing() {
   usePageTitle("Pricing");
   const { isAuthenticated, isPremium } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const { data: stripeStatus } = useQuery<{ enabled: boolean; priceId: string | null }>({
+    queryKey: ["/api/stripe/status"],
+    staleTime: 60_000,
+  });
+
+  const stripeEnabled = stripeStatus?.enabled ?? false;
+
+  async function handleSubscribe() {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await apiRequest("POST", "/api/stripe/create-checkout-session", {
+        priceId: stripeStatus?.priceId || undefined,
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        setError("Failed to start checkout. Please try again.");
+      }
+    } catch (err: any) {
+      setError(err.message || "Failed to start checkout. Please try again.");
+      setIsLoading(false);
+    }
+  }
 
   return (
     <div className="min-h-screen pt-16">
@@ -121,9 +152,32 @@ export default function Pricing() {
                     </Button>
                   </Link>
                 </div>
+              ) : stripeEnabled && isAuthenticated ? (
+                <div className="space-y-2">
+                  <Button
+                    className="w-full bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold"
+                    onClick={handleSubscribe}
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Processing...</>
+                    ) : (
+                      <><Crown className="w-4 h-4 mr-2" /> Subscribe Now</>
+                    )}
+                  </Button>
+                  {error && (
+                    <p className="text-sm text-red-600 text-center">{error}</p>
+                  )}
+                </div>
+              ) : stripeEnabled && !isAuthenticated ? (
+                <Link href="/signup">
+                  <Button className="w-full bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold">
+                    Sign Up to Subscribe
+                  </Button>
+                </Link>
               ) : (
                 <Button className="w-full bg-royal-gold/50 text-royal-navy font-cinzel font-bold cursor-not-allowed" disabled>
-                  Coming Soon — Join Waitlist
+                  Coming Soon
                 </Button>
               )}
             </CardContent>
@@ -141,12 +195,12 @@ export default function Pricing() {
               a: "You get full access to Trust pillar content, including the Trust course, related downloads, and the ability to read all forum discussions. Progress tracking is also included.",
             },
             {
-              q: "When will premium subscriptions be available?",
-              a: "We are finalizing payment processing and will announce availability soon. In the meantime, the admin can grant premium access to early supporters.",
+              q: "Can I cancel anytime?",
+              a: "Yes. You can cancel at any time from your billing page. Your access continues until the end of your billing period.",
             },
             {
-              q: "Can I cancel anytime?",
-              a: "Yes. When subscriptions launch, you'll be able to cancel at any time. Your access continues until the end of your billing period.",
+              q: "How does billing work?",
+              a: "Subscriptions are billed monthly at $9.99/month through Stripe, a secure payment processor. You can manage your payment method and billing from the billing page.",
             },
             {
               q: "Will free content ever be locked?",
