@@ -282,6 +282,7 @@ export interface IStorage {
   getDashboardStats(userId: string): Promise<{
     coursesInProgress: number;
     coursesCompleted: number;
+    availableCourses: number;
     forumPosts: number;
     videosWatched: number;
   }>;
@@ -1670,6 +1671,7 @@ export class DatabaseStorage implements IStorage {
   async getDashboardStats(userId: string): Promise<{
     coursesInProgress: number;
     coursesCompleted: number;
+    availableCourses: number;
     forumPosts: number;
     videosWatched: number;
   }> {
@@ -1680,6 +1682,10 @@ export class DatabaseStorage implements IStorage {
     const [completedResult] = await db.select({ count: sql<number>`count(*)` })
       .from(enrollments)
       .where(and(eq(enrollments.userId, userId), sql`${enrollments.completedAt} IS NOT NULL`));
+
+    const [availableResult] = await db.select({ count: sql<number>`count(*)` })
+      .from(courses)
+      .where(eq(courses.isPublished, true));
 
     const [threadCount] = await db.select({ count: sql<number>`count(*)` })
       .from(forum_threads).where(eq(forum_threads.authorId, userId));
@@ -1694,6 +1700,7 @@ export class DatabaseStorage implements IStorage {
     return {
       coursesInProgress: inProgressResult?.count || 0,
       coursesCompleted: completedResult?.count || 0,
+      availableCourses: availableResult?.count || 0,
       forumPosts: (threadCount?.count || 0) + (replyCount?.count || 0),
       videosWatched: videosResult?.count || 0,
     };

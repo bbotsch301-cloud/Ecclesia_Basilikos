@@ -25,6 +25,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 interface DashboardStats {
   coursesInProgress: number;
   coursesCompleted: number;
+  availableCourses: number;
   forumPosts: number;
   videosWatched: number;
   recentActivity: ActivityItem[];
@@ -140,9 +141,11 @@ function DashboardContent() {
                 <CardContent className="pt-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-gray-500">In Progress</p>
+                      <p className="text-sm text-gray-500">
+                        {(stats?.coursesInProgress || 0) > 0 ? "In Progress" : "Available Courses"}
+                      </p>
                       <p className="text-3xl font-bold text-royal-navy dark:text-royal-gold">
-                        {stats?.coursesInProgress || 0}
+                        {(stats?.coursesInProgress || 0) > 0 ? stats?.coursesInProgress : stats?.availableCourses || 0}
                       </p>
                     </div>
                     <BookOpen className="h-8 w-8 text-royal-gold" />
