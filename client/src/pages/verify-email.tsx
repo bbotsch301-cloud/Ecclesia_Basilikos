@@ -72,7 +72,7 @@ export default function VerifyEmail() {
         {status !== 'loading' && (
           <div className="space-y-3">
             <Button 
-              onClick={() => window.location.href = '/welcome'}
+              onClick={() => window.location.href = '/dashboard'}
               className="w-full bg-covenant-gold hover:bg-covenant-gold/90 text-white"
               data-testid="button-go-to-courses"
             >

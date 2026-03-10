@@ -27,6 +27,15 @@ export const users = pgTable("users", {
   passwordResetExpires: timestamp("password_reset_expires"),
   lastLoginAt: timestamp("last_login_at"),
   termsAcceptedAt: timestamp("terms_accepted_at"),
+  // Subscription fields
+  subscriptionTier: text("subscription_tier").default('free'), // 'free' | 'premium'
+  subscriptionStatus: text("subscription_status").default('none'), // 'none' | 'active' | 'cancelled' | 'expired' | 'trialing'
+  subscriptionStartDate: timestamp("subscription_start_date"),
+  subscriptionEndDate: timestamp("subscription_end_date"),
+  stripeCustomerId: text("stripe_customer_id"),
+  stripeSubscriptionId: text("stripe_subscription_id"),
+  premiumGrantedBy: varchar("premium_granted_by"),
+  premiumGrantedAt: timestamp("premium_granted_at"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -54,6 +63,7 @@ export const courses = pgTable("courses", {
   level: text("level").notNull(), // beginner, intermediate, advanced
   duration: text("duration"), // e.g., "4 weeks", "8 hours"
   price: integer("price").default(0), // in cents, 0 for free
+  isFree: boolean("is_free").default(false), // true for Trust/free-tier courses
   imageUrl: text("image_url"),
   scheduledPublishAt: timestamp("scheduled_publish_at"),
   isPublished: boolean("is_published").default(false),
@@ -208,6 +218,7 @@ export const downloads = pgTable("downloads", {
   scriptureText: text("scripture_text"),
   scriptureReference: text("scripture_reference"),
   isPublic: boolean("is_public").default(false),
+  isFree: boolean("is_free").default(false), // true for Trust/free-tier downloads
   isPublished: boolean("is_published").default(false),
   downloadCount: integer("download_count").default(0),
   courseId: varchar("course_id").references(() => courses.id),
@@ -877,3 +888,45 @@ export const insertNewsletterCampaignSchema = createInsertSchema(newsletter_camp
 
 export type InsertNewsletterCampaign = z.infer<typeof insertNewsletterCampaignSchema>;
 export type NewsletterCampaign = typeof newsletter_campaigns.$inferSelect;
+
+// Subscription history/audit table
+export const subscriptions = pgTable("subscriptions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  tier: text("tier").notNull(), // 'free' | 'premium'
+  status: text("status").notNull(), // 'active' | 'cancelled' | 'expired' | 'trialing'
+  source: text("source").notNull(), // 'admin_grant' | 'stripe' | 'manual'
+  startDate: timestamp("start_date").notNull(),
+  endDate: timestamp("end_date"),
+  cancelledAt: timestamp("cancelled_at"),
+  grantedByAdminId: varchar("granted_by_admin_id").references(() => users.id),
+  stripeSubscriptionId: text("stripe_subscription_id"),
+  amount: integer("amount"), // in cents
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("subscriptions_user_id_idx").on(table.userId),
+]);
+
+export const subscriptionRelations = relations(subscriptions, ({ one }) => ({
+  user: one(users, {
+    fields: [subscriptions.userId],
+    references: [users.id],
+  }),
+  grantedByAdmin: one(users, {
+    fields: [subscriptions.grantedByAdminId],
+    references: [users.id],
+  }),
+}));
+
+// Subscription Zod schemas
+export const subscriptionTierSchema = z.enum(['free', 'premium']);
+export const subscriptionStatusSchema = z.enum(['none', 'active', 'cancelled', 'expired', 'trialing']);
+
+export const insertSubscriptionSchema = createInsertSchema(subscriptions).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertSubscription = z.infer<typeof insertSubscriptionSchema>;
+export type Subscription = typeof subscriptions.$inferSelect;

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "wouter";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { usePageTitle } from "@/hooks/usePageTitle";
@@ -11,10 +12,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { User, Shield, Mail, Calendar, Save, Lock } from "lucide-react";
+import { User, Shield, Mail, Calendar, Save, Lock, Crown, CreditCard } from "lucide-react";
 
 function ProfileContent() {
-  const { user } = useAuth();
+  const { user, isPremium } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   usePageTitle("Profile");
@@ -135,6 +136,37 @@ function ProfileContent() {
                 <Calendar className="h-4 w-4" /> Member Since
               </div>
               <div className="font-medium">{memberSince}</div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Subscription Status */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <CreditCard className="h-5 w-5" /> Subscription
+            </CardTitle>
+            <CardDescription>Your current plan and billing</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                {isPremium ? (
+                  <Badge className="bg-royal-gold text-royal-navy">
+                    <Crown className="w-3 h-3 mr-1" /> Royal Assembly
+                  </Badge>
+                ) : (
+                  <Badge variant="outline">Free — Citizen</Badge>
+                )}
+                <span className="text-sm text-gray-500">
+                  {isPremium ? "Full access to all content" : "Trust content access"}
+                </span>
+              </div>
+              <Link href="/billing">
+                <Button variant="outline" size="sm" className="font-cinzel text-xs">
+                  {isPremium ? "Manage" : "Upgrade"}
+                </Button>
+              </Link>
             </div>
           </CardContent>
         </Card>

@@ -59,6 +59,7 @@ const downloadFormSchema = z.object({
   scriptureText: z.string().optional(),
   scriptureReference: z.string().optional(),
   isPublic: z.boolean().optional(),
+  isFree: z.boolean().optional(),
   fileUrl: z.string().min(1, "File URL is required"),
 });
 
@@ -151,6 +152,7 @@ export default function AdminDownloads() {
       scriptureText: "",
       scriptureReference: "",
       isPublic: false,
+      isFree: false,
       fileUrl: "",
     },
   });
@@ -303,6 +305,7 @@ export default function AdminDownloads() {
       scriptureText: "",
       scriptureReference: "",
       isPublic: false,
+      isFree: false,
       fileUrl: "",
     });
   };
@@ -323,6 +326,7 @@ export default function AdminDownloads() {
       scriptureText: "",
       scriptureReference: "",
       isPublic: false,
+      isFree: false,
       fileUrl: "",
     });
     setDialogOpen(true);
@@ -358,6 +362,7 @@ export default function AdminDownloads() {
       scriptureText: download.scriptureText || "",
       scriptureReference: download.scriptureReference || "",
       isPublic: download.isPublic || false,
+      isFree: download.isFree || false,
       fileUrl: download.fileUrl,
     });
     setDialogOpen(true);
@@ -393,6 +398,7 @@ export default function AdminDownloads() {
       scriptureText: download.scriptureText || "",
       scriptureReference: download.scriptureReference || "",
       isPublic: download.isPublic || false,
+      isFree: download.isFree || false,
       fileUrl: download.fileUrl,
     });
     setDialogOpen(true);
@@ -1126,6 +1132,25 @@ export default function AdminDownloads() {
                     <div className="space-y-1 leading-none">
                       <FormLabel>Is Public</FormLabel>
                       <p className="text-sm text-muted-foreground">Allow access without authentication</p>
+                    </div>
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="isFree"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel>Free Content</FormLabel>
+                      <p className="text-sm text-muted-foreground">Available to free-tier users (Trust content)</p>
                     </div>
                   </FormItem>
                 )}

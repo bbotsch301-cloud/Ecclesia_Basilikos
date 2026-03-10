@@ -31,6 +31,7 @@ import {
   Zap,
   Award,
   BarChart3,
+  Crown,
 } from "lucide-react";
 import { usePageTitle } from "@/hooks/usePageTitle";
 
@@ -42,6 +43,7 @@ interface CourseWithLessonCount {
   level: string;
   duration: string | null;
   price: number | null;
+  isFree: boolean | null;
   imageUrl: string | null;
   isPublished: boolean;
   lessonCount: number;
@@ -145,7 +147,7 @@ const pillarMeta: Record<string, {
 
 export default function Courses() {
   usePageTitle("Courses");
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, isPremium } = useAuth();
   const { toast } = useToast();
   const [, navigate] = useLocation();
   const [expandedCourse, setExpandedCourse] = useState<string | null>(null);
@@ -259,8 +261,8 @@ export default function Courses() {
               <p className="text-sm text-gray-300 font-cinzel">Pillars</p>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center border border-white/10">
-              <p className="text-3xl font-bold text-royal-gold">Free</p>
-              <p className="text-sm text-gray-300 font-cinzel">All Courses</p>
+              <p className="text-3xl font-bold text-royal-gold">{isPremium ? "Full" : "Free"}</p>
+              <p className="text-sm text-gray-300 font-cinzel">{isPremium ? "Access" : "Trust Courses"}</p>
             </div>
           </div>
         </div>
@@ -399,9 +401,19 @@ export default function Courses() {
                                 <Clock className="w-3 h-3" /> {course.duration}
                               </span>
                             )}
-                            <Badge variant="outline" className="text-xs text-green-600 border-green-300">
-                              Free
-                            </Badge>
+                            {course.isFree ? (
+                              <Badge variant="outline" className="text-xs text-green-600 border-green-300">
+                                Free
+                              </Badge>
+                            ) : !isPremium ? (
+                              <Badge variant="outline" className="text-xs text-royal-gold border-royal-gold/30">
+                                <Lock className="w-3 h-3 mr-1" /> Premium
+                              </Badge>
+                            ) : (
+                              <Badge variant="outline" className="text-xs text-royal-gold border-royal-gold/30">
+                                <Crown className="w-3 h-3 mr-1" /> Premium
+                              </Badge>
+                            )}
                           </div>
 
                           <h3 className="font-cinzel text-xl md:text-2xl font-bold text-royal-navy dark:text-royal-gold mb-3">
@@ -433,23 +445,35 @@ export default function Courses() {
 
                           {/* Action Buttons */}
                           <div className="flex flex-wrap items-center gap-3">
-                            <Button
-                              onClick={() => handleBeginLearning(course.id)}
-                              disabled={enrollMutation.isPending}
-                              size="lg"
-                              className="bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold px-8 shadow-md hover:shadow-lg transition-all"
-                            >
-                              {enrollMutation.isPending ? (
-                                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                              ) : isCompleted ? (
-                                <CheckCircle className="w-4 h-4 mr-2" />
-                              ) : isStarted ? (
-                                <Play className="w-4 h-4 mr-2" />
-                              ) : (
-                                <GraduationCap className="w-4 h-4 mr-2" />
-                              )}
-                              {isCompleted ? "Review Course" : isStarted ? "Continue Learning" : "Start This Course"}
-                            </Button>
+                            {!course.isFree && !isPremium ? (
+                              <Link href="/pricing">
+                                <Button
+                                  size="lg"
+                                  className="bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold px-8 shadow-md hover:shadow-lg transition-all"
+                                >
+                                  <Lock className="w-4 h-4 mr-2" />
+                                  Upgrade to Access
+                                </Button>
+                              </Link>
+                            ) : (
+                              <Button
+                                onClick={() => handleBeginLearning(course.id)}
+                                disabled={enrollMutation.isPending}
+                                size="lg"
+                                className="bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold px-8 shadow-md hover:shadow-lg transition-all"
+                              >
+                                {enrollMutation.isPending ? (
+                                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                ) : isCompleted ? (
+                                  <CheckCircle className="w-4 h-4 mr-2" />
+                                ) : isStarted ? (
+                                  <Play className="w-4 h-4 mr-2" />
+                                ) : (
+                                  <GraduationCap className="w-4 h-4 mr-2" />
+                                )}
+                                {isCompleted ? "Review Course" : isStarted ? "Continue Learning" : "Start This Course"}
+                              </Button>
+                            )}
 
                             <Button
                               variant="outline"
@@ -675,8 +699,8 @@ export default function Courses() {
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {[
               {
-                q: "Are the courses really free?",
-                a: "Yes. All three pillar courses are completely free. We believe this foundational knowledge should be accessible to everyone.",
+                q: "Which courses are free?",
+                a: "Trust pillar courses are free forever. Other courses require a Premium (Royal Assembly) subscription. We believe foundational Trust knowledge should be accessible to everyone.",
               },
               {
                 q: "Do I need to take them in order?",

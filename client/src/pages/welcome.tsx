@@ -1,13 +1,14 @@
 import { Link } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent } from "@/components/ui/card";
-import { BookOpen, FileText, Shield, Users, Download, GraduationCap, Mail, Settings } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { BookOpen, FileText, Shield, Users, Download, GraduationCap, Mail, Settings, CheckCircle, Crown, ArrowRight } from "lucide-react";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import RequireAuth from "@/components/RequireAuth";
 
 function WelcomeContent() {
   usePageTitle("Dashboard");
-  const { user } = useAuth();
+  const { user, isPremium } = useAuth();
 
   if (!user) return null;
 
@@ -70,6 +71,40 @@ function WelcomeContent() {
             );
           })}
         </div>
+
+        {/* Free Account Info + Premium Upsell */}
+        {!isPremium && (
+          <div className="grid md:grid-cols-2 gap-6 mt-8">
+            <Card className="royal-card">
+              <CardContent className="p-6">
+                <h3 className="font-cinzel text-lg font-bold text-royal-navy mb-4">Your Free Account Includes</h3>
+                <ul className="space-y-2">
+                  {["Trust pillar course", "Trust-related downloads", "Forum reading", "Progress tracking", "Email notifications"].map((f, i) => (
+                    <li key={i} className="flex items-center gap-2 text-sm text-gray-600">
+                      <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" /> {f}
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+            <Card className="border-2 border-royal-gold/30 bg-gradient-to-br from-royal-gold/5 to-transparent">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-2 mb-3">
+                  <Crown className="w-5 h-5 text-royal-gold" />
+                  <h3 className="font-cinzel text-lg font-bold text-royal-navy">Want Full Access?</h3>
+                </div>
+                <p className="text-sm text-gray-600 mb-4">
+                  Upgrade to the Royal Assembly for all courses, downloads, forum posting, Proof Vault, and more.
+                </p>
+                <Link href="/pricing">
+                  <Button className="w-full bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold">
+                    View Plans <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          </div>
+        )}
 
         {user.role === 'admin' && (
           <div className="mt-8">

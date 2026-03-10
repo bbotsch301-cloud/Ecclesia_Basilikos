@@ -32,7 +32,7 @@ export default function Signup() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate("/welcome");
+      navigate("/dashboard");
     }
   }, [isAuthenticated, navigate]);
 
@@ -68,12 +68,12 @@ export default function Signup() {
   if (isAuthenticated) return null;
 
   const benefits = [
-    { icon: BookOpen, text: "Royal Academy courses" },
-    { icon: FileText, text: "Educational resources & templates" },
-    { icon: Shield, text: "Proof Vault document timestamping" },
-    { icon: Users, text: "Embassy Forum community" },
-    { icon: Download, text: "Exclusive downloads" },
+    { icon: BookOpen, text: "Trust pillar course access" },
+    { icon: FileText, text: "Trust-related downloads" },
+    { icon: Users, text: "Forum reading & browsing" },
     { icon: GraduationCap, text: "Track your learning progress" },
+    { icon: Shield, text: "Email notifications" },
+    { icon: Download, text: "Public educational resources" },
   ];
 
   return (
@@ -97,6 +97,9 @@ export default function Signup() {
               </li>
             ))}
           </ul>
+          <p className="text-sm text-gray-400 mb-4">
+            Free account includes Trust content. <Link href="/pricing" className="text-royal-gold hover:underline">Upgrade anytime</Link> for full access.
+          </p>
           <div className="bg-white/10 backdrop-blur-sm border border-royal-gold/30 rounded-lg p-5">
             <p className="font-georgia italic text-gray-200">
               "But ye are a chosen generation, a royal priesthood, an holy nation, a peculiar people."

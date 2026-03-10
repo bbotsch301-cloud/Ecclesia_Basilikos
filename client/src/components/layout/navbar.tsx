@@ -4,10 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Menu, Crown, LogIn, UserPlus, LogOut, BookOpen, FileText, Shield, Home, ChevronDown, Settings, User, Search } from "lucide-react";
+import { Menu, Crown, LogIn, UserPlus, LogOut, BookOpen, FileText, Shield, Home, ChevronDown, Settings, User, Search, CreditCard, Sparkles } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import NotificationBell from "@/components/NotificationBell";
 import SearchDialog from "@/components/SearchDialog";
+import PremiumBadge from "@/components/PremiumBadge";
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -15,12 +16,13 @@ const navigation = [
   { name: "Trust & Assets", href: "/trust-assets" },
   { name: "State Passport", href: "/state-passport" },
   { name: "Contact & Stewardship", href: "/contact" },
+  { name: "Pricing", href: "/pricing" },
 ];
 
 export default function Navbar() {
   const [location, navigate] = useLocation();
   const [isOpen, setIsOpen] = useState(false);
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated, isPremium, logout } = useAuth();
 
   const handleLogout = async () => {
     try {
@@ -84,6 +86,7 @@ export default function Navbar() {
                         {initials}
                       </AvatarFallback>
                     </Avatar>
+                    {isPremium && <PremiumBadge />}
                     <span className="font-cinzel text-xs text-royal-navy dark:text-gray-300 hidden 2xl:inline">
                       {user?.firstName}
                     </span>
@@ -107,6 +110,14 @@ export default function Navbar() {
                     <Shield className="w-4 h-4 mr-2" /> Proof Vault
                     <span className="ml-auto text-[10px] text-gray-400">Soon</span>
                   </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/billing")}>
+                    <CreditCard className="w-4 h-4 mr-2" /> Billing
+                  </DropdownMenuItem>
+                  {!isPremium && (
+                    <DropdownMenuItem onClick={() => navigate("/pricing")} className="text-royal-gold focus:text-royal-gold">
+                      <Sparkles className="w-4 h-4 mr-2" /> Upgrade
+                    </DropdownMenuItem>
+                  )}
                   {user?.role === 'admin' && (
                     <>
                       <DropdownMenuSeparator />
@@ -156,8 +167,9 @@ export default function Navbar() {
                         </AvatarFallback>
                       </Avatar>
                       <div>
-                        <p className="font-cinzel font-bold text-royal-navy text-sm">
+                        <p className="font-cinzel font-bold text-royal-navy text-sm flex items-center gap-2">
                           {user.firstName} {user.lastName}
+                          {isPremium && <PremiumBadge />}
                         </p>
                         <p className="text-xs text-gray-500">{user.email}</p>
                       </div>

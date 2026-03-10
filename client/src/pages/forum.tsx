@@ -12,12 +12,13 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MessageSquare, Users, Eye, Clock, Plus, Pin, Search, X } from "lucide-react";
+import { MessageSquare, Users, Eye, Clock, Plus, Pin, Search, X, Crown } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import type { ForumCategory, ForumThread, User } from "@shared/schema";
 import { usePageTitle } from "@/hooks/usePageTitle";
+import UpgradePrompt from "@/components/UpgradePrompt";
 
 const createThreadSchema = z.object({
   title: z.string().min(5, "Title must be at least 5 characters"),
@@ -29,7 +30,7 @@ type CreateThreadForm = z.infer<typeof createThreadSchema>;
 
 export default function Forum() {
   usePageTitle("Forum");
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, isPremium } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -168,7 +169,7 @@ export default function Forum() {
             </p>
           </div>
           <div className="flex items-center gap-2">
-          {isAuthenticated && (
+          {isAuthenticated && isPremium && (
             <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
               <DialogTrigger asChild>
                 <Button className="bg-amber-600 hover:bg-amber-700">
@@ -251,8 +252,26 @@ export default function Forum() {
               </DialogContent>
             </Dialog>
           )}
+          {isAuthenticated && !isPremium && (
+            <Link href="/pricing">
+              <Button variant="outline" className="border-royal-gold/30 text-royal-gold hover:bg-royal-gold/5">
+                <Crown className="h-4 w-4 mr-2" />
+                Upgrade to Post
+              </Button>
+            </Link>
+          )}
           </div>
         </div>
+        {/* Premium upgrade banner */}
+        {isAuthenticated && !isPremium && (
+          <div className="mb-4">
+            <UpgradePrompt
+              title="Join the Discussion"
+              description="Upgrade to Premium to create threads, reply to discussions, and engage with the community."
+            />
+          </div>
+        )}
+
         {/* Search Bar */}
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />

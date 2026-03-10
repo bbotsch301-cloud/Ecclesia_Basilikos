@@ -32,6 +32,7 @@ import proofVaultRoutes from "./proofVaultRoutes";
 import path from "path";
 import { rateLimit } from "./rateLimit";
 import { sanitizeHtml, sanitizePlainText } from "./sanitize";
+import { isPremiumUser, requireSubscription } from "./subscriptionMiddleware";
 import logger from "./logger";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -412,6 +413,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ error: "Course not found" });
       }
 
+      // Gate non-free courses behind premium subscription
+      if (!course.isFree && !isPremiumUser((req as any).user)) {
+        return res.status(403).json({ error: "Premium subscription required", code: "PREMIUM_REQUIRED" });
+      }
+
       // Check if already enrolled
       const isEnrolled = await storage.isUserEnrolled(userId, courseId);
       if (isEnrolled) {
@@ -608,7 +614,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Create a new thread
-  app.post("/api/forum/threads", requireAuth, forumLimiter, async (req, res) => {
+  app.post("/api/forum/threads", requireAuth, requireSubscription, forumLimiter, async (req, res) => {
     try {
       const threadData = insertForumThreadSchema.omit({ authorId: true }).parse(req.body);
       const user = req.user as User;
@@ -656,7 +662,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Create a reply to a thread
-  app.post("/api/forum/threads/:threadId/replies", requireAuth, forumLimiter, async (req, res) => {
+  app.post("/api/forum/threads/:threadId/replies", requireAuth, requireSubscription, forumLimiter, async (req, res) => {
     try {
       const { threadId } = req.params;
       const replyData = insertForumReplySchema.omit({ authorId: true, threadId: true }).parse(req.body);
@@ -852,6 +858,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       if (!download || (!download.isPublished && user.role !== 'admin')) {
         return res.status(404).json({ error: "Download not found" });
+      }
+
+      // Gate non-free, non-public downloads behind premium
+      if (!download.isFree && !download.isPublic && !isPremiumUser(user)) {
+        return res.status(403).json({ error: "Premium subscription required", code: "PREMIUM_REQUIRED" });
       }
 
       await storage.trackUserDownload(user.id, id, req.ip);
@@ -1166,7 +1177,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/comments", requireAuth, forumLimiter, async (req, res) => {
+  app.post("/api/comments", requireAuth, requireSubscription, forumLimiter, async (req, res) => {
     try {
       const user = req.user as User;
       const { targetType, targetId, content } = z.object({
@@ -1295,6 +1306,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Admin routes
   app.use('/api/admin', adminRoutes);
+
+  // Subscription status endpoint
+  app.get("/api/subscription/status", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+      const premium = isPremiumUser(user);
+      res.json({
+        tier: user.subscriptionTier || 'free',
+        status: user.subscriptionStatus || 'none',
+        isPremium: premium,
+        startDate: user.subscriptionStartDate,
+        endDate: user.subscriptionEndDate,
+        features: {
+          trustCourses: true,
+          allCourses: premium,
+          trustDownloads: true,
+          allDownloads: premium,
+          forumRead: true,
+          forumWrite: premium,
+          proofVault: premium,
+          comments: premium,
+        },
+      });
+    } catch (error) {
+      logger.error({ err: error }, "Error fetching subscription status:");
+      res.status(500).json({ error: "Failed to fetch subscription status" });
+    }
+  });
+
+  app.get("/api/subscription/history", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+      const history = await storage.getSubscriptionHistory(user.id);
+      res.json(history);
+    } catch (error) {
+      logger.error({ err: error }, "Error fetching subscription history:");
+      res.status(500).json({ error: "Failed to fetch subscription history" });
+    }
+  });
 
   // Proof Vault routes
   app.use('/api/proof-vault', proofVaultRoutes);

@@ -664,7 +664,69 @@ export default function Home() {
       </div>
 
       {/* ═══════════════════════════════════════════════════════════════
-          SECTION 8: FINAL CTA
+          SECTION 8: MEMBERSHIP
+          ═══════════════════════════════════════════════════════════════ */}
+      <div className="py-24 marble-bg">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <RevealOnScroll>
+            <div className="text-center mb-12">
+              <h2 className="font-cinzel-decorative text-3xl md:text-4xl font-bold text-royal-navy mb-4">
+                Two Ways to Learn
+              </h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Start free with Trust content, or unlock everything with Premium access.
+              </p>
+            </div>
+          </RevealOnScroll>
+
+          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            <RevealOnScroll>
+              <Card className="royal-card h-full">
+                <CardContent className="p-8">
+                  <h3 className="font-cinzel text-xl font-bold text-royal-navy mb-2">Free — Citizen</h3>
+                  <p className="text-3xl font-bold text-royal-navy mb-4">$0</p>
+                  <ul className="space-y-2 mb-6">
+                    {["Trust course access", "Trust downloads", "Forum reading", "Progress tracking"].map((f, i) => (
+                      <li key={i} className="flex items-center gap-2 text-sm text-gray-600">
+                        <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" /> {f}
+                      </li>
+                    ))}
+                  </ul>
+                  <Link href="/signup">
+                    <Button variant="outline" className="w-full font-cinzel">Get Started Free</Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            </RevealOnScroll>
+
+            <RevealOnScroll delay={0.15}>
+              <Card className="royal-card h-full border-2 border-royal-gold/30">
+                <CardContent className="p-8">
+                  <div className="flex items-center gap-2 mb-2">
+                    <h3 className="font-cinzel text-xl font-bold text-royal-navy">Premium — Royal Assembly</h3>
+                  </div>
+                  <p className="text-3xl font-bold text-royal-navy mb-4">$9.99<span className="text-sm text-gray-400 font-normal">/mo</span></p>
+                  <ul className="space-y-2 mb-6">
+                    {["All courses & lessons", "All downloads & templates", "Forum posting", "Proof Vault", "Priority support"].map((f, i) => (
+                      <li key={i} className="flex items-center gap-2 text-sm text-gray-600">
+                        <CheckCircle className="w-4 h-4 text-royal-gold flex-shrink-0" /> {f}
+                      </li>
+                    ))}
+                  </ul>
+                  <Link href="/pricing">
+                    <Button className="w-full bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold">
+                      View Plans <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            </RevealOnScroll>
+          </div>
+        </div>
+      </div>
+
+      {/* ═══════════════════════════════════════════════════════════════
+          SECTION 9: FINAL CTA
           ═══════════════════════════════════════════════════════════════ */}
       <div className="py-32 bg-gradient-to-br from-royal-navy via-royal-burgundy to-royal-navy relative overflow-hidden">
         {/* Subtle pattern */}

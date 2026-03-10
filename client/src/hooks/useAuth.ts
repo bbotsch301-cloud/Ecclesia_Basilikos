@@ -38,10 +38,22 @@ export function useAuth() {
     },
   });
 
+  const typedUser = user as User | null | undefined;
+  const isAuthenticated = !!user && !error;
+  const isPremium = isAuthenticated && (
+    typedUser?.role === 'admin' ||
+    (typedUser?.subscriptionTier === 'premium' && typedUser?.subscriptionStatus === 'active')
+  );
+  const isAdmin = isAuthenticated && typedUser?.role === 'admin';
+
   return {
-    user: user as User | null | undefined,
+    user: typedUser,
     isLoading,
-    isAuthenticated: !!user && !error,
+    isAuthenticated,
+    isPremium: !!isPremium,
+    isAdmin: !!isAdmin,
+    subscriptionTier: (typedUser?.subscriptionTier || 'free') as string,
+    subscriptionStatus: (typedUser?.subscriptionStatus || 'none') as string,
     register: registerMutation.mutateAsync,
     login: loginMutation.mutateAsync,
     logout: logoutMutation.mutateAsync,

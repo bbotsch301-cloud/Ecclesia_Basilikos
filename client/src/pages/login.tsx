@@ -20,7 +20,7 @@ export default function Login() {
   const [, navigate] = useLocation();
   const searchString = useSearch();
   const params = new URLSearchParams(searchString);
-  const redirectTo = params.get("redirect") || "/welcome";
+  const redirectTo = params.get("redirect") || "/dashboard";
 
   useEffect(() => {
     if (isAuthenticated) {

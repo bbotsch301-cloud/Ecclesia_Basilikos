@@ -5,9 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { Download, FileText, Scale, Shield, BookOpen, Scroll, Crown, ChevronRight, Clock, Users, CheckCircle, ArrowLeft, Loader2, Banknote, Globe } from "lucide-react";
+import { Download, FileText, Scale, Shield, BookOpen, Scroll, Crown, ChevronRight, Clock, Users, CheckCircle, ArrowLeft, Loader2, Banknote, Globe, Lock } from "lucide-react";
 import type { Download as DownloadType } from "@shared/schema";
 import { usePageTitle } from "@/hooks/usePageTitle";
+import { useAuth } from "@/hooks/useAuth";
+import ContentLock from "@/components/ContentLock";
 
 const iconMap: Record<string, any> = {
   scroll: Scroll,
@@ -46,6 +48,7 @@ const extraCategories = ["Foundation", "Legal Templates", "Study Guides"];
 export default function Downloads() {
   usePageTitle("Downloads");
   const { toast } = useToast();
+  const { isPremium } = useAuth();
   const [selectedItem, setSelectedItem] = useState<DownloadType | null>(null);
   const [activeCategory, setActiveCategory] = useState("All");
 
@@ -193,6 +196,13 @@ export default function Downloads() {
                                 }`}>
                                   {item.category}
                                 </Badge>
+                                {item.isFree ? (
+                                  <Badge variant="outline" className="text-[10px] text-green-600 border-green-300">Free</Badge>
+                                ) : !isPremium ? (
+                                  <Badge variant="outline" className="text-[10px] text-royal-gold border-royal-gold/30">
+                                    <Lock className="w-2.5 h-2.5 mr-0.5" /> Premium
+                                  </Badge>
+                                ) : null}
                                 <span className={`text-xs ${isSelected ? "text-gray-300" : "text-gray-400"}`}>
                                   {item.fileType}
                                 </span>
@@ -254,6 +264,7 @@ export default function Downloads() {
                       </div>
                     </div>
 
+                    <ContentLock locked={!selectedItem.isFree && !isPremium}>
                     <div className="p-8 space-y-8">
                       {selectedItem.scriptureText && selectedItem.scriptureReference && (
                         <div className="bg-royal-gold/5 border border-royal-gold/20 rounded-xl p-6">
@@ -347,6 +358,7 @@ export default function Downloads() {
                         </Card>
                       </div>
                     </div>
+                    </ContentLock>
                   </div>
                 </div>
               ) : (

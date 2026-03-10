@@ -8,6 +8,13 @@
       "when": 1773099094418,
       "tag": "0000_large_molten_man",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1773114221946,
+      "tag": "0001_shiny_justin_hammer",
+      "breakpoints": true
     }
   ]
 }

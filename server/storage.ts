@@ -51,7 +51,10 @@ import {
   type NewsletterCampaign,
   type InsertNewsletterCampaign,
   type UserDownload,
+  type Subscription,
+  type InsertSubscription,
   users,
+  subscriptions,
   contacts,
   newsletter_subscribers,
   courses,
@@ -199,6 +202,8 @@ export interface IStorage {
     totalEnrollments: number;
     totalForumThreads: number;
     totalForumReplies: number;
+    totalPremiumUsers: number;
+    totalFreeUsers: number;
   }>;
   getRecentActivity(): Promise<AdminAuditLog[]>;
   createAuditLog(log: Omit<AdminAuditLog, 'id' | 'createdAt'>): Promise<AdminAuditLog>;
@@ -282,6 +287,22 @@ export interface IStorage {
   markNewsletterCampaignSent(id: string, recipientCount: number): Promise<NewsletterCampaign>;
   deleteNewsletterCampaign(id: string): Promise<void>;
   getAllNewsletterSubscribers(): Promise<Newsletter[]>;
+
+  // Subscription management
+  updateUserSubscription(userId: string, updates: Partial<{
+    subscriptionTier: string;
+    subscriptionStatus: string;
+    subscriptionStartDate: Date;
+    subscriptionEndDate: Date | null;
+    stripeCustomerId: string;
+    stripeSubscriptionId: string;
+    premiumGrantedBy: string;
+    premiumGrantedAt: Date;
+  }>): Promise<User>;
+  createSubscriptionRecord(data: InsertSubscription): Promise<Subscription>;
+  getSubscriptionHistory(userId: string): Promise<Subscription[]>;
+  getActiveSubscribers(): Promise<User[]>;
+  getSubscriptionStats(): Promise<{ totalPremium: number; totalFree: number; recentSubscriptions: number }>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -983,6 +1004,8 @@ export class DatabaseStorage implements IStorage {
     totalEnrollments: number;
     totalForumThreads: number;
     totalForumReplies: number;
+    totalPremiumUsers: number;
+    totalFreeUsers: number;
   }> {
     const [stats] = await db.select({
       totalUsers: sql<number>`(SELECT COUNT(*) FROM ${users})`,
@@ -992,8 +1015,10 @@ export class DatabaseStorage implements IStorage {
       totalEnrollments: sql<number>`(SELECT COUNT(*) FROM ${enrollments})`,
       totalForumThreads: sql<number>`(SELECT COUNT(*) FROM ${forum_threads})`,
       totalForumReplies: sql<number>`(SELECT COUNT(*) FROM ${forum_replies})`,
+      totalPremiumUsers: sql<number>`(SELECT COUNT(*) FROM ${users} WHERE subscription_tier = 'premium' AND subscription_status = 'active')`,
+      totalFreeUsers: sql<number>`(SELECT COUNT(*) FROM ${users} WHERE subscription_tier = 'free' OR subscription_tier IS NULL)`,
     }).from(sql`(SELECT 1) as dummy`);
-    
+
     return stats;
   }
 
@@ -1747,6 +1772,56 @@ export class DatabaseStorage implements IStorage {
   async getAllNewsletterSubscribers(): Promise<Newsletter[]> {
     return await db.select().from(newsletter_subscribers)
       .orderBy(desc(newsletter_subscribers.subscribed_at));
+  }
+  // Subscription management
+  async updateUserSubscription(userId: string, updates: Partial<{
+    subscriptionTier: string;
+    subscriptionStatus: string;
+    subscriptionStartDate: Date;
+    subscriptionEndDate: Date | null;
+    stripeCustomerId: string;
+    stripeSubscriptionId: string;
+    premiumGrantedBy: string;
+    premiumGrantedAt: Date;
+  }>): Promise<User> {
+    const [updated] = await db.update(users)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(users.id, userId))
+      .returning();
+    return updated;
+  }
+
+  async createSubscriptionRecord(data: InsertSubscription): Promise<Subscription> {
+    const [record] = await db.insert(subscriptions).values(data).returning();
+    return record;
+  }
+
+  async getSubscriptionHistory(userId: string): Promise<Subscription[]> {
+    return await db.select().from(subscriptions)
+      .where(eq(subscriptions.userId, userId))
+      .orderBy(desc(subscriptions.createdAt));
+  }
+
+  async getActiveSubscribers(): Promise<User[]> {
+    return await db.select().from(users)
+      .where(and(
+        eq(users.subscriptionTier, 'premium'),
+        eq(users.subscriptionStatus, 'active'),
+      ))
+      .orderBy(desc(users.subscriptionStartDate));
+  }
+
+  async getSubscriptionStats(): Promise<{ totalPremium: number; totalFree: number; recentSubscriptions: number }> {
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    const [stats] = await db.select({
+      totalPremium: sql<number>`(SELECT COUNT(*) FROM ${users} WHERE subscription_tier = 'premium' AND subscription_status = 'active')`,
+      totalFree: sql<number>`(SELECT COUNT(*) FROM ${users} WHERE subscription_tier = 'free' OR subscription_tier IS NULL)`,
+      recentSubscriptions: sql<number>`(SELECT COUNT(*) FROM ${subscriptions} WHERE created_at > ${thirtyDaysAgo})`,
+    }).from(sql`(SELECT 1) as dummy`);
+
+    return stats;
   }
 }
 

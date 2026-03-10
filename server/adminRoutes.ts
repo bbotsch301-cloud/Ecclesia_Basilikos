@@ -1340,4 +1340,107 @@ router.delete('/newsletter-campaigns/:id', requireAdmin, async (req, res) => {
   }
 });
 
+// ================================
+// SUBSCRIPTION MANAGEMENT (ADMIN ONLY)
+// ================================
+
+// Grant or revoke premium subscription
+router.patch('/users/:id/subscription', requireAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { action } = z.object({
+      action: z.enum(['grant', 'revoke']),
+    }).parse(req.body);
+
+    const targetUser = await storage.getUser(id);
+    if (!targetUser) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const oldData = {
+      subscriptionTier: targetUser.subscriptionTier,
+      subscriptionStatus: targetUser.subscriptionStatus,
+    };
+
+    if (action === 'grant') {
+      const now = new Date();
+      await storage.updateUserSubscription(id, {
+        subscriptionTier: 'premium',
+        subscriptionStatus: 'active',
+        subscriptionStartDate: now,
+        subscriptionEndDate: null,
+        premiumGrantedBy: req.user!.id,
+        premiumGrantedAt: now,
+      });
+
+      await storage.createSubscriptionRecord({
+        userId: id,
+        tier: 'premium',
+        status: 'active',
+        source: 'admin_grant',
+        startDate: now,
+        grantedByAdminId: req.user!.id,
+        notes: `Premium granted by admin ${req.user!.email || req.user!.id}`,
+      });
+    } else {
+      await storage.updateUserSubscription(id, {
+        subscriptionTier: 'free',
+        subscriptionStatus: 'none',
+        subscriptionEndDate: new Date(),
+      });
+
+      await storage.createSubscriptionRecord({
+        userId: id,
+        tier: 'free',
+        status: 'cancelled',
+        source: 'admin_grant',
+        startDate: new Date(),
+        cancelledAt: new Date(),
+        grantedByAdminId: req.user!.id,
+        notes: `Premium revoked by admin ${req.user!.email || req.user!.id}`,
+      });
+    }
+
+    const updatedUser = await storage.getUser(id);
+
+    await auditLog(
+      req.user!.id,
+      action === 'grant' ? 'GRANT_PREMIUM' : 'REVOKE_PREMIUM',
+      'USER',
+      id,
+      oldData,
+      { subscriptionTier: updatedUser?.subscriptionTier, subscriptionStatus: updatedUser?.subscriptionStatus },
+      req.ip,
+      req.get('User-Agent')
+    );
+
+    res.json(updatedUser);
+  } catch (error) {
+    logger.error({ err: error }, 'Error updating subscription:');
+    res.status(500).json({ error: 'Failed to update subscription' });
+  }
+});
+
+// Get subscription stats
+router.get('/subscription-stats', requireAdmin, async (req, res) => {
+  try {
+    const stats = await storage.getSubscriptionStats();
+    res.json(stats);
+  } catch (error) {
+    logger.error({ err: error }, 'Error fetching subscription stats:');
+    res.status(500).json({ error: 'Failed to fetch subscription stats' });
+  }
+});
+
+// List premium subscribers
+router.get('/subscribers', requireAdmin, async (req, res) => {
+  try {
+    const subscribers = await storage.getActiveSubscribers();
+    res.json(subscribers);
+  } catch (error) {
+    logger.error({ err: error }, 'Error fetching subscribers:');
+    res.status(500).json({ error: 'Failed to fetch subscribers' });
+  }
+});
+
 export default router;

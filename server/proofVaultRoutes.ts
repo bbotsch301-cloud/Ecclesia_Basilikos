@@ -6,6 +6,7 @@ import { db } from "./db";
 import { proofs, createProofHashSchema } from "@shared/schema";
 import { eq, and, desc, sql } from "drizzle-orm";
 import { requireAuth } from "./auth";
+import { requireSubscription } from "./subscriptionMiddleware";
 import logger from "./logger";
 import {
   stampHash,
@@ -95,7 +96,7 @@ router.use(requireAuth);
 
 // --- POST /proofs - Create a new proof ---
 
-router.post("/proofs", conditionalUpload, async (req: Request, res: Response) => {
+router.post("/proofs", requireSubscription, conditionalUpload, async (req: Request, res: Response) => {
   try {
     const userId = (req as any).user.id;
 

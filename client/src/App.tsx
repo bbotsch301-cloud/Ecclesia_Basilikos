@@ -64,6 +64,9 @@ const AdminCourseEditor = lazy(() => import("@/pages/admin-course-editor"));
 const AdminForum = lazy(() => import("@/pages/admin-forum"));
 const AdminNewsletter = lazy(() => import("@/pages/admin-newsletter"));
 const Dashboard = lazy(() => import("@/pages/dashboard"));
+const Pricing = lazy(() => import("@/pages/pricing"));
+const Billing = lazy(() => import("@/pages/billing"));
+const AdminSubscribers = lazy(() => import("@/pages/admin-subscribers"));
 
 function PageLoader() {
   return (
@@ -115,6 +118,8 @@ function Router() {
             <Route path="/reset-password" component={ResetPassword} />
             <Route path="/terms" component={Terms} />
             <Route path="/privacy" component={Privacy} />
+            <Route path="/pricing" component={Pricing} />
+            <Route path="/billing">{() => <SectionErrorBoundary><Billing /></SectionErrorBoundary>}</Route>
             <Route path="/user/:userId" component={UserProfile} />
             {/* Proof Vault routes */}
             <Route path="/proof-vault">{() => <SectionErrorBoundary><ProofVault /></SectionErrorBoundary>}</Route>
@@ -132,6 +137,7 @@ function Router() {
             <Route path="/admin/forum">{() => <RequireAdmin><SectionErrorBoundary><AdminForum /></SectionErrorBoundary></RequireAdmin>}</Route>
             <Route path="/admin/contacts">{() => <RequireAdmin><SectionErrorBoundary><AdminContactMessages /></SectionErrorBoundary></RequireAdmin>}</Route>
             <Route path="/admin/newsletter">{() => <RequireAdmin><SectionErrorBoundary><AdminNewsletter /></SectionErrorBoundary></RequireAdmin>}</Route>
+            <Route path="/admin/subscribers">{() => <RequireAdmin><SectionErrorBoundary><AdminSubscribers /></SectionErrorBoundary></RequireAdmin>}</Route>
             <Route path="/admin">{() => <RequireAdmin><SectionErrorBoundary><AdminDashboard /></SectionErrorBoundary></RequireAdmin>}</Route>
             <Route component={NotFound} />
           </Switch>

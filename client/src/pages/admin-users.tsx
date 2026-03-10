@@ -27,7 +27,8 @@ import {
   UserCheck,
   UserX,
   Mail,
-  Send
+  Send,
+  Crown,
 } from "lucide-react";
 import { Link } from "wouter";
 import { useToast } from "@/hooks/use-toast";
@@ -43,6 +44,8 @@ interface User {
   lastName: string;
   role: 'admin' | 'moderator' | 'instructor' | 'student' | 'user';
   isActive: boolean;
+  subscriptionTier: string | null;
+  subscriptionStatus: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -285,6 +288,7 @@ export default function AdminUsers() {
                     <TableHead>Email</TableHead>
                     <TableHead>Role</TableHead>
                     <TableHead>Status</TableHead>
+                    <TableHead>Subscription</TableHead>
                     <TableHead>Joined</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
@@ -323,6 +327,15 @@ export default function AdminUsers() {
                             </>
                           )}
                         </Badge>
+                      </TableCell>
+                      <TableCell>
+                        {user.subscriptionTier === 'premium' && user.subscriptionStatus === 'active' ? (
+                          <Badge className="bg-royal-gold text-royal-navy text-xs">
+                            <Crown className="w-3 h-3 mr-1" /> Premium
+                          </Badge>
+                        ) : (
+                          <Badge variant="outline" className="text-xs">Free</Badge>
+                        )}
                       </TableCell>
                       <TableCell>
                         {new Date(user.createdAt).toLocaleDateString()}

@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
@@ -88,6 +89,7 @@ function CourseListView() {
     level: "beginner",
     duration: "",
     price: 0,
+    isFree: false,
     imageUrl: "",
   });
 
@@ -103,7 +105,7 @@ function CourseListView() {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/courses"] });
       toast({ title: "Course Created", description: "Course has been created successfully." });
       setCourseDialogOpen(false);
-      setCourseForm({ title: "", description: "", category: "", level: "beginner", duration: "", price: 0, imageUrl: "" });
+      setCourseForm({ title: "", description: "", category: "", level: "beginner", duration: "", price: 0, isFree: false, imageUrl: "" });
     },
     onError: (error: Error) => {
       toast({ title: "Error", description: error.message, variant: "destructive" });
@@ -406,6 +408,16 @@ function CourseListView() {
                   className="mt-1"
                 />
               </div>
+            </div>
+            <div className="flex items-center space-x-3">
+              <Checkbox
+                id="isFree"
+                checked={courseForm.isFree}
+                onCheckedChange={(checked) => setCourseForm({ ...courseForm, isFree: !!checked })}
+              />
+              <label htmlFor="isFree" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                Free Content (available to free-tier users)
+              </label>
             </div>
             <div>
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Image URL</label>
