@@ -19,17 +19,22 @@ app.use(compression());
 app.use(requestId);
 
 // Security headers
+const isDevelopment = process.env.NODE_ENV === "development";
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'"],
+      scriptSrc: isDevelopment 
+        ? ["'self'", "'unsafe-inline'", "localhost:*", "127.0.0.1:*"]
+        : ["'self'"],
       styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdnjs.cloudflare.com"],
       fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"],
       imgSrc: ["'self'", "data:", "blob:", "https:"],
       mediaSrc: ["'self'", "https:"],
       frameSrc: ["'self'", "https://www.youtube.com", "https://www.youtube-nocookie.com", "https://player.vimeo.com"],
-      connectSrc: ["'self'"],
+      connectSrc: isDevelopment 
+        ? ["'self'", "ws:", "wss:", "localhost:*", "127.0.0.1:*"]
+        : ["'self'"],
       objectSrc: ["'none'"],
       baseUri: ["'self'"],
       formAction: ["'self'"],
