@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ecclesia Basilikos - Embassy of the Eternal Kingdom</title>
     <meta name="description" content="Come out of her, my people. Embassy of Christ's everlasting Kingdom. Royal priesthood, divine citizenship, and covenant freedom under the New Covenant.">
 
@@ -10,7 +10,11 @@
     <meta property="og:title" content="Ecclesia Basilikos - Embassy of the Eternal Kingdom">
     <meta property="og:description" content="Come out of her, my people. Embassy of Christ's everlasting Kingdom. Royal priesthood, divine citizenship, and covenant freedom under the New Covenant.">
     <meta property="og:type" content="website">
+    <!-- og:image should be an absolute URL in production (e.g. https://ecclesiabasilikos.com/covenant-og-image.jpg) -->
     <meta property="og:image" content="/covenant-og-image.jpg">
+    <meta property="og:url" content="https://ecclesiabasilikos.com" />
+    <meta property="og:site_name" content="Ecclesia Basilikos" />
+    <link rel="canonical" href="https://ecclesiabasilikos.com" />
 
     <!-- Twitter Card meta tags -->
     <meta name="twitter:card" content="summary_large_image">
@@ -39,6 +43,7 @@
   </head>
   <body>
     <div id="root"></div>
+    <noscript>This application requires JavaScript to run.</noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

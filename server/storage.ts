@@ -120,6 +120,7 @@ export interface IStorage {
   enrollUser(userId: string, courseId: string): Promise<Enrollment>;
   getUserEnrollments(userId: string): Promise<(Enrollment & { course: Course })[]>;
   isUserEnrolled(userId: string, courseId: string): Promise<boolean>;
+  completeEnrollment(userId: string, courseId: string): Promise<Enrollment>;
   
   // Downloads
   getPublicDownloads(): Promise<Download[]>;
@@ -228,7 +229,7 @@ export interface IStorage {
   // Public listings
   getPublishedVideos(): Promise<Video[]>;
   getPublishedResources(): Promise<Resource[]>;
-  getRecentForumThreads(): Promise<Array<ForumThread & { author: User; category: ForumCategory }>>;
+  getRecentForumThreads(offset?: number, limit?: number): Promise<{ threads: Array<ForumThread & { author: User; category: ForumCategory }>; total: number }>;
   searchForumThreads(query: string): Promise<Array<ForumThread & { author: Pick<User, 'id' | 'firstName' | 'lastName' | 'username'>; category: ForumCategory }>>;
   getCoursesWithLessonCount(): Promise<(Course & { lessonCount: number })[]>;
   getAllCoursesWithLessonCount(): Promise<(Course & { lessonCount: number })[]>;
@@ -508,6 +509,16 @@ export class DatabaseStorage implements IStorage {
       .from(enrollments)
       .where(and(eq(enrollments.userId, userId), eq(enrollments.courseId, courseId)));
     return !!enrollment;
+  }
+
+  async completeEnrollment(userId: string, courseId: string): Promise<Enrollment> {
+    const [updated] = await db
+      .update(enrollments)
+      .set({ completedAt: new Date(), progress: 100 })
+      .where(and(eq(enrollments.userId, userId), eq(enrollments.courseId, courseId)))
+      .returning();
+    if (!updated) throw new Error("Enrollment not found");
+    return updated;
   }
 
   // Downloads
@@ -1307,24 +1318,31 @@ export class DatabaseStorage implements IStorage {
       .orderBy(desc(resources.createdAt));
   }
 
-  async getRecentForumThreads(): Promise<Array<ForumThread & { author: User; category: ForumCategory }>> {
-    const threads = await db
-      .select({
-        thread: forum_threads,
-        author: users,
-        category: forum_categories,
-      })
-      .from(forum_threads)
-      .innerJoin(users, eq(forum_threads.authorId, users.id))
-      .innerJoin(forum_categories, eq(forum_threads.categoryId, forum_categories.id))
-      .orderBy(desc(forum_threads.isPinned), desc(forum_threads.lastReplyAt), desc(forum_threads.createdAt))
-      .limit(50);
+  async getRecentForumThreads(offset = 0, limit = 20): Promise<{ threads: Array<ForumThread & { author: User; category: ForumCategory }>; total: number }> {
+    const [totalResult, threads] = await Promise.all([
+      db.select({ count: sql<number>`count(*)::int` }).from(forum_threads),
+      db
+        .select({
+          thread: forum_threads,
+          author: users,
+          category: forum_categories,
+        })
+        .from(forum_threads)
+        .innerJoin(users, eq(forum_threads.authorId, users.id))
+        .innerJoin(forum_categories, eq(forum_threads.categoryId, forum_categories.id))
+        .orderBy(desc(forum_threads.isPinned), desc(forum_threads.lastReplyAt), desc(forum_threads.createdAt))
+        .limit(limit)
+        .offset(offset),
+    ]);
 
-    return threads.map(t => ({
-      ...t.thread,
-      author: t.author,
-      category: t.category,
-    }));
+    return {
+      threads: threads.map(t => ({
+        ...t.thread,
+        author: t.author,
+        category: t.category,
+      })),
+      total: totalResult[0]?.count ?? 0,
+    };
   }
 
   async searchForumThreads(query: string): Promise<Array<ForumThread & { author: Pick<User, 'id' | 'firstName' | 'lastName' | 'username'>; category: ForumCategory }>> {

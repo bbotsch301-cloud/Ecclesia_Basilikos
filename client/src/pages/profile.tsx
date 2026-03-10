@@ -90,8 +90,8 @@ function ProfileContent() {
       toast({ title: "Error", description: "New passwords do not match", variant: "destructive" });
       return;
     }
-    if (newPassword.length < 6) {
-      toast({ title: "Error", description: "New password must be at least 6 characters", variant: "destructive" });
+    if (newPassword.length < 8) {
+      toast({ title: "Error", description: "New password must be at least 8 characters", variant: "destructive" });
       return;
     }
     passwordMutation.mutate({ currentPassword, newPassword });

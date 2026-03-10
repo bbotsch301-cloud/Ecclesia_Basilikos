@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Menu, Crown, LogIn, UserPlus, LogOut, BookOpen, FileText, Shield, Home, ChevronDown, Settings, User, Search, CreditCard, Sparkles } from "lucide-react";
+import { Menu, Crown, LogIn, UserPlus, LogOut, BookOpen, FileText, Shield, Home, ChevronDown, Settings, User, Search, CreditCard, Sparkles, MessageSquare, Download } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import NotificationBell from "@/components/NotificationBell";
 import SearchDialog from "@/components/SearchDialog";
@@ -108,9 +108,8 @@ export default function Navbar() {
                   <DropdownMenuItem onClick={() => navigate("/resources")}>
                     <FileText className="w-4 h-4 mr-2" /> Resources
                   </DropdownMenuItem>
-                  <DropdownMenuItem disabled className="opacity-50">
+                  <DropdownMenuItem onClick={() => navigate("/proof-vault")}>
                     <Shield className="w-4 h-4 mr-2" /> Proof Vault
-                    <span className="ml-auto text-[10px] text-gray-400">Soon</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => navigate("/billing")}>
                     <CreditCard className="w-4 h-4 mr-2" /> Billing
@@ -211,6 +210,21 @@ export default function Navbar() {
                           </Link>
                           <Link href="/courses" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">
                             <BookOpen className="w-4 h-4" /> Courses
+                          </Link>
+                          <Link href="/forum" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">
+                            <MessageSquare className="w-4 h-4" /> Forum
+                          </Link>
+                          <Link href="/downloads" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">
+                            <Download className="w-4 h-4" /> Downloads
+                          </Link>
+                          <Link href="/resources" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">
+                            <FileText className="w-4 h-4" /> Resources
+                          </Link>
+                          <Link href="/proof-vault" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">
+                            <Shield className="w-4 h-4" /> Proof Vault
+                          </Link>
+                          <Link href="/billing" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">
+                            <CreditCard className="w-4 h-4" /> Billing
                           </Link>
                           {user?.role === 'admin' && (
                             <Link href="/admin" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">

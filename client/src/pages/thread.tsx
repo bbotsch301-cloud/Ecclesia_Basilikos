@@ -7,7 +7,6 @@ import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -317,11 +316,20 @@ export default function ThreadPage() {
                                 onChange={(e) => setEditThreadTitle(e.target.value)}
                                 placeholder="Thread title"
                               />
-                              <Textarea
-                                value={editThreadContent}
-                                onChange={(e) => setEditThreadContent(e.target.value)}
-                                rows={6}
-                              />
+                              <Suspense
+                                fallback={
+                                  <div className="border rounded-lg p-4 min-h-[150px] flex items-center justify-center">
+                                    <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
+                                  </div>
+                                }
+                              >
+                                <RichTextEditor
+                                  content={editThreadContent}
+                                  onChange={setEditThreadContent}
+                                  placeholder="Thread content..."
+                                  minHeight="150px"
+                                />
+                              </Suspense>
                               <Button
                                 className="w-full bg-royal-gold hover:bg-royal-gold/90 text-royal-navy"
                                 disabled={editThreadMutation.isPending}
@@ -506,11 +514,20 @@ export default function ThreadPage() {
                         {/* Reply content */}
                         {isEditing ? (
                           <div className="space-y-3">
-                            <Textarea
-                              value={editReplyContent}
-                              onChange={(e) => setEditReplyContent(e.target.value)}
-                              rows={3}
-                            />
+                            <Suspense
+                              fallback={
+                                <div className="border rounded-lg p-4 min-h-[80px] flex items-center justify-center">
+                                  <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
+                                </div>
+                              }
+                            >
+                              <RichTextEditor
+                                content={editReplyContent}
+                                onChange={setEditReplyContent}
+                                placeholder="Edit your reply..."
+                                minHeight="80px"
+                              />
+                            </Suspense>
                             <div className="flex gap-2">
                               <Button
                                 size="sm"

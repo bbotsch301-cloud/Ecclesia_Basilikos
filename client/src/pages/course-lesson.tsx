@@ -1,6 +1,6 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { useParams, Link } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
@@ -73,6 +73,7 @@ function CourseLessonContent() {
   const params = useParams<{ courseId: string; lessonId: string }>();
   const { toast } = useToast();
   const { isAuthenticated } = useAuth();
+  const queryClient = useQueryClient();
   const courseId = params.courseId || "1";
   const lessonId = params.lessonId;
 
@@ -87,6 +88,28 @@ function CourseLessonContent() {
 
   const { data: downloadsData } = useQuery<CourseDownload[]>({
     queryKey: ['/api/courses', courseId, 'downloads'],
+  });
+
+  const completeCourse = useMutation({
+    mutationFn: async (sectionId: string) => {
+      await apiRequest('POST', `/api/sections/${sectionId}/complete`);
+      await apiRequest('POST', `/api/enrollments/${courseId}/complete`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/courses', courseId, 'progress'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/my-enrollments'] });
+      toast({
+        title: "Course Complete!",
+        description: "Congratulations! You have completed this course.",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to mark course as complete. Please try again.",
+        variant: "destructive",
+      });
+    },
   });
 
   usePageTitle(courseData?.title ? `${courseData.title}` : "Course");
@@ -190,6 +213,9 @@ function CourseLessonContent() {
               <div className="space-y-1 max-h-[calc(100vh-200px)] overflow-y-auto pr-1">
                 {lessons.map((lesson, i) => {
                   const isActive = currentLesson?.id === lesson.id;
+                  const isCompleted = isAuthenticated && progressData
+                    ? i < (progressData.completedSections ?? 0)
+                    : false;
                   return (
                     <Link
                       key={lesson.id}
@@ -203,11 +229,15 @@ function CourseLessonContent() {
                         }`}
                       >
                         <div className="flex items-start gap-2">
-                          <span className={`text-xs font-bold mt-0.5 ${
-                            isActive ? "text-royal-gold" : "text-gray-400"
-                          }`}>
-                            {i + 1}.
-                          </span>
+                          {isCompleted ? (
+                            <CheckCircle className={`h-3.5 w-3.5 mt-0.5 shrink-0 ${isActive ? "text-royal-gold" : "text-green-500"}`} />
+                          ) : (
+                            <span className={`text-xs font-bold mt-0.5 ${
+                              isActive ? "text-royal-gold" : "text-gray-400"
+                            }`}>
+                              {i + 1}.
+                            </span>
+                          )}
                           <div className="flex-1 min-w-0">
                             <p className="font-medium text-xs leading-snug">{lesson.title}</p>
                             {lesson.duration && (
@@ -511,15 +541,15 @@ function CourseLessonContent() {
                 ) : (
                   <Button
                     className="bg-green-600 hover:bg-green-700 text-white font-cinzel font-bold"
+                    disabled={completeCourse.isPending}
                     onClick={() => {
-                      toast({
-                        title: "Course Complete!",
-                        description: "Congratulations! You have completed this course.",
-                      });
+                      if (currentLesson) {
+                        completeCourse.mutate(currentLesson.id);
+                      }
                     }}
                   >
                     <CheckCircle className="h-4 w-4 mr-2" />
-                    Complete Course
+                    {completeCourse.isPending ? "Completing..." : "Complete Course"}
                   </Button>
                 )}
               </div>

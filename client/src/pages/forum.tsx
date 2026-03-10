@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Link } from "wouter";
+import { Link, useSearch } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
@@ -77,10 +77,13 @@ export default function Forum() {
   const { user, isAuthenticated, isPremium } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const searchString = useSearch();
+  const initialCategory = new URLSearchParams(searchString).get("category");
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(initialCategory);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [page, setPage] = useState(1);
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleSearchChange = useCallback((value: string) => {
@@ -106,14 +109,21 @@ export default function Forum() {
     enabled: !!selectedCategory,
   });
 
-  const { data: allThreads = [], isLoading: allThreadsLoading } = useQuery<ThreadWithMeta[]>({
-    queryKey: ["/api/forum/threads"],
+  const { data: allThreadsData, isLoading: allThreadsLoading } = useQuery<{ threads: ThreadWithMeta[]; total: number; page: number; totalPages: number }>({
+    queryKey: ["/api/forum/threads", page],
+    queryFn: async () => {
+      const res = await fetch(`/api/forum/threads?page=${page}`);
+      if (!res.ok) throw new Error("Failed to fetch threads");
+      return res.json();
+    },
     enabled: !selectedCategory,
   });
+  const allThreads = allThreadsData?.threads ?? [];
+  const totalPages = allThreadsData?.totalPages ?? 1;
 
   const isSearching = debouncedSearch.length >= 2;
 
-  const { data: searchResults = [], isLoading: searchLoading } = useQuery<ThreadWithMeta[]>({
+  const { data: searchResults = [], isLoading: searchLoading, isFetching: searchFetching } = useQuery<ThreadWithMeta[]>({
     queryKey: ["/api/forum/search", debouncedSearch],
     queryFn: async () => {
       const res = await fetch(`/api/forum/search?q=${encodeURIComponent(debouncedSearch)}`);
@@ -535,7 +545,11 @@ export default function Forum() {
 
             {isSearching && (
               <div className="mb-4 text-sm text-gray-500 px-1">
-                Searching for "{debouncedSearch}"...
+                {(searchLoading || searchFetching)
+                  ? `Searching...`
+                  : searchResults.length === 0
+                    ? `No results for "${debouncedSearch}"`
+                    : `${searchResults.length} result${searchResults.length !== 1 ? "s" : ""} for "${debouncedSearch}"`}
               </div>
             )}
 
@@ -597,6 +611,31 @@ export default function Forum() {
                 {regularThreads.map((thread) => (
                   <ThreadRow key={thread.id} thread={thread} onLike={likeMutation.mutate} isAuthenticated={isAuthenticated} />
                 ))}
+              </div>
+            )}
+
+            {/* Pagination (only for all-threads view, not search or category) */}
+            {!isSearching && !selectedCategory && totalPages > 1 && (
+              <div className="flex items-center justify-center gap-3 mt-6">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  disabled={page <= 1}
+                >
+                  Previous
+                </Button>
+                <span className="text-sm text-gray-500">
+                  Page {page} of {totalPages}
+                </span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                  disabled={page >= totalPages}
+                >
+                  Next
+                </Button>
               </div>
             )}
           </div>

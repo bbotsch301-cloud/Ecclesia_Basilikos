@@ -405,7 +405,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const user = req.user as User;
       const { currentPassword, newPassword } = z.object({
         currentPassword: z.string().min(1),
-        newPassword: z.string().min(6),
+        newPassword: z.string().min(8),
       }).parse(req.body);
 
       const bcryptMod = await import("bcryptjs");
@@ -641,7 +641,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get all recent threads (across all categories)
   app.get("/api/forum/threads", async (req, res) => {
     try {
-      const threads = await storage.getRecentForumThreads();
+      const page = Math.max(1, parseInt((req.query.page as string) || "1", 10));
+      const limit = 20;
+      const offset = (page - 1) * limit;
+      const { threads, total } = await storage.getRecentForumThreads(offset, limit);
       const threadIds = threads.map(t => t.id);
       const likeCounts = await storage.getThreadLikeCounts(threadIds);
       const user = req.user as User | undefined;
@@ -649,11 +652,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (user) {
         userLikedSet = await storage.getUserLikedThreadIds(user.id, threadIds);
       }
-      res.json(threads.map(t => ({
-        ...t,
-        likeCount: likeCounts[t.id] || 0,
-        userLiked: userLikedSet.has(t.id),
-      })));
+      res.json({
+        threads: threads.map(t => ({
+          ...t,
+          likeCount: likeCounts[t.id] || 0,
+          userLiked: userLikedSet.has(t.id),
+        })),
+        total,
+        page,
+        totalPages: Math.ceil(total / limit),
+      });
     } catch (error) {
       logger.error({ err: error }, "Error fetching recent forum threads:");
       res.status(500).json({ error: "Failed to fetch threads" });
@@ -1203,6 +1211,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Complete an enrollment (mark course as finished)
+  app.post("/api/enrollments/:courseId/complete", requireAuth, async (req, res) => {
+    try {
+      const userId = (req as any).user.id;
+      const enrollment = await storage.completeEnrollment(userId, req.params.courseId);
+      res.json(enrollment);
+    } catch (error) {
+      logger.error({ err: error }, "Error completing enrollment:");
+      res.status(500).json({ error: "Failed to complete enrollment" });
+    }
+  });
+
   // Update video progress
   app.post("/api/videos/:videoId/progress", requireAuth, async (req, res) => {
     try {
@@ -1260,7 +1280,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/dictionary/batch", async (req, res) => {
     try {
       const offset = parseInt(req.query.offset as string) || 0;
-      const limit = Math.min(parseInt(req.query.limit as string) || 500, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 500);
       const results = await storage.getDictionaryBatch(offset, limit);
       res.json(results);
     } catch (error) {

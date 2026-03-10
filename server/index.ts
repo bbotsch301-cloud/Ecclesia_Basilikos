@@ -24,17 +24,17 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: isDevelopment 
+      scriptSrc: isDevelopment
         ? ["'self'", "'unsafe-inline'", "localhost:*", "127.0.0.1:*"]
-        : ["'self'"],
+        : ["'self'", "https://plausible.io", "https://cdnjs.cloudflare.com"],
       styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdnjs.cloudflare.com"],
       fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"],
       imgSrc: ["'self'", "data:", "blob:", "https:"],
       mediaSrc: ["'self'", "https:"],
       frameSrc: ["'self'", "https://www.youtube.com", "https://www.youtube-nocookie.com", "https://player.vimeo.com"],
-      connectSrc: isDevelopment 
+      connectSrc: isDevelopment
         ? ["'self'", "ws:", "wss:", "localhost:*", "127.0.0.1:*"]
-        : ["'self'"],
+        : ["'self'", "https://plausible.io"],
       objectSrc: ["'none'"],
       baseUri: ["'self'"],
       formAction: ["'self'"],

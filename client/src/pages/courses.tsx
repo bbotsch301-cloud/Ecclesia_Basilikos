@@ -176,7 +176,7 @@ export default function Courses() {
       return response.json();
     },
     onSuccess: (_data, courseId) => {
-      window.location.href = `/course/${courseId}/lesson/1`;
+      navigate(`/course/${courseId}`);
     },
     onError: (error: any) => {
       toast({
@@ -195,7 +195,7 @@ export default function Courses() {
 
     const enrollment = getEnrollment(courseId);
     if (enrollment) {
-      window.location.href = `/course/${courseId}/lesson/1`;
+      navigate(`/course/${courseId}`);
       return;
     }
 

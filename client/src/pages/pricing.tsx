@@ -103,7 +103,7 @@ export default function Pricing() {
                   </li>
                 ))}
               </ul>
-              {isAuthenticated ? (
+              {isAuthenticated && !isPremium ? (
                 <Button variant="outline" className="w-full font-cinzel" disabled>
                   Current Plan
                 </Button>

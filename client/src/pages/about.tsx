@@ -25,8 +25,8 @@ export default function About() {
               />
             </div>
             <div>
-              <h2 className="font-playfair text-3xl font-bold text-covenant-blue mb-6">Christ as the Grantor</h2>
-              <p className="text-lg text-covenant-gray leading-relaxed mb-6">
+              <h2 className="font-playfair text-3xl font-bold text-royal-navy mb-6">Christ as the Grantor</h2>
+              <p className="text-lg text-gray-600 leading-relaxed mb-6">
                 New Covenant Trust is established by Jesus Christ Himself as the Grantor, who has transferred all authority and blessing to His Body. Unlike Babylon's system of contracts and merchandise, this trust operates under divine law and spiritual authority.
               </p>
               <div className="bg-covenant-light p-6 rounded-lg">
@@ -47,18 +47,18 @@ export default function About() {
               />
             </div>
             <div className="lg:order-1">
-              <h2 className="font-playfair text-3xl font-bold text-covenant-blue mb-6">Contrast with Babylon's System</h2>
-              <p className="text-lg text-covenant-gray leading-relaxed mb-6">
+              <h2 className="font-playfair text-3xl font-bold text-royal-navy mb-6">Contrast with Babylon's System</h2>
+              <p className="text-lg text-gray-600 leading-relaxed mb-6">
                 Babylon operates through contracts, legal fictions, and the creation of artificial persons to bind mankind in debt slavery. New Covenant Trust transcends these earthly systems, operating under the perfect law of liberty found in Christ.
               </p>
               <div className="space-y-4">
                 <div className="flex items-start">
                   <X className="text-red-500 mt-1 mr-3 flex-shrink-0" size={20} />
-                  <span className="text-covenant-gray">Babylon: Legal fiction, artificial persons, debt slavery</span>
+                  <span className="text-gray-600">Babylon: Legal fiction, artificial persons, debt slavery</span>
                 </div>
                 <div className="flex items-start">
                   <Check className="text-green-500 mt-1 mr-3 flex-shrink-0" size={20} />
-                  <span className="text-covenant-gray">Covenant: Living souls, divine inheritance, spiritual freedom</span>
+                  <span className="text-gray-600">Covenant: Living souls, divine inheritance, spiritual freedom</span>
                 </div>
               </div>
             </div>
@@ -160,10 +160,10 @@ export default function About() {
           {/* Trust Structure Introduction */}
           <div className="mb-20">
             <div className="text-center mb-12">
-              <h2 className="font-playfair text-3xl font-bold text-covenant-blue mb-4">
+              <h2 className="font-playfair text-3xl font-bold text-royal-navy mb-4">
                 Understanding Trust Structure
               </h2>
-              <p className="text-lg text-covenant-gray max-w-3xl mx-auto">
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 A basic introduction to trust roles and how the New Covenant Trust operates under divine law
               </p>
             </div>
@@ -173,16 +173,16 @@ export default function About() {
               <div className="bg-white p-6 rounded-xl shadow-lg border border-covenant-light">
                 <div className="text-center mb-4">
                   <div className="w-16 h-16 bg-covenant-gold rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-2xl font-bold text-covenant-blue">G</span>
+                    <span className="text-2xl font-bold text-royal-navy">G</span>
                   </div>
-                  <h3 className="font-playfair text-xl font-bold text-covenant-blue">The Grantor</h3>
-                  <p className="text-sm text-covenant-gray">Creator & Owner of the Trust</p>
+                  <h3 className="font-playfair text-xl font-bold text-royal-navy">The Grantor</h3>
+                  <p className="text-sm text-gray-600">Creator & Owner of the Trust</p>
                 </div>
                 <div className="space-y-3">
-                  <p className="text-sm text-covenant-gray">
+                  <p className="text-sm text-gray-600">
                     <strong>In earthly trusts:</strong> The person who creates the trust and transfers assets into it.
                   </p>
-                  <p className="text-sm text-covenant-blue font-semibold">
+                  <p className="text-sm text-royal-navy font-semibold">
                     <strong>In New Covenant Trust:</strong> Jesus Christ, who transferred all authority and blessing to His Body.
                   </p>
                   <blockquote className="text-xs italic bg-covenant-light p-3 rounded">
@@ -195,16 +195,16 @@ export default function About() {
               <div className="bg-white p-6 rounded-xl shadow-lg border border-covenant-light">
                 <div className="text-center mb-4">
                   <div className="w-16 h-16 bg-covenant-gold rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-2xl font-bold text-covenant-blue">T</span>
+                    <span className="text-2xl font-bold text-royal-navy">T</span>
                   </div>
-                  <h3 className="font-playfair text-xl font-bold text-covenant-blue">The Trustee</h3>
-                  <p className="text-sm text-covenant-gray">Manager & Administrator</p>
+                  <h3 className="font-playfair text-xl font-bold text-royal-navy">The Trustee</h3>
+                  <p className="text-sm text-gray-600">Manager & Administrator</p>
                 </div>
                 <div className="space-y-3">
-                  <p className="text-sm text-covenant-gray">
+                  <p className="text-sm text-gray-600">
                     <strong>In earthly trusts:</strong> The person who manages the trust assets according to the trust terms.
                   </p>
-                  <p className="text-sm text-covenant-blue font-semibold">
+                  <p className="text-sm text-royal-navy font-semibold">
                     <strong>In New Covenant Trust:</strong> Believers who operate in Kingdom authority as royal priests.
                   </p>
                   <blockquote className="text-xs italic bg-covenant-light p-3 rounded">
@@ -217,16 +217,16 @@ export default function About() {
               <div className="bg-white p-6 rounded-xl shadow-lg border border-covenant-light">
                 <div className="text-center mb-4">
                   <div className="w-16 h-16 bg-covenant-gold rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-2xl font-bold text-covenant-blue">B</span>
+                    <span className="text-2xl font-bold text-royal-navy">B</span>
                   </div>
-                  <h3 className="font-playfair text-xl font-bold text-covenant-blue">The Beneficiary</h3>
-                  <p className="text-sm text-covenant-gray">Recipient of Trust Benefits</p>
+                  <h3 className="font-playfair text-xl font-bold text-royal-navy">The Beneficiary</h3>
+                  <p className="text-sm text-gray-600">Recipient of Trust Benefits</p>
                 </div>
                 <div className="space-y-3">
-                  <p className="text-sm text-covenant-gray">
+                  <p className="text-sm text-gray-600">
                     <strong>In earthly trusts:</strong> The person who receives benefits from the trust assets.
                   </p>
-                  <p className="text-sm text-covenant-blue font-semibold">
+                  <p className="text-sm text-royal-navy font-semibold">
                     <strong>In New Covenant Trust:</strong> All believers as joint-heirs with Christ in His inheritance.
                   </p>
                   <blockquote className="text-xs italic bg-covenant-light p-3 rounded">
@@ -302,10 +302,10 @@ export default function About() {
           {/* Core Kingdom Principles */}
           <div className="mb-20">
             <div className="text-center mb-12">
-              <h2 className="font-playfair text-3xl font-bold text-covenant-blue mb-4">
+              <h2 className="font-playfair text-3xl font-bold text-royal-navy mb-4">
                 Core Kingdom Principles
               </h2>
-              <p className="text-lg text-covenant-gray max-w-3xl mx-auto">
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 Learn the fundamental truths of your identity in Christ and your inheritance as a co-heir with Christ
               </p>
             </div>
@@ -313,8 +313,8 @@ export default function About() {
             <div className="grid md:grid-cols-3 gap-8 mb-12">
               {/* The New Covenant */}
               <div className="bg-white p-6 rounded-xl shadow-lg border border-covenant-light">
-                <h3 className="font-playfair text-xl font-bold text-covenant-blue mb-4">The New Covenant</h3>
-                <p className="text-sm text-covenant-gray mb-4">
+                <h3 className="font-playfair text-xl font-bold text-royal-navy mb-4">The New Covenant</h3>
+                <p className="text-sm text-gray-600 mb-4">
                   Understanding Christ's testament as both covenant and will
                 </p>
                 <div className="bg-covenant-light p-4 rounded-lg mb-4">
@@ -323,15 +323,15 @@ export default function About() {
                   </blockquote>
                   <cite className="text-covenant-gold font-semibold text-xs">Hebrews 9:16 (KJV)</cite>
                 </div>
-                <p className="text-sm text-covenant-gray">
+                <p className="text-sm text-gray-600">
                   Jesus' death ratified the New Covenant, making us beneficiaries of His will and co-heirs to His Kingdom.
                 </p>
               </div>
 
               {/* Royal Identity */}
               <div className="bg-white p-6 rounded-xl shadow-lg border border-covenant-light">
-                <h3 className="font-playfair text-xl font-bold text-covenant-blue mb-4">Royal Identity</h3>
-                <p className="text-sm text-covenant-gray mb-4">
+                <h3 className="font-playfair text-xl font-bold text-royal-navy mb-4">Royal Identity</h3>
+                <p className="text-sm text-gray-600 mb-4">
                   Your divine inheritance and authority in Christ
                 </p>
                 <div className="bg-covenant-light p-4 rounded-lg mb-4">
@@ -340,15 +340,15 @@ export default function About() {
                   </blockquote>
                   <cite className="text-covenant-gold font-semibold text-xs">Romans 8:17 (KJV)</cite>
                 </div>
-                <p className="text-sm text-covenant-gray">
+                <p className="text-sm text-gray-600">
                   In Christ, you are sealed with the Holy Spirit as the down payment of your inheritance and divine authority.
                 </p>
               </div>
 
               {/* Kingdom Freedom */}
               <div className="bg-white p-6 rounded-xl shadow-lg border border-covenant-light">
-                <h3 className="font-playfair text-xl font-bold text-covenant-blue mb-4">Kingdom Freedom</h3>
-                <p className="text-sm text-covenant-gray mb-4">
+                <h3 className="font-playfair text-xl font-bold text-royal-navy mb-4">Kingdom Freedom</h3>
+                <p className="text-sm text-gray-600 mb-4">
                   Liberation from Babylonian systems and worldly bondage
                 </p>
                 <div className="bg-covenant-light p-4 rounded-lg mb-4">
@@ -357,7 +357,7 @@ export default function About() {
                   </blockquote>
                   <cite className="text-covenant-gold font-semibold text-xs">John 8:36 (KJV)</cite>
                 </div>
-                <p className="text-sm text-covenant-gray">
+                <p className="text-sm text-gray-600">
                   Christ has freed you from the counterfeit kingdom's merchandise system where souls are traded.
                 </p>
               </div>
@@ -367,10 +367,10 @@ export default function About() {
           {/* The New Covenant Trust Structure */}
           <div className="mb-20">
             <div className="text-center mb-12">
-              <h2 className="font-playfair text-3xl font-bold text-covenant-blue mb-4">
+              <h2 className="font-playfair text-3xl font-bold text-royal-navy mb-4">
                 The New Covenant Trust Structure
               </h2>
-              <p className="text-lg text-covenant-gray max-w-3xl mx-auto">
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 Understanding your role as trustee in God's divine legacy trust
               </p>
             </div>
@@ -382,7 +382,7 @@ export default function About() {
                 {/* Grantor */}
                 <div className="bg-white/10 p-6 rounded-lg text-center">
                   <div className="w-12 h-12 bg-covenant-gold rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-lg font-bold text-covenant-blue">G</span>
+                    <span className="text-lg font-bold text-royal-navy">G</span>
                   </div>
                   <h4 className="font-semibold text-lg mb-2 text-covenant-gold">Grantor: The Creator</h4>
                   <p className="text-sm">God, the original grantor of the divine trust</p>
@@ -391,7 +391,7 @@ export default function About() {
                 {/* Trustee of Trustees */}
                 <div className="bg-white/10 p-6 rounded-lg text-center">
                   <div className="w-12 h-12 bg-covenant-gold rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-lg font-bold text-covenant-blue">T</span>
+                    <span className="text-lg font-bold text-royal-navy">T</span>
                   </div>
                   <h4 className="font-semibold text-lg mb-2 text-covenant-gold">Trustee of Trustees: Christ</h4>
                   <p className="text-sm">Jesus who reconciled the breach and restored authority</p>
@@ -400,7 +400,7 @@ export default function About() {
                 {/* Beneficiary */}
                 <div className="bg-white/10 p-6 rounded-lg text-center">
                   <div className="w-12 h-12 bg-covenant-gold rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-lg font-bold text-covenant-blue">B</span>
+                    <span className="text-lg font-bold text-royal-navy">B</span>
                   </div>
                   <h4 className="font-semibold text-lg mb-2 text-covenant-gold">Beneficiary: You</h4>
                   <p className="text-sm">Co-heir with Christ, trustee of the restored estate</p>
@@ -409,7 +409,7 @@ export default function About() {
                 {/* Witness */}
                 <div className="bg-white/10 p-6 rounded-lg text-center">
                   <div className="w-12 h-12 bg-covenant-gold rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-lg font-bold text-covenant-blue">W</span>
+                    <span className="text-lg font-bold text-royal-navy">W</span>
                   </div>
                   <h4 className="font-semibold text-lg mb-2 text-covenant-gold">Witness: Holy Spirit</h4>
                   <p className="text-sm">The earnest and seal of your inheritance</p>
@@ -426,13 +426,13 @@ export default function About() {
 
             {/* Your Divine Role */}
             <div className="bg-white p-8 rounded-xl shadow-lg border border-covenant-light">
-              <h3 className="font-playfair text-2xl font-bold text-covenant-blue mb-6 text-center">Your Divine Role</h3>
+              <h3 className="font-playfair text-2xl font-bold text-royal-navy mb-6 text-center">Your Divine Role</h3>
               <div className="max-w-4xl mx-auto">
-                <p className="text-lg text-covenant-gray leading-relaxed mb-6">
+                <p className="text-lg text-gray-600 leading-relaxed mb-6">
                   As a trustee in the New Covenant Trust, you are called to be a living sacrifice, holy and acceptable to God. Your body becomes a temple of the Holy Spirit, stewarding the Kingdom's resources with divine authority.
                 </p>
-                <p className="text-lg text-covenant-gray leading-relaxed">
-                  This trust operates under <span className="font-semibold text-covenant-blue">Lex Divina</span> (divine law), transcending earthly jurisdictions and empowering you to walk as an ambassador of Heaven with full access to Kingdom resources.
+                <p className="text-lg text-gray-600 leading-relaxed">
+                  This trust operates under <span className="font-semibold text-royal-navy">Lex Divina</span> (divine law), transcending earthly jurisdictions and empowering you to walk as an ambassador of Heaven with full access to Kingdom resources.
                 </p>
               </div>
             </div>

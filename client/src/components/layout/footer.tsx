@@ -72,6 +72,27 @@ export default function Footer() {
           </div>
 
           <div>
+            <h4 className="font-playfair font-semibold text-lg mb-4">Community</h4>
+            <ul className="space-y-2">
+              <li>
+                <Link href="/forum" className="text-gray-300 hover:text-royal-gold transition-colors">
+                  Forum
+                </Link>
+              </li>
+              <li>
+                <Link href="/courses" className="text-gray-300 hover:text-royal-gold transition-colors">
+                  Courses
+                </Link>
+              </li>
+              <li>
+                <Link href="/pricing" className="text-gray-300 hover:text-royal-gold transition-colors">
+                  Membership
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div>
             <h4 className="font-playfair font-semibold text-lg mb-4">Stay Connected</h4>
             <p className="text-gray-300 mb-4">Get updates on new teachings and resources</p>
             <form onSubmit={handleNewsletterSubmit} className="flex" aria-label="Newsletter subscription">
