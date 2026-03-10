@@ -580,7 +580,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/forum/threads", async (req, res) => {
     try {
       const threads = await storage.getRecentForumThreads();
-      res.json(threads);
+      const threadIds = threads.map(t => t.id);
+      const likeCounts = await storage.getThreadLikeCounts(threadIds);
+      const user = req.user as User | undefined;
+      let userLikedSet = new Set<string>();
+      if (user) {
+        userLikedSet = await storage.getUserLikedThreadIds(user.id, threadIds);
+      }
+      res.json(threads.map(t => ({
+        ...t,
+        likeCount: likeCounts[t.id] || 0,
+        userLiked: userLikedSet.has(t.id),
+      })));
     } catch (error) {
       logger.error({ err: error }, "Error fetching recent forum threads:");
       res.status(500).json({ error: "Failed to fetch threads" });
@@ -606,7 +617,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { categoryId } = req.params;
       const threads = await storage.getForumThreadsByCategory(categoryId);
-      res.json(threads);
+      const threadIds = threads.map(t => t.id);
+      const likeCounts = await storage.getThreadLikeCounts(threadIds);
+      const user = req.user as User | undefined;
+      let userLikedSet = new Set<string>();
+      if (user) {
+        userLikedSet = await storage.getUserLikedThreadIds(user.id, threadIds);
+      }
+      res.json(threads.map(t => ({
+        ...t,
+        likeCount: likeCounts[t.id] || 0,
+        userLiked: userLikedSet.has(t.id),
+      })));
     } catch (error) {
       logger.error({ err: error }, "Error fetching forum threads:");
       res.status(500).json({ error: "Failed to fetch threads" });
@@ -641,7 +663,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/forum/threads/:threadId", async (req, res) => {
     try {
       const { threadId } = req.params;
-      
+
       // Get thread details
       const thread = await storage.getForumThreadById(threadId);
       if (!thread) {
@@ -650,11 +672,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Get replies
       const replies = await storage.getForumRepliesByThread(threadId);
-      
+
       // Increment view count
       await storage.incrementThreadViews(threadId);
 
-      res.json({ thread, replies });
+      // Get like counts
+      const replyIds = replies.map(r => r.id);
+      const [threadLikeCounts, replyLikeCounts] = await Promise.all([
+        storage.getThreadLikeCounts([threadId]),
+        storage.getReplyLikeCounts(replyIds),
+      ]);
+
+      // Get user's likes if authenticated
+      const user = req.user as User | undefined;
+      let userLikedThread = false;
+      let userLikedReplyIds = new Set<string>();
+      if (user) {
+        const [likedThreads, likedReplies] = await Promise.all([
+          storage.getUserLikedThreadIds(user.id, [threadId]),
+          storage.getUserLikedReplyIds(user.id, replyIds),
+        ]);
+        userLikedThread = likedThreads.has(threadId);
+        userLikedReplyIds = likedReplies;
+      }
+
+      res.json({
+        thread: { ...thread, likeCount: threadLikeCounts[threadId] || 0, userLiked: userLikedThread },
+        replies: replies.map(r => ({
+          ...r,
+          likeCount: replyLikeCounts[r.id] || 0,
+          userLiked: userLikedReplyIds.has(r.id),
+        })),
+      });
     } catch (error) {
       logger.error({ err: error }, "Error fetching forum thread:");
       res.status(500).json({ error: "Failed to fetch thread" });
@@ -799,6 +848,65 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       logger.error({ err: error }, "Error deleting reply:");
       res.status(500).json({ error: "Failed to delete reply" });
+    }
+  });
+
+  // Forum likes
+  app.post("/api/forum/threads/:threadId/like", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+      await storage.likeThread(user.id, req.params.threadId);
+      res.json({ success: true });
+    } catch (error) {
+      logger.error({ err: error }, "Error liking thread:");
+      res.status(500).json({ error: "Failed to like thread" });
+    }
+  });
+
+  app.delete("/api/forum/threads/:threadId/like", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+      await storage.unlikeThread(user.id, req.params.threadId);
+      res.json({ success: true });
+    } catch (error) {
+      logger.error({ err: error }, "Error unliking thread:");
+      res.status(500).json({ error: "Failed to unlike thread" });
+    }
+  });
+
+  app.post("/api/forum/replies/:replyId/like", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+      await storage.likeReply(user.id, req.params.replyId);
+      res.json({ success: true });
+    } catch (error) {
+      logger.error({ err: error }, "Error liking reply:");
+      res.status(500).json({ error: "Failed to like reply" });
+    }
+  });
+
+  app.delete("/api/forum/replies/:replyId/like", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+      await storage.unlikeReply(user.id, req.params.replyId);
+      res.json({ success: true });
+    } catch (error) {
+      logger.error({ err: error }, "Error unliking reply:");
+      res.status(500).json({ error: "Failed to unlike reply" });
+    }
+  });
+
+  // Forum categories with thread counts
+  app.get("/api/forum/categories-with-counts", async (req, res) => {
+    try {
+      const [categories, threadCounts] = await Promise.all([
+        storage.getForumCategories(),
+        storage.getCategoryThreadCounts(),
+      ]);
+      res.json(categories.map(c => ({ ...c, threadCount: threadCounts[c.id] || 0 })));
+    } catch (error) {
+      logger.error({ err: error }, "Error fetching categories with counts:");
+      res.status(500).json({ error: "Failed to fetch categories" });
     }
   });
 

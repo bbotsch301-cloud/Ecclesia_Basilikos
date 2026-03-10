@@ -5,14 +5,17 @@ import { useAuth } from "@/hooks/useAuth";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MessageSquare, Users, Eye, Clock, Plus, Pin, Search, X, Crown } from "lucide-react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import {
+  MessageSquare, Eye, Plus, Pin, Search, X, Crown, Heart,
+  Lock, Loader2, MessageCircle, TrendingUp,
+} from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -28,6 +31,46 @@ const createThreadSchema = z.object({
 
 type CreateThreadForm = z.infer<typeof createThreadSchema>;
 
+interface CategoryWithCount extends ForumCategory {
+  threadCount: number;
+}
+
+interface ThreadWithMeta extends ForumThread {
+  author: User;
+  category: ForumCategory;
+  lastReplyUser?: User;
+  likeCount: number;
+  userLiked: boolean;
+}
+
+function timeAgo(date: string | Date | null): string {
+  if (!date) return "Unknown";
+  const now = new Date();
+  const then = new Date(date);
+  const seconds = Math.floor((now.getTime() - then.getTime()) / 1000);
+  if (seconds < 60) return "just now";
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 30) return `${days}d ago`;
+  const months = Math.floor(days / 30);
+  if (months < 12) return `${months}mo ago`;
+  return `${Math.floor(months / 12)}y ago`;
+}
+
+function getUserDisplayName(user: User): string {
+  return user.username || `${user.firstName} ${user.lastName}`.trim() || user.email;
+}
+
+function getUserInitials(user: User): string {
+  if (user.firstName && user.lastName) {
+    return `${user.firstName[0]}${user.lastName[0]}`.toUpperCase();
+  }
+  return (user.username || user.email || "?")[0].toUpperCase();
+}
+
 export default function Forum() {
   usePageTitle("Forum");
   const { user, isAuthenticated, isPremium } = useAuth();
@@ -41,9 +84,7 @@ export default function Forum() {
 
   const handleSearchChange = useCallback((value: string) => {
     setSearchInput(value);
-    if (debounceTimerRef.current) {
-      clearTimeout(debounceTimerRef.current);
-    }
+    if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
     debounceTimerRef.current = setTimeout(() => {
       setDebouncedSearch(value.trim());
     }, 300);
@@ -51,32 +92,28 @@ export default function Forum() {
 
   useEffect(() => {
     return () => {
-      if (debounceTimerRef.current) {
-        clearTimeout(debounceTimerRef.current);
-      }
+      if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
     };
   }, []);
 
-  const { data: categories = [], isLoading: categoriesLoading } = useQuery<ForumCategory[]>({
-    queryKey: ['/api/forum/categories'],
+  const { data: categories = [], isLoading: categoriesLoading } = useQuery<CategoryWithCount[]>({
+    queryKey: ["/api/forum/categories-with-counts"],
   });
 
-  // Fetch threads for selected category
-  const { data: categoryThreads = [], isLoading: categoryThreadsLoading } = useQuery<Array<ForumThread & { author: User; category: ForumCategory; lastReplyUser?: User }>>({
-    queryKey: ['/api/forum/categories', selectedCategory, 'threads'],
+  const { data: categoryThreads = [], isLoading: categoryThreadsLoading } = useQuery<ThreadWithMeta[]>({
+    queryKey: ["/api/forum/categories", selectedCategory, "threads"],
     enabled: !!selectedCategory,
   });
 
-  // Fetch all recent threads when no category is selected
-  const { data: allThreads = [], isLoading: allThreadsLoading } = useQuery<Array<ForumThread & { author: User; category: ForumCategory }>>({
-    queryKey: ['/api/forum/threads'],
+  const { data: allThreads = [], isLoading: allThreadsLoading } = useQuery<ThreadWithMeta[]>({
+    queryKey: ["/api/forum/threads"],
     enabled: !selectedCategory,
   });
 
   const isSearching = debouncedSearch.length >= 2;
 
-  const { data: searchResults = [], isLoading: searchLoading } = useQuery<Array<ForumThread & { author: User; category: ForumCategory }>>({
-    queryKey: ['/api/forum/search', debouncedSearch],
+  const { data: searchResults = [], isLoading: searchLoading } = useQuery<ThreadWithMeta[]>({
+    queryKey: ["/api/forum/search", debouncedSearch],
     queryFn: async () => {
       const res = await fetch(`/api/forum/search?q=${encodeURIComponent(debouncedSearch)}`);
       if (!res.ok) throw new Error("Search failed");
@@ -85,107 +122,146 @@ export default function Forum() {
     enabled: isSearching,
   });
 
-  const threads = isSearching ? searchResults : (selectedCategory ? categoryThreads : allThreads);
-  const threadsLoading = isSearching ? searchLoading : (selectedCategory ? categoryThreadsLoading : allThreadsLoading);
+  const threads = isSearching ? searchResults : selectedCategory ? categoryThreads : allThreads;
+  const threadsLoading = isSearching ? searchLoading : selectedCategory ? categoryThreadsLoading : allThreadsLoading;
+
+  const pinnedThreads = threads.filter((t) => t.isPinned);
+  const regularThreads = threads.filter((t) => !t.isPinned);
+
+  const totalThreadCount = categories.reduce((sum, c) => sum + c.threadCount, 0);
 
   const form = useForm<CreateThreadForm>({
     mode: "onBlur",
     resolver: zodResolver(createThreadSchema),
-    defaultValues: {
-      title: "",
-      content: "",
-      categoryId: "",
-    },
+    defaultValues: { title: "", content: "", categoryId: "" },
   });
 
   const createThreadMutation = useMutation({
     mutationFn: async (data: CreateThreadForm) => {
-      return await apiRequest('POST', '/api/forum/threads', data);
+      return await apiRequest("POST", "/api/forum/threads", data);
     },
     onSuccess: () => {
-      toast({
-        title: "Success",
-        description: "Thread created successfully!",
-      });
+      toast({ title: "Thread created", description: "Your discussion has been posted." });
       setIsCreateDialogOpen(false);
       form.reset();
-      queryClient.invalidateQueries({ queryKey: ['/api/forum/threads'] });
-      queryClient.invalidateQueries({
-        queryKey: ['/api/forum/categories', selectedCategory, 'threads'],
-      });
+      queryClient.invalidateQueries({ queryKey: ["/api/forum/threads"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/forum/categories", selectedCategory, "threads"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/forum/categories-with-counts"] });
     },
     onError: (error: any) => {
-      toast({
-        title: "Error",
-        description: error.message || "Failed to create thread",
-        variant: "destructive",
-      });
+      toast({ title: "Error", description: error.message || "Failed to create thread", variant: "destructive" });
     },
   });
 
-  const onSubmit = (data: CreateThreadForm) => {
-    createThreadMutation.mutate(data);
-  };
-
-  const formatDate = (date: string | Date | null) => {
-    if (!date) return 'Unknown';
-    return new Date(date).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  };
-
-  const getUserDisplayName = (user: User) => {
-    return user.username || `${user.firstName} ${user.lastName}` || user.email;
-  };
+  const likeMutation = useMutation({
+    mutationFn: async ({ threadId, liked }: { threadId: string; liked: boolean }) => {
+      if (liked) {
+        return await apiRequest("DELETE", `/api/forum/threads/${threadId}/like`);
+      }
+      return await apiRequest("POST", `/api/forum/threads/${threadId}/like`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/forum/threads"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/forum/categories", selectedCategory, "threads"] });
+    },
+  });
 
   if (categoriesLoading) {
     return (
-      <div className="pt-16 container mx-auto px-4 py-8">
-        <div className="flex justify-center items-center min-h-64">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading forum...</p>
-          </div>
+      <div className="pt-16 min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin text-royal-gold mx-auto mb-3" />
+          <p className="text-gray-500">Loading forum...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="pt-16 container mx-auto px-4 py-8">
-      {/* Header */}
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h1 className="text-4xl font-bold text-gray-900 font-playfair mb-2">
-              Community Forum
-            </h1>
-            <p className="text-lg text-gray-600">
-              Connect with fellow believers and discuss covenant truths
-            </p>
+    <div className="pt-16 min-h-screen bg-gray-50">
+      {/* Hero */}
+      <div className="bg-gradient-to-br from-royal-navy via-royal-navy/95 to-royal-burgundy/80">
+        <div className="container mx-auto px-4 py-10 md:py-14">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+            <div>
+              <h1 className="font-cinzel-decorative text-3xl md:text-4xl font-bold text-white mb-2">
+                Community Forum
+              </h1>
+              <p className="text-gray-300 text-lg max-w-xl">
+                Connect with fellow believers. Ask questions, share insights, and walk the covenant path together.
+              </p>
+            </div>
+            <div className="flex items-center gap-6 text-gray-300">
+              <div className="flex items-center gap-2">
+                <MessageSquare className="h-5 w-5 text-royal-gold" />
+                <div>
+                  <p className="text-white font-semibold">{totalThreadCount}</p>
+                  <p className="text-xs text-gray-400">Threads</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <TrendingUp className="h-5 w-5 text-royal-gold" />
+                <div>
+                  <p className="text-white font-semibold">{categories.length}</p>
+                  <p className="text-xs text-gray-400">Categories</p>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-          {isAuthenticated && isPremium && (
+        </div>
+      </div>
+
+      <div className="container mx-auto px-4 py-6">
+        {/* Premium upgrade banner */}
+        {isAuthenticated && !isPremium && (
+          <div className="mb-6">
+            <UpgradePrompt
+              title="Join the Discussion"
+              description="Upgrade to Premium to create threads, reply to discussions, and engage with the community."
+            />
+          </div>
+        )}
+
+        {/* Toolbar: Search + New Thread */}
+        <div className="flex flex-col sm:flex-row gap-3 mb-6">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Input
+              placeholder="Search threads..."
+              value={searchInput}
+              onChange={(e) => handleSearchChange(e.target.value)}
+              className="pl-10 pr-10 bg-white"
+            />
+            {searchInput && (
+              <button
+                onClick={() => {
+                  setSearchInput("");
+                  setDebouncedSearch("");
+                  if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+                }}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+          {isAuthenticated && isPremium ? (
             <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
               <DialogTrigger asChild>
-                <Button className="bg-amber-600 hover:bg-amber-700">
+                <Button className="bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-semibold shrink-0">
                   <Plus className="h-4 w-4 mr-2" />
                   New Thread
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[525px]">
                 <DialogHeader>
-                  <DialogTitle>Create New Thread</DialogTitle>
+                  <DialogTitle className="font-cinzel">Start a Discussion</DialogTitle>
                   <DialogDescription>
-                    Start a new discussion in the community forum.
+                    Share your thoughts with the community.
                   </DialogDescription>
                 </DialogHeader>
                 <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                  <form onSubmit={form.handleSubmit((data) => createThreadMutation.mutate(data))} className="space-y-4">
                     <FormField
                       control={form.control}
                       name="categoryId"
@@ -201,7 +277,10 @@ export default function Forum() {
                             <SelectContent>
                               {categories.map((cat) => (
                                 <SelectItem key={cat.id} value={cat.id}>
-                                  {cat.name}
+                                  <span className="flex items-center gap-2">
+                                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: cat.color || "#3B82F6" }} />
+                                    {cat.name}
+                                  </span>
                                 </SelectItem>
                               ))}
                             </SelectContent>
@@ -217,7 +296,7 @@ export default function Forum() {
                         <FormItem>
                           <FormLabel>Title</FormLabel>
                           <FormControl>
-                            <Input placeholder="Thread title..." {...field} />
+                            <Input placeholder="What's on your mind?" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -230,11 +309,7 @@ export default function Forum() {
                         <FormItem>
                           <FormLabel>Content</FormLabel>
                           <FormControl>
-                            <Textarea
-                              placeholder="Share your thoughts..."
-                              rows={5}
-                              {...field}
-                            />
+                            <Textarea placeholder="Share your thoughts..." rows={5} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -242,198 +317,205 @@ export default function Forum() {
                     />
                     <Button
                       type="submit"
-                      className="w-full bg-amber-600 hover:bg-amber-700"
+                      className="w-full bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-semibold"
                       disabled={createThreadMutation.isPending}
                     >
-                      {createThreadMutation.isPending ? "Creating..." : "Create Thread"}
+                      {createThreadMutation.isPending ? "Posting..." : "Post Thread"}
                     </Button>
                   </form>
                 </Form>
               </DialogContent>
             </Dialog>
-          )}
-          {isAuthenticated && !isPremium && (
+          ) : isAuthenticated ? (
             <Link href="/pricing">
-              <Button variant="outline" className="border-royal-gold/30 text-royal-gold hover:bg-royal-gold/5">
+              <Button variant="outline" className="border-royal-gold/30 text-royal-gold hover:bg-royal-gold/5 shrink-0">
                 <Crown className="h-4 w-4 mr-2" />
                 Upgrade to Post
               </Button>
             </Link>
+          ) : (
+            <Link href="/login?redirect=/forum">
+              <Button variant="outline" className="shrink-0">Sign in to Post</Button>
+            </Link>
           )}
-          </div>
         </div>
-        {/* Premium upgrade banner */}
-        {isAuthenticated && !isPremium && (
-          <div className="mb-4">
-            <UpgradePrompt
-              title="Join the Discussion"
-              description="Upgrade to Premium to create threads, reply to discussions, and engage with the community."
-            />
+
+        {/* Category Pills */}
+        <div className="flex flex-wrap gap-2 mb-6">
+          <button
+            onClick={() => setSelectedCategory(null)}
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+              selectedCategory === null
+                ? "bg-royal-navy text-white shadow-md"
+                : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
+            }`}
+          >
+            All Threads
+            <span className="ml-1.5 text-xs opacity-70">{totalThreadCount}</span>
+          </button>
+          {categories.map((cat) => (
+            <button
+              key={cat.id}
+              onClick={() => setSelectedCategory(cat.id)}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1.5 ${
+                selectedCategory === cat.id
+                  ? "text-white shadow-md"
+                  : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
+              }`}
+              style={selectedCategory === cat.id ? { backgroundColor: cat.color || "#3B82F6" } : {}}
+            >
+              <span
+                className="w-2 h-2 rounded-full shrink-0"
+                style={{
+                  backgroundColor: selectedCategory === cat.id ? "rgba(255,255,255,0.7)" : (cat.color || "#3B82F6"),
+                }}
+              />
+              {cat.name}
+              <span className="text-xs opacity-70">{cat.threadCount}</span>
+            </button>
+          ))}
+        </div>
+
+        {isSearching && (
+          <div className="mb-4 text-sm text-gray-500">
+            Searching for "{debouncedSearch}"...
           </div>
         )}
 
-        {/* Search Bar */}
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input
-            placeholder="Search forum threads..."
-            value={searchInput}
-            onChange={(e) => handleSearchChange(e.target.value)}
-            className="pl-10 pr-10"
-          />
-          {searchInput && (
-            <button
-              onClick={() => {
-                setSearchInput("");
-                setDebouncedSearch("");
-                if (debounceTimerRef.current) {
-                  clearTimeout(debounceTimerRef.current);
-                }
-              }}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-            >
-              <X className="h-4 w-4" />
-            </button>
+        {/* Thread List */}
+        {threadsLoading ? (
+          <div className="flex justify-center py-16">
+            <div className="text-center">
+              <Loader2 className="h-7 w-7 animate-spin text-royal-gold mx-auto mb-3" />
+              <p className="text-gray-500 text-sm">Loading threads...</p>
+            </div>
+          </div>
+        ) : threads.length === 0 ? (
+          <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
+            <MessageSquare className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-gray-900 mb-1">
+              {isSearching ? "No results found" : "No discussions yet"}
+            </h3>
+            <p className="text-gray-500 mb-4 text-sm">
+              {isSearching
+                ? `Nothing matching "${debouncedSearch}".`
+                : `Be the first to start a conversation${selectedCategory ? " in this category" : ""}.`}
+            </p>
+            {!isSearching && isAuthenticated && isPremium && (
+              <Button
+                onClick={() => setIsCreateDialogOpen(true)}
+                className="bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-semibold"
+              >
+                Start First Thread
+              </Button>
+            )}
+          </div>
+        ) : (
+          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden divide-y divide-gray-100">
+            {/* Pinned threads */}
+            {pinnedThreads.length > 0 && (
+              <>
+                {pinnedThreads.map((thread) => (
+                  <ThreadRow key={thread.id} thread={thread} isPinned onLike={likeMutation.mutate} isAuthenticated={isAuthenticated} />
+                ))}
+                {regularThreads.length > 0 && (
+                  <div className="bg-gray-50 px-5 py-1.5">
+                    <span className="text-xs font-medium text-gray-400 uppercase tracking-wide">Recent Threads</span>
+                  </div>
+                )}
+              </>
+            )}
+            {regularThreads.map((thread) => (
+              <ThreadRow key={thread.id} thread={thread} onLike={likeMutation.mutate} isAuthenticated={isAuthenticated} />
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function ThreadRow({
+  thread,
+  isPinned,
+  onLike,
+  isAuthenticated,
+}: {
+  thread: ThreadWithMeta;
+  isPinned?: boolean;
+  onLike: (args: { threadId: string; liked: boolean }) => void;
+  isAuthenticated: boolean;
+}) {
+  return (
+    <div
+      className={`flex items-start gap-3 px-4 md:px-5 py-4 hover:bg-gray-50/70 transition-colors ${
+        isPinned ? "bg-royal-gold/[0.03]" : ""
+      }`}
+    >
+      {/* Avatar */}
+      <Link href={`/forum/thread/${thread.id}`} className="shrink-0 hidden sm:block">
+        <Avatar className="h-10 w-10">
+          <AvatarFallback className="bg-royal-navy/10 text-royal-navy font-semibold text-sm">
+            {getUserInitials(thread.author)}
+          </AvatarFallback>
+        </Avatar>
+      </Link>
+
+      {/* Content */}
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2 mb-0.5 flex-wrap">
+          {isPinned && <Pin className="h-3.5 w-3.5 text-royal-gold shrink-0" />}
+          <Badge
+            className="text-white text-[10px] px-1.5 py-0 leading-4 shrink-0"
+            style={{ backgroundColor: thread.category.color || "#3B82F6" }}
+          >
+            {thread.category.name}
+          </Badge>
+          {thread.isLocked && (
+            <Lock className="h-3 w-3 text-gray-400 shrink-0" />
           )}
         </div>
+        <Link href={`/forum/thread/${thread.id}`}>
+          <h3 className="text-[15px] font-semibold text-gray-900 hover:text-royal-gold transition-colors leading-snug truncate">
+            {thread.title}
+          </h3>
+        </Link>
+        <p className="text-gray-500 text-xs mt-0.5 truncate">
+          <span className="font-medium text-gray-600">{getUserDisplayName(thread.author)}</span>
+          <span className="mx-1.5 text-gray-300">&middot;</span>
+          {timeAgo(thread.createdAt)}
+          {thread.lastReplyAt && (thread.replyCount ?? 0) > 0 && (
+            <>
+              <span className="mx-1.5 text-gray-300">&middot;</span>
+              <span>last reply {timeAgo(thread.lastReplyAt)}</span>
+            </>
+          )}
+        </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        {/* Categories Sidebar */}
-        <div className="lg:col-span-1">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Categories</CardTitle>
-            </CardHeader>
-            <CardContent className="p-0">
-              <div className="space-y-1">
-                <button
-                  onClick={() => setSelectedCategory(null)}
-                  className={`w-full text-left px-4 py-3 transition-colors hover:bg-gray-50 ${
-                    selectedCategory === null
-                      ? 'bg-amber-50 border-l-4 border-amber-600'
-                      : ''
-                  }`}
-                >
-                  <div className="font-medium text-gray-900">All Categories</div>
-                  <div className="text-sm text-gray-500">View all recent threads</div>
-                </button>
-                {categories.map((category: ForumCategory) => (
-                  <button
-                    key={category.id}
-                    onClick={() => setSelectedCategory(category.id)}
-                    className={`w-full text-left px-4 py-3 transition-colors hover:bg-gray-50 ${
-                      selectedCategory === category.id
-                        ? 'bg-amber-50 border-l-4 border-amber-600'
-                        : ''
-                    }`}
-                  >
-                    <div className="flex items-center gap-2">
-                      <div
-                        className="w-3 h-3 rounded-full"
-                        style={{ backgroundColor: category.color || '#3B82F6' }}
-                      />
-                      <span className="font-medium text-gray-900">{category.name}</span>
-                    </div>
-                    {category.description && (
-                      <div className="text-sm text-gray-500 mt-1">
-                        {category.description}
-                      </div>
-                    )}
-                  </button>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+      {/* Stats */}
+      <div className="flex items-center gap-3 shrink-0 text-xs text-gray-400">
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            if (!isAuthenticated) return;
+            onLike({ threadId: thread.id, liked: thread.userLiked });
+          }}
+          className={`flex items-center gap-1 transition-colors ${
+            isAuthenticated ? "hover:text-red-500 cursor-pointer" : "cursor-default"
+          } ${thread.userLiked ? "text-red-500" : ""}`}
+          title={isAuthenticated ? (thread.userLiked ? "Unlike" : "Like") : "Sign in to like"}
+        >
+          <Heart className={`h-3.5 w-3.5 ${thread.userLiked ? "fill-current" : ""}`} />
+          {thread.likeCount > 0 && <span>{thread.likeCount}</span>}
+        </button>
+        <div className="flex items-center gap-1" title={`${thread.replyCount} replies`}>
+          <MessageCircle className="h-3.5 w-3.5" />
+          <span>{thread.replyCount}</span>
         </div>
-
-        {/* Threads List */}
-        <div className="lg:col-span-3">
-          {threadsLoading ? (
-            <div className="flex justify-center items-center min-h-64">
-              <div className="text-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-600 mx-auto mb-4"></div>
-                <p className="text-gray-600">Loading threads...</p>
-              </div>
-            </div>
-          ) : threads.length === 0 ? (
-            <Card>
-              <CardContent className="py-12 text-center">
-                <MessageSquare className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  {isSearching ? "No results found" : "No discussions yet"}
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  {isSearching
-                    ? `No threads matching "${debouncedSearch}".`
-                    : `Be the first to start a conversation${selectedCategory ? ' in this category' : ''}.`}
-                </p>
-                {!isSearching && isAuthenticated && (
-                  <Button
-                    onClick={() => setIsCreateDialogOpen(true)}
-                    className="bg-amber-600 hover:bg-amber-700"
-                  >
-                    Create First Thread
-                  </Button>
-                )}
-              </CardContent>
-            </Card>
-          ) : (
-            <div className="space-y-4">
-              {threads.map((thread: any) => (
-                <Card key={thread.id} className="hover:shadow-md transition-shadow">
-                  <CardContent className="p-6">
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          {thread.isPinned && (
-                            <Pin className="h-4 w-4 text-amber-600" />
-                          )}
-                          <Badge
-                            style={{ backgroundColor: thread.category.color || '#3B82F6' }}
-                            className="text-white text-xs"
-                          >
-                            {thread.category.name}
-                          </Badge>
-                          {thread.isLocked && (
-                            <Badge variant="secondary" className="text-xs">
-                              Locked
-                            </Badge>
-                          )}
-                        </div>
-                        <Link href={`/forum/thread/${thread.id}`}>
-                          <h3 className="text-lg font-semibold text-gray-900 hover:text-amber-600 transition-colors mb-2">
-                            {thread.title}
-                          </h3>
-                        </Link>
-                        <p className="text-gray-600 text-sm mb-3 line-clamp-2">
-                          {thread.content.substring(0, 150)}{thread.content.length > 150 ? '...' : ''}
-                        </p>
-                        <div className="flex items-center gap-4 text-sm text-gray-500">
-                          <div className="flex items-center gap-1">
-                            <Users className="h-4 w-4" />
-                            <span>By {getUserDisplayName(thread.author)}</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Clock className="h-4 w-4" />
-                            <span>{formatDate(thread.createdAt)}</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Eye className="h-4 w-4" />
-                            <span>{thread.viewCount} views</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <MessageSquare className="h-4 w-4" />
-                            <span>{thread.replyCount} replies</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
+        <div className="hidden md:flex items-center gap-1" title={`${thread.viewCount} views`}>
+          <Eye className="h-3.5 w-3.5" />
+          <span>{thread.viewCount}</span>
         </div>
       </div>
     </div>

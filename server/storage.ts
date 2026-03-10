@@ -254,6 +254,17 @@ export interface IStorage {
   // Global search
   searchGlobal(query: string): Promise<{ courses: any[]; threads: any[]; downloads: any[] }>;
 
+  // Forum likes
+  likeThread(userId: string, threadId: string): Promise<void>;
+  unlikeThread(userId: string, threadId: string): Promise<void>;
+  likeReply(userId: string, replyId: string): Promise<void>;
+  unlikeReply(userId: string, replyId: string): Promise<void>;
+  getThreadLikeCounts(threadIds: string[]): Promise<Record<string, number>>;
+  getReplyLikeCounts(replyIds: string[]): Promise<Record<string, number>>;
+  getUserLikedThreadIds(userId: string, threadIds: string[]): Promise<Set<string>>;
+  getUserLikedReplyIds(userId: string, replyIds: string[]): Promise<Set<string>>;
+  getCategoryThreadCounts(): Promise<Record<string, number>>;
+
   // Thread subscriptions
   subscribeToThread(userId: string, threadId: string): Promise<ThreadSubscription>;
   unsubscribeFromThread(userId: string, threadId: string): Promise<void>;
@@ -1558,6 +1569,76 @@ export class DatabaseStorage implements IStorage {
     const subs = await db.select({ userId: threadSubscriptions.userId }).from(threadSubscriptions)
       .where(eq(threadSubscriptions.threadId, threadId));
     return subs.map(s => s.userId);
+  }
+
+  // Forum likes
+  async likeThread(userId: string, threadId: string): Promise<void> {
+    await db.insert(forum_likes).values({ userId, threadId }).onConflictDoNothing();
+  }
+
+  async unlikeThread(userId: string, threadId: string): Promise<void> {
+    await db.delete(forum_likes)
+      .where(and(eq(forum_likes.userId, userId), eq(forum_likes.threadId, threadId)));
+  }
+
+  async likeReply(userId: string, replyId: string): Promise<void> {
+    await db.insert(forum_likes).values({ userId, replyId }).onConflictDoNothing();
+  }
+
+  async unlikeReply(userId: string, replyId: string): Promise<void> {
+    await db.delete(forum_likes)
+      .where(and(eq(forum_likes.userId, userId), eq(forum_likes.replyId, replyId)));
+  }
+
+  async getThreadLikeCounts(threadIds: string[]): Promise<Record<string, number>> {
+    if (threadIds.length === 0) return {};
+    const rows = await db.select({
+      threadId: forum_likes.threadId,
+      count: sql<number>`count(*)::int`,
+    }).from(forum_likes)
+      .where(inArray(forum_likes.threadId!, threadIds))
+      .groupBy(forum_likes.threadId);
+    const map: Record<string, number> = {};
+    for (const r of rows) if (r.threadId) map[r.threadId] = r.count;
+    return map;
+  }
+
+  async getReplyLikeCounts(replyIds: string[]): Promise<Record<string, number>> {
+    if (replyIds.length === 0) return {};
+    const rows = await db.select({
+      replyId: forum_likes.replyId,
+      count: sql<number>`count(*)::int`,
+    }).from(forum_likes)
+      .where(inArray(forum_likes.replyId!, replyIds))
+      .groupBy(forum_likes.replyId);
+    const map: Record<string, number> = {};
+    for (const r of rows) if (r.replyId) map[r.replyId] = r.count;
+    return map;
+  }
+
+  async getUserLikedThreadIds(userId: string, threadIds: string[]): Promise<Set<string>> {
+    if (threadIds.length === 0) return new Set();
+    const rows = await db.select({ threadId: forum_likes.threadId }).from(forum_likes)
+      .where(and(eq(forum_likes.userId, userId), inArray(forum_likes.threadId!, threadIds)));
+    return new Set(rows.map(r => r.threadId!).filter(Boolean));
+  }
+
+  async getUserLikedReplyIds(userId: string, replyIds: string[]): Promise<Set<string>> {
+    if (replyIds.length === 0) return new Set();
+    const rows = await db.select({ replyId: forum_likes.replyId }).from(forum_likes)
+      .where(and(eq(forum_likes.userId, userId), inArray(forum_likes.replyId!, replyIds)));
+    return new Set(rows.map(r => r.replyId!).filter(Boolean));
+  }
+
+  async getCategoryThreadCounts(): Promise<Record<string, number>> {
+    const rows = await db.select({
+      categoryId: forum_threads.categoryId,
+      count: sql<number>`count(*)::int`,
+    }).from(forum_threads)
+      .groupBy(forum_threads.categoryId);
+    const map: Record<string, number> = {};
+    for (const r of rows) map[r.categoryId] = r.count;
+    return map;
   }
 
   // Public profile
