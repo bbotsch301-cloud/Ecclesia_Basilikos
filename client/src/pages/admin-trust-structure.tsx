@@ -3,7 +3,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+// Dialog imports reserved for future use
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -839,7 +839,7 @@ export default function AdminTrustStructure() {
   const dragEntityRef = useRef<TrustEntity | null>(null);
 
   // Temp connection line for visual feedback
-  const [tempLine, setTempLine] = useState<{ fromX: number; fromY: number; toX: number; toY: number } | null>(null);
+  const [tempLine] = useState<{ fromX: number; fromY: number; toX: number; toY: number } | null>(null);
 
   // Diagram refs for SVG line calculation
   const diagramRef = useRef<HTMLDivElement>(null);
@@ -853,6 +853,15 @@ export default function AdminTrustStructure() {
 
   const entities = data?.entities || [];
   const relationships = data?.relationships || [];
+
+  // Auto-seed defaults on first load when structure is empty
+  const autoSeeded = useRef(false);
+  useEffect(() => {
+    if (!isLoading && data && entities.length === 0 && !autoSeeded.current && !seedMutation.isPending) {
+      autoSeeded.current = true;
+      seedMutation.mutate();
+    }
+  }, [isLoading, data, entities.length]);
 
   // ── Mutations ──
   const seedMutation = useMutation({
@@ -916,7 +925,6 @@ export default function AdminTrustStructure() {
 
   // ── Clone handler ──
   const handleClone = (entity: TrustEntity) => {
-    const cloneNum = entities.filter(e => e.layer === entity.layer).length + 1;
     createEntityMutation.mutate({
       name: `${entity.name} (Copy)`,
       subtitle: entity.subtitle || "",
@@ -1132,15 +1140,19 @@ export default function AdminTrustStructure() {
             >
               <LinkIcon className="w-4 h-4 mr-2" /> Relationships
             </Button>
-            {entities.length === 0 && (
+            {entities.length > 0 && (
               <Button
-                onClick={() => seedMutation.mutate()}
+                onClick={() => {
+                  if (confirm("This will reload the default trust structure template. Any custom changes will remain — only missing defaults will be added. Continue?")) {
+                    seedMutation.mutate();
+                  }
+                }}
                 disabled={seedMutation.isPending}
                 variant="outline"
                 className="font-cinzel border-dashed"
               >
                 <RefreshCw className={`w-4 h-4 mr-2 ${seedMutation.isPending ? 'animate-spin' : ''}`} />
-                Load Template
+                Reload Defaults
               </Button>
             )}
           </div>
@@ -1275,54 +1287,10 @@ export default function AdminTrustStructure() {
             style={{ transform: `scale(${zoom})`, transformOrigin: 'top center', zIndex: 2 }}
           >
             {entities.length === 0 ? (
-              /* ── Empty state ── */
-              <div className="space-y-8">
-                {LAYERS_ORDER.slice(0, 5).map((layer) => {
-                  const config = LAYER_CONFIG[layer];
-                  const Icon = config.icon;
-                  return (
-                    <div key={layer} className="flex items-center gap-6">
-                      <div className="w-32 shrink-0 text-right">
-                        <p className="text-[10px] uppercase tracking-[0.2em] text-gray-400 font-semibold">{config.label}</p>
-                      </div>
-                      <div className="flex-1 flex justify-center">
-                        {inlineAddLayer === layer ? (
-                          <InlineAddForm
-                            layer={layer}
-                            templates={LAYER_TEMPLATES[layer] || []}
-                            onSubmit={handleInlineAdd}
-                            onCancel={() => setInlineAddLayer(null)}
-                            isPending={createEntityMutation.isPending}
-                          />
-                        ) : (
-                          <button
-                            onClick={() => setInlineAddLayer(layer)}
-                            className="border-2 border-dashed border-gray-300 hover:border-gray-400 rounded-xl px-8 py-6 flex flex-col items-center gap-2 text-gray-400 hover:text-gray-600 transition-all group bg-white/50 hover:bg-white/80"
-                          >
-                            <Icon className="w-6 h-6 opacity-40 group-hover:opacity-70 transition-opacity" />
-                            <span className="text-xs font-medium">Add {config.label} Entity</span>
-                            <Plus className="w-4 h-4 opacity-30 group-hover:opacity-60" />
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-
-                <div className="text-center pt-4">
-                  <p className="text-gray-500 text-sm mb-4">
-                    Start building your trust structure, or load the default template.
-                  </p>
-                  <Button
-                    onClick={() => seedMutation.mutate()}
-                    disabled={seedMutation.isPending}
-                    variant="outline"
-                    className="font-cinzel"
-                  >
-                    <RefreshCw className={`w-4 h-4 mr-2 ${seedMutation.isPending ? 'animate-spin' : ''}`} />
-                    Load Template
-                  </Button>
-                </div>
+              /* ── Empty state — auto-seeds defaults ── */
+              <div className="flex flex-col items-center justify-center py-20 gap-4">
+                <Loader2 className="h-10 w-10 animate-spin text-royal-gold" />
+                <p className="text-gray-500 text-sm font-cinzel">Loading default trust structure...</p>
               </div>
             ) : (
               /* ── Populated diagram ── */
@@ -1331,7 +1299,6 @@ export default function AdminTrustStructure() {
                   const isCoreLayer = LAYERS_ORDER.indexOf(layer) < 5;
                   if (layerEntities.length === 0 && !isCoreLayer) return null;
 
-                  const Icon = config.icon;
                   const isDragOver = dragOverLayer === layer;
 
                   return (
