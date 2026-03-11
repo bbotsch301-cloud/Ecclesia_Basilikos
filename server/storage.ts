@@ -85,6 +85,12 @@ import {
   type Proof,
   type InsertProof,
   beneficialUnits,
+  trustEntities,
+  trustRelationships,
+  type TrustEntity,
+  type InsertTrustEntity,
+  type TrustRelationship,
+  type InsertTrustRelationship,
 } from "@shared/schema";
 import { eq, and, desc, sql, or, inArray, ilike } from "drizzle-orm";
 import { db } from "./db";
@@ -338,6 +344,18 @@ export interface IStorage {
 
   // GDPR account deletion
   deleteAllUserData(userId: string): Promise<void>;
+
+  // Trust Structure
+  getTrustEntities(): Promise<TrustEntity[]>;
+  getTrustEntity(id: string): Promise<TrustEntity | undefined>;
+  createTrustEntity(entity: InsertTrustEntity): Promise<TrustEntity>;
+  updateTrustEntity(id: string, updates: Partial<InsertTrustEntity>): Promise<TrustEntity>;
+  deleteTrustEntity(id: string): Promise<void>;
+  getTrustRelationships(): Promise<TrustRelationship[]>;
+  createTrustRelationship(rel: InsertTrustRelationship): Promise<TrustRelationship>;
+  deleteTrustRelationship(id: string): Promise<void>;
+  getTrustStructure(): Promise<{ entities: TrustEntity[]; relationships: TrustRelationship[] }>;
+  seedTrustStructure(): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -2153,6 +2171,363 @@ export class DatabaseStorage implements IStorage {
       // Finally delete the user record
       await tx.delete(users).where(eq(users.id, userId));
     });
+  }
+
+  // ====== Trust Structure ======
+
+  async getTrustEntities(): Promise<TrustEntity[]> {
+    return await db.select().from(trustEntities).orderBy(trustEntities.sortOrder);
+  }
+
+  async getTrustEntity(id: string): Promise<TrustEntity | undefined> {
+    const [entity] = await db.select().from(trustEntities).where(eq(trustEntities.id, id));
+    return entity;
+  }
+
+  async createTrustEntity(entity: InsertTrustEntity): Promise<TrustEntity> {
+    const [created] = await db.insert(trustEntities).values(entity).returning();
+    return created;
+  }
+
+  async updateTrustEntity(id: string, updates: Partial<InsertTrustEntity>): Promise<TrustEntity> {
+    const [updated] = await db
+      .update(trustEntities)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(trustEntities.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteTrustEntity(id: string): Promise<void> {
+    // Delete relationships first
+    await db.delete(trustRelationships).where(
+      or(eq(trustRelationships.fromEntityId, id), eq(trustRelationships.toEntityId, id))
+    );
+    await db.delete(trustEntities).where(eq(trustEntities.id, id));
+  }
+
+  async getTrustRelationships(): Promise<TrustRelationship[]> {
+    return await db.select().from(trustRelationships);
+  }
+
+  async createTrustRelationship(rel: InsertTrustRelationship): Promise<TrustRelationship> {
+    const [created] = await db.insert(trustRelationships).values(rel).returning();
+    return created;
+  }
+
+  async deleteTrustRelationship(id: string): Promise<void> {
+    await db.delete(trustRelationships).where(eq(trustRelationships.id, id));
+  }
+
+  async getTrustStructure(): Promise<{ entities: TrustEntity[]; relationships: TrustRelationship[] }> {
+    const [entities, relationships] = await Promise.all([
+      this.getTrustEntities(),
+      this.getTrustRelationships(),
+    ]);
+    return { entities, relationships };
+  }
+
+  async seedTrustStructure(): Promise<void> {
+    // Only seed if empty
+    const existing = await db.select().from(trustEntities).limit(1);
+    if (existing.length > 0) return;
+
+    // === LAYER 1: CHARTER ===
+    const [charter] = await db.insert(trustEntities).values({
+      name: "New Covenant Legacy Trust",
+      subtitle: "Constitutional Root",
+      layer: "charter",
+      entityType: "charter",
+      description: "The covenant charter established under divine authority. Source of all governance, stewardship mandates, and community philosophy. Holds intellectual property, core charter documents, and long-term reserves.",
+      charter: "Established under the authority of the New Covenant, this charter anchors the entire trust network in divine law and constitutional principles.",
+      legalBasis: "First Amendment right of free association; Constitutional trust principles",
+      trusteeLabel: "Mission Founder (Grantor)",
+      protectorLabel: "Protector Council",
+      color: "#DC2626",
+      icon: "scroll",
+      sortOrder: 1,
+      status: "active",
+    }).returning();
+
+    // === LAYER 2: TRUST (Mission Anchor) ===
+    const [ebt] = await db.insert(trustEntities).values({
+      name: "Ecclesia Basilikos Trust",
+      subtitle: "Mission Anchor",
+      layer: "trust",
+      entityType: "trust",
+      description: "The mission anchor trust. Stewards the mission, protects the charter, oversees governance principles, authorizes new chapters and communes, and safeguards core assets including IP, platform ownership, and major land assets.",
+      trusteeLabel: "Administrative Steward (Trustee)",
+      protectorLabel: "Protector Council — checks & balance oversight",
+      color: "#1E3A5F",
+      icon: "crown",
+      sortOrder: 2,
+      status: "active",
+    }).returning();
+
+    // === LAYER 3: OPERATIONAL TRUSTS ===
+    const [landTrust] = await db.insert(trustEntities).values({
+      name: "Land Trust",
+      subtitle: "Stewardship of Land",
+      layer: "operational",
+      entityType: "trust",
+      description: "Holds and administers all real property, acreage, and land-based assets. Separates land ownership from community operations for legal protection.",
+      color: "#16A34A",
+      icon: "map-pin",
+      sortOrder: 10,
+      status: "active",
+      acreage: "59.8 acres",
+      totalValue: 34180000, // $341,800 in cents
+    }).returning();
+
+    const [housingTrust] = await db.insert(trustEntities).values({
+      name: "Housing Trust",
+      subtitle: "Shelter & Dwellings",
+      layer: "operational",
+      entityType: "trust",
+      description: "Administers housing structures, shelters, and dwellings. Ensures community members have access to covenant-aligned shelter.",
+      color: "#CA8A04",
+      icon: "home",
+      sortOrder: 11,
+      status: "active",
+    }).returning();
+
+    const [treasuryTrust] = await db.insert(trustEntities).values({
+      name: "Treasury Trust",
+      subtitle: "Finance & Allocation",
+      layer: "operational",
+      entityType: "trust",
+      description: "Manages financial contributions, allocations, reserves, and the economic infrastructure of the trust network. Handles PMA contributions and redistribution.",
+      color: "#2563EB",
+      icon: "banknote",
+      sortOrder: 12,
+      status: "active",
+      annualRevenue: 5240000, // $52,400 in cents
+    }).returning();
+
+    const [enterpriseTrust] = await db.insert(trustEntities).values({
+      name: "Enterprise Trust",
+      subtitle: "Commerce & Revenue",
+      layer: "operational",
+      entityType: "trust",
+      description: "Oversees commercial activities, revenue generation, and enterprise development. If one activity has legal problems, it doesn't endanger the entire system.",
+      color: "#9333EA",
+      icon: "building",
+      sortOrder: 13,
+      status: "active",
+    }).returning();
+
+    const [educationTrust] = await db.insert(trustEntities).values({
+      name: "Education Trust",
+      subtitle: "Academy & Training",
+      layer: "operational",
+      entityType: "trust",
+      description: "Administers educational programs, courses, curriculum development, and the training infrastructure for community members and leadership.",
+      color: "#0EA5E9",
+      icon: "graduation-cap",
+      sortOrder: 14,
+      status: "active",
+    }).returning();
+
+    // === LAYER 4: PMA (People Layer) ===
+    const [mainPma] = await db.insert(trustEntities).values({
+      name: "Ecclesia Basilikos PMA",
+      subtitle: "People Layer",
+      layer: "pma",
+      entityType: "pma",
+      description: "The primary Private Membership Association. Members join the community through the PMA. They are beneficiary participants, not owners of trust assets. Protects internal community governance, voluntary association rights, and private member interaction.",
+      legalBasis: "First Amendment right of free association",
+      color: "#7C3AED",
+      icon: "users",
+      sortOrder: 20,
+      status: "active",
+      memberCount: 24,
+    }).returning();
+
+    // === LAYER 5: PLATFORM (Community OS) ===
+    const [platform] = await db.insert(trustEntities).values({
+      name: "Ecclesia Platform",
+      subtitle: "Community OS",
+      layer: "platform",
+      entityType: "platform",
+      description: "The digital platform layer — the administrative operating system of the trust network. Manages membership records, chapter structure, project coordination, education systems, governance tools, and communication.",
+      color: "#F59E0B",
+      icon: "monitor",
+      sortOrder: 25,
+      status: "active",
+    }).returning();
+
+    // === LAYER 6: CHAPTERS (Geographic) ===
+    const [hg1] = await db.insert(trustEntities).values({
+      name: "Heaven's Gate 1",
+      subtitle: "Rural · 42 acres",
+      layer: "chapter",
+      entityType: "chapter",
+      description: "Rural chapter settlement on 42 acres. Agricultural stewardship, sustainable living, and covenant fellowship. Coordinates local members, meetups, resource sharing, and project launches.",
+      location: "Rural",
+      acreage: "42 acres",
+      color: "#059669",
+      icon: "trees",
+      sortOrder: 30,
+      status: "active",
+      memberCount: 0,
+      totalValue: 20000000, // example
+    }).returning();
+
+    const [hg2] = await db.insert(trustEntities).values({
+      name: "Heaven's Gate 2",
+      subtitle: "Gateway · 17 acres",
+      layer: "chapter",
+      entityType: "chapter",
+      description: "Gateway chapter on 17 acres. Transitional housing, training center, and preparation for covenant community life.",
+      location: "Gateway",
+      acreage: "17 acres",
+      color: "#0891B2",
+      icon: "door-open",
+      sortOrder: 31,
+      status: "active",
+      memberCount: 0,
+      totalValue: 14180000,
+    }).returning();
+
+    const [hg3] = await db.insert(trustEntities).values({
+      name: "Heaven's Gate 3",
+      subtitle: "Urban Refuge",
+      layer: "chapter",
+      entityType: "chapter",
+      description: "Urban refuge and embassy. Outreach, education, and gathering point for the ecclesia in urban settings.",
+      location: "Urban",
+      color: "#6366F1",
+      icon: "building-2",
+      sortOrder: 32,
+      status: "planned",
+      memberCount: 0,
+    }).returning();
+
+    // === LAYER 7: COMMUNES (Functional Communities) ===
+    const [farmCommune] = await db.insert(trustEntities).values({
+      name: "HG1 Farming Commune",
+      subtitle: "Agricultural Stewardship",
+      layer: "commune",
+      entityType: "commune",
+      description: "Farming commune within Heaven's Gate 1. Shared agricultural operations, crop management, livestock, and food production.",
+      color: "#65A30D",
+      icon: "wheat",
+      sortOrder: 40,
+      status: "planned",
+    }).returning();
+
+    const [discCommune] = await db.insert(trustEntities).values({
+      name: "HG2 Discipleship House",
+      subtitle: "Training & Formation",
+      layer: "commune",
+      entityType: "commune",
+      description: "Discipleship commune within Heaven's Gate 2. Intensive training, mentorship, and preparation for community leadership.",
+      color: "#D97706",
+      icon: "book-open",
+      sortOrder: 41,
+      status: "planned",
+    }).returning();
+
+    // === LAYER 4b: Chapter PMAs ===
+    const [hg1pma] = await db.insert(trustEntities).values({
+      name: "HG1 PMA",
+      subtitle: "Membership · Rural",
+      layer: "pma",
+      entityType: "pma",
+      description: "Local PMA for Heaven's Gate 1 rural chapter. Governs member rights, obligations, and community participation at the chapter level.",
+      color: "#8B5CF6",
+      icon: "shield-check",
+      sortOrder: 50,
+      status: "active",
+    }).returning();
+
+    const [hg2pma] = await db.insert(trustEntities).values({
+      name: "HG2 PMA",
+      subtitle: "Membership · Gateway",
+      layer: "pma",
+      entityType: "pma",
+      description: "Local PMA for Heaven's Gate 2 gateway chapter.",
+      color: "#8B5CF6",
+      icon: "shield-check",
+      sortOrder: 51,
+      status: "active",
+    }).returning();
+
+    const [hg3pma] = await db.insert(trustEntities).values({
+      name: "HG3 PMA",
+      subtitle: "Membership · Urban",
+      layer: "pma",
+      entityType: "pma",
+      description: "Local PMA for Heaven's Gate 3 urban chapter.",
+      color: "#8B5CF6",
+      icon: "shield-check",
+      sortOrder: 52,
+      status: "planned",
+    }).returning();
+
+    // === RELATIONSHIPS ===
+
+    // Charter → Trust (Authority)
+    await db.insert(trustRelationships).values({ fromEntityId: charter.id, toEntityId: ebt.id, relationshipType: "authority", label: "Authorizes" });
+
+    // Trust → Operational (Grants)
+    await db.insert(trustRelationships).values([
+      { fromEntityId: ebt.id, toEntityId: landTrust.id, relationshipType: "grants", label: "Stewardship mandate" },
+      { fromEntityId: ebt.id, toEntityId: housingTrust.id, relationshipType: "grants" },
+      { fromEntityId: ebt.id, toEntityId: treasuryTrust.id, relationshipType: "grants" },
+      { fromEntityId: ebt.id, toEntityId: enterpriseTrust.id, relationshipType: "oversees" },
+      { fromEntityId: ebt.id, toEntityId: educationTrust.id, relationshipType: "grants" },
+    ]);
+
+    // Trust → PMA (Establishes)
+    await db.insert(trustRelationships).values({ fromEntityId: ebt.id, toEntityId: mainPma.id, relationshipType: "establishes_pma", label: "Establishes" });
+
+    // PMA → Platform (Oversees)
+    await db.insert(trustRelationships).values({ fromEntityId: mainPma.id, toEntityId: platform.id, relationshipType: "oversees", label: "Administers" });
+
+    // Operational → Chapters (Land, Funds)
+    await db.insert(trustRelationships).values([
+      { fromEntityId: landTrust.id, toEntityId: hg1.id, relationshipType: "land" },
+      { fromEntityId: landTrust.id, toEntityId: hg2.id, relationshipType: "land" },
+      { fromEntityId: housingTrust.id, toEntityId: hg1.id, relationshipType: "funds" },
+      { fromEntityId: housingTrust.id, toEntityId: hg2.id, relationshipType: "funds" },
+      { fromEntityId: housingTrust.id, toEntityId: hg3.id, relationshipType: "funds" },
+      { fromEntityId: treasuryTrust.id, toEntityId: enterpriseTrust.id, relationshipType: "funds" },
+      { fromEntityId: educationTrust.id, toEntityId: platform.id, relationshipType: "funds", label: "Curriculum & courses" },
+    ]);
+
+    // Chapters → Chapter PMAs (Establishes PMA)
+    await db.insert(trustRelationships).values([
+      { fromEntityId: hg1.id, toEntityId: hg1pma.id, relationshipType: "establishes_pma" },
+      { fromEntityId: hg2.id, toEntityId: hg2pma.id, relationshipType: "establishes_pma" },
+      { fromEntityId: hg3.id, toEntityId: hg3pma.id, relationshipType: "establishes_pma" },
+    ]);
+
+    // Chapter PMAs → Chapters (Remits)
+    await db.insert(trustRelationships).values([
+      { fromEntityId: hg1pma.id, toEntityId: hg1.id, relationshipType: "remits" },
+      { fromEntityId: hg2pma.id, toEntityId: hg2.id, relationshipType: "remits" },
+      { fromEntityId: hg3pma.id, toEntityId: hg3.id, relationshipType: "remits" },
+    ]);
+
+    // Chapters → Communes
+    await db.insert(trustRelationships).values([
+      { fromEntityId: hg1.id, toEntityId: farmCommune.id, relationshipType: "oversees" },
+      { fromEntityId: hg2.id, toEntityId: discCommune.id, relationshipType: "oversees" },
+    ]);
+
+    // Cross-coordination
+    await db.insert(trustRelationships).values([
+      { fromEntityId: hg1.id, toEntityId: hg2.id, relationshipType: "coordinates" },
+      { fromEntityId: hg2.id, toEntityId: hg3.id, relationshipType: "coordinates" },
+    ]);
+
+    // Main PMA → Chapter PMAs (Authority)
+    await db.insert(trustRelationships).values([
+      { fromEntityId: mainPma.id, toEntityId: hg1pma.id, relationshipType: "authority" },
+      { fromEntityId: mainPma.id, toEntityId: hg2pma.id, relationshipType: "authority" },
+      { fromEntityId: mainPma.id, toEntityId: hg3pma.id, relationshipType: "authority" },
+    ]);
   }
 }
 

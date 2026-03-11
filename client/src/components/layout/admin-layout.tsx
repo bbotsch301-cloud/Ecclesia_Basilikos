@@ -16,6 +16,7 @@ import {
   Mail,
   Pencil,
   CreditCard,
+  Crown,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -31,6 +32,7 @@ const adminNav = [
   { name: "Contacts", href: "/admin/contacts", icon: MessageSquare },
   { name: "Newsletter", href: "/admin/newsletter", icon: Mail },
   { name: "Trust Downloads", href: "/admin/trust-downloads", icon: Shield },
+  { name: "Trust Structure", href: "/admin/trust-structure", icon: Crown },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {

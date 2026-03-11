@@ -13,7 +13,9 @@ import {
   insertForumCategorySchema,
   insertPageContentSchema,
   updatePageContentSchema,
-  insertDownloadSchema
+  insertDownloadSchema,
+  insertTrustEntitySchema,
+  insertTrustRelationshipSchema,
 } from '@shared/schema';
 
 const router = Router();
@@ -1506,6 +1508,99 @@ router.patch('/subscribers/:userId', requireAdmin, async (req, res) => {
     }
     logger.error({ err: error }, 'Error updating subscriber:');
     res.status(500).json({ error: 'Failed to update subscriber' });
+  }
+});
+
+// ================================
+// TRUST STRUCTURE (ADMIN ONLY)
+// ================================
+
+// Get entire trust structure (entities + relationships)
+router.get('/trust-structure', requireAdmin, async (req, res) => {
+  try {
+    const structure = await storage.getTrustStructure();
+    res.json(structure);
+  } catch (error) {
+    logger.error({ err: error }, 'Error fetching trust structure');
+    res.status(500).json({ error: 'Failed to fetch trust structure' });
+  }
+});
+
+// Seed trust structure with default data
+router.post('/trust-structure/seed', requireAdmin, async (req, res) => {
+  try {
+    await storage.seedTrustStructure();
+    const structure = await storage.getTrustStructure();
+    res.json(structure);
+  } catch (error) {
+    logger.error({ err: error }, 'Error seeding trust structure');
+    res.status(500).json({ error: 'Failed to seed trust structure' });
+  }
+});
+
+// Create a trust entity
+router.post('/trust-entities', requireAdmin, async (req, res) => {
+  try {
+    const data = insertTrustEntitySchema.parse(req.body);
+    const entity = await storage.createTrustEntity(data);
+    await auditLog(req.user!.id, 'CREATE', 'TRUST_ENTITY', entity.id, null, { name: entity.name, layer: entity.layer }, req.ip, req.headers['user-agent']);
+    res.json(entity);
+  } catch (error: any) {
+    if (error.name === 'ZodError') {
+      return res.status(400).json({ error: 'Invalid input', details: error.errors });
+    }
+    logger.error({ err: error }, 'Error creating trust entity');
+    res.status(500).json({ error: 'Failed to create trust entity' });
+  }
+});
+
+// Update a trust entity
+router.put('/trust-entities/:id', requireAdmin, async (req, res) => {
+  try {
+    const entity = await storage.updateTrustEntity(req.params.id, req.body);
+    await auditLog(req.user!.id, 'UPDATE', 'TRUST_ENTITY', entity.id, null, { name: entity.name }, req.ip, req.headers['user-agent']);
+    res.json(entity);
+  } catch (error) {
+    logger.error({ err: error }, 'Error updating trust entity');
+    res.status(500).json({ error: 'Failed to update trust entity' });
+  }
+});
+
+// Delete a trust entity
+router.delete('/trust-entities/:id', requireAdmin, async (req, res) => {
+  try {
+    await storage.deleteTrustEntity(req.params.id);
+    await auditLog(req.user!.id, 'DELETE', 'TRUST_ENTITY', req.params.id, null, null, req.ip, req.headers['user-agent']);
+    res.json({ success: true });
+  } catch (error) {
+    logger.error({ err: error }, 'Error deleting trust entity');
+    res.status(500).json({ error: 'Failed to delete trust entity' });
+  }
+});
+
+// Create a trust relationship
+router.post('/trust-relationships', requireAdmin, async (req, res) => {
+  try {
+    const data = insertTrustRelationshipSchema.parse(req.body);
+    const rel = await storage.createTrustRelationship(data);
+    res.json(rel);
+  } catch (error: any) {
+    if (error.name === 'ZodError') {
+      return res.status(400).json({ error: 'Invalid input', details: error.errors });
+    }
+    logger.error({ err: error }, 'Error creating trust relationship');
+    res.status(500).json({ error: 'Failed to create trust relationship' });
+  }
+});
+
+// Delete a trust relationship
+router.delete('/trust-relationships/:id', requireAdmin, async (req, res) => {
+  try {
+    await storage.deleteTrustRelationship(req.params.id);
+    res.json({ success: true });
+  } catch (error) {
+    logger.error({ err: error }, 'Error deleting trust relationship');
+    res.status(500).json({ error: 'Failed to delete trust relationship' });
   }
 });
 

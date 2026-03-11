@@ -963,7 +963,116 @@ export const insertBeneficialUnitSchema = createInsertSchema(beneficialUnits).om
 export type InsertBeneficialUnit = z.infer<typeof insertBeneficialUnitSchema>;
 export type BeneficialUnit = typeof beneficialUnits.$inferSelect;
 
-// ====== PHASE II: Commune Structure (Future) ======
-// communes table: id, name, type ('farming'|'discipleship'|'trade'|...), trusteeId, location, charter, createdAt
-// commune_memberships: userId, communeId, role ('beneficiary'|'steward'|'elder'), joinedAt
-// Beneficiaries maintain global trust status + optional commune membership(s)
+// ====== TRUST STRUCTURE ======
+// The full hierarchical trust model: Constitutional → Governance → Stewardship → Community → Participation
+
+export const trustEntityLayerEnum = pgEnum('trust_entity_layer', [
+  'charter',         // Covenant Charter — philosophy & authority
+  'trust',           // Ecclesia Basilikos Trust — mission anchor & stewardship
+  'operational',     // Operational Trusts — Land, Housing, Treasury, Enterprise, Education
+  'pma',             // Private Membership Association — people layer
+  'platform',        // Digital Platform / Community OS — coordination
+  'chapter',         // City/Geographic Chapters
+  'commune',         // Functional Communities (farming, discipleship, etc.)
+  'project',         // Active Projects within communes/chapters
+]);
+
+// Governance roles within the trust structure
+export const trustRoleEnum = pgEnum('trust_role', [
+  'grantor',          // mission founder / source of authority
+  'trustee',          // administrative authority
+  'protector',        // protector council member — checks & balances
+  'steward',          // chapter/commune leader
+  'beneficiary',      // community participant
+  'officer',          // operational role
+]);
+
+export const trustEntities = pgTable("trust_entities", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  subtitle: text("subtitle"),           // e.g. "Constitutional Root", "Governance Anchor"
+  layer: trustEntityLayerEnum("layer").notNull(),
+  entityType: text("entity_type").notNull(), // e.g. "trust", "community", "pma", "chapter", "project"
+  description: text("description"),
+  // Governance
+  trusteeLabel: text("trustee_label"),    // who serves as trustee
+  protectorLabel: text("protector_label"),// protector council info
+  // Location / physical
+  location: text("location"),
+  acreage: text("acreage"),             // e.g. "42 acres"
+  // Financial
+  totalValue: integer("total_value"),   // in cents
+  annualRevenue: integer("annual_revenue"), // in cents
+  // Membership
+  memberCount: integer("member_count").default(0),
+  // Status
+  status: text("status").default('active'), // active, planned, dissolved
+  // Visual / display
+  color: text("color"),                  // hex color for diagram node
+  icon: text("icon"),                    // lucide icon name
+  sortOrder: integer("sort_order").default(0),
+  // Metadata
+  charter: text("charter"),              // governing document text / purpose statement
+  legalBasis: text("legal_basis"),       // constitutional/legal foundation
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const trustRelationshipTypeEnum = pgEnum('trust_relationship_type', [
+  'authority',       // red — constitutional authority chain
+  'grants',          // black — grants powers/rights
+  'funds',           // blue — financial flows
+  'land',            // green — land stewardship
+  'remits',          // purple — remits/reports
+  'establishes_pma', // dashed purple — establishes a PMA
+  'oversees',        // dashed orange — oversight
+  'coordinates',     // dashed gray — coordination
+]);
+
+export const trustRelationships = pgTable("trust_relationships", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  fromEntityId: varchar("from_entity_id").notNull().references(() => trustEntities.id),
+  toEntityId: varchar("to_entity_id").notNull().references(() => trustEntities.id),
+  relationshipType: trustRelationshipTypeEnum("relationship_type").notNull(),
+  label: text("label"),                  // optional descriptive label on the edge
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("trust_rel_from_idx").on(table.fromEntityId),
+  index("trust_rel_to_idx").on(table.toEntityId),
+]);
+
+export const trustEntityRelations = relations(trustEntities, ({ many }) => ({
+  outgoingRelationships: many(trustRelationships, { relationName: "fromEntity" }),
+  incomingRelationships: many(trustRelationships, { relationName: "toEntity" }),
+}));
+
+export const trustRelationshipRelations = relations(trustRelationships, ({ one }) => ({
+  fromEntity: one(trustEntities, {
+    fields: [trustRelationships.fromEntityId],
+    references: [trustEntities.id],
+    relationName: "fromEntity",
+  }),
+  toEntity: one(trustEntities, {
+    fields: [trustRelationships.toEntityId],
+    references: [trustEntities.id],
+    relationName: "toEntity",
+  }),
+}));
+
+export const insertTrustEntitySchema = createInsertSchema(trustEntities).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertTrustRelationshipSchema = createInsertSchema(trustRelationships).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertTrustEntity = z.infer<typeof insertTrustEntitySchema>;
+export type TrustEntity = typeof trustEntities.$inferSelect;
+export type InsertTrustRelationship = z.infer<typeof insertTrustRelationshipSchema>;
+export type TrustRelationship = typeof trustRelationships.$inferSelect;

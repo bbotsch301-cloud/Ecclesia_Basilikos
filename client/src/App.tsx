@@ -67,6 +67,7 @@ const Dashboard = lazy(() => import("@/pages/dashboard"));
 const Pricing = lazy(() => import("@/pages/pricing"));
 const Billing = lazy(() => import("@/pages/billing"));
 const AdminSubscribers = lazy(() => import("@/pages/admin-subscribers"));
+const AdminTrustStructure = lazy(() => import("@/pages/admin-trust-structure"));
 
 function PageLoader() {
   return (
@@ -140,6 +141,7 @@ function Router() {
             <Route path="/admin/contacts">{() => <RequireAdmin><SectionErrorBoundary><AdminContactMessages /></SectionErrorBoundary></RequireAdmin>}</Route>
             <Route path="/admin/newsletter">{() => <RequireAdmin><SectionErrorBoundary><AdminNewsletter /></SectionErrorBoundary></RequireAdmin>}</Route>
             <Route path="/admin/subscribers">{() => <RequireAdmin><SectionErrorBoundary><AdminSubscribers /></SectionErrorBoundary></RequireAdmin>}</Route>
+            <Route path="/admin/trust-structure">{() => <RequireAdmin><SectionErrorBoundary><AdminTrustStructure /></SectionErrorBoundary></RequireAdmin>}</Route>
             <Route path="/admin">{() => <RequireAdmin><SectionErrorBoundary><AdminDashboard /></SectionErrorBoundary></RequireAdmin>}</Route>
             <Route component={NotFound} />
           </Switch>
