@@ -2,27 +2,33 @@ import { Link } from "wouter";
 import { usePageTitle } from "@/hooks/usePageTitle";
 
 export default function Terms() {
-  usePageTitle("Terms of Service");
+  usePageTitle("Platform Usage Guidelines");
   return (
     <div className="max-w-4xl mx-auto px-4 py-16">
-      <h1 className="font-playfair text-4xl font-bold text-royal-navy mb-2">Terms of Service</h1>
+      <h1 className="font-playfair text-4xl font-bold text-royal-navy mb-2">Platform Usage Guidelines</h1>
       <p className="text-muted-foreground mb-8">Last updated: February 2026</p>
+
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-8">
+        <p className="text-sm text-blue-800">
+          These Platform Usage Guidelines operate under and supplement the{" "}
+          <Link href="/pma-agreement" className="text-royal-gold hover:underline font-medium">
+            PMA Membership Agreement
+          </Link>, which is the governing document of the Ecclesia Basilikos Trust.
+        </p>
+      </div>
 
       <div className="prose prose-slate max-w-none space-y-6">
         <section>
-          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">1. Acceptance of Terms</h2>
+          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">1. Relationship to PMA Agreement</h2>
           <p>
-            By accessing and using the Ecclesia Basilikos platform ("the Platform"), you agree to be bound by these
-            Terms of Service. If you do not agree to these terms, please do not use the Platform.
+            These Platform Usage Guidelines supplement the PMA Membership Agreement, which serves as the governing document for the Ecclesia Basilikos Trust. By using this platform, you agree to abide by both this document and the PMA Membership Agreement.
           </p>
         </section>
 
         <section>
-          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">2. Description of Service</h2>
+          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">2. Trust Administration Platform</h2>
           <p>
-            Ecclesia Basilikos is an educational platform providing courses, resources, forum discussions, and
-            downloadable materials related to Kingdom citizenship, biblical covenant truth, and trust administration.
-            The content is provided for educational and informational purposes only.
+            Ecclesia Basilikos operates as a Trust Administration Platform through which Beneficiaries receive and access their beneficial interest. The platform delivers educational courses, resources, forum discussions, and downloadable materials related to Kingdom citizenship, biblical covenant truth, and trust administration. All content is provided for educational and informational purposes only.
           </p>
         </section>
 
@@ -49,12 +55,9 @@ export default function Terms() {
         </section>
 
         <section>
-          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">5. Intellectual Property</h2>
+          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">5. Trust Corpus</h2>
           <p>
-            All content on the Platform, including courses, videos, documents, and resources, is the property of
-            Ecclesia Basilikos or its content creators and is protected by applicable intellectual property laws.
-            You may not reproduce, distribute, or create derivative works from this content without express
-            written permission.
+            All content on the Platform, including courses, videos, documents, and resources, constitutes the Trust corpus administered by the Trustee and is protected by applicable intellectual property laws. You may not reproduce, distribute, or create derivative works from this content without express written permission from the Trustee.
           </p>
         </section>
 
@@ -87,18 +90,16 @@ export default function Terms() {
         </section>
 
         <section>
-          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">9. Changes to Terms</h2>
+          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">9. Changes to Guidelines</h2>
           <p>
-            We reserve the right to modify these Terms of Service at any time. Changes will be effective
-            immediately upon posting. Your continued use of the Platform after changes constitutes acceptance
-            of the modified terms.
+            We reserve the right to modify these Platform Usage Guidelines at any time. Changes will be effective immediately upon posting. Your continued use of the Platform after changes constitutes acceptance of the modified guidelines.
           </p>
         </section>
 
         <section>
           <h2 className="font-playfair text-2xl font-semibold text-royal-navy">10. Contact</h2>
           <p>
-            If you have questions about these Terms of Service, please{" "}
+            If you have questions about these Platform Usage Guidelines, please{" "}
             <Link href="/contact" className="text-royal-gold hover:text-royal-gold-bright underline">
               contact us
             </Link>.

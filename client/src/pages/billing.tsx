@@ -125,7 +125,7 @@ function BillingContent() {
   return (
     <div className="min-h-screen pt-16 marble-bg">
       <div className="max-w-3xl mx-auto px-4 py-12">
-        <h1 className="font-cinzel-decorative text-3xl font-bold text-royal-navy mb-8">Billing & Subscription</h1>
+        <h1 className="font-cinzel-decorative text-3xl font-bold text-royal-navy mb-8">Stewardship & Beneficial Interest</h1>
 
         {/* Current Plan */}
         <Card className="mb-8 border-2 border-royal-gold/20">
@@ -140,7 +140,7 @@ function BillingContent() {
               <div>
                 <div className="flex items-center gap-3 mb-2">
                   <h3 className="font-cinzel text-xl font-bold text-royal-navy">
-                    {isPremium ? "Royal Assembly" : "Citizen (Free)"}
+                    {isPremium ? "Royal Beneficiary" : "General Beneficiary (Free)"}
                   </h3>
                   {isPremium && <PremiumBadge size="md" />}
                 </div>
@@ -160,7 +160,7 @@ function BillingContent() {
               {!isPremium && (
                 <Link href="/pricing">
                   <Button className="bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold">
-                    <Crown className="w-4 h-4 mr-2" /> Upgrade
+                    <Crown className="w-4 h-4 mr-2" /> Elevate Interest
                   </Button>
                 </Link>
               )}
@@ -216,7 +216,7 @@ function BillingContent() {
             <CardHeader>
               <CardTitle className="font-cinzel text-lg flex items-center gap-2 text-red-700">
                 <XCircle className="w-5 h-5" />
-                Cancel Subscription
+                Withdraw Royal Interest
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -235,12 +235,12 @@ function BillingContent() {
                     <AlertDialogTitle>Are you sure you want to cancel?</AlertDialogTitle>
                     <AlertDialogDescription>
                       Your premium access will continue until the end of your current billing period.
-                      After that, you will be downgraded to the free Citizen plan and lose access to
+                      After that, you will be returned to General Beneficial Interest and lose access to
                       premium courses, downloads, forum posting, and the Proof Vault.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel>Keep Subscription</AlertDialogCancel>
+                    <AlertDialogCancel>Keep Royal Interest</AlertDialogCancel>
                     <AlertDialogAction
                       onClick={() => cancelMutation.mutate()}
                       className="bg-red-600 hover:bg-red-700"
@@ -252,7 +252,7 @@ function BillingContent() {
                           Cancelling...
                         </>
                       ) : (
-                        "Yes, Cancel Subscription"
+                        "Yes, Withdraw Interest"
                       )}
                     </AlertDialogAction>
                   </AlertDialogFooter>
@@ -265,7 +265,7 @@ function BillingContent() {
         {/* Subscription History */}
         <Card>
           <CardHeader>
-            <CardTitle className="font-cinzel text-lg">Subscription History</CardTitle>
+            <CardTitle className="font-cinzel text-lg">Interest History</CardTitle>
           </CardHeader>
           <CardContent>
             {historyLoading ? (

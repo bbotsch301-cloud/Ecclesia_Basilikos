@@ -27,6 +27,7 @@ export const users = pgTable("users", {
   passwordResetExpires: timestamp("password_reset_expires"),
   lastLoginAt: timestamp("last_login_at"),
   termsAcceptedAt: timestamp("terms_accepted_at"),
+  pmaAgreementAcceptedAt: timestamp("pma_agreement_accepted_at"),
   // Subscription fields
   subscriptionTier: text("subscription_tier").default('free'), // 'free' | 'premium'
   subscriptionStatus: text("subscription_status").default('none'), // 'none' | 'active' | 'cancelled' | 'expired' | 'trialing'
@@ -36,6 +37,7 @@ export const users = pgTable("users", {
   stripeSubscriptionId: text("stripe_subscription_id"),
   premiumGrantedBy: varchar("premium_granted_by"),
   premiumGrantedAt: timestamp("premium_granted_at"),
+  beneficialUnitId: varchar("beneficial_unit_id"),
   emailNotifications: boolean("email_notifications").default(true),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
@@ -476,10 +478,12 @@ export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
   isActive: true,
   termsAcceptedAt: true,
+  pmaAgreementAcceptedAt: true,
   createdAt: true,
 }).extend({
   password: z.string().min(8, "Password must be at least 8 characters"),
-  termsAccepted: z.literal(true, { errorMap: () => ({ message: "You must accept the terms" }) }),
+  pmaAgreementAccepted: z.literal(true, { errorMap: () => ({ message: "You must accept the PMA Membership Agreement" }) }),
+  privacyAccepted: z.literal(true, { errorMap: () => ({ message: "You must acknowledge the Privacy Policy" }) }),
 });
 
 export const loginSchema = z.object({
@@ -933,3 +937,34 @@ export const insertSubscriptionSchema = createInsertSchema(subscriptions).omit({
 
 export type InsertSubscription = z.infer<typeof insertSubscriptionSchema>;
 export type Subscription = typeof subscriptions.$inferSelect;
+
+// Beneficial Units — each beneficiary receives 1 unit representing equal share (1/N) of trust corpus
+export const beneficialUnits = pgTable("beneficial_units", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id).unique(),
+  unitNumber: integer("unit_number").notNull().unique(),
+  issuedAt: timestamp("issued_at").defaultNow(),
+  status: text("status").default('active'),
+  withdrawnAt: timestamp("withdrawn_at"),
+});
+
+export const beneficialUnitRelations = relations(beneficialUnits, ({ one }) => ({
+  user: one(users, {
+    fields: [beneficialUnits.userId],
+    references: [users.id],
+  }),
+}));
+
+export const insertBeneficialUnitSchema = createInsertSchema(beneficialUnits).omit({
+  id: true,
+  issuedAt: true,
+  withdrawnAt: true,
+});
+
+export type InsertBeneficialUnit = z.infer<typeof insertBeneficialUnitSchema>;
+export type BeneficialUnit = typeof beneficialUnits.$inferSelect;
+
+// ====== PHASE II: Commune Structure (Future) ======
+// communes table: id, name, type ('farming'|'discipleship'|'trade'|...), trusteeId, location, charter, createdAt
+// commune_memberships: userId, communeId, role ('beneficiary'|'steward'|'elder'), joinedAt
+// Beneficiaries maintain global trust status + optional commune membership(s)

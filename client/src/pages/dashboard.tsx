@@ -8,6 +8,7 @@ import { useAuth } from "@/hooks/useAuth";
 import RequireAuth from "@/components/RequireAuth";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import {
+  Award,
   BookOpen,
   CheckCircle,
   MessageSquare,
@@ -307,6 +308,31 @@ function DashboardContent() {
             </CardContent>
           </Card>
 
+          {/* Beneficial Unit Card */}
+          <Card className="flex flex-col border border-royal-gold/20">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-royal-navy dark:text-royal-gold flex items-center gap-2 font-cinzel text-lg">
+                <Award className="h-5 w-5 text-royal-gold" />
+                Your Beneficial Unit
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex-1 flex flex-col">
+              <div className="flex-1 flex flex-col items-center justify-center text-center py-6">
+                <Award className="h-10 w-10 text-royal-gold mb-2" />
+                <p className="text-sm text-gray-500 mb-1">
+                  Trust Instrument
+                </p>
+                <p className="text-xs text-gray-400">
+                  View your beneficial unit details and download your certificate.
+                </p>
+              </div>
+              <Link href="/beneficiary/unit" className="mt-4">
+                <Button className="w-full bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold text-sm">
+                  View Unit <ArrowRight className="h-4 w-4 ml-1" />
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
 
           {/* Premium Upgrade Card — only for free users */}
           {!isPremium && (
@@ -314,7 +340,7 @@ function DashboardContent() {
               <CardHeader className="pb-3">
                 <CardTitle className="text-royal-navy dark:text-royal-gold flex items-center gap-2 font-cinzel text-lg">
                   <Crown className="h-5 w-5 text-royal-gold" />
-                  Unlock Premium
+                  Elevate Interest
                 </CardTitle>
               </CardHeader>
               <CardContent className="flex-1 flex flex-col">

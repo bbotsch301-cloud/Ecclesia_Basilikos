@@ -86,7 +86,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/pricing" className="text-gray-300 hover:text-royal-gold transition-colors">
-                  Membership
+                  Beneficial Interest
                 </Link>
               </li>
             </ul>
@@ -128,8 +128,11 @@ export default function Footer() {
               <Link href="/contact" className="text-gray-300 hover:text-royal-gold transition-colors">
                 Contact
               </Link>
+              <Link href="/pma-agreement" className="text-gray-300 hover:text-royal-gold transition-colors">
+                PMA Agreement
+              </Link>
               <Link href="/terms" className="text-gray-300 hover:text-royal-gold transition-colors">
-                Terms of Service
+                Platform Guidelines
               </Link>
               <Link href="/privacy" className="text-gray-300 hover:text-royal-gold transition-colors">
                 Privacy Policy

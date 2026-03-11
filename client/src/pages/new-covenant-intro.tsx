@@ -64,7 +64,8 @@ export default function NewCovenantIntro() {
       email: "",
       password: "",
       confirmPassword: "",
-      termsAccepted: undefined as unknown as true,
+      pmaAgreementAccepted: undefined as unknown as true,
+      privacyAccepted: undefined as unknown as true,
     },
   });
 
@@ -378,7 +379,7 @@ export default function NewCovenantIntro() {
                                     />
                                     <FormField
                                       control={registerForm.control}
-                                      name="termsAccepted"
+                                      name="pmaAgreementAccepted"
                                       render={({ field }) => (
                                         <FormItem>
                                           <div className="border border-gray-200 rounded-lg p-3">
@@ -390,13 +391,38 @@ export default function NewCovenantIntro() {
                                                 />
                                               </FormControl>
                                               <Label className="text-sm text-gray-700 leading-relaxed cursor-pointer font-normal" onClick={() => field.onChange(field.value === true ? undefined : true)}>
-                                                I agree to the{" "}
-                                                <Link href="/terms" className="text-covenant-gold hover:underline font-medium">
-                                                  Terms of Service
-                                                </Link>{" "}
-                                                and{" "}
+                                                I accept the{" "}
+                                                <Link href="/pma-agreement" className="text-covenant-gold hover:underline font-medium">
+                                                  PMA Membership Agreement
+                                                </Link>
+                                              </Label>
+                                            </div>
+                                            <FormMessage className="mt-2 ml-7" />
+                                          </div>
+                                        </FormItem>
+                                      )}
+                                    />
+                                    <FormField
+                                      control={registerForm.control}
+                                      name="privacyAccepted"
+                                      render={({ field }) => (
+                                        <FormItem>
+                                          <div className="border border-gray-200 rounded-lg p-3">
+                                            <div className="flex items-start gap-3">
+                                              <FormControl>
+                                                <Checkbox
+                                                  checked={field.value === true}
+                                                  onCheckedChange={(checked) => field.onChange(checked === true ? true : undefined)}
+                                                />
+                                              </FormControl>
+                                              <Label className="text-sm text-gray-700 leading-relaxed cursor-pointer font-normal" onClick={() => field.onChange(field.value === true ? undefined : true)}>
+                                                I acknowledge the{" "}
                                                 <Link href="/privacy" className="text-covenant-gold hover:underline font-medium">
                                                   Privacy Policy
+                                                </Link>{" "}
+                                                and{" "}
+                                                <Link href="/terms" className="text-covenant-gold hover:underline font-medium">
+                                                  Platform Guidelines
                                                 </Link>
                                               </Label>
                                             </div>

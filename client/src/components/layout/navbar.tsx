@@ -112,11 +112,11 @@ export default function Navbar() {
                     <Shield className="w-4 h-4 mr-2" /> Proof Vault
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => navigate("/billing")}>
-                    <CreditCard className="w-4 h-4 mr-2" /> Billing
+                    <CreditCard className="w-4 h-4 mr-2" /> Stewardship
                   </DropdownMenuItem>
                   {!isPremium && (
                     <DropdownMenuItem onClick={() => navigate("/pricing")} className="text-royal-gold focus:text-royal-gold">
-                      <Sparkles className="w-4 h-4 mr-2" /> Upgrade
+                      <Sparkles className="w-4 h-4 mr-2" /> Elevate Interest
                     </DropdownMenuItem>
                   )}
                   {user?.role === 'admin' && (
@@ -224,7 +224,7 @@ export default function Navbar() {
                             <Shield className="w-4 h-4" /> Proof Vault
                           </Link>
                           <Link href="/billing" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">
-                            <CreditCard className="w-4 h-4" /> Billing
+                            <CreditCard className="w-4 h-4" /> Stewardship
                           </Link>
                           {user?.role === 'admin' && (
                             <Link href="/admin" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">

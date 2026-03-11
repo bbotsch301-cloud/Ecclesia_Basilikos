@@ -76,7 +76,7 @@ export default function Pricing() {
             Choose Your Path
           </h1>
           <p className="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto leading-relaxed">
-            Begin your journey with free Trust content, or unlock the full Royal Assembly for complete access to all courses, templates, and community features.
+            Begin your journey with free Trust content, or elevate to Royal Beneficial Interest for complete access to all courses, templates, and community features.
           </p>
         </div>
       </section>
@@ -89,7 +89,7 @@ export default function Pricing() {
             <CardContent className="p-8 md:p-10">
               <div className="text-center mb-8">
                 <Badge className="mb-4 bg-gray-100 text-gray-700 border-gray-300 font-cinzel">
-                  <Users className="w-3 h-3 mr-1" /> Citizen
+                  <Users className="w-3 h-3 mr-1" /> General Beneficiary
                 </Badge>
                 <h2 className="font-cinzel-decorative text-2xl font-bold text-royal-navy mb-2">Free</h2>
                 <p className="text-4xl font-bold text-royal-navy">$0<span className="text-lg text-gray-400 font-normal">/forever</span></p>
@@ -123,7 +123,7 @@ export default function Pricing() {
             <CardContent className="p-8 md:p-10">
               <div className="text-center mb-8">
                 <Badge className="mb-4 bg-royal-gold/10 text-royal-gold border-royal-gold font-cinzel">
-                  <Crown className="w-3 h-3 mr-1" /> Royal Assembly
+                  <Crown className="w-3 h-3 mr-1" /> Royal Beneficiary
                 </Badge>
                 <h2 className="font-cinzel-decorative text-2xl font-bold text-royal-navy mb-2">Premium</h2>
                 <p className="text-4xl font-bold text-royal-navy">$9.99<span className="text-lg text-gray-400 font-normal">/month</span></p>
@@ -144,11 +144,11 @@ export default function Pricing() {
               {isPremium ? (
                 <div className="space-y-2">
                   <Button className="w-full bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold" disabled>
-                    <Crown className="w-4 h-4 mr-2" /> You're a Member
+                    <Crown className="w-4 h-4 mr-2" /> You're a Royal Beneficiary
                   </Button>
                   <Link href="/billing">
                     <Button variant="ghost" className="w-full text-sm text-gray-500">
-                      Manage Subscription
+                      Manage Stewardship
                     </Button>
                   </Link>
                 </div>
@@ -162,7 +162,7 @@ export default function Pricing() {
                     {isLoading ? (
                       <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Processing...</>
                     ) : (
-                      <><Crown className="w-4 h-4 mr-2" /> Subscribe Now</>
+                      <><Crown className="w-4 h-4 mr-2" /> Elevate Interest</>
                     )}
                   </Button>
                   {error && (
@@ -172,7 +172,7 @@ export default function Pricing() {
               ) : stripeEnabled && !isAuthenticated ? (
                 <Link href="/signup">
                   <Button className="w-full bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold">
-                    Sign Up to Subscribe
+                    Sign Up to Join
                   </Button>
                 </Link>
               ) : (

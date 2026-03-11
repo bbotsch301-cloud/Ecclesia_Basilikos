@@ -47,6 +47,8 @@ const NewsletterUnsubscribe = lazy(() => import("@/pages/newsletter-unsubscribe"
 const NotFound = lazy(() => import("@/pages/not-found"));
 const Terms = lazy(() => import("@/pages/terms"));
 const Privacy = lazy(() => import("@/pages/privacy"));
+const PmaAgreement = lazy(() => import("@/pages/pma-agreement"));
+const BeneficialUnit = lazy(() => import("@/pages/beneficial-unit"));
 const UserProfile = lazy(() => import("@/pages/user-profile"));
 
 // Admin pages
@@ -116,6 +118,8 @@ function Router() {
             <Route path="/reset-password" component={ResetPassword} />
             <Route path="/terms" component={Terms} />
             <Route path="/privacy" component={Privacy} />
+            <Route path="/pma-agreement" component={PmaAgreement} />
+            <Route path="/beneficiary/unit">{() => <SectionErrorBoundary><BeneficialUnit /></SectionErrorBoundary>}</Route>
             <Route path="/pricing" component={Pricing} />
             <Route path="/billing">{() => <SectionErrorBoundary><Billing /></SectionErrorBoundary>}</Route>
             <Route path="/user/:userId" component={UserProfile} />

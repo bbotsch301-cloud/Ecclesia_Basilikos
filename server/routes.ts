@@ -90,7 +90,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Authentication routes
   app.post("/api/auth/register", authLimiter, async (req, res) => {
     try {
-      const { termsAccepted, ...userData } = insertUserSchema.parse(req.body);
+      const { pmaAgreementAccepted, privacyAccepted, ...userData } = insertUserSchema.parse(req.body);
 
       // Check if user already exists
       const existingUser = await storage.getUserByEmail(userData.email);
@@ -98,8 +98,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: "Email already registered" });
       }
 
-      const user = await storage.createUser({ ...userData, termsAcceptedAt: new Date() });
-      
+      const user = await storage.createUser({ ...userData, termsAcceptedAt: new Date(), pmaAgreementAcceptedAt: new Date() });
+
+      // Issue beneficial unit
+      try {
+        await storage.issueBeneficialUnit(user.id);
+      } catch (unitErr) {
+        logger.warn({ err: unitErr, userId: user.id }, 'Failed to issue beneficial unit during registration');
+      }
+
       // Send verification email
       const verificationUrl = `${process.env.BASE_URL || `${req.protocol}://${req.get('host')}`}/verify-email?token=${user.emailVerificationToken}`;
       
@@ -141,8 +148,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           await storage.createNotification({
             userId: verifiedUser.id,
             type: 'welcome',
-            title: 'Welcome to Ecclesia Basilikos!',
-            message: 'Start your journey by exploring our courses and downloading essential documents.',
+            title: 'Welcome, Beneficiary!',
+            message: 'Your beneficial interest in the Ecclesia Basilikos Trust is now established. Begin your journey.',
             linkUrl: '/dashboard',
           });
 
@@ -1875,6 +1882,51 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Proof Vault routes
   app.use('/api/proof-vault', proofVaultRoutes);
+
+  // Beneficial Unit endpoints
+  app.get("/api/beneficiary/unit", requireAuth, async (req, res) => {
+    try {
+      const userId = req.user!.id;
+      const unit = await storage.getBeneficialUnit(userId);
+      if (!unit) {
+        return res.status(404).json({ error: "No beneficial unit found" });
+      }
+      const totalActive = await storage.getTotalActiveBeneficiaries();
+      res.json({
+        ...unit,
+        totalActiveBeneficiaries: totalActive,
+        percentage: totalActive > 0 ? (1 / totalActive * 100).toFixed(6) : "0",
+      });
+    } catch (error) {
+      logger.error({ err: error }, "Error fetching beneficial unit");
+      res.status(500).json({ error: "Failed to fetch beneficial unit" });
+    }
+  });
+
+  app.get("/api/beneficiary/unit/certificate", requireAuth, async (req, res) => {
+    try {
+      const userId = req.user!.id;
+      const user = req.user!;
+      const unit = await storage.getBeneficialUnit(userId);
+      if (!unit) {
+        return res.status(404).json({ error: "No beneficial unit found" });
+      }
+      const totalActive = await storage.getTotalActiveBeneficiaries();
+      const { generateCertificatePDF } = await import("./certificateGenerator");
+      const pdfBuffer = await generateCertificatePDF({
+        fullName: `${user.firstName} ${user.lastName}`,
+        unitNumber: unit.unitNumber,
+        issuedAt: unit.issuedAt!,
+        totalActive,
+      });
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader("Content-Disposition", `attachment; filename="beneficial-unit-${unit.unitNumber}.pdf"`);
+      res.send(pdfBuffer);
+    } catch (error) {
+      logger.error({ err: error }, "Error generating certificate");
+      res.status(500).json({ error: "Failed to generate certificate" });
+    }
+  });
 
   const httpServer = createServer(app);
   return httpServer;

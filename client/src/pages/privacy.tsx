@@ -14,7 +14,7 @@ export default function Privacy() {
           <p>We collect the following types of information:</p>
           <ul className="list-disc pl-6 space-y-1">
             <li>
-              <strong>Account Information:</strong> When you register, we collect your name, email address,
+              <strong>Account Information:</strong> When you become a Beneficiary, we collect your name, email address,
               and password (stored securely using bcrypt hashing).
             </li>
             <li>
@@ -36,7 +36,7 @@ export default function Privacy() {
           <h2 className="font-playfair text-2xl font-semibold text-royal-navy">2. How We Use Your Information</h2>
           <p>We use your information to:</p>
           <ul className="list-disc pl-6 space-y-1">
-            <li>Provide and maintain the Platform and your account</li>
+            <li>Administer your beneficial interest and trust operations</li>
             <li>Send verification emails and password reset links</li>
             <li>Deliver newsletter updates you have subscribed to</li>
             <li>Respond to your inquiries and support requests</li>
@@ -77,9 +77,7 @@ export default function Privacy() {
         <section>
           <h2 className="font-playfair text-2xl font-semibold text-royal-navy">6. Data Sharing</h2>
           <p>
-            We do not sell, trade, or otherwise transfer your personal information to outside parties.
-            Your data is only shared with third-party services as described above, which are necessary
-            for the Platform to function.
+            We do not sell, trade, or otherwise transfer your personal information to outside parties. Your data is held within the private trust structure and is only shared with third-party services as described above, which are necessary for the Platform to function.
           </p>
         </section>
 
@@ -88,14 +86,24 @@ export default function Privacy() {
           <p>You have the right to:</p>
           <ul className="list-disc pl-6 space-y-1">
             <li>Access and update your personal information through your profile</li>
-            <li>Delete your account by contacting us</li>
+            <li>Withdraw your beneficial interest (account deletion)</li>
             <li>Unsubscribe from our newsletter at any time</li>
             <li>Request a copy of your personal data</li>
           </ul>
         </section>
 
         <section>
-          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">8. Children's Privacy</h2>
+          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">Private Association Data Practices</h2>
+          <p>
+            As a Private Membership Association, Ecclesia Basilikos handles all member data within the private
+            jurisdiction of the Trust. Data collected from Beneficiaries is used exclusively for the administration
+            of beneficial interest and trust operations. The Association does not participate in commercial data
+            markets or advertising networks.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">9. Children's Privacy</h2>
           <p>
             The Platform is not intended for children under the age of 13. We do not knowingly collect
             personal information from children under 13.
@@ -103,7 +111,7 @@ export default function Privacy() {
         </section>
 
         <section>
-          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">9. Changes to This Policy</h2>
+          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">10. Changes to This Policy</h2>
           <p>
             We may update this Privacy Policy from time to time. Changes will be posted on this page with
             an updated revision date. Your continued use of the Platform constitutes acceptance of the
@@ -112,7 +120,7 @@ export default function Privacy() {
         </section>
 
         <section>
-          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">10. Contact</h2>
+          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">11. Contact</h2>
           <p>
             If you have questions about this Privacy Policy or your personal data, please{" "}
             <Link href="/contact" className="text-royal-gold hover:text-royal-gold-bright underline">

@@ -84,6 +84,7 @@ import {
   proofs,
   type Proof,
   type InsertProof,
+  beneficialUnits,
 } from "@shared/schema";
 import { eq, and, desc, sql, or, inArray, ilike } from "drizzle-orm";
 import { db } from "./db";
@@ -97,13 +98,17 @@ export interface IStorage {
   getUserByVerificationToken(token: string): Promise<User | undefined>;
   getUserByPasswordResetToken(token: string): Promise<User | undefined>;
   getUserByStripeCustomerId(customerId: string): Promise<User | undefined>;
-  createUser(user: Omit<InsertUser, 'termsAccepted'> & { termsAcceptedAt?: Date }): Promise<User>;
+  createUser(user: Omit<InsertUser, 'pmaAgreementAccepted' | 'privacyAccepted'> & { termsAcceptedAt?: Date; pmaAgreementAcceptedAt?: Date }): Promise<User>;
   updateUser(userId: string, updates: Partial<InsertUser>): Promise<User>;
   setPasswordResetToken(userId: string, token: string, expires: Date): Promise<void>;
   resetPassword(userId: string, hashedPassword: string): Promise<void>;
   verifyUserEmail(userId: string): Promise<User>;
   validateUser(email: string, password: string): Promise<User | null>;
-  
+  issueBeneficialUnit(userId: string): Promise<any>;
+  getBeneficialUnit(userId: string): Promise<any>;
+  getTotalActiveBeneficiaries(): Promise<number>;
+  withdrawBeneficialUnit(userId: string): Promise<void>;
+
   // Contact & Newsletter
   createContact(contact: InsertContact): Promise<Contact>;
   getAllContacts(): Promise<Contact[]>;
@@ -401,7 +406,7 @@ export class DatabaseStorage implements IStorage {
     return user;
   }
 
-  async createUser(insertUser: Omit<InsertUser, 'termsAccepted'> & { termsAcceptedAt?: Date }): Promise<User> {
+  async createUser(insertUser: Omit<InsertUser, 'pmaAgreementAccepted' | 'privacyAccepted'> & { termsAcceptedAt?: Date; pmaAgreementAcceptedAt?: Date }): Promise<User> {
     const hashedPassword = await bcrypt.hash(insertUser.password, 10);
     const verificationToken = randomUUID();
     const verificationExpires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
@@ -417,6 +422,49 @@ export class DatabaseStorage implements IStorage {
       })
       .returning();
     return user;
+  }
+
+  async issueBeneficialUnit(userId: string): Promise<any> {
+    // Get next unit number
+    const result = await db.select({ maxNum: sql<number>`COALESCE(MAX(${beneficialUnits.unitNumber}), 0)` }).from(beneficialUnits);
+    const nextNumber = (result[0]?.maxNum || 0) + 1;
+
+    const [unit] = await db
+      .insert(beneficialUnits)
+      .values({
+        userId,
+        unitNumber: nextNumber,
+        status: 'active',
+      })
+      .returning();
+
+    // Update user with unit reference
+    await db.update(users).set({ beneficialUnitId: unit.id }).where(eq(users.id, userId));
+
+    return unit;
+  }
+
+  async getBeneficialUnit(userId: string): Promise<any> {
+    const [unit] = await db
+      .select()
+      .from(beneficialUnits)
+      .where(eq(beneficialUnits.userId, userId));
+    return unit || null;
+  }
+
+  async getTotalActiveBeneficiaries(): Promise<number> {
+    const result = await db
+      .select({ count: sql<number>`COUNT(*)` })
+      .from(beneficialUnits)
+      .where(eq(beneficialUnits.status, 'active'));
+    return Number(result[0]?.count || 0);
+  }
+
+  async withdrawBeneficialUnit(userId: string): Promise<void> {
+    await db
+      .update(beneficialUnits)
+      .set({ status: 'withdrawn', withdrawnAt: new Date() })
+      .where(eq(beneficialUnits.userId, userId));
   }
 
   async validateUser(email: string, password: string): Promise<User | null> {

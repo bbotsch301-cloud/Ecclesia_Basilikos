@@ -128,7 +128,7 @@ export function generateBulkEmailHtml(subject: string, body: string): string {
           </div>
 
           <div class="footer">
-            <p>Ecclesia Basilikos - Teaching Spiritual Freedom Through Biblical Truth</p>
+            <p>Ecclesia Basilikos - A Private Membership Association | Teaching Spiritual Freedom Through Biblical Truth</p>
             <p>If you have any questions, please contact us through our website.</p>
             <p style="margin-top:12px;font-size:12px;color:#999;">
               <a href="${getBaseUrl()}/newsletter/unsubscribe" style="color:#999;text-decoration:underline;">Unsubscribe</a> from future emails.
@@ -180,8 +180,8 @@ export function generateWelcomeEmailHtml(firstName: string): string {
       <body>
         <div class="container">
           <div class="header">
-            <h1>Welcome to Ecclesia Basilikos!</h1>
-            <p>Your Journey to Spiritual Freedom Begins Now</p>
+            <h1>Welcome, Beneficiary!</h1>
+            <p>Your Beneficial Interest Is Now Established</p>
           </div>
 
           <div class="content">
@@ -213,7 +213,7 @@ export function generateWelcomeEmailHtml(firstName: string): string {
           </div>
 
           <div class="footer">
-            <p>Ecclesia Basilikos - Teaching Spiritual Freedom Through Biblical Truth</p>
+            <p>Ecclesia Basilikos - A Private Membership Association | Teaching Spiritual Freedom Through Biblical Truth</p>
             <p>If you have any questions, please contact us through our website.</p>
           </div>
         </div>
@@ -266,7 +266,7 @@ export function sendForumReplyNotificationEmail(
             <p style="font-size: 13px; color: #888;">Or copy this link: ${threadUrl}</p>
           </div>
           <div class="footer">
-            <p>Ecclesia Basilikos - Teaching Spiritual Freedom Through Biblical Truth</p>
+            <p>Ecclesia Basilikos - A Private Membership Association | Teaching Spiritual Freedom Through Biblical Truth</p>
           </div>
         </div>
       </body>
@@ -371,7 +371,7 @@ export function generateVerificationEmailHtml(
           </div>
 
           <div class="footer">
-            <p>${template.footerText || 'Ecclesia Basilikos - Teaching Spiritual Freedom Through Biblical Truth'}</p>
+            <p>${template.footerText || 'Ecclesia Basilikos - A Private Membership Association | Teaching Spiritual Freedom Through Biblical Truth'}</p>
             <p>${template.footerSubtext || 'If you have any questions, please contact us through our website.'}</p>
           </div>
         </div>
@@ -391,7 +391,7 @@ export function sendOnboardingEmail(to: string, firstName: string): void {
   const forumUrl = `${baseUrl}/forum`;
   const downloadsUrl = `${baseUrl}/downloads`;
 
-  const subject = 'Getting Started with Ecclesia Basilikos';
+  const subject = 'Getting Started as a Beneficiary — Ecclesia Basilikos';
   const html = `
     <!DOCTYPE html>
     <html>
@@ -429,8 +429,8 @@ export function sendOnboardingEmail(to: string, firstName: string): void {
       <body>
         <div class="container">
           <div class="header">
-            <h1>Getting Started</h1>
-            <p>Your Quick Guide to Ecclesia Basilikos</p>
+            <h1>Getting Started as a Beneficiary</h1>
+            <p>Your Quick Guide to the Ecclesia Basilikos Trust</p>
           </div>
 
           <div class="content">
@@ -476,7 +476,7 @@ export function sendOnboardingEmail(to: string, firstName: string): void {
           </div>
 
           <div class="footer">
-            <p>Ecclesia Basilikos - Teaching Spiritual Freedom Through Biblical Truth</p>
+            <p>Ecclesia Basilikos - A Private Membership Association | Teaching Spiritual Freedom Through Biblical Truth</p>
             <p>If you have any questions, please contact us through our website.</p>
           </div>
         </div>

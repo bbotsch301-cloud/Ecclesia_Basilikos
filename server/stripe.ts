@@ -163,7 +163,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session): Promis
     notes: "Subscribed via Stripe Checkout",
   });
 
-  logger.info({ userId, customerId, subscriptionId }, "Checkout completed - user upgraded to premium");
+  logger.info({ userId, customerId, subscriptionId }, "Checkout completed - beneficiary elevated to Royal Interest");
 }
 
 async function handleSubscriptionUpdated(subscription: Stripe.Subscription): Promise<void> {
@@ -215,7 +215,7 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription): Pro
     notes: "Subscription cancelled/deleted via Stripe",
   });
 
-  logger.info({ userId: user.id }, "Subscription deleted - user downgraded to free");
+  logger.info({ userId: user.id }, "Subscription deleted - beneficiary returned to General Interest");
 }
 
 async function handlePaymentFailed(invoice: Stripe.Invoice): Promise<void> {

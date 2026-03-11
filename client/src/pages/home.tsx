@@ -683,7 +683,7 @@ export default function Home() {
             <RevealOnScroll>
               <Card className="royal-card h-full">
                 <CardContent className="p-8">
-                  <h3 className="font-cinzel text-xl font-bold text-royal-navy mb-2">Free — Citizen</h3>
+                  <h3 className="font-cinzel text-xl font-bold text-royal-navy mb-2">Free — General Beneficiary</h3>
                   <p className="text-3xl font-bold text-royal-navy mb-4">$0</p>
                   <ul className="space-y-2 mb-6">
                     {["Trust course access", "Trust downloads", "Forum reading", "Progress tracking"].map((f, i) => (
@@ -703,7 +703,7 @@ export default function Home() {
               <Card className="royal-card h-full border-2 border-royal-gold/30">
                 <CardContent className="p-8">
                   <div className="flex items-center gap-2 mb-2">
-                    <h3 className="font-cinzel text-xl font-bold text-royal-navy">Premium — Royal Assembly</h3>
+                    <h3 className="font-cinzel text-xl font-bold text-royal-navy">Premium — Royal Beneficiary</h3>
                   </div>
                   <p className="text-3xl font-bold text-royal-navy mb-4">$9.99<span className="text-sm text-gray-400 font-normal">/mo</span></p>
                   <ul className="space-y-2 mb-6">

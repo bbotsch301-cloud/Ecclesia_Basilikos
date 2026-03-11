@@ -25,7 +25,7 @@ const registrationSchema = insertUserSchema.extend({
 type RegistrationData = z.infer<typeof registrationSchema>;
 
 export default function Signup() {
-  usePageTitle("Join");
+  usePageTitle("Become a Beneficiary");
   const { isAuthenticated, isLoading, register: registerUser, isRegistering } = useAuth();
   const { toast } = useToast();
   const [, navigate] = useLocation();
@@ -41,7 +41,7 @@ export default function Signup() {
   const form = useForm<RegistrationData>({
     mode: "onBlur",
     resolver: zodResolver(registrationSchema),
-    defaultValues: { email: "", password: "", confirmPassword: "", firstName: "", lastName: "", termsAccepted: undefined as unknown as true },
+    defaultValues: { email: "", password: "", confirmPassword: "", firstName: "", lastName: "", pmaAgreementAccepted: undefined as unknown as true, privacyAccepted: undefined as unknown as true },
   });
 
   const onSubmit = async (data: RegistrationData) => {
@@ -52,7 +52,7 @@ export default function Signup() {
       setRegisteredEmail(userData.email);
       setRegistrationSuccess(true);
       toast({
-        title: "Account created!",
+        title: "Beneficial interest established!",
         description: "Please check your email to verify your account before signing in.",
       });
     } catch (error: any) {
@@ -127,10 +127,10 @@ export default function Signup() {
         <div className="hidden lg:flex flex-col justify-center bg-gradient-to-br from-royal-navy via-royal-burgundy to-royal-navy p-12 xl:p-16 text-white">
           <Crown className="w-12 h-12 text-royal-gold mb-6" />
           <h2 className="font-cinzel-decorative text-3xl xl:text-4xl font-bold mb-4">
-            Join the Covenant Path
+            Become a Beneficiary
           </h2>
           <p className="text-gray-300 text-lg mb-8 leading-relaxed">
-            Step into your identity as a royal priest. Access the tools, education,
+            Acquire beneficial interest in the Ecclesia Basilikos Trust. Access the tools, education,
             and community to walk in covenant authority.
           </p>
           <ul className="space-y-4 mb-10">
@@ -142,7 +142,7 @@ export default function Signup() {
             ))}
           </ul>
           <p className="text-sm text-gray-400 mb-4">
-            Free account includes Trust content. <Link href="/pricing" className="text-royal-gold hover:underline">Upgrade anytime</Link> for full access.
+            General Beneficial Interest includes Trust content. <Link href="/pricing" className="text-royal-gold hover:underline">Upgrade anytime</Link> for full access.
           </p>
           <div className="bg-white/10 backdrop-blur-sm border border-royal-gold/30 rounded-lg p-5">
             <p className="font-georgia italic text-gray-200">
@@ -236,7 +236,7 @@ export default function Signup() {
                   />
                   <FormField
                     control={form.control}
-                    name="termsAccepted"
+                    name="pmaAgreementAccepted"
                     render={({ field }) => (
                       <FormItem>
                         <div className="border border-gray-200 rounded-lg p-4">
@@ -248,13 +248,39 @@ export default function Signup() {
                               />
                             </FormControl>
                             <Label className="text-sm text-gray-700 leading-relaxed cursor-pointer font-normal" onClick={() => field.onChange(field.value === true ? undefined : true)}>
-                              I agree to the{" "}
-                              <Link href="/terms" className="text-royal-gold hover:underline font-medium">
-                                Terms of Service
-                              </Link>{" "}
-                              and{" "}
+                              I have read and voluntarily accept the{" "}
+                              <Link href="/pma-agreement" className="text-royal-gold hover:underline font-medium">
+                                PMA Membership Agreement
+                              </Link>
+                              , establishing my beneficial interest in the Ecclesia Basilikos Trust
+                            </Label>
+                          </div>
+                          <FormMessage className="mt-2 ml-7" />
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="privacyAccepted"
+                    render={({ field }) => (
+                      <FormItem>
+                        <div className="border border-gray-200 rounded-lg p-4">
+                          <div className="flex items-start gap-3">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value === true}
+                                onCheckedChange={(checked) => field.onChange(checked === true ? true : undefined)}
+                              />
+                            </FormControl>
+                            <Label className="text-sm text-gray-700 leading-relaxed cursor-pointer font-normal" onClick={() => field.onChange(field.value === true ? undefined : true)}>
+                              I acknowledge the{" "}
                               <Link href="/privacy" className="text-royal-gold hover:underline font-medium">
                                 Privacy Policy
+                              </Link>{" "}
+                              and{" "}
+                              <Link href="/terms" className="text-royal-gold hover:underline font-medium">
+                                Platform Guidelines
                               </Link>
                             </Label>
                           </div>

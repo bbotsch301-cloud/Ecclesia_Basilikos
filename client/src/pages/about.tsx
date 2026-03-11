@@ -1,3 +1,4 @@
+import { Link } from "wouter";
 import HeroSection from "@/components/ui/hero-section";
 import ScriptureQuote from "@/components/ui/scripture-quote";
 import { Check, X } from "lucide-react";
@@ -450,6 +451,28 @@ export default function About() {
                 <p className="text-lg text-gray-600 leading-relaxed">
                   This trust operates under <span className="font-semibold text-royal-navy">Lex Divina</span> (divine law), transcending earthly jurisdictions and empowering you to walk as an ambassador of Heaven with full access to Kingdom resources.
                 </p>
+              </div>
+            </div>
+
+            {/* Private Membership Association */}
+            <div className="bg-gradient-to-br from-royal-gold/5 to-transparent p-8 rounded-xl shadow-lg border-2 border-royal-gold/20">
+              <h3 className="font-cinzel-decorative text-2xl font-bold text-royal-navy mb-6 text-center">Private Membership Association</h3>
+              <div className="max-w-4xl mx-auto">
+                <p className="text-lg text-gray-600 leading-relaxed mb-4">
+                  Ecclesia Basilikos operates as a Private Membership Association (PMA) under the First Amendment right
+                  of free association and free exercise of religion. Members are Beneficiaries who acquire beneficial
+                  interest in the Trust upon joining.
+                </p>
+                <p className="text-lg text-gray-600 leading-relaxed mb-4">
+                  This structure ensures that the Association operates in private jurisdiction, separate from public
+                  commercial enterprise. All interactions, educational content, and community activities are conducted
+                  within the private trust framework.
+                </p>
+                <div className="text-center mt-6">
+                  <Link href="/pma-agreement" className="text-royal-gold hover:underline font-cinzel font-semibold">
+                    Read the PMA Membership Agreement →
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
