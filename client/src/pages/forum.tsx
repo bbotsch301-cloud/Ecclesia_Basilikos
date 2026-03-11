@@ -9,11 +9,12 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   MessageSquare, Eye, Plus, Pin, Search, X, Crown, Heart,
-  Lock, Loader2, MessageCircle, TrendingUp,
+  Lock, Loader2, MessageCircle, TrendingUp, Flag,
 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -74,7 +75,7 @@ function getUserInitials(user: User): string {
 }
 
 export default function Forum() {
-  usePageTitle("Forum");
+  usePageTitle("Forum", "Community forum for discussing trust law, lawful money, and covenant principles.");
   const { user, isAuthenticated, isPremium } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -93,6 +94,14 @@ export default function Forum() {
     debounceTimerRef.current = setTimeout(() => {
       setDebouncedSearch(value.trim());
     }, 300);
+  }, []);
+
+  const handleCategoryChange = useCallback((categoryId: string | null) => {
+    setSelectedCategory(categoryId);
+    setSearchInput("");
+    setDebouncedSearch("");
+    setPage(1);
+    if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
   }, []);
 
   useEffect(() => {
@@ -269,7 +278,8 @@ export default function Forum() {
               </h2>
               <nav className="space-y-1">
                 <button
-                  onClick={() => setSelectedCategory(null)}
+                  onClick={() => handleCategoryChange(null)}
+                  aria-pressed={selectedCategory === null}
                   className={`w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium transition-all flex items-center justify-between ${
                     selectedCategory === null
                       ? "bg-royal-navy text-white shadow-md"
@@ -282,7 +292,9 @@ export default function Forum() {
                 {categories.map((cat) => (
                   <button
                     key={cat.id}
-                    onClick={() => setSelectedCategory(cat.id)}
+                    onClick={() => handleCategoryChange(cat.id)}
+                    aria-pressed={selectedCategory === cat.id}
+                    aria-label={`Filter by ${cat.name} category`}
                     className={`w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
                       selectedCategory === cat.id
                         ? "text-white shadow-md"
@@ -502,7 +514,7 @@ export default function Forum() {
               </div>
               <div className="flex flex-wrap gap-2">
                 <button
-                  onClick={() => setSelectedCategory(null)}
+                  onClick={() => handleCategoryChange(null)}
                   className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
                     selectedCategory === null
                       ? "bg-royal-navy text-white shadow-md"
@@ -514,7 +526,7 @@ export default function Forum() {
                 {categories.map((cat) => (
                   <button
                     key={cat.id}
-                    onClick={() => setSelectedCategory(cat.id)}
+                    onClick={() => handleCategoryChange(cat.id)}
                     className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all flex items-center gap-1.5 ${
                       selectedCategory === cat.id
                         ? "text-white shadow-md"
@@ -689,6 +701,30 @@ function ThreadRow({
   onLike: (args: { threadId: string; liked: boolean }) => void;
   isAuthenticated: boolean;
 }) {
+  const [reportOpen, setReportOpen] = useState(false);
+  const [reportReason, setReportReason] = useState("");
+  const [reportLoading, setReportLoading] = useState(false);
+  const { toast } = useToast();
+
+  const handleReport = async () => {
+    if (reportReason.trim().length < 10) return;
+    setReportLoading(true);
+    try {
+      const res = await apiRequest("POST", `/api/forum/threads/${thread.id}/report`, { reason: reportReason });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Failed to submit report");
+      }
+      toast({ title: "Report submitted", description: "Thank you for helping keep the community safe." });
+      setReportOpen(false);
+      setReportReason("");
+    } catch (err: any) {
+      toast({ title: "Error", description: err.message || "Failed to submit report", variant: "destructive" });
+    } finally {
+      setReportLoading(false);
+    }
+  };
+
   return (
     <div
       className={`flex items-start gap-3 px-4 md:px-5 py-4 hover:bg-gray-50/70 dark:hover:bg-royal-navy/30 transition-colors ${
@@ -748,6 +784,7 @@ function ThreadRow({
             isAuthenticated ? "hover:text-red-500 cursor-pointer" : "cursor-default"
           } ${thread.userLiked ? "text-red-500" : ""}`}
           title={isAuthenticated ? (thread.userLiked ? "Unlike" : "Like") : "Sign in to like"}
+          aria-label={isAuthenticated ? (thread.userLiked ? "Unlike this thread" : "Like this thread") : "Sign in to like"}
         >
           <Heart className={`h-3.5 w-3.5 ${thread.userLiked ? "fill-current" : ""}`} />
           {thread.likeCount > 0 && <span>{thread.likeCount}</span>}
@@ -760,6 +797,42 @@ function ThreadRow({
           <Eye className="h-3.5 w-3.5" />
           <span>{thread.viewCount}</span>
         </div>
+        {isAuthenticated && (
+          <Dialog open={reportOpen} onOpenChange={setReportOpen}>
+            <DialogTrigger asChild>
+              <button
+                className="flex items-center gap-1 text-gray-400 hover:text-orange-500 transition-colors"
+                title="Report thread"
+                aria-label="Report this thread"
+              >
+                <Flag className="h-3.5 w-3.5" />
+              </button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Report Thread</DialogTitle>
+                <DialogDescription>
+                  Describe why this thread should be reviewed by a moderator.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="space-y-4">
+                <Textarea
+                  placeholder="Reason for reporting (min 10 characters)..."
+                  value={reportReason}
+                  onChange={(e) => setReportReason(e.target.value)}
+                  rows={4}
+                />
+                <Button
+                  className="w-full"
+                  disabled={reportLoading || reportReason.trim().length < 10}
+                  onClick={handleReport}
+                >
+                  {reportLoading ? "Submitting..." : "Submit Report"}
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+        )}
       </div>
     </div>
   );

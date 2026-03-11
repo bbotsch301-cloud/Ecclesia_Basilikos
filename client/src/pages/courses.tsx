@@ -145,7 +145,7 @@ const pillarMeta: Record<string, {
 };
 
 export default function Courses() {
-  usePageTitle("Courses & Learning Path");
+  usePageTitle("Courses & Learning Path", "Browse foundational courses on Trust Law, Lawful Money Redemption, and State Passport.");
   const { isAuthenticated, isLoading, isPremium } = useAuth();
   const { toast } = useToast();
   const [, navigate] = useLocation();
@@ -250,8 +250,14 @@ export default function Courses() {
 
   if (isLoading || coursesLoading) {
     return (
-      <div className="pt-16 min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-royal-gold" />
+      <div className="min-h-screen pt-16">
+        <section className="relative bg-gradient-to-br from-royal-navy via-royal-burgundy to-royal-navy py-20 md:py-28">
+          <div className="absolute inset-0 bg-black/20" />
+          <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <Loader2 className="h-8 w-8 animate-spin text-royal-gold mx-auto" />
+            <p className="text-gray-300 mt-4 font-cinzel">Loading courses...</p>
+          </div>
+        </section>
       </div>
     );
   }
@@ -492,15 +498,48 @@ export default function Courses() {
                           {/* Action Buttons */}
                           <div className="flex flex-wrap items-center gap-3">
                             {!course.isFree && !isPremium ? (
-                              <Link href="/pricing">
-                                <Button
-                                  size="lg"
-                                  className="bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold px-8 shadow-md hover:shadow-lg transition-all"
-                                >
-                                  <Lock className="w-4 h-4 mr-2" />
-                                  Upgrade to Access
-                                </Button>
-                              </Link>
+                              <div className="w-full">
+                                <Link href="/pricing">
+                                  <Button
+                                    size="lg"
+                                    className="bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold px-8 shadow-md hover:shadow-lg transition-all"
+                                  >
+                                    <Lock className="w-4 h-4 mr-2" />
+                                    {(() => {
+                                      const trustCourse = pillarCourses.find(c => c.isFree);
+                                      const trustEnrollment = trustCourse ? getEnrollment(trustCourse.id) : null;
+                                      const hasCompletedTrust = !!trustEnrollment?.completedAt;
+                                      return hasCompletedTrust
+                                        ? `Ready for the next step? Unlock ${course.title} with Premium`
+                                        : "Unlock with Premium — $9.99/mo";
+                                    })()}
+                                  </Button>
+                                </Link>
+                                <p className="text-xs text-gray-500 mt-2 leading-relaxed">
+                                  {(() => {
+                                    const trustCourse = pillarCourses.find(c => c.isFree);
+                                    const trustEnrollment = trustCourse ? getEnrollment(trustCourse.id) : null;
+                                    const hasCompletedTrust = !!trustEnrollment?.completedAt;
+                                    return hasCompletedTrust
+                                      ? `You've completed the free Trust course. Upgrade to continue with ${course.title}.`
+                                      : `Complete the free Trust course first, then unlock ${course.title} with Premium for $9.99/mo.`;
+                                  })()}
+                                </p>
+                                <ul className="mt-3 space-y-1">
+                                  <li className="flex items-center gap-2 text-xs text-gray-500">
+                                    <CheckCircle className="w-3 h-3 text-royal-gold flex-shrink-0" />
+                                    All 3 pillar courses (Lawful Money, Trust, State Passport)
+                                  </li>
+                                  <li className="flex items-center gap-2 text-xs text-gray-500">
+                                    <CheckCircle className="w-3 h-3 text-royal-gold flex-shrink-0" />
+                                    Full downloads library and templates
+                                  </li>
+                                  <li className="flex items-center gap-2 text-xs text-gray-500">
+                                    <CheckCircle className="w-3 h-3 text-royal-gold flex-shrink-0" />
+                                    Forum posting and community access
+                                  </li>
+                                </ul>
+                              </div>
                             ) : (
                               <Button
                                 onClick={() => handleBeginLearning(course.id)}

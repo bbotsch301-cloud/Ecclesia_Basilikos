@@ -85,7 +85,7 @@ import {
   type Proof,
   type InsertProof,
 } from "@shared/schema";
-import { eq, and, desc, sql, or, inArray } from "drizzle-orm";
+import { eq, and, desc, sql, or, inArray, ilike } from "drizzle-orm";
 import { db } from "./db";
 import { randomUUID } from "crypto";
 import bcrypt from "bcryptjs";
@@ -115,7 +115,8 @@ export interface IStorage {
   getCourse(id: string): Promise<Course | undefined>;
   createCourse(course: InsertCourse): Promise<Course>;
   getCourseLessons(courseId: string): Promise<Lesson[]>;
-  
+  getLessonById(id: string): Promise<Lesson | undefined>;
+
   // Enrollment management
   enrollUser(userId: string, courseId: string): Promise<Enrollment>;
   getUserEnrollments(userId: string): Promise<(Enrollment & { course: Course })[]>;
@@ -321,6 +322,17 @@ export interface IStorage {
   getSubscriptionHistory(userId: string): Promise<Subscription[]>;
   getActiveSubscribers(): Promise<User[]>;
   getSubscriptionStats(): Promise<{ totalPremium: number; totalFree: number; recentSubscriptions: number }>;
+  getAllSubscribers(search?: string): Promise<User[]>;
+  getSubscriptionStatsWithChurn(): Promise<{ totalPremium: number; totalFree: number; recentSubscriptions: number; churnRate: number }>;
+  adminUpdateSubscription(userId: string, updates: { status: string; plan: string; endDate: string | null }): Promise<User>;
+
+  // GDPR data export helpers
+  getUserForumThreads(userId: string): Promise<any[]>;
+  getUserForumReplies(userId: string): Promise<any[]>;
+  getUserComments(userId: string): Promise<any[]>;
+
+  // GDPR account deletion
+  deleteAllUserData(userId: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -477,6 +489,11 @@ export class DatabaseStorage implements IStorage {
       .from(lessons)
       .where(eq(lessons.courseId, courseId))
       .orderBy(lessons.order);
+  }
+
+  async getLessonById(id: string): Promise<Lesson | undefined> {
+    const [lesson] = await db.select().from(lessons).where(eq(lessons.id, id));
+    return lesson;
   }
 
   // Enrollment management
@@ -651,6 +668,11 @@ export class DatabaseStorage implements IStorage {
   // Forum Categories
   async getForumCategories(): Promise<ForumCategory[]> {
     return await db.select().from(forum_categories).where(eq(forum_categories.isActive, true)).orderBy(forum_categories.order, forum_categories.name);
+  }
+
+  async getForumCategoryById(id: string): Promise<ForumCategory | undefined> {
+    const [category] = await db.select().from(forum_categories).where(eq(forum_categories.id, id));
+    return category;
   }
 
   async createForumCategory(category: InsertForumCategory): Promise<ForumCategory> {
@@ -870,13 +892,15 @@ export class DatabaseStorage implements IStorage {
   }
 
   async deleteCourse(id: string): Promise<void> {
-    // Delete related lessons and enrollments first
-    await db.delete(lesson_progress).where(
-      sql`${lesson_progress.lessonId} IN (SELECT id FROM ${lessons} WHERE ${lessons.courseId} = ${id})`
-    );
-    await db.delete(lessons).where(eq(lessons.courseId, id));
-    await db.delete(enrollments).where(eq(enrollments.courseId, id));
-    await db.delete(courses).where(eq(courses.id, id));
+    // Delete related lessons and enrollments in a transaction to ensure data integrity
+    await db.transaction(async (tx) => {
+      await tx.delete(lesson_progress).where(
+        sql`${lesson_progress.lessonId} IN (SELECT id FROM ${lessons} WHERE ${lessons.courseId} = ${id})`
+      );
+      await tx.delete(lessons).where(eq(lessons.courseId, id));
+      await tx.delete(enrollments).where(eq(enrollments.courseId, id));
+      await tx.delete(courses).where(eq(courses.id, id));
+    });
   }
 
   async createLesson(lesson: InsertLesson): Promise<Lesson> {
@@ -1949,10 +1973,13 @@ export class DatabaseStorage implements IStorage {
       .orderBy(desc(proofs.createdAt));
   }
 
-  async updateProof(id: string, updates: Partial<{ status: string; otsProof: string | null; lastUpgradeAttemptAt: Date; updatedAt: Date; errorMessage: string | null }>): Promise<Proof> {
+  async updateProof(id: string, updates: Partial<{ status: string; otsProof: string | null; lastUpgradeAttemptAt: Date; updatedAt: Date; errorMessage: string | null }>, userId?: string): Promise<Proof> {
+    const condition = userId
+      ? and(eq(proofs.id, id), eq(proofs.userId, userId))
+      : eq(proofs.id, id);
     const [updated] = await db.update(proofs)
       .set(updates as any)
-      .where(eq(proofs.id, id))
+      .where(condition)
       .returning();
     return updated;
   }
@@ -1973,6 +2000,111 @@ export class DatabaseStorage implements IStorage {
     }).from(sql`(SELECT 1) as dummy`);
 
     return stats;
+  }
+
+  async getAllSubscribers(search?: string): Promise<User[]> {
+    if (search && search.trim()) {
+      const term = `%${search.trim()}%`;
+      return await db.select().from(users)
+        .where(
+          or(
+            ilike(users.firstName, term),
+            ilike(users.lastName, term),
+            ilike(users.email, term),
+          )
+        )
+        .orderBy(desc(users.createdAt));
+    }
+    return await db.select().from(users).orderBy(desc(users.createdAt));
+  }
+
+  async getSubscriptionStatsWithChurn(): Promise<{ totalPremium: number; totalFree: number; recentSubscriptions: number; churnRate: number }> {
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    const [stats] = await db.select({
+      totalPremium: sql<number>`(SELECT COUNT(*) FROM ${users} WHERE subscription_tier = 'premium' AND subscription_status = 'active')`,
+      totalFree: sql<number>`(SELECT COUNT(*) FROM ${users} WHERE subscription_tier = 'free' OR subscription_tier IS NULL OR subscription_status = 'none' OR subscription_status IS NULL)`,
+      recentSubscriptions: sql<number>`(SELECT COUNT(*) FROM ${subscriptions} WHERE created_at > ${thirtyDaysAgo})`,
+      cancelledLast30: sql<number>`(SELECT COUNT(*) FROM ${users} WHERE subscription_status = 'cancelled' AND updated_at > ${thirtyDaysAgo})`,
+      totalEverPremium: sql<number>`(SELECT COUNT(*) FROM ${users} WHERE subscription_tier = 'premium' OR subscription_status IN ('active', 'cancelled', 'expired'))`,
+    }).from(sql`(SELECT 1) as dummy`);
+
+    const churnRate = Number(stats.totalEverPremium) > 0
+      ? Math.round((Number(stats.cancelledLast30) / Number(stats.totalEverPremium)) * 100 * 10) / 10
+      : 0;
+
+    return {
+      totalPremium: Number(stats.totalPremium),
+      totalFree: Number(stats.totalFree),
+      recentSubscriptions: Number(stats.recentSubscriptions),
+      churnRate,
+    };
+  }
+
+  async adminUpdateSubscription(userId: string, updates: { status: string; plan: string; endDate: string | null }): Promise<User> {
+    const subscriptionUpdates: Record<string, any> = {
+      subscriptionStatus: updates.status,
+      subscriptionTier: updates.plan,
+      updatedAt: new Date(),
+    };
+
+    if (updates.endDate) {
+      subscriptionUpdates.subscriptionEndDate = new Date(updates.endDate);
+    } else {
+      subscriptionUpdates.subscriptionEndDate = null;
+    }
+
+    // If setting to active and no start date exists, set one
+    if (updates.status === 'active') {
+      const user = await this.getUser(userId);
+      if (user && !user.subscriptionStartDate) {
+        subscriptionUpdates.subscriptionStartDate = new Date();
+      }
+    }
+
+    const [updated] = await db.update(users)
+      .set(subscriptionUpdates)
+      .where(eq(users.id, userId))
+      .returning();
+    return updated;
+  }
+
+  // GDPR data export helpers
+  async getUserForumThreads(userId: string): Promise<any[]> {
+    return await db.select().from(forum_threads).where(eq(forum_threads.authorId, userId)).orderBy(desc(forum_threads.createdAt));
+  }
+
+  async getUserForumReplies(userId: string): Promise<any[]> {
+    return await db.select().from(forum_replies).where(eq(forum_replies.authorId, userId)).orderBy(desc(forum_replies.createdAt));
+  }
+
+  async getUserComments(userId: string): Promise<any[]> {
+    return await db.select().from(comments).where(eq(comments.authorId, userId)).orderBy(desc(comments.createdAt));
+  }
+
+  // GDPR account deletion - delete all user data in a transaction
+  async deleteAllUserData(userId: string): Promise<void> {
+    await db.transaction(async (tx) => {
+      // Delete in order respecting foreign key constraints
+      await tx.delete(notifications).where(eq(notifications.userId, userId));
+      await tx.delete(comments).where(eq(comments.authorId, userId));
+      await tx.delete(forum_likes).where(eq(forum_likes.userId, userId));
+      await tx.delete(forum_replies).where(eq(forum_replies.authorId, userId));
+      await tx.delete(forum_threads).where(eq(forum_threads.authorId, userId));
+      await tx.delete(lesson_progress).where(eq(lesson_progress.userId, userId));
+      await tx.delete(sectionProgress).where(eq(sectionProgress.userId, userId));
+      await tx.delete(videoProgress).where(eq(videoProgress.userId, userId));
+      await tx.delete(enrollments).where(eq(enrollments.userId, userId));
+      await tx.delete(userDownloads).where(eq(userDownloads.userId, userId));
+      await tx.delete(proofs).where(eq(proofs.userId, userId));
+      await tx.delete(subscriptions).where(eq(subscriptions.userId, userId));
+      await tx.delete(threadSubscriptions).where(eq(threadSubscriptions.userId, userId));
+      // Clear lastReplyUserId references on threads before deleting user
+      await tx.update(forum_threads).set({ lastReplyUserId: null }).where(eq(forum_threads.lastReplyUserId, userId));
+      // Finally delete the user record
+      await tx.delete(users).where(eq(users.id, userId));
+    });
   }
 }
 

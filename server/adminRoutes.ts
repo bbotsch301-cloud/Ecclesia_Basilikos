@@ -560,7 +560,7 @@ router.patch('/lessons/:id', requireInstructor, async (req, res) => {
     const { id } = req.params;
     const lessonData = insertLessonSchema.partial().parse(req.body);
     
-    const oldLesson = await storage.getCourseLessons('').then(lessons => lessons.find(l => l.id === id));
+    const oldLesson = await storage.getLessonById(id);
     const updatedLesson = await storage.updateLesson(id, lessonData);
     
     await auditLog(
@@ -586,7 +586,7 @@ router.delete('/lessons/:id', requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
 
-    const oldLesson = await storage.getCourseLessons('').then(lessons => lessons.find(l => l.id === id));
+    const oldLesson = await storage.getLessonById(id);
     await storage.deleteLesson(id);
 
     await auditLog(
@@ -718,7 +718,7 @@ router.patch('/forum/categories/:id', requireModerator, async (req, res) => {
     const { id } = req.params;
     const categoryData = insertForumCategorySchema.partial().parse(req.body);
     
-    const oldCategory = await storage.getForumCategories().then(cats => cats.find(c => c.id === id));
+    const oldCategory = await storage.getForumCategoryById(id);
     const updatedCategory = await storage.updateForumCategory(id, categoryData);
     
     await auditLog(
@@ -744,7 +744,7 @@ router.delete('/forum/categories/:id', requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
     
-    const oldCategory = await storage.getForumCategories().then(cats => cats.find(c => c.id === id));
+    const oldCategory = await storage.getForumCategoryById(id);
     await storage.deleteForumCategory(id);
     
     await auditLog(
@@ -1421,10 +1421,10 @@ router.patch('/users/:id/subscription', requireAdmin, async (req, res) => {
   }
 });
 
-// Get subscription stats
+// Get subscription stats (with churn rate)
 router.get('/subscription-stats', requireAdmin, async (req, res) => {
   try {
-    const stats = await storage.getSubscriptionStats();
+    const stats = await storage.getSubscriptionStatsWithChurn();
     res.json(stats);
   } catch (error) {
     logger.error({ err: error }, 'Error fetching subscription stats:');
@@ -1432,14 +1432,80 @@ router.get('/subscription-stats', requireAdmin, async (req, res) => {
   }
 });
 
-// List premium subscribers
+// List all users with subscription info (supports search)
 router.get('/subscribers', requireAdmin, async (req, res) => {
   try {
-    const subscribers = await storage.getActiveSubscribers();
-    res.json(subscribers);
+    const search = typeof req.query.search === 'string' ? req.query.search : undefined;
+    const subscribers = await storage.getAllSubscribers(search);
+    // Return relevant subscription fields
+    const result = subscribers.map(u => ({
+      id: u.id,
+      firstName: u.firstName,
+      lastName: u.lastName,
+      email: u.email,
+      role: u.role,
+      subscriptionStatus: u.subscriptionStatus || 'none',
+      subscriptionTier: u.subscriptionTier || 'free',
+      subscriptionStartDate: u.subscriptionStartDate,
+      subscriptionEndDate: u.subscriptionEndDate,
+      stripeCustomerId: u.stripeCustomerId,
+      createdAt: u.createdAt,
+    }));
+    res.json(result);
   } catch (error) {
     logger.error({ err: error }, 'Error fetching subscribers:');
     res.status(500).json({ error: 'Failed to fetch subscribers' });
+  }
+});
+
+// Admin manually update a user's subscription
+router.patch('/subscribers/:userId', requireAdmin, async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const schema = z.object({
+      status: z.enum(['active', 'cancelled', 'expired']),
+      plan: z.string().min(1),
+      endDate: z.string().nullable(),
+    });
+    const data = schema.parse(req.body);
+
+    const oldUser = await storage.getUser(userId);
+    if (!oldUser) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const updatedUser = await storage.adminUpdateSubscription(userId, data);
+
+    // Create a subscription history record
+    await storage.createSubscriptionRecord({
+      userId,
+      tier: data.plan,
+      status: data.status,
+      source: 'manual',
+      startDate: updatedUser.subscriptionStartDate || new Date(),
+      endDate: data.endDate ? new Date(data.endDate) : null,
+      grantedByAdminId: req.user!.id,
+      notes: `Manual override by admin ${req.user!.email || req.user!.id}: status=${data.status}, plan=${data.plan}`,
+    });
+
+    await auditLog(
+      req.user!.id,
+      'UPDATE',
+      'SUBSCRIPTION',
+      userId,
+      { subscriptionStatus: oldUser.subscriptionStatus, subscriptionTier: oldUser.subscriptionTier },
+      { subscriptionStatus: data.status, subscriptionTier: data.plan },
+      req.ip,
+      req.get('User-Agent')
+    );
+
+    res.json(updatedUser);
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({ error: 'Invalid input', details: error.errors });
+    }
+    logger.error({ err: error }, 'Error updating subscriber:');
+    res.status(500).json({ error: 'Failed to update subscriber' });
   }
 });
 

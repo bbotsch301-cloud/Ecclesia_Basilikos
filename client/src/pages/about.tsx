@@ -5,7 +5,7 @@ import customImage from "@assets/IMG_9062_1755824052661.jpeg";
 import { usePageTitle } from "@/hooks/usePageTitle";
 
 export default function About() {
-  usePageTitle("About");
+  usePageTitle("About", "Learn about Ecclesia Basilikos and our mission to educate on lawful standing.");
   return (
     <div className="pt-16">
       <HeroSection

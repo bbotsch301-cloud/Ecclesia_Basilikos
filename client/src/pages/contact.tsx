@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { Mail, Send, Shield, ScrollText, Users, BookOpen, CheckCircle, Crown } from "lucide-react";
+import { Mail, Send, Shield, ScrollText, Users, BookOpen, CheckCircle, Crown, ArrowLeft } from "lucide-react";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -26,7 +26,7 @@ const contactSchema = z.object({
 type ContactForm = z.infer<typeof contactSchema>;
 
 export default function Contact() {
-  usePageTitle("Contact");
+  usePageTitle("Contact", "Contact Ecclesia Basilikos for guidance on trust law and lawful money.");
   const { toast } = useToast();
   const { user } = useAuth();
 
@@ -46,13 +46,12 @@ export default function Contact() {
     }
   });
 
+  const [messageSent, setMessageSent] = useState(false);
+
   const contactMutation = useMutation({
     mutationFn: (data: ContactForm) => apiRequest("POST", "/api/contact", data),
     onSuccess: () => {
-      toast({
-        title: "Message sent successfully!",
-        description: "We'll get back to you within 24 hours.",
-      });
+      setMessageSent(true);
       form.reset();
     },
     onError: (error: any) => {
@@ -260,6 +259,25 @@ export default function Contact() {
           <div className="grid lg:grid-cols-2 gap-12">
             {/* Contact Form */}
             <div className="bg-white p-8 rounded-xl shadow-lg">
+              {messageSent ? (
+                <div className="text-center py-8">
+                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <CheckCircle className="h-8 w-8 text-green-600" />
+                  </div>
+                  <h3 className="font-cinzel text-2xl font-bold text-royal-navy mb-2">Message Sent!</h3>
+                  <p className="text-gray-600 mb-2">Thank you for reaching out. We've received your message.</p>
+                  <p className="text-sm text-gray-500 mb-6">We typically respond within 24-48 hours.</p>
+                  <Button
+                    variant="outline"
+                    onClick={() => setMessageSent(false)}
+                    className="font-cinzel"
+                  >
+                    <ArrowLeft className="h-4 w-4 mr-2" />
+                    Send Another Message
+                  </Button>
+                </div>
+              ) : (
+              <>
               <h3 className="font-cinzel text-2xl font-bold text-royal-navy mb-6">Send us a Message</h3>
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -359,6 +377,8 @@ export default function Contact() {
                   </Button>
                 </form>
               </Form>
+              </>
+              )}
             </div>
 
             {/* Contact Information */}

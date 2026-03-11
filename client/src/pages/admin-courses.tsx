@@ -20,6 +20,7 @@ import {
   ChevronDown,
   ChevronUp,
   ListOrdered,
+  Loader2,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
@@ -57,6 +58,8 @@ export default function AdminCourses() {
   usePageTitle("Admin - Courses");
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState("");
+  const [levelFilter, setLevelFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
   const [courseDialogOpen, setCourseDialogOpen] = useState(false);
   const [lessonDialogOpen, setLessonDialogOpen] = useState(false);
   const [editingCourse, setEditingCourse] = useState<CourseData | null>(null);
@@ -256,12 +259,17 @@ export default function AdminCourses() {
     }
   };
 
-  const filteredCourses = courses?.filter(
-    (course) =>
+  const filteredCourses = courses?.filter((course) => {
+    const matchesSearch = !searchTerm ||
       course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       course.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      course.description.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+      course.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesLevel = levelFilter === "all" || course.level === levelFilter;
+    const matchesStatus = statusFilter === "all" ||
+      (statusFilter === "published" && course.isPublished) ||
+      (statusFilter === "draft" && !course.isPublished);
+    return matchesSearch && matchesLevel && matchesStatus;
+  });
 
   const getLevelBadge = (level: string) => {
     switch (level) {
@@ -292,9 +300,9 @@ export default function AdminCourses() {
           </Button>
         </div>
 
-        {/* Search */}
-        <div className="mb-6">
-          <div className="relative max-w-md">
+        {/* Search & Filters */}
+        <div className="mb-6 flex flex-wrap gap-3 items-center">
+          <div className="relative flex-1 min-w-[200px] max-w-md">
             <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
             <Input
               placeholder="Search courses..."
@@ -303,6 +311,27 @@ export default function AdminCourses() {
               className="pl-10"
             />
           </div>
+          <Select value={levelFilter} onValueChange={setLevelFilter}>
+            <SelectTrigger className="w-[140px]">
+              <SelectValue placeholder="Level" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Levels</SelectItem>
+              <SelectItem value="beginner">Beginner</SelectItem>
+              <SelectItem value="intermediate">Intermediate</SelectItem>
+              <SelectItem value="advanced">Advanced</SelectItem>
+            </SelectContent>
+          </Select>
+          <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <SelectTrigger className="w-[140px]">
+              <SelectValue placeholder="Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Status</SelectItem>
+              <SelectItem value="published">Published</SelectItem>
+              <SelectItem value="draft">Draft</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         {/* Courses List */}
@@ -608,9 +637,12 @@ export default function AdminCourses() {
                   !courseForm.category
                 }
               >
-                {createCourseMutation.isPending || updateCourseMutation.isPending
-                  ? "Saving..."
-                  : editingCourse
+                {createCourseMutation.isPending || updateCourseMutation.isPending ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    Saving...
+                  </>
+                ) : editingCourse
                     ? "Update Course"
                     : "Create Course"}
               </Button>
@@ -697,9 +729,12 @@ export default function AdminCourses() {
                   createLessonMutation.isPending || updateLessonMutation.isPending || !lessonForm.title
                 }
               >
-                {createLessonMutation.isPending || updateLessonMutation.isPending
-                  ? "Saving..."
-                  : editingLesson
+                {createLessonMutation.isPending || updateLessonMutation.isPending ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    Saving...
+                  </>
+                ) : editingLesson
                     ? "Update Lesson"
                     : "Add Lesson"}
               </Button>

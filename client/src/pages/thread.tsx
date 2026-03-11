@@ -14,10 +14,11 @@ import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
 import {
   MessageSquare, ArrowLeft, Eye, Lock, Pencil, Trash2,
-  Heart, Bell, BellOff, Loader2, Crown, CornerDownRight,
+  Heart, Bell, BellOff, Loader2, Crown, CornerDownRight, Flag,
 } from "lucide-react";
 import type { ForumThread, ForumReply, ForumCategory, User } from "@shared/schema";
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
@@ -91,6 +92,30 @@ export default function ThreadPage() {
   const [editReplyContent, setEditReplyContent] = useState("");
   const [editThreadTitle, setEditThreadTitle] = useState("");
   const [editThreadContent, setEditThreadContent] = useState("");
+
+  // Report states
+  const [reportingReplyId, setReportingReplyId] = useState<string | null>(null);
+  const [reportReason, setReportReason] = useState("");
+  const [reportLoading, setReportLoading] = useState(false);
+
+  const handleReportReply = async (replyId: string) => {
+    if (reportReason.trim().length < 10) return;
+    setReportLoading(true);
+    try {
+      const res = await apiRequest("POST", `/api/forum/replies/${replyId}/report`, { reason: reportReason });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Failed to submit report");
+      }
+      toast({ title: "Report submitted", description: "Thank you for helping keep the community safe." });
+      setReportingReplyId(null);
+      setReportReason("");
+    } catch (err: any) {
+      toast({ title: "Error", description: err.message || "Failed to submit report", variant: "destructive" });
+    } finally {
+      setReportLoading(false);
+    }
+  };
   const [editThreadOpen, setEditThreadOpen] = useState(false);
 
   const { data, isLoading, error } = useQuery<ThreadData>({
@@ -566,6 +591,52 @@ export default function ThreadPage() {
                             <Heart className={`h-3.5 w-3.5 ${reply.userLiked ? "fill-current" : ""}`} />
                             {reply.likeCount > 0 && <span>{reply.likeCount}</span>}
                           </button>
+                          {isAuthenticated && (
+                            <Dialog
+                              open={reportingReplyId === reply.id}
+                              onOpenChange={(open) => {
+                                if (open) {
+                                  setReportingReplyId(reply.id);
+                                  setReportReason("");
+                                } else {
+                                  setReportingReplyId(null);
+                                }
+                              }}
+                            >
+                              <DialogTrigger asChild>
+                                <button
+                                  className="flex items-center gap-1 px-2 py-1 rounded text-xs text-gray-400 hover:text-orange-500 transition-colors"
+                                  title="Report reply"
+                                  aria-label="Report this reply"
+                                >
+                                  <Flag className="h-3.5 w-3.5" />
+                                </button>
+                              </DialogTrigger>
+                              <DialogContent>
+                                <DialogHeader>
+                                  <DialogTitle>Report Reply</DialogTitle>
+                                  <DialogDescription>
+                                    Describe why this reply should be reviewed by a moderator.
+                                  </DialogDescription>
+                                </DialogHeader>
+                                <div className="space-y-4">
+                                  <Textarea
+                                    placeholder="Reason for reporting (min 10 characters)..."
+                                    value={reportReason}
+                                    onChange={(e) => setReportReason(e.target.value)}
+                                    rows={4}
+                                  />
+                                  <Button
+                                    className="w-full"
+                                    disabled={reportLoading || reportReason.trim().length < 10}
+                                    onClick={() => handleReportReply(reply.id)}
+                                  >
+                                    {reportLoading ? "Submitting..." : "Submit Report"}
+                                  </Button>
+                                </div>
+                              </DialogContent>
+                            </Dialog>
+                          )}
                         </div>
                       )}
                     </div>

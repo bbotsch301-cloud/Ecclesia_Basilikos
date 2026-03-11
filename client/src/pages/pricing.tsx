@@ -30,7 +30,7 @@ const premiumFeatures = [
 ];
 
 export default function Pricing() {
-  usePageTitle("Pricing");
+  usePageTitle("Pricing", "Free and Premium plans for accessing courses, downloads, and community features.");
   const { isAuthenticated, isPremium } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

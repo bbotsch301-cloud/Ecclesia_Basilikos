@@ -110,7 +110,7 @@ if (process.env.NODE_ENV === "production" && !process.env.BASE_URL) {
   // Initialize email templates
   await initializeEmailTemplates();
 
-  app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
+  app.use((err: any, req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";
 
@@ -119,7 +119,19 @@ if (process.env.NODE_ENV === "production" && !process.env.BASE_URL) {
       return res.status(400).json({ message: "Invalid JSON" });
     }
 
-    logger.error({ err, status }, message);
+    // Structured error log with request context for observability
+    logger.error({
+      err,
+      status,
+      method: req.method,
+      path: req.path,
+      requestId: (req as any).id,
+      userId: (req as any).user?.id || null,
+      userAgent: req.get("user-agent"),
+      ip: req.ip,
+      stack: err.stack,
+    }, `Unhandled error: ${message}`);
+
     res.status(status).json({ message });
   });
 

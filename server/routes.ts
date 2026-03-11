@@ -50,6 +50,16 @@ const loginAttempts = new Map<string, { count: number; lockedUntil: number | nul
 const MAX_LOGIN_ATTEMPTS = 5;
 const LOCKOUT_DURATION_MS = 15 * 60_000; // 15 minutes
 
+// Clean up expired login attempt entries every 30 minutes to prevent memory leak
+setInterval(() => {
+  const now = Date.now();
+  loginAttempts.forEach((entry, key) => {
+    if (entry.lockedUntil && now > entry.lockedUntil) {
+      loginAttempts.delete(key);
+    }
+  });
+}, 30 * 60_000);
+
 export async function registerRoutes(app: Express): Promise<Server> {
   // Health check endpoints (no auth required)
   app.get("/health", (_req, res) => {
@@ -317,7 +327,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const expires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
       await storage.setPasswordResetToken(user.id, token, expires);
 
-      const resetUrl = `${req.protocol}://${req.get("host")}/reset-password?token=${token}`;
+      const resetUrl = `${process.env.BASE_URL || `${req.protocol}://${req.get("host")}`}/reset-password?token=${token}`;
 
       const { sendEmail } = await import("./email");
       await sendEmail({
@@ -426,6 +436,95 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       logger.error({ err: error }, "Change password error:");
       res.status(500).json({ error: "Failed to change password" });
+    }
+  });
+
+  // GDPR: Export all user data
+  app.get("/api/auth/export-data", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+
+      // Gather all user data from existing storage methods and direct queries
+      const [
+        enrollmentsData,
+        notificationsData,
+        subscriptionHistory,
+        downloadHistory,
+      ] = await Promise.all([
+        storage.getUserEnrollments(user.id),
+        storage.getUserNotifications(user.id, 1000),
+        storage.getSubscriptionHistory(user.id),
+        storage.getUserDownloadHistory(user.id),
+      ]);
+
+      // Direct queries for data without dedicated storage methods
+      const [
+        forumThreadsData,
+        forumRepliesData,
+        commentsData,
+        proofsData,
+      ] = await Promise.all([
+        storage.getUserForumThreads(user.id),
+        storage.getUserForumReplies(user.id),
+        storage.getUserComments(user.id),
+        storage.getUserProofs(user.id),
+      ]);
+
+      // Build the export object, excluding sensitive fields
+      const { password: _pw, emailVerificationToken: _tok, passwordResetToken: _prt, passwordResetExpires: _pre, emailVerificationExpires: _eve, ...safeProfile } = user;
+
+      const exportData = {
+        exportDate: new Date().toISOString(),
+        profile: safeProfile,
+        enrollments: enrollmentsData,
+        forumThreads: forumThreadsData,
+        forumReplies: forumRepliesData,
+        comments: commentsData,
+        downloads: downloadHistory,
+        proofs: proofsData,
+        subscriptions: subscriptionHistory,
+        notifications: notificationsData,
+      };
+
+      res.setHeader("Content-Type", "application/json");
+      res.setHeader("Content-Disposition", `attachment; filename="user-data-export-${user.id}.json"`);
+      res.json(exportData);
+    } catch (error) {
+      logger.error({ err: error }, "Data export error:");
+      res.status(500).json({ error: "Failed to export data" });
+    }
+  });
+
+  // GDPR: Delete account
+  app.delete("/api/auth/delete-account", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+      const { password } = z.object({
+        password: z.string().min(1, "Password is required"),
+      }).parse(req.body);
+
+      const bcryptMod = await import("bcryptjs");
+      const isValid = await bcryptMod.compare(password, user.password);
+      if (!isValid) {
+        return res.status(400).json({ error: "Password is incorrect" });
+      }
+
+      await storage.deleteAllUserData(user.id);
+
+      // Destroy session
+      req.session.destroy((err) => {
+        if (err) {
+          logger.error({ err }, "Session destruction error during account deletion");
+        }
+        res.clearCookie("connect.sid");
+        res.json({ success: true, message: "Account deleted successfully" });
+      });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ errors: error.errors });
+      }
+      logger.error({ err: error }, "Account deletion error:");
+      res.status(500).json({ error: "Failed to delete account" });
     }
   });
 
@@ -872,11 +971,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { title, content } = z.object({
         title: z.string().min(1).optional(),
         content: z.string().min(1).optional(),
+      }).refine(data => data.title || data.content, {
+        message: "At least one of title or content must be provided",
       }).parse(req.body);
 
       const updated = await storage.updateForumThread(threadId, {
-        title: title ? sanitizePlainText(title) : title,
-        content: content ? sanitizeHtml(content) : content,
+        title: title ? sanitizePlainText(title) : undefined,
+        content: content ? sanitizeHtml(content) : undefined,
       });
       res.json({ success: true, thread: updated });
     } catch (error) {
@@ -1518,6 +1619,97 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       logger.error({ err: error }, "Error checking subscription");
       res.status(500).json({ error: "Failed to check subscription" });
+    }
+  });
+
+  // ─── Content Report / Flag ───
+
+  // In-memory rate tracking for reports (max 5 per user per hour)
+  const reportCounts = new Map<string, { count: number; resetAt: number }>();
+
+  // Cleanup stale entries every 30 minutes
+  setInterval(() => {
+    const now = Date.now();
+    reportCounts.forEach((entry, key) => {
+      if (now > entry.resetAt) reportCounts.delete(key);
+    });
+  }, 30 * 60_000);
+
+  function checkReportRateLimit(userId: string): boolean {
+    const now = Date.now();
+    const entry = reportCounts.get(userId);
+    if (!entry || now > entry.resetAt) {
+      reportCounts.set(userId, { count: 1, resetAt: now + 60 * 60_000 });
+      return true;
+    }
+    if (entry.count >= 5) return false;
+    entry.count++;
+    return true;
+  }
+
+  const reportSchema = z.object({
+    reason: z.string().min(10, "Reason must be at least 10 characters"),
+  });
+
+  app.post("/api/forum/threads/:threadId/report", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+      if (!checkReportRateLimit(user.id)) {
+        return res.status(429).json({ error: "Too many reports. Please try again later." });
+      }
+
+      const { reason } = reportSchema.parse(req.body);
+      const { threadId } = req.params;
+
+      const thread = await storage.getForumThreadById(threadId);
+      if (!thread) return res.status(404).json({ error: "Thread not found" });
+
+      await storage.createContact({
+        name: user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.email,
+        email: user.email,
+        subject: "content-report",
+        message: `[Thread Report] Thread ID: ${threadId}\nThread Title: ${thread.title}\nReported by User ID: ${user.id}\n\nReason: ${reason}`,
+      });
+
+      logger.info({ userId: user.id, threadId }, "Thread reported");
+      res.json({ success: true, message: "Report submitted. Thank you." });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ errors: error.errors });
+      }
+      logger.error({ err: error }, "Error reporting thread");
+      res.status(500).json({ error: "Failed to submit report" });
+    }
+  });
+
+  app.post("/api/forum/replies/:replyId/report", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+      if (!checkReportRateLimit(user.id)) {
+        return res.status(429).json({ error: "Too many reports. Please try again later." });
+      }
+
+      const { reason } = reportSchema.parse(req.body);
+      const { replyId } = req.params;
+
+      const reply = await storage.getForumReply(replyId);
+      if (!reply) return res.status(404).json({ error: "Reply not found" });
+
+      await storage.createContact({
+        name: user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.email,
+        email: user.email,
+        subject: "content-report",
+        message: `[Reply Report] Reply ID: ${replyId}\nThread ID: ${reply.threadId}\nReported by User ID: ${user.id}\n\nReason: ${reason}`,
+      });
+
+      logger.info({ userId: user.id, replyId }, "Reply reported");
+      res.json({ success: true, message: "Report submitted. Thank you." });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ errors: error.errors });
+      }
+      logger.error({ err: error }, "Error reporting reply");
+      res.status(500).json({ error: "Failed to submit report" });
     }
   });
 

@@ -1,16 +1,85 @@
 import { Link } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
+import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { BookOpen, FileText, Shield, Users, Download, GraduationCap, Mail, Settings, CheckCircle, Crown, ArrowRight } from "lucide-react";
+import { BookOpen, FileText, Shield, Users, Download, GraduationCap, Mail, Settings, CheckCircle, Crown, ArrowRight, Play, Star } from "lucide-react";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import RequireAuth from "@/components/RequireAuth";
+
+interface Enrollment {
+  courseId: string;
+  progress: number | null;
+  completedAt: string | null;
+  course: {
+    id: string;
+    title: string;
+    category: string;
+  };
+}
+
+interface CourseWithLessonCount {
+  id: string;
+  title: string;
+  category: string;
+  isFree: boolean | null;
+}
 
 function WelcomeContent() {
   usePageTitle("Dashboard");
   const { user, isPremium } = useAuth();
 
+  const { data: enrollments = [] } = useQuery<Enrollment[]>({
+    queryKey: ["/api/my-enrollments"],
+  });
+
+  const { data: courses = [] } = useQuery<CourseWithLessonCount[]>({
+    queryKey: ["/api/courses"],
+  });
+
   if (!user) return null;
+
+  // Find free (Trust) course and user's enrollment in it
+  const freeCourse = courses.find(c => c.isFree || c.category === "Trust & Assets");
+  const freeCourseEnrollment = freeCourse
+    ? enrollments.find(e => e.courseId === freeCourse.id)
+    : null;
+
+  // Find any in-progress enrollment
+  const inProgressEnrollment = enrollments.find(e => !e.completedAt && (e.progress ?? 0) > 0);
+
+  // Determine primary card state
+  const hasStartedFreeCourse = !!freeCourseEnrollment;
+  const hasCompletedFreeCourse = !!freeCourseEnrollment?.completedAt;
+  const hasAnyInProgress = !!inProgressEnrollment;
+
+  let primaryTitle = "Start Free Course";
+  let primaryDescription = "Begin with the Trust Foundation — it's free and sets the stage for everything else.";
+  let primaryHref = freeCourse ? `/course/${freeCourse.id}` : "/courses";
+  let primaryIcon = GraduationCap;
+  let primaryButtonText = "Start Learning";
+
+  if (hasAnyInProgress && inProgressEnrollment) {
+    primaryTitle = "Continue Learning";
+    primaryDescription = `Pick up where you left off — ${inProgressEnrollment.course?.title || "your course"} is ${inProgressEnrollment.progress || 0}% complete.`;
+    primaryHref = `/course/${inProgressEnrollment.courseId}`;
+    primaryIcon = Play;
+    primaryButtonText = "Continue Course";
+  } else if (hasCompletedFreeCourse) {
+    primaryTitle = "Explore More Courses";
+    primaryDescription = "You've completed the Trust Foundation. Continue your journey with the other pillars.";
+    primaryHref = "/courses";
+    primaryIcon = BookOpen;
+    primaryButtonText = "View Courses";
+  } else if (hasStartedFreeCourse) {
+    primaryTitle = "Continue Learning";
+    primaryDescription = `You've started the Trust Foundation — keep going! You're ${freeCourseEnrollment?.progress || 0}% complete.`;
+    primaryHref = `/course/${freeCourse!.id}`;
+    primaryIcon = Play;
+    primaryButtonText = "Continue Course";
+  }
+
+  const PrimaryIcon = primaryIcon;
 
   const pathways = [
     { title: "Downloads", description: "Documents, declarations & resources", href: "/downloads", icon: Download, disabled: false },
@@ -18,7 +87,6 @@ function WelcomeContent() {
     { title: "Royal Academy", description: "Explore courses in trust, stewardship & covenant authority", href: "/courses", icon: BookOpen, disabled: false },
     { title: "Proof Vault", description: "Timestamp & verify your documents", href: "/proof-vault", icon: Shield, disabled: true },
     { title: "Embassy Forum", description: "Join discussions with the covenant community", href: "/forum", icon: Users, disabled: false },
-    { title: "My Courses", description: "Continue your learning journey", href: "/courses", icon: GraduationCap, disabled: false },
   ];
 
   return (
@@ -46,28 +114,59 @@ function WelcomeContent() {
           </div>
         )}
 
-        {/* Pathway Cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Primary Card — Start Free Course / Continue Learning */}
+        <div className="mb-8">
+          <Link href={primaryHref}>
+            <Card className="border-2 border-royal-gold bg-gradient-to-br from-royal-gold/10 via-amber-50 to-transparent hover:shadow-xl transition-all cursor-pointer relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-48 h-48 bg-royal-gold/5 rounded-full blur-3xl -translate-y-1/4 translate-x-1/4" />
+              <CardContent className="p-8 md:p-10 relative">
+                <div className="flex items-start gap-2 mb-4">
+                  <Star className="w-4 h-4 text-royal-gold flex-shrink-0 mt-0.5" />
+                  <span className="text-xs font-semibold text-royal-gold uppercase tracking-wider font-cinzel">
+                    Recommended First Step
+                  </span>
+                </div>
+                <div className="flex flex-col md:flex-row md:items-center gap-6">
+                  <div className="flex-shrink-0">
+                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-royal-gold/15 flex items-center justify-center">
+                      <PrimaryIcon className="w-8 h-8 md:w-10 md:h-10 text-royal-gold" />
+                    </div>
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-cinzel text-2xl md:text-3xl font-bold text-royal-navy mb-2">{primaryTitle}</h3>
+                    <p className="text-gray-600 text-base md:text-lg mb-4">{primaryDescription}</p>
+                    <Button className="bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold px-8 shadow-md hover:shadow-lg transition-all">
+                      {primaryButtonText} <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+        </div>
+
+        {/* Secondary Pathway Cards */}
+        <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-4">
           {pathways.map((p) => {
             const card = (
-              <Card className={`royal-card transition-all h-full ${p.disabled ? "opacity-50 cursor-not-allowed" : "hover:border-royal-gold cursor-pointer"}`}>
-                <CardContent className="p-8 relative">
+              <Card className={`royal-card transition-all h-full ${p.disabled ? "opacity-50 cursor-not-allowed" : "hover:border-royal-gold/50 cursor-pointer"}`}>
+                <CardContent className="p-5 relative text-center">
                   {p.disabled && (
-                    <span className="absolute top-3 right-3 text-xs font-semibold bg-gray-200 text-gray-500 px-2 py-1 rounded-full">
+                    <span className="absolute top-2 right-2 text-[10px] font-semibold bg-gray-200 text-gray-500 px-2 py-0.5 rounded-full">
                       Coming Soon
                     </span>
                   )}
-                  <p.icon className={`w-12 h-12 mb-4 ${p.disabled ? "text-gray-400" : "text-royal-burgundy"}`} />
-                  <h3 className="font-cinzel text-xl font-bold text-royal-navy mb-2">{p.title}</h3>
-                  <p className="text-gray-600">{p.description}</p>
+                  <p.icon className={`w-8 h-8 mb-3 mx-auto ${p.disabled ? "text-gray-400" : "text-royal-burgundy"}`} />
+                  <h3 className="font-cinzel text-sm font-bold text-royal-navy mb-1">{p.title}</h3>
+                  <p className="text-gray-500 text-xs leading-snug">{p.description}</p>
                 </CardContent>
               </Card>
             );
 
             return p.disabled ? (
-              <div key={p.href}>{card}</div>
+              <div key={p.title}>{card}</div>
             ) : (
-              <Link key={p.href} href={p.href}>{card}</Link>
+              <Link key={p.title} href={p.href}>{card}</Link>
             );
           })}
         </div>

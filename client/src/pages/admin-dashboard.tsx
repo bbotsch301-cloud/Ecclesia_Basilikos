@@ -93,45 +93,57 @@ export default function AdminDashboard() {
         </div>
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Users</CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{statsLoading ? '...' : stats?.totalUsers || 0}</div>
-            </CardContent>
-          </Card>
+          <Link href="/admin/users">
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total Users</CardTitle>
+                <Users className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{statsLoading ? '...' : stats?.totalUsers || 0}</div>
+                <p className="text-xs text-muted-foreground mt-1">Click to manage</p>
+              </CardContent>
+            </Card>
+          </Link>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Courses</CardTitle>
-              <BookOpen className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{statsLoading ? '...' : stats?.totalCourses || 0}</div>
-            </CardContent>
-          </Card>
+          <Link href="/admin/courses">
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Courses</CardTitle>
+                <BookOpen className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{statsLoading ? '...' : stats?.totalCourses || 0}</div>
+                <p className="text-xs text-muted-foreground mt-1">{statsLoading ? '' : `${stats?.totalEnrollments || 0} enrollments`}</p>
+              </CardContent>
+            </Card>
+          </Link>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Videos</CardTitle>
-              <Video className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{statsLoading ? '...' : stats?.totalVideos || 0}</div>
-            </CardContent>
-          </Card>
+          <Link href="/admin/videos">
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Videos</CardTitle>
+                <Video className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{statsLoading ? '...' : stats?.totalVideos || 0}</div>
+                <p className="text-xs text-muted-foreground mt-1">Click to manage</p>
+              </CardContent>
+            </Card>
+          </Link>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Resources</CardTitle>
-              <FileText className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{statsLoading ? '...' : stats?.totalResources || 0}</div>
-            </CardContent>
-          </Card>
+          <Link href="/admin/forum">
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Forum Activity</CardTitle>
+                <MessageSquare className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{statsLoading ? '...' : stats?.totalForumThreads || 0}</div>
+                <p className="text-xs text-muted-foreground mt-1">{statsLoading ? '' : `${stats?.totalForumReplies || 0} replies`}</p>
+              </CardContent>
+            </Card>
+          </Link>
         </div>
 
         {/* Subscriber Stats */}

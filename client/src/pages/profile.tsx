@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "wouter";
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "wouter";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { usePageTitle } from "@/hooks/usePageTitle";
@@ -13,12 +13,24 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Switch } from "@/components/ui/switch";
-import { User, Shield, Mail, Calendar, Save, Lock, Crown, CreditCard, Bell } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { User, Shield, Mail, Calendar, Save, Lock, Crown, CreditCard, Bell, Download, Trash2 } from "lucide-react";
 
 function ProfileContent() {
   const { user, isPremium } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const [, setLocation] = useLocation();
   usePageTitle("Profile");
 
   const [firstName, setFirstName] = useState(user?.firstName || "");
@@ -26,6 +38,16 @@ function ProfileContent() {
   const [username, setUsername] = useState(user?.username || "");
 
   const [emailNotifications, setEmailNotifications] = useState(user?.emailNotifications !== false);
+
+  // Sync form state when user data changes (e.g. after refetch)
+  useEffect(() => {
+    if (user) {
+      setFirstName(user.firstName || "");
+      setLastName(user.lastName || "");
+      setUsername(user.username || "");
+      setEmailNotifications(user.emailNotifications !== false);
+    }
+  }, [user]);
 
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -73,6 +95,58 @@ function ProfileContent() {
       toast({ title: "Error", description: error.message || "Failed to update notification settings", variant: "destructive" });
     },
   });
+
+  const [deletePassword, setDeletePassword] = useState("");
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
+
+  const handleExportData = async () => {
+    try {
+      setIsExporting(true);
+      const response = await fetch("/api/auth/export-data", { credentials: "include" });
+      if (!response.ok) {
+        throw new Error("Failed to export data");
+      }
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `user-data-export.json`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      toast({ title: "Data exported", description: "Your data has been downloaded." });
+    } catch (error: any) {
+      toast({ title: "Error", description: error.message || "Failed to export data", variant: "destructive" });
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
+  const deleteAccountMutation = useMutation({
+    mutationFn: async (password: string) => {
+      return await apiRequest("DELETE", "/api/auth/delete-account", { password });
+    },
+    onSuccess: () => {
+      toast({ title: "Account deleted", description: "Your account has been permanently deleted." });
+      queryClient.clear();
+      setLocation("/");
+    },
+    onError: (error: any) => {
+      toast({ title: "Error", description: error.message || "Failed to delete account", variant: "destructive" });
+    },
+  });
+
+  const handleDeleteAccount = () => {
+    if (!deletePassword) {
+      toast({ title: "Error", description: "Please enter your password to confirm deletion", variant: "destructive" });
+      return;
+    }
+    deleteAccountMutation.mutate(deletePassword);
+    setDeleteDialogOpen(false);
+    setDeletePassword("");
+  };
 
   const handleToggleEmailNotifications = (checked: boolean) => {
     setEmailNotifications(checked);
@@ -243,6 +317,7 @@ function ProfileContent() {
                 <div>
                   <Label htmlFor="newPassword">New Password</Label>
                   <Input id="newPassword" type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
+                  <p className="text-xs text-gray-400 mt-1">Minimum 8 characters</p>
                 </div>
                 <div>
                   <Label htmlFor="confirmPassword">Confirm New Password</Label>
@@ -276,6 +351,74 @@ function ProfileContent() {
                 onCheckedChange={handleToggleEmailNotifications}
                 disabled={notificationMutation.isPending}
               />
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Data & Privacy Card */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Shield className="h-5 w-5" /> Data & Privacy
+            </CardTitle>
+            <CardDescription>Export your data or delete your account</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium">Download My Data</p>
+                <p className="text-sm text-gray-500">Export all your data as a JSON file</p>
+              </div>
+              <Button variant="outline" onClick={handleExportData} disabled={isExporting}>
+                <Download className="h-4 w-4 mr-2" />
+                {isExporting ? "Exporting..." : "Download"}
+              </Button>
+            </div>
+            <div className="border-t pt-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-red-600">Delete Account</p>
+                  <p className="text-sm text-gray-500">Permanently delete your account and all associated data</p>
+                </div>
+                <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="destructive">
+                      <Trash2 className="h-4 w-4 mr-2" />
+                      Delete Account
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action cannot be undone. This will permanently delete your account
+                        and remove all your data including enrollments, forum posts, and progress.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <div className="py-4">
+                      <Label htmlFor="deletePassword">Enter your password to confirm</Label>
+                      <Input
+                        id="deletePassword"
+                        type="password"
+                        value={deletePassword}
+                        onChange={(e) => setDeletePassword(e.target.value)}
+                        placeholder="Your current password"
+                        className="mt-2"
+                      />
+                    </div>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel onClick={() => setDeletePassword("")}>Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={handleDeleteAccount}
+                        className="bg-red-600 hover:bg-red-700 text-white"
+                        disabled={deleteAccountMutation.isPending || !deletePassword}
+                      >
+                        {deleteAccountMutation.isPending ? "Deleting..." : "Delete My Account"}
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
             </div>
           </CardContent>
         </Card>

@@ -18,7 +18,7 @@ import StaggerContainer, {
 import sealImage from "@assets/EB_1772210493582.png";
 
 export default function Home() {
-  usePageTitle();
+  usePageTitle(undefined, "Reclaim your lawful standing. Free courses on trust law, lawful money, and state citizenship.");
   const ctaHref = useCtaHref();
   const shouldReduceMotion = useReducedMotion();
 

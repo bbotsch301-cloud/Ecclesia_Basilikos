@@ -19,6 +19,7 @@ import {
   GraduationCap,
   FileText,
   Search,
+  Crown,
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -90,7 +91,7 @@ function formatDate(dateString: string): string {
 
 function DashboardContent() {
   usePageTitle("Dashboard");
-  const { user } = useAuth();
+  const { user, isPremium } = useAuth();
 
   const { data: stats, isLoading: statsLoading } = useQuery<DashboardStats>({
     queryKey: ["/api/dashboard/stats"],
@@ -141,12 +142,13 @@ function DashboardContent() {
                 <CardContent className="pt-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-gray-500">
-                        {(stats?.coursesInProgress || 0) > 0 ? "In Progress" : "Available Courses"}
-                      </p>
+                      <p className="text-sm text-gray-500">In Progress</p>
                       <p className="text-3xl font-bold text-royal-navy dark:text-royal-gold">
-                        {(stats?.coursesInProgress || 0) > 0 ? stats?.coursesInProgress : stats?.availableCourses || 0}
+                        {stats?.coursesInProgress || 0}
                       </p>
+                      {(stats?.coursesInProgress || 0) === 0 && (stats?.availableCourses || 0) > 0 && (
+                        <p className="text-xs text-gray-400 mt-1">{stats?.availableCourses} available to start</p>
+                      )}
                     </div>
                     <BookOpen className="h-8 w-8 text-royal-gold" />
                   </div>
@@ -234,7 +236,10 @@ function DashboardContent() {
               ) : (
                 <div className="text-center py-6 flex-1 flex flex-col items-center justify-center">
                   <GraduationCap className="h-10 w-10 text-gray-300 mb-2" />
-                  <p className="text-sm text-gray-500">No courses started yet</p>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-300">Ready to begin your journey?</p>
+                  <p className="text-xs text-gray-400 mt-1">
+                    Start with the foundational pillars to build your knowledge step by step.
+                  </p>
                 </div>
               )}
               <Link href="/courses" className="mt-4">
@@ -302,6 +307,46 @@ function DashboardContent() {
             </CardContent>
           </Card>
 
+
+          {/* Premium Upgrade Card — only for free users */}
+          {!isPremium && (
+            <Card className="flex flex-col border-2 border-royal-gold/30 bg-gradient-to-br from-royal-gold/5 to-transparent">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-royal-navy dark:text-royal-gold flex items-center gap-2 font-cinzel text-lg">
+                  <Crown className="h-5 w-5 text-royal-gold" />
+                  Unlock Premium
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="flex-1 flex flex-col">
+                <div className="flex-1 flex flex-col justify-center py-4">
+                  <p className="text-sm text-gray-600 dark:text-gray-300 mb-3 leading-relaxed">
+                    {(stats?.coursesInProgress ?? 0) > 0 || (stats?.coursesCompleted ?? 0) > 0
+                      ? "You've started your foundation. Unlock all 3 pillars with Premium for $9.99/mo."
+                      : "Get full access to all courses, downloads, and community features for $9.99/mo."}
+                  </p>
+                  <ul className="space-y-1.5 mb-2">
+                    <li className="flex items-center gap-2 text-xs text-gray-500">
+                      <CheckCircle className="w-3 h-3 text-royal-gold flex-shrink-0" />
+                      All pillar courses
+                    </li>
+                    <li className="flex items-center gap-2 text-xs text-gray-500">
+                      <CheckCircle className="w-3 h-3 text-royal-gold flex-shrink-0" />
+                      Full downloads library
+                    </li>
+                    <li className="flex items-center gap-2 text-xs text-gray-500">
+                      <CheckCircle className="w-3 h-3 text-royal-gold flex-shrink-0" />
+                      Forum posting access
+                    </li>
+                  </ul>
+                </div>
+                <Link href="/pricing" className="mt-4">
+                  <Button className="w-full bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold text-sm">
+                    View Plans <ArrowRight className="h-4 w-4 ml-1" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          )}
 
           {/* Resources / Dictionary */}
           <Card className="flex flex-col">

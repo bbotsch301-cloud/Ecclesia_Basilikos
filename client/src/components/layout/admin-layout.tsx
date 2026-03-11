@@ -15,6 +15,7 @@ import {
   MessagesSquare,
   Mail,
   Pencil,
+  CreditCard,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -26,6 +27,7 @@ const adminNav = [
   { name: "Downloads", href: "/admin/downloads", icon: Download },
   { name: "Content", href: "/admin/content", icon: FileText },
   { name: "Forum", href: "/admin/forum", icon: MessagesSquare },
+  { name: "Subscribers", href: "/admin/subscribers", icon: CreditCard },
   { name: "Contacts", href: "/admin/contacts", icon: MessageSquare },
   { name: "Newsletter", href: "/admin/newsletter", icon: Mail },
   { name: "Trust Downloads", href: "/admin/trust-downloads", icon: Shield },

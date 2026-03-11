@@ -46,7 +46,7 @@ const pillarCategories = [
 const extraCategories = ["Foundation", "Legal Templates", "Study Guides"];
 
 export default function Downloads() {
-  usePageTitle("Downloads");
+  usePageTitle("Downloads", "Download legal templates, affidavits, and forms for trust and lawful money.");
   const { toast } = useToast();
   const { isPremium } = useAuth();
   const [selectedItem, setSelectedItem] = useState<DownloadType | null>(null);

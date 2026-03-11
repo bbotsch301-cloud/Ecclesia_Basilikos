@@ -19,6 +19,9 @@ import {
   ChevronRight,
   Video,
   Loader2,
+  Crown,
+  ArrowRight,
+  Lock,
 } from "lucide-react";
 import CommentSection from "@/components/CommentSection";
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
@@ -73,22 +76,24 @@ function getYouTubeEmbedId(url: string | null): string | null {
 function CourseLessonContent() {
   const params = useParams<{ courseId: string; lessonId: string }>();
   const { toast } = useToast();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isPremium } = useAuth();
   const queryClient = useQueryClient();
-  const courseId = params.courseId || "1";
+  const courseId = params.courseId;
   const lessonId = params.lessonId;
 
   const { data: courseData, isLoading: courseLoading, error: courseError } = useQuery<CourseWithLessons>({
     queryKey: ['/api/courses', courseId],
+    enabled: !!courseId,
   });
 
   const { data: progressData } = useQuery<CourseProgress>({
     queryKey: ['/api/courses', courseId, 'progress'],
-    enabled: isAuthenticated,
+    enabled: isAuthenticated && !!courseId,
   });
 
   const { data: downloadsData } = useQuery<CourseDownload[]>({
     queryKey: ['/api/courses', courseId, 'downloads'],
+    enabled: !!courseId,
   });
 
   const completeCourse = useMutation({
@@ -596,6 +601,41 @@ function CourseLessonContent() {
                 )}
               </div>
             </div>
+
+            {/* Upgrade Prompt — shown on the last lesson of a free course for non-premium users */}
+            {!nextLesson && !isPremium && courseData && (courseData as any).category === "Trust & Assets" && (
+              <Card className="border-2 border-royal-gold/40 bg-gradient-to-br from-royal-gold/10 via-amber-50 to-transparent mt-6">
+                <CardContent className="p-6 md:p-8">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Crown className="w-5 h-5 text-royal-gold" />
+                    <h3 className="font-cinzel text-lg font-bold text-royal-navy">Continue Your Journey</h3>
+                  </div>
+                  <p className="text-gray-600 mb-4 leading-relaxed">
+                    You've completed the Trust Foundation! Ready to continue your journey? Unlock the Lawful Money and State Passport courses with Premium.
+                  </p>
+                  <ul className="space-y-2 mb-5">
+                    <li className="flex items-center gap-2 text-sm text-gray-600">
+                      <CheckCircle className="w-4 h-4 text-royal-gold flex-shrink-0" />
+                      All 3 pillar courses — Lawful Money, Trust, and State Passport
+                    </li>
+                    <li className="flex items-center gap-2 text-sm text-gray-600">
+                      <CheckCircle className="w-4 h-4 text-royal-gold flex-shrink-0" />
+                      Full downloads library with templates and forms
+                    </li>
+                    <li className="flex items-center gap-2 text-sm text-gray-600">
+                      <CheckCircle className="w-4 h-4 text-royal-gold flex-shrink-0" />
+                      Forum posting and full community access
+                    </li>
+                  </ul>
+                  <Link href="/pricing">
+                    <Button className="bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold px-8 shadow-md hover:shadow-lg transition-all">
+                      <Lock className="w-4 h-4 mr-2" />
+                      Unlock Premium — $9.99/mo <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            )}
           </div>
         </div>
       </div>
