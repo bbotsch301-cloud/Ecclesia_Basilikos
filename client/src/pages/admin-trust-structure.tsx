@@ -69,80 +69,80 @@ const LAYER_CONFIG: Record<string, {
   charter: {
     label: "Constitutional",
     subtitle: "Philosophy & Divine Authority",
-    nodeColor: "bg-amber-700",
-    nodeBorder: "border-amber-500",
-    nodeText: "text-amber-50",
-    nodeBg: "bg-amber-800/90",
+    nodeColor: "bg-amber-600",
+    nodeBorder: "border-amber-400",
+    nodeText: "text-white",
+    nodeBg: "bg-amber-700",
     icon: Crown,
     defaultEntityType: "charter",
   },
   trust: {
     label: "Governance",
     subtitle: "Mission Anchor & Stewardship",
-    nodeColor: "bg-slate-700",
-    nodeBorder: "border-slate-500",
-    nodeText: "text-slate-50",
-    nodeBg: "bg-slate-800/90",
+    nodeColor: "bg-slate-600",
+    nodeBorder: "border-slate-400",
+    nodeText: "text-white",
+    nodeBg: "bg-slate-700",
     icon: Shield,
     defaultEntityType: "trust",
   },
   operational: {
     label: "Structural",
     subtitle: "Operational Trust Layer",
-    nodeColor: "bg-teal-700",
-    nodeBorder: "border-teal-500",
-    nodeText: "text-teal-50",
-    nodeBg: "bg-teal-800/90",
+    nodeColor: "bg-teal-600",
+    nodeBorder: "border-teal-400",
+    nodeText: "text-white",
+    nodeBg: "bg-teal-700",
     icon: Building2,
     defaultEntityType: "operational",
   },
   pma: {
     label: "Participating",
     subtitle: "Private Membership Associations",
-    nodeColor: "bg-rose-700",
-    nodeBorder: "border-rose-500",
-    nodeText: "text-rose-50",
-    nodeBg: "bg-rose-800/90",
+    nodeColor: "bg-rose-600",
+    nodeBorder: "border-rose-400",
+    nodeText: "text-white",
+    nodeBg: "bg-rose-700",
     icon: Users,
     defaultEntityType: "pma",
   },
   platform: {
     label: "Platform",
     subtitle: "Digital Infrastructure",
-    nodeColor: "bg-indigo-700",
-    nodeBorder: "border-indigo-500",
-    nodeText: "text-indigo-50",
-    nodeBg: "bg-indigo-800/90",
+    nodeColor: "bg-indigo-600",
+    nodeBorder: "border-indigo-400",
+    nodeText: "text-white",
+    nodeBg: "bg-indigo-700",
     icon: Globe,
     defaultEntityType: "platform",
   },
   chapter: {
     label: "Chapter",
     subtitle: "Regional Governance",
-    nodeColor: "bg-orange-700",
-    nodeBorder: "border-orange-500",
-    nodeText: "text-orange-50",
-    nodeBg: "bg-orange-800/90",
+    nodeColor: "bg-orange-600",
+    nodeBorder: "border-orange-400",
+    nodeText: "text-white",
+    nodeBg: "bg-orange-700",
     icon: MapPin,
     defaultEntityType: "chapter",
   },
   commune: {
     label: "Community",
     subtitle: "Local Stewardship Units",
-    nodeColor: "bg-emerald-700",
-    nodeBorder: "border-emerald-500",
-    nodeText: "text-emerald-50",
-    nodeBg: "bg-emerald-800/90",
+    nodeColor: "bg-emerald-600",
+    nodeBorder: "border-emerald-400",
+    nodeText: "text-white",
+    nodeBg: "bg-emerald-700",
     icon: Sprout,
     defaultEntityType: "community",
   },
   project: {
     label: "Project",
     subtitle: "Specific Initiatives",
-    nodeColor: "bg-gray-600",
+    nodeColor: "bg-gray-500",
     nodeBorder: "border-gray-400",
-    nodeText: "text-gray-50",
-    nodeBg: "bg-gray-700/90",
+    nodeText: "text-white",
+    nodeBg: "bg-gray-600",
     icon: FolderOpen,
     defaultEntityType: "project",
   },
@@ -154,14 +154,14 @@ const RELATIONSHIP_CONFIG: Record<string, {
   strokeColor: string;
   dashed: boolean;
 }> = {
-  authority:       { label: "Authority",       color: "bg-red-500",     strokeColor: "#ef4444", dashed: false },
-  grants:          { label: "Grants",          color: "bg-gray-700",    strokeColor: "#374151", dashed: false },
-  funds:           { label: "Funds",           color: "bg-blue-500",    strokeColor: "#3b82f6", dashed: false },
-  land:            { label: "Land",            color: "bg-green-500",   strokeColor: "#22c55e", dashed: false },
-  remits:          { label: "Remits",          color: "bg-purple-500",  strokeColor: "#a855f7", dashed: false },
-  establishes_pma: { label: "Establishes PMA", color: "bg-purple-400",  strokeColor: "#c084fc", dashed: true },
-  oversees:        { label: "Oversees",        color: "bg-orange-400",  strokeColor: "#fb923c", dashed: true },
-  coordinates:     { label: "Coordinates",     color: "bg-gray-400",    strokeColor: "#9ca3af", dashed: true },
+  authority:       { label: "Authority",       color: "bg-red-500",     strokeColor: "#dc2626", dashed: false },
+  grants:          { label: "Grants",          color: "bg-gray-800",    strokeColor: "#1f2937", dashed: false },
+  funds:           { label: "Funds",           color: "bg-blue-500",    strokeColor: "#2563eb", dashed: false },
+  land:            { label: "Land",            color: "bg-green-600",   strokeColor: "#16a34a", dashed: false },
+  remits:          { label: "Remits",          color: "bg-purple-500",  strokeColor: "#9333ea", dashed: false },
+  establishes_pma: { label: "Establishes PMA", color: "bg-purple-400",  strokeColor: "#a855f7", dashed: true },
+  oversees:        { label: "Oversees",        color: "bg-orange-500",  strokeColor: "#ea580c", dashed: true },
+  coordinates:     { label: "Coordinates",     color: "bg-gray-500",    strokeColor: "#6b7280", dashed: true },
 };
 
 const LAYERS_ORDER = ['charter', 'trust', 'operational', 'pma', 'platform', 'chapter', 'commune', 'project'];
@@ -343,22 +343,22 @@ function EntityNode({
       onClick={onClick}
       className={`
         relative group cursor-pointer select-none
-        rounded-xl border-2 px-5 py-3 min-w-[160px] max-w-[220px]
-        transition-all duration-200 ease-out
+        rounded-xl border-2 px-5 py-3.5 min-w-[170px] max-w-[220px]
+        transition-all duration-200 ease-out shadow-md
         ${config.nodeBg} ${config.nodeBorder} ${config.nodeText}
-        ${isSelected ? 'ring-2 ring-yellow-400 ring-offset-2 ring-offset-gray-900 scale-105 shadow-lg shadow-yellow-400/20' : ''}
-        ${isConnecting && connectFrom !== entity.id ? 'hover:ring-2 hover:ring-cyan-400 hover:ring-offset-2 hover:ring-offset-gray-900' : ''}
-        ${!isConnecting ? 'hover:scale-105 hover:shadow-lg' : ''}
+        ${isSelected ? 'ring-3 ring-royal-gold ring-offset-2 ring-offset-white scale-105 shadow-xl' : ''}
+        ${isConnecting && connectFrom !== entity.id ? 'hover:ring-2 hover:ring-cyan-500 hover:ring-offset-2 hover:ring-offset-white' : ''}
+        ${!isConnecting ? 'hover:scale-105 hover:shadow-xl hover:brightness-110' : ''}
       `}
     >
       {/* Drag grip */}
-      <div className="absolute -left-1 top-1/2 -translate-y-1/2 hidden group-hover:flex opacity-40 hover:opacity-80 cursor-grab">
+      <div className="absolute -left-1.5 top-1/2 -translate-y-1/2 hidden group-hover:flex opacity-50 hover:opacity-90 cursor-grab text-white/70">
         <GripVertical className="w-3.5 h-3.5" />
       </div>
 
       {/* Status indicator */}
       {entity.status === 'planned' && (
-        <div className="absolute -top-2 -right-2 w-4 h-4 rounded-full bg-yellow-400 border-2 border-gray-900" title="Planned" />
+        <div className="absolute -top-2 -right-2 w-4 h-4 rounded-full bg-yellow-400 border-2 border-white shadow" title="Planned" />
       )}
 
       {/* Entity name */}
@@ -386,8 +386,8 @@ function EntityNode({
           e.stopPropagation();
           onStartConnect(entity.id);
         }}
-        className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-cyan-500 border-2 border-gray-900 hidden group-hover:flex items-center justify-center hover:bg-cyan-400 hover:scale-125 transition-all z-10 shadow-lg"
-        title="Drag to connect"
+        className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-cyan-500 border-2 border-white hidden group-hover:flex items-center justify-center hover:bg-cyan-400 hover:scale-125 transition-all z-10 shadow-md"
+        title="Click to connect"
       >
         <Circle className="w-2 h-2 fill-current text-white" />
       </button>
@@ -469,28 +469,28 @@ function InlineAddForm({
   };
 
   return (
-    <div className={`rounded-xl border-2 border-dashed ${config?.nodeBorder || 'border-gray-500'} bg-gray-800/50 p-3 min-w-[200px] max-w-[260px] animate-in fade-in slide-in-from-bottom-2 duration-200`}>
+    <div className={`rounded-xl border-2 ${config?.nodeBorder || 'border-gray-300'} bg-white shadow-lg p-3 min-w-[210px] max-w-[270px] animate-in fade-in slide-in-from-bottom-2 duration-200`}>
       {showTemplates && templates.length > 0 ? (
         <div className="space-y-1.5">
-          <p className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold px-1">Quick Add</p>
+          <p className="text-[10px] uppercase tracking-wider text-gray-500 font-semibold px-1">Quick Add</p>
           {templates.map((t, i) => (
             <button
               key={i}
               onClick={() => handleTemplate(t)}
               disabled={isPending}
-              className="w-full text-left px-2.5 py-1.5 rounded-lg bg-gray-700/60 hover:bg-gray-600/80 text-gray-200 text-xs transition-colors flex items-center gap-2"
+              className="w-full text-left px-2.5 py-2 rounded-lg bg-gray-50 hover:bg-gray-100 text-gray-800 text-xs transition-colors flex items-center gap-2 border border-gray-200"
             >
-              <Zap className="w-3 h-3 text-yellow-400 shrink-0" />
+              <Zap className="w-3 h-3 text-amber-500 shrink-0" />
               <div className="min-w-0">
-                <p className="font-medium truncate">{t.name}</p>
-                <p className="text-[10px] text-gray-400 truncate">{t.subtitle}</p>
+                <p className="font-semibold truncate">{t.name}</p>
+                <p className="text-[10px] text-gray-500 truncate">{t.subtitle}</p>
               </div>
             </button>
           ))}
-          <div className="border-t border-gray-700 pt-1.5 mt-1.5">
+          <div className="border-t border-gray-200 pt-1.5 mt-1.5">
             <button
               onClick={() => setShowTemplates(false)}
-              className="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-gray-700/40 text-gray-400 hover:text-gray-200 text-xs transition-colors flex items-center gap-2"
+              className="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-gray-50 text-gray-500 hover:text-gray-700 text-xs transition-colors flex items-center gap-2"
             >
               <Edit className="w-3 h-3 shrink-0" />
               Custom entity...
@@ -498,7 +498,7 @@ function InlineAddForm({
           </div>
           <button
             onClick={onCancel}
-            className="w-full text-center text-[10px] text-gray-500 hover:text-gray-300 pt-1"
+            className="w-full text-center text-[10px] text-gray-400 hover:text-gray-600 pt-1"
           >
             Cancel
           </button>
@@ -514,7 +514,7 @@ function InlineAddForm({
               if (e.key === "Escape") onCancel();
             }}
             placeholder="Entity name..."
-            className="h-8 text-xs bg-gray-700/60 border-gray-600 text-white placeholder:text-gray-500"
+            className="h-8 text-xs"
           />
           <Input
             value={subtitle}
@@ -524,7 +524,7 @@ function InlineAddForm({
               if (e.key === "Escape") onCancel();
             }}
             placeholder="Subtitle (optional)"
-            className="h-8 text-xs bg-gray-700/60 border-gray-600 text-white placeholder:text-gray-500"
+            className="h-8 text-xs"
           />
           <div className="flex items-center gap-1.5">
             <Button
@@ -541,7 +541,7 @@ function InlineAddForm({
                 size="sm"
                 variant="ghost"
                 onClick={() => { setShowTemplates(true); setName(""); setSubtitle(""); }}
-                className="h-7 text-xs text-gray-400 hover:text-white"
+                className="h-7 text-xs text-gray-500 hover:text-gray-700"
               >
                 Templates
               </Button>
@@ -550,7 +550,7 @@ function InlineAddForm({
               size="sm"
               variant="ghost"
               onClick={onCancel}
-              className="h-7 w-7 p-0 text-gray-400 hover:text-white"
+              className="h-7 w-7 p-0 text-gray-400 hover:text-gray-600"
             >
               <X className="w-3 h-3" />
             </Button>
@@ -1164,11 +1164,13 @@ export default function AdminTrustStructure() {
         </div>
 
         {/* ════════════ RELATIONSHIP LEGEND / FILTER ════════════ */}
-        <div className="bg-gray-900 rounded-t-xl border border-gray-700 border-b-0 px-4 py-3 flex flex-wrap items-center gap-2">
+        <div className="bg-white rounded-t-xl border border-gray-200 border-b-0 px-4 py-3 flex flex-wrap items-center gap-2">
           <button
             onClick={() => setActiveFilter(null)}
-            className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${
-              activeFilter === null ? 'bg-white text-gray-900' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all border ${
+              activeFilter === null
+                ? 'bg-royal-navy text-white border-royal-navy'
+                : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100'
             }`}
           >
             All Relationships
@@ -1179,16 +1181,18 @@ export default function AdminTrustStructure() {
               <button
                 key={type}
                 onClick={() => setActiveFilter(activeFilter === type ? null : type)}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition-all ${
-                  activeFilter === type ? 'bg-white text-gray-900' : 'bg-gray-700/60 text-gray-300 hover:bg-gray-600'
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all border ${
+                  activeFilter === type
+                    ? 'bg-royal-navy text-white border-royal-navy'
+                    : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100'
                 }`}
               >
                 <span
-                  className="w-3 h-0.5 rounded inline-block"
+                  className="w-4 h-1 rounded-full inline-block"
                   style={{ backgroundColor: cfg.strokeColor }}
                 />
                 {cfg.label}
-                {count > 0 && <span className="text-[10px] opacity-60">({count})</span>}
+                {count > 0 && <span className="text-[10px] opacity-50">({count})</span>}
               </button>
             );
           })}
@@ -1196,17 +1200,17 @@ export default function AdminTrustStructure() {
 
         {/* ════════════ CONNECT MODE BAR ════════════ */}
         {connectMode && (
-          <div className="bg-cyan-900/80 border-x border-cyan-700 px-4 py-2 flex items-center justify-between">
-            <div className="flex items-center gap-3 text-sm text-cyan-100">
-              <MousePointer2 className="w-4 h-4" />
+          <div className="bg-cyan-50 border-x border-cyan-200 px-4 py-2.5 flex items-center justify-between">
+            <div className="flex items-center gap-3 text-sm text-cyan-800 font-medium">
+              <MousePointer2 className="w-4 h-4 text-cyan-600" />
               {!connectFrom
                 ? "Click the SOURCE entity (or use a connection handle)"
-                : <>Source: <strong>{entities.find(e => e.id === connectFrom)?.name}</strong> — now click the TARGET</>
+                : <>Source: <strong className="text-cyan-900">{entities.find(e => e.id === connectFrom)?.name}</strong> — now click the TARGET</>
               }
             </div>
             <div className="flex items-center gap-2">
               <Select value={connectType} onValueChange={setConnectType}>
-                <SelectTrigger className="h-7 w-[150px] text-xs bg-cyan-800 border-cyan-600 text-white">
+                <SelectTrigger className="h-7 w-[150px] text-xs">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -1218,7 +1222,7 @@ export default function AdminTrustStructure() {
               <Button
                 size="sm"
                 variant="ghost"
-                className="text-cyan-200 hover:text-white h-7"
+                className="text-cyan-600 hover:text-cyan-800 h-7"
                 onClick={() => { setConnectMode(false); setConnectFrom(null); }}
               >
                 <X className="w-4 h-4" />
@@ -1230,26 +1234,33 @@ export default function AdminTrustStructure() {
         {/* ════════════ DIAGRAM AREA ════════════ */}
         <div
           ref={diagramRef}
-          className="relative bg-gray-900 rounded-b-xl border border-gray-700 border-t-0 overflow-x-auto min-h-[500px]"
+          className="relative bg-gradient-to-b from-slate-50 to-gray-100 rounded-b-xl border border-gray-200 border-t-0 overflow-auto"
+          style={{ minHeight: '520px' }}
         >
+          {/* Subtle grid pattern */}
+          <div className="absolute inset-0 opacity-[0.4] pointer-events-none" style={{
+            backgroundImage: 'radial-gradient(circle, #cbd5e1 0.5px, transparent 0.5px)',
+            backgroundSize: '24px 24px',
+          }} />
+
           {/* Zoom controls */}
-          <div className="absolute top-3 right-3 z-20 flex items-center gap-1 bg-gray-800/90 rounded-lg border border-gray-600 p-1">
+          <div className="sticky top-3 float-right mr-3 mt-3 z-20 flex items-center gap-1 bg-white/90 backdrop-blur rounded-lg border border-gray-200 p-1 shadow-sm">
             <button
               onClick={() => setZoom(z => Math.max(0.5, z - 0.1))}
-              className="w-7 h-7 flex items-center justify-center text-gray-400 hover:text-white rounded transition-colors"
+              className="w-7 h-7 flex items-center justify-center text-gray-500 hover:text-gray-800 rounded transition-colors"
             >
               <ZoomOut className="w-4 h-4" />
             </button>
-            <span className="text-[10px] text-gray-400 w-10 text-center">{Math.round(zoom * 100)}%</span>
+            <span className="text-[10px] text-gray-500 w-10 text-center font-medium">{Math.round(zoom * 100)}%</span>
             <button
               onClick={() => setZoom(z => Math.min(1.5, z + 0.1))}
-              className="w-7 h-7 flex items-center justify-center text-gray-400 hover:text-white rounded transition-colors"
+              className="w-7 h-7 flex items-center justify-center text-gray-500 hover:text-gray-800 rounded transition-colors"
             >
               <ZoomIn className="w-4 h-4" />
             </button>
             <button
               onClick={() => setZoom(1)}
-              className="w-7 h-7 flex items-center justify-center text-gray-400 hover:text-white rounded transition-colors"
+              className="w-7 h-7 flex items-center justify-center text-gray-500 hover:text-gray-800 rounded transition-colors"
             >
               <Maximize2 className="w-3.5 h-3.5" />
             </button>
@@ -1272,7 +1283,7 @@ export default function AdminTrustStructure() {
                   return (
                     <div key={layer} className="flex items-center gap-6">
                       <div className="w-32 shrink-0 text-right">
-                        <p className="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-medium">{config.label}</p>
+                        <p className="text-[10px] uppercase tracking-[0.2em] text-gray-400 font-semibold">{config.label}</p>
                       </div>
                       <div className="flex-1 flex justify-center">
                         {inlineAddLayer === layer ? (
@@ -1286,10 +1297,10 @@ export default function AdminTrustStructure() {
                         ) : (
                           <button
                             onClick={() => setInlineAddLayer(layer)}
-                            className="border-2 border-dashed border-gray-700 hover:border-gray-500 rounded-xl px-8 py-6 flex flex-col items-center gap-2 text-gray-600 hover:text-gray-400 transition-all group"
+                            className="border-2 border-dashed border-gray-300 hover:border-gray-400 rounded-xl px-8 py-6 flex flex-col items-center gap-2 text-gray-400 hover:text-gray-600 transition-all group bg-white/50 hover:bg-white/80"
                           >
                             <Icon className="w-6 h-6 opacity-40 group-hover:opacity-70 transition-opacity" />
-                            <span className="text-xs">Add {config.label} Entity</span>
+                            <span className="text-xs font-medium">Add {config.label} Entity</span>
                             <Plus className="w-4 h-4 opacity-30 group-hover:opacity-60" />
                           </button>
                         )}
@@ -1306,7 +1317,7 @@ export default function AdminTrustStructure() {
                     onClick={() => seedMutation.mutate()}
                     disabled={seedMutation.isPending}
                     variant="outline"
-                    className="font-cinzel text-gray-300 border-gray-600 hover:bg-gray-800"
+                    className="font-cinzel"
                   >
                     <RefreshCw className={`w-4 h-4 mr-2 ${seedMutation.isPending ? 'animate-spin' : ''}`} />
                     Load Template
@@ -1326,25 +1337,25 @@ export default function AdminTrustStructure() {
                   return (
                     <div
                       key={layer}
-                      className={`flex items-start gap-6 rounded-lg transition-colors duration-200 py-2 -mx-2 px-2 ${
-                        isDragOver ? 'bg-cyan-900/30 ring-1 ring-cyan-500/40' : ''
+                      className={`flex items-start gap-6 rounded-xl transition-all duration-200 py-3 -mx-2 px-2 ${
+                        isDragOver ? 'bg-cyan-100/70 ring-2 ring-cyan-400/50' : ''
                       }`}
                       onDragOver={(e) => handleDragOver(e, layer)}
                       onDragLeave={handleDragLeave}
                       onDrop={(e) => handleDrop(e, layer)}
                     >
                       {/* Layer label */}
-                      <div className="w-32 shrink-0 text-right pt-2">
-                        <p className="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-medium leading-tight">
+                      <div className="w-32 shrink-0 text-right pt-3">
+                        <p className="text-[10px] uppercase tracking-[0.2em] text-gray-400 font-semibold leading-tight">
                           {config.label}
                         </p>
-                        <p className="text-[9px] text-gray-600 mt-0.5 hidden sm:block">
+                        <p className="text-[9px] text-gray-400 mt-0.5 hidden sm:block">
                           {config.subtitle}
                         </p>
                       </div>
 
                       {/* Entity nodes */}
-                      <div className="flex-1 flex flex-wrap justify-center items-start gap-4 min-h-[60px]">
+                      <div className="flex-1 flex flex-wrap justify-center items-start gap-5 min-h-[70px]">
                         {layerEntities.map((entity) => (
                           <EntityNode
                             key={entity.id}
@@ -1373,7 +1384,7 @@ export default function AdminTrustStructure() {
                         ) : (
                           <button
                             onClick={() => setInlineAddLayer(layer)}
-                            className="border-2 border-dashed border-gray-700 hover:border-gray-500 rounded-xl w-12 h-12 flex items-center justify-center text-gray-600 hover:text-gray-400 transition-all self-center"
+                            className="border-2 border-dashed border-gray-300 hover:border-gray-400 rounded-xl w-12 h-12 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-all self-center bg-white/50 hover:bg-white/80"
                             title={`Add ${config.label} entity`}
                           >
                             <Plus className="w-4 h-4" />
