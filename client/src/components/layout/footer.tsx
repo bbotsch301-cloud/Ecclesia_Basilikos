@@ -86,7 +86,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/pricing" className="text-gray-300 hover:text-royal-gold transition-colors">
-                  Beneficial Interest
+                  PMA Membership
                 </Link>
               </li>
             </ul>

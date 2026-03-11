@@ -115,12 +115,14 @@ function WelcomeContent() {
         )}
 
         {/* Beneficial Unit Notice */}
+        {isPremium && (
         <div className="flex items-center gap-3 bg-royal-gold/5 border border-royal-gold/20 text-royal-navy rounded-lg p-4 mb-8">
           <Award className="w-5 h-5 text-royal-gold flex-shrink-0" />
           <p className="text-sm">
             Your <strong>Beneficial Unit</strong> has been issued. <Link href="/beneficiary/unit" className="text-royal-gold hover:underline font-medium">View your unit details and download your certificate</Link>.
           </p>
         </div>
+        )}
 
         {/* Primary Card — Start Free Course / Continue Learning */}
         <div className="mb-8">
@@ -184,7 +186,7 @@ function WelcomeContent() {
           <div className="grid md:grid-cols-2 gap-6 mt-8">
             <Card className="royal-card">
               <CardContent className="p-6">
-                <h3 className="font-cinzel text-lg font-bold text-royal-navy mb-4">Your General Beneficial Interest Includes</h3>
+                <h3 className="font-cinzel text-lg font-bold text-royal-navy mb-4">Your Free Account Includes</h3>
                 <ul className="space-y-2">
                   {["Trust pillar course", "Trust-related downloads", "Forum reading", "Progress tracking", "Email notifications"].map((f, i) => (
                     <li key={i} className="flex items-center gap-2 text-sm text-gray-600">
@@ -201,7 +203,7 @@ function WelcomeContent() {
                   <h3 className="font-cinzel text-lg font-bold text-royal-navy">Want Full Access?</h3>
                 </div>
                 <p className="text-sm text-gray-600 mb-4">
-                  Elevate to Royal Beneficial Interest for all courses, downloads, forum posting, Proof Vault, and more.
+                  Acquire PMA Beneficial Interest for all courses, downloads, forum posting, Proof Vault, and more.
                 </p>
                 <Link href="/pricing">
                   <Button className="w-full bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold">

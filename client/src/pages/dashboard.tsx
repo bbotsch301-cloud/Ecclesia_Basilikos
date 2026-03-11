@@ -340,15 +340,15 @@ function DashboardContent() {
               <CardHeader className="pb-3">
                 <CardTitle className="text-royal-navy dark:text-royal-gold flex items-center gap-2 font-cinzel text-lg">
                   <Crown className="h-5 w-5 text-royal-gold" />
-                  Elevate Interest
+                  Acquire PMA Membership
                 </CardTitle>
               </CardHeader>
               <CardContent className="flex-1 flex flex-col">
                 <div className="flex-1 flex flex-col justify-center py-4">
                   <p className="text-sm text-gray-600 dark:text-gray-300 mb-3 leading-relaxed">
                     {(stats?.coursesInProgress ?? 0) > 0 || (stats?.coursesCompleted ?? 0) > 0
-                      ? "You've started your foundation. Unlock all 3 pillars with Premium for $9.99/mo."
-                      : "Get full access to all courses, downloads, and community features for $9.99/mo."}
+                      ? "You've started your foundation. Unlock all 3 pillars with a $500 one-time contribution for PMA membership."
+                      : "Get full access to all courses, downloads, and community features with a $500 one-time contribution for PMA membership."}
                   </p>
                   <ul className="space-y-1.5 mb-2">
                     <li className="flex items-center gap-2 text-xs text-gray-500">

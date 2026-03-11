@@ -90,7 +90,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Authentication routes
   app.post("/api/auth/register", authLimiter, async (req, res) => {
     try {
-      const { pmaAgreementAccepted, privacyAccepted, ...userData } = insertUserSchema.parse(req.body);
+      const { privacyAccepted, ...userData } = insertUserSchema.parse(req.body);
 
       // Check if user already exists
       const existingUser = await storage.getUserByEmail(userData.email);
@@ -98,14 +98,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: "Email already registered" });
       }
 
-      const user = await storage.createUser({ ...userData, termsAcceptedAt: new Date(), pmaAgreementAcceptedAt: new Date() });
-
-      // Issue beneficial unit
-      try {
-        await storage.issueBeneficialUnit(user.id);
-      } catch (unitErr) {
-        logger.warn({ err: unitErr, userId: user.id }, 'Failed to issue beneficial unit during registration');
-      }
+      const user = await storage.createUser({ ...userData, termsAcceptedAt: new Date() });
 
       // Send verification email
       const verificationUrl = `${process.env.BASE_URL || `${req.protocol}://${req.get('host')}`}/verify-email?token=${user.emailVerificationToken}`;
@@ -1826,7 +1819,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { isStripeEnabled } = await import("./stripe");
       res.json({
         enabled: isStripeEnabled(),
-        priceId: process.env.STRIPE_PRICE_ID || null,
+        priceIdOneTime: process.env.STRIPE_PRICE_ID_ONETIME || process.env.STRIPE_PRICE_ID || null,
+        priceIdInstallment: process.env.STRIPE_PRICE_ID_INSTALLMENT || null,
       });
     } catch {
       res.json({ enabled: false });
@@ -1842,13 +1836,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const user = req.user as User;
-      const priceId = req.body.priceId || process.env.STRIPE_PRICE_ID;
+      const paymentMode: "one_time" | "installment" = req.body.paymentMode === "installment" ? "installment" : "one_time";
 
-      if (!priceId || typeof priceId !== "string") {
-        return res.status(400).json({ error: "priceId is required (set STRIPE_PRICE_ID env var or pass in body)" });
+      let priceId: string | undefined;
+      if (paymentMode === "one_time") {
+        priceId = req.body.priceId || process.env.STRIPE_PRICE_ID_ONETIME || process.env.STRIPE_PRICE_ID;
+      } else {
+        priceId = req.body.priceId || process.env.STRIPE_PRICE_ID_INSTALLMENT;
       }
 
-      const url = await createCheckoutSession(user.id, user.email, priceId);
+      if (!priceId || typeof priceId !== "string") {
+        return res.status(400).json({ error: "priceId is required (set STRIPE_PRICE_ID_ONETIME / STRIPE_PRICE_ID_INSTALLMENT env var or pass in body)" });
+      }
+
+      const url = await createCheckoutSession(user.id, user.email, priceId, paymentMode);
       res.json({ url });
     } catch (error: any) {
       logger.error({ err: error }, "Error creating checkout session");

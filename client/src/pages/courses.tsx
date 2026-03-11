@@ -201,8 +201,8 @@ export default function Courses() {
         });
       } else if (serverCode.toLowerCase().includes("premium") || serverMessage.toLowerCase().includes("premium")) {
         toast({
-          title: "Premium Subscription Required",
-          description: "This course requires a premium subscription. Visit /pricing to upgrade.",
+          title: "PMA Membership Required",
+          description: "This course requires PMA membership. Visit /pricing to acquire beneficial interest.",
           variant: "destructive",
         });
       } else {
@@ -313,8 +313,8 @@ export default function Courses() {
               <p className="text-sm text-gray-300 font-cinzel">Pillars</p>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center border border-white/10">
-              <p className="text-3xl font-bold text-royal-gold">{isPremium ? "Full" : "Free"}</p>
-              <p className="text-sm text-gray-300 font-cinzel">{isPremium ? "Access" : "Trust Courses"}</p>
+              <p className="text-3xl font-bold text-royal-gold">{isPremium ? "PMA" : "Free"}</p>
+              <p className="text-sm text-gray-300 font-cinzel">{isPremium ? "Member" : "Trust Courses"}</p>
             </div>
           </div>
         </div>
@@ -459,11 +459,11 @@ export default function Courses() {
                               </Badge>
                             ) : !isPremium ? (
                               <Badge variant="outline" className="text-xs text-royal-gold border-royal-gold/30">
-                                <Lock className="w-3 h-3 mr-1" /> Premium
+                                <Lock className="w-3 h-3 mr-1" /> PMA Only
                               </Badge>
                             ) : (
                               <Badge variant="outline" className="text-xs text-royal-gold border-royal-gold/30">
-                                <Crown className="w-3 h-3 mr-1" /> Premium
+                                <Crown className="w-3 h-3 mr-1" /> PMA Member
                               </Badge>
                             )}
                           </div>
@@ -510,8 +510,8 @@ export default function Courses() {
                                       const trustEnrollment = trustCourse ? getEnrollment(trustCourse.id) : null;
                                       const hasCompletedTrust = !!trustEnrollment?.completedAt;
                                       return hasCompletedTrust
-                                        ? `Ready for the next step? Unlock ${course.title} with Premium`
-                                        : "Unlock with Premium — $9.99/mo";
+                                        ? `Ready for the next step? Acquire PMA membership to access ${course.title}`
+                                        : "Acquire PMA Membership — $500 or $50/mo";
                                     })()}
                                   </Button>
                                 </Link>
@@ -521,8 +521,8 @@ export default function Courses() {
                                     const trustEnrollment = trustCourse ? getEnrollment(trustCourse.id) : null;
                                     const hasCompletedTrust = !!trustEnrollment?.completedAt;
                                     return hasCompletedTrust
-                                      ? `You've completed the free Trust course. Upgrade to continue with ${course.title}.`
-                                      : `Complete the free Trust course first, then unlock ${course.title} with Premium for $9.99/mo.`;
+                                      ? `You've completed the free Trust course. Acquire PMA membership to continue with ${course.title}.`
+                                      : `Complete the free Trust course first, then acquire PMA membership to access ${course.title}. $500 one-time or $50/mo installment.`;
                                   })()}
                                 </p>
                                 <ul className="mt-3 space-y-1">
@@ -745,7 +745,7 @@ export default function Courses() {
             {[
               {
                 q: "Which courses are free?",
-                a: "Trust pillar courses are free forever. Other courses require a Premium (Royal Assembly) subscription. We believe foundational Trust knowledge should be accessible to everyone.",
+                a: "Trust pillar courses are free forever. Other courses require PMA membership. We believe foundational Trust knowledge should be accessible to everyone.",
               },
               {
                 q: "Do I need to take them in order?",

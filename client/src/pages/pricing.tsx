@@ -11,43 +11,46 @@ import PremiumBadge from "@/components/PremiumBadge";
 import { apiRequest } from "@/lib/queryClient";
 
 const freeTierFeatures = [
-  "Trust document downloads",
   "Trust pillar course access",
+  "Trust document downloads",
   "Forum reading & browsing",
   "Public educational resources",
   "Progress tracking",
   "Email notifications",
 ];
 
-const premiumFeatures = [
+const pmaFeatures = [
   "Everything in Free, plus:",
   "All courses & lesson content",
   "All downloadable templates & guides",
   "Forum posting & community discussion",
   "Proof Vault document timestamping",
   "Comments on lessons & videos",
+  "Beneficial Unit instrument (1/N trust interest)",
   "Priority community support",
 ];
 
 export default function Pricing() {
-  usePageTitle("Pricing", "Free and Premium plans for accessing courses, downloads, and community features.");
+  usePageTitle("Pricing", "Free Trust access and PMA Beneficial Interest for full access to all courses, downloads, and community features.");
   const { isAuthenticated, isPremium } = useAuth();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<"one_time" | "installment" | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const { data: stripeStatus } = useQuery<{ enabled: boolean; priceId: string | null }>({
+  const { data: stripeStatus } = useQuery<{ enabled: boolean; priceIdOneTime: string | null; priceIdInstallment: string | null }>({
     queryKey: ["/api/stripe/status"],
     staleTime: 60_000,
   });
 
   const stripeEnabled = stripeStatus?.enabled ?? false;
 
-  async function handleSubscribe() {
-    setIsLoading(true);
+  async function handleCheckout(mode: "one_time" | "installment") {
+    setIsLoading(mode);
     setError(null);
     try {
+      const priceId = mode === "one_time" ? stripeStatus?.priceIdOneTime : stripeStatus?.priceIdInstallment;
       const res = await apiRequest("POST", "/api/stripe/create-checkout-session", {
-        priceId: stripeStatus?.priceId || undefined,
+        priceId: priceId || undefined,
+        paymentMode: mode,
       });
       const data = await res.json();
       if (data.url) {
@@ -57,7 +60,7 @@ export default function Pricing() {
       }
     } catch (err: any) {
       setError(err.message || "Failed to start checkout. Please try again.");
-      setIsLoading(false);
+      setIsLoading(null);
     }
   }
 
@@ -76,7 +79,7 @@ export default function Pricing() {
             Choose Your Path
           </h1>
           <p className="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto leading-relaxed">
-            Begin your journey with free Trust content, or elevate to Royal Beneficial Interest for complete access to all courses, templates, and community features.
+            Access free Trust content as a user, or acquire full beneficial interest through PMA membership.
           </p>
         </div>
       </section>
@@ -89,7 +92,7 @@ export default function Pricing() {
             <CardContent className="p-8 md:p-10">
               <div className="text-center mb-8">
                 <Badge className="mb-4 bg-gray-100 text-gray-700 border-gray-300 font-cinzel">
-                  <Users className="w-3 h-3 mr-1" /> General Beneficiary
+                  <Users className="w-3 h-3 mr-1" /> Trust User
                 </Badge>
                 <h2 className="font-cinzel-decorative text-2xl font-bold text-royal-navy mb-2">Free</h2>
                 <p className="text-4xl font-bold text-royal-navy">$0<span className="text-lg text-gray-400 font-normal">/forever</span></p>
@@ -107,30 +110,30 @@ export default function Pricing() {
                 <Button variant="outline" className="w-full font-cinzel" disabled>
                   Current Plan
                 </Button>
-              ) : (
+              ) : !isAuthenticated ? (
                 <Link href="/signup">
                   <Button variant="outline" className="w-full font-cinzel font-bold">
                     Get Started Free
                   </Button>
                 </Link>
-              )}
+              ) : null}
             </CardContent>
           </Card>
 
-          {/* Premium Tier */}
+          {/* PMA Beneficiary */}
           <Card className="border-2 border-royal-gold relative overflow-hidden shadow-xl">
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-royal-gold via-yellow-400 to-royal-gold" />
             <CardContent className="p-8 md:p-10">
               <div className="text-center mb-8">
                 <Badge className="mb-4 bg-royal-gold/10 text-royal-gold border-royal-gold font-cinzel">
-                  <Crown className="w-3 h-3 mr-1" /> Royal Beneficiary
+                  <Crown className="w-3 h-3 mr-1" /> PMA Beneficiary
                 </Badge>
-                <h2 className="font-cinzel-decorative text-2xl font-bold text-royal-navy mb-2">Premium</h2>
-                <p className="text-4xl font-bold text-royal-navy">$9.99<span className="text-lg text-gray-400 font-normal">/month</span></p>
-                <p className="text-sm text-gray-500 mt-2">Cancel anytime</p>
+                <h2 className="font-cinzel-decorative text-2xl font-bold text-royal-navy mb-2">Beneficial Interest</h2>
+                <p className="text-4xl font-bold text-royal-navy">$500</p>
+                <p className="text-sm text-gray-500 mt-2">One-time trust contribution &bull; or $50 &times; 10 months</p>
               </div>
               <ul className="space-y-3 mb-8">
-                {premiumFeatures.map((feature, i) => (
+                {pmaFeatures.map((feature, i) => (
                   <li key={i} className={`flex items-start gap-3 text-sm ${i === 0 ? "text-royal-gold font-semibold font-cinzel" : "text-gray-700"}`}>
                     {i === 0 ? (
                       <Crown className="w-4 h-4 text-royal-gold flex-shrink-0 mt-0.5" />
@@ -144,25 +147,37 @@ export default function Pricing() {
               {isPremium ? (
                 <div className="space-y-2">
                   <Button className="w-full bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold" disabled>
-                    <Crown className="w-4 h-4 mr-2" /> You're a Royal Beneficiary
+                    <Crown className="w-4 h-4 mr-2" /> You're a PMA Beneficiary
                   </Button>
                   <Link href="/billing">
                     <Button variant="ghost" className="w-full text-sm text-gray-500">
-                      Manage Stewardship
+                      View Stewardship Details
                     </Button>
                   </Link>
                 </div>
               ) : stripeEnabled && isAuthenticated ? (
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <Button
                     className="w-full bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold"
-                    onClick={handleSubscribe}
-                    disabled={isLoading}
+                    onClick={() => handleCheckout("one_time")}
+                    disabled={isLoading !== null}
                   >
-                    {isLoading ? (
+                    {isLoading === "one_time" ? (
                       <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Processing...</>
                     ) : (
-                      <><Crown className="w-4 h-4 mr-2" /> Elevate Interest</>
+                      <><Crown className="w-4 h-4 mr-2" /> Acquire Interest — $500</>
+                    )}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="w-full font-cinzel border-royal-gold/30 text-royal-navy"
+                    onClick={() => handleCheckout("installment")}
+                    disabled={isLoading !== null}
+                  >
+                    {isLoading === "installment" ? (
+                      <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Processing...</>
+                    ) : (
+                      <>$50 × 10 Months</>
                     )}
                   </Button>
                   {error && (
@@ -172,7 +187,7 @@ export default function Pricing() {
               ) : stripeEnabled && !isAuthenticated ? (
                 <Link href="/signup">
                   <Button className="w-full bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold">
-                    Sign Up to Join
+                    Sign Up to Acquire Interest
                   </Button>
                 </Link>
               ) : (
@@ -191,16 +206,16 @@ export default function Pricing() {
         <div className="space-y-6">
           {[
             {
-              q: "What's included in the free plan?",
+              q: "What's included with a free account?",
               a: "You get full access to Trust pillar content, including the Trust course, related downloads, and the ability to read all forum discussions. Progress tracking is also included.",
             },
             {
-              q: "Can I cancel anytime?",
-              a: "Yes. You can cancel at any time from your billing page. Your access continues until the end of your billing period.",
+              q: "What is PMA Beneficial Interest?",
+              a: "By contributing $500 (or $50×10), you acquire beneficial interest in the Ecclesia Basilikos Trust through our Private Membership Association. This grants you a Beneficial Unit representing your equal share of the trust corpus, plus full access to all content and community features.",
             },
             {
-              q: "How does billing work?",
-              a: "Subscriptions are billed monthly at $9.99/month through Stripe, a secure payment processor. You can manage your payment method and billing from the billing page.",
+              q: "Is the $500 a subscription?",
+              a: "No. It's a one-time trust contribution that permanently establishes your beneficial interest. You can also choose the $50×10 installment plan. There are no recurring charges after your contribution is complete.",
             },
             {
               q: "Will free content ever be locked?",

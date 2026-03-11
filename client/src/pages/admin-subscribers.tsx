@@ -297,7 +297,7 @@ export default function AdminSubscribers() {
                       <TableCell>
                         {sub.subscriptionTier === 'premium' ? (
                           <Badge className="bg-royal-gold text-royal-navy text-xs">
-                            <Crown className="w-3 h-3 mr-1" /> Premium
+                            <Crown className="w-3 h-3 mr-1" /> PMA Member
                           </Badge>
                         ) : (
                           <Badge variant="outline" className="text-xs">Free</Badge>
@@ -366,7 +366,7 @@ export default function AdminSubscribers() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="free">Free</SelectItem>
-                      <SelectItem value="premium">Premium</SelectItem>
+                      <SelectItem value="premium">PMA Member</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

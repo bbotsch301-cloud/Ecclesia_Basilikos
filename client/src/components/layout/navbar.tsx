@@ -15,7 +15,8 @@ const navigation = [
   { name: "Lawful Money", href: "/lawful-money" },
   { name: "Trust & Assets", href: "/trust-assets" },
   { name: "State Passport", href: "/state-passport" },
-  { name: "Contact & Stewardship", href: "/contact" },
+  { name: "The Mandate", href: "/mandate" },
+  { name: "Courses", href: "/courses" },
   { name: "Pricing", href: "/pricing" },
 ];
 
@@ -112,11 +113,11 @@ export default function Navbar() {
                     <Shield className="w-4 h-4 mr-2" /> Proof Vault
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => navigate("/billing")}>
-                    <CreditCard className="w-4 h-4 mr-2" /> Stewardship
+                    <CreditCard className="w-4 h-4 mr-2" /> Membership
                   </DropdownMenuItem>
                   {!isPremium && (
                     <DropdownMenuItem onClick={() => navigate("/pricing")} className="text-royal-gold focus:text-royal-gold">
-                      <Sparkles className="w-4 h-4 mr-2" /> Elevate Interest
+                      <Sparkles className="w-4 h-4 mr-2" /> Acquire Interest
                     </DropdownMenuItem>
                   )}
                   {user?.role === 'admin' && (
@@ -220,11 +221,14 @@ export default function Navbar() {
                           <Link href="/resources" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">
                             <FileText className="w-4 h-4" /> Resources
                           </Link>
+                          <Link href="/nation" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">
+                            <Crown className="w-4 h-4" /> Ecclesia Nation
+                          </Link>
                           <Link href="/proof-vault" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">
                             <Shield className="w-4 h-4" /> Proof Vault
                           </Link>
                           <Link href="/billing" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">
-                            <CreditCard className="w-4 h-4" /> Stewardship
+                            <CreditCard className="w-4 h-4" /> Membership
                           </Link>
                           {user?.role === 'admin' && (
                             <Link href="/admin" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">

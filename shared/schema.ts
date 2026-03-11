@@ -482,7 +482,6 @@ export const insertUserSchema = createInsertSchema(users).omit({
   createdAt: true,
 }).extend({
   password: z.string().min(8, "Password must be at least 8 characters"),
-  pmaAgreementAccepted: z.literal(true, { errorMap: () => ({ message: "You must accept the PMA Membership Agreement" }) }),
   privacyAccepted: z.literal(true, { errorMap: () => ({ message: "You must acknowledge the Privacy Policy" }) }),
 });
 

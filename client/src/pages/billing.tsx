@@ -100,8 +100,8 @@ function BillingContent() {
       queryClient.invalidateQueries({ queryKey: ["/api/subscription/history"] });
       queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
       toast({
-        title: "Subscription Cancelled",
-        description: "Your subscription has been cancelled. You will retain access until the end of your billing period.",
+        title: "Installment Payments Stopped",
+        description: "Your installment payments have been stopped. Your PMA membership and beneficial interest remain active.",
       });
       setCancelDialogOpen(false);
     },
@@ -125,7 +125,7 @@ function BillingContent() {
   return (
     <div className="min-h-screen pt-16 marble-bg">
       <div className="max-w-3xl mx-auto px-4 py-12">
-        <h1 className="font-cinzel-decorative text-3xl font-bold text-royal-navy mb-8">Stewardship & Beneficial Interest</h1>
+        <h1 className="font-cinzel-decorative text-3xl font-bold text-royal-navy mb-8">Stewardship & PMA Membership</h1>
 
         {/* Current Plan */}
         <Card className="mb-8 border-2 border-royal-gold/20">
@@ -140,14 +140,14 @@ function BillingContent() {
               <div>
                 <div className="flex items-center gap-3 mb-2">
                   <h3 className="font-cinzel text-xl font-bold text-royal-navy">
-                    {isPremium ? "Royal Beneficiary" : "General Beneficiary (Free)"}
+                    {isPremium ? "PMA Beneficiary" : "Trust User (Free)"}
                   </h3>
                   {isPremium && <PremiumBadge size="md" />}
                 </div>
                 <p className="text-sm text-gray-500">
                   {isPremium
                     ? "You have full access to all content and features."
-                    : "You have access to Trust content. Upgrade for full access."
+                    : "You have access to Trust content. Acquire PMA membership for full access."
                   }
                 </p>
                 {subStatus?.startDate && (
@@ -160,7 +160,7 @@ function BillingContent() {
               {!isPremium && (
                 <Link href="/pricing">
                   <Button className="bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold">
-                    <Crown className="w-4 h-4 mr-2" /> Elevate Interest
+                    <Crown className="w-4 h-4 mr-2" /> Acquire Beneficial Interest
                   </Button>
                 </Link>
               )}
@@ -168,17 +168,17 @@ function BillingContent() {
           </CardContent>
         </Card>
 
-        {/* Manage Subscription */}
+        {/* Manage Membership */}
         {isPremium && (
           <Card className="mb-8">
             <CardHeader>
-              <CardTitle className="font-cinzel text-lg">Manage Subscription</CardTitle>
+              <CardTitle className="font-cinzel text-lg">Manage Membership</CardTitle>
             </CardHeader>
             <CardContent>
               {stripeEnabled && hasStripeCustomer ? (
                 <div>
                   <p className="text-sm text-gray-500 mb-4">
-                    Manage your subscription, update payment methods, or view invoices through the Stripe customer portal.
+                    Manage your PMA membership, update payment methods, or view invoices through the Stripe customer portal.
                   </p>
                   <Button
                     variant="outline"
@@ -199,10 +199,10 @@ function BillingContent() {
               ) : (
                 <div>
                   <p className="text-sm text-gray-500 mb-4">
-                    Your subscription is managed by an administrator. Contact support for any changes.
+                    Your PMA membership is managed by an administrator. Contact support for any changes.
                   </p>
                   <Button variant="outline" disabled className="font-cinzel">
-                    Admin-Managed Subscription
+                    Admin-Managed Membership
                   </Button>
                 </div>
               )}
@@ -210,37 +210,34 @@ function BillingContent() {
           </Card>
         )}
 
-        {/* Cancel Subscription */}
+        {/* Stop Installment Payments */}
         {isPremium && subStatus?.status === 'active' && (
           <Card className="mb-8 border border-red-200">
             <CardHeader>
               <CardTitle className="font-cinzel text-lg flex items-center gap-2 text-red-700">
                 <XCircle className="w-5 h-5" />
-                Withdraw Royal Interest
+                Withdraw Beneficial Interest
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-gray-600 mb-4">
-                If you wish to cancel your subscription, you will retain access to premium content until the end of your current billing period.
-                This action cannot be undone.
+                If you are on the installment plan and wish to stop payments, you can do so here. Your PMA membership and beneficial interest remain active regardless.
               </p>
               <AlertDialog open={cancelDialogOpen} onOpenChange={setCancelDialogOpen}>
                 <AlertDialogTrigger asChild>
                   <Button variant="destructive" className="font-cinzel">
-                    Cancel Subscription
+                    Stop Installment Payments
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
                     <AlertDialogTitle>Are you sure you want to cancel?</AlertDialogTitle>
                     <AlertDialogDescription>
-                      Your premium access will continue until the end of your current billing period.
-                      After that, you will be returned to General Beneficial Interest and lose access to
-                      premium courses, downloads, forum posting, and the Proof Vault.
+                      If you are on the $50×10 installment plan, this will stop future payments. Your PMA membership and beneficial interest in the Trust remain active.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel>Keep Royal Interest</AlertDialogCancel>
+                    <AlertDialogCancel>Keep Payments</AlertDialogCancel>
                     <AlertDialogAction
                       onClick={() => cancelMutation.mutate()}
                       className="bg-red-600 hover:bg-red-700"
@@ -252,7 +249,7 @@ function BillingContent() {
                           Cancelling...
                         </>
                       ) : (
-                        "Yes, Withdraw Interest"
+                        "Yes, Stop Payments"
                       )}
                     </AlertDialogAction>
                   </AlertDialogFooter>
@@ -273,7 +270,7 @@ function BillingContent() {
                 <Loader2 className="w-6 h-6 animate-spin text-gray-400" />
               </div>
             ) : history.length === 0 ? (
-              <p className="text-sm text-gray-500 text-center py-8">No subscription history yet.</p>
+              <p className="text-sm text-gray-500 text-center py-8">No membership history yet.</p>
             ) : (
               <Table>
                 <TableHeader>

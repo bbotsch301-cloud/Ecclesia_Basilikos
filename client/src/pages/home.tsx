@@ -555,52 +555,71 @@ export default function Home() {
               </Card>
             </motion.div>
 
-            {/* Phase 2 — Coming */}
+            {/* Phase 2 — Structure */}
             <motion.div variants={staggerItemVariants}>
-              <Card className="border border-gray-200 opacity-75">
+              <Card className="border border-gray-200 hover:border-royal-gold/30 transition-all">
                 <CardContent className="p-6 md:p-8">
                   <div className="flex items-start gap-5">
-                    <div className="w-14 h-14 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
-                      <span className="font-cinzel text-lg font-bold text-gray-500">02</span>
+                    <div className="w-14 h-14 rounded-full bg-royal-burgundy/20 flex items-center justify-center flex-shrink-0">
+                      <span className="font-cinzel text-lg font-bold text-royal-burgundy">02</span>
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <h3 className="font-cinzel text-xl font-bold text-gray-500">
+                        <h3 className="font-cinzel text-xl font-bold text-royal-navy">
                           Phase 2 — Structure
                         </h3>
-                        <span className="text-xs font-semibold text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
-                          Coming Soon
+                        <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-royal-burgundy bg-royal-burgundy/10 px-3 py-1 rounded-full">
+                          PMA Members
                         </span>
                       </div>
-                      <p className="text-gray-400 leading-relaxed">
+                      <p className="text-gray-600 leading-relaxed mb-3">
                         Covenant identity, ecclesia assembly, kingdom governance, and the divine mandate. Building the structure upon the foundation.
                       </p>
+                      <div className="flex flex-wrap gap-2">
+                        <Link href="/mandate" className="text-xs font-cinzel font-semibold text-royal-gold hover:text-royal-burgundy transition-colors">
+                          The Mandate →
+                        </Link>
+                        <Link href="/nation" className="text-xs font-cinzel font-semibold text-royal-gold hover:text-royal-burgundy transition-colors">
+                          Ecclesia Nation →
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </CardContent>
               </Card>
             </motion.div>
 
-            {/* Phase 3 — Coming */}
+            {/* Phase 3 — Operation */}
             <motion.div variants={staggerItemVariants}>
-              <Card className="border border-gray-200 opacity-60">
+              <Card className="border border-gray-200 hover:border-royal-gold/30 transition-all">
                 <CardContent className="p-6 md:p-8">
                   <div className="flex items-start gap-5">
                     <div className="w-14 h-14 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
-                      <span className="font-cinzel text-lg font-bold text-gray-400">03</span>
+                      <span className="font-cinzel text-lg font-bold text-gray-500">03</span>
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <h3 className="font-cinzel text-xl font-bold text-gray-400">
+                        <h3 className="font-cinzel text-xl font-bold text-gray-500">
                           Phase 3 — Operation
                         </h3>
-                        <span className="text-xs font-semibold text-gray-400 bg-gray-100 px-3 py-1 rounded-full">
+                        <span className="text-xs font-semibold text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
                           Coming Soon
                         </span>
                       </div>
-                      <p className="text-gray-400 leading-relaxed">
+                      <p className="text-gray-400 leading-relaxed mb-3">
                         Full stewardship operation, academy courses, covenant repository, embassy forum, and proof vault. Living and operating from the new estate.
                       </p>
+                      <div className="flex flex-wrap gap-2">
+                        <Link href="/repository" className="text-xs font-cinzel font-semibold text-royal-gold hover:text-royal-burgundy transition-colors">
+                          Covenant Repository →
+                        </Link>
+                        <Link href="/forum" className="text-xs font-cinzel font-semibold text-royal-gold hover:text-royal-burgundy transition-colors">
+                          Embassy Forum →
+                        </Link>
+                        <Link href="/proof-vault" className="text-xs font-cinzel font-semibold text-royal-gold hover:text-royal-burgundy transition-colors">
+                          Proof Vault →
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -674,7 +693,7 @@ export default function Home() {
                 Two Ways to Learn
               </h2>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Start free with Trust content, or unlock everything with Premium access.
+                Start free with Trust content, or acquire PMA Beneficial Interest for full access.
               </p>
             </div>
           </RevealOnScroll>
@@ -683,7 +702,7 @@ export default function Home() {
             <RevealOnScroll>
               <Card className="royal-card h-full">
                 <CardContent className="p-8">
-                  <h3 className="font-cinzel text-xl font-bold text-royal-navy mb-2">Free — General Beneficiary</h3>
+                  <h3 className="font-cinzel text-xl font-bold text-royal-navy mb-2">Free — Trust User</h3>
                   <p className="text-3xl font-bold text-royal-navy mb-4">$0</p>
                   <ul className="space-y-2 mb-6">
                     {["Trust course access", "Trust downloads", "Forum reading", "Progress tracking"].map((f, i) => (
@@ -703,11 +722,11 @@ export default function Home() {
               <Card className="royal-card h-full border-2 border-royal-gold/30">
                 <CardContent className="p-8">
                   <div className="flex items-center gap-2 mb-2">
-                    <h3 className="font-cinzel text-xl font-bold text-royal-navy">Premium — Royal Beneficiary</h3>
+                    <h3 className="font-cinzel text-xl font-bold text-royal-navy">PMA Beneficiary</h3>
                   </div>
-                  <p className="text-3xl font-bold text-royal-navy mb-4">$9.99<span className="text-sm text-gray-400 font-normal">/mo</span></p>
+                  <p className="text-3xl font-bold text-royal-navy mb-4">$500</p>
                   <ul className="space-y-2 mb-6">
-                    {["All courses & lessons", "All downloads & templates", "Forum posting", "Proof Vault", "Priority support"].map((f, i) => (
+                    {["All courses & lessons", "All downloads & templates", "Forum posting", "Proof Vault", "Beneficial Unit instrument"].map((f, i) => (
                       <li key={i} className="flex items-center gap-2 text-sm text-gray-600">
                         <CheckCircle className="w-4 h-4 text-royal-gold flex-shrink-0" /> {f}
                       </li>
@@ -715,7 +734,7 @@ export default function Home() {
                   </ul>
                   <Link href="/pricing">
                     <Button className="w-full bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold">
-                      View Plans <ArrowRight className="w-4 h-4 ml-2" />
+                      Learn More <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
                   </Link>
                 </CardContent>

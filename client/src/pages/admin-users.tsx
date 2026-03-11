@@ -331,10 +331,10 @@ export default function AdminUsers() {
                       <TableCell>
                         {user.subscriptionTier === 'premium' && user.subscriptionStatus === 'active' ? (
                           <Badge className="bg-royal-gold text-royal-navy text-xs">
-                            <Crown className="w-3 h-3 mr-1" /> Royal Beneficiary
+                            <Crown className="w-3 h-3 mr-1" /> PMA Member
                           </Badge>
                         ) : (
-                          <Badge variant="outline" className="text-xs">General Beneficiary</Badge>
+                          <Badge variant="outline" className="text-xs">Free</Badge>
                         )}
                       </TableCell>
                       <TableCell>

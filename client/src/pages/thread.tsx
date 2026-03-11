@@ -695,8 +695,8 @@ export default function ThreadPage() {
           ) : isAuthenticated ? (
             <div className="bg-white rounded-xl border border-royal-gold/20 p-6 text-center">
               <Crown className="h-8 w-8 text-royal-gold mx-auto mb-2" />
-              <p className="text-gray-700 font-medium mb-1">Premium members can reply</p>
-              <p className="text-gray-500 text-sm mb-4">Upgrade to join the discussion.</p>
+              <p className="text-gray-700 font-medium mb-1">PMA members can reply</p>
+              <p className="text-gray-500 text-sm mb-4">Acquire PMA membership to join the discussion.</p>
               <Link href="/pricing">
                 <Button className="bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-semibold">
                   View Plans

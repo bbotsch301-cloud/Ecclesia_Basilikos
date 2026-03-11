@@ -263,7 +263,7 @@ export default function Forum() {
           <div className="mb-6">
             <UpgradePrompt
               title="Join the Discussion"
-              description="Upgrade to Premium to create threads, reply to discussions, and engage with the community."
+              description="Acquire PMA membership to create threads, reply to discussions, and engage with the community."
             />
           </div>
         )}
@@ -414,7 +414,7 @@ export default function Forum() {
                   <Link href="/pricing">
                     <Button variant="outline" className="w-full border-royal-gold/30 text-royal-gold hover:bg-royal-gold/5">
                       <Crown className="h-4 w-4 mr-2" />
-                      Upgrade to Post
+                      Join to Post
                     </Button>
                   </Link>
                 ) : (
@@ -502,7 +502,7 @@ export default function Forum() {
                   ) : isAuthenticated ? (
                     <Link href="/pricing">
                       <Button variant="outline" className="w-full border-royal-gold/30 text-royal-gold hover:bg-royal-gold/5">
-                        <Crown className="h-4 w-4 mr-2" /> Upgrade to Post
+                        <Crown className="h-4 w-4 mr-2" /> Join to Post
                       </Button>
                     </Link>
                   ) : (

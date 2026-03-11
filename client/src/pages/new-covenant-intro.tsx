@@ -64,7 +64,6 @@ export default function NewCovenantIntro() {
       email: "",
       password: "",
       confirmPassword: "",
-      pmaAgreementAccepted: undefined as unknown as true,
       privacyAccepted: undefined as unknown as true,
     },
   });
@@ -374,31 +373,6 @@ export default function NewCovenantIntro() {
                                             <Input type="password" placeholder="Confirm password" {...field} />
                                           </FormControl>
                                           <FormMessage />
-                                        </FormItem>
-                                      )}
-                                    />
-                                    <FormField
-                                      control={registerForm.control}
-                                      name="pmaAgreementAccepted"
-                                      render={({ field }) => (
-                                        <FormItem>
-                                          <div className="border border-gray-200 rounded-lg p-3">
-                                            <div className="flex items-start gap-3">
-                                              <FormControl>
-                                                <Checkbox
-                                                  checked={field.value === true}
-                                                  onCheckedChange={(checked) => field.onChange(checked === true ? true : undefined)}
-                                                />
-                                              </FormControl>
-                                              <Label className="text-sm text-gray-700 leading-relaxed cursor-pointer font-normal" onClick={() => field.onChange(field.value === true ? undefined : true)}>
-                                                I accept the{" "}
-                                                <Link href="/pma-agreement" className="text-covenant-gold hover:underline font-medium">
-                                                  PMA Membership Agreement
-                                                </Link>
-                                              </Label>
-                                            </div>
-                                            <FormMessage className="mt-2 ml-7" />
-                                          </div>
                                         </FormItem>
                                       )}
                                     />

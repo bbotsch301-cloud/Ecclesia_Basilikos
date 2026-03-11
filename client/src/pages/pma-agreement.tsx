@@ -58,7 +58,7 @@ export default function PmaAgreement() {
           <p>Beneficial interest is structured in two tiers:</p>
           <ul className="list-disc pl-6 space-y-2">
             <li><strong>General Beneficial Interest (Free):</strong> Access to foundational Trust content, including the Trust pillar course, Trust-related downloads, forum reading, and educational resources.</li>
-            <li><strong>Royal Beneficial Interest (Premium):</strong> Full access to all Trust corpus, including all courses, all downloadable templates and guides, forum posting and community discussion, Proof Vault document timestamping, comments on lessons and videos, and priority community support. The contribution for Royal Beneficial Interest is a trust contribution, not a commercial transaction.</li>
+            <li><strong>PMA Beneficial Interest:</strong> Full access to all Trust corpus, including all courses, all downloadable templates and guides, forum posting and community discussion, Proof Vault document timestamping, comments on lessons and videos, and priority community support. The contribution for PMA Beneficial Interest is a trust contribution, not a commercial transaction.</li>
           </ul>
           <p>
             Each Beneficiary, regardless of tier, receives one (1) Beneficial Unit representing an equal and undivided
@@ -73,7 +73,7 @@ export default function PmaAgreement() {
           <ul className="list-disc pl-6 space-y-1">
             <li>Access to educational materials and courses as determined by their tier of beneficial interest</li>
             <li>Participation in the community forum in accordance with their tier</li>
-            <li>Use of the Proof Vault for document timestamping (Royal Beneficiaries)</li>
+            <li>Use of the Proof Vault for document timestamping (PMA Beneficiaries)</li>
             <li>Access to downloadable resources and templates as determined by their tier</li>
             <li>Enrollment in available courses and tracking of learning progress</li>
             <li>Receipt of one (1) Beneficial Unit instrument certifying their interest in the Trust</li>

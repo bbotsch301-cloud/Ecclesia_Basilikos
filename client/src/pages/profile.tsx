@@ -241,7 +241,7 @@ function ProfileContent() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <CreditCard className="h-5 w-5" /> Beneficial Interest
+              <CreditCard className="h-5 w-5" /> PMA Membership
             </CardTitle>
             <CardDescription>Your current plan and billing</CardDescription>
           </CardHeader>
@@ -250,10 +250,10 @@ function ProfileContent() {
               <div className="flex items-center gap-3">
                 {isPremium ? (
                   <Badge className="bg-royal-gold text-royal-navy">
-                    <Crown className="w-3 h-3 mr-1" /> Royal Beneficiary
+                    <Crown className="w-3 h-3 mr-1" /> PMA Beneficiary
                   </Badge>
                 ) : (
-                  <Badge variant="outline">General Beneficiary</Badge>
+                  <Badge variant="outline">Trust User (Free)</Badge>
                 )}
                 <span className="text-sm text-gray-500">
                   {isPremium ? "Full access to all content" : "Trust content access"}
@@ -261,7 +261,7 @@ function ProfileContent() {
               </div>
               <Link href="/billing">
                 <Button variant="outline" size="sm" className="font-cinzel text-xs">
-                  {isPremium ? "Manage" : "Elevate Interest"}
+                  {isPremium ? "Manage" : "Acquire Interest"}
                 </Button>
               </Link>
             </div>

@@ -611,7 +611,7 @@ function CourseLessonContent() {
                     <h3 className="font-cinzel text-lg font-bold text-royal-navy">Continue Your Journey</h3>
                   </div>
                   <p className="text-gray-600 mb-4 leading-relaxed">
-                    You've completed the Trust Foundation! Ready to continue your journey? Unlock the Lawful Money and State Passport courses with Premium.
+                    You've completed the Trust Foundation! Ready to continue your journey? Acquire PMA membership to access the Lawful Money and State Passport courses.
                   </p>
                   <ul className="space-y-2 mb-5">
                     <li className="flex items-center gap-2 text-sm text-gray-600">
@@ -630,7 +630,7 @@ function CourseLessonContent() {
                   <Link href="/pricing">
                     <Button className="bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold px-8 shadow-md hover:shadow-lg transition-all">
                       <Lock className="w-4 h-4 mr-2" />
-                      Unlock Premium — $9.99/mo <ArrowRight className="w-4 h-4 ml-2" />
+                      Acquire PMA Membership <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
                   </Link>
                 </CardContent>

@@ -199,7 +199,7 @@ export default function Downloads() {
                                   <Badge variant="outline" className="text-[10px] text-green-600 border-green-300">Free</Badge>
                                 ) : !isPremium ? (
                                   <Badge variant="outline" className="text-[10px] text-royal-gold border-royal-gold/30">
-                                    <Lock className="w-2.5 h-2.5 mr-0.5" /> Premium
+                                    <Lock className="w-2.5 h-2.5 mr-0.5" /> PMA Only
                                   </Badge>
                                 ) : null}
                                 <span className={`text-xs ${isSelected ? "text-gray-300" : "text-gray-400"}`}>

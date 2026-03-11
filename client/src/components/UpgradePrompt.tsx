@@ -20,7 +20,7 @@ const features = [
 export default function UpgradePrompt({
   variant = "inline",
   title = "Unlock Full Access",
-  description = "Elevate to Royal Beneficial Interest to access all courses, downloads, forum posting, and more.",
+  description = "Acquire PMA Beneficial Interest to access all courses, downloads, forum posting, and more.",
 }: UpgradePromptProps) {
   if (variant === "overlay") {
     return (
@@ -66,7 +66,7 @@ export default function UpgradePrompt({
         <Link href="/pricing">
           <Button className="bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold whitespace-nowrap">
             <Crown className="w-4 h-4 mr-2" />
-            Elevate Interest
+            Acquire Interest
           </Button>
         </Link>
       </CardContent>

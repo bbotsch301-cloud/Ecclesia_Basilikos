@@ -8,7 +8,7 @@ interface ContentLockProps {
   message?: string;
 }
 
-export default function ContentLock({ children, locked, message = "Royal Beneficiary Content" }: ContentLockProps) {
+export default function ContentLock({ children, locked, message = "PMA Member Content" }: ContentLockProps) {
   if (!locked) {
     return <>{children}</>;
   }
@@ -24,7 +24,7 @@ export default function ContentLock({ children, locked, message = "Royal Benefic
         </div>
         <p className="font-cinzel font-bold text-royal-navy text-lg">{message}</p>
         <p className="text-sm text-gray-500 max-w-xs text-center">
-          Elevate to Royal Beneficial Interest to unlock this content.
+          Acquire PMA Beneficial Interest to unlock this content.
         </p>
         <Link href="/pricing">
           <Button className="bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold mt-1">
