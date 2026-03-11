@@ -5,7 +5,7 @@ import {
   Shield, BookOpen, Banknote, Globe,
   ArrowRight, CheckCircle, AlertTriangle, Lock,
   Scale, FileText, Building, Users, Eye,
-  ChevronRight, Landmark, CircleDot
+  ChevronRight, Landmark, CircleDot, Crown, Scroll, Key
 } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import RevealOnScroll from "@/components/ui/reveal-on-scroll";
@@ -18,7 +18,7 @@ import StaggerContainer, {
 import sealImage from "@assets/EB_1772210493582.png";
 
 export default function Home() {
-  usePageTitle(undefined, "Reclaim your lawful standing. Free courses on trust law, lawful money, and state citizenship.");
+  usePageTitle(undefined, "Ecclesia Basilikos — A Private Membership Association operating under divine covenant authority. Acquire beneficial interest in the trust.");
   const ctaHref = useCtaHref();
   const shouldReduceMotion = useReducedMotion();
 
@@ -33,7 +33,7 @@ export default function Home() {
   return (
     <div className="pt-16">
       {/* ═══════════════════════════════════════════════════════════════
-          SECTION 1: HERO
+          SECTION 1: HERO — PMA IDENTITY
           ═══════════════════════════════════════════════════════════════ */}
       <div className="relative bg-gradient-to-br from-royal-navy via-royal-burgundy to-royal-navy pt-4 pb-28 md:pt-6 md:pb-40 animate-hero-gradient overflow-hidden">
         <div className="absolute inset-0 bg-black/25"></div>
@@ -60,7 +60,7 @@ export default function Home() {
             animate={heroAnimate}
             transition={heroTransition(0.15)}
           >
-            Reclaim What Was Always Yours
+            Embassy of the Eternal Kingdom
           </motion.h1>
 
           <motion.h2
@@ -69,7 +69,7 @@ export default function Home() {
             animate={heroAnimate}
             transition={heroTransition(0.25)}
           >
-            Your Money · Your Assets · Your Status
+            A Private Membership Association Under Divine Covenant Authority
           </motion.h2>
 
           <motion.p
@@ -78,7 +78,9 @@ export default function Home() {
             animate={heroAnimate}
             transition={heroTransition(0.4)}
           >
-            You have been operating inside a system designed to hold everything in your name while giving you control over nothing. Three pillars. Three shifts. One foundation.
+            Ecclesia Basilikos is a trust-governed assembly established to educate, equip, and restore
+            those called to operate outside Babylon's commercial systems — under private jurisdiction,
+            divine authority, and covenant law.
           </motion.p>
 
           <motion.div
@@ -93,20 +95,20 @@ export default function Home() {
                   size="lg"
                   className="royal-button text-lg md:text-xl px-10 py-6 shadow-2xl hover:scale-105 transition-transform"
                 >
-                  <Users className="mr-3 h-6 w-6" />
-                  {ctaHref === "/signup" ? "Join Free" : "Go to Dashboard"}
+                  <Crown className="mr-3 h-6 w-6" />
+                  {ctaHref === "/signup" ? "Enter the Assembly" : "Go to Dashboard"}
                   <ArrowRight className="ml-3 h-5 w-5" />
                 </Button>
               </Link>
             </div>
-            <Link href="/lawful-money">
+            <Link href="/pma-agreement">
               <Button
                 size="lg"
                 variant="outline"
                 className="text-lg md:text-xl px-10 py-6 bg-white/15 border-royal-gold/50 text-royal-gold hover:bg-white/25 transition-all"
               >
-                <Banknote className="mr-3 h-6 w-6" />
-                Start with Pillar 1
+                <Scroll className="mr-3 h-6 w-6" />
+                Read the PMA Agreement
               </Button>
             </Link>
           </motion.div>
@@ -114,17 +116,20 @@ export default function Home() {
       </div>
 
       {/* ═══════════════════════════════════════════════════════════════
-          SECTION 2: THE PROBLEM
+          SECTION 2: WHAT IS THE PMA
           ═══════════════════════════════════════════════════════════════ */}
       <div className="py-24 bg-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <RevealOnScroll>
             <div className="text-center mb-16">
               <h2 className="font-cinzel-decorative text-3xl md:text-4xl font-bold text-royal-navy mb-6">
-                The System Was Not Built for You
+                What Is a Private Membership Association?
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                Everything you think you own is held under a framework you never agreed to. Your money is debt. Your property is titled in a fiction. Your citizenship places you under a jurisdiction you never chose.
+                A PMA operates under the First Amendment right to freely assemble. It is a private,
+                non-commercial body — not a business. Its members are not customers. Its offerings are
+                not products. Everything exchanged within the association is governed by private agreement,
+                not commercial regulation.
               </p>
             </div>
           </RevealOnScroll>
@@ -132,22 +137,22 @@ export default function Home() {
           <StaggerContainer staggerDelay={0.12} className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-16">
             {[
               {
-                icon: Banknote,
-                title: "Your Money Isn't Money",
+                icon: Shield,
+                title: "Private Jurisdiction",
                 description:
-                  "Federal Reserve Notes are debt obligations — not lawful money. Every transaction you make using them is conducted in private credit, creating legal presumptions and tax obligations you never understood.",
+                  "The PMA operates outside the commercial public sphere. Members enter by private agreement, not by public contract. This places the association — and its activities — under private, not statutory, jurisdiction.",
               },
               {
-                icon: Building,
-                title: "Your Assets Aren't Protected",
+                icon: Scale,
+                title: "Trust-Governed Structure",
                 description:
-                  "Anything held in your personal name is exposed to liens, levies, lawsuits, and seizure. You don't truly own what can be taken from you by operation of law without your consent.",
+                  "Ecclesia Basilikos is organized as a trust. Christ is the Grantor. The Trustee administers the corpus. Beneficiaries receive their share of the trust's educational, spiritual, and material resources.",
               },
               {
-                icon: FileText,
-                title: "Your Status Isn't What You Think",
+                icon: Crown,
+                title: "Divine Covenant Authority",
                 description:
-                  "The 14th Amendment created a federal citizenship that places you under congressional jurisdiction. Your original status — state citizen of the republic — has been obscured, not destroyed.",
+                  "This assembly does not derive its authority from the state. It operates under the New Covenant — a higher jurisdiction. Members are recognized as royal priests, ambassadors, and stewards of an eternal kingdom.",
               },
             ].map((item, index) => (
               <motion.div key={index} variants={staggerItemVariants}>
@@ -171,8 +176,8 @@ export default function Home() {
           <RevealOnScroll>
             <div className="text-center">
               <p className="text-xl md:text-2xl font-semibold text-royal-navy max-w-3xl mx-auto">
-                This is not conspiracy. This is how the system is structured.{" "}
-                <span className="text-royal-burgundy">And it can be changed — lawfully.</span>
+                This is not a church. Not a corporation. Not a club.{" "}
+                <span className="text-royal-burgundy">It is a covenant assembly operating under trust law.</span>
               </p>
             </div>
           </RevealOnScroll>
@@ -180,225 +185,211 @@ export default function Home() {
       </div>
 
       {/* ═══════════════════════════════════════════════════════════════
-          SECTION 3: THE THREE PILLARS — MAIN FEATURE
+          SECTION 3: THE TRUST STRUCTURE
           ═══════════════════════════════════════════════════════════════ */}
       <div className="py-28 marble-bg">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <RevealOnScroll>
             <div className="text-center mb-8">
               <span className="inline-flex items-center gap-2 font-cinzel text-xs tracking-[0.3em] uppercase text-royal-burgundy bg-royal-burgundy/10 px-5 py-2 rounded-full mb-5">
-                <Shield className="w-3.5 h-3.5" />
-                The Foundation
+                <Landmark className="w-3.5 h-3.5" />
+                Trust Architecture
               </span>
               <h2 className="font-cinzel-decorative text-3xl md:text-5xl font-bold text-royal-navy mb-6">
-                Three Pillars of Alignment
+                How the Trust Is Structured
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                Each pillar addresses a critical area where you have been unknowingly
-                operating under the wrong framework. Together, they form the
-                foundation everything else is built upon.
+                Ecclesia Basilikos operates through a layered trust framework. Each layer serves
+                a distinct purpose — from divine authority down to individual stewardship.
               </p>
             </div>
           </RevealOnScroll>
 
-          {/* Pillar 1 — Lawful Money */}
+          {/* Layer 1 — Covenant Charter */}
           <RevealOnScroll>
             <div className="max-w-5xl mx-auto mt-16">
-              <Link href="/lawful-money">
-                <Card className="royal-card hover:border-royal-gold transition-all cursor-pointer group overflow-hidden">
-                  <CardContent className="p-0">
-                    <div className="grid md:grid-cols-5">
-                      <div className="md:col-span-2 bg-gradient-to-br from-royal-navy to-royal-burgundy p-8 md:p-10 flex flex-col justify-center text-white">
-                        <span className="inline-block self-start text-xs font-semibold text-royal-gold bg-royal-gold/15 px-3 py-1 rounded-full mb-4">
-                          Pillar 1
-                        </span>
-                        <Banknote className="w-14 h-14 text-royal-gold mb-4" />
-                        <h3 className="font-cinzel-decorative text-2xl md:text-3xl font-bold mb-2">
-                          Lawful Money Redemption
-                        </h3>
-                        <p className="text-sm text-royal-gold font-cinzel font-semibold">
-                          12 USC § 411
-                        </p>
-                      </div>
-                      <div className="md:col-span-3 p-8 md:p-10 flex flex-col justify-center">
-                        <p className="text-gray-700 leading-relaxed mb-6">
-                          Every Federal Reserve Note is a debt instrument issued by a private
-                          banking system. Under 12 USC § 411, you have the statutory right to
-                          demand redemption in lawful money — non-debt currency authorized under
-                          the Constitution. This single act changes the legal character of every
-                          transaction.
-                        </p>
-                        <ul className="space-y-3 mb-6">
-                          {[
-                            "Remove the presumption of private credit usage",
-                            "Establish your financial standing under public law",
-                            "Affect how income is characterized for tax purposes",
-                            "Exercise a right — not file a petition",
-                          ].map((item, i) => (
-                            <li key={i} className="flex items-start gap-3 text-sm text-gray-600">
-                              <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
-                              {item}
-                            </li>
-                          ))}
-                        </ul>
-                        <div className="flex items-center gap-2 text-royal-gold font-cinzel text-sm font-semibold group-hover:gap-3 transition-all">
-                          Learn How Lawful Money Redemption Works
-                          <ArrowRight className="w-4 h-4" />
-                        </div>
-                      </div>
+              <Card className="royal-card hover:border-royal-gold transition-all group overflow-hidden">
+                <CardContent className="p-0">
+                  <div className="grid md:grid-cols-5">
+                    <div className="md:col-span-2 bg-gradient-to-br from-royal-navy to-royal-burgundy p-8 md:p-10 flex flex-col justify-center text-white">
+                      <span className="inline-block self-start text-xs font-semibold text-royal-gold bg-royal-gold/15 px-3 py-1 rounded-full mb-4">
+                        Layer 1
+                      </span>
+                      <Crown className="w-14 h-14 text-royal-gold mb-4" />
+                      <h3 className="font-cinzel-decorative text-2xl md:text-3xl font-bold mb-2">
+                        Covenant Charter
+                      </h3>
+                      <p className="text-sm text-royal-gold font-cinzel font-semibold">
+                        Philosophy & Divine Authority
+                      </p>
                     </div>
-                  </CardContent>
-                </Card>
-              </Link>
+                    <div className="md:col-span-3 p-8 md:p-10 flex flex-col justify-center">
+                      <p className="text-gray-700 leading-relaxed mb-6">
+                        The charter establishes the source of authority — the New Covenant — and the
+                        mission of the assembly. It defines the Grantor (Christ), the purpose of the trust,
+                        and the mandate under which all operations proceed. Nothing exists in this framework
+                        without this foundation.
+                      </p>
+                      <ul className="space-y-3 mb-6">
+                        {[
+                          "Establishes divine covenant as the source of authority",
+                          "Defines the Grantor, mission, and purpose of the trust",
+                          "Anchors all activity in scriptural mandate",
+                          "Supersedes all lower layers in governance",
+                        ].map((item, i) => (
+                          <li key={i} className="flex items-start gap-3 text-sm text-gray-600">
+                            <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </RevealOnScroll>
 
-          {/* Pillar 2 — Trust */}
+          {/* Layer 2 — Ecclesia Basilikos Trust */}
           <RevealOnScroll>
             <div className="max-w-5xl mx-auto mt-8">
-              <Link href="/trust-assets">
-                <Card className="royal-card hover:border-royal-gold transition-all cursor-pointer group overflow-hidden">
-                  <CardContent className="p-0">
-                    <div className="grid md:grid-cols-5">
-                      <div className="md:col-span-3 p-8 md:p-10 flex flex-col justify-center order-2 md:order-1">
-                        <p className="text-gray-700 leading-relaxed mb-6">
-                          Anything held in your personal name is fully exposed — to creditors,
-                          government claims, lawsuits, and probate. A properly structured trust
-                          separates legal title from beneficial interest. The trust owns the
-                          assets. You receive the benefits. That separation is your protection.
-                        </p>
-                        <ul className="space-y-3 mb-6">
-                          {[
-                            "Separate legal title from personal liability",
-                            "Shield assets from judgments, liens, and creditor claims",
-                            "Avoid probate — private, efficient, and immediate",
-                            "Hold real property, accounts, vehicles, and business interests",
-                          ].map((item, i) => (
-                            <li key={i} className="flex items-start gap-3 text-sm text-gray-600">
-                              <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
-                              {item}
-                            </li>
-                          ))}
-                        </ul>
-                        <div className="flex items-center gap-2 text-royal-gold font-cinzel text-sm font-semibold group-hover:gap-3 transition-all">
-                          Learn How Trust Protection Works
-                          <ArrowRight className="w-4 h-4" />
-                        </div>
-                      </div>
-                      <div className="md:col-span-2 bg-gradient-to-br from-royal-burgundy to-royal-navy p-8 md:p-10 flex flex-col justify-center text-white order-1 md:order-2">
-                        <span className="inline-block self-start text-xs font-semibold text-royal-gold bg-royal-gold/15 px-3 py-1 rounded-full mb-4">
-                          Pillar 2
-                        </span>
-                        <Shield className="w-14 h-14 text-royal-gold mb-4" />
-                        <h3 className="font-cinzel-decorative text-2xl md:text-3xl font-bold mb-2">
-                          Trust & Asset Protection
-                        </h3>
-                        <p className="text-sm text-royal-gold font-cinzel font-semibold">
-                          Securing What Was Given
-                        </p>
-                      </div>
+              <Card className="royal-card hover:border-royal-gold transition-all group overflow-hidden">
+                <CardContent className="p-0">
+                  <div className="grid md:grid-cols-5">
+                    <div className="md:col-span-3 p-8 md:p-10 flex flex-col justify-center order-2 md:order-1">
+                      <p className="text-gray-700 leading-relaxed mb-6">
+                        The central trust holds the corpus — all educational content, courses, downloads,
+                        community resources, and financial contributions. The Trustee administers this corpus
+                        with fiduciary duty to the beneficiaries. Every member who acquires beneficial interest
+                        receives a Beneficial Unit — a 1/N share of the trust corpus.
+                      </p>
+                      <ul className="space-y-3 mb-6">
+                        {[
+                          "Holds and governs the trust corpus (all assets and content)",
+                          "Trustee administers with fiduciary duty to beneficiaries",
+                          "Each beneficiary receives a Beneficial Unit (1/N share)",
+                          "Protected from external claims under trust law",
+                        ].map((item, i) => (
+                          <li key={i} className="flex items-start gap-3 text-sm text-gray-600">
+                            <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
                     </div>
-                  </CardContent>
-                </Card>
-              </Link>
+                    <div className="md:col-span-2 bg-gradient-to-br from-royal-burgundy to-royal-navy p-8 md:p-10 flex flex-col justify-center text-white order-1 md:order-2">
+                      <span className="inline-block self-start text-xs font-semibold text-royal-gold bg-royal-gold/15 px-3 py-1 rounded-full mb-4">
+                        Layer 2
+                      </span>
+                      <Landmark className="w-14 h-14 text-royal-gold mb-4" />
+                      <h3 className="font-cinzel-decorative text-2xl md:text-3xl font-bold mb-2">
+                        Ecclesia Basilikos Trust
+                      </h3>
+                      <p className="text-sm text-royal-gold font-cinzel font-semibold">
+                        Mission Anchor & Stewardship
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </RevealOnScroll>
 
-          {/* Pillar 3 — Passport */}
+          {/* Layer 3 — Private Membership Association */}
           <RevealOnScroll>
             <div className="max-w-5xl mx-auto mt-8">
-              <Link href="/state-passport">
-                <Card className="royal-card hover:border-royal-gold transition-all cursor-pointer group overflow-hidden">
-                  <CardContent className="p-0">
-                    <div className="grid md:grid-cols-5">
-                      <div className="md:col-span-2 bg-gradient-to-br from-royal-navy to-royal-burgundy p-8 md:p-10 flex flex-col justify-center text-white">
-                        <span className="inline-block self-start text-xs font-semibold text-royal-gold bg-royal-gold/15 px-3 py-1 rounded-full mb-4">
-                          Pillar 3
-                        </span>
-                        <Globe className="w-14 h-14 text-royal-gold mb-4" />
-                        <h3 className="font-cinzel-decorative text-2xl md:text-3xl font-bold mb-2">
-                          State-Citizen Passport
-                        </h3>
-                        <p className="text-sm text-royal-gold font-cinzel font-semibold">
-                          Reclaiming Your Status
-                        </p>
-                      </div>
-                      <div className="md:col-span-3 p-8 md:p-10 flex flex-col justify-center">
-                        <p className="text-gray-700 leading-relaxed mb-6">
-                          There are two types of citizenship in America — and you have been
-                          defaulted into one without your knowledge. State citizenship predates
-                          the 14th Amendment and carries unalienable rights, not civil privileges.
-                          Your passport can reflect your true political status in the republic.
-                        </p>
-                        <ul className="space-y-3 mb-6">
-                          {[
-                            "Establish your standing under original constitutional jurisdiction",
-                            "Operate under unalienable rights — not legislative privileges",
-                            "Declare your domicile in one of the several states",
-                            "Document your status through the passport application process",
-                          ].map((item, i) => (
-                            <li key={i} className="flex items-start gap-3 text-sm text-gray-600">
-                              <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
-                              {item}
-                            </li>
-                          ))}
-                        </ul>
+              <Card className="royal-card hover:border-royal-gold transition-all group overflow-hidden">
+                <CardContent className="p-0">
+                  <div className="grid md:grid-cols-5">
+                    <div className="md:col-span-2 bg-gradient-to-br from-royal-navy to-royal-burgundy p-8 md:p-10 flex flex-col justify-center text-white">
+                      <span className="inline-block self-start text-xs font-semibold text-royal-gold bg-royal-gold/15 px-3 py-1 rounded-full mb-4">
+                        Layer 3
+                      </span>
+                      <Users className="w-14 h-14 text-royal-gold mb-4" />
+                      <h3 className="font-cinzel-decorative text-2xl md:text-3xl font-bold mb-2">
+                        The PMA
+                      </h3>
+                      <p className="text-sm text-royal-gold font-cinzel font-semibold">
+                        The People Layer
+                      </p>
+                    </div>
+                    <div className="md:col-span-3 p-8 md:p-10 flex flex-col justify-center">
+                      <p className="text-gray-700 leading-relaxed mb-6">
+                        The Private Membership Association is where you enter. By accepting the PMA agreement,
+                        you step into private jurisdiction. You are not a customer — you are a member of a
+                        covenant body. Your rights within this assembly are governed by private agreement,
+                        not commercial statute.
+                      </p>
+                      <ul className="space-y-3 mb-6">
+                        {[
+                          "Enter by private agreement — not public contract",
+                          "First Amendment right to freely assemble",
+                          "Members are beneficiaries — not customers or subscribers",
+                          "All exchange governed by covenant, not commerce",
+                        ].map((item, i) => (
+                          <li key={i} className="flex items-start gap-3 text-sm text-gray-600">
+                            <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                      <Link href="/pma-agreement">
                         <div className="flex items-center gap-2 text-royal-gold font-cinzel text-sm font-semibold group-hover:gap-3 transition-all">
-                          Learn How State-Citizen Status Works
+                          Read the Full PMA Agreement
                           <ArrowRight className="w-4 h-4" />
                         </div>
-                      </div>
+                      </Link>
                     </div>
-                  </CardContent>
-                </Card>
-              </Link>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </RevealOnScroll>
         </div>
       </div>
 
       {/* ═══════════════════════════════════════════════════════════════
-          SECTION 4: THE SHIFT — BEFORE / AFTER
+          SECTION 4: KINGDOM vs BABYLON
           ═══════════════════════════════════════════════════════════════ */}
       <RevealOnScroll>
         <div className="py-24 bg-gradient-to-r from-royal-burgundy via-royal-navy to-royal-burgundy">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="font-cinzel-decorative text-3xl md:text-4xl font-bold text-white mb-6">
-                The Shift This Creates
+                Babylon's System vs. The Kingdom Model
               </h2>
               <p className="text-lg text-gray-300 max-w-3xl mx-auto leading-relaxed">
-                Each pillar moves you from the system's default position to your
-                lawful standing. This is what alignment looks like in practice.
+                The world operates under one framework. This assembly operates under another.
+                The PMA exists to formalize that separation — lawfully.
               </p>
             </div>
 
             <StaggerContainer staggerDelay={0.15} className="space-y-4 max-w-4xl mx-auto">
               {[
                 {
-                  before: "Using private credit (Federal Reserve Notes)",
-                  after: "Redeeming in lawful money (12 USC § 411)",
-                  icon: Banknote,
-                },
-                {
-                  before: "Assets held in personal name — fully exposed",
-                  after: "Assets held in trust — lawfully protected",
-                  icon: Shield,
-                },
-                {
-                  before: "Federal citizen — subject to congressional jurisdiction",
-                  after: "State citizen — standing under original constitution",
-                  icon: Globe,
-                },
-                {
-                  before: "Operating by permission and privilege",
-                  after: "Operating by right and standing",
+                  before: "Commercial jurisdiction — regulated by statute",
+                  after: "Private jurisdiction — governed by covenant agreement",
                   icon: Scale,
                 },
                 {
-                  before: "System controls your identity, property, and status",
-                  after: "You hold your identity, property, and status in trust",
-                  icon: Lock,
+                  before: "Customers purchasing products and services",
+                  after: "Beneficiaries receiving their share of the trust corpus",
+                  icon: Users,
+                },
+                {
+                  before: "Corporate structure — owned by shareholders",
+                  after: "Trust structure — administered for beneficiaries",
+                  icon: Building,
+                },
+                {
+                  before: "Authority derived from the state",
+                  after: "Authority derived from the Grantor under divine covenant",
+                  icon: Crown,
+                },
+                {
+                  before: "Identity defined by federal citizenship",
+                  after: "Identity defined by covenant standing and royal priesthood",
+                  icon: Globe,
                 },
               ].map((item, index) => (
                 <motion.div key={index} variants={staggerItemVariants}>
@@ -425,18 +416,19 @@ export default function Home() {
       </RevealOnScroll>
 
       {/* ═══════════════════════════════════════════════════════════════
-          SECTION 5: WHAT YOU GET — CONCRETE OUTCOMES
+          SECTION 5: WHAT THE TRUST PROVIDES
           ═══════════════════════════════════════════════════════════════ */}
       <div className="py-24 bg-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <RevealOnScroll>
             <div className="text-center mb-16">
               <h2 className="font-cinzel-decorative text-3xl md:text-4xl font-bold text-royal-navy mb-6">
-                What You Will Learn
+                What the Trust Provides
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                This is not theory. Each pillar comes with specific knowledge,
-                processes, and documentation you can act on.
+                The trust corpus contains everything the assembly has built — education,
+                resources, community, and tools. Beneficiaries access these according to
+                their level of interest.
               </p>
             </div>
           </RevealOnScroll>
@@ -444,44 +436,44 @@ export default function Home() {
           <StaggerContainer staggerDelay={0.1} className="grid md:grid-cols-2 gap-5 max-w-4xl mx-auto">
             {[
               {
-                icon: FileText,
-                text: "The full text and meaning of 12 USC § 411",
-              },
-              {
                 icon: Banknote,
-                text: "How to write a proper restrictive endorsement on every deposit",
-              },
-              {
-                icon: Scale,
-                text: "The legal distinction between private credit and public money",
+                text: "Lawful money redemption education — how to exercise 12 USC § 411",
               },
               {
                 icon: Shield,
-                text: "How trust structures separate legal title from beneficial interest",
-              },
-              {
-                icon: Building,
-                text: "The difference between irrevocable, express, common law, and land trusts",
-              },
-              {
-                icon: Lock,
-                text: "How to transfer real property, accounts, and vehicles into trust",
+                text: "Trust law education — separating legal title from beneficial interest",
               },
               {
                 icon: Globe,
-                text: "The constitutional basis for state citizenship vs. federal citizenship",
+                text: "State-citizen passport guidance — reclaiming your political status",
               },
               {
-                icon: Landmark,
-                text: "How to complete the DS-11 passport application with proper status language",
+                icon: FileText,
+                text: "Trust documents, templates, and administrative tools",
               },
               {
-                icon: Eye,
-                text: "Key case law: Slaughter-House Cases, United States v. Cruikshank",
+                icon: BookOpen,
+                text: "Full course library — structured lessons across all pillars",
+              },
+              {
+                icon: Lock,
+                text: "Proof Vault — secure document storage and verification",
               },
               {
                 icon: Users,
-                text: "Access to community support, guidance, and fellowship throughout the process",
+                text: "Community forum — fellowship, guidance, and shared learning",
+              },
+              {
+                icon: Key,
+                text: "Beneficial Unit certificate — your 1/N share of the trust corpus",
+              },
+              {
+                icon: Landmark,
+                text: "Trust structure education — charter, operational trusts, and governance",
+              },
+              {
+                icon: Eye,
+                text: "Case law references — Slaughter-House Cases, Cruikshank, and more",
               },
             ].map((item, index) => (
               <motion.div key={index} variants={staggerItemVariants}>
@@ -500,24 +492,24 @@ export default function Home() {
       </div>
 
       {/* ═══════════════════════════════════════════════════════════════
-          SECTION 6: PHASE ROADMAP
+          SECTION 6: PATH TO BENEFICIAL INTEREST
           ═══════════════════════════════════════════════════════════════ */}
       <div className="py-24 marble-bg">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <RevealOnScroll>
             <div className="text-center mb-16">
               <h2 className="font-cinzel-decorative text-3xl md:text-4xl font-bold text-royal-navy mb-6">
-                The Journey Ahead
+                The Path to Beneficial Interest
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                The foundation must be set first. What follows builds upon it — but nothing
-                can be built without this ground being laid.
+                Entry into the assembly is open to all. Acquiring full beneficial interest
+                is a deliberate step — a covenant commitment, not a commercial transaction.
               </p>
             </div>
           </RevealOnScroll>
 
           <StaggerContainer staggerDelay={0.2} className="max-w-3xl mx-auto space-y-6">
-            {/* Foundation — Active */}
+            {/* Step 1 — Trust User */}
             <motion.div variants={staggerItemVariants}>
               <Card className="border-2 border-royal-gold shadow-lg">
                 <CardContent className="p-6 md:p-8">
@@ -528,34 +520,28 @@ export default function Home() {
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
                         <h3 className="font-cinzel text-xl font-bold text-royal-navy">
-                          Foundation
+                          Enter as Trust User
                         </h3>
                         <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-green-700 bg-green-100 px-3 py-1 rounded-full">
                           <CircleDot className="w-3 h-3" />
-                          Start Here
+                          Free
                         </span>
                       </div>
                       <p className="text-gray-600 leading-relaxed mb-3">
-                        Lawful Money Redemption, Trust & Asset Protection, and State-Citizen Passport. These three pillars establish your financial standing, protect your assets, and confirm your political status.
+                        Create an account and begin learning. Access the trust pillar courses,
+                        download foundational documents, read the forum, and track your progress.
+                        No contribution required. No obligation.
                       </p>
-                      <div className="flex flex-wrap gap-2">
-                        <Link href="/lawful-money" className="text-xs font-cinzel font-semibold text-royal-gold hover:text-royal-burgundy transition-colors">
-                          Lawful Money →
-                        </Link>
-                        <Link href="/trust-assets" className="text-xs font-cinzel font-semibold text-royal-gold hover:text-royal-burgundy transition-colors">
-                          Trust & Assets →
-                        </Link>
-                        <Link href="/state-passport" className="text-xs font-cinzel font-semibold text-royal-gold hover:text-royal-burgundy transition-colors">
-                          State Passport →
-                        </Link>
-                      </div>
+                      <Link href="/signup" className="text-xs font-cinzel font-semibold text-royal-gold hover:text-royal-burgundy transition-colors">
+                        Create Free Account →
+                      </Link>
                     </div>
                   </div>
                 </CardContent>
               </Card>
             </motion.div>
 
-            {/* Phase 2 — Structure */}
+            {/* Step 2 — Read the Agreement */}
             <motion.div variants={staggerItemVariants}>
               <Card className="border border-gray-200 hover:border-royal-gold/30 transition-all">
                 <CardContent className="p-6 md:p-8">
@@ -566,60 +552,49 @@ export default function Home() {
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
                         <h3 className="font-cinzel text-xl font-bold text-royal-navy">
-                          Phase 2 — Structure
+                          Study the PMA Agreement
                         </h3>
-                        <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-royal-burgundy bg-royal-burgundy/10 px-3 py-1 rounded-full">
-                          PMA Members
-                        </span>
                       </div>
                       <p className="text-gray-600 leading-relaxed mb-3">
-                        Covenant identity, ecclesia assembly, kingdom governance, and the divine mandate. Building the structure upon the foundation.
+                        Read and understand the Private Membership Association agreement.
+                        It defines the trust, the roles (Grantor, Trustee, Beneficiary),
+                        the trust corpus, and the terms of beneficial interest. Know what
+                        you are entering before you enter.
                       </p>
-                      <div className="flex flex-wrap gap-2">
-                        <Link href="/mandate" className="text-xs font-cinzel font-semibold text-royal-gold hover:text-royal-burgundy transition-colors">
-                          The Mandate →
-                        </Link>
-                        <Link href="/nation" className="text-xs font-cinzel font-semibold text-royal-gold hover:text-royal-burgundy transition-colors">
-                          Ecclesia Nation →
-                        </Link>
-                      </div>
+                      <Link href="/pma-agreement" className="text-xs font-cinzel font-semibold text-royal-gold hover:text-royal-burgundy transition-colors">
+                        Read PMA Agreement →
+                      </Link>
                     </div>
                   </div>
                 </CardContent>
               </Card>
             </motion.div>
 
-            {/* Phase 3 — Operation */}
+            {/* Step 3 — Acquire Beneficial Interest */}
             <motion.div variants={staggerItemVariants}>
               <Card className="border border-gray-200 hover:border-royal-gold/30 transition-all">
                 <CardContent className="p-6 md:p-8">
                   <div className="flex items-start gap-5">
-                    <div className="w-14 h-14 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
-                      <span className="font-cinzel text-lg font-bold text-gray-500">03</span>
+                    <div className="w-14 h-14 rounded-full bg-royal-burgundy/20 flex items-center justify-center flex-shrink-0">
+                      <span className="font-cinzel text-lg font-bold text-royal-burgundy">03</span>
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <h3 className="font-cinzel text-xl font-bold text-gray-500">
-                          Phase 3 — Operation
+                        <h3 className="font-cinzel text-xl font-bold text-royal-navy">
+                          Acquire Beneficial Interest
                         </h3>
-                        <span className="text-xs font-semibold text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
-                          Coming Soon
+                        <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-royal-burgundy bg-royal-burgundy/10 px-3 py-1 rounded-full">
+                          PMA Beneficiary
                         </span>
                       </div>
-                      <p className="text-gray-400 leading-relaxed mb-3">
-                        Full stewardship operation, academy courses, covenant repository, embassy forum, and proof vault. Living and operating from the new estate.
+                      <p className="text-gray-600 leading-relaxed mb-3">
+                        Make a one-time trust contribution of $500 (or $50 × 10 months).
+                        Accept the PMA agreement and receive your Beneficial Unit — a 1/N share
+                        of the entire trust corpus. Your interest is permanent. It never downgrades.
                       </p>
-                      <div className="flex flex-wrap gap-2">
-                        <Link href="/repository" className="text-xs font-cinzel font-semibold text-royal-gold hover:text-royal-burgundy transition-colors">
-                          Covenant Repository →
-                        </Link>
-                        <Link href="/forum" className="text-xs font-cinzel font-semibold text-royal-gold hover:text-royal-burgundy transition-colors">
-                          Embassy Forum →
-                        </Link>
-                        <Link href="/proof-vault" className="text-xs font-cinzel font-semibold text-royal-gold hover:text-royal-burgundy transition-colors">
-                          Proof Vault →
-                        </Link>
-                      </div>
+                      <Link href="/pricing" className="text-xs font-cinzel font-semibold text-royal-gold hover:text-royal-burgundy transition-colors">
+                        View Contribution Options →
+                      </Link>
                     </div>
                   </div>
                 </CardContent>
@@ -645,24 +620,24 @@ export default function Home() {
           <StaggerContainer staggerDelay={0.12} className="space-y-6 max-w-3xl mx-auto">
             {[
               {
-                q: "Is lawful money redemption legal?",
-                a: "Yes. 12 USC § 411 is current, standing federal law. It expressly states that Federal Reserve Notes \"shall be redeemed in lawful money on demand.\" Redemption is the exercise of a statutory right — not a loophole, petition, or protest.",
+                q: "Is a Private Membership Association legal?",
+                a: "Yes. The right to freely assemble is protected under the First Amendment. PMAs have been upheld in numerous court decisions. The key is proper structure, genuine private agreement, and non-commercial purpose — all of which Ecclesia Basilikos maintains.",
               },
               {
-                q: "Do I need a lawyer to set up a trust?",
-                a: "We provide education on trust law, structure, and administration so you understand what you are doing and why. We encourage members to study diligently and seek qualified counsel when appropriate. Knowledge comes first — then action.",
+                q: "What is a Beneficial Unit?",
+                a: "A Beneficial Unit is your share of the trust corpus. When you acquire beneficial interest, you receive one unit. Its value is calculated as 1/N, where N is the total number of active beneficiaries. As the trust corpus grows, so does the value underlying each unit.",
               },
               {
-                q: "Can the government refuse a state-citizen passport?",
-                a: "The right to a passport is well established. The process involves completing the standard DS-11 application with the correct understanding of domicile, status, and language. We educate on what the law says and how the application works.",
+                q: "Is the $500 contribution a payment for services?",
+                a: "No. It is a trust contribution — not a purchase. You are contributing to the trust corpus and in return acquiring beneficial interest in that corpus. This is a trust relationship, not a commercial transaction. The distinction is fundamental to the PMA structure.",
               },
               {
-                q: "Is this anti-government?",
-                a: "No. This is about understanding the system as it is written — not as you were told it works. Every action here is grounded in existing statute, constitutional law, and legal precedent. This is alignment with the law, not resistance to it.",
+                q: "Can my beneficial interest be revoked?",
+                a: "Your beneficial interest is permanent. Even if you chose the $50 × 10 installment plan and stop contributing early, your membership never downgrades. Once established, your standing within the trust is irrevocable.",
               },
               {
-                q: "How long does this take?",
-                a: "The foundation is self-paced. Some members begin practicing lawful money redemption within days. Trust establishment takes more preparation. The passport process involves a formal application. We provide guidance and community support throughout.",
+                q: "What is the three-pillar foundation?",
+                a: "The three pillars — Lawful Money Redemption, Trust & Asset Protection, and State-Citizen Passport — are the core educational tracks. They address the three areas where most people are unknowingly operating under the wrong legal framework: money, property, and political status.",
               },
             ].map((item, index) => (
               <motion.div key={index} variants={staggerItemVariants}>
@@ -683,17 +658,17 @@ export default function Home() {
       </div>
 
       {/* ═══════════════════════════════════════════════════════════════
-          SECTION 8: MEMBERSHIP
+          SECTION 8: MEMBERSHIP TIERS
           ═══════════════════════════════════════════════════════════════ */}
       <div className="py-24 marble-bg">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <RevealOnScroll>
             <div className="text-center mb-12">
               <h2 className="font-cinzel-decorative text-3xl md:text-4xl font-bold text-royal-navy mb-4">
-                Two Ways to Learn
+                Two Tiers of Interest
               </h2>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Start free with Trust content, or acquire PMA Beneficial Interest for full access.
+                General access is free. Full beneficial interest requires a trust contribution.
               </p>
             </div>
           </RevealOnScroll>
@@ -702,17 +677,17 @@ export default function Home() {
             <RevealOnScroll>
               <Card className="royal-card h-full">
                 <CardContent className="p-8">
-                  <h3 className="font-cinzel text-xl font-bold text-royal-navy mb-2">Free — Trust User</h3>
+                  <h3 className="font-cinzel text-xl font-bold text-royal-navy mb-2">General Interest — Trust User</h3>
                   <p className="text-3xl font-bold text-royal-navy mb-4">$0</p>
                   <ul className="space-y-2 mb-6">
-                    {["Trust course access", "Trust downloads", "Forum reading", "Progress tracking"].map((f, i) => (
+                    {["Trust pillar course access", "Foundational downloads", "Forum reading", "Progress tracking"].map((f, i) => (
                       <li key={i} className="flex items-center gap-2 text-sm text-gray-600">
                         <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" /> {f}
                       </li>
                     ))}
                   </ul>
                   <Link href="/signup">
-                    <Button variant="outline" className="w-full font-cinzel">Get Started Free</Button>
+                    <Button variant="outline" className="w-full font-cinzel">Enter the Assembly</Button>
                   </Link>
                 </CardContent>
               </Card>
@@ -724,9 +699,10 @@ export default function Home() {
                   <div className="flex items-center gap-2 mb-2">
                     <h3 className="font-cinzel text-xl font-bold text-royal-navy">PMA Beneficiary</h3>
                   </div>
-                  <p className="text-3xl font-bold text-royal-navy mb-4">$500</p>
+                  <p className="text-3xl font-bold text-royal-navy mb-1">$500</p>
+                  <p className="text-sm text-gray-500 mb-4">one-time contribution · or $50 × 10</p>
                   <ul className="space-y-2 mb-6">
-                    {["All courses & lessons", "All downloads & templates", "Forum posting", "Proof Vault", "Beneficial Unit instrument"].map((f, i) => (
+                    {["All courses & lessons across every pillar", "All downloads, templates & trust documents", "Forum posting & community participation", "Proof Vault — secure document storage", "Beneficial Unit certificate (1/N share)"].map((f, i) => (
                       <li key={i} className="flex items-center gap-2 text-sm text-gray-600">
                         <CheckCircle className="w-4 h-4 text-royal-gold flex-shrink-0" /> {f}
                       </li>
@@ -734,7 +710,7 @@ export default function Home() {
                   </ul>
                   <Link href="/pricing">
                     <Button className="w-full bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold">
-                      Learn More <ArrowRight className="w-4 h-4 ml-2" />
+                      Acquire Beneficial Interest <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
                   </Link>
                 </CardContent>
@@ -757,10 +733,10 @@ export default function Home() {
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <RevealOnScroll>
             <h2 className="font-cinzel-decorative text-4xl md:text-5xl font-bold text-white mb-6">
-              The Foundation Starts Here
+              The Assembly Is Open
             </h2>
             <p className="text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto leading-relaxed mb-4">
-              Three pillars. Three shifts. One foundation.
+              A covenant body. A trust-governed assembly. A kingdom embassy.
             </p>
           </RevealOnScroll>
 
@@ -788,25 +764,25 @@ export default function Home() {
           <RevealOnScroll delay={0.5}>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <div className="inline-block rounded-lg animate-glow-pulse">
-                <Link href="/lawful-money">
+                <Link href={ctaHref}>
                   <Button
                     size="lg"
                     className="royal-button text-xl px-12 py-7 shadow-2xl hover:scale-105 transition-transform"
                   >
-                    <Banknote className="mr-3 h-7 w-7" />
-                    Begin with Pillar 1
+                    <Crown className="mr-3 h-7 w-7" />
+                    {ctaHref === "/signup" ? "Enter the Assembly" : "Go to Dashboard"}
                     <ArrowRight className="ml-3 h-6 w-6" />
                   </Button>
                 </Link>
               </div>
-              <Link href="/contact">
+              <Link href="/pma-agreement">
                 <Button
                   size="lg"
                   variant="outline"
                   className="text-xl px-12 py-7 bg-white/15 border-royal-gold/50 text-royal-gold hover:bg-white/25 transition-all"
                 >
-                  <Users className="mr-3 h-7 w-7" />
-                  Get Guidance
+                  <Scroll className="mr-3 h-7 w-7" />
+                  PMA Agreement
                 </Button>
               </Link>
             </div>
@@ -814,8 +790,8 @@ export default function Home() {
 
           <RevealOnScroll delay={0.7}>
             <p className="text-gray-400 text-base max-w-xl mx-auto leading-relaxed mt-10">
-              Ecclesia Basilikos provides education and community — not legal or tax advice.
-              Your journey is your own, supported by knowledge and fellowship.
+              Ecclesia Basilikos is a Private Membership Association providing education and community
+              under divine covenant authority — not legal, financial, or tax advice.
             </p>
           </RevealOnScroll>
         </div>
