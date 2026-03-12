@@ -16,7 +16,16 @@ export interface ResolvedEntity {
   coordinationTargets: { entity: TrustEntity; relationship: TrustRelationship }[];
   landStewardship: { entity: TrustEntity; relationship: TrustRelationship }[];
   remitsTo: { entity: TrustEntity; relationship: TrustRelationship }[];
+  shepherdTargets: { entity: TrustEntity; relationship: TrustRelationship }[];
+  shepherdSources: { entity: TrustEntity; relationship: TrustRelationship }[];
+  teachTargets: { entity: TrustEntity; relationship: TrustRelationship }[];
+  teachSources: { entity: TrustEntity; relationship: TrustRelationship }[];
+  serveTargets: { entity: TrustEntity; relationship: TrustRelationship }[];
+  serveSources: { entity: TrustEntity; relationship: TrustRelationship }[];
+  titheTargets: { entity: TrustEntity; relationship: TrustRelationship }[];
+  titheSources: { entity: TrustEntity; relationship: TrustRelationship }[];
   rootAuthority: TrustEntity | null;
+  authorityChain: TrustEntity[];
 }
 
 export function resolveEntity(
@@ -79,11 +88,48 @@ export function resolveEntity(
     .map(r => ({ entity: findEntity(r.toEntityId)!, relationship: r }))
     .filter(r => r.entity);
 
+  // Ecclesiastical relationships
+  const shepherdTargets = outgoing
+    .filter(r => r.relationshipType === 'shepherds')
+    .map(r => ({ entity: findEntity(r.toEntityId)!, relationship: r }))
+    .filter(r => r.entity);
+  const shepherdSources = incoming
+    .filter(r => r.relationshipType === 'shepherds')
+    .map(r => ({ entity: findEntity(r.fromEntityId)!, relationship: r }))
+    .filter(r => r.entity);
+  const teachTargets = outgoing
+    .filter(r => r.relationshipType === 'teaches')
+    .map(r => ({ entity: findEntity(r.toEntityId)!, relationship: r }))
+    .filter(r => r.entity);
+  const teachSources = incoming
+    .filter(r => r.relationshipType === 'teaches')
+    .map(r => ({ entity: findEntity(r.fromEntityId)!, relationship: r }))
+    .filter(r => r.entity);
+  const serveTargets = outgoing
+    .filter(r => r.relationshipType === 'serves')
+    .map(r => ({ entity: findEntity(r.toEntityId)!, relationship: r }))
+    .filter(r => r.entity);
+  const serveSources = incoming
+    .filter(r => r.relationshipType === 'serves')
+    .map(r => ({ entity: findEntity(r.fromEntityId)!, relationship: r }))
+    .filter(r => r.entity);
+  const titheTargets = outgoing
+    .filter(r => r.relationshipType === 'tithes')
+    .map(r => ({ entity: findEntity(r.toEntityId)!, relationship: r }))
+    .filter(r => r.entity);
+  const titheSources = incoming
+    .filter(r => r.relationshipType === 'tithes')
+    .map(r => ({ entity: findEntity(r.fromEntityId)!, relationship: r }))
+    .filter(r => r.entity);
+
+  // Walk authority chain
   let rootAuthority: TrustEntity | null = null;
+  const authorityChain: TrustEntity[] = [];
   let current = entity;
   const visited = new Set<string>();
   while (current) {
     visited.add(current.id);
+    authorityChain.unshift(current);
     const parentRel = relationships.find(
       r => r.toEntityId === current.id && ['authority', 'grants', 'establishes_pma'].includes(r.relationshipType)
     );
@@ -94,18 +140,11 @@ export function resolveEntity(
   }
 
   return {
-    entity,
-    parentAuthorities,
-    childEntities,
-    beneficiaryEntities,
-    benefitSources,
-    fundingSources,
-    fundingTargets,
-    oversightTargets,
-    coordinationTargets,
-    landStewardship,
-    remitsTo,
-    rootAuthority,
+    entity, parentAuthorities, childEntities, beneficiaryEntities, benefitSources,
+    fundingSources, fundingTargets, oversightTargets, coordinationTargets,
+    landStewardship, remitsTo, shepherdTargets, shepherdSources,
+    teachTargets, teachSources, serveTargets, serveSources,
+    titheTargets, titheSources, rootAuthority, authorityChain,
   };
 }
 
@@ -134,6 +173,15 @@ export const TEMPLATE_VARIABLES = [
   { key: 'coordination.targets', label: 'Coordination Targets', category: 'Relationships' },
   { key: 'land.stewardship', label: 'Land Stewardship', category: 'Relationships' },
   { key: 'remits.targets', label: 'Remits To', category: 'Relationships' },
+  { key: 'shepherds.targets', label: 'Shepherds (outgoing)', category: 'Ecclesiastical' },
+  { key: 'shepherds.sources', label: 'Shepherded By', category: 'Ecclesiastical' },
+  { key: 'teaches.targets', label: 'Teaches (outgoing)', category: 'Ecclesiastical' },
+  { key: 'teaches.sources', label: 'Taught By', category: 'Ecclesiastical' },
+  { key: 'serves.targets', label: 'Serves (outgoing)', category: 'Ecclesiastical' },
+  { key: 'serves.sources', label: 'Served By', category: 'Ecclesiastical' },
+  { key: 'tithe.targets', label: 'Tithe Recipients', category: 'Ecclesiastical' },
+  { key: 'tithe.sources', label: 'Tithe Sources', category: 'Ecclesiastical' },
+  { key: 'authority.chain', label: 'Full Authority Chain', category: 'Governance' },
   { key: 'date', label: 'Current Date', category: 'Meta' },
 ];
 
@@ -162,6 +210,17 @@ export function buildVariableMap(resolved: ResolvedEntity): Record<string, strin
     'coordination.targets': resolved.coordinationTargets.map(c => `${c.entity.name}${c.relationship.label ? ` — ${c.relationship.label}` : ''}`).join('\n') || '(None)',
     'land.stewardship': resolved.landStewardship.map(l => `${l.entity.name}${l.relationship.label ? ` — ${l.relationship.label}` : ''}`).join('\n') || '(None)',
     'remits.targets': resolved.remitsTo.map(rt => `${rt.entity.name}${rt.relationship.label ? ` — ${rt.relationship.label}` : ''}`).join('\n') || '(None)',
+    // Ecclesiastical variables
+    'shepherds.targets': resolved.shepherdTargets.map(s => `${s.entity.name}${s.relationship.label ? ` — ${s.relationship.label}` : ''}`).join('\n') || '(None)',
+    'shepherds.sources': resolved.shepherdSources.map(s => `${s.entity.name}${s.relationship.label ? ` — ${s.relationship.label}` : ''}`).join('\n') || '(None)',
+    'teaches.targets': resolved.teachTargets.map(t => `${t.entity.name}${t.relationship.label ? ` — ${t.relationship.label}` : ''}`).join('\n') || '(None)',
+    'teaches.sources': resolved.teachSources.map(t => `${t.entity.name}${t.relationship.label ? ` — ${t.relationship.label}` : ''}`).join('\n') || '(None)',
+    'serves.targets': resolved.serveTargets.map(s => `${s.entity.name}${s.relationship.label ? ` — ${s.relationship.label}` : ''}`).join('\n') || '(None)',
+    'serves.sources': resolved.serveSources.map(s => `${s.entity.name}${s.relationship.label ? ` — ${s.relationship.label}` : ''}`).join('\n') || '(None)',
+    'tithe.targets': resolved.titheTargets.map(t => `${t.entity.name}${t.relationship.label ? ` — ${t.relationship.label}` : ''}`).join('\n') || '(None)',
+    'tithe.sources': resolved.titheSources.map(t => `${t.entity.name}${t.relationship.label ? ` — ${t.relationship.label}` : ''}`).join('\n') || '(None)',
+    // Authority chain
+    'authority.chain': resolved.authorityChain.map(e => e.name).join(' → ') || e.name,
     'date': today,
   };
 }

@@ -1741,7 +1741,7 @@ router.post('/trust-documents/generate', requireAdmin, async (req, res) => {
   }
 });
 
-// Generate documents for ALL entities (seeds templates first if needed)
+// Generate documents for ALL entities × ALL applicable templates (seeds templates first if needed)
 router.post('/trust-documents/generate-all', requireAdmin, async (req, res) => {
   try {
     // Ensure templates are seeded
@@ -1749,34 +1749,37 @@ router.post('/trust-documents/generate-all', requireAdmin, async (req, res) => {
     const templates = await storage.getTrustDocumentTemplates();
     const { entities, relationships } = await storage.getTrustStructure();
 
-    // Check which entities already have documents
+    // Check which entity+template combos already have documents
     const existingDocs = await storage.getTrustDocuments();
-    const existingEntityIds = new Set(existingDocs.map(d => d.entityId));
+    const existingCombos = new Set(existingDocs.map(d => `${d.entityId}:${d.templateId}`));
 
     const generated = [];
     for (const entity of entities) {
-      if (existingEntityIds.has(entity.id)) continue;
+      // Find ALL applicable templates for this entity's layer
+      const applicableTemplates = templates.filter(t =>
+        (t.applicableLayers || []).includes(entity.layer)
+      );
 
-      // Find best template: first one whose applicableLayers includes this entity's layer
-      const template = templates.find(t =>
-        (t.applicableLayers || []).includes(entity.layer) &&
-        !(t.applicableLayers || []).includes('charter') || entity.layer === (t.applicableLayers || [])[0]
-      ) || templates.find(t => (t.applicableLayers || []).includes(entity.layer));
-
-      if (!template) continue;
+      if (applicableTemplates.length === 0) continue;
 
       const resolved = resolveEntity(entity, entities, relationships);
-      const resolvedSections = template.sections.map((s, i) => ({
-        title: s.title,
-        content: resolveVariables(s.contentTemplate, resolved),
-        sortOrder: s.sortOrder ?? i,
-      }));
 
-      const doc = await storage.createTrustDocumentWithSections(
-        { entityId: entity.id, templateId: template.id, title: template.name, subtitle: entity.name, status: 'draft' },
-        resolvedSections
-      );
-      generated.push(doc);
+      for (const template of applicableTemplates) {
+        // Skip if this entity+template combo already exists
+        if (existingCombos.has(`${entity.id}:${template.id}`)) continue;
+
+        const resolvedSections = template.sections.map((s, i) => ({
+          title: s.title,
+          content: resolveVariables(s.contentTemplate, resolved),
+          sortOrder: s.sortOrder ?? i,
+        }));
+
+        const doc = await storage.createTrustDocumentWithSections(
+          { entityId: entity.id, templateId: template.id, title: template.name, subtitle: entity.name, status: 'draft' },
+          resolvedSections
+        );
+        generated.push(doc);
+      }
     }
 
     res.json({ generated: generated.length, documents: generated });
