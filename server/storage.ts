@@ -2254,7 +2254,7 @@ export class DatabaseStorage implements IStorage {
       subtitle: "Constitutional Root & Covenant Charter",
       layer: "charter",
       entityType: "charter",
-      description: "The irrevocable constitutional root trust and covenant charter. Established under divine authority, it is both the founding legal vehicle and the philosophical cornerstone. Source of all governance, stewardship mandates, and community philosophy. Holds intellectual property, core charter documents, and long-term reserves.",
+      description: "Established upon Matthew 18:20 — covenant assembly. The irrevocable constitutional root trust and covenant charter. Established under divine authority, it is both the founding legal vehicle and the philosophical cornerstone. Source of all governance, stewardship mandates, and community philosophy. Holds intellectual property, core charter documents, and long-term reserves.",
       charter: "Established under the authority of the New Covenant, this trust anchors the entire trust network in divine law and constitutional principles. The grantor irrevocably conveys the corpus into trust for the benefit of the ecclesia and its members in perpetuity. It defines the mission, values, and divine mandate for covenant community life.",
       legalBasis: "First Amendment right of free association; Constitutional trust principles; Common law express trust; UCC Article 9 exemptions for ecclesiastical trusts",
       trusteeLabel: "Mission Founder (Grantor)",
@@ -2272,7 +2272,7 @@ export class DatabaseStorage implements IStorage {
       subtitle: "Governance Anchor",
       layer: "trust",
       entityType: "trust",
-      description: "The governance anchor trust. Stewards the mission, protects the charter, oversees governance principles. Authorizes two parallel arms: operational trusts (asset stewardship) and the PMA (community governance). Safeguards core assets including IP, platform ownership, and major land assets.",
+      description: "After the pattern of Acts 4:32-35 — the common storehouse. The governance anchor trust. Stewards the mission, protects the charter, oversees governance principles. Authorizes two parallel arms: operational trusts (asset stewardship) and the PMA (community governance). Safeguards core assets including IP, platform ownership, and major land assets.",
       charter: "To steward the mission of the ecclesia, administering all sub-trusts and the PMA under the authority of the New Covenant Legacy Trust.",
       legalBasis: "Express trust under common law; First Amendment ecclesiastical governance",
       trusteeLabel: "Administrative Steward (Trustee)",
@@ -2290,7 +2290,7 @@ export class DatabaseStorage implements IStorage {
       subtitle: "Stewardship of Land",
       layer: "operational",
       entityType: "trust",
-      description: "Holds and administers all real property, acreage, and land-based assets. Separates land ownership from community operations for legal protection. Title is held by the trust, not individual members.",
+      description: "Dominion stewardship per Genesis 1:28 — 'Be fruitful, and multiply, and replenish the earth, and subdue it.' Holds and administers all real property, acreage, and land-based assets. Separates land ownership from community operations for legal protection. Title is held by the trust, not individual members.",
       charter: "To hold, protect, and steward all real property assets for the benefit of the ecclesia community.",
       legalBasis: "Land trust doctrine; Beneficial interest separated from legal title",
       trusteeLabel: "Land Steward (Trustee)",
@@ -2307,7 +2307,7 @@ export class DatabaseStorage implements IStorage {
       subtitle: "Shelter & Buildings",
       layer: "operational",
       entityType: "trust",
-      description: "Administers housing structures, shelters, and buildings. Ensures community members have access to covenant-aligned shelter. Manages construction, maintenance, and allocation of dwelling units.",
+      description: "Pure religion: to visit the fatherless and widows — James 1:27. Administers housing structures, shelters, and buildings. Ensures community members have access to covenant-aligned shelter. Manages construction, maintenance, and allocation of dwelling units.",
       charter: "To provide and maintain shelter and dwelling infrastructure for the benefit of ecclesia members and their families.",
       legalBasis: "Express trust; Cooperative housing principles",
       trusteeLabel: "Housing Steward (Trustee)",
@@ -2324,7 +2324,7 @@ export class DatabaseStorage implements IStorage {
       subtitle: "Finances & Resources",
       layer: "operational",
       entityType: "trust",
-      description: "Manages financial contributions, allocations, reserves, and the economic infrastructure of the trust network. Handles PMA contributions and redistribution to operational sub-trusts.",
+      description: "The storehouse principle — Malachi 3:10 — 'Bring ye all the tithes into the storehouse.' Manages financial contributions, allocations, reserves, and the economic infrastructure of the trust network. Handles PMA contributions and redistribution to operational sub-trusts.",
       charter: "To receive, hold, and allocate financial resources for the operations and growth of the trust network according to the charter mandate.",
       legalBasis: "Express trust; PMA contribution agreements; Private exchange (not taxable income)",
       trusteeLabel: "Treasury Steward (Trustee)",
@@ -2341,7 +2341,7 @@ export class DatabaseStorage implements IStorage {
       subtitle: "Commerce & Innovation",
       layer: "operational",
       entityType: "trust",
-      description: "Oversees commercial activities, revenue generation, and enterprise development. Isolates commercial liability — if one activity has legal problems, it doesn't endanger the entire system.",
+      description: "After the pattern of Proverbs 31 — the virtuous enterprise. Oversees commercial activities, revenue generation, and enterprise development. Isolates commercial liability — if one activity has legal problems, it doesn't endanger the entire system.",
       charter: "To develop and manage revenue-generating enterprises for the sustenance and growth of the ecclesia community.",
       legalBasis: "Express trust; Commercial liability isolation",
       trusteeLabel: "Enterprise Steward (Trustee)",
@@ -2358,7 +2358,7 @@ export class DatabaseStorage implements IStorage {
       subtitle: "Knowledge & Training",
       layer: "operational",
       entityType: "trust",
-      description: "Administers educational programs, courses, curriculum development, and the training infrastructure. Covers trust law fundamentals, agricultural skills, community governance, spiritual formation, and leadership development.",
+      description: "Train up a child in the way he should go — Proverbs 22:6. Administers educational programs, courses, curriculum development, and the training infrastructure. Covers trust law fundamentals, agricultural skills, community governance, spiritual formation, and leadership development.",
       charter: "To develop, deliver, and steward educational resources, courses, and training programs that equip members for covenant community life and leadership.",
       legalBasis: "Express trust; First Amendment religious education",
       trusteeLabel: "Education Steward (Trustee)",
@@ -2376,7 +2376,7 @@ export class DatabaseStorage implements IStorage {
       subtitle: "(PMA) — People Layer",
       layer: "pma",
       entityType: "pma",
-      description: "The primary Private Membership Association. Members join the community through the PMA. They are beneficiary participants, not owners of trust assets. The PMA is a peer of the operational trusts — both authorized by the EBT. The PMA organizes the people; the trusts hold the assets for their benefit.",
+      description: "Ecclesia governance per Matthew 16:18-19 — 'Upon this rock I will build my ecclesia.' The primary Private Membership Association. Members join the community through the PMA. They are beneficiary participants, not owners of trust assets. The PMA is a peer of the operational trusts — both authorized by the EBT. The PMA organizes the people; the trusts hold the assets for their benefit.",
       charter: "To organize the voluntary association of members under the ecclesia covenant, establishing their rights, obligations, and mutual commitments as beneficiaries of the trust network.",
       legalBasis: "First Amendment right of free association; NAACP v. Alabama (1958); Roberts v. United States Jaycees (1984); Private contract law",
       trusteeLabel: "PMA Administrator",
@@ -2393,7 +2393,7 @@ export class DatabaseStorage implements IStorage {
       subtitle: "Regional Communities",
       layer: "chapter",
       entityType: "chapter",
-      description: "Regional community chapters organized geographically. Each chapter coordinates local members, meetups, resource sharing, and project launches within a defined area. Chapters contain communes.",
+      description: "Local assemblies per Acts 14:23 — 'They ordained elders in every church.' Regional community chapters organized geographically. Each chapter coordinates local members, meetups, resource sharing, and project launches within a defined area. Chapters contain communes.",
       charter: "To organize and govern regional community units under the authority of the PMA.",
       trusteeLabel: "Chapter Steward",
       protectorLabel: "PMA Oversight",
@@ -2409,7 +2409,7 @@ export class DatabaseStorage implements IStorage {
       subtitle: "Local Residential Groups",
       layer: "commune",
       entityType: "commune",
-      description: "Local community groups organized around shared living, resources, and daily life. Communes are the smallest residential unit, nested within chapters. They share meals, labor, and daily responsibilities.",
+      description: "Koinonia households per Acts 2:44-46 — 'All that believed were together, and had all things common.' Local community groups organized around shared living, resources, and daily life. Communes are the smallest residential unit, nested within chapters. They share meals, labor, and daily responsibilities.",
       charter: "To organize shared living and resource-sharing groups under chapter authority.",
       trusteeLabel: "Commune Lead",
       protectorLabel: "Chapter Steward",
@@ -2425,7 +2425,7 @@ export class DatabaseStorage implements IStorage {
       subtitle: "Cross-Cutting Functional Groups",
       layer: "guild",
       entityType: "guild",
-      description: "Functional groups organized around skills, trades, and areas of expertise. Guilds cross chapter boundaries — a farmer in Chapter A and a farmer in Chapter B are both in the Farming Guild. They provide training, coordination, and quality standards across the network.",
+      description: "Craftsmen assemblies per Exodus 35:10 — 'Every wise hearted among you shall come, and make all that the LORD hath commanded.' Functional groups organized around skills, trades, and areas of expertise. Guilds cross chapter boundaries — a farmer in Chapter A and a farmer in Chapter B are both in the Farming Guild. They provide training, coordination, and quality standards across the network.",
       charter: "To organize functional working groups that develop and deploy specialized skills across the trust network.",
       trusteeLabel: "Guild Master",
       protectorLabel: "PMA Oversight",
@@ -2441,7 +2441,7 @@ export class DatabaseStorage implements IStorage {
       subtitle: "Time-Bound Initiatives",
       layer: "project",
       entityType: "project",
-      description: "Specific initiatives and time-bound projects undertaken by members. Projects may span chapters and guilds to accomplish defined objectives. They have a start, end, and deliverable.",
+      description: "Kingdom works per Colossians 3:23 — 'Whatsoever ye do, do it heartily, as to the Lord.' Specific initiatives and time-bound projects undertaken by members. Projects may span chapters and guilds to accomplish defined objectives. They have a start, end, and deliverable.",
       charter: "To coordinate specific initiatives and deliverables within the trust ecosystem.",
       trusteeLabel: "Project Lead",
       protectorLabel: "PMA Oversight",
@@ -2458,7 +2458,7 @@ export class DatabaseStorage implements IStorage {
       subtitle: "All Members",
       layer: "beneficiary",
       entityType: "beneficiary",
-      description: "All members of the trust ecosystem. Every member is both a beneficiary (receiving benefits from trust assets) and a steward (contributing labor, skills, and resources through the PMA). This is where the two arms meet: the asset arm provides benefits, and the people arm organizes participation.",
+      description: "Joint heirs per Romans 8:17 — 'If children, then heirs; heirs of God, and joint-heirs with Christ.' All members of the trust ecosystem. Every member is both a beneficiary (receiving benefits from trust assets) and a steward (contributing labor, skills, and resources through the PMA). This is where the two arms meet: the asset arm provides benefits, and the people arm organizes participation.",
       charter: "All members participate as both beneficiaries and stewards of the trust network, receiving benefits and contributing to the common good.",
       trusteeLabel: "Individual Members",
       protectorLabel: "PMA Membership Council",
@@ -2476,70 +2476,70 @@ export class DatabaseStorage implements IStorage {
     // NCLT → EBT (Authority — constitutional root authorizes governance)
     await db.insert(trustRelationships).values({
       fromEntityId: nclt.id, toEntityId: ebt.id,
-      relationshipType: "authority", label: "Authorizes",
+      relationshipType: "authority", label: "Authorizes", notes: "Constitutional authority — Romans 13:1 'The powers that be are ordained of God'",
     });
 
     // === ASSET ARM: EBT → Operational Trusts (Grants) ===
     await db.insert(trustRelationships).values([
-      { fromEntityId: ebt.id, toEntityId: landTrust.id, relationshipType: "grants", label: "Grants stewardship" },
-      { fromEntityId: ebt.id, toEntityId: housingTrust.id, relationshipType: "grants", label: "Grants stewardship" },
-      { fromEntityId: ebt.id, toEntityId: treasuryTrust.id, relationshipType: "grants", label: "Grants stewardship" },
-      { fromEntityId: ebt.id, toEntityId: enterpriseTrust.id, relationshipType: "grants", label: "Grants stewardship" },
-      { fromEntityId: ebt.id, toEntityId: educationTrust.id, relationshipType: "grants", label: "Grants stewardship" },
+      { fromEntityId: ebt.id, toEntityId: landTrust.id, relationshipType: "grants", label: "Grants stewardship", notes: "Stewardship mandate — Genesis 2:15 'The LORD God took the man, and put him into the garden to dress it and to keep it'" },
+      { fromEntityId: ebt.id, toEntityId: housingTrust.id, relationshipType: "grants", label: "Grants stewardship", notes: "Shelter provision — Isaiah 32:18 'My people shall dwell in a peaceable habitation'" },
+      { fromEntityId: ebt.id, toEntityId: treasuryTrust.id, relationshipType: "grants", label: "Grants stewardship", notes: "Storehouse principle — Malachi 3:10" },
+      { fromEntityId: ebt.id, toEntityId: enterpriseTrust.id, relationshipType: "grants", label: "Grants stewardship", notes: "Fruitful enterprise — Proverbs 31:16-18" },
+      { fromEntityId: ebt.id, toEntityId: educationTrust.id, relationshipType: "grants", label: "Grants stewardship", notes: "Teaching mandate — Deuteronomy 6:7 'Thou shalt teach them diligently unto thy children'" },
     ]);
 
     // === PEOPLE ARM: EBT → PMA (Establishes) ===
     await db.insert(trustRelationships).values({
       fromEntityId: ebt.id, toEntityId: mainPma.id,
-      relationshipType: "establishes_pma", label: "Establishes",
+      relationshipType: "establishes_pma", label: "Establishes", notes: "Ecclesia assembly — Matthew 16:18 'Upon this rock I will build my ecclesia'",
     });
 
     // === PEOPLE ARM: PMA → Community Structure ===
     await db.insert(trustRelationships).values([
-      { fromEntityId: mainPma.id, toEntityId: chapters.id, relationshipType: "oversees", label: "Organizes" },
-      { fromEntityId: mainPma.id, toEntityId: guilds.id, relationshipType: "oversees", label: "Organizes" },
-      { fromEntityId: mainPma.id, toEntityId: projects.id, relationshipType: "oversees", label: "Organizes" },
+      { fromEntityId: mainPma.id, toEntityId: chapters.id, relationshipType: "oversees", label: "Elder oversight", notes: "Elder governance — 1 Timothy 5:17 'Let the elders that rule well be counted worthy of double honour'" },
+      { fromEntityId: mainPma.id, toEntityId: guilds.id, relationshipType: "oversees", label: "Organizes", notes: "Gift coordination — 1 Corinthians 12:28 'God hath set some in the church'" },
+      { fromEntityId: mainPma.id, toEntityId: projects.id, relationshipType: "oversees", label: "Organizes", notes: "Kingdom works — Nehemiah 2:17-18 'Let us build up the wall'" },
     ]);
 
     // Chapters → Communes (hierarchical — communes are nested within chapters)
     await db.insert(trustRelationships).values({
       fromEntityId: chapters.id, toEntityId: communes.id,
-      relationshipType: "oversees", label: "Contains",
+      relationshipType: "oversees", label: "Contains", notes: "House churches within assembly — Romans 16:5 'the church that is in their house'",
     });
 
     // === CROSS-ARM: Operational Trusts benefit PMA members ===
     await db.insert(trustRelationships).values([
-      { fromEntityId: landTrust.id, toEntityId: beneficiaries.id, relationshipType: "benefits", label: "Benefits" },
-      { fromEntityId: housingTrust.id, toEntityId: beneficiaries.id, relationshipType: "benefits", label: "Benefits" },
-      { fromEntityId: treasuryTrust.id, toEntityId: beneficiaries.id, relationshipType: "benefits", label: "Benefits" },
-      { fromEntityId: enterpriseTrust.id, toEntityId: beneficiaries.id, relationshipType: "benefits", label: "Benefits" },
-      { fromEntityId: educationTrust.id, toEntityId: beneficiaries.id, relationshipType: "benefits", label: "Benefits" },
+      { fromEntityId: landTrust.id, toEntityId: beneficiaries.id, relationshipType: "benefits", label: "Benefits", notes: "Inheritance of the land — Psalm 37:11 'The meek shall inherit the earth'" },
+      { fromEntityId: housingTrust.id, toEntityId: beneficiaries.id, relationshipType: "benefits", label: "Benefits", notes: "Shelter for the household — Proverbs 24:3-4" },
+      { fromEntityId: treasuryTrust.id, toEntityId: beneficiaries.id, relationshipType: "benefits", label: "Benefits", notes: "Distribution as every man had need — Acts 4:35" },
+      { fromEntityId: enterpriseTrust.id, toEntityId: beneficiaries.id, relationshipType: "benefits", label: "Benefits", notes: "The laborer is worthy — 1 Timothy 5:18" },
+      { fromEntityId: educationTrust.id, toEntityId: beneficiaries.id, relationshipType: "benefits", label: "Benefits", notes: "Teaching all nations — Matthew 28:19-20" },
     ]);
 
     // === PMA governs beneficiaries (members organized through PMA) ===
     await db.insert(trustRelationships).values({
       fromEntityId: mainPma.id, toEntityId: beneficiaries.id,
-      relationshipType: "oversees", label: "Organizes members",
+      relationshipType: "oversees", label: "Organizes members", notes: "Shepherd the flock — 1 Peter 5:2 'Feed the flock of God which is among you'",
     });
 
     // === Beneficiaries contribute back (remits — upward flow) ===
     await db.insert(trustRelationships).values({
       fromEntityId: beneficiaries.id, toEntityId: mainPma.id,
-      relationshipType: "remits", label: "Contributes labor & resources",
+      relationshipType: "remits", label: "Contributes labor & resources", notes: "Each according to ability — Acts 11:29 'Every man according to his ability, determined to send relief'",
     });
 
     // === Treasury funds other operational trusts ===
     await db.insert(trustRelationships).values([
-      { fromEntityId: treasuryTrust.id, toEntityId: landTrust.id, relationshipType: "funds", label: "Allocates funds" },
-      { fromEntityId: treasuryTrust.id, toEntityId: housingTrust.id, relationshipType: "funds", label: "Allocates funds" },
-      { fromEntityId: treasuryTrust.id, toEntityId: enterpriseTrust.id, relationshipType: "funds", label: "Allocates funds" },
-      { fromEntityId: treasuryTrust.id, toEntityId: educationTrust.id, relationshipType: "funds", label: "Allocates funds" },
+      { fromEntityId: treasuryTrust.id, toEntityId: landTrust.id, relationshipType: "funds", label: "Allocates funds", notes: "Storehouse distribution — Acts 4:34-35" },
+      { fromEntityId: treasuryTrust.id, toEntityId: housingTrust.id, relationshipType: "funds", label: "Allocates funds", notes: "Storehouse distribution — Acts 4:34-35" },
+      { fromEntityId: treasuryTrust.id, toEntityId: enterpriseTrust.id, relationshipType: "funds", label: "Allocates funds", notes: "Parable of talents — Matthew 25:14-30" },
+      { fromEntityId: treasuryTrust.id, toEntityId: educationTrust.id, relationshipType: "funds", label: "Allocates funds", notes: "Investment in wisdom — Proverbs 4:7" },
     ]);
 
     // === Enterprise revenue flows to treasury ===
     await db.insert(trustRelationships).values({
       fromEntityId: enterpriseTrust.id, toEntityId: treasuryTrust.id,
-      relationshipType: "remits", label: "Revenue flows",
+      relationshipType: "remits", label: "Revenue flows", notes: "Firstfruits to the storehouse — Proverbs 3:9-10",
     });
   }
 

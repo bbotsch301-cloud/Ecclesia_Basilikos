@@ -987,6 +987,13 @@ export const trustRoleEnum = pgEnum('trust_role', [
   'steward',          // chapter/commune leader
   'beneficiary',      // community participant
   'officer',          // operational role
+  'elder',            // local governance — 1 Timothy 3:1-7, Titus 1:5-9
+  'deacon',           // service governance — 1 Timothy 3:8-13
+  'apostle',          // five-fold ministry — Ephesians 4:11
+  'prophet',          // five-fold ministry — Ephesians 4:11
+  'evangelist',       // five-fold ministry — Ephesians 4:11
+  'pastor',           // five-fold ministry — Ephesians 4:11
+  'teacher',          // five-fold ministry — Ephesians 4:11
 ]);
 
 export const trustEntities = pgTable("trust_entities", {
@@ -1031,6 +1038,10 @@ export const trustRelationshipTypeEnum = pgEnum('trust_relationship_type', [
   'oversees',        // dashed orange — oversight
   'coordinates',     // dashed gray — coordination
   'benefits',        // dashed teal — trusts hold assets for benefit of members
+  'shepherds',       // pastoral care — 1 Peter 5:2
+  'teaches',         // discipleship chain — Matthew 28:20
+  'serves',          // diaconal service — Mark 10:45
+  'tithes',          // storehouse giving — Malachi 3:10
 ]);
 
 export const trustRelationships = pgTable("trust_relationships", {

@@ -18,6 +18,7 @@ import {
   Layers,
   ArrowRight,
   Gem,
+  BookOpen,
 } from "lucide-react";
 
 // ═══════════════════════════════════════════════════════════
@@ -593,8 +594,130 @@ Mitigation:
     ],
   },
   {
-    id: "conclusion",
+    id: "biblical-foundations",
     number: "X",
+    title: "Biblical & Early Church Foundations",
+    icon: BookOpen,
+    content: `The trust economy is not an invention of modern legal theory — it is a recovery of the economic model practiced by the earliest ecclesia. The book of Acts records a community that operated on precisely the principles this trust structure implements: shared assets, mutual stewardship, elder governance, and distribution according to need.`,
+    subsections: [
+      {
+        title: "A. The Original Economic Model — Acts 2:42-47 / Acts 4:32-35",
+        content: `The earliest church operated as a functioning economic community:
+
+    "And they continued stedfastly in the apostles' doctrine and fellowship, and in breaking of bread, and in prayers... And all that believed were together, and had all things common; And sold their possessions and goods, and parted them to all men, as every man had need... And they, continuing daily with one accord in the temple, and breaking bread from house to house, did eat their meat with gladness and singleness of heart."
+    — Acts 2:42, 44-46
+
+    "And the multitude of them that believed were of one heart and of one soul: neither said any of them that ought of the things which he possessed was his own; but they had all things common... Neither was there any among them that lacked: for as many as were possessors of lands or houses sold them, and brought the prices of the things that were sold, And laid them down at the apostles' feet: and distribution was made unto every man according as he had need."
+    — Acts 4:32, 34-35
+
+This was not primitive communism — it was voluntary covenant community organized under apostolic governance. Assets were held in common trust. Distribution was according to need. Governance was by appointed elders. This is precisely what the Ecclesia Basilikos Trust structure implements through modern trust law.`,
+      },
+      {
+        title: "B. Koinonia (κοινωνία) — Fellowship as Economic Participation",
+        content: `The Greek word koinonia, typically translated "fellowship," carries a far richer meaning than modern churchgoers realize. It denotes:
+
+    - Partnership and sharing in common — a joint participation in resources
+    - Economic solidarity — not merely spiritual friendship
+    - Mutual contribution and mutual benefit — the same reciprocal relationship encoded in the Beneficial Unit structure
+
+    "And they continued stedfastly in the apostles' doctrine and koinonia..." — Acts 2:42
+
+In the early church, koinonia was not a Wednesday night potluck — it was the economic operating system. Members contributed assets, labor, and skills into a common pool administered by the apostles and later by appointed elders and deacons. The trust ecosystem's commune structure directly mirrors this koinonia household model.`,
+      },
+      {
+        title: "C. Five-Fold Ministry Governance vs. Corporate Hierarchy",
+        content: `The early church did not organize itself as a corporation with a CEO, board of directors, and shareholders. It was governed by a five-fold ministry structure:
+
+    "And he gave some, apostles; and some, prophets; and some, evangelists; and some, pastors and teachers; For the perfecting of the saints, for the work of the ministry, for the edifying of the body of Christ."
+    — Ephesians 4:11-12
+
+Each role serves a distinct function in the governance ecosystem:
+
+    Apostle — Foundational authority and new territory (maps to Grantor/Trustee)
+    Prophet — Discernment and direction (maps to Protector Council)
+    Evangelist — Outreach and growth (maps to Enterprise/Expansion)
+    Pastor — Shepherding and care (maps to Chapter/Commune Steward)
+    Teacher — Education and training (maps to Guild/Education Trust)
+
+This is complemented by the elder/deacon structure:
+
+    "Let the elders that rule well be counted worthy of double honour, especially they who labour in the word and doctrine." — 1 Timothy 5:17
+
+    "Likewise must the deacons be grave... Holding the mystery of the faith in a pure conscience." — 1 Timothy 3:8-9
+
+Elders govern. Deacons serve. The five-fold ministry equips. Together, they form a governance structure that is both authoritative and servant-hearted — precisely the model the trust ecosystem implements through its layered governance.`,
+      },
+      {
+        title: "D. The Storehouse Principle — Malachi 3:10 / Acts 4:34-35",
+        content: `The Treasury Trust implements the biblical storehouse principle:
+
+    "Bring ye all the tithes into the storehouse, that there may be meat in mine house, and prove me now herewith, saith the LORD of hosts, if I will not open you the windows of heaven, and pour you out a blessing, that there shall not be room enough to receive it."
+    — Malachi 3:10
+
+In the early church, the apostles' feet served as the storehouse:
+
+    "And laid them down at the apostles' feet: and distribution was made unto every man according as he had need." — Acts 4:35
+
+The Treasury Trust functions as the modern storehouse — receiving contributions, holding reserves, and distributing according to community need. The tithes relationship type in the trust structure directly implements this scriptural pattern.`,
+      },
+      {
+        title: "E. Jubilee Economics — Debt Release & Land Return (Leviticus 25)",
+        content: `The most radical economic provision in scripture is the Year of Jubilee:
+
+    "And ye shall hallow the fiftieth year, and proclaim liberty throughout all the land unto all the inhabitants thereof: it shall be a jubile unto you; and ye shall return every man unto his possession, and ye shall return every man unto his family."
+    — Leviticus 25:10
+
+    "The land shall not be sold for ever: for the land is mine; for ye are strangers and sojourners with me."
+    — Leviticus 25:23
+
+The trust structure implements jubilee economics structurally:
+
+    - Land is held in trust perpetually — it can never be sold or alienated (Leviticus 25:23)
+    - The sabbatical cycle provides periodic rest and debt review (Exodus 23:10-11)
+    - The jubilee principle ensures no generational wealth concentration
+    - Beneficial Units are non-transferable — preventing the accumulation that jubilee was designed to reset
+
+Where ancient Israel needed a periodic jubilee to correct drift toward inequality, the trust structure prevents that drift from occurring in the first place.`,
+      },
+      {
+        title: "F. Widow, Orphan & Stranger Provisions",
+        content: `Scripture mandates economic provision for the vulnerable:
+
+    "At the end of three years thou shalt bring forth all the tithe of thine increase the same year, and shalt lay it up within thy gates: And the Levite, (because he hath no part nor inheritance with thee,) and the stranger, and the fatherless, and the widow, which are within thy gates, shall come, and shall eat and be satisfied."
+    — Deuteronomy 14:28-29
+
+    "Pure religion and undefiled before God and the Father is this, To visit the fatherless and widows in their affliction, and to keep himself unspotted from the world."
+    — James 1:27
+
+The trust ecosystem builds this care into its structure through:
+
+    - The Housing Trust ensuring no member is without shelter
+    - The Treasury Trust providing for those unable to fully contribute
+    - The Beneficial Unit guaranteeing equal interest regardless of economic productivity
+    - The PMA's covenant obligation of mutual care and support
+    - The Benevolence provisions embedded in each operational trust`,
+      },
+      {
+        title: "G. How Each Trust Layer Maps to Early Church Structure",
+        content: `The nine-layer trust architecture directly mirrors the organizational pattern of the early church:
+
+    Charter Trust → Apostolic foundation (Ephesians 2:20 — "Built upon the foundation of the apostles and prophets")
+    Governance Trust → Apostolic administration (Acts 6:2-4 — "It is not reason that we should leave the word of God, and serve tables")
+    Operational Trusts → Diaconal service arms (Acts 6:3 — "Look ye out among you seven men... whom we may appoint over this business")
+    PMA → The ecclesia assembly (Matthew 16:18 — "I will build my ecclesia")
+    Chapters → Local churches (Acts 14:23 — "They ordained elders in every church")
+    Communes → House churches (Romans 16:5 — "The church that is in their house")
+    Guilds → Gift-based working groups (1 Corinthians 12:28 — "God hath set some in the church")
+    Projects → Kingdom works (Nehemiah 2:17-18 — "Let us build up the wall")
+    Beneficiaries → Joint heirs (Romans 8:17 — "Heirs of God, and joint-heirs with Christ")
+
+The trust structure is not an imposition of modern legal concepts onto ancient faith — it is the recovery of ancient faith through modern legal instruments. The early church already operated this way. The trust ecosystem simply provides the legal protection to do it again.`,
+      },
+    ],
+  },
+  {
+    id: "conclusion",
+    number: "XI",
     title: "Conclusion — A More Excellent Way",
     icon: Heart,
     content: `The Ecclesia Basilikos Trust economy is not utopian idealism — it is a practical, legally grounded alternative to the debt-based, extractive economic system that dominates the modern world.

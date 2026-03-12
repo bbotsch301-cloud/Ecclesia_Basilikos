@@ -184,6 +184,48 @@ const RELATIONSHIP_CONFIG: Record<string, {
   oversees:        { label: "Oversees",        color: "bg-orange-500",  strokeColor: "#ea580c", dashed: true },
   coordinates:     { label: "Coordinates",     color: "bg-gray-500",    strokeColor: "#6b7280", dashed: true },
   benefits:        { label: "Benefits",        color: "bg-teal-500",    strokeColor: "#0d9488", dashed: true },
+  shepherds:       { label: "Shepherds",       color: "bg-emerald-600", strokeColor: "#059669", dashed: false },
+  teaches:         { label: "Teaches",         color: "bg-sky-600",     strokeColor: "#0284c7", dashed: false },
+  serves:          { label: "Serves",          color: "bg-rose-500",    strokeColor: "#f43f5e", dashed: true },
+  tithes:          { label: "Tithes",          color: "bg-amber-600",   strokeColor: "#d97706", dashed: false },
+};
+
+// Biblical labels for each layer type (Phase 4 / Phase 7 — UI-only, no enum rename)
+const BIBLICAL_LABELS: Record<string, string> = {
+  charter: "Covenant Foundation",
+  trust: "Common Storehouse (Acts 4:32)",
+  operational: "Stewardship Arm",
+  pma: "Ecclesia (Matthew 16:18)",
+  chapter: "Local Assembly (Acts 14:23)",
+  commune: "Koinonia Household (Acts 2:46)",
+  guild: "Craftsmen Assembly (Exodus 35:10)",
+  project: "Kingdom Work",
+  beneficiary: "Joint Heir (Romans 8:17)",
+};
+
+// Biblical labels for governance roles
+const BIBLICAL_ROLE_LABELS: Record<string, string> = {
+  grantor: "Grantor",
+  trustee: "Trustee",
+  protector: "Protector",
+  steward: "Steward",
+  beneficiary: "Beneficiary",
+  officer: "Officer",
+  elder: "Elder (1 Timothy 3:1-7)",
+  deacon: "Deacon (1 Timothy 3:8-13)",
+  apostle: "Apostle (Ephesians 4:11)",
+  prophet: "Prophet (Ephesians 4:11)",
+  evangelist: "Evangelist (Ephesians 4:11)",
+  pastor: "Pastor (Ephesians 4:11)",
+  teacher: "Teacher (Ephesians 4:11)",
+};
+
+// Biblical labels for relationship types
+const BIBLICAL_RELATIONSHIP_LABELS: Record<string, string> = {
+  shepherds: "Shepherds (1 Peter 5:2)",
+  teaches: "Teaches (Matthew 28:20)",
+  serves: "Serves (Mark 10:45)",
+  tithes: "Tithes (Malachi 3:10)",
 };
 
 const LAYERS_ORDER = ['charter', 'trust', 'operational', 'pma', 'chapter', 'commune', 'guild', 'project', 'beneficiary'];
@@ -429,6 +471,13 @@ function EntityNode({
       {entity.subtitle && (
         <p className={`opacity-70 text-center mt-0.5 leading-tight ${isProminent ? 'text-xs' : 'text-[11px]'}`}>
           {entity.subtitle}
+        </p>
+      )}
+
+      {/* Biblical subtitle */}
+      {BIBLICAL_LABELS[entity.layer] && (
+        <p className={`opacity-50 text-center mt-0.5 leading-tight italic ${isProminent ? 'text-[11px]' : 'text-[10px]'}`}>
+          {BIBLICAL_LABELS[entity.layer]}
         </p>
       )}
 
@@ -683,6 +732,9 @@ function DetailSidebar({
                 </SheetTitle>
                 {entity.subtitle && (
                   <p className="text-sm opacity-80 mt-0.5">{entity.subtitle}</p>
+                )}
+                {BIBLICAL_LABELS[entity.layer] && (
+                  <p className="text-xs opacity-60 mt-0.5 italic">{BIBLICAL_LABELS[entity.layer]}</p>
                 )}
               </div>
             </div>

@@ -175,6 +175,10 @@ function generateCharterDocument(r: ResolvedEntity, today: string, _rootName: st
     subtitle: e.name,
     sections: [
       {
+        title: "Scripture Preamble",
+        content: `"But now hath he obtained a more excellent ministry, by how much also he is the mediator of a better covenant, which was established upon better promises."\n— Hebrews 8:6`,
+      },
+      {
         title: "Preamble",
         content: `This Declaration of Trust is established on ${today} under the authority of divine law, constitutional principles, and the inherent right of free association.\n\nThis instrument creates and governs "${e.name}" as an irrevocable express trust, serving as the constitutional root and covenant charter for the entire trust ecosystem described herein.`,
       },
@@ -221,6 +225,10 @@ function generateGovernanceDocument(r: ResolvedEntity, today: string, parentName
     title: `TRUST ADMINISTRATION AGREEMENT`,
     subtitle: e.name,
     sections: [
+      {
+        title: "Scripture Preamble",
+        content: `"And all that believed were together, and had all things common; And sold their possessions and goods, and parted them to all men, as every man had need."\n— Acts 2:44-45\n\n"Neither was there any among them that lacked: for as many as were possessors of lands or houses sold them, and brought the prices of the things that were sold, And laid them down at the apostles' feet: and distribution was made unto every man according as he had need."\n— Acts 4:34-35`,
+      },
       {
         title: "Preamble",
         content: `This Trust Administration Agreement is executed on ${today} under the authority of ${parentNames}.\n\n"${e.name}" serves as the governance anchor for the trust ecosystem rooted in ${rootName}.`,
@@ -276,6 +284,10 @@ function generateSubTrustDocument(r: ResolvedEntity, today: string, parentNames:
     subtitle: e.name,
     sections: [
       {
+        title: "Scripture Preamble",
+        content: `"He that is faithful in that which is least is faithful also in much: and he that is unjust in the least is unjust also in much. If therefore ye have not been faithful in the unrighteous mammon, who will commit to your trust the true riches? And if ye have not been faithful in that which is another man's, who shall give you that which is your own?"\n— Luke 16:10-12`,
+      },
+      {
         title: "Preamble",
         content: `This Sub-Trust Declaration is executed on ${today} under the authority granted by ${parentNames}, ultimately rooted in ${rootName}.`,
       },
@@ -303,6 +315,10 @@ function generateSubTrustDocument(r: ResolvedEntity, today: string, parentNames:
         title: "Article VI — Financial Provisions",
         content: [fundingInfo, fundingOut, e.notes].filter(Boolean).join('\n\n') || '(No financial provisions defined.)',
       },
+      {
+        title: "Jubilee & Sabbatical Provisions",
+        content: `This trust acknowledges and incorporates the biblical economic cycles:\n\nSabbatical Year (every 7th year):\n    "But the seventh year thou shalt let it rest and lie still; that the poor of thy people may eat." — Exodus 23:11\n    Land held by this trust shall observe a sabbatical rest cycle. Commerce operations shall conduct a review of all debts owed by members.\n\nYear of Jubilee (every 50th year):\n    "And ye shall hallow the fiftieth year, and proclaim liberty throughout all the land unto all the inhabitants thereof: it shall be a jubile unto you; and ye shall return every man unto his possession." — Leviticus 25:10\n    All internal debts shall be released. Land stewardship assignments shall be reviewed and equitably redistributed. Economic participation shall be reset to ensure no generational accumulation distorts the covenant community.`,
+      },
       ...(r.landStewardship.length > 0 ? [{
         title: "Article VII — Land Stewardship",
         content: `This trust provides land stewardship to:\n\n${r.landStewardship.map(l => `    ${l.entity.name}${l.relationship.label ? ` — ${l.relationship.label}` : ''}`).join('\n')}`,
@@ -328,6 +344,10 @@ function generatePMADocument(r: ResolvedEntity, today: string, parentNames: stri
     subtitle: e.name,
     sections: [
       {
+        title: "Scripture Preamble",
+        content: `"And I say also unto thee, That thou art Peter, and upon this rock I will build my church; and the gates of hell shall not prevail against it. And I will give unto thee the keys of the kingdom of heaven: and whatsoever thou shalt bind on earth shall be bound in heaven: and whatsoever thou shalt loose on earth shall be loosed in heaven."\n— Matthew 16:18-19\n\n"Moreover if thy brother shall trespass against thee, go and tell him his fault between thee and him alone: if he shall hear thee, thou hast gained thy brother... For where two or three are gathered together in my name, there am I in the midst of them."\n— Matthew 18:15, 20`,
+      },
+      {
         title: "Preamble",
         content: `This Private Membership Association Agreement is established on ${today} under the authority of ${parentNames}, rooted in ${rootName}.\n\nThis agreement governs the voluntary association of members under the ecclesia covenant.`,
       },
@@ -346,6 +366,10 @@ function generatePMADocument(r: ResolvedEntity, today: string, parentNames: stri
       {
         title: "Article IV — Governance",
         content: `PMA Administrator: ${e.trusteeLabel || '(Not assigned)'}\n\nOversight Body: ${e.protectorLabel || '(Not assigned)'}`,
+      },
+      {
+        title: "Article IV-A — Elder & Deacon Qualifications",
+        content: `Elders appointed to governance must meet the qualifications set forth in scripture:\n\n    "A bishop then must be blameless, the husband of one wife, vigilant, sober, of good behaviour, given to hospitality, apt to teach; Not given to wine, no striker, not greedy of filthy lucre; but patient, not a brawler, not covetous; One that ruleth well his own house, having his children in subjection with all gravity."\n    — 1 Timothy 3:2-4\n\n    "For a bishop must be blameless, as the steward of God; not selfwilled, not soon angry, not given to wine, no striker, not given to filthy lucre; But a lover of hospitality, a lover of good men, sober, just, holy, temperate; Holding fast the faithful word as he hath been taught."\n    — Titus 1:7-9\n\nDeacons appointed to service must likewise meet the qualifications:\n\n    "Likewise must the deacons be grave, not doubletongued, not given to much wine, not greedy of filthy lucre; Holding the mystery of the faith in a pure conscience. And let these also first be proved; then let them use the office of a deacon, being found blameless."\n    — 1 Timothy 3:8-10`,
       },
       {
         title: "Article V — Community Structure",
@@ -383,6 +407,7 @@ function generateChapterDocument(r: ResolvedEntity, today: string, parentNames: 
     title: `CHAPTER CHARTER`,
     subtitle: e.name,
     sections: [
+      { title: "Scripture Preamble", content: `"For this cause left I thee in Crete, that thou shouldest set in order the things that are wanting, and ordain elders in every city, as I had appointed thee."\n— Titus 1:5` },
       { title: "Authorization", content: `This Chapter Charter is issued on ${today}, authorized by ${parentNames}.` },
       { title: "Article I — Purpose", content: e.charter || e.description || '(No purpose defined.)' },
       { title: "Article II — Governance", content: `Chapter Steward: ${e.trusteeLabel || '(Not assigned)'}\nOversight: ${e.protectorLabel || '(Not assigned)'}` },
@@ -399,6 +424,7 @@ function generateCommuneDocument(r: ResolvedEntity, today: string, parentNames: 
     title: `COMMUNE OPERATING AGREEMENT`,
     subtitle: e.name,
     sections: [
+      { title: "Scripture Preamble", content: `"And they, continuing daily with one accord in the temple, and breaking bread from house to house, did eat their meat with gladness and singleness of heart, Praising God, and having favour with all the people."\n— Acts 2:46-47` },
       { title: "Authorization", content: `This Commune Operating Agreement is issued on ${today}, authorized by ${parentNames}.` },
       { title: "Article I — Purpose", content: e.charter || e.description || '(No purpose defined.)' },
       { title: "Article II — Governance", content: `Commune Lead: ${e.trusteeLabel || '(Not assigned)'}\nOversight: ${e.protectorLabel || '(Not assigned)'}` },
@@ -414,6 +440,7 @@ function generateGuildDocument(r: ResolvedEntity, today: string, parentNames: st
     title: `GUILD CHARTER`,
     subtitle: e.name,
     sections: [
+      { title: "Scripture Preamble", content: `"Every wise hearted among you shall come, and make all that the LORD hath commanded."\n— Exodus 35:10` },
       { title: "Authorization", content: `This Guild Charter is issued on ${today}, authorized by ${parentNames}.` },
       { title: "Article I — Purpose & Scope", content: e.charter || e.description || '(No purpose defined.)' },
       { title: "Article II — Governance", content: `Guild Master: ${e.trusteeLabel || '(Not assigned)'}\nOversight: ${e.protectorLabel || '(Not assigned)'}` },
@@ -454,6 +481,7 @@ function generateBeneficiaryDocument(r: ResolvedEntity, today: string): ReturnTy
     title: `BENEFICIAL INTEREST DECLARATION`,
     subtitle: e.name,
     sections: [
+      { title: "Scripture Preamble", content: `"The labourer is worthy of his reward."\n— 1 Timothy 5:18\n\n"And if children, then heirs; heirs of God, and joint-heirs with Christ."\n— Romans 8:17` },
       { title: "Declaration", content: `This Beneficial Interest Declaration is issued on ${today}.\n\nAll members of the trust ecosystem are hereby recognized as both beneficiaries and stewards. Each member holds one (1) Beneficial Unit representing an equal, undivided interest (1/N) in the trust corpus.` },
       { title: "Article I — Rights & Beneficial Interest", content: `${e.charter || e.description || 'Members are entitled to beneficial use of trust assets as allocated by the governance structure.'}\n\nBeneficial interest is derived from the following trust entities:\n\n${benefitSourcesList}${fundingSourcesList}` },
       { title: "Article II — Obligations & Stewardship", content: `Members contribute labor, skills, and resources back to the community through the PMA. The relationship is reciprocal — beneficial interest is contingent on active stewardship participation.\n\nBeneficial Units are:\n    Non-transferable (cannot be sold, traded, or speculated upon)\n    Non-attachable (cannot be seized by external creditors)\n    Revocable only by voluntary withdrawal or covenant violation` },
