@@ -46,6 +46,7 @@ import { apiRequest, queryClient, getQueryFn } from "@/lib/queryClient";
 import AdminLayout from "@/components/layout/admin-layout";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import type { TrustEntity, TrustRelationship } from "@shared/schema";
+import { DocumentBuilderButton } from "@/components/trust-document-builder";
 
 interface TrustStructureData {
   entities: TrustEntity[];
@@ -68,27 +69,27 @@ const LAYER_CONFIG: Record<string, {
 }> = {
   charter: {
     label: "Constitutional",
-    subtitle: "Philosophy & Divine Authority",
-    nodeColor: "bg-amber-600",
-    nodeBorder: "border-amber-400",
+    subtitle: "Charter & Constitutional Root",
+    nodeColor: "bg-red-900",
+    nodeBorder: "border-red-800",
     nodeText: "text-white",
-    nodeBg: "bg-amber-700",
+    nodeBg: "bg-red-900",
     icon: Crown,
     defaultEntityType: "charter",
   },
   trust: {
     label: "Governance",
-    subtitle: "Mission Anchor & Stewardship",
-    nodeColor: "bg-slate-600",
-    nodeBorder: "border-slate-400",
+    subtitle: "Governance Anchor",
+    nodeColor: "bg-slate-700",
+    nodeBorder: "border-slate-500",
     nodeText: "text-white",
-    nodeBg: "bg-slate-700",
+    nodeBg: "bg-slate-800",
     icon: Shield,
     defaultEntityType: "trust",
   },
   operational: {
-    label: "Structural",
-    subtitle: "Operational Trust Layer",
+    label: "Asset Stewardship",
+    subtitle: "Operational Trusts",
     nodeColor: "bg-teal-600",
     nodeBorder: "border-teal-400",
     nodeText: "text-white",
@@ -97,12 +98,12 @@ const LAYER_CONFIG: Record<string, {
     defaultEntityType: "operational",
   },
   pma: {
-    label: "Participating",
-    subtitle: "Private Membership Associations",
-    nodeColor: "bg-rose-600",
-    nodeBorder: "border-rose-400",
+    label: "People Layer",
+    subtitle: "Community Governance",
+    nodeColor: "bg-purple-600",
+    nodeBorder: "border-purple-400",
     nodeText: "text-white",
-    nodeBg: "bg-rose-700",
+    nodeBg: "bg-purple-700",
     icon: Users,
     defaultEntityType: "pma",
   },
@@ -118,33 +119,53 @@ const LAYER_CONFIG: Record<string, {
   },
   chapter: {
     label: "Chapter",
-    subtitle: "Regional Governance",
-    nodeColor: "bg-orange-600",
-    nodeBorder: "border-orange-400",
-    nodeText: "text-white",
-    nodeBg: "bg-orange-700",
+    subtitle: "Regional Communities",
+    nodeColor: "bg-purple-100",
+    nodeBorder: "border-purple-400 border-dashed",
+    nodeText: "text-purple-800",
+    nodeBg: "bg-white",
     icon: MapPin,
     defaultEntityType: "chapter",
   },
   commune: {
-    label: "Community",
-    subtitle: "Local Stewardship Units",
-    nodeColor: "bg-emerald-600",
-    nodeBorder: "border-emerald-400",
-    nodeText: "text-white",
-    nodeBg: "bg-emerald-700",
+    label: "Commune",
+    subtitle: "Local Residential Groups",
+    nodeColor: "bg-purple-100",
+    nodeBorder: "border-purple-400 border-dashed",
+    nodeText: "text-purple-800",
+    nodeBg: "bg-white",
     icon: Sprout,
-    defaultEntityType: "community",
+    defaultEntityType: "commune",
+  },
+  guild: {
+    label: "Guild",
+    subtitle: "Cross-Cutting Functional Groups",
+    nodeColor: "bg-amber-100",
+    nodeBorder: "border-amber-500 border-dashed",
+    nodeText: "text-amber-800",
+    nodeBg: "bg-white",
+    icon: Users,
+    defaultEntityType: "guild",
   },
   project: {
     label: "Project",
-    subtitle: "Specific Initiatives",
-    nodeColor: "bg-gray-500",
-    nodeBorder: "border-gray-400",
-    nodeText: "text-white",
-    nodeBg: "bg-gray-600",
+    subtitle: "Time-Bound Initiatives",
+    nodeColor: "bg-gray-100",
+    nodeBorder: "border-gray-400 border-dashed",
+    nodeText: "text-gray-700",
+    nodeBg: "bg-white",
     icon: FolderOpen,
     defaultEntityType: "project",
+  },
+  beneficiary: {
+    label: "Beneficiary",
+    subtitle: "All Members",
+    nodeColor: "bg-gray-100",
+    nodeBorder: "border-gray-400 border-dashed",
+    nodeText: "text-gray-700",
+    nodeBg: "bg-white",
+    icon: Users,
+    defaultEntityType: "beneficiary",
   },
 };
 
@@ -162,9 +183,10 @@ const RELATIONSHIP_CONFIG: Record<string, {
   establishes_pma: { label: "Establishes PMA", color: "bg-purple-400",  strokeColor: "#a855f7", dashed: true },
   oversees:        { label: "Oversees",        color: "bg-orange-500",  strokeColor: "#ea580c", dashed: true },
   coordinates:     { label: "Coordinates",     color: "bg-gray-500",    strokeColor: "#6b7280", dashed: true },
+  benefits:        { label: "Benefits",        color: "bg-teal-500",    strokeColor: "#0d9488", dashed: true },
 };
 
-const LAYERS_ORDER = ['charter', 'trust', 'operational', 'pma', 'platform', 'chapter', 'commune', 'project'];
+const LAYERS_ORDER = ['charter', 'trust', 'operational', 'pma', 'chapter', 'commune', 'guild', 'project', 'beneficiary'];
 
 // ── Quick templates per layer ──
 interface EntityTemplate {
@@ -175,36 +197,36 @@ interface EntityTemplate {
 
 const LAYER_TEMPLATES: Record<string, EntityTemplate[]> = {
   charter: [
-    { name: "New Covenant Legacy Trust", subtitle: "Constitutional Root", entityType: "charter" },
-    { name: "Covenant Charter", subtitle: "Divine Authority Foundation", entityType: "charter" },
+    { name: "New Covenant Legacy Trust", subtitle: "Constitutional Root & Covenant Charter", entityType: "charter" },
   ],
   trust: [
     { name: "Governance Trust", subtitle: "Governance Anchor", entityType: "trust" },
-    { name: "Stewardship Trust", subtitle: "Mission Administration", entityType: "trust" },
   ],
   operational: [
     { name: "Land Trust", subtitle: "Stewardship of Land", entityType: "operational" },
-    { name: "Housing Trust", subtitle: "Shelter & Dwellings", entityType: "operational" },
-    { name: "Treasury Trust", subtitle: "Finance & Allocation", entityType: "operational" },
-    { name: "Enterprise Trust", subtitle: "Commerce & Revenue", entityType: "operational" },
+    { name: "Housing Trust", subtitle: "Shelter & Buildings", entityType: "operational" },
+    { name: "Treasury Trust", subtitle: "Finances & Resources", entityType: "operational" },
+    { name: "Enterprise Trust", subtitle: "Commerce & Innovation", entityType: "operational" },
     { name: "Education Trust", subtitle: "Knowledge & Training", entityType: "operational" },
   ],
   pma: [
-    { name: "Local PMA", subtitle: "Membership · Local", entityType: "pma" },
-    { name: "Regional PMA", subtitle: "Membership · Regional", entityType: "pma" },
-  ],
-  platform: [
-    { name: "Platform Trust", subtitle: "Digital Infrastructure", entityType: "platform" },
+    { name: "Private Membership Association", subtitle: "(PMA)", entityType: "pma" },
+    { name: "Local PMA", subtitle: "Sub-PMA · Local Chapter", entityType: "pma" },
   ],
   chapter: [
-    { name: "Regional Chapter", subtitle: "Regional Governance", entityType: "chapter" },
+    { name: "Chapter", subtitle: "Regional Community", entityType: "chapter" },
   ],
   commune: [
-    { name: "Heaven's Gate", subtitle: "Community Unit", entityType: "community" },
-    { name: "Commune", subtitle: "Local Stewardship", entityType: "community" },
+    { name: "Commune", subtitle: "Local Residential Group", entityType: "commune" },
+  ],
+  guild: [
+    { name: "Guild", subtitle: "Functional Group", entityType: "guild" },
   ],
   project: [
-    { name: "Project", subtitle: "Initiative", entityType: "project" },
+    { name: "Project", subtitle: "Time-Bound Initiative", entityType: "project" },
+  ],
+  beneficiary: [
+    { name: "Beneficiaries & Stewards", subtitle: "All Members", entityType: "beneficiary" },
   ],
 };
 
@@ -309,6 +331,29 @@ function ConnectionLines({
 // ENTITY NODE (with connection handle, clone, drag)
 // ═══════════════════════════════════════════════════════════
 
+type NodeSizeVariant = 'compact' | 'standard' | 'wide' | 'prominent';
+
+function getNodeSizeVariant(layer: string): NodeSizeVariant {
+  switch (layer) {
+    case 'charter': return 'wide';
+    case 'trust': return 'wide';
+    case 'pma': return 'prominent';
+    case 'beneficiary': return 'wide';
+    case 'chapter':
+    case 'commune':
+    case 'guild':
+    case 'project': return 'compact';
+    default: return 'standard';
+  }
+}
+
+const NODE_SIZE_CLASSES: Record<NodeSizeVariant, string> = {
+  compact: 'min-w-[140px] max-w-[175px] px-4 py-2.5',
+  standard: 'min-w-[160px] max-w-[200px] px-5 py-3',
+  wide: 'min-w-[220px] max-w-[300px] px-6 py-4',
+  prominent: 'min-w-[280px] max-w-[400px] px-8 py-5',
+};
+
 function EntityNode({
   entity,
   isSelected,
@@ -320,6 +365,7 @@ function EntityNode({
   onClone,
   onStartConnect,
   onDragStart,
+  sizeOverride,
 }: {
   entity: TrustEntity;
   isSelected: boolean;
@@ -331,8 +377,12 @@ function EntityNode({
   onClone: () => void;
   onStartConnect: (entityId: string) => void;
   onDragStart: (e: React.DragEvent, entity: TrustEntity) => void;
+  sizeOverride?: NodeSizeVariant;
 }) {
   const config = LAYER_CONFIG[entity.layer] || LAYER_CONFIG.project;
+  const sizeVariant = sizeOverride || getNodeSizeVariant(entity.layer);
+  const sizeClasses = NODE_SIZE_CLASSES[sizeVariant];
+  const isProminent = sizeVariant === 'prominent';
 
   return (
     <div
@@ -343,79 +393,45 @@ function EntityNode({
       onClick={onClick}
       className={`
         relative group cursor-pointer select-none
-        rounded-xl border-2 px-5 py-3.5 min-w-[170px] max-w-[220px]
+        rounded-xl border-2 ${sizeClasses}
         transition-all duration-200 ease-out shadow-md
-        ${config.nodeBg} ${config.nodeBorder} ${config.nodeText}
+        ${entity.color ? '' : config.nodeBg} ${config.nodeBorder} ${entity.color ? 'text-white' : config.nodeText}
         ${isSelected ? 'ring-3 ring-royal-gold ring-offset-2 ring-offset-white scale-105 shadow-xl' : ''}
         ${isConnecting && connectFrom !== entity.id ? 'hover:ring-2 hover:ring-cyan-500 hover:ring-offset-2 hover:ring-offset-white' : ''}
         ${!isConnecting ? 'hover:scale-105 hover:shadow-xl hover:brightness-110' : ''}
       `}
+      style={entity.color ? { backgroundColor: entity.color } : undefined}
     >
-      {/* Drag grip */}
-      <div className="absolute -left-1.5 top-1/2 -translate-y-1/2 hidden group-hover:flex opacity-50 hover:opacity-90 cursor-grab text-white/70">
-        <GripVertical className="w-3.5 h-3.5" />
-      </div>
-
       {/* Status indicator */}
       {entity.status === 'planned' && (
-        <div className="absolute -top-2 -right-2 w-4 h-4 rounded-full bg-yellow-400 border-2 border-white shadow" title="Planned" />
+        <div className="absolute -top-1.5 -right-1.5 w-3.5 h-3.5 rounded-full bg-yellow-400 border-2 border-white shadow" title="Planned" />
       )}
 
       {/* Entity name */}
-      <p className="font-cinzel font-bold text-sm leading-tight text-center">
+      <p className={`font-cinzel font-bold leading-tight text-center ${isProminent ? 'text-base' : 'text-sm'}`}>
         {entity.name}
       </p>
 
       {/* Subtitle */}
       {entity.subtitle && (
-        <p className="text-[11px] opacity-70 text-center mt-0.5 leading-tight">
+        <p className={`opacity-70 text-center mt-0.5 leading-tight ${isProminent ? 'text-xs' : 'text-[11px]'}`}>
           {entity.subtitle}
         </p>
       )}
 
-      {/* Location/acreage */}
-      {(entity.location || entity.acreage) && (
-        <p className="text-[10px] opacity-50 text-center mt-0.5">
-          {[entity.location, entity.acreage].filter(Boolean).join(' · ')}
-        </p>
+      {/* Connection handle (bottom center) — only show in connect mode */}
+      {isConnecting && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onStartConnect(entity.id);
+          }}
+          className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-cyan-500 border-2 border-white flex items-center justify-center hover:bg-cyan-400 hover:scale-125 transition-all z-10 shadow-md"
+          title="Click to connect"
+        >
+          <Circle className="w-1.5 h-1.5 fill-current text-white" />
+        </button>
       )}
-
-      {/* Connection handle (bottom center) */}
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          onStartConnect(entity.id);
-        }}
-        className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-cyan-500 border-2 border-white hidden group-hover:flex items-center justify-center hover:bg-cyan-400 hover:scale-125 transition-all z-10 shadow-md"
-        title="Click to connect"
-      >
-        <Circle className="w-2 h-2 fill-current text-white" />
-      </button>
-
-      {/* Hover action buttons (top right) */}
-      <div className="absolute -top-3 -right-3 hidden group-hover:flex items-center gap-0.5 z-10">
-        <button
-          onClick={(e) => { e.stopPropagation(); onClone(); }}
-          className="w-6 h-6 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white flex items-center justify-center shadow-lg transition-colors"
-          title="Clone"
-        >
-          <Copy className="w-3 h-3" />
-        </button>
-        <button
-          onClick={(e) => { e.stopPropagation(); onEdit(); }}
-          className="w-6 h-6 rounded-full bg-blue-500 hover:bg-blue-400 text-white flex items-center justify-center shadow-lg transition-colors"
-          title="Edit"
-        >
-          <Edit className="w-3 h-3" />
-        </button>
-        <button
-          onClick={(e) => { e.stopPropagation(); onDelete(); }}
-          className="w-6 h-6 rounded-full bg-red-500 hover:bg-red-400 text-white flex items-center justify-center shadow-lg transition-colors"
-          title="Delete"
-        >
-          <Trash2 className="w-3 h-3" />
-        </button>
-      </div>
     </div>
   );
 }
@@ -639,24 +655,32 @@ function DetailSidebar({
     <Sheet open={open} onOpenChange={(o) => !o && onClose()}>
       <SheetContent className="w-[380px] sm:w-[420px] overflow-y-auto p-0">
         {/* Header with entity color */}
-        <div className={`${config.nodeBg} ${config.nodeText} p-5 border-b ${config.nodeBorder}`}>
+        <div
+          className={`${entity.color ? 'text-white' : `${config.nodeBg} ${config.nodeText}`} p-5 border-b ${config.nodeBorder}`}
+          style={entity.color ? { backgroundColor: entity.color } : undefined}
+        >
           <SheetHeader>
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0 flex-1">
-                <Badge className={`text-[10px] mb-2 ${config.nodeColor} text-white border-0`}>
+                <Badge className="text-[10px] mb-2 bg-white/20 text-white border-0 backdrop-blur">
                   {config.label} Layer
                 </Badge>
-                <SheetTitle className={`font-cinzel text-lg ${config.nodeText} leading-tight`}>
+                <SheetTitle className="font-cinzel text-lg text-white leading-tight">
                   {entity.name}
                 </SheetTitle>
                 {entity.subtitle && (
-                  <p className="text-sm opacity-70 mt-0.5">{entity.subtitle}</p>
+                  <p className="text-sm opacity-80 mt-0.5">{entity.subtitle}</p>
                 )}
               </div>
             </div>
           </SheetHeader>
           {/* Quick actions */}
-          <div className="flex items-center gap-2 mt-3">
+          <div className="flex items-center gap-2 mt-3 flex-wrap">
+            <DocumentBuilderButton
+              entity={entity}
+              allEntities={allEntities}
+              relationships={relationships}
+            />
             <Button
               size="sm"
               variant="secondary"
@@ -795,18 +819,24 @@ function DetailSidebar({
             <Label className="text-[10px] uppercase tracking-wider text-gray-500 font-semibold">Notes</Label>
             <Textarea value={form.notes || ""} onChange={(e) => setForm(f => ({ ...f, notes: e.target.value }))} rows={2} className="mt-1" />
           </div>
+          {/* spacer so sticky footer doesn't cover last field */}
+          <div className="h-16" />
+        </div>
 
-          {/* Save button */}
-          {hasChanges && (
-            <Button
-              onClick={handleSave}
-              disabled={isSaving}
-              className="w-full bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel"
-            >
-              {isSaving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Check className="w-4 h-4 mr-2" />}
-              Save Changes
-            </Button>
-          )}
+        {/* Sticky save footer — always visible */}
+        <div className="sticky bottom-0 bg-white border-t border-gray-200 px-5 py-3 shadow-[0_-2px_8px_rgba(0,0,0,0.06)]">
+          <Button
+            onClick={handleSave}
+            disabled={isSaving || !hasChanges}
+            className={`w-full font-cinzel transition-all ${
+              hasChanges
+                ? 'bg-royal-gold hover:bg-royal-gold/90 text-royal-navy'
+                : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+            }`}
+          >
+            {isSaving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Check className="w-4 h-4 mr-2" />}
+            {hasChanges ? 'Save Changes' : 'No Changes'}
+          </Button>
         </div>
       </SheetContent>
     </Sheet>
@@ -871,6 +901,15 @@ export default function AdminTrustStructure() {
       toast({ title: "Structure seeded", description: "Default entities and relationships created." });
     },
     onError: (err: Error) => toast({ title: "Seed failed", description: err.message, variant: "destructive" }),
+  });
+
+  const resetMutation = useMutation({
+    mutationFn: () => apiRequest("POST", "/api/admin/trust-structure/reset"),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/trust-structure"] });
+      toast({ title: "Structure reset", description: "Trust structure has been reset to defaults." });
+    },
+    onError: (err: Error) => toast({ title: "Reset failed", description: err.message, variant: "destructive" }),
   });
 
   const createEntityMutation = useMutation({
@@ -1087,6 +1126,10 @@ export default function AdminTrustStructure() {
     entities: entities.filter(e => e.layer === layer).sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0)),
   }));
 
+  // Group entities by section for two-arm layout
+  const getEntitiesForLayers = (layers: string[]) =>
+    entities.filter(e => layers.includes(e.layer)).sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+
   const activeLayers = entitiesByLayer.filter(g => g.entities.length > 0);
   const totalValue = entities.reduce((sum, e) => sum + (e.totalValue || 0), 0);
   const totalRevenue = entities.reduce((sum, e) => sum + (e.annualRevenue || 0), 0);
@@ -1116,7 +1159,7 @@ export default function AdminTrustStructure() {
                 <Layers className="w-6 h-6 text-royal-gold" />
                 Trust Structure
               </h1>
-              <p className="text-sm text-gray-500">Click nodes to edit &middot; Drag to move layers &middot; Use handles to connect</p>
+              <p className="text-sm text-gray-500">Click any node to edit, delete, or view details</p>
             </div>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -1140,74 +1183,43 @@ export default function AdminTrustStructure() {
             >
               <LinkIcon className="w-4 h-4 mr-2" /> Relationships
             </Button>
-            {entities.length > 0 && (
-              <Button
-                onClick={() => {
-                  if (confirm("This will reload the default trust structure template. Any custom changes will remain — only missing defaults will be added. Continue?")) {
-                    seedMutation.mutate();
-                  }
-                }}
-                disabled={seedMutation.isPending}
-                variant="outline"
-                className="font-cinzel border-dashed"
-              >
-                <RefreshCw className={`w-4 h-4 mr-2 ${seedMutation.isPending ? 'animate-spin' : ''}`} />
-                Reload Defaults
-              </Button>
-            )}
           </div>
         </div>
 
-        {/* ════════════ STATS ROW ════════════ */}
-        <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 mb-4">
-          {[
-            { label: "Entities", value: entities.length },
-            { label: "Relationships", value: relationships.length },
-            { label: "Active Layers", value: activeLayers.length },
-            { label: "Active", value: entities.filter(e => e.status === 'active').length },
-            { label: "Total Value", value: totalValue > 0 ? `$${(totalValue / 100).toLocaleString()}` : "\u2014" },
-            { label: "Annual Rev", value: totalRevenue > 0 ? `$${(totalRevenue / 100).toLocaleString()}` : "\u2014" },
-          ].map((stat, i) => (
-            <div key={i} className="bg-white rounded-lg border px-3 py-2 text-center">
-              <p className="text-lg font-bold text-royal-navy">{stat.value}</p>
-              <p className="text-[10px] text-gray-500 uppercase tracking-wide">{stat.label}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* ════════════ RELATIONSHIP LEGEND / FILTER ════════════ */}
-        <div className="bg-white rounded-t-xl border border-gray-200 border-b-0 px-4 py-3 flex flex-wrap items-center gap-2">
-          <button
-            onClick={() => setActiveFilter(null)}
-            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all border ${
-              activeFilter === null
-                ? 'bg-royal-navy text-white border-royal-navy'
-                : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100'
-            }`}
-          >
-            All Relationships
-          </button>
-          {Object.entries(RELATIONSHIP_CONFIG).map(([type, cfg]) => {
-            const count = relationships.filter(r => r.relationshipType === type).length;
-            return (
+        {/* ════════════ COMPACT STATS + LEGEND (collapsible) ════════════ */}
+        <div className="bg-white rounded-t-xl border border-gray-200 border-b-0 px-4 py-2.5 flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center gap-4 text-xs text-gray-500">
+            <span><strong className="text-royal-navy">{entities.length}</strong> entities</span>
+            <span><strong className="text-royal-navy">{relationships.length}</strong> relationships</span>
+          </div>
+          <div className="flex flex-wrap items-center gap-1.5">
+            <button
+              onClick={() => setActiveFilter(null)}
+              className={`px-2.5 py-1 rounded-full text-[11px] font-medium transition-all border ${
+                activeFilter === null
+                  ? 'bg-royal-navy text-white border-royal-navy'
+                  : 'bg-gray-50 text-gray-500 border-gray-200 hover:bg-gray-100'
+              }`}
+            >
+              All
+            </button>
+            {Object.entries(RELATIONSHIP_CONFIG).filter(([type]) => {
+              return relationships.some(r => r.relationshipType === type);
+            }).map(([type, cfg]) => (
               <button
                 key={type}
                 onClick={() => setActiveFilter(activeFilter === type ? null : type)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all border ${
+                className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-medium transition-all border ${
                   activeFilter === type
                     ? 'bg-royal-navy text-white border-royal-navy'
-                    : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100'
+                    : 'bg-gray-50 text-gray-500 border-gray-200 hover:bg-gray-100'
                 }`}
               >
-                <span
-                  className="w-4 h-1 rounded-full inline-block"
-                  style={{ backgroundColor: cfg.strokeColor }}
-                />
+                <span className="w-3 h-0.5 rounded-full inline-block" style={{ backgroundColor: cfg.strokeColor }} />
                 {cfg.label}
-                {count > 0 && <span className="text-[10px] opacity-50">({count})</span>}
               </button>
-            );
-          })}
+            ))}
+          </div>
         </div>
 
         {/* ════════════ CONNECT MODE BAR ════════════ */}
@@ -1246,17 +1258,11 @@ export default function AdminTrustStructure() {
         {/* ════════════ DIAGRAM AREA ════════════ */}
         <div
           ref={diagramRef}
-          className="relative bg-gradient-to-b from-slate-50 to-gray-100 rounded-b-xl border border-gray-200 border-t-0 overflow-auto"
+          className="relative bg-slate-50/80 rounded-b-xl border border-gray-200 border-t-0 overflow-auto"
           style={{ minHeight: '520px' }}
         >
-          {/* Subtle grid pattern */}
-          <div className="absolute inset-0 opacity-[0.4] pointer-events-none" style={{
-            backgroundImage: 'radial-gradient(circle, #cbd5e1 0.5px, transparent 0.5px)',
-            backgroundSize: '24px 24px',
-          }} />
-
           {/* Zoom controls */}
-          <div className="sticky top-3 float-right mr-3 mt-3 z-20 flex items-center gap-1 bg-white/90 backdrop-blur rounded-lg border border-gray-200 p-1 shadow-sm">
+          <div className="sticky top-3 float-right mr-3 mt-3 z-20 flex items-center gap-1 bg-white/80 backdrop-blur rounded-lg border border-gray-200 p-0.5 shadow-sm">
             <button
               onClick={() => setZoom(z => Math.max(0.5, z - 0.1))}
               className="w-7 h-7 flex items-center justify-center text-gray-500 hover:text-gray-800 rounded transition-colors"
@@ -1281,7 +1287,7 @@ export default function AdminTrustStructure() {
           {/* SVG connection lines */}
           <ConnectionLines lines={lines} activeFilter={activeFilter} tempLine={tempLine} />
 
-          {/* Layer rows */}
+          {/* Two-arm diagram layout */}
           <div
             className="relative py-8 px-4"
             style={{ transform: `scale(${zoom})`, transformOrigin: 'top center', zIndex: 2 }}
@@ -1293,74 +1299,281 @@ export default function AdminTrustStructure() {
                 <p className="text-gray-500 text-sm font-cinzel">Loading default trust structure...</p>
               </div>
             ) : (
-              /* ── Populated diagram ── */
-              <div className="space-y-12">
-                {entitiesByLayer.map(({ layer, config, entities: layerEntities }) => {
-                  const isCoreLayer = LAYERS_ORDER.indexOf(layer) < 5;
-                  if (layerEntities.length === 0 && !isCoreLayer) return null;
+              /* ── Two-arm populated diagram ── */
+              <div className="flex flex-col items-center gap-2">
+                {/* Title */}
+                <h2 className="font-cinzel text-lg tracking-[0.15em] text-gray-500 uppercase text-center mb-4">
+                  Ecclesia Basilikos Trust Ecosystem
+                </h2>
 
-                  const isDragOver = dragOverLayer === layer;
-
+                {/* ── CONSTITUTIONAL ROOT (centered) ── */}
+                {(() => {
+                  const charterEntities = getEntitiesForLayers(['charter']);
                   return (
                     <div
-                      key={layer}
-                      className={`flex items-start gap-6 rounded-xl transition-all duration-200 py-3 -mx-2 px-2 ${
-                        isDragOver ? 'bg-cyan-100/70 ring-2 ring-cyan-400/50' : ''
-                      }`}
-                      onDragOver={(e) => handleDragOver(e, layer)}
+                      className={`group/section flex flex-col items-center gap-4 py-3 rounded-xl transition-all ${dragOverLayer === 'charter' ? 'bg-cyan-100/70 ring-2 ring-cyan-400/50' : ''}`}
+                      onDragOver={(e) => handleDragOver(e, 'charter')}
                       onDragLeave={handleDragLeave}
-                      onDrop={(e) => handleDrop(e, layer)}
+                      onDrop={(e) => handleDrop(e, 'charter')}
                     >
-                      {/* Layer label */}
-                      <div className="w-32 shrink-0 text-right pt-3">
-                        <p className="text-[10px] uppercase tracking-[0.2em] text-gray-400 font-semibold leading-tight">
-                          {config.label}
-                        </p>
-                        <p className="text-[9px] text-gray-400 mt-0.5 hidden sm:block">
-                          {config.subtitle}
-                        </p>
-                      </div>
+                      {charterEntities.map((entity) => (
+                        <EntityNode
+                          key={entity.id} entity={entity}
+                          isSelected={selectedEntity === entity.id} isConnecting={connectMode} connectFrom={connectFrom}
+                          onClick={() => handleEntityClick(entity.id)}
+                          onEdit={() => { setSelectedEntity(entity.id); setSidebarEntity(entity); }}
+                          onDelete={() => handleDeleteEntity(entity.id)}
+                          onClone={() => handleClone(entity)}
+                          onStartConnect={handleStartConnect} onDragStart={handleDragStart}
+                        />
+                      ))}
+                      {inlineAddLayer === 'charter' ? (
+                        <InlineAddForm layer="charter" templates={LAYER_TEMPLATES.charter || []}
+                          onSubmit={handleInlineAdd} onCancel={() => setInlineAddLayer(null)} isPending={createEntityMutation.isPending} />
+                      ) : (
+                        <button onClick={() => setInlineAddLayer('charter')}
+                          className="border-2 border-dashed border-gray-200 hover:border-gray-400 rounded-xl w-8 h-8 flex items-center justify-center text-gray-300 hover:text-gray-500 transition-all bg-white/40 hover:bg-white/80 opacity-0 group-hover/section:opacity-100"
+                          title="Add Constitutional entity">
+                          <Plus className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
+                  );
+                })()}
 
-                      {/* Entity nodes */}
-                      <div className="flex-1 flex flex-wrap justify-center items-start gap-5 min-h-[70px]">
-                        {layerEntities.map((entity) => (
+                {/* ── GOVERNANCE ANCHOR (centered) ── */}
+                {(() => {
+                  const trustEntitiesList = getEntitiesForLayers(['trust']);
+                  return (
+                    <div
+                      className={`group/section flex flex-col items-center gap-4 py-3 rounded-xl transition-all ${dragOverLayer === 'trust' ? 'bg-cyan-100/70 ring-2 ring-cyan-400/50' : ''}`}
+                      onDragOver={(e) => handleDragOver(e, 'trust')}
+                      onDragLeave={handleDragLeave}
+                      onDrop={(e) => handleDrop(e, 'trust')}
+                    >
+                      {trustEntitiesList.map((entity) => (
+                        <EntityNode
+                          key={entity.id} entity={entity}
+                          isSelected={selectedEntity === entity.id} isConnecting={connectMode} connectFrom={connectFrom}
+                          onClick={() => handleEntityClick(entity.id)}
+                          onEdit={() => { setSelectedEntity(entity.id); setSidebarEntity(entity); }}
+                          onDelete={() => handleDeleteEntity(entity.id)}
+                          onClone={() => handleClone(entity)}
+                          onStartConnect={handleStartConnect} onDragStart={handleDragStart}
+                        />
+                      ))}
+                      {inlineAddLayer === 'trust' ? (
+                        <InlineAddForm layer="trust" templates={LAYER_TEMPLATES.trust || []}
+                          onSubmit={handleInlineAdd} onCancel={() => setInlineAddLayer(null)} isPending={createEntityMutation.isPending} />
+                      ) : (
+                        <button onClick={() => setInlineAddLayer('trust')}
+                          className="border-2 border-dashed border-gray-200 hover:border-gray-400 rounded-xl w-8 h-8 flex items-center justify-center text-gray-300 hover:text-gray-500 transition-all bg-white/40 hover:bg-white/80 opacity-0 group-hover/section:opacity-100"
+                          title="Add Governance entity">
+                          <Plus className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
+                  );
+                })()}
+
+                {/* ══════ TWO-ARM SPLIT ══════ */}
+                <div className="flex gap-8 lg:gap-16 items-start justify-center w-full mt-4">
+
+                  {/* ── LEFT ARM: ASSET STEWARDSHIP ── */}
+                  <div className="group/section flex-1 max-w-[480px]">
+                    <div className="relative mb-6">
+                      <div className="border-t border-gray-300 w-full" />
+                      <span className="absolute left-3 -translate-y-1/2 bg-gradient-to-b from-slate-50 to-gray-100 px-2 text-[10px] uppercase tracking-[0.2em] text-gray-400 font-semibold">
+                        Asset Stewardship
+                      </span>
+                    </div>
+                    <div
+                      className={`flex flex-wrap justify-center items-start gap-4 min-h-[80px] p-4 rounded-xl border border-dashed border-gray-300 bg-white/30 transition-all ${
+                        dragOverLayer === 'operational' ? 'bg-cyan-100/70 ring-2 ring-cyan-400/50 border-cyan-400' : ''
+                      }`}
+                      onDragOver={(e) => handleDragOver(e, 'operational')}
+                      onDragLeave={handleDragLeave}
+                      onDrop={(e) => handleDrop(e, 'operational')}
+                    >
+                      {getEntitiesForLayers(['operational']).map((entity) => (
+                        <EntityNode
+                          key={entity.id} entity={entity}
+                          isSelected={selectedEntity === entity.id} isConnecting={connectMode} connectFrom={connectFrom}
+                          onClick={() => handleEntityClick(entity.id)}
+                          onEdit={() => { setSelectedEntity(entity.id); setSidebarEntity(entity); }}
+                          onDelete={() => handleDeleteEntity(entity.id)}
+                          onClone={() => handleClone(entity)}
+                          onStartConnect={handleStartConnect} onDragStart={handleDragStart}
+                        />
+                      ))}
+                      {inlineAddLayer === 'operational' ? (
+                        <InlineAddForm layer="operational" templates={LAYER_TEMPLATES.operational || []}
+                          onSubmit={handleInlineAdd} onCancel={() => setInlineAddLayer(null)} isPending={createEntityMutation.isPending} />
+                      ) : (
+                        <button onClick={() => setInlineAddLayer('operational')}
+                          className="border-2 border-dashed border-gray-200 hover:border-gray-400 rounded-xl w-8 h-8 flex items-center justify-center text-gray-300 hover:text-gray-500 transition-all self-center bg-white/40 hover:bg-white/80 opacity-0 group-hover/section:opacity-100"
+                          title="Add Operational Trust">
+                          <Plus className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* ── RIGHT ARM: COMMUNITY GOVERNANCE ── */}
+                  <div className="group/section flex-1 max-w-[480px]">
+                    <div className="relative mb-6">
+                      <div className="border-t border-gray-300 w-full" />
+                      <span className="absolute left-3 -translate-y-1/2 bg-gradient-to-b from-slate-50 to-gray-100 px-2 text-[10px] uppercase tracking-[0.2em] text-gray-400 font-semibold">
+                        Community Governance
+                      </span>
+                    </div>
+                    <div className="flex flex-col items-center gap-6">
+
+                      {/* PMA */}
+                      <div
+                        className={`flex flex-wrap justify-center items-start gap-4 w-full rounded-xl transition-all py-2 ${
+                          dragOverLayer === 'pma' ? 'bg-cyan-100/70 ring-2 ring-cyan-400/50' : ''
+                        }`}
+                        onDragOver={(e) => handleDragOver(e, 'pma')}
+                        onDragLeave={handleDragLeave}
+                        onDrop={(e) => handleDrop(e, 'pma')}
+                      >
+                        {getEntitiesForLayers(['pma']).map((entity) => (
                           <EntityNode
-                            key={entity.id}
-                            entity={entity}
-                            isSelected={selectedEntity === entity.id}
-                            isConnecting={connectMode}
-                            connectFrom={connectFrom}
+                            key={entity.id} entity={entity}
+                            isSelected={selectedEntity === entity.id} isConnecting={connectMode} connectFrom={connectFrom}
                             onClick={() => handleEntityClick(entity.id)}
                             onEdit={() => { setSelectedEntity(entity.id); setSidebarEntity(entity); }}
                             onDelete={() => handleDeleteEntity(entity.id)}
                             onClone={() => handleClone(entity)}
-                            onStartConnect={handleStartConnect}
-                            onDragStart={handleDragStart}
+                            onStartConnect={handleStartConnect} onDragStart={handleDragStart}
                           />
                         ))}
-
-                        {/* Inline add form or add button */}
-                        {inlineAddLayer === layer ? (
-                          <InlineAddForm
-                            layer={layer}
-                            templates={LAYER_TEMPLATES[layer] || []}
-                            onSubmit={handleInlineAdd}
-                            onCancel={() => setInlineAddLayer(null)}
-                            isPending={createEntityMutation.isPending}
-                          />
+                        {inlineAddLayer === 'pma' ? (
+                          <InlineAddForm layer="pma" templates={LAYER_TEMPLATES.pma || []}
+                            onSubmit={handleInlineAdd} onCancel={() => setInlineAddLayer(null)} isPending={createEntityMutation.isPending} />
                         ) : (
-                          <button
-                            onClick={() => setInlineAddLayer(layer)}
-                            className="border-2 border-dashed border-gray-300 hover:border-gray-400 rounded-xl w-12 h-12 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-all self-center bg-white/50 hover:bg-white/80"
-                            title={`Add ${config.label} entity`}
-                          >
+                          <button onClick={() => setInlineAddLayer('pma')}
+                            className="border-2 border-dashed border-gray-200 hover:border-gray-400 rounded-xl w-8 h-8 flex items-center justify-center text-gray-300 hover:text-gray-500 transition-all self-center bg-white/40 hover:bg-white/80 opacity-0 group-hover/section:opacity-100"
+                            title="Add PMA">
                             <Plus className="w-4 h-4" />
                           </button>
                         )}
                       </div>
+
+                      {/* Chapters → Communes (hierarchical) */}
+                      <div className="flex flex-col items-center gap-3 w-full">
+                        {['chapter', 'commune'].map((layer) => {
+                          const layerConfig = LAYER_CONFIG[layer];
+                          const layerEnts = getEntitiesForLayers([layer]);
+                          return (
+                            <div
+                              key={layer}
+                              className={`flex flex-wrap justify-center items-start gap-3 w-full py-2 rounded-xl transition-all ${
+                                dragOverLayer === layer ? 'bg-cyan-100/70 ring-2 ring-cyan-400/50' : ''
+                              }`}
+                              onDragOver={(e) => handleDragOver(e, layer)}
+                              onDragLeave={handleDragLeave}
+                              onDrop={(e) => handleDrop(e, layer)}
+                            >
+                              {layerEnts.map((entity) => (
+                                <EntityNode
+                                  key={entity.id} entity={entity}
+                                  isSelected={selectedEntity === entity.id} isConnecting={connectMode} connectFrom={connectFrom}
+                                  onClick={() => handleEntityClick(entity.id)}
+                                  onEdit={() => { setSelectedEntity(entity.id); setSidebarEntity(entity); }}
+                                  onDelete={() => handleDeleteEntity(entity.id)}
+                                  onClone={() => handleClone(entity)}
+                                  onStartConnect={handleStartConnect} onDragStart={handleDragStart}
+                                />
+                              ))}
+                              {inlineAddLayer === layer ? (
+                                <InlineAddForm layer={layer} templates={LAYER_TEMPLATES[layer] || []}
+                                  onSubmit={handleInlineAdd} onCancel={() => setInlineAddLayer(null)} isPending={createEntityMutation.isPending} />
+                              ) : (
+                                <button onClick={() => setInlineAddLayer(layer)}
+                                  className="border-2 border-dashed border-gray-200 hover:border-gray-400 rounded-xl w-7 h-7 flex items-center justify-center text-gray-300 hover:text-gray-500 transition-all self-center bg-white/40 hover:bg-white/80 opacity-0 group-hover/section:opacity-100"
+                                  title={`Add ${layerConfig.label}`}>
+                                  <Plus className="w-3 h-3" />
+                                </button>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {/* Guilds & Projects (cross-cutting) */}
+                      <div className="flex flex-wrap justify-center items-start gap-3 w-full">
+                        {['guild', 'project'].map((layer) => {
+                          const layerConfig = LAYER_CONFIG[layer];
+                          const layerEnts = getEntitiesForLayers([layer]);
+                          return layerEnts.map((entity) => (
+                            <div
+                              key={entity.id}
+                              className={`rounded-xl transition-all ${dragOverLayer === layer ? 'bg-cyan-100/70 ring-2 ring-cyan-400/50' : ''}`}
+                              onDragOver={(e) => handleDragOver(e, layer)}
+                              onDragLeave={handleDragLeave}
+                              onDrop={(e) => handleDrop(e, layer)}
+                            >
+                              <EntityNode
+                                entity={entity}
+                                isSelected={selectedEntity === entity.id} isConnecting={connectMode} connectFrom={connectFrom}
+                                onClick={() => handleEntityClick(entity.id)}
+                                onEdit={() => { setSelectedEntity(entity.id); setSidebarEntity(entity); }}
+                                onDelete={() => handleDeleteEntity(entity.id)}
+                                onClone={() => handleClone(entity)}
+                                onStartConnect={handleStartConnect} onDragStart={handleDragStart}
+                              />
+                            </div>
+                          )).concat([
+                            inlineAddLayer === layer ? (
+                              <InlineAddForm key={`add-${layer}`} layer={layer} templates={LAYER_TEMPLATES[layer] || []}
+                                onSubmit={handleInlineAdd} onCancel={() => setInlineAddLayer(null)} isPending={createEntityMutation.isPending} />
+                            ) : (
+                              <button key={`btn-${layer}`} onClick={() => setInlineAddLayer(layer)}
+                                className="border-2 border-dashed border-gray-200 hover:border-gray-400 rounded-xl w-7 h-7 flex items-center justify-center text-gray-300 hover:text-gray-500 transition-all self-center bg-white/40 hover:bg-white/80 opacity-0 group-hover/section:opacity-100"
+                                title={`Add ${layerConfig.label}`}>
+                                <Plus className="w-3 h-3" />
+                              </button>
+                            ),
+                          ]);
+                        }).flat()}
+                      </div>
                     </div>
-                  );
-                })}
+                  </div>
+                </div>
+
+                {/* ── BENEFICIARIES & STEWARDS (centered, below both arms) ── */}
+                <div className="mt-8 w-full">
+                  <div
+                    className={`group/section flex flex-col items-center gap-4 py-3 rounded-xl transition-all ${dragOverLayer === 'beneficiary' ? 'bg-cyan-100/70 ring-2 ring-cyan-400/50' : ''}`}
+                    onDragOver={(e) => handleDragOver(e, 'beneficiary')}
+                    onDragLeave={handleDragLeave}
+                    onDrop={(e) => handleDrop(e, 'beneficiary')}
+                  >
+                    {getEntitiesForLayers(['beneficiary']).map((entity) => (
+                      <EntityNode
+                        key={entity.id} entity={entity}
+                        isSelected={selectedEntity === entity.id} isConnecting={connectMode} connectFrom={connectFrom}
+                        onClick={() => handleEntityClick(entity.id)}
+                        onEdit={() => { setSelectedEntity(entity.id); setSidebarEntity(entity); }}
+                        onDelete={() => handleDeleteEntity(entity.id)}
+                        onClone={() => handleClone(entity)}
+                        onStartConnect={handleStartConnect} onDragStart={handleDragStart}
+                      />
+                    ))}
+                    {inlineAddLayer === 'beneficiary' ? (
+                      <InlineAddForm layer="beneficiary" templates={LAYER_TEMPLATES.beneficiary || []}
+                        onSubmit={handleInlineAdd} onCancel={() => setInlineAddLayer(null)} isPending={createEntityMutation.isPending} />
+                    ) : (
+                      <button onClick={() => setInlineAddLayer('beneficiary')}
+                        className="border-2 border-dashed border-gray-200 hover:border-gray-400 rounded-xl w-8 h-8 flex items-center justify-center text-gray-300 hover:text-gray-500 transition-all bg-white/40 hover:bg-white/80 opacity-0 group-hover/section:opacity-100"
+                        title="Add Beneficiary entity">
+                        <Plus className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
+                </div>
               </div>
             )}
           </div>
@@ -1370,9 +1583,9 @@ export default function AdminTrustStructure() {
         {entities.length > 0 && (
           <div className="mt-6 grid sm:grid-cols-3 gap-3">
             {[
-              { icon: Crown, title: "Authority Flows Downward", desc: "Constitutional authority originates from the charter and flows through governance to operational entities." },
-              { icon: Shield, title: "Stewardship, Not Ownership", desc: "Trustees administer corpus for beneficiaries. Legal title is separated from beneficial interest." },
-              { icon: Users, title: "Each Commune Has Its PMA", desc: "Every community unit establishes its own Private Membership Association for local governance." },
+              { icon: Crown, title: "Two Arms, One Body", desc: "The EBT authorizes two parallel arms: operational trusts hold assets, and the PMA organizes people. Neither controls the other." },
+              { icon: Shield, title: "Stewardship, Not Ownership", desc: "Trustees administer corpus for beneficiaries. Legal title is separated from beneficial interest. Members have use rights, not ownership." },
+              { icon: Users, title: "Beneficiaries & Stewards", desc: "Every member is both a beneficiary (receiving from the asset arm) and a steward (contributing through the people arm). The relationship is reciprocal." },
             ].map((p, i) => (
               <div key={i} className="bg-gray-50 rounded-lg border p-4 flex items-start gap-3">
                 <p.icon className="w-5 h-5 text-royal-gold shrink-0 mt-0.5" />

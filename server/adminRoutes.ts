@@ -1538,6 +1538,19 @@ router.post('/trust-structure/seed', requireAdmin, async (req, res) => {
   }
 });
 
+// Reset trust structure — delete everything and re-seed defaults
+router.post('/trust-structure/reset', requireAdmin, async (req, res) => {
+  try {
+    await storage.resetTrustStructure();
+    const structure = await storage.getTrustStructure();
+    await auditLog(req.user!.id, 'DELETE', 'TRUST_STRUCTURE', 'all', null, { action: 'reset' }, req.ip, req.headers['user-agent']);
+    res.json(structure);
+  } catch (error) {
+    logger.error({ err: error }, 'Error resetting trust structure');
+    res.status(500).json({ error: 'Failed to reset trust structure' });
+  }
+});
+
 // Create a trust entity
 router.post('/trust-entities', requireAdmin, async (req, res) => {
   try {

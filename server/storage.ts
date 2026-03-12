@@ -356,6 +356,7 @@ export interface IStorage {
   deleteTrustRelationship(id: string): Promise<void>;
   getTrustStructure(): Promise<{ entities: TrustEntity[]; relationships: TrustRelationship[] }>;
   seedTrustStructure(): Promise<void>;
+  resetTrustStructure(): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -2232,43 +2233,58 @@ export class DatabaseStorage implements IStorage {
     const existing = await db.select().from(trustEntities).limit(1);
     if (existing.length > 0) return;
 
-    // === LAYER 1: CHARTER ===
-    const [charter] = await db.insert(trustEntities).values({
+    // ══════════════════════════════════════════════════════════
+    // TWO-ARM TRUST ECOSYSTEM
+    //
+    //              [NCLT] (Charter + Constitutional Root)
+    //                 ↓
+    //              [EBT] (Governance Anchor)
+    //            ↙         ↘
+    //     ASSET ARM      PEOPLE ARM
+    //     (Trusts)        (PMA)
+    //     hold the      organize who
+    //     assets        benefits
+    //            ↘         ↙
+    //       [Beneficiaries & Stewards]
+    // ══════════════════════════════════════════════════════════
+
+    // === CONSTITUTIONAL ROOT ===
+    const [nclt] = await db.insert(trustEntities).values({
       name: "New Covenant Legacy Trust",
-      subtitle: "Constitutional Root",
+      subtitle: "Constitutional Root & Covenant Charter",
       layer: "charter",
       entityType: "charter",
-      description: "The covenant charter established under divine authority. Source of all governance, stewardship mandates, and community philosophy. Holds intellectual property, core charter documents, and long-term reserves.",
-      charter: "Established under the authority of the New Covenant, this charter anchors the entire trust network in divine law and constitutional principles. The grantor irrevocably conveys the corpus into trust for the benefit of the ecclesia and its members in perpetuity.",
+      description: "The irrevocable constitutional root trust and covenant charter. Established under divine authority, it is both the founding legal vehicle and the philosophical cornerstone. Source of all governance, stewardship mandates, and community philosophy. Holds intellectual property, core charter documents, and long-term reserves.",
+      charter: "Established under the authority of the New Covenant, this trust anchors the entire trust network in divine law and constitutional principles. The grantor irrevocably conveys the corpus into trust for the benefit of the ecclesia and its members in perpetuity. It defines the mission, values, and divine mandate for covenant community life.",
       legalBasis: "First Amendment right of free association; Constitutional trust principles; Common law express trust; UCC Article 9 exemptions for ecclesiastical trusts",
       trusteeLabel: "Mission Founder (Grantor)",
       protectorLabel: "Protector Council (3-member oversight body)",
-      notes: "The charter trust is irrevocable. All sub-trusts derive their authority from this document. Amendments require unanimous Protector Council approval.",
-      color: "#DC2626",
+      notes: "The NCLT is irrevocable. All sub-trusts derive their authority from this document. Amendments require unanimous Protector Council approval. The covenant charter is embedded as the founding purpose statement.",
+      color: "#8B2500",
       icon: "scroll",
       sortOrder: 1,
       status: "active",
     }).returning();
 
-    // === LAYER 2: TRUST (Mission Anchor) ===
+    // === GOVERNANCE ANCHOR ===
     const [ebt] = await db.insert(trustEntities).values({
       name: "Ecclesia Basilikos Trust",
-      subtitle: "Mission Anchor",
+      subtitle: "Governance Anchor",
       layer: "trust",
       entityType: "trust",
-      description: "The mission anchor trust. Stewards the mission, protects the charter, oversees governance principles, authorizes new chapters and communes, and safeguards core assets including IP, platform ownership, and major land assets.",
-      charter: "To steward the mission of the ecclesia, administering all sub-trusts and operational mandates under the authority of the New Covenant Legacy Trust charter.",
+      description: "The governance anchor trust. Stewards the mission, protects the charter, oversees governance principles. Authorizes two parallel arms: operational trusts (asset stewardship) and the PMA (community governance). Safeguards core assets including IP, platform ownership, and major land assets.",
+      charter: "To steward the mission of the ecclesia, administering all sub-trusts and the PMA under the authority of the New Covenant Legacy Trust.",
       legalBasis: "Express trust under common law; First Amendment ecclesiastical governance",
       trusteeLabel: "Administrative Steward (Trustee)",
       protectorLabel: "Protector Council — checks & balance oversight",
-      notes: "The EBT is the operational governance layer. The trustee administers day-to-day operations while the Protector Council ensures alignment with the charter. All new sub-trusts, chapters, and PMAs must be authorized here.",
+      notes: "The EBT is the operational governance layer. The trustee administers day-to-day operations while the Protector Council ensures alignment with the charter. Authorizes both the asset arm (operational trusts) and the people arm (PMA) independently.",
       color: "#1E3A5F",
       icon: "crown",
       sortOrder: 2,
       status: "active",
     }).returning();
 
-    // === LAYER 3: OPERATIONAL TRUSTS ===
+    // === ASSET ARM: OPERATIONAL TRUSTS ===
     const [landTrust] = await db.insert(trustEntities).values({
       name: "Land Trust",
       subtitle: "Stewardship of Land",
@@ -2279,27 +2295,25 @@ export class DatabaseStorage implements IStorage {
       legalBasis: "Land trust doctrine; Beneficial interest separated from legal title",
       trusteeLabel: "Land Steward (Trustee)",
       protectorLabel: "EBT Oversight",
-      notes: "Land is held in trust and never individually owned. Members have beneficial use rights through their PMA membership. This structure protects land from individual creditors and ensures perpetual community stewardship.",
+      notes: "Land is held in trust and never individually owned. Members have beneficial use rights through their PMA membership.",
       color: "#16A34A",
       icon: "map-pin",
       sortOrder: 10,
       status: "active",
-      acreage: "59.8 acres",
-      totalValue: 34180000,
     }).returning();
 
     const [housingTrust] = await db.insert(trustEntities).values({
       name: "Housing Trust",
-      subtitle: "Shelter & Dwellings",
+      subtitle: "Shelter & Buildings",
       layer: "operational",
       entityType: "trust",
-      description: "Administers housing structures, shelters, and dwellings. Ensures community members have access to covenant-aligned shelter. Manages construction, maintenance, and allocation of dwelling units.",
+      description: "Administers housing structures, shelters, and buildings. Ensures community members have access to covenant-aligned shelter. Manages construction, maintenance, and allocation of dwelling units.",
       charter: "To provide and maintain shelter and dwelling infrastructure for the benefit of ecclesia members and their families.",
       legalBasis: "Express trust; Cooperative housing principles",
       trusteeLabel: "Housing Steward (Trustee)",
       protectorLabel: "EBT Oversight",
-      notes: "Housing is allocated based on need, contribution, and family size. Members do not own dwellings — they have beneficial use rights. Maintenance is a shared community responsibility.",
-      color: "#CA8A04",
+      notes: "Housing is allocated based on need, contribution, and family size. Members do not own dwellings — they have beneficial use rights.",
+      color: "#6366F1",
       icon: "home",
       sortOrder: 11,
       status: "active",
@@ -2307,7 +2321,7 @@ export class DatabaseStorage implements IStorage {
 
     const [treasuryTrust] = await db.insert(trustEntities).values({
       name: "Treasury Trust",
-      subtitle: "Finance & Allocation",
+      subtitle: "Finances & Resources",
       layer: "operational",
       entityType: "trust",
       description: "Manages financial contributions, allocations, reserves, and the economic infrastructure of the trust network. Handles PMA contributions and redistribution to operational sub-trusts.",
@@ -2315,17 +2329,16 @@ export class DatabaseStorage implements IStorage {
       legalBasis: "Express trust; PMA contribution agreements; Private exchange (not taxable income)",
       trusteeLabel: "Treasury Steward (Trustee)",
       protectorLabel: "EBT Oversight + Annual Audit",
-      notes: "All financial flows are private member contributions, not commercial transactions. The treasury operates under lawful money principles where applicable. Annual allocation budgets are approved by the Protector Council.",
-      color: "#2563EB",
+      notes: "All financial flows are private member contributions, not commercial transactions. The treasury operates under lawful money principles where applicable.",
+      color: "#CA8A04",
       icon: "banknote",
       sortOrder: 12,
       status: "active",
-      annualRevenue: 5240000,
     }).returning();
 
     const [enterpriseTrust] = await db.insert(trustEntities).values({
       name: "Enterprise Trust",
-      subtitle: "Commerce & Revenue",
+      subtitle: "Commerce & Innovation",
       layer: "operational",
       entityType: "trust",
       description: "Oversees commercial activities, revenue generation, and enterprise development. Isolates commercial liability — if one activity has legal problems, it doesn't endanger the entire system.",
@@ -2333,8 +2346,8 @@ export class DatabaseStorage implements IStorage {
       legalBasis: "Express trust; Commercial liability isolation",
       trusteeLabel: "Enterprise Steward (Trustee)",
       protectorLabel: "EBT Oversight",
-      notes: "Each enterprise operates as a separate activity under this trust for liability isolation. Current enterprises include agricultural sales, digital products, and educational services. Revenue flows to the Treasury Trust for redistribution.",
-      color: "#9333EA",
+      notes: "Each enterprise operates as a separate activity under this trust for liability isolation. Revenue flows to the Treasury Trust for redistribution.",
+      color: "#0F766E",
       icon: "building",
       sortOrder: 13,
       status: "active",
@@ -2342,268 +2355,201 @@ export class DatabaseStorage implements IStorage {
 
     const [educationTrust] = await db.insert(trustEntities).values({
       name: "Education Trust",
-      subtitle: "Academy & Training",
+      subtitle: "Knowledge & Training",
       layer: "operational",
       entityType: "trust",
-      description: "Administers educational programs, courses, curriculum development, and the training infrastructure for community members and leadership development.",
+      description: "Administers educational programs, courses, curriculum development, and the training infrastructure. Covers trust law fundamentals, agricultural skills, community governance, spiritual formation, and leadership development.",
       charter: "To develop, deliver, and steward educational resources, courses, and training programs that equip members for covenant community life and leadership.",
       legalBasis: "Express trust; First Amendment religious education",
       trusteeLabel: "Education Steward (Trustee)",
       protectorLabel: "EBT Oversight",
-      notes: "Curriculum includes trust law fundamentals, lawful money principles, agricultural skills, community governance, and spiritual formation. The platform serves as the primary delivery mechanism for courses.",
+      notes: "The platform serves as the primary delivery mechanism for courses. Curriculum is developed by guilds and delivered through chapters.",
       color: "#0EA5E9",
       icon: "graduation-cap",
       sortOrder: 14,
       status: "active",
     }).returning();
 
-    // === LAYER 4: PMA (People Layer) ===
+    // === PEOPLE ARM: PMA & COMMUNITY GOVERNANCE ===
     const [mainPma] = await db.insert(trustEntities).values({
-      name: "Ecclesia Basilikos PMA",
-      subtitle: "People Layer",
+      name: "Private Membership Association",
+      subtitle: "(PMA) — People Layer",
       layer: "pma",
       entityType: "pma",
-      description: "The primary Private Membership Association. Members join the community through the PMA. They are beneficiary participants, not owners of trust assets. Protects internal community governance, voluntary association rights, and private member interaction.",
+      description: "The primary Private Membership Association. Members join the community through the PMA. They are beneficiary participants, not owners of trust assets. The PMA is a peer of the operational trusts — both authorized by the EBT. The PMA organizes the people; the trusts hold the assets for their benefit.",
       charter: "To organize the voluntary association of members under the ecclesia covenant, establishing their rights, obligations, and mutual commitments as beneficiaries of the trust network.",
       legalBasis: "First Amendment right of free association; NAACP v. Alabama (1958); Roberts v. United States Jaycees (1984); Private contract law",
       trusteeLabel: "PMA Administrator",
       protectorLabel: "Membership Council",
-      notes: "Membership is voluntary and requires signing the PMA agreement. Members are beneficiaries of trust assets, not owners. The PMA protects internal governance from external interference. All member interactions are private and not subject to public regulation.",
+      notes: "Membership is voluntary and requires signing the PMA agreement. Members are beneficiaries of trust assets, not owners. The PMA protects internal governance from external interference.",
       color: "#7C3AED",
       icon: "users",
       sortOrder: 20,
       status: "active",
-      memberCount: 24,
     }).returning();
 
-    // === LAYER 5: PLATFORM (Community OS) ===
-    const [platform] = await db.insert(trustEntities).values({
-      name: "Ecclesia Platform",
-      subtitle: "Community OS",
-      layer: "platform",
-      entityType: "platform",
-      description: "The digital platform layer — the administrative operating system of the trust network. Manages membership records, chapter structure, project coordination, education systems, governance tools, and communication.",
-      charter: "To provide the digital infrastructure for administering the trust network, delivering education, managing membership, and coordinating community operations.",
-      legalBasis: "Platform operates under PMA private association protections",
-      trusteeLabel: "Platform Administrator",
-      protectorLabel: "PMA Oversight",
-      notes: "The platform is the primary interface for members to access courses, manage their profiles, participate in forums, and engage with community governance. It is owned by the trust, not any individual.",
-      color: "#F59E0B",
-      icon: "monitor",
-      sortOrder: 25,
-      status: "active",
-    }).returning();
-
-    // === LAYER 6: CHAPTERS (Geographic) ===
-    const [hg1] = await db.insert(trustEntities).values({
-      name: "Heaven's Gate 1",
-      subtitle: "Rural · 42 acres",
+    const [chapters] = await db.insert(trustEntities).values({
+      name: "Chapters",
+      subtitle: "Regional Communities",
       layer: "chapter",
       entityType: "chapter",
-      description: "Rural chapter settlement on 42 acres. Agricultural stewardship, sustainable living, and covenant fellowship. Coordinates local members, meetups, resource sharing, and project launches.",
-      charter: "To steward 42 acres of rural land for agricultural production, sustainable community living, and covenant fellowship.",
-      legalBasis: "Land held in Land Trust; Operations governed by chapter PMA",
+      description: "Regional community chapters organized geographically. Each chapter coordinates local members, meetups, resource sharing, and project launches within a defined area. Chapters contain communes.",
+      charter: "To organize and govern regional community units under the authority of the PMA.",
       trusteeLabel: "Chapter Steward",
-      protectorLabel: "EBT + Local Council",
-      location: "Rural",
-      acreage: "42 acres",
-      notes: "Primary agricultural chapter. Includes farmland, communal living spaces, workshop areas, and gathering spaces. Self-sustaining food production is a core objective.",
-      color: "#059669",
-      icon: "trees",
+      protectorLabel: "PMA Oversight",
+      notes: "Chapters are the geographic organizing unit. Each chapter may establish its own sub-PMA for local governance. Chapters contain one or more communes.",
+      color: "#7C3AED",
+      icon: "map-pin",
       sortOrder: 30,
       status: "active",
-      memberCount: 0,
-      totalValue: 20000000,
     }).returning();
 
-    const [hg2] = await db.insert(trustEntities).values({
-      name: "Heaven's Gate 2",
-      subtitle: "Gateway · 17 acres",
-      layer: "chapter",
-      entityType: "chapter",
-      description: "Gateway chapter on 17 acres. Transitional housing, training center, and preparation for covenant community life.",
-      charter: "To provide transitional housing, training facilities, and a gateway experience for new members entering covenant community life.",
-      legalBasis: "Land held in Land Trust; Operations governed by chapter PMA",
-      trusteeLabel: "Chapter Steward",
-      protectorLabel: "EBT + Local Council",
-      location: "Gateway",
-      acreage: "17 acres",
-      notes: "Entry-point chapter for new members. Includes discipleship housing, classroom spaces, and small-scale agriculture. Members typically spend 6-12 months here before transitioning to HG1 or leadership roles.",
-      color: "#0891B2",
-      icon: "door-open",
+    const [communes] = await db.insert(trustEntities).values({
+      name: "Communes",
+      subtitle: "Local Residential Groups",
+      layer: "commune",
+      entityType: "commune",
+      description: "Local community groups organized around shared living, resources, and daily life. Communes are the smallest residential unit, nested within chapters. They share meals, labor, and daily responsibilities.",
+      charter: "To organize shared living and resource-sharing groups under chapter authority.",
+      trusteeLabel: "Commune Lead",
+      protectorLabel: "Chapter Steward",
+      notes: "Communes operate within their parent chapter. They share daily life, meals, labor, and resources.",
+      color: "#7C3AED",
+      icon: "sprout",
       sortOrder: 31,
       status: "active",
-      memberCount: 0,
-      totalValue: 14180000,
     }).returning();
 
-    const [hg3] = await db.insert(trustEntities).values({
-      name: "Heaven's Gate 3",
-      subtitle: "Urban Refuge",
-      layer: "chapter",
-      entityType: "chapter",
-      description: "Urban refuge and embassy. Outreach, education, and gathering point for the ecclesia in urban settings.",
-      charter: "To establish an urban presence for outreach, education, and community gathering in a metropolitan area.",
-      legalBasis: "Leased or purchased property held in Land Trust",
-      trusteeLabel: "Chapter Steward (Planned)",
-      protectorLabel: "EBT + Local Council",
-      location: "Urban",
-      notes: "Planned urban chapter. Will serve as an embassy and outreach center. Focus on education, community events, and connecting urban members with rural chapters.",
-      color: "#6366F1",
-      icon: "building-2",
-      sortOrder: 32,
-      status: "planned",
-      memberCount: 0,
-    }).returning();
-
-    // === LAYER 7: COMMUNES (Functional Communities) ===
-    const [farmCommune] = await db.insert(trustEntities).values({
-      name: "HG1 Farming Commune",
-      subtitle: "Agricultural Stewardship",
-      layer: "commune",
-      entityType: "commune",
-      description: "Farming commune within Heaven's Gate 1. Shared agricultural operations, crop management, livestock, and food production.",
-      charter: "To collectively steward agricultural operations at HG1, producing food for the community and generating revenue through surplus sales.",
-      trusteeLabel: "Farm Lead",
-      protectorLabel: "Chapter Steward",
-      notes: "Members contribute labor and share in the harvest. Surplus is sold through the Enterprise Trust. Focus on regenerative agriculture and food sovereignty.",
-      color: "#65A30D",
-      icon: "wheat",
-      sortOrder: 40,
-      status: "planned",
-    }).returning();
-
-    const [discCommune] = await db.insert(trustEntities).values({
-      name: "HG2 Discipleship House",
-      subtitle: "Training & Formation",
-      layer: "commune",
-      entityType: "commune",
-      description: "Discipleship commune within Heaven's Gate 2. Intensive training, mentorship, and preparation for community leadership.",
-      charter: "To provide intensive discipleship training and formation for members preparing for community leadership and covenant life.",
-      trusteeLabel: "Discipleship Lead",
-      protectorLabel: "Chapter Steward",
-      notes: "12-week intensive programs covering trust law, community governance, agricultural basics, financial stewardship, and spiritual formation. Graduates are prepared for leadership roles.",
+    const [guilds] = await db.insert(trustEntities).values({
+      name: "Guilds",
+      subtitle: "Cross-Cutting Functional Groups",
+      layer: "guild",
+      entityType: "guild",
+      description: "Functional groups organized around skills, trades, and areas of expertise. Guilds cross chapter boundaries — a farmer in Chapter A and a farmer in Chapter B are both in the Farming Guild. They provide training, coordination, and quality standards across the network.",
+      charter: "To organize functional working groups that develop and deploy specialized skills across the trust network.",
+      trusteeLabel: "Guild Master",
+      protectorLabel: "PMA Oversight",
+      notes: "Guilds include farming, construction, education, technology, and other vocational groups. They cross geographic boundaries to connect members with shared skills.",
       color: "#D97706",
-      icon: "book-open",
-      sortOrder: 41,
-      status: "planned",
-    }).returning();
-
-    // === LAYER 4b: Chapter PMAs ===
-    const [hg1pma] = await db.insert(trustEntities).values({
-      name: "HG1 PMA",
-      subtitle: "Membership · Rural",
-      layer: "pma",
-      entityType: "pma",
-      description: "Local PMA for Heaven's Gate 1 rural chapter. Governs member rights, obligations, and community participation at the chapter level.",
-      charter: "To govern the voluntary association of members at the Heaven's Gate 1 chapter, establishing local rights and obligations.",
-      legalBasis: "First Amendment; Sub-PMA under Ecclesia Basilikos PMA authority",
-      trusteeLabel: "Local PMA Administrator",
-      protectorLabel: "Main PMA Oversight",
-      notes: "Chapter-level PMA. Members must also be members of the main Ecclesia Basilikos PMA. Local governance decisions are made by chapter members within the authority granted by the main PMA.",
-      color: "#8B5CF6",
-      icon: "shield-check",
-      sortOrder: 50,
+      icon: "users",
+      sortOrder: 32,
       status: "active",
     }).returning();
 
-    const [hg2pma] = await db.insert(trustEntities).values({
-      name: "HG2 PMA",
-      subtitle: "Membership · Gateway",
-      layer: "pma",
-      entityType: "pma",
-      description: "Local PMA for Heaven's Gate 2 gateway chapter. Governs transitional member participation and training program enrollment.",
-      charter: "To govern the voluntary association of members at the Heaven's Gate 2 gateway chapter.",
-      legalBasis: "First Amendment; Sub-PMA under Ecclesia Basilikos PMA authority",
-      trusteeLabel: "Local PMA Administrator",
-      protectorLabel: "Main PMA Oversight",
-      notes: "Gateway chapter PMA. Includes provisions for transitional membership during discipleship training periods.",
-      color: "#8B5CF6",
-      icon: "shield-check",
-      sortOrder: 51,
+    const [projects] = await db.insert(trustEntities).values({
+      name: "Projects",
+      subtitle: "Time-Bound Initiatives",
+      layer: "project",
+      entityType: "project",
+      description: "Specific initiatives and time-bound projects undertaken by members. Projects may span chapters and guilds to accomplish defined objectives. They have a start, end, and deliverable.",
+      charter: "To coordinate specific initiatives and deliverables within the trust ecosystem.",
+      trusteeLabel: "Project Lead",
+      protectorLabel: "PMA Oversight",
+      notes: "Projects draw resources from operational trusts and labor from guild and chapter members. They have defined scope, timeline, and deliverables.",
+      color: "#6B7280",
+      icon: "folder-open",
+      sortOrder: 33,
       status: "active",
     }).returning();
 
-    const [hg3pma] = await db.insert(trustEntities).values({
-      name: "HG3 PMA",
-      subtitle: "Membership · Urban",
-      layer: "pma",
-      entityType: "pma",
-      description: "Local PMA for Heaven's Gate 3 urban chapter. Will govern urban member participation and outreach activities.",
-      charter: "To govern the voluntary association of members at the Heaven's Gate 3 urban chapter.",
-      legalBasis: "First Amendment; Sub-PMA under Ecclesia Basilikos PMA authority",
-      trusteeLabel: "Local PMA Administrator (Planned)",
-      protectorLabel: "Main PMA Oversight",
-      notes: "Planned urban chapter PMA. Will be activated when HG3 chapter launches.",
-      color: "#8B5CF6",
-      icon: "shield-check",
-      sortOrder: 52,
-      status: "planned",
+    // === BENEFICIARIES & STEWARDS ===
+    const [beneficiaries] = await db.insert(trustEntities).values({
+      name: "Beneficiaries & Stewards",
+      subtitle: "All Members",
+      layer: "beneficiary",
+      entityType: "beneficiary",
+      description: "All members of the trust ecosystem. Every member is both a beneficiary (receiving benefits from trust assets) and a steward (contributing labor, skills, and resources through the PMA). This is where the two arms meet: the asset arm provides benefits, and the people arm organizes participation.",
+      charter: "All members participate as both beneficiaries and stewards of the trust network, receiving benefits and contributing to the common good.",
+      trusteeLabel: "Individual Members",
+      protectorLabel: "PMA Membership Council",
+      notes: "Members are not owners — they are beneficiaries with use rights and stewards with responsibilities. The relationship is reciprocal: trust assets benefit members, and members contribute back through the PMA.",
+      color: "#6B7280",
+      icon: "users",
+      sortOrder: 40,
+      status: "active",
     }).returning();
 
-    // === RELATIONSHIPS ===
+    // ══════════════════════════════════════════════════════════
+    // RELATIONSHIPS
+    // ══════════════════════════════════════════════════════════
 
-    // Charter → Trust (Authority)
-    await db.insert(trustRelationships).values({ fromEntityId: charter.id, toEntityId: ebt.id, relationshipType: "authority", label: "Authorizes" });
+    // NCLT → EBT (Authority — constitutional root authorizes governance)
+    await db.insert(trustRelationships).values({
+      fromEntityId: nclt.id, toEntityId: ebt.id,
+      relationshipType: "authority", label: "Authorizes",
+    });
 
-    // Trust → Operational (Grants)
+    // === ASSET ARM: EBT → Operational Trusts (Grants) ===
     await db.insert(trustRelationships).values([
-      { fromEntityId: ebt.id, toEntityId: landTrust.id, relationshipType: "grants", label: "Stewardship mandate" },
-      { fromEntityId: ebt.id, toEntityId: housingTrust.id, relationshipType: "grants" },
-      { fromEntityId: ebt.id, toEntityId: treasuryTrust.id, relationshipType: "grants" },
-      { fromEntityId: ebt.id, toEntityId: enterpriseTrust.id, relationshipType: "oversees" },
-      { fromEntityId: ebt.id, toEntityId: educationTrust.id, relationshipType: "grants" },
+      { fromEntityId: ebt.id, toEntityId: landTrust.id, relationshipType: "grants", label: "Grants stewardship" },
+      { fromEntityId: ebt.id, toEntityId: housingTrust.id, relationshipType: "grants", label: "Grants stewardship" },
+      { fromEntityId: ebt.id, toEntityId: treasuryTrust.id, relationshipType: "grants", label: "Grants stewardship" },
+      { fromEntityId: ebt.id, toEntityId: enterpriseTrust.id, relationshipType: "grants", label: "Grants stewardship" },
+      { fromEntityId: ebt.id, toEntityId: educationTrust.id, relationshipType: "grants", label: "Grants stewardship" },
     ]);
 
-    // Trust → PMA (Establishes)
-    await db.insert(trustRelationships).values({ fromEntityId: ebt.id, toEntityId: mainPma.id, relationshipType: "establishes_pma", label: "Establishes" });
+    // === PEOPLE ARM: EBT → PMA (Establishes) ===
+    await db.insert(trustRelationships).values({
+      fromEntityId: ebt.id, toEntityId: mainPma.id,
+      relationshipType: "establishes_pma", label: "Establishes",
+    });
 
-    // PMA → Platform (Oversees)
-    await db.insert(trustRelationships).values({ fromEntityId: mainPma.id, toEntityId: platform.id, relationshipType: "oversees", label: "Administers" });
-
-    // Operational → Chapters (Land, Funds)
+    // === PEOPLE ARM: PMA → Community Structure ===
     await db.insert(trustRelationships).values([
-      { fromEntityId: landTrust.id, toEntityId: hg1.id, relationshipType: "land" },
-      { fromEntityId: landTrust.id, toEntityId: hg2.id, relationshipType: "land" },
-      { fromEntityId: housingTrust.id, toEntityId: hg1.id, relationshipType: "funds" },
-      { fromEntityId: housingTrust.id, toEntityId: hg2.id, relationshipType: "funds" },
-      { fromEntityId: housingTrust.id, toEntityId: hg3.id, relationshipType: "funds" },
-      { fromEntityId: treasuryTrust.id, toEntityId: enterpriseTrust.id, relationshipType: "funds" },
-      { fromEntityId: educationTrust.id, toEntityId: platform.id, relationshipType: "funds", label: "Curriculum & courses" },
+      { fromEntityId: mainPma.id, toEntityId: chapters.id, relationshipType: "oversees", label: "Organizes" },
+      { fromEntityId: mainPma.id, toEntityId: guilds.id, relationshipType: "oversees", label: "Organizes" },
+      { fromEntityId: mainPma.id, toEntityId: projects.id, relationshipType: "oversees", label: "Organizes" },
     ]);
 
-    // Chapters → Chapter PMAs (Establishes PMA)
+    // Chapters → Communes (hierarchical — communes are nested within chapters)
+    await db.insert(trustRelationships).values({
+      fromEntityId: chapters.id, toEntityId: communes.id,
+      relationshipType: "oversees", label: "Contains",
+    });
+
+    // === CROSS-ARM: Operational Trusts benefit PMA members ===
     await db.insert(trustRelationships).values([
-      { fromEntityId: hg1.id, toEntityId: hg1pma.id, relationshipType: "establishes_pma" },
-      { fromEntityId: hg2.id, toEntityId: hg2pma.id, relationshipType: "establishes_pma" },
-      { fromEntityId: hg3.id, toEntityId: hg3pma.id, relationshipType: "establishes_pma" },
+      { fromEntityId: landTrust.id, toEntityId: beneficiaries.id, relationshipType: "benefits", label: "Benefits" },
+      { fromEntityId: housingTrust.id, toEntityId: beneficiaries.id, relationshipType: "benefits", label: "Benefits" },
+      { fromEntityId: treasuryTrust.id, toEntityId: beneficiaries.id, relationshipType: "benefits", label: "Benefits" },
+      { fromEntityId: enterpriseTrust.id, toEntityId: beneficiaries.id, relationshipType: "benefits", label: "Benefits" },
+      { fromEntityId: educationTrust.id, toEntityId: beneficiaries.id, relationshipType: "benefits", label: "Benefits" },
     ]);
 
-    // Chapter PMAs → Chapters (Remits)
+    // === PMA governs beneficiaries (members organized through PMA) ===
+    await db.insert(trustRelationships).values({
+      fromEntityId: mainPma.id, toEntityId: beneficiaries.id,
+      relationshipType: "oversees", label: "Organizes members",
+    });
+
+    // === Beneficiaries contribute back (remits — upward flow) ===
+    await db.insert(trustRelationships).values({
+      fromEntityId: beneficiaries.id, toEntityId: mainPma.id,
+      relationshipType: "remits", label: "Contributes labor & resources",
+    });
+
+    // === Treasury funds other operational trusts ===
     await db.insert(trustRelationships).values([
-      { fromEntityId: hg1pma.id, toEntityId: hg1.id, relationshipType: "remits" },
-      { fromEntityId: hg2pma.id, toEntityId: hg2.id, relationshipType: "remits" },
-      { fromEntityId: hg3pma.id, toEntityId: hg3.id, relationshipType: "remits" },
+      { fromEntityId: treasuryTrust.id, toEntityId: landTrust.id, relationshipType: "funds", label: "Allocates funds" },
+      { fromEntityId: treasuryTrust.id, toEntityId: housingTrust.id, relationshipType: "funds", label: "Allocates funds" },
+      { fromEntityId: treasuryTrust.id, toEntityId: enterpriseTrust.id, relationshipType: "funds", label: "Allocates funds" },
+      { fromEntityId: treasuryTrust.id, toEntityId: educationTrust.id, relationshipType: "funds", label: "Allocates funds" },
     ]);
 
-    // Chapters → Communes
-    await db.insert(trustRelationships).values([
-      { fromEntityId: hg1.id, toEntityId: farmCommune.id, relationshipType: "oversees" },
-      { fromEntityId: hg2.id, toEntityId: discCommune.id, relationshipType: "oversees" },
-    ]);
+    // === Enterprise revenue flows to treasury ===
+    await db.insert(trustRelationships).values({
+      fromEntityId: enterpriseTrust.id, toEntityId: treasuryTrust.id,
+      relationshipType: "remits", label: "Revenue flows",
+    });
+  }
 
-    // Cross-coordination
-    await db.insert(trustRelationships).values([
-      { fromEntityId: hg1.id, toEntityId: hg2.id, relationshipType: "coordinates" },
-      { fromEntityId: hg2.id, toEntityId: hg3.id, relationshipType: "coordinates" },
-    ]);
-
-    // Main PMA → Chapter PMAs (Authority)
-    await db.insert(trustRelationships).values([
-      { fromEntityId: mainPma.id, toEntityId: hg1pma.id, relationshipType: "authority" },
-      { fromEntityId: mainPma.id, toEntityId: hg2pma.id, relationshipType: "authority" },
-      { fromEntityId: mainPma.id, toEntityId: hg3pma.id, relationshipType: "authority" },
-    ]);
+  async resetTrustStructure(): Promise<void> {
+    // Delete all relationships first (foreign key constraints)
+    await db.delete(trustRelationships);
+    // Delete all entities
+    await db.delete(trustEntities);
+    // Re-seed with defaults
+    await this.seedTrustStructure();
   }
 }
 

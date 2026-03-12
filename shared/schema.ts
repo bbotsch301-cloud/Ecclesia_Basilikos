@@ -969,12 +969,14 @@ export type BeneficialUnit = typeof beneficialUnits.$inferSelect;
 export const trustEntityLayerEnum = pgEnum('trust_entity_layer', [
   'charter',         // Covenant Charter — philosophy & authority
   'trust',           // Ecclesia Basilikos Trust — mission anchor & stewardship
-  'operational',     // Operational Trusts — Land, Housing, Treasury, Enterprise, Education
+  'operational',     // Operational Trusts — Land, Housing, Treasury, Enterprise
   'pma',             // Private Membership Association — people layer
   'platform',        // Digital Platform / Community OS — coordination
   'chapter',         // City/Geographic Chapters
   'commune',         // Functional Communities (farming, discipleship, etc.)
   'project',         // Active Projects within communes/chapters
+  'guild',           // Functional Groups (skills, trades, etc.)
+  'beneficiary',     // Beneficiaries & Stewards — all members
 ]);
 
 // Governance roles within the trust structure
@@ -1028,6 +1030,7 @@ export const trustRelationshipTypeEnum = pgEnum('trust_relationship_type', [
   'establishes_pma', // dashed purple — establishes a PMA
   'oversees',        // dashed orange — oversight
   'coordinates',     // dashed gray — coordination
+  'benefits',        // dashed teal — trusts hold assets for benefit of members
 ]);
 
 export const trustRelationships = pgTable("trust_relationships", {
