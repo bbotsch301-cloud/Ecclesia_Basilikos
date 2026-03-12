@@ -17,6 +17,7 @@ import {
   insertTrustEntitySchema,
   insertTrustRelationshipSchema,
 } from '@shared/schema';
+import { resolveEntity, resolveVariables } from './trustDocumentUtils';
 
 const router = Router();
 
@@ -1614,6 +1615,217 @@ router.delete('/trust-relationships/:id', requireAdmin, async (req, res) => {
   } catch (error) {
     logger.error({ err: error }, 'Error deleting trust relationship');
     res.status(500).json({ error: 'Failed to delete trust relationship' });
+  }
+});
+
+// ================================
+// TRUST DOCUMENT TEMPLATES
+// ================================
+
+router.get('/trust-document-templates', requireAdmin, async (req, res) => {
+  try {
+    const templates = await storage.getTrustDocumentTemplates();
+    res.json(templates);
+  } catch (error) {
+    logger.error({ err: error }, 'Error fetching trust document templates');
+    res.status(500).json({ error: 'Failed to fetch templates' });
+  }
+});
+
+router.get('/trust-document-templates/:id', requireAdmin, async (req, res) => {
+  try {
+    const template = await storage.getTrustDocumentTemplate(req.params.id);
+    if (!template) return res.status(404).json({ error: 'Template not found' });
+    res.json(template);
+  } catch (error) {
+    logger.error({ err: error }, 'Error fetching trust document template');
+    res.status(500).json({ error: 'Failed to fetch template' });
+  }
+});
+
+router.post('/trust-document-templates', requireAdmin, async (req, res) => {
+  try {
+    const { name, description, applicableLayers, status } = req.body;
+    const template = await storage.createTrustDocumentTemplate({ name, description, applicableLayers, status });
+    res.json(template);
+  } catch (error) {
+    logger.error({ err: error }, 'Error creating trust document template');
+    res.status(500).json({ error: 'Failed to create template' });
+  }
+});
+
+router.put('/trust-document-templates/:id', requireAdmin, async (req, res) => {
+  try {
+    const { name, description, applicableLayers, status } = req.body;
+    const template = await storage.updateTrustDocumentTemplate(req.params.id, { name, description, applicableLayers, status });
+    res.json(template);
+  } catch (error) {
+    logger.error({ err: error }, 'Error updating trust document template');
+    res.status(500).json({ error: 'Failed to update template' });
+  }
+});
+
+router.delete('/trust-document-templates/:id', requireAdmin, async (req, res) => {
+  try {
+    const template = await storage.getTrustDocumentTemplate(req.params.id);
+    if (template?.isBuiltIn) {
+      return res.status(400).json({ error: 'Cannot delete built-in templates' });
+    }
+    await storage.deleteTrustDocumentTemplate(req.params.id);
+    res.json({ success: true });
+  } catch (error) {
+    logger.error({ err: error }, 'Error deleting trust document template');
+    res.status(500).json({ error: 'Failed to delete template' });
+  }
+});
+
+router.post('/trust-document-templates/:id/sections', requireAdmin, async (req, res) => {
+  try {
+    const { sections } = req.body;
+    const result = await storage.replaceTrustTemplateSections(req.params.id, sections);
+    await storage.updateTrustDocumentTemplate(req.params.id, {});
+    res.json(result);
+  } catch (error) {
+    logger.error({ err: error }, 'Error replacing template sections');
+    res.status(500).json({ error: 'Failed to update sections' });
+  }
+});
+
+router.post('/trust-document-templates/seed', requireAdmin, async (req, res) => {
+  try {
+    await storage.seedTrustDocumentTemplates();
+    const templates = await storage.getTrustDocumentTemplates();
+    res.json(templates);
+  } catch (error) {
+    logger.error({ err: error }, 'Error seeding trust document templates');
+    res.status(500).json({ error: 'Failed to seed templates' });
+  }
+});
+
+// ================================
+// TRUST DOCUMENTS
+// ================================
+
+router.get('/trust-documents', requireAdmin, async (req, res) => {
+  try {
+    const docs = await storage.getTrustDocuments();
+    res.json(docs);
+  } catch (error) {
+    logger.error({ err: error }, 'Error fetching trust documents');
+    res.status(500).json({ error: 'Failed to fetch documents' });
+  }
+});
+
+router.get('/trust-documents/:id', requireAdmin, async (req, res) => {
+  try {
+    const doc = await storage.getTrustDocumentById(req.params.id);
+    if (!doc) return res.status(404).json({ error: 'Document not found' });
+    res.json(doc);
+  } catch (error) {
+    logger.error({ err: error }, 'Error fetching trust document');
+    res.status(500).json({ error: 'Failed to fetch document' });
+  }
+});
+
+router.post('/trust-documents/generate', requireAdmin, async (req, res) => {
+  try {
+    const { entityId, templateId, title, subtitle, sections } = req.body;
+    const doc = await storage.createTrustDocumentWithSections(
+      { entityId, templateId, title, subtitle, status: 'draft' },
+      sections || []
+    );
+    res.json(doc);
+  } catch (error) {
+    logger.error({ err: error }, 'Error generating trust document');
+    res.status(500).json({ error: 'Failed to generate document' });
+  }
+});
+
+// Generate documents for ALL entities (seeds templates first if needed)
+router.post('/trust-documents/generate-all', requireAdmin, async (req, res) => {
+  try {
+    // Ensure templates are seeded
+    await storage.seedTrustDocumentTemplates();
+    const templates = await storage.getTrustDocumentTemplates();
+    const { entities, relationships } = await storage.getTrustStructure();
+
+    // Check which entities already have documents
+    const existingDocs = await storage.getTrustDocuments();
+    const existingEntityIds = new Set(existingDocs.map(d => d.entityId));
+
+    const generated = [];
+    for (const entity of entities) {
+      if (existingEntityIds.has(entity.id)) continue;
+
+      // Find best template: first one whose applicableLayers includes this entity's layer
+      const template = templates.find(t =>
+        (t.applicableLayers || []).includes(entity.layer) &&
+        !(t.applicableLayers || []).includes('charter') || entity.layer === (t.applicableLayers || [])[0]
+      ) || templates.find(t => (t.applicableLayers || []).includes(entity.layer));
+
+      if (!template) continue;
+
+      const resolved = resolveEntity(entity, entities, relationships);
+      const resolvedSections = template.sections.map((s, i) => ({
+        title: s.title,
+        content: resolveVariables(s.contentTemplate, resolved),
+        sortOrder: s.sortOrder ?? i,
+      }));
+
+      const doc = await storage.createTrustDocumentWithSections(
+        { entityId: entity.id, templateId: template.id, title: template.name, subtitle: entity.name, status: 'draft' },
+        resolvedSections
+      );
+      generated.push(doc);
+    }
+
+    res.json({ generated: generated.length, documents: generated });
+  } catch (error) {
+    logger.error({ err: error }, 'Error generating all trust documents');
+    res.status(500).json({ error: 'Failed to generate all documents' });
+  }
+});
+
+router.put('/trust-documents/:id', requireAdmin, async (req, res) => {
+  try {
+    const { title, subtitle, status } = req.body;
+    const doc = await storage.updateTrustDocumentMeta(req.params.id, { title, subtitle, status });
+    res.json(doc);
+  } catch (error) {
+    logger.error({ err: error }, 'Error updating trust document');
+    res.status(500).json({ error: 'Failed to update document' });
+  }
+});
+
+router.put('/trust-documents/:id/sections/:sectionId', requireAdmin, async (req, res) => {
+  try {
+    const { content } = req.body;
+    const section = await storage.updateTrustDocumentSectionContent(req.params.sectionId, content);
+    res.json(section);
+  } catch (error) {
+    logger.error({ err: error }, 'Error updating document section');
+    res.status(500).json({ error: 'Failed to update section' });
+  }
+});
+
+router.post('/trust-documents/:id/reset', requireAdmin, async (req, res) => {
+  try {
+    const { sections } = req.body;
+    const doc = await storage.resetTrustDocumentFromTemplate(req.params.id, sections || []);
+    res.json(doc);
+  } catch (error) {
+    logger.error({ err: error }, 'Error resetting trust document');
+    res.status(500).json({ error: 'Failed to reset document' });
+  }
+});
+
+router.delete('/trust-documents/:id', requireAdmin, async (req, res) => {
+  try {
+    await storage.deleteTrustDocumentById(req.params.id);
+    res.json({ success: true });
+  } catch (error) {
+    logger.error({ err: error }, 'Error deleting trust document');
+    res.status(500).json({ error: 'Failed to delete document' });
   }
 });
 

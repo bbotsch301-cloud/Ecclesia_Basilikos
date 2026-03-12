@@ -69,6 +69,7 @@ const Billing = lazy(() => import("@/pages/billing"));
 const AdminSubscribers = lazy(() => import("@/pages/admin-subscribers"));
 const AdminTrustStructure = lazy(() => import("@/pages/admin-trust-structure"));
 const AdminWhitePaper = lazy(() => import("@/pages/admin-white-paper"));
+const AdminTrustDocuments = lazy(() => import("@/pages/admin-trust-documents"));
 
 function PageLoader() {
   return (
@@ -144,6 +145,7 @@ function Router() {
             <Route path="/admin/subscribers">{() => <RequireAdmin><SectionErrorBoundary><AdminSubscribers /></SectionErrorBoundary></RequireAdmin>}</Route>
             <Route path="/admin/trust-structure">{() => <RequireAdmin><SectionErrorBoundary><AdminTrustStructure /></SectionErrorBoundary></RequireAdmin>}</Route>
             <Route path="/admin/white-paper">{() => <RequireAdmin><SectionErrorBoundary><AdminWhitePaper /></SectionErrorBoundary></RequireAdmin>}</Route>
+            <Route path="/admin/trust-documents">{() => <RequireAdmin><SectionErrorBoundary><AdminTrustDocuments /></SectionErrorBoundary></RequireAdmin>}</Route>
             <Route path="/admin">{() => <RequireAdmin><SectionErrorBoundary><AdminDashboard /></SectionErrorBoundary></RequireAdmin>}</Route>
             <Route component={NotFound} />
           </Switch>

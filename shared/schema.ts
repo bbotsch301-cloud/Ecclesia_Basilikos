@@ -1090,3 +1090,108 @@ export type InsertTrustEntity = z.infer<typeof insertTrustEntitySchema>;
 export type TrustEntity = typeof trustEntities.$inferSelect;
 export type InsertTrustRelationship = z.infer<typeof insertTrustRelationshipSchema>;
 export type TrustRelationship = typeof trustRelationships.$inferSelect;
+
+// ═══════════════════════════════════════════════════════════
+// TRUST DOCUMENT MANAGEMENT
+// ═══════════════════════════════════════════════════════════
+
+export const trustDocumentTemplates = pgTable("trust_document_templates", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  description: text("description"),
+  applicableLayers: text("applicable_layers").array(),
+  isBuiltIn: boolean("is_built_in").default(false),
+  status: text("status").default('active'),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const trustTemplateSections = pgTable("trust_template_sections", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  templateId: varchar("template_id").notNull().references(() => trustDocumentTemplates.id, { onDelete: 'cascade' }),
+  title: text("title").notNull(),
+  contentTemplate: text("content_template").notNull(),
+  sortOrder: integer("sort_order").default(0),
+});
+
+export const trustDocuments = pgTable("trust_documents", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  entityId: varchar("entity_id").notNull().references(() => trustEntities.id),
+  templateId: varchar("template_id").references(() => trustDocumentTemplates.id),
+  title: text("title").notNull(),
+  subtitle: text("subtitle"),
+  version: integer("version").default(1),
+  status: text("status").default('draft'),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const trustDocumentSections = pgTable("trust_document_sections", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  documentId: varchar("document_id").notNull().references(() => trustDocuments.id, { onDelete: 'cascade' }),
+  title: text("title").notNull(),
+  content: text("content").notNull(),
+  sortOrder: integer("sort_order").default(0),
+});
+
+// Relations
+export const trustDocumentTemplateRelations = relations(trustDocumentTemplates, ({ many }) => ({
+  sections: many(trustTemplateSections),
+}));
+
+export const trustTemplateSectionRelations = relations(trustTemplateSections, ({ one }) => ({
+  template: one(trustDocumentTemplates, {
+    fields: [trustTemplateSections.templateId],
+    references: [trustDocumentTemplates.id],
+  }),
+}));
+
+export const trustDocumentRelations = relations(trustDocuments, ({ one, many }) => ({
+  entity: one(trustEntities, {
+    fields: [trustDocuments.entityId],
+    references: [trustEntities.id],
+  }),
+  template: one(trustDocumentTemplates, {
+    fields: [trustDocuments.templateId],
+    references: [trustDocumentTemplates.id],
+  }),
+  sections: many(trustDocumentSections),
+}));
+
+export const trustDocumentSectionRelations = relations(trustDocumentSections, ({ one }) => ({
+  document: one(trustDocuments, {
+    fields: [trustDocumentSections.documentId],
+    references: [trustDocuments.id],
+  }),
+}));
+
+// Insert schemas
+export const insertTrustDocumentTemplateSchema = createInsertSchema(trustDocumentTemplates).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertTrustTemplateSectionSchema = createInsertSchema(trustTemplateSections).omit({
+  id: true,
+});
+
+export const insertTrustDocumentSchema = createInsertSchema(trustDocuments).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertTrustDocumentSectionSchema = createInsertSchema(trustDocumentSections).omit({
+  id: true,
+});
+
+// Types
+export type TrustDocumentTemplate = typeof trustDocumentTemplates.$inferSelect;
+export type InsertTrustDocumentTemplate = z.infer<typeof insertTrustDocumentTemplateSchema>;
+export type TrustTemplateSectionType = typeof trustTemplateSections.$inferSelect;
+export type InsertTrustTemplateSection = z.infer<typeof insertTrustTemplateSectionSchema>;
+export type TrustDocument = typeof trustDocuments.$inferSelect;
+export type InsertTrustDocument = z.infer<typeof insertTrustDocumentSchema>;
+export type TrustDocumentSection = typeof trustDocumentSections.$inferSelect;
+export type InsertTrustDocumentSection = z.infer<typeof insertTrustDocumentSectionSchema>;

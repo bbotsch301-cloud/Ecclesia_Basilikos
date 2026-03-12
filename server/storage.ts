@@ -91,6 +91,18 @@ import {
   type InsertTrustEntity,
   type TrustRelationship,
   type InsertTrustRelationship,
+  trustDocumentTemplates,
+  trustTemplateSections,
+  trustDocuments,
+  trustDocumentSections,
+  type TrustDocumentTemplate,
+  type InsertTrustDocumentTemplate,
+  type TrustTemplateSectionType,
+  type InsertTrustTemplateSection,
+  type TrustDocument,
+  type InsertTrustDocument,
+  type TrustDocumentSection,
+  type InsertTrustDocumentSection,
 } from "@shared/schema";
 import { eq, and, desc, sql, or, inArray, ilike } from "drizzle-orm";
 import { db } from "./db";
@@ -357,6 +369,24 @@ export interface IStorage {
   getTrustStructure(): Promise<{ entities: TrustEntity[]; relationships: TrustRelationship[] }>;
   seedTrustStructure(): Promise<void>;
   resetTrustStructure(): Promise<void>;
+
+  // Trust Document Templates
+  getTrustDocumentTemplates(): Promise<(TrustDocumentTemplate & { sections: TrustTemplateSectionType[] })[]>;
+  getTrustDocumentTemplate(id: string): Promise<(TrustDocumentTemplate & { sections: TrustTemplateSectionType[] }) | undefined>;
+  createTrustDocumentTemplate(data: InsertTrustDocumentTemplate): Promise<TrustDocumentTemplate>;
+  updateTrustDocumentTemplate(id: string, updates: Partial<InsertTrustDocumentTemplate>): Promise<TrustDocumentTemplate>;
+  deleteTrustDocumentTemplate(id: string): Promise<void>;
+  replaceTrustTemplateSections(templateId: string, sections: Omit<InsertTrustTemplateSection, 'templateId'>[]): Promise<TrustTemplateSectionType[]>;
+  seedTrustDocumentTemplates(): Promise<void>;
+
+  // Trust Documents
+  getTrustDocuments(): Promise<(TrustDocument & { sections: TrustDocumentSection[] })[]>;
+  getTrustDocumentById(id: string): Promise<(TrustDocument & { sections: TrustDocumentSection[] }) | undefined>;
+  createTrustDocumentWithSections(doc: InsertTrustDocument, sections: Omit<InsertTrustDocumentSection, 'documentId'>[]): Promise<TrustDocument & { sections: TrustDocumentSection[] }>;
+  updateTrustDocumentMeta(id: string, updates: Partial<InsertTrustDocument>): Promise<TrustDocument>;
+  updateTrustDocumentSectionContent(sectionId: string, content: string): Promise<TrustDocumentSection>;
+  resetTrustDocumentFromTemplate(id: string, sections: Omit<InsertTrustDocumentSection, 'documentId'>[]): Promise<TrustDocument & { sections: TrustDocumentSection[] }>;
+  deleteTrustDocumentById(id: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -2550,6 +2580,305 @@ export class DatabaseStorage implements IStorage {
     await db.delete(trustEntities);
     // Re-seed with defaults
     await this.seedTrustStructure();
+  }
+
+  // ====== Trust Document Templates ======
+
+  async getTrustDocumentTemplates(): Promise<(TrustDocumentTemplate & { sections: TrustTemplateSectionType[] })[]> {
+    const templates = await db.select().from(trustDocumentTemplates).orderBy(trustDocumentTemplates.name);
+    const allSections = await db.select().from(trustTemplateSections).orderBy(trustTemplateSections.sortOrder);
+    return templates.map(t => ({
+      ...t,
+      sections: allSections.filter(s => s.templateId === t.id),
+    }));
+  }
+
+  async getTrustDocumentTemplate(id: string): Promise<(TrustDocumentTemplate & { sections: TrustTemplateSectionType[] }) | undefined> {
+    const [template] = await db.select().from(trustDocumentTemplates).where(eq(trustDocumentTemplates.id, id));
+    if (!template) return undefined;
+    const sections = await db.select().from(trustTemplateSections)
+      .where(eq(trustTemplateSections.templateId, id))
+      .orderBy(trustTemplateSections.sortOrder);
+    return { ...template, sections };
+  }
+
+  async createTrustDocumentTemplate(data: InsertTrustDocumentTemplate): Promise<TrustDocumentTemplate> {
+    const [created] = await db.insert(trustDocumentTemplates).values(data).returning();
+    return created;
+  }
+
+  async updateTrustDocumentTemplate(id: string, updates: Partial<InsertTrustDocumentTemplate>): Promise<TrustDocumentTemplate> {
+    const [updated] = await db.update(trustDocumentTemplates)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(trustDocumentTemplates.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteTrustDocumentTemplate(id: string): Promise<void> {
+    await db.delete(trustDocumentTemplates).where(eq(trustDocumentTemplates.id, id));
+  }
+
+  async replaceTrustTemplateSections(templateId: string, sections: Omit<InsertTrustTemplateSection, 'templateId'>[]): Promise<TrustTemplateSectionType[]> {
+    await db.delete(trustTemplateSections).where(eq(trustTemplateSections.templateId, templateId));
+    if (sections.length === 0) return [];
+    const rows = sections.map((s, i) => ({
+      ...s,
+      templateId,
+      sortOrder: s.sortOrder ?? i,
+    }));
+    return await db.insert(trustTemplateSections).values(rows).returning();
+  }
+
+  async seedTrustDocumentTemplates(): Promise<void> {
+    const existing = await db.select().from(trustDocumentTemplates).limit(1);
+    if (existing.length > 0) return;
+
+    const templates: { name: string; description: string; layers: string[]; sections: { title: string; content: string }[] }[] = [
+      {
+        name: "Declaration of Trust",
+        description: "Constitutional root charter for the trust ecosystem",
+        layers: ["charter"],
+        sections: [
+          { title: "Scripture Preamble", content: '"But now hath he obtained a more excellent ministry, by how much also he is the mediator of a better covenant, which was established upon better promises."\n— Hebrews 8:6' },
+          { title: "Preamble", content: 'This Declaration of Trust is established on {{date}} under the authority of divine law, constitutional principles, and the inherent right of free association.\n\nThis instrument creates and governs "{{entity.name}}" as an irrevocable express trust, serving as the constitutional root and covenant charter for the entire trust ecosystem described herein.' },
+          { title: "Article I — Purpose & Covenant", content: "{{entity.charter}}" },
+          { title: "Article II — Legal Foundation", content: "{{entity.legalBasis}}" },
+          { title: "Article III — Governance Structure", content: "Trustee: {{entity.trusteeLabel}}\n\nProtector: {{entity.protectorLabel}}\n\nThe Trustee shall administer the Trust corpus and operations in accordance with this Declaration. The Protector Council shall provide oversight and ensure alignment with the covenant purpose." },
+          { title: "Article IV — Description & Scope", content: "{{entity.description}}" },
+          { title: "Article V — Sub-Trusts & Entities Authorized", content: "The following entities are authorized under this trust:\n\n{{children.list}}" },
+          { title: "Article VI — Amendments & Irrevocability", content: "This trust is irrevocable. Amendments to this Declaration require unanimous approval of the Protector Council.\n\n{{entity.notes}}" },
+          { title: "Article VII — Signatures & Attestation", content: "IN WITNESS WHEREOF, the Grantor has executed this Declaration of Trust on the date first written above.\n\n\n____________________________________\n{{entity.trusteeLabel}}\nDate: _______________\n\n\n____________________________________\n{{entity.protectorLabel}}\nDate: _______________" },
+        ],
+      },
+      {
+        name: "Trust Administration Agreement",
+        description: "Governance anchor for the trust ecosystem",
+        layers: ["trust"],
+        sections: [
+          { title: "Scripture Preamble", content: '"And all that believed were together, and had all things common; And sold their possessions and goods, and parted them to all men, as every man had need."\n— Acts 2:44-45' },
+          { title: "Preamble", content: 'This Trust Administration Agreement is executed on {{date}} under the authority of {{parent.names}}.\n\n"{{entity.name}}" serves as the governance anchor for the trust ecosystem rooted in {{root.name}}.' },
+          { title: "Article I — Mission & Charter", content: "{{entity.charter}}" },
+          { title: "Article II — Authority Derived", content: "This trust derives its authority from: {{parent.names}}.\n\n{{entity.legalBasis}}" },
+          { title: "Article III — Governance", content: "Administrative Trustee: {{entity.trusteeLabel}}\n\nProtector/Oversight: {{entity.protectorLabel}}" },
+          { title: "Article IV — Scope & Operations", content: "{{entity.description}}" },
+          { title: "Article V — Additional Provisions", content: "{{entity.notes}}" },
+          { title: "Signatures", content: "Executed on {{date}}.\n\n\n____________________________________\n{{entity.trusteeLabel}}\n\n\n____________________________________\n{{entity.protectorLabel}}" },
+        ],
+      },
+      {
+        name: "Sub-Trust Declaration",
+        description: "Declaration for operational sub-trusts",
+        layers: ["operational"],
+        sections: [
+          { title: "Scripture Preamble", content: '"He that is faithful in that which is least is faithful also in much."\n— Luke 16:10-12' },
+          { title: "Preamble", content: "This Sub-Trust Declaration is executed on {{date}} under the authority granted by {{parent.names}}, ultimately rooted in {{root.name}}." },
+          { title: "Article I — Purpose", content: "{{entity.charter}}" },
+          { title: "Article II — Scope of Operations", content: "{{entity.description}}" },
+          { title: "Article III — Legal Basis", content: "{{entity.legalBasis}}" },
+          { title: "Article IV — Governance", content: "Trustee: {{entity.trusteeLabel}}\n\nOversight: {{entity.protectorLabel}}\n\nAuthority derived from: {{parent.names}}" },
+          { title: "Article V — Beneficiaries", content: "Assets held by this trust are for the benefit of:\n\n{{beneficiaries.list}}" },
+          { title: "Article VI — Financial Provisions", content: "Funding sources: {{funding.sources}}\n\nFunding targets: {{funding.targets}}\n\n{{entity.notes}}" },
+          { title: "Signatures", content: "Executed on {{date}}.\n\n\n____________________________________\n{{entity.trusteeLabel}}\n\n\n____________________________________\n{{entity.protectorLabel}}" },
+        ],
+      },
+      {
+        name: "PMA Agreement",
+        description: "Private Membership Association agreement",
+        layers: ["pma"],
+        sections: [
+          { title: "Scripture Preamble", content: '"And I say also unto thee, That thou art Peter, and upon this rock I will build my church; and the gates of hell shall not prevail against it."\n— Matthew 16:18-19' },
+          { title: "Preamble", content: 'This Private Membership Association Agreement is established on {{date}} under the authority of {{parent.names}}, rooted in {{root.name}}.\n\nThis agreement governs the voluntary association of members under the ecclesia covenant.' },
+          { title: "Article I — Purpose & Mission", content: "{{entity.charter}}" },
+          { title: "Article II — Legal Foundation", content: "{{entity.legalBasis}}" },
+          { title: "Article III — Membership", content: "{{entity.description}}\n\nMembership is voluntary and requires execution of this agreement. Members are beneficiaries of trust assets held by the asset stewardship arm, not owners." },
+          { title: "Article IV — Governance", content: "PMA Administrator: {{entity.trusteeLabel}}\n\nOversight Body: {{entity.protectorLabel}}" },
+          { title: "Article V — Community Structure", content: "The following organizational units operate under this PMA:\n\n{{oversight.targets}}" },
+          { title: "Article VI — Member Rights & Obligations", content: "Members have the right to:\n• Beneficial use of trust assets as allocated\n• Participation in community governance\n• Access to community resources and programs\n• Voluntary withdrawal at any time\n\nMembers have the obligation to:\n• Abide by the covenant charter\n• Contribute labor, skills, or resources as agreed\n• Respect the governance structure\n• Maintain the private nature of the association" },
+          { title: "Article VII — Additional Provisions", content: "{{entity.notes}}" },
+          { title: "Signatures", content: "I, the undersigned, voluntarily enter into this Private Membership Association Agreement.\n\n\nMember: ____________________________________\nDate: _______________\n\n\nPMA Administrator: ____________________________________\n{{entity.trusteeLabel}}\nDate: _______________" },
+        ],
+      },
+      {
+        name: "Chapter Charter",
+        description: "Charter for geographic chapters",
+        layers: ["chapter"],
+        sections: [
+          { title: "Scripture Preamble", content: '"For this cause left I thee in Crete, that thou shouldest set in order the things that are wanting, and ordain elders in every city."\n— Titus 1:5' },
+          { title: "Authorization", content: "This Chapter Charter is issued on {{date}}, authorized by {{parent.names}}." },
+          { title: "Article I — Purpose", content: "{{entity.charter}}" },
+          { title: "Article II — Governance", content: "Chapter Steward: {{entity.trusteeLabel}}\nOversight: {{entity.protectorLabel}}" },
+          { title: "Article III — Sub-Units", content: "The following units operate within this chapter:\n\n{{children.list}}" },
+          { title: "Article IV — Provisions", content: "{{entity.notes}}" },
+          { title: "Signatures", content: "Chapter Steward: ____________________________________\nDate: _______________" },
+        ],
+      },
+      {
+        name: "Commune Operating Agreement",
+        description: "Operating agreement for communes",
+        layers: ["commune"],
+        sections: [
+          { title: "Scripture Preamble", content: '"And they, continuing daily with one accord in the temple, and breaking bread from house to house, did eat their meat with gladness and singleness of heart."\n— Acts 2:46-47' },
+          { title: "Authorization", content: "This Commune Operating Agreement is issued on {{date}}, authorized by {{parent.names}}." },
+          { title: "Article I — Purpose", content: "{{entity.charter}}" },
+          { title: "Article II — Governance", content: "Commune Lead: {{entity.trusteeLabel}}\nOversight: {{entity.protectorLabel}}" },
+          { title: "Article III — Provisions", content: "{{entity.notes}}" },
+          { title: "Signatures", content: "Commune Lead: ____________________________________\nDate: _______________" },
+        ],
+      },
+      {
+        name: "Guild Charter",
+        description: "Charter for skill-based guilds",
+        layers: ["guild"],
+        sections: [
+          { title: "Scripture Preamble", content: '"Every wise hearted among you shall come, and make all that the LORD hath commanded."\n— Exodus 35:10' },
+          { title: "Authorization", content: "This Guild Charter is issued on {{date}}, authorized by {{parent.names}}." },
+          { title: "Article I — Purpose & Scope", content: "{{entity.charter}}" },
+          { title: "Article II — Governance", content: "Guild Master: {{entity.trusteeLabel}}\nOversight: {{entity.protectorLabel}}" },
+          { title: "Article III — Cross-Chapter Operations", content: "This guild operates across all chapters and geographic boundaries. Members from any chapter may participate based on relevant skills and expertise." },
+          { title: "Article IV — Provisions", content: "{{entity.notes}}" },
+          { title: "Signatures", content: "Guild Master: ____________________________________\nDate: _______________" },
+        ],
+      },
+      {
+        name: "Project Authorization",
+        description: "Authorization document for projects",
+        layers: ["project"],
+        sections: [
+          { title: "Authorization", content: "This Project Authorization is issued on {{date}}, authorized by {{parent.names}}." },
+          { title: "Article I — Scope & Deliverables", content: "{{entity.charter}}" },
+          { title: "Article II — Governance", content: "Project Lead: {{entity.trusteeLabel}}\nOversight: {{entity.protectorLabel}}" },
+          { title: "Article III — Provisions", content: "{{entity.notes}}" },
+          { title: "Signatures", content: "Project Lead: ____________________________________\nDate: _______________\n\nAuthorizing Body: ____________________________________\nDate: _______________" },
+        ],
+      },
+      {
+        name: "Beneficial Interest Declaration",
+        description: "Declaration of beneficial interest for members",
+        layers: ["beneficiary"],
+        sections: [
+          { title: "Scripture Preamble", content: '"The labourer is worthy of his reward."\n— 1 Timothy 5:18\n\n"And if children, then heirs; heirs of God, and joint-heirs with Christ."\n— Romans 8:17' },
+          { title: "Declaration", content: "This Beneficial Interest Declaration is issued on {{date}}.\n\nAll members of the trust ecosystem are hereby recognized as both beneficiaries and stewards. Each member holds one (1) Beneficial Unit representing an equal, undivided interest (1/N) in the trust corpus." },
+          { title: "Article I — Rights & Beneficial Interest", content: "{{entity.charter}}\n\nBeneficial interest is derived from the following trust entities:\n\n{{benefit.sources}}" },
+          { title: "Article II — Obligations & Stewardship", content: "Members contribute labor, skills, and resources back to the community through the PMA. The relationship is reciprocal — beneficial interest is contingent on active stewardship participation.\n\nBeneficial Units are:\n    Non-transferable (cannot be sold, traded, or speculated upon)\n    Non-attachable (cannot be seized by external creditors)\n    Revocable only by voluntary withdrawal or covenant violation" },
+          { title: "Article III — Provisions", content: "{{entity.notes}}" },
+        ],
+      },
+      {
+        name: "Generic Trust Entity Document",
+        description: "General-purpose document for any trust entity",
+        layers: ["charter", "trust", "operational", "pma", "chapter", "commune", "guild", "project", "beneficiary"],
+        sections: [
+          { title: "Overview", content: 'Document generated on {{date}} for "{{entity.name}}".' },
+          { title: "Purpose", content: "{{entity.charter}}" },
+          { title: "Legal Basis", content: "{{entity.legalBasis}}" },
+          { title: "Governance", content: "Trustee: {{entity.trusteeLabel}}\nProtector: {{entity.protectorLabel}}" },
+          { title: "Notes", content: "{{entity.notes}}" },
+        ],
+      },
+    ];
+
+    for (const tmpl of templates) {
+      const [template] = await db.insert(trustDocumentTemplates).values({
+        name: tmpl.name,
+        description: tmpl.description,
+        applicableLayers: tmpl.layers,
+        isBuiltIn: true,
+        status: 'active',
+      }).returning();
+
+      if (tmpl.sections.length > 0) {
+        await db.insert(trustTemplateSections).values(
+          tmpl.sections.map((s, i) => ({
+            templateId: template.id,
+            title: s.title,
+            contentTemplate: s.content,
+            sortOrder: i,
+          }))
+        );
+      }
+    }
+  }
+
+  // ====== Trust Documents ======
+
+  async getTrustDocuments(): Promise<(TrustDocument & { sections: TrustDocumentSection[] })[]> {
+    const docs = await db.select().from(trustDocuments).orderBy(desc(trustDocuments.updatedAt));
+    const allSections = await db.select().from(trustDocumentSections).orderBy(trustDocumentSections.sortOrder);
+    return docs.map(d => ({
+      ...d,
+      sections: allSections.filter(s => s.documentId === d.id),
+    }));
+  }
+
+  async getTrustDocumentById(id: string): Promise<(TrustDocument & { sections: TrustDocumentSection[] }) | undefined> {
+    const [doc] = await db.select().from(trustDocuments).where(eq(trustDocuments.id, id));
+    if (!doc) return undefined;
+    const sections = await db.select().from(trustDocumentSections)
+      .where(eq(trustDocumentSections.documentId, id))
+      .orderBy(trustDocumentSections.sortOrder);
+    return { ...doc, sections };
+  }
+
+  async createTrustDocumentWithSections(doc: InsertTrustDocument, sections: Omit<InsertTrustDocumentSection, 'documentId'>[]): Promise<TrustDocument & { sections: TrustDocumentSection[] }> {
+    const [created] = await db.insert(trustDocuments).values(doc).returning();
+    let createdSections: TrustDocumentSection[] = [];
+    if (sections.length > 0) {
+      createdSections = await db.insert(trustDocumentSections).values(
+        sections.map((s, i) => ({
+          ...s,
+          documentId: created.id,
+          sortOrder: s.sortOrder ?? i,
+        }))
+      ).returning();
+    }
+    return { ...created, sections: createdSections };
+  }
+
+  async updateTrustDocumentMeta(id: string, updates: Partial<InsertTrustDocument>): Promise<TrustDocument> {
+    const [updated] = await db.update(trustDocuments)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(trustDocuments.id, id))
+      .returning();
+    return updated;
+  }
+
+  async updateTrustDocumentSectionContent(sectionId: string, content: string): Promise<TrustDocumentSection> {
+    const [updated] = await db.update(trustDocumentSections)
+      .set({ content })
+      .where(eq(trustDocumentSections.id, sectionId))
+      .returning();
+    return updated;
+  }
+
+  async resetTrustDocumentFromTemplate(id: string, sections: Omit<InsertTrustDocumentSection, 'documentId'>[]): Promise<TrustDocument & { sections: TrustDocumentSection[] }> {
+    // Get current doc to increment version
+    const [doc] = await db.select().from(trustDocuments).where(eq(trustDocuments.id, id));
+    if (!doc) throw new Error('Document not found');
+
+    // Increment version
+    const [updated] = await db.update(trustDocuments)
+      .set({ version: (doc.version || 1) + 1, updatedAt: new Date() })
+      .where(eq(trustDocuments.id, id))
+      .returning();
+
+    // Replace sections
+    await db.delete(trustDocumentSections).where(eq(trustDocumentSections.documentId, id));
+    let createdSections: TrustDocumentSection[] = [];
+    if (sections.length > 0) {
+      createdSections = await db.insert(trustDocumentSections).values(
+        sections.map((s, i) => ({
+          ...s,
+          documentId: id,
+          sortOrder: s.sortOrder ?? i,
+        }))
+      ).returning();
+    }
+    return { ...updated, sections: createdSections };
+  }
+
+  async deleteTrustDocumentById(id: string): Promise<void> {
+    await db.delete(trustDocuments).where(eq(trustDocuments.id, id));
   }
 }
 
