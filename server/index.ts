@@ -6,6 +6,7 @@ import path from "path";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic } from "./vite";
 import { initializeEmailTemplates } from "./initializeEmailTemplates";
+import { storage } from "./storage";
 import { csrfProtection } from "./csrf";
 import logger from "./logger";
 import { requestId } from "./requestId";
@@ -109,6 +110,15 @@ if (process.env.NODE_ENV === "production" && !process.env.BASE_URL) {
 
   // Initialize email templates
   await initializeEmailTemplates();
+
+  // Seed trust structure and document templates on startup
+  try {
+    await storage.seedTrustStructure();
+    await storage.seedTrustDocumentTemplates();
+    logger.info("Trust structure and document templates seeded (if not already present)");
+  } catch (err) {
+    logger.error({ err }, "Failed to seed trust data on startup");
+  }
 
   app.use((err: any, req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
