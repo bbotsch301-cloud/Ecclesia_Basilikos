@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import AdminLayout from "@/components/layout/admin-layout";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { Button } from "@/components/ui/button";
@@ -12,14 +12,8 @@ import {
   Crown,
   Shield,
   Building2,
-  Users,
-  Globe,
-  MapPin,
-  Sprout,
   Coins,
   Scale,
-  BookOpen,
-  Landmark,
   Heart,
   Layers,
   ArrowRight,
@@ -686,7 +680,7 @@ function SectionBlock({ section }: { section: WhitePaperSection }) {
       </div>
 
       {/* Main content */}
-      <div className="pl-[52px]">
+      <div className="pl-0 sm:pl-[52px]">
         <pre className="whitespace-pre-wrap font-serif text-[15px] leading-relaxed text-slate-700 mb-4">
           {section.content}
         </pre>
@@ -737,17 +731,13 @@ function SectionBlock({ section }: { section: WhitePaperSection }) {
 
 export default function AdminWhitePaper() {
   usePageTitle("Admin - White Paper");
-  const printRef = useRef<HTMLDivElement>(null);
 
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  const handlePrint = () => {
-    const printWindow = window.open("", "_blank");
-    if (!printWindow) return;
-
+  const getWhitePaperHtml = () => {
     const allContent = sections
       .map((s) => {
         let html = `<div class="section-title">Section ${s.number} — ${s.title}</div>`;
@@ -763,103 +753,120 @@ export default function AdminWhitePaper() {
       })
       .join("\n");
 
-    printWindow.document.write(`
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <title>Ecclesia Basilikos Trust Economy — White Paper</title>
-        <style>
-          @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap');
-          body {
-            font-family: 'Crimson Pro', 'Georgia', serif;
-            max-width: 8.5in;
-            margin: 0.75in auto;
-            padding: 0 0.5in;
-            color: #1a1a1a;
-            font-size: 11pt;
-            line-height: 1.65;
-          }
-          h1 {
-            font-family: 'Cinzel', serif;
-            text-align: center;
-            font-size: 20pt;
-            letter-spacing: 0.15em;
-            margin-bottom: 4pt;
-            text-transform: uppercase;
-          }
-          .doc-subtitle {
-            font-family: 'Cinzel', serif;
-            text-align: center;
-            font-size: 12pt;
-            color: #555;
-            margin-bottom: 8pt;
-          }
-          .doc-date {
-            text-align: center;
-            font-size: 10pt;
-            color: #888;
-            margin-bottom: 24pt;
-          }
-          .section-title {
-            font-family: 'Cinzel', serif;
-            font-size: 13pt;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            border-bottom: 1px solid #ccc;
-            padding-bottom: 4pt;
-            margin-top: 24pt;
-            margin-bottom: 10pt;
-          }
-          .subsection-title {
-            font-family: 'Cinzel', serif;
-            font-size: 11pt;
-            font-weight: 600;
-            margin-top: 16pt;
-            margin-bottom: 6pt;
-            color: #333;
-          }
-          .section-content {
-            white-space: pre-wrap;
-            margin-bottom: 10pt;
-          }
-          .separator {
-            border: none;
-            border-top: 1px solid #ddd;
-            margin: 20pt 35%;
-          }
-          @media print {
-            body { margin: 0; padding: 0.5in; }
-            .section-title { page-break-after: avoid; }
-          }
-        </style>
-      </head>
-      <body>
-        <h1>White Paper</h1>
-        <div class="doc-subtitle">The Ecclesia Basilikos Trust Economy</div>
-        <div class="doc-subtitle" style="font-size: 10pt; color: #888;">A Covenant-Based Economic Architecture for Community Self-Governance</div>
-        <div class="doc-date">Published ${new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</div>
-        <hr class="separator" />
-        ${allContent}
-        <div style="text-align: center; margin-top: 30pt;">
-          <div style="font-family: 'Cinzel', serif; font-size: 10pt; text-transform: uppercase; letter-spacing: 0.2em; color: #888;">
-            Ecclesia Basilikos Trust
-          </div>
-          <div style="font-size: 9pt; color: #aaa; margin-top: 4pt;">
-            Confidential — For Internal Distribution Only
-          </div>
-        </div>
-      </body>
-      </html>
-    `);
+    return `<!DOCTYPE html>
+<html>
+<head>
+  <title>Ecclesia Basilikos Trust Economy — White Paper</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap');
+    body {
+      font-family: 'Crimson Pro', 'Georgia', serif;
+      max-width: 8.5in;
+      margin: 0.75in auto;
+      padding: 0 0.5in;
+      color: #1a1a1a;
+      font-size: 11pt;
+      line-height: 1.65;
+    }
+    h1 {
+      font-family: 'Cinzel', serif;
+      text-align: center;
+      font-size: 20pt;
+      letter-spacing: 0.15em;
+      margin-bottom: 4pt;
+      text-transform: uppercase;
+    }
+    .doc-subtitle {
+      font-family: 'Cinzel', serif;
+      text-align: center;
+      font-size: 12pt;
+      color: #555;
+      margin-bottom: 8pt;
+    }
+    .doc-date {
+      text-align: center;
+      font-size: 10pt;
+      color: #888;
+      margin-bottom: 24pt;
+    }
+    .section-title {
+      font-family: 'Cinzel', serif;
+      font-size: 13pt;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 4pt;
+      margin-top: 24pt;
+      margin-bottom: 10pt;
+    }
+    .subsection-title {
+      font-family: 'Cinzel', serif;
+      font-size: 11pt;
+      font-weight: 600;
+      margin-top: 16pt;
+      margin-bottom: 6pt;
+      color: #333;
+    }
+    .section-content {
+      white-space: pre-wrap;
+      margin-bottom: 10pt;
+    }
+    .separator {
+      border: none;
+      border-top: 1px solid #ddd;
+      margin: 20pt 35%;
+    }
+    @media print {
+      body { margin: 0; padding: 0.5in; }
+      .section-title { page-break-after: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <h1>White Paper</h1>
+  <div class="doc-subtitle">The Ecclesia Basilikos Trust Economy</div>
+  <div class="doc-subtitle" style="font-size: 10pt; color: #888;">A Covenant-Based Economic Architecture for Community Self-Governance</div>
+  <div class="doc-date">Published ${new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</div>
+  <hr class="separator" />
+  ${allContent}
+  <div style="text-align: center; margin-top: 30pt;">
+    <div style="font-family: 'Cinzel', serif; font-size: 10pt; text-transform: uppercase; letter-spacing: 0.2em; color: #888;">
+      Ecclesia Basilikos Trust
+    </div>
+    <div style="font-size: 9pt; color: #aaa; margin-top: 4pt;">
+      Confidential — For Internal Distribution Only
+    </div>
+  </div>
+</body>
+</html>`;
+  };
+
+  const handlePrint = () => {
+    const printWindow = window.open("", "_blank");
+    if (!printWindow) return;
+    printWindow.document.write(getWhitePaperHtml());
     printWindow.document.close();
     printWindow.focus();
     setTimeout(() => printWindow.print(), 500);
   };
 
+  const handleDownload = () => {
+    const html = getWhitePaperHtml();
+    const blob = new Blob([html], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "Ecclesia_Basilikos_Trust_Economy_White_Paper.html";
+    document.body.appendChild(a);
+    a.click();
+    URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  };
+
   return (
     <AdminLayout>
-      <div className="p-6 max-w-4xl mx-auto">
+      <div className="p-4 sm:p-6 max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between flex-wrap gap-4">
@@ -879,8 +886,8 @@ export default function AdminWhitePaper() {
               <Button size="sm" variant="outline" onClick={handlePrint}>
                 <Printer className="w-4 h-4 mr-1" /> Print
               </Button>
-              <Button size="sm" variant="outline" onClick={handlePrint}>
-                <Download className="w-4 h-4 mr-1" /> Export PDF
+              <Button size="sm" variant="outline" onClick={handleDownload}>
+                <Download className="w-4 h-4 mr-1" /> Download
               </Button>
             </div>
           </div>
@@ -905,7 +912,7 @@ export default function AdminWhitePaper() {
         <TableOfContents onNavigate={scrollToSection} />
 
         {/* Sections */}
-        <div ref={printRef}>
+        <div>
           {sections.map((section) => (
             <SectionBlock key={section.id} section={section} />
           ))}

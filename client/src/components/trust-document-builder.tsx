@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
@@ -22,9 +22,13 @@ interface ResolvedEntity {
   parentAuthorities: { entity: TrustEntity; relationship: TrustRelationship }[];
   childEntities: { entity: TrustEntity; relationship: TrustRelationship }[];
   beneficiaryEntities: { entity: TrustEntity; relationship: TrustRelationship }[];
+  benefitSources: { entity: TrustEntity; relationship: TrustRelationship }[];
   fundingSources: { entity: TrustEntity; relationship: TrustRelationship }[];
   fundingTargets: { entity: TrustEntity; relationship: TrustRelationship }[];
   oversightTargets: { entity: TrustEntity; relationship: TrustRelationship }[];
+  coordinationTargets: { entity: TrustEntity; relationship: TrustRelationship }[];
+  landStewardship: { entity: TrustEntity; relationship: TrustRelationship }[];
+  remitsTo: { entity: TrustEntity; relationship: TrustRelationship }[];
   rootAuthority: TrustEntity | null; // walk up the authority chain to the root
 }
 
@@ -68,6 +72,27 @@ function resolveEntity(
     .map(r => ({ entity: findEntity(r.toEntityId)!, relationship: r }))
     .filter(r => r.entity);
 
+  // Incoming benefits — trusts that hold assets for the benefit of this entity
+  const benefitSources = incoming
+    .filter(r => r.relationshipType === 'benefits')
+    .map(r => ({ entity: findEntity(r.fromEntityId)!, relationship: r }))
+    .filter(r => r.entity);
+
+  const coordinationTargets = outgoing
+    .filter(r => r.relationshipType === 'coordinates')
+    .map(r => ({ entity: findEntity(r.toEntityId)!, relationship: r }))
+    .filter(r => r.entity);
+
+  const landStewardship = outgoing
+    .filter(r => r.relationshipType === 'land')
+    .map(r => ({ entity: findEntity(r.toEntityId)!, relationship: r }))
+    .filter(r => r.entity);
+
+  const remitsTo = outgoing
+    .filter(r => r.relationshipType === 'remits')
+    .map(r => ({ entity: findEntity(r.toEntityId)!, relationship: r }))
+    .filter(r => r.entity);
+
   // Walk up authority chain to find root
   let rootAuthority: TrustEntity | null = null;
   let current = entity;
@@ -88,9 +113,13 @@ function resolveEntity(
     parentAuthorities,
     childEntities,
     beneficiaryEntities,
+    benefitSources,
     fundingSources,
     fundingTargets,
     oversightTargets,
+    coordinationTargets,
+    landStewardship,
+    remitsTo,
     rootAuthority,
   };
 }
@@ -274,6 +303,14 @@ function generateSubTrustDocument(r: ResolvedEntity, today: string, parentNames:
         title: "Article VI — Financial Provisions",
         content: [fundingInfo, fundingOut, e.notes].filter(Boolean).join('\n\n') || '(No financial provisions defined.)',
       },
+      ...(r.landStewardship.length > 0 ? [{
+        title: "Article VII — Land Stewardship",
+        content: `This trust provides land stewardship to:\n\n${r.landStewardship.map(l => `    ${l.entity.name}${l.relationship.label ? ` — ${l.relationship.label}` : ''}`).join('\n')}`,
+      }] : []),
+      ...(r.coordinationTargets.length > 0 ? [{
+        title: `Article ${r.landStewardship.length > 0 ? 'VIII' : 'VII'} — Coordination`,
+        content: `This trust coordinates with:\n\n${r.coordinationTargets.map(c => `    ${c.entity.name}${c.relationship.label ? ` — ${c.relationship.label}` : ''}`).join('\n')}`,
+      }] : []),
       {
         title: "Signatures",
         content: `Executed on ${today}.\n\n\n____________________________________\n${e.trusteeLabel || 'Trustee'}\n\n\n____________________________________\n${e.protectorLabel || 'Oversight'}`,
@@ -318,8 +355,16 @@ function generatePMADocument(r: ResolvedEntity, today: string, parentNames: stri
         title: "Article VI — Member Rights & Obligations",
         content: `Members have the right to:\n    • Beneficial use of trust assets as allocated\n    • Participation in community governance\n    • Access to community resources and programs\n    • Voluntary withdrawal at any time\n\nMembers have the obligation to:\n    • Abide by the covenant charter\n    • Contribute labor, skills, or resources as agreed\n    • Respect the governance structure\n    • Maintain the private nature of the association`,
       },
+      ...(r.benefitSources.length > 0 ? [{
+        title: "Article VII — Trust Benefits Received",
+        content: `Members receive beneficial interest from the following trust entities:\n\n${r.benefitSources.map(b => `    ${b.entity.name}${b.relationship.label ? ` — ${b.relationship.label}` : ''}`).join('\n')}\n\nThese trusts hold assets for the benefit of PMA members. Members do not own these assets — they hold equitable beneficial interest through their Beneficial Units.`,
+      }] : []),
+      ...(r.remitsTo.length > 0 ? [{
+        title: `Article ${r.benefitSources.length > 0 ? 'VIII' : 'VII'} — Reporting & Accountability`,
+        content: `This PMA reports to:\n\n${r.remitsTo.map(rt => `    ${rt.entity.name}${rt.relationship.label ? ` — ${rt.relationship.label}` : ''}`).join('\n')}`,
+      }] : []),
       {
-        title: "Article VII — Additional Provisions",
+        title: `Article ${7 + (r.benefitSources.length > 0 ? 1 : 0) + (r.remitsTo.length > 0 ? 1 : 0)} — Additional Provisions`,
         content: e.notes || '(No additional provisions.)',
       },
       {
@@ -396,17 +441,22 @@ function generateProjectDocument(r: ResolvedEntity, today: string, parentNames: 
 
 function generateBeneficiaryDocument(r: ResolvedEntity, today: string): ReturnType<typeof generateDocument> {
   const e = r.entity;
-  const benefitSources = r.entity.id
-    ? [] // We'd need incoming "benefits" relationships
-    : [];
+
+  const benefitSourcesList = r.benefitSources.length > 0
+    ? r.benefitSources.map(b => `    ${b.entity.name}${b.relationship.label ? ` — ${b.relationship.label}` : ''}`).join('\n')
+    : '    All operational trusts within the ecosystem';
+
+  const fundingSourcesList = r.fundingSources.length > 0
+    ? `\n\nFunding received from:\n${r.fundingSources.map(f => `    ${f.entity.name}`).join('\n')}`
+    : '';
 
   return {
     title: `BENEFICIAL INTEREST DECLARATION`,
     subtitle: e.name,
     sections: [
-      { title: "Declaration", content: `This Beneficial Interest Declaration is issued on ${today}.\n\nAll members of the trust ecosystem are hereby recognized as both beneficiaries and stewards.` },
-      { title: "Article I — Rights", content: e.charter || e.description || '(No rights defined.)' },
-      { title: "Article II — Obligations", content: `Members contribute labor, skills, and resources back to the community through the PMA. The relationship is reciprocal.` },
+      { title: "Declaration", content: `This Beneficial Interest Declaration is issued on ${today}.\n\nAll members of the trust ecosystem are hereby recognized as both beneficiaries and stewards. Each member holds one (1) Beneficial Unit representing an equal, undivided interest (1/N) in the trust corpus.` },
+      { title: "Article I — Rights & Beneficial Interest", content: `${e.charter || e.description || 'Members are entitled to beneficial use of trust assets as allocated by the governance structure.'}\n\nBeneficial interest is derived from the following trust entities:\n\n${benefitSourcesList}${fundingSourcesList}` },
+      { title: "Article II — Obligations & Stewardship", content: `Members contribute labor, skills, and resources back to the community through the PMA. The relationship is reciprocal — beneficial interest is contingent on active stewardship participation.\n\nBeneficial Units are:\n    Non-transferable (cannot be sold, traded, or speculated upon)\n    Non-attachable (cannot be seized by external creditors)\n    Revocable only by voluntary withdrawal or covenant violation` },
       { title: "Article III — Provisions", content: e.notes || '(No additional provisions.)' },
     ],
   };
@@ -481,82 +531,97 @@ function DocumentPreviewDialog({
   const resolved = resolveEntity(entity, allEntities, relationships);
   const doc = generateDocument(resolved);
   const [collapsed, setCollapsed] = useState<Record<number, boolean>>({});
-  const printRef = useRef<HTMLDivElement>(null);
 
   const toggleSection = (idx: number) => {
     setCollapsed(prev => ({ ...prev, [idx]: !prev[idx] }));
   };
 
+  const getDocumentHtml = () => {
+    return `<!DOCTYPE html>
+<html>
+<head>
+  <title>${doc.title} — ${doc.subtitle}</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap');
+    body {
+      font-family: 'Crimson Pro', 'Georgia', serif;
+      max-width: 8.5in;
+      margin: 0.75in auto;
+      padding: 0 0.5in;
+      color: #1a1a1a;
+      font-size: 12pt;
+      line-height: 1.6;
+    }
+    h1 {
+      font-family: 'Cinzel', serif;
+      text-align: center;
+      font-size: 18pt;
+      letter-spacing: 0.15em;
+      margin-bottom: 4pt;
+      text-transform: uppercase;
+    }
+    .doc-subtitle {
+      font-family: 'Cinzel', serif;
+      text-align: center;
+      font-size: 14pt;
+      color: #444;
+      margin-bottom: 24pt;
+    }
+    .section-title {
+      font-family: 'Cinzel', serif;
+      font-size: 11pt;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 4pt;
+      margin-top: 20pt;
+      margin-bottom: 10pt;
+    }
+    .section-content {
+      white-space: pre-wrap;
+      margin-bottom: 12pt;
+    }
+    .separator {
+      border: none;
+      border-top: 2px solid #1E3A5F;
+      margin: 16pt 30%;
+    }
+    @media print {
+      body { margin: 0; padding: 0.5in; }
+    }
+  </style>
+</head>
+<body>
+  <h1>${doc.title}</h1>
+  <div class="doc-subtitle">${doc.subtitle}</div>
+  <hr class="separator" />
+  ${doc.sections.map(s => `<div class="section-title">${s.title}</div>\n  <div class="section-content">${s.content}</div>`).join('\n  ')}
+</body>
+</html>`;
+  };
+
   const handlePrint = () => {
-    if (!printRef.current) return;
     const printWindow = window.open('', '_blank');
     if (!printWindow) return;
-
-    const content = printRef.current.innerHTML;
-    printWindow.document.write(`
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <title>${doc.title} — ${doc.subtitle}</title>
-        <style>
-          @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap');
-          body {
-            font-family: 'Crimson Pro', 'Georgia', serif;
-            max-width: 8.5in;
-            margin: 0.75in auto;
-            padding: 0 0.5in;
-            color: #1a1a1a;
-            font-size: 12pt;
-            line-height: 1.6;
-          }
-          h1 {
-            font-family: 'Cinzel', serif;
-            text-align: center;
-            font-size: 18pt;
-            letter-spacing: 0.15em;
-            margin-bottom: 4pt;
-            text-transform: uppercase;
-          }
-          .doc-subtitle {
-            font-family: 'Cinzel', serif;
-            text-align: center;
-            font-size: 14pt;
-            color: #444;
-            margin-bottom: 24pt;
-          }
-          .section-title {
-            font-family: 'Cinzel', serif;
-            font-size: 11pt;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            border-bottom: 1px solid #ccc;
-            padding-bottom: 4pt;
-            margin-top: 20pt;
-            margin-bottom: 10pt;
-          }
-          .section-content {
-            white-space: pre-wrap;
-            margin-bottom: 12pt;
-          }
-          .separator {
-            border: none;
-            border-top: 2px solid #1E3A5F;
-            margin: 16pt 30%;
-          }
-          @media print {
-            body { margin: 0; padding: 0.5in; }
-          }
-        </style>
-      </head>
-      <body>
-        ${content}
-      </body>
-      </html>
-    `);
+    printWindow.document.write(getDocumentHtml());
     printWindow.document.close();
     printWindow.focus();
     setTimeout(() => printWindow.print(), 500);
+  };
+
+  const handleDownload = () => {
+    const html = getDocumentHtml();
+    const blob = new Blob([html], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const safeName = doc.subtitle.replace(/[^a-zA-Z0-9]/g, '_').replace(/_+/g, '_');
+    a.href = url;
+    a.download = `${safeName}_${doc.title.replace(/[^a-zA-Z0-9]/g, '_')}.html`;
+    document.body.appendChild(a);
+    a.click();
+    URL.revokeObjectURL(url);
+    document.body.removeChild(a);
   };
 
   return (
@@ -579,8 +644,8 @@ function DocumentPreviewDialog({
               <Button size="sm" variant="outline" onClick={handlePrint}>
                 <Printer className="w-4 h-4 mr-1" /> Print
               </Button>
-              <Button size="sm" variant="outline" onClick={handlePrint}>
-                <Download className="w-4 h-4 mr-1" /> Export
+              <Button size="sm" variant="outline" onClick={handleDownload}>
+                <Download className="w-4 h-4 mr-1" /> Download
               </Button>
             </div>
           </div>
@@ -591,19 +656,6 @@ function DocumentPreviewDialog({
 
         {/* Document body — scrollable */}
         <div className="overflow-y-auto flex-1 px-6 py-6">
-          {/* Printable version (hidden but used for print/export) */}
-          <div ref={printRef} className="hidden">
-            <h1>{doc.title}</h1>
-            <div className="doc-subtitle">{doc.subtitle}</div>
-            <hr className="separator" />
-            {doc.sections.map((section, idx) => (
-              <div key={idx}>
-                <div className="section-title">{section.title}</div>
-                <div className="section-content">{section.content}</div>
-              </div>
-            ))}
-          </div>
-
           {/* Visual preview */}
           <div className="max-w-2xl mx-auto">
             {/* Document title block */}

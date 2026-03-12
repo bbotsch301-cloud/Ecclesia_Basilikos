@@ -241,6 +241,8 @@ interface LineData {
   toX: number;
   toY: number;
   type: string;
+  label?: string;
+  notes?: string;
 }
 
 function ConnectionLines({
@@ -294,18 +296,29 @@ function ConnectionLines({
         if (!cfg) return null;
         const cp1Y = line.fromY + Math.min(Math.abs(line.toX - line.fromX) * 0.3, 40) + 10;
         const cp2Y = line.toY - Math.min(Math.abs(line.toX - line.fromX) * 0.3, 40) - 10;
+        const pathId = `path-${line.id}`;
         const path = `M ${line.fromX} ${line.fromY} C ${line.fromX} ${cp1Y}, ${line.toX} ${cp2Y}, ${line.toX} ${line.toY}`;
+        const displayLabel = line.label || line.notes;
         return (
-          <path
-            key={line.id}
-            d={path}
-            fill="none"
-            stroke={cfg.strokeColor}
-            strokeWidth={2.5}
-            strokeDasharray={cfg.dashed ? "8,4" : "none"}
-            markerEnd={`url(#arrow-${line.type})`}
-            opacity={0.85}
-          />
+          <g key={line.id}>
+            <path
+              id={pathId}
+              d={path}
+              fill="none"
+              stroke={cfg.strokeColor}
+              strokeWidth={2.5}
+              strokeDasharray={cfg.dashed ? "8,4" : "none"}
+              markerEnd={`url(#arrow-${line.type})`}
+              opacity={0.85}
+            />
+            {displayLabel && (
+              <text fontSize="10" fill={cfg.strokeColor} fontWeight="600" opacity={0.9}>
+                <textPath href={`#${pathId}`} startOffset="50%" textAnchor="middle">
+                  <tspan dy="-6">{displayLabel}</tspan>
+                </textPath>
+              </text>
+            )}
+          </g>
         );
       })}
 
@@ -348,10 +361,10 @@ function getNodeSizeVariant(layer: string): NodeSizeVariant {
 }
 
 const NODE_SIZE_CLASSES: Record<NodeSizeVariant, string> = {
-  compact: 'min-w-[140px] max-w-[175px] px-4 py-2.5',
-  standard: 'min-w-[160px] max-w-[200px] px-5 py-3',
-  wide: 'min-w-[220px] max-w-[300px] px-6 py-4',
-  prominent: 'min-w-[280px] max-w-[400px] px-8 py-5',
+  compact: 'min-w-[120px] sm:min-w-[140px] max-w-[160px] sm:max-w-[175px] px-3 sm:px-4 py-2 sm:py-2.5',
+  standard: 'min-w-[140px] sm:min-w-[160px] max-w-[180px] sm:max-w-[200px] px-4 sm:px-5 py-2.5 sm:py-3',
+  wide: 'min-w-[180px] sm:min-w-[220px] max-w-[260px] sm:max-w-[300px] px-4 sm:px-6 py-3 sm:py-4',
+  prominent: 'min-w-[200px] sm:min-w-[280px] max-w-[300px] sm:max-w-[400px] px-5 sm:px-8 py-3 sm:py-5',
 };
 
 function EntityNode({
@@ -708,30 +721,44 @@ function DetailSidebar({
               {outgoing.map(r => {
                 const cfg = RELATIONSHIP_CONFIG[r.relationshipType];
                 return (
-                  <div key={r.id} className="flex items-center gap-1.5 text-xs">
-                    <ArrowRight className="w-3 h-3 text-gray-400 shrink-0" />
-                    <span
-                      className="px-1.5 py-0.5 rounded text-[10px] font-medium text-white shrink-0"
-                      style={{ backgroundColor: cfg?.strokeColor || '#888' }}
-                    >
-                      {cfg?.label}
-                    </span>
-                    <span className="text-gray-700 truncate">{getEntityName(r.toEntityId)}</span>
+                  <div key={r.id} className="text-xs">
+                    <div className="flex items-center gap-1.5">
+                      <ArrowRight className="w-3 h-3 text-gray-400 shrink-0" />
+                      <span
+                        className="px-1.5 py-0.5 rounded text-[10px] font-medium text-white shrink-0"
+                        style={{ backgroundColor: cfg?.strokeColor || '#888' }}
+                      >
+                        {cfg?.label}
+                      </span>
+                      <span className="text-gray-700 truncate">{getEntityName(r.toEntityId)}</span>
+                    </div>
+                    {(r.label || r.notes) && (
+                      <p className="text-[10px] text-gray-400 italic ml-5 mt-0.5 truncate">
+                        {r.label}{r.label && r.notes ? ' — ' : ''}{r.notes}
+                      </p>
+                    )}
                   </div>
                 );
               })}
               {incoming.map(r => {
                 const cfg = RELATIONSHIP_CONFIG[r.relationshipType];
                 return (
-                  <div key={r.id} className="flex items-center gap-1.5 text-xs">
-                    <ArrowLeft className="w-3 h-3 text-gray-400 shrink-0" />
-                    <span className="text-gray-700 truncate">{getEntityName(r.fromEntityId)}</span>
-                    <span
-                      className="px-1.5 py-0.5 rounded text-[10px] font-medium text-white shrink-0"
-                      style={{ backgroundColor: cfg?.strokeColor || '#888' }}
-                    >
-                      {cfg?.label}
-                    </span>
+                  <div key={r.id} className="text-xs">
+                    <div className="flex items-center gap-1.5">
+                      <ArrowLeft className="w-3 h-3 text-gray-400 shrink-0" />
+                      <span className="text-gray-700 truncate">{getEntityName(r.fromEntityId)}</span>
+                      <span
+                        className="px-1.5 py-0.5 rounded text-[10px] font-medium text-white shrink-0"
+                        style={{ backgroundColor: cfg?.strokeColor || '#888' }}
+                      >
+                        {cfg?.label}
+                      </span>
+                    </div>
+                    {(r.label || r.notes) && (
+                      <p className="text-[10px] text-gray-400 italic ml-5 mt-0.5 truncate">
+                        {r.label}{r.label && r.notes ? ' — ' : ''}{r.notes}
+                      </p>
+                    )}
                   </div>
                 );
               })}
@@ -1023,7 +1050,7 @@ export default function AdminTrustStructure() {
       const toX = (toRect.left + toRect.width / 2 - containerRect.left + scrollLeft) / zoom;
       const toY = (toRect.top - containerRect.top + scrollTop) / zoom;
 
-      newLines.push({ id: rel.id, fromX, fromY, toX, toY, type: rel.relationshipType });
+      newLines.push({ id: rel.id, fromX, fromY, toX, toY, type: rel.relationshipType, label: rel.label || undefined, notes: rel.notes || undefined });
     }
 
     setLines(newLines);
@@ -1187,10 +1214,10 @@ export default function AdminTrustStructure() {
         </div>
 
         {/* ════════════ COMPACT STATS + LEGEND (collapsible) ════════════ */}
-        <div className="bg-white rounded-t-xl border border-gray-200 border-b-0 px-4 py-2.5 flex flex-wrap items-center justify-between gap-2">
-          <div className="flex items-center gap-4 text-xs text-gray-500">
+        <div className="bg-white rounded-t-xl border border-gray-200 border-b-0 px-3 sm:px-4 py-2.5 flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center gap-3 sm:gap-4 text-xs text-gray-500">
             <span><strong className="text-royal-navy">{entities.length}</strong> entities</span>
-            <span><strong className="text-royal-navy">{relationships.length}</strong> relationships</span>
+            <span><strong className="text-royal-navy">{relationships.length}</strong> rels</span>
           </div>
           <div className="flex flex-wrap items-center gap-1.5">
             <button
@@ -1224,17 +1251,17 @@ export default function AdminTrustStructure() {
 
         {/* ════════════ CONNECT MODE BAR ════════════ */}
         {connectMode && (
-          <div className="bg-cyan-50 border-x border-cyan-200 px-4 py-2.5 flex items-center justify-between">
-            <div className="flex items-center gap-3 text-sm text-cyan-800 font-medium">
-              <MousePointer2 className="w-4 h-4 text-cyan-600" />
+          <div className="bg-cyan-50 border-x border-cyan-200 px-4 py-2.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+            <div className="flex items-center gap-3 text-xs sm:text-sm text-cyan-800 font-medium">
+              <MousePointer2 className="w-4 h-4 text-cyan-600 shrink-0" />
               {!connectFrom
-                ? "Click the SOURCE entity (or use a connection handle)"
-                : <>Source: <strong className="text-cyan-900">{entities.find(e => e.id === connectFrom)?.name}</strong> — now click the TARGET</>
+                ? "Click the SOURCE entity"
+                : <>Source: <strong className="text-cyan-900">{entities.find(e => e.id === connectFrom)?.name}</strong> — now click TARGET</>
               }
             </div>
             <div className="flex items-center gap-2">
               <Select value={connectType} onValueChange={setConnectType}>
-                <SelectTrigger className="h-7 w-[150px] text-xs">
+                <SelectTrigger className="h-7 w-[130px] sm:w-[150px] text-xs">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -1258,8 +1285,8 @@ export default function AdminTrustStructure() {
         {/* ════════════ DIAGRAM AREA ════════════ */}
         <div
           ref={diagramRef}
-          className="relative bg-slate-50/80 rounded-b-xl border border-gray-200 border-t-0 overflow-auto"
-          style={{ minHeight: '520px' }}
+          className="relative bg-slate-50/80 rounded-b-xl border border-gray-200 border-t-0 overflow-auto -mx-4 sm:mx-0 border-x-0 sm:border-x sm:rounded-b-xl"
+          style={{ minHeight: '420px' }}
         >
           {/* Zoom controls */}
           <div className="sticky top-3 float-right mr-3 mt-3 z-20 flex items-center gap-1 bg-white/80 backdrop-blur rounded-lg border border-gray-200 p-0.5 shadow-sm">
@@ -1289,7 +1316,7 @@ export default function AdminTrustStructure() {
 
           {/* Two-arm diagram layout */}
           <div
-            className="relative py-8 px-4"
+            className="relative py-6 sm:py-8 px-2 sm:px-4"
             style={{ transform: `scale(${zoom})`, transformOrigin: 'top center', zIndex: 2 }}
           >
             {entities.length === 0 ? (
@@ -1377,10 +1404,10 @@ export default function AdminTrustStructure() {
                 })()}
 
                 {/* ══════ TWO-ARM SPLIT ══════ */}
-                <div className="flex gap-8 lg:gap-16 items-start justify-center w-full mt-4">
+                <div className="flex flex-col md:flex-row gap-6 md:gap-8 lg:gap-16 items-start justify-center w-full mt-4">
 
                   {/* ── LEFT ARM: ASSET STEWARDSHIP ── */}
-                  <div className="group/section flex-1 max-w-[480px]">
+                  <div className="group/section w-full md:flex-1 md:max-w-[480px]">
                     <div className="relative mb-6">
                       <div className="border-t border-gray-300 w-full" />
                       <span className="absolute left-3 -translate-y-1/2 bg-gradient-to-b from-slate-50 to-gray-100 px-2 text-[10px] uppercase tracking-[0.2em] text-gray-400 font-semibold">
@@ -1420,7 +1447,7 @@ export default function AdminTrustStructure() {
                   </div>
 
                   {/* ── RIGHT ARM: COMMUNITY GOVERNANCE ── */}
-                  <div className="group/section flex-1 max-w-[480px]">
+                  <div className="group/section w-full md:flex-1 md:max-w-[480px]">
                     <div className="relative mb-6">
                       <div className="border-t border-gray-300 w-full" />
                       <span className="absolute left-3 -translate-y-1/2 bg-gradient-to-b from-slate-50 to-gray-100 px-2 text-[10px] uppercase tracking-[0.2em] text-gray-400 font-semibold">
@@ -1581,7 +1608,7 @@ export default function AdminTrustStructure() {
 
         {/* ════════════ ARCHITECTURAL PRINCIPLES ════════════ */}
         {entities.length > 0 && (
-          <div className="mt-6 grid sm:grid-cols-3 gap-3">
+          <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
             {[
               { icon: Crown, title: "Two Arms, One Body", desc: "The EBT authorizes two parallel arms: operational trusts hold assets, and the PMA organizes people. Neither controls the other." },
               { icon: Shield, title: "Stewardship, Not Ownership", desc: "Trustees administer corpus for beneficiaries. Legal title is separated from beneficial interest. Members have use rights, not ownership." },
@@ -1617,7 +1644,7 @@ export default function AdminTrustStructure() {
                   const cfg = RELATIONSHIP_CONFIG[rel.relationshipType];
                   return (
                     <div key={rel.id} className="flex items-center justify-between gap-2 px-3 py-2 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors text-xs">
-                      <div className="flex items-center gap-2 min-w-0 flex-1">
+                      <div className="flex items-center gap-2 min-w-0 flex-1 flex-wrap">
                         <span className="font-semibold text-gray-800 truncate">{from?.name || "?"}</span>
                         <span
                           className="shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium text-white"
@@ -1626,7 +1653,8 @@ export default function AdminTrustStructure() {
                           {cfg?.label || rel.relationshipType}
                         </span>
                         <span className="font-semibold text-gray-800 truncate">{to?.name || "?"}</span>
-                        {rel.label && <span className="text-gray-400 truncate">({rel.label})</span>}
+                        {rel.label && <span className="text-gray-400 text-[10px] truncate">"{rel.label}"</span>}
+                        {rel.notes && <span className="text-gray-400 text-[10px] italic truncate">{rel.notes}</span>}
                       </div>
                       <Button
                         variant="ghost"
