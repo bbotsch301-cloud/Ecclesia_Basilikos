@@ -378,6 +378,7 @@ export interface IStorage {
   deleteTrustDocumentTemplate(id: string): Promise<void>;
   replaceTrustTemplateSections(templateId: string, sections: Omit<InsertTrustTemplateSection, 'templateId'>[]): Promise<TrustTemplateSectionType[]>;
   seedTrustDocumentTemplates(): Promise<void>;
+  reseedTrustDocumentTemplates(): Promise<void>;
 
   // Trust Documents
   getTrustDocuments(): Promise<(TrustDocument & { sections: TrustDocumentSection[] })[]>;
@@ -2669,9 +2670,26 @@ export class DatabaseStorage implements IStorage {
     return await db.insert(trustTemplateSections).values(rows).returning();
   }
 
+  async reseedTrustDocumentTemplates(): Promise<void> {
+    // Delete all existing built-in templates and their sections (cascade), then reseed
+    const builtIn = await db.select({ id: trustDocumentTemplates.id })
+      .from(trustDocumentTemplates)
+      .where(eq(trustDocumentTemplates.isBuiltIn, true));
+    for (const t of builtIn) {
+      await db.delete(trustTemplateSections).where(eq(trustTemplateSections.templateId, t.id));
+      await db.delete(trustDocumentTemplates).where(eq(trustDocumentTemplates.id, t.id));
+    }
+    // Now seed fresh
+    await this.seedTrustDocumentTemplatesCore();
+  }
+
   async seedTrustDocumentTemplates(): Promise<void> {
     const existing = await db.select().from(trustDocumentTemplates).limit(1);
     if (existing.length > 0) return;
+    await this.seedTrustDocumentTemplatesCore();
+  }
+
+  private async seedTrustDocumentTemplatesCore(): Promise<void> {
 
     const templates: { name: string; description: string; layers: string[]; sections: { title: string; content: string }[] }[] = [
       // ═══════════════════════════════════════════════════════════════════════════

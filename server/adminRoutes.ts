@@ -1693,7 +1693,7 @@ router.post('/trust-document-templates/:id/sections', requireAdmin, async (req, 
 
 router.post('/trust-document-templates/seed', requireAdmin, async (req, res) => {
   try {
-    await storage.seedTrustDocumentTemplates();
+    await storage.reseedTrustDocumentTemplates();
     const templates = await storage.getTrustDocumentTemplates();
     res.json(templates);
   } catch (error) {
@@ -1744,8 +1744,8 @@ router.post('/trust-documents/generate', requireAdmin, async (req, res) => {
 // Generate documents for ALL entities × ALL applicable templates (seeds templates first if needed)
 router.post('/trust-documents/generate-all', requireAdmin, async (req, res) => {
   try {
-    // Ensure templates are seeded
-    await storage.seedTrustDocumentTemplates();
+    // Force reseed built-in templates to ensure latest versions are available
+    await storage.reseedTrustDocumentTemplates();
     const templates = await storage.getTrustDocumentTemplates();
     const { entities, relationships } = await storage.getTrustStructure();
 
