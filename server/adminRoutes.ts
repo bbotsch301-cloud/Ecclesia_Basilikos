@@ -1744,10 +1744,13 @@ router.post('/trust-documents/generate', requireAdmin, async (req, res) => {
 // Generate documents for ALL entities × ALL applicable templates (seeds templates first if needed)
 router.post('/trust-documents/generate-all', requireAdmin, async (req, res) => {
   try {
+    // Ensure trust structure exists
+    await storage.seedTrustStructure();
     // Force reseed built-in templates to ensure latest versions are available
     await storage.reseedTrustDocumentTemplates();
     const templates = await storage.getTrustDocumentTemplates();
     const { entities, relationships } = await storage.getTrustStructure();
+    logger.info({ entityCount: entities.length, templateCount: templates.length }, 'Generate all: entities and templates loaded');
 
     // Check which entity+template combos already have documents
     const existingDocs = await storage.getTrustDocuments();

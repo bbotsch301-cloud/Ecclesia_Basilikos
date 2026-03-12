@@ -2671,11 +2671,21 @@ export class DatabaseStorage implements IStorage {
   }
 
   async reseedTrustDocumentTemplates(): Promise<void> {
-    // Delete all existing built-in templates and their sections (cascade), then reseed
+    // Delete all existing built-in templates, their sections, AND any documents that reference them
     const builtIn = await db.select({ id: trustDocumentTemplates.id })
       .from(trustDocumentTemplates)
       .where(eq(trustDocumentTemplates.isBuiltIn, true));
     for (const t of builtIn) {
+      // Find documents referencing this template
+      const docs = await db.select({ id: trustDocuments.id })
+        .from(trustDocuments)
+        .where(eq(trustDocuments.templateId, t.id));
+      // Delete document sections, then documents
+      for (const d of docs) {
+        await db.delete(trustDocumentSections).where(eq(trustDocumentSections.documentId, d.id));
+      }
+      await db.delete(trustDocuments).where(eq(trustDocuments.templateId, t.id));
+      // Now delete template sections and template
       await db.delete(trustTemplateSections).where(eq(trustTemplateSections.templateId, t.id));
       await db.delete(trustDocumentTemplates).where(eq(trustDocumentTemplates.id, t.id));
     }

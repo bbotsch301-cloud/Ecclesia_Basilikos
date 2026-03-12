@@ -191,12 +191,10 @@ function TemplatesTab() {
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold">Document Templates</h3>
         <div className="flex gap-2">
-          {templates.length === 0 && (
-            <Button onClick={() => seedMutation.mutate()} disabled={seedMutation.isPending} variant="outline">
-              {seedMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-1" /> : <Sparkles className="w-4 h-4 mr-1" />}
-              Seed Built-in Templates
-            </Button>
-          )}
+          <Button onClick={() => seedMutation.mutate()} disabled={seedMutation.isPending} variant="outline">
+            {seedMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-1" /> : <Sparkles className="w-4 h-4 mr-1" />}
+            {templates.length === 0 ? "Seed Built-in Templates" : "Reseed Built-in Templates"}
+          </Button>
           <Button onClick={() => setCreating(true)}>
             <Plus className="w-4 h-4 mr-1" /> New Template
           </Button>
@@ -427,15 +425,12 @@ function DocumentsTab() {
     queryFn: () => apiGet("/api/admin/trust-documents"),
   });
 
-  const { data: entities = [] } = useQuery<TrustEntity[]>({
-    queryKey: ["/api/admin/trust-entities"],
-    queryFn: () => apiGet("/api/admin/trust-entities"),
+  const { data: trustStructure } = useQuery<{ entities: TrustEntity[]; relationships: TrustRelationship[] }>({
+    queryKey: ["/api/admin/trust-structure"],
+    queryFn: () => apiGet("/api/admin/trust-structure"),
   });
-
-  const { data: relationships = [] } = useQuery<TrustRelationship[]>({
-    queryKey: ["/api/admin/trust-relationships"],
-    queryFn: () => apiGet("/api/admin/trust-relationships"),
-  });
+  const entities = trustStructure?.entities || [];
+  const relationships = trustStructure?.relationships || [];
 
   const { data: templates = [] } = useQuery<TemplateWithSections[]>({
     queryKey: ["/api/admin/trust-document-templates"],
