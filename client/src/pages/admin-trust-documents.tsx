@@ -62,7 +62,7 @@ import type {
 } from "@shared/schema";
 
 const LAYER_OPTIONS = [
-  "charter", "trust", "operational", "pma", "chapter", "commune", "guild", "project", "beneficiary",
+  "covenant", "body", "stewardship", "assembly", "region", "household", "craft", "ministry", "member",
 ];
 
 // ═══════════════════════════════════════════════════════════

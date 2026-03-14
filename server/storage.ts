@@ -2265,68 +2265,69 @@ export class DatabaseStorage implements IStorage {
     if (existing.length > 0) return;
 
     // ══════════════════════════════════════════════════════════
-    // TWO-ARM TRUST ECOSYSTEM
+    // BIBLICAL ECCLESIOLOGY: COVENANT GATEWAY → BODY OF CHRIST
     //
-    //              [NCLT] (Charter + Constitutional Root)
-    //                 ↓
-    //              [EBT] (Governance Anchor)
-    //            ↙         ↘
-    //     ASSET ARM      PEOPLE ARM
-    //     (Trusts)        (PMA)
-    //     hold the      organize who
-    //     assets        benefits
-    //            ↘         ↙
-    //       [Beneficiaries & Stewards]
+    //   [Individual] → [NCLT] (Covenant Gateway)
+    //                     ↓ enters
+    //                  [EB] (Body of Christ)
+    //                ┌──────────────────────┐
+    //                │   STEWARDSHIP ORGANS  │
+    //                │   (5 trusts)          │
+    //                │   ASSEMBLY (PMA)      │
+    //                │   REGIONS → HOUSEHOLDS│
+    //                │   CRAFTS / MINISTRIES │
+    //                │   MEMBERS (joint heirs)│
+    //                └──────────────────────┘
     // ══════════════════════════════════════════════════════════
 
-    // === CONSTITUTIONAL ROOT ===
+    // === COVENANT GATEWAY ===
     const [nclt] = await db.insert(trustEntities).values({
       name: "New Covenant Legacy Trust",
-      subtitle: "Constitutional Root & Covenant Charter",
-      layer: "charter",
-      entityType: "charter",
-      description: 'The irrevocable constitutional root trust and covenant charter of the entire trust ecosystem. "For where two or three are gathered together in my name, there am I in the midst of them" (Matthew 18:20). Established under divine authority as the founding legal vehicle and philosophical cornerstone. Source of all governance, stewardship mandates, and community philosophy. Holds intellectual property, core charter documents, and long-term reserves. "Except the LORD build the house, they labour in vain that build it" (Psalm 127:1).',
-      charter: 'Established under the authority of the New Covenant — "But now hath he obtained a more excellent ministry, by how much also he is the mediator of a better covenant, which was established upon better promises" (Hebrews 8:6). This trust anchors the entire trust network in divine law, natural law, and constitutional principles. The grantor irrevocably conveys the corpus into trust for the benefit of the ecclesia and its members in perpetuity. It defines the mission, values, and divine mandate for covenant community life. "The earth is the LORD\'s, and the fulness thereof" (Psalm 24:1) — all property held herein is stewarded, not owned, in recognition that God is the ultimate proprietor of all things.',
+      subtitle: "Individual Covenant Gateway",
+      layer: "covenant",
+      entityType: "covenant",
+      description: 'Your personal covenant with God through Christ — the doorway into the Body. "But this shall be the covenant that I will make with the house of Israel; After those days, saith the LORD, I will put my law in their inward parts, and write it in their hearts; and will be their God, and they shall be my people" (Jeremiah 31:33). "For he is not a Jew, which is one outwardly; neither is that circumcision, which is outward in the flesh: But he is a Jew, which is one inwardly; and circumcision is that of the heart, in the spirit, and not in the letter" (Romans 2:28-29). The NCLT is the individual\'s irrevocable covenant — a circumcision of heart establishing the singular relationship between man and God through Christ. It is the gateway through which one enters the Body.',
+      charter: 'Established under the authority of the New Covenant — "But now hath he obtained a more excellent ministry, by how much also he is the mediator of a better covenant, which was established upon better promises" (Hebrews 8:6). This covenant trust is the individual\'s personal gateway — a declaration of faith, allegiance, and irrevocable commitment. As baptism symbolizes the death of the old man and resurrection of the new, so this covenant marks the legal and spiritual transition from the world system into the Body of Christ. "The earth is the LORD\'s, and the fulness thereof" (Psalm 24:1) — all property held herein is stewarded, not owned.',
       legalBasis: 'Divine law — "All scripture is given by inspiration of God" (2 Timothy 3:16); Natural law — inalienable rights endowed by the Creator; Common law of trusts — express private trust, not organized under any state trust code or Uniform Trust Code; First Amendment — free exercise, free association, peaceable assembly; Ninth Amendment — rights retained by the people; Tenth Amendment — powers reserved to the people; UCC 1-308 — all rights reserved without prejudice; NAACP v. Alabama, 357 U.S. 449 (1958) — right of free association; This trust does not seek, require, or operate under any statutory license, franchise, 501(c)(3) status, or governmental permission.',
-      trusteeLabel: "Mission Founder (Grantor)",
+      trusteeLabel: "The Individual (Covenant Maker)",
       protectorLabel: "Protector Council (3-member elder oversight body — 1 Timothy 5:17)",
-      notes: 'The NCLT is irrevocable — "No man, having put his hand to the plough, and looking back, is fit for the kingdom of God" (Luke 9:62). All sub-trusts derive their authority from this Declaration. Amendments require unanimous Protector Council approval. The covenant charter is embedded as the founding purpose statement. All disputes resolved under the Matthew 18 Protocol. "Moreover if thy brother shall trespass against thee, go and tell him his fault between thee and him alone" (Matthew 18:15).',
+      notes: 'The NCLT is irrevocable — "No man, having put his hand to the plough, and looking back, is fit for the kingdom of God" (Luke 9:62). This is not an organizational charter but a personal covenant — the individual\'s oath before God, the circumcision of heart (Romans 2:29), the narrow gate (Matthew 7:13-14). Through this covenant, the individual becomes a "new creature" (2 Corinthians 5:17) and enters the Body. All disputes resolved under the Matthew 18 Protocol.',
       color: "#8B2500",
       icon: "scroll",
       sortOrder: 1,
       status: "active",
     }).returning();
 
-    // === GOVERNANCE ANCHOR ===
+    // === BODY OF CHRIST ===
     const [ebt] = await db.insert(trustEntities).values({
-      name: "Ecclesia Basilikos Trust",
-      subtitle: "Governance Anchor",
-      layer: "trust",
-      entityType: "trust",
-      description: '"And the multitude of them that believed were of one heart and of one soul: neither said any of them that ought of the things which he possessed was his own; but they had all things common" (Acts 4:32). The governance anchor trust. Stewards the mission, protects the charter, and oversees governance principles following the pattern of the Jerusalem church. Authorizes two parallel arms: operational trusts (asset stewardship) and the PMA (community governance). "Moreover it is required in stewards, that a man be found faithful" (1 Corinthians 4:2).',
-      charter: 'To steward the mission of the ecclesia, administering all sub-trusts and the PMA under the authority of the New Covenant Legacy Trust. "And the things that thou hast heard of me among many witnesses, the same commit thou to faithful men, who shall be able to teach others also" (2 Timothy 2:2). The governance anchor ensures that every arm of the ecosystem operates in alignment with the covenant charter, Scripture, and the original intent of the Grantor.',
-      legalBasis: 'Express trust under common law — not organized under any statutory code; First Amendment ecclesiastical governance — the right of the ecclesia to govern its own affairs without state interference; Common law fiduciary duty — the Trustee is bound by conscience and equity to administer the trust faithfully; "Render therefore unto Caesar the things which are Caesar\'s; and unto God the things that are God\'s" (Matthew 22:21) — this trust renders unto God what belongs to God.',
+      name: "Ecclesia Basilikos",
+      subtitle: "Body of Christ",
+      layer: "body",
+      entityType: "body",
+      description: '"For as the body is one, and hath many members, and all the members of that one body, being many, are one body: so also is Christ. For by one Spirit are we all baptized into one body" (1 Corinthians 12:12-13). "And the multitude of them that believed were of one heart and of one soul: neither said any of them that ought of the things which he possessed was his own; but they had all things common" (Acts 4:32). The Body of Christ — the collective assembly of those who have entered through the covenant gateway. Everything exists within the Body: stewardship organs, the gathered assembly, regional churches, households, crafts, ministries, and all members. "There is neither Jew nor Greek, there is neither bond nor free, there is neither male nor female: for ye are all one in Christ Jesus" (Galatians 3:28).',
+      charter: 'To be the living Body of Christ — the collective of all who have entered through the covenant. "And he is the head of the body, the church" (Colossians 1:18). The Body commissions stewardship organs, gathers the assembly, establishes regional churches, and nurtures households. All internal structures serve the Body and its members. "From whom the whole body fitly joined together and compacted by that which every joint supplieth, according to the effectual working in the measure of every part, maketh increase of the body unto the edifying of itself in love" (Ephesians 4:16).',
+      legalBasis: 'Express trust under common law — not organized under any statutory code; First Amendment ecclesiastical governance — the right of the ecclesia to govern its own affairs without state interference; Common law fiduciary duty — the Trustee is bound by conscience and equity to administer the trust faithfully; "Render therefore unto Caesar the things which are Caesar\'s; and unto God the things that are God\'s" (Matthew 22:21).',
       trusteeLabel: "Administrative Steward (Trustee) — 'a faithful and wise steward' (Luke 12:42)",
       protectorLabel: "Protector Council — elder oversight body per 1 Timothy 5:17, Titus 1:5-9",
-      notes: '"Let all things be done decently and in order" (1 Corinthians 14:40). The EBT is the operational governance layer. The Trustee administers day-to-day operations while the Protector Council ensures alignment with the charter. Authorizes both the asset arm (operational trusts) and the people arm (PMA) independently. "Where no counsel is, the people fall: but in the multitude of counsellors there is safety" (Proverbs 11:14).',
+      notes: '"Let all things be done decently and in order" (1 Corinthians 14:40). The Body is the living organism within which all operations take place. Christ is the Head (Colossians 1:18); the Body coordinates all its members and organs. "Now ye are the body of Christ, and members in particular" (1 Corinthians 12:27). "Where no counsel is, the people fall: but in the multitude of counsellors there is safety" (Proverbs 11:14).',
       color: "#1E3A5F",
       icon: "crown",
       sortOrder: 2,
       status: "active",
     }).returning();
 
-    // === ASSET ARM: OPERATIONAL TRUSTS ===
+    // === STEWARDSHIP ORGANS (within the Body) ===
     const [landTrust] = await db.insert(trustEntities).values({
       name: "Land Trust",
       subtitle: "Stewardship of Land",
-      layer: "operational",
-      entityType: "trust",
-      description: '"And the LORD God took the man, and put him into the garden of Eden to dress it and to keep it" (Genesis 2:15). "The earth is the LORD\'s, and the fulness thereof" (Psalm 24:1). Dominion stewardship per Genesis 1:28. Holds and administers all real property, acreage, and land-based assets. Separates land ownership from community operations for legal protection. Legal title is held by the trust; members receive beneficial use rights. "The land shall not be sold for ever: for the land is mine; for ye are strangers and sojourners with me" (Leviticus 25:23).',
-      charter: 'To hold, protect, and steward all real property assets for the benefit of the ecclesia community. Following the Levitical model where land was allotted for use but belonged ultimately to God (Leviticus 25:23). Land is held in perpetuity for the community, never to be individually alienated, speculated upon, or encumbered. "Blessed are the meek: for they shall inherit the earth" (Matthew 5:5).',
-      legalBasis: 'Land trust doctrine under common law; Beneficial interest separated from legal title; Spendthrift protections — no creditor may reach trust-held land; Not subject to partition or forced sale; "The heaven, even the heavens, are the LORD\'s: but the earth hath he given to the children of men" (Psalm 115:16).',
+      layer: "stewardship",
+      entityType: "stewardship",
+      description: '"And the LORD God took the man, and put him into the garden of Eden to dress it and to keep it" (Genesis 2:15). "The earth is the LORD\'s, and the fulness thereof" (Psalm 24:1). An organ of the Body responsible for dominion stewardship per Genesis 1:28. Holds and administers all real property, acreage, and land-based assets. Legal title is held by the trust; members receive beneficial use rights. "The land shall not be sold for ever: for the land is mine; for ye are strangers and sojourners with me" (Leviticus 25:23).',
+      charter: 'To hold, protect, and steward all real property assets for the benefit of the Body. Following the Levitical model where land was allotted for use but belonged ultimately to God (Leviticus 25:23). Land is held in perpetuity for the community, never to be individually alienated, speculated upon, or encumbered. "Blessed are the meek: for they shall inherit the earth" (Matthew 5:5).',
+      legalBasis: 'Land trust doctrine under common law; Beneficial interest separated from legal title; Spendthrift protections — no creditor may reach trust-held land; Not subject to partition or forced sale.',
       trusteeLabel: "Land Steward (Trustee) — 'a good steward of the manifold grace of God' (1 Peter 4:10)",
-      protectorLabel: "EBT Oversight + Protector Council",
-      notes: '"The land shall rest a sabbath unto the LORD" (Leviticus 25:4). Land is held in trust and never individually owned. Members have beneficial use rights through their PMA membership. The Jubilee principle (Leviticus 25) governs long-term land allocation. Agricultural land follows Sabbath rest cycles.',
+      protectorLabel: "Body Oversight + Protector Council",
+      notes: '"The land shall rest a sabbath unto the LORD" (Leviticus 25:4). Land is held in trust and never individually owned. Members have beneficial use rights through their membership in the Body. The Jubilee principle (Leviticus 25) governs long-term land allocation.',
       color: "#16A34A",
       icon: "map-pin",
       sortOrder: 10,
@@ -2336,14 +2337,14 @@ export class DatabaseStorage implements IStorage {
     const [housingTrust] = await db.insert(trustEntities).values({
       name: "Housing Trust",
       subtitle: "Shelter & Buildings",
-      layer: "operational",
-      entityType: "trust",
-      description: '"My people shall dwell in a peaceable habitation, and in sure dwellings, and in quiet resting places" (Isaiah 32:18). "Pure religion and undefiled before God and the Father is this, To visit the fatherless and widows in their affliction" (James 1:27). Administers housing structures, shelters, and buildings. Ensures community members have access to covenant-aligned shelter. Manages construction, maintenance, and allocation of dwelling units.',
-      charter: 'To provide and maintain shelter and dwelling infrastructure for the benefit of ecclesia members and their families. "In my Father\'s house are many mansions: if it were not so, I would have told you. I go to prepare a place for you" (John 14:2). As Christ prepares a place for His people, so this trust prepares shelter for the covenant community.',
-      legalBasis: 'Express trust under common law; Cooperative housing principles; Beneficial use rights — members use but do not own dwellings; Spendthrift protections — housing cannot be seized by individual member creditors.',
+      layer: "stewardship",
+      entityType: "stewardship",
+      description: '"My people shall dwell in a peaceable habitation, and in sure dwellings, and in quiet resting places" (Isaiah 32:18). An organ of the Body providing shelter. Administers housing structures, shelters, and buildings. Ensures members of the Body have access to covenant-aligned shelter. "In my Father\'s house are many mansions" (John 14:2).',
+      charter: 'To provide and maintain shelter and dwelling infrastructure for the benefit of members of the Body. As Christ prepares a place for His people, so this organ of the Body prepares shelter for the covenant community.',
+      legalBasis: 'Express trust under common law; Cooperative housing principles; Beneficial use rights — members use but do not own dwellings; Spendthrift protections.',
       trusteeLabel: "Housing Steward (Trustee)",
-      protectorLabel: "EBT Oversight + Protector Council",
-      notes: '"By wisdom a house is built, and by understanding it is established; and by knowledge the rooms are filled with all precious and pleasant riches" (Proverbs 24:3-4). Housing is allocated based on need, contribution, and family size. Members do not own dwellings — they have beneficial use rights. "He that hath two coats, let him impart to him that hath none" (Luke 3:11).',
+      protectorLabel: "Body Oversight + Protector Council",
+      notes: '"By wisdom a house is built, and by understanding it is established" (Proverbs 24:3-4). Housing is allocated based on need, contribution, and family size. Members do not own dwellings — they have beneficial use rights as members of the Body.',
       color: "#6366F1",
       icon: "home",
       sortOrder: 11,
@@ -2353,14 +2354,14 @@ export class DatabaseStorage implements IStorage {
     const [treasuryTrust] = await db.insert(trustEntities).values({
       name: "Treasury Trust",
       subtitle: "Finances & Resources",
-      layer: "operational",
-      entityType: "trust",
-      description: '"Bring ye all the tithes into the storehouse, that there may be meat in mine house, and prove me now herewith, saith the LORD of hosts, if I will not open you the windows of heaven, and pour you out a blessing, that there shall not be room enough to receive it" (Malachi 3:10). The central treasury and storehouse. Manages financial contributions, allocations, reserves, and the economic infrastructure of the trust network.',
-      charter: 'To receive, hold, and allocate financial resources for the operations and growth of the trust network according to the covenant charter mandate. "Honour the LORD with thy substance, and with the firstfruits of all thine increase: So shall thy barns be filled with plenty" (Proverbs 3:9-10). All contributions are irrevocable gifts to the trust — not investments, loans, or purchases. Distribution follows the Acts 2:45 model: "as every man had need."',
-      legalBasis: 'Express trust under common law; Private member contributions — not commercial transactions or taxable income; PMA contribution agreements; "For where your treasure is, there will your heart be also" (Matthew 6:21). This treasury operates in the private domain — not as a bank, financial institution, or money services business.',
-      trusteeLabel: "Treasury Steward (Trustee) — 'the faithful and wise steward, whom his lord shall make ruler over his household' (Luke 12:42)",
-      protectorLabel: "EBT Oversight + Annual Audit Committee (3 members — 2 Corinthians 13:1)",
-      notes: '"For the love of money is the root of all evil" (1 Timothy 6:10). All financial flows are private member contributions, not commercial transactions. The treasury operates under lawful money principles. No private inurement — no officer profits from trust funds. "Lay not up for yourselves treasures upon earth... but lay up for yourselves treasures in heaven" (Matthew 6:19-20). Complete financial transparency — quarterly reports to all members.',
+      layer: "stewardship",
+      entityType: "stewardship",
+      description: '"Bring ye all the tithes into the storehouse, that there may be meat in mine house" (Malachi 3:10). The treasury organ of the Body — the central storehouse. Manages financial contributions, allocations, reserves, and the economic infrastructure of the Body.',
+      charter: 'To receive, hold, and allocate financial resources for the operations and growth of the Body according to the covenant mandate. "Honour the LORD with thy substance, and with the firstfruits of all thine increase" (Proverbs 3:9-10). Distribution follows the Acts 2:45 model: "as every man had need."',
+      legalBasis: 'Express trust under common law; Private member contributions — not commercial transactions or taxable income; This treasury operates in the private domain.',
+      trusteeLabel: "Treasury Steward (Trustee) — 'the faithful and wise steward' (Luke 12:42)",
+      protectorLabel: "Body Oversight + Annual Audit Committee (3 members — 2 Corinthians 13:1)",
+      notes: '"For the love of money is the root of all evil" (1 Timothy 6:10). All financial flows are private member contributions, not commercial transactions. The treasury operates under lawful money principles. Complete financial transparency — quarterly reports to all members.',
       color: "#CA8A04",
       icon: "banknote",
       sortOrder: 12,
@@ -2370,14 +2371,14 @@ export class DatabaseStorage implements IStorage {
     const [enterpriseTrust] = await db.insert(trustEntities).values({
       name: "Enterprise Trust",
       subtitle: "Commerce & Innovation",
-      layer: "operational",
-      entityType: "trust",
-      description: '"She considereth a field, and buyeth it: with the fruit of her hands she planteth a vineyard. She perceiveth that her merchandise is good: her candle goeth not out by night" (Proverbs 31:16-18). The enterprise arm oversees revenue-generating activities for community sustenance. Isolates commercial liability so that if one enterprise encounters legal difficulty, it does not endanger the wider ecosystem. "Whatsoever thy hand findeth to do, do it with thy might" (Ecclesiastes 9:10).',
-      charter: 'To develop and manage revenue-generating enterprises for the sustenance and growth of the ecclesia community. "His lord said unto him, Well done, thou good and faithful servant: thou hast been faithful over a few things, I will make thee ruler over many things" (Matthew 25:21). Enterprise activities serve the covenant purpose — they are not profit-seeking ventures for individual enrichment but communal endeavors whose fruit feeds the storehouse.',
-      legalBasis: 'Express trust under common law; Commercial liability isolation — each enterprise activity is a separate trust operation; Revenue flows to the Treasury Trust as first-fruits (Proverbs 3:9-10); Private enterprise within the ecclesia — not a publicly traded or regulated commercial entity.',
+      layer: "stewardship",
+      entityType: "stewardship",
+      description: '"She considereth a field, and buyeth it: with the fruit of her hands she planteth a vineyard" (Proverbs 31:16). The enterprise organ of the Body — oversees revenue-generating activities for community sustenance. Isolates commercial liability. Also administers the digital platform and community coordination infrastructure. "Whatsoever thy hand findeth to do, do it with thy might" (Ecclesiastes 9:10).',
+      charter: 'To develop and manage revenue-generating enterprises and digital infrastructure for the sustenance and growth of the Body. "Well done, thou good and faithful servant: thou hast been faithful over a few things, I will make thee ruler over many things" (Matthew 25:21).',
+      legalBasis: 'Express trust under common law; Commercial liability isolation — each enterprise activity is a separate trust operation; Revenue flows to the Treasury Trust as first-fruits.',
       trusteeLabel: "Enterprise Steward (Trustee) — 'a Proverbs 31 steward'",
-      protectorLabel: "EBT Oversight + Protector Council",
-      notes: '"The hand of the diligent maketh rich" (Proverbs 10:4). Each enterprise operates as a separate activity under this trust for liability isolation. Revenue flows to the Treasury Trust for redistribution. "Not slothful in business; fervent in spirit; serving the Lord" (Romans 12:11). All enterprise must align with the covenant purpose — no activity that contradicts Scripture.',
+      protectorLabel: "Body Oversight + Protector Council",
+      notes: '"The hand of the diligent maketh rich" (Proverbs 10:4). Each enterprise operates as a separate activity under this trust for liability isolation. Revenue flows to the Treasury Trust for redistribution. "Not slothful in business; fervent in spirit; serving the Lord" (Romans 12:11).',
       color: "#0F766E",
       icon: "building",
       sortOrder: 13,
@@ -2387,118 +2388,122 @@ export class DatabaseStorage implements IStorage {
     const [educationTrust] = await db.insert(trustEntities).values({
       name: "Education Trust",
       subtitle: "Knowledge & Training",
-      layer: "operational",
-      entityType: "trust",
-      description: '"Train up a child in the way he should go: and when he is old, he will not depart from it" (Proverbs 22:6). "Study to shew thyself approved unto God, a workman that needeth not to be ashamed, rightly dividing the word of truth" (2 Timothy 2:15). Administers educational programs, courses, curriculum development, and training infrastructure covering trust law, agricultural skills, community governance, spiritual formation, and leadership development.',
-      charter: 'To develop, deliver, and steward educational resources, courses, and training programs that equip members for covenant community life and leadership. "And the things that thou hast heard of me among many witnesses, the same commit thou to faithful men, who shall be able to teach others also" (2 Timothy 2:2). "The fear of the LORD is the beginning of knowledge" (Proverbs 1:7). All education begins with the Word of God and flows outward into practical application.',
-      legalBasis: 'Express trust under common law; First Amendment religious education — the ecclesia has the inherent right to educate its members in matters of faith, doctrine, and practical living; "And these words, which I command thee this day, shall be in thine heart: And thou shalt teach them diligently unto thy children" (Deuteronomy 6:6-7).',
+      layer: "stewardship",
+      entityType: "stewardship",
+      description: '"Train up a child in the way he should go: and when he is old, he will not depart from it" (Proverbs 22:6). "Study to shew thyself approved unto God, a workman that needeth not to be ashamed, rightly dividing the word of truth" (2 Timothy 2:15). The education organ of the Body — administers educational programs, courses, curriculum development, and training infrastructure.',
+      charter: 'To develop, deliver, and steward educational resources that equip members of the Body for covenant community life and leadership. "And the things that thou hast heard of me among many witnesses, the same commit thou to faithful men, who shall be able to teach others also" (2 Timothy 2:2).',
+      legalBasis: 'Express trust under common law; First Amendment religious education — the ecclesia has the inherent right to educate its members.',
       trusteeLabel: "Education Steward (Trustee) — 'apt to teach' (1 Timothy 3:2)",
-      protectorLabel: "EBT Oversight + Protector Council",
-      notes: '"My people are destroyed for lack of knowledge" (Hosea 4:6). The platform serves as the primary delivery mechanism for courses. Curriculum is developed by guilds and delivered through chapters. "Give instruction to a wise man, and he will be yet wiser: teach a just man, and he will increase in learning" (Proverbs 9:9). Discipleship chains (2 Timothy 2:2) ensure knowledge passes from generation to generation.',
+      protectorLabel: "Body Oversight + Protector Council",
+      notes: '"My people are destroyed for lack of knowledge" (Hosea 4:6). Curriculum is developed by crafts and delivered through regions. Discipleship chains (2 Timothy 2:2) ensure knowledge passes from generation to generation.',
       color: "#0EA5E9",
       icon: "graduation-cap",
       sortOrder: 14,
       status: "active",
     }).returning();
 
-    // === PEOPLE ARM: PMA & COMMUNITY GOVERNANCE ===
+    // === ASSEMBLY (within the Body) ===
     const [mainPma] = await db.insert(trustEntities).values({
       name: "Private Membership Association",
-      subtitle: "(PMA) — People Layer",
-      layer: "pma",
-      entityType: "pma",
-      description: '"And I say also unto thee, That thou art Peter, and upon this rock I will build my church [ecclesia]; and the gates of hell shall not prevail against it" (Matthew 16:18). The primary Private Membership Association — the voluntary assembly of believers. Members join the community through the PMA. They are beneficiary participants, not owners of trust assets. "For where two or three are gathered together in my name, there am I in the midst of them" (Matthew 18:20). The PMA organizes the people; the trusts hold the assets for their benefit.',
-      charter: 'To organize the voluntary association of members under the ecclesia covenant, establishing their rights, obligations, and mutual commitments as beneficiaries of the trust network. "Stand fast therefore in the liberty wherewith Christ hath made us free, and be not entangled again with the yoke of bondage" (Galatians 5:1). This PMA is not a state-chartered institution but a voluntary assembly of free men and women exercising their God-given right of association.',
-      legalBasis: 'First Amendment right of free association — "Congress shall make no law... prohibiting the free exercise [of religion]; or abridging... the right of the people peaceably to assemble"; NAACP v. Alabama, 357 U.S. 449 (1958) — right of private associations; Roberts v. U.S. Jaycees, 468 U.S. 609 (1984) — associational freedom; Boy Scouts of America v. Dale, 530 U.S. 640 (2000) — right to exclude; Private contract law — voluntary agreement between private parties; This PMA is NOT a public accommodation, statutory entity, or 501(c)(3) organization.',
+      subtitle: "The Gathered Ecclesia",
+      layer: "assembly",
+      entityType: "assembly",
+      description: '"And I say also unto thee, That thou art Peter, and upon this rock I will build my church [ecclesia]; and the gates of hell shall not prevail against it" (Matthew 16:18). The gathered ecclesia within the Body — the voluntary assembly of believers. "For where two or three are gathered together in my name, there am I in the midst of them" (Matthew 18:20). The assembly organizes the people; the stewardship organs hold the assets for their benefit.',
+      charter: 'To organize the voluntary assembly of members within the Body, establishing their rights, obligations, and mutual commitments. "Stand fast therefore in the liberty wherewith Christ hath made us free, and be not entangled again with the yoke of bondage" (Galatians 5:1). This assembly is not a state-chartered institution but a gathering of those who have entered the Body through the covenant.',
+      legalBasis: 'First Amendment right of free association; NAACP v. Alabama, 357 U.S. 449 (1958); Roberts v. U.S. Jaycees, 468 U.S. 609 (1984); Boy Scouts of America v. Dale, 530 U.S. 640 (2000); Private contract law — voluntary agreement between private parties; This PMA is NOT a public accommodation, statutory entity, or 501(c)(3) organization.',
       trusteeLabel: "PMA Administrator — 'he that is greatest among you shall be your servant' (Matthew 23:11)",
       protectorLabel: "Membership Council — elder body per 1 Timothy 5:17",
-      notes: '"Now ye are the body of Christ, and members in particular" (1 Corinthians 12:27). Membership is voluntary and requires signing the PMA agreement. Members are beneficiaries of trust assets, not owners. The PMA protects internal governance from external interference. "Know ye not that we shall judge angels? how much more things that pertain to this life?" (1 Corinthians 6:3) — the ecclesia governs its own affairs. All disputes resolved through the Matthew 18 Protocol, never before civil courts (1 Corinthians 6:1-8).',
+      notes: '"Now ye are the body of Christ, and members in particular" (1 Corinthians 12:27). Membership is voluntary and requires signing the PMA agreement. Members are beneficiaries of trust assets, not owners. All disputes resolved through the Matthew 18 Protocol, never before civil courts (1 Corinthians 6:1-8).',
       color: "#7C3AED",
       icon: "users",
       sortOrder: 20,
       status: "active",
     }).returning();
 
-    const [chapters] = await db.insert(trustEntities).values({
-      name: "Chapters",
-      subtitle: "Regional Communities",
-      layer: "chapter",
-      entityType: "chapter",
-      description: '"For this cause left I thee in Crete, that thou shouldest set in order the things that are wanting, and ordain elders in every city, as I had appointed thee" (Titus 1:5). "And when they had ordained them elders in every church, and had prayed with fasting, they commended them to the Lord" (Acts 14:23). Regional community chapters organized geographically. Each chapter is a local expression of the ecclesia — a city-church following the New Testament pattern.',
-      charter: 'To organize and govern regional community units under the authority of the PMA, following the pattern of the seven churches of Revelation (Revelation 2-3) and the city-by-city establishment of the early church. Each chapter coordinates local members, worship, resource sharing, pastoral care, and project launches within its geographic area. "Greet the church that is in their house" (Romans 16:5).',
-      legalBasis: 'Derives authority from the PMA and root charter; First Amendment free exercise and assembly; Right of local ecclesia self-governance as practiced by the early church in every city (Acts 14:23, Titus 1:5).',
-      trusteeLabel: "Chapter Steward — 'a bishop then must be... given to hospitality' (1 Timothy 3:2)",
-      protectorLabel: "PMA Oversight + Local Elder Body",
-      notes: '"Obey them that have the rule over you, and submit yourselves: for they watch for your souls, as they that must give account" (Hebrews 13:17). Chapters are the geographic organizing unit. Each chapter appoints local elders per the qualifications of 1 Timothy 3:1-7 and Titus 1:5-9. Chapters contain one or more communes. "The elders which are among you I exhort... Feed the flock of God which is among you, taking the oversight thereof, not by constraint, but willingly" (1 Peter 5:1-2).',
+    // === REGIONS (city-churches within the Body) ===
+    const [regions] = await db.insert(trustEntities).values({
+      name: "Regional Assemblies",
+      subtitle: "City-Churches",
+      layer: "region",
+      entityType: "region",
+      description: '"For this cause left I thee in Crete, that thou shouldest set in order the things that are wanting, and ordain elders in every city, as I had appointed thee" (Titus 1:5). "And when they had ordained them elders in every church, and had prayed with fasting, they commended them to the Lord" (Acts 14:23). Regional assemblies organized geographically within the Body — city-churches following the pattern of the seven churches of Revelation (Rev 2-3).',
+      charter: 'To organize and govern regional community units within the Body, following the New Testament pattern of city-by-city establishment of the early church. Each region coordinates local members, worship, resource sharing, pastoral care, and ministry launches within its geographic area.',
+      legalBasis: 'Derives authority from the assembly and covenant; First Amendment free exercise and assembly; Right of local ecclesia self-governance as practiced by the early church in every city (Acts 14:23, Titus 1:5).',
+      trusteeLabel: "Region Steward — 'a bishop then must be... given to hospitality' (1 Timothy 3:2)",
+      protectorLabel: "Assembly Oversight + Local Elder Body",
+      notes: '"Obey them that have the rule over you, and submit yourselves: for they watch for your souls" (Hebrews 13:17). Regions are the geographic organizing unit within the Body. Each region appoints local elders per the qualifications of 1 Timothy 3:1-7 and Titus 1:5-9.',
       color: "#7C3AED",
       icon: "map-pin",
       sortOrder: 30,
       status: "active",
     }).returning();
 
-    const [communes] = await db.insert(trustEntities).values({
-      name: "Communes",
-      subtitle: "Local Residential Groups",
-      layer: "commune",
-      entityType: "commune",
-      description: '"And they, continuing daily with one accord in the temple, and breaking bread from house to house, did eat their meat with gladness and singleness of heart, Praising God, and having favour with all the people" (Acts 2:46-47). "And the multitude of them that believed were of one heart and of one soul: neither said any of them that ought of the things which he possessed was his own; but they had all things common" (Acts 4:32). Intentional common-life communities nested within chapters.',
-      charter: 'To organize shared living and resource-sharing groups under chapter authority, following the koinonia model of Acts 2:42-47. Daily fellowship, shared meals, common labor, mutual care, and worship together. "Behold, how good and how pleasant it is for brethren to dwell together in unity!" (Psalm 133:1). Each commune embodies the radical generosity of the early church in practical daily life.',
-      legalBasis: 'Derives authority from parent chapter and PMA; Private cooperative living arrangement within the trust ecosystem; Not a statutory co-op or HOA — a private ecclesial household under common law trust.',
-      trusteeLabel: "Commune Lead — 'a servant of all' (Mark 9:35)",
-      protectorLabel: "Chapter Steward + Local Elders",
-      notes: '"Bear ye one another\'s burdens, and so fulfil the law of Christ" (Galatians 6:2). Communes operate within their parent chapter. They share daily life, meals, labor, and resources. "And all that believed were together, and had all things common; And sold their possessions and goods, and parted them to all men, as every man had need" (Acts 2:44-45). "For even when we were with you, this we commanded you, that if any would not work, neither should he eat" (2 Thessalonians 3:10).',
+    // === HOUSEHOLDS (house-churches within the Body) ===
+    const [households] = await db.insert(trustEntities).values({
+      name: "Households",
+      subtitle: "House-Churches",
+      layer: "household",
+      entityType: "household",
+      description: '"And they, continuing daily with one accord in the temple, and breaking bread from house to house, did eat their meat with gladness and singleness of heart" (Acts 2:46). "Greet the church that is in their house" (Romans 16:5). House-churches and oikos groups — the intimate gatherings within the Body where daily fellowship, shared meals, common labor, and worship take place.',
+      charter: 'To organize shared living and resource-sharing groups within regions, following the koinonia model of Acts 2:42-47. "Behold, how good and how pleasant it is for brethren to dwell together in unity!" (Psalm 133:1).',
+      legalBasis: 'Derives authority from parent region and assembly; Private cooperative living arrangement within the Body; Not a statutory co-op or HOA — a private ecclesial household under common law trust.',
+      trusteeLabel: "Household Lead — 'a servant of all' (Mark 9:35)",
+      protectorLabel: "Region Steward + Local Elders",
+      notes: '"Bear ye one another\'s burdens, and so fulfil the law of Christ" (Galatians 6:2). Households operate within their parent region. They share daily life, meals, labor, and resources.',
       color: "#7C3AED",
       icon: "sprout",
       sortOrder: 31,
       status: "active",
     }).returning();
 
-    const [guilds] = await db.insert(trustEntities).values({
-      name: "Guilds",
-      subtitle: "Cross-Cutting Functional Groups",
-      layer: "guild",
-      entityType: "guild",
-      description: '"And I have filled him with the spirit of God, in wisdom, and in understanding, and in knowledge, and in all manner of workmanship" (Exodus 31:3). "Every wise hearted among you shall come, and make all that the LORD hath commanded" (Exodus 35:10). Functional groups organized around skills, trades, and areas of expertise following the Bezalel pattern. Guilds cross chapter boundaries — connecting skilled workers across the network.',
-      charter: 'To organize functional working groups that develop and deploy specialized skills across the trust network. "Seest thou a man diligent in his business? he shall stand before kings" (Proverbs 22:29). Guilds provide training, apprenticeship, mentorship, quality standards, and cross-chapter coordination of expertise. "Iron sharpeneth iron; so a man sharpeneth the countenance of his friend" (Proverbs 27:17).',
-      legalBasis: 'Derives authority from the PMA and root charter; Cross-chapter functional authority delegated by the governance anchor; First Amendment right of association for vocational fellowship.',
-      trusteeLabel: "Guild Master — 'a workman that needeth not to be ashamed' (2 Timothy 2:15)",
-      protectorLabel: "PMA Oversight + Guild Council",
-      notes: '"Whatsoever thy hand findeth to do, do it with thy might" (Ecclesiastes 9:10). Guilds include farming, construction, education, technology, healing arts, and other vocational groups. Three-tier membership: Apprentice, Journeyman, Master. "And the things that thou hast heard of me among many witnesses, the same commit thou to faithful men, who shall be able to teach others also" (2 Timothy 2:2) — the discipleship chain applies to trade skills as well as spiritual formation.',
+    // === CRAFTS (Bezalel pattern within the Body) ===
+    const [crafts] = await db.insert(trustEntities).values({
+      name: "Crafts",
+      subtitle: "Skilled Workers — Bezalel Pattern",
+      layer: "craft",
+      entityType: "craft",
+      description: '"And I have filled him with the spirit of God, in wisdom, and in understanding, and in knowledge, and in all manner of workmanship" (Exodus 31:3). "Every wise hearted among you shall come, and make all that the LORD hath commanded" (Exodus 35:10). Functional groups within the Body organized around skills, trades, and areas of expertise following the Bezalel pattern. Crafts cross regional boundaries — connecting skilled workers across the Body.',
+      charter: 'To organize functional working groups that develop and deploy specialized skills across the Body. "Seest thou a man diligent in his business? he shall stand before kings" (Proverbs 22:29). "Iron sharpeneth iron; so a man sharpeneth the countenance of his friend" (Proverbs 27:17).',
+      legalBasis: 'Derives authority from the assembly and covenant; Cross-regional functional authority delegated by the Body; First Amendment right of association for vocational fellowship.',
+      trusteeLabel: "Craft Master — 'a workman that needeth not to be ashamed' (2 Timothy 2:15)",
+      protectorLabel: "Assembly Oversight + Craft Council",
+      notes: '"Whatsoever thy hand findeth to do, do it with thy might" (Ecclesiastes 9:10). Crafts include farming, construction, education, technology, healing arts, and other vocational groups. Three-tier membership: Apprentice, Journeyman, Master.',
       color: "#D97706",
       icon: "users",
       sortOrder: 32,
       status: "active",
     }).returning();
 
-    const [projects] = await db.insert(trustEntities).values({
-      name: "Projects",
-      subtitle: "Time-Bound Initiatives",
-      layer: "project",
-      entityType: "project",
-      description: '"Then I told them of the hand of my God which was good upon me... And they said, Let us rise up and build. So they strengthened their hands for this good work" (Nehemiah 2:18). "For which of you, intending to build a tower, sitteth not down first, and counteth the cost, whether he have sufficient to finish it?" (Luke 14:28). Specific initiatives and time-bound projects undertaken by members following the Nehemiah pattern of organized building.',
-      charter: 'To coordinate specific initiatives and deliverables within the trust ecosystem. "Commit thy works unto the LORD, and thy thoughts shall be established" (Proverbs 16:3). Each project has a defined scope, timeline, and deliverable — counting the cost before building (Luke 14:28) and organizing labor for efficient completion (Nehemiah 3).',
-      legalBasis: 'Derives authority from parent entity (chapter, guild, or PMA); Time-bound authorization — project authority expires upon completion or the defined end date; Resources allocated from operational trusts through the governance structure.',
-      trusteeLabel: "Project Lead — 'as Nehemiah organized the builders' (Nehemiah 3)",
-      protectorLabel: "PMA Oversight + Sponsoring Entity",
-      notes: '"And let us not be weary in well doing: for in due season we shall reap, if we faint not" (Galatians 6:9). Projects draw resources from operational trusts and labor from guild and chapter members. They have defined scope, timeline, and deliverables. "The plans of the diligent lead surely to abundance" (Proverbs 21:5 ESV). Projects report progress to the sponsoring entity and conclude with an accounting of stewardship.',
+    // === MINISTRIES (diakonia within the Body) ===
+    const [ministries] = await db.insert(trustEntities).values({
+      name: "Ministries",
+      subtitle: "Service Initiatives — Diakonia",
+      layer: "ministry",
+      entityType: "ministry",
+      description: '"Then I told them of the hand of my God which was good upon me... And they said, Let us rise up and build. So they strengthened their hands for this good work" (Nehemiah 2:18). "For which of you, intending to build a tower, sitteth not down first, and counteth the cost, whether he have sufficient to finish it?" (Luke 14:28). Service initiatives and focused ministries within the Body — following the Nehemiah pattern of organized building and the diakonia (service) of the early church.',
+      charter: 'To coordinate specific service initiatives and deliverables within the Body. "Commit thy works unto the LORD, and thy thoughts shall be established" (Proverbs 16:3). Each ministry has a defined scope and purpose — counting the cost before building (Luke 14:28).',
+      legalBasis: 'Derives authority from parent entity (region, craft, or assembly); Resources allocated from stewardship organs through the Body.',
+      trusteeLabel: "Ministry Lead — 'as Nehemiah organized the builders' (Nehemiah 3)",
+      protectorLabel: "Assembly Oversight + Sponsoring Entity",
+      notes: '"And let us not be weary in well doing: for in due season we shall reap, if we faint not" (Galatians 6:9). Ministries draw resources from stewardship organs and labor from craft and regional members.',
       color: "#6B7280",
       icon: "folder-open",
       sortOrder: 33,
       status: "active",
     }).returning();
 
-    // === BENEFICIARIES & STEWARDS ===
-    const [beneficiaries] = await db.insert(trustEntities).values({
-      name: "Beneficiaries & Stewards",
-      subtitle: "All Members — Joint Heirs",
-      layer: "beneficiary",
-      entityType: "beneficiary",
-      description: '"And if children, then heirs; heirs of God, and joint-heirs with Christ" (Romans 8:17). "The Spirit itself beareth witness with our spirit, that we are the children of God" (Romans 8:16). All members of the trust ecosystem are both beneficiaries (receiving from the community) and stewards (giving back). This is where the two arms meet: the asset arm provides benefits, and the people arm organizes participation. "For we are labourers together with God" (1 Corinthians 3:9).',
-      charter: 'All members participate as both beneficiaries and stewards of the trust network, receiving benefits and contributing to the common good. "As every man hath received the gift, even so minister the same one to another, as good stewards of the manifold grace of God" (1 Peter 4:10). Each member holds one Beneficial Unit — an equal, undivided interest (1/N) in the trust corpus, analogous to being joint-heirs (Romans 8:17). Beneficial interest is non-transferable, non-attachable, and contingent on active covenant participation.',
-      legalBasis: 'Beneficial interest under common law trust doctrine; Spendthrift trust protections — no external creditor may reach the Beneficial Unit; Interest is equitable, not legal — members have use rights, not ownership; "The labourer is worthy of his reward" (1 Timothy 5:18); "Give, and it shall be given unto you; good measure, pressed down, and shaken together, and running over" (Luke 6:38).',
+    // === MEMBERS (joint heirs within the Body) ===
+    const [members] = await db.insert(trustEntities).values({
+      name: "Members of the Body",
+      subtitle: "Joint Heirs with Christ",
+      layer: "member",
+      entityType: "member",
+      description: '"And if children, then heirs; heirs of God, and joint-heirs with Christ" (Romans 8:17). "The Spirit itself beareth witness with our spirit, that we are the children of God" (Romans 8:16). All who have entered the Body through the covenant are members — both recipients (receiving from the community) and participants (giving back). "For we are labourers together with God" (1 Corinthians 3:9). "As every man hath received the gift, even so minister the same one to another, as good stewards of the manifold grace of God" (1 Peter 4:10).',
+      charter: 'All members participate as both beneficiaries and stewards of the Body, receiving benefits and contributing to the common good. Each member holds one Beneficial Unit — an equal, undivided interest (1/N) in the trust corpus, analogous to being joint-heirs (Romans 8:17). Beneficial interest is non-transferable, non-attachable, and contingent on active covenant participation.',
+      legalBasis: 'Beneficial interest under common law trust doctrine; Spendthrift trust protections — no external creditor may reach the Beneficial Unit; Interest is equitable, not legal — members have use rights, not ownership.',
       trusteeLabel: "Individual Members — 'ye are the body of Christ, and members in particular' (1 Corinthians 12:27)",
-      protectorLabel: "PMA Membership Council + Protector Council",
-      notes: '"For even when we were with you, this we commanded you, that if any would not work, neither should he eat" (2 Thessalonians 3:10). Members are not owners — they are beneficiaries with use rights and stewards with responsibilities. The relationship is reciprocal: trust assets benefit members, and members contribute back through the PMA. Beneficial Units are non-transferable, non-attachable, and revocable only by voluntary withdrawal or covenant violation after the Matthew 18 process. "From everyone who has been given much, much will be demanded" (Luke 12:48 NIV).',
+      protectorLabel: "Assembly Membership Council + Protector Council",
+      notes: '"For even when we were with you, this we commanded you, that if any would not work, neither should he eat" (2 Thessalonians 3:10). Members are not owners — they are beneficiaries with use rights and stewards with responsibilities. Beneficial Units are non-transferable, non-attachable, and revocable only by voluntary withdrawal or covenant violation after the Matthew 18 process.',
       color: "#6B7280",
       icon: "users",
       sortOrder: 40,
@@ -2509,62 +2514,62 @@ export class DatabaseStorage implements IStorage {
     // RELATIONSHIPS
     // ══════════════════════════════════════════════════════════
 
-    // NCLT → EBT (Authority — constitutional root authorizes governance)
+    // NCLT → EB (Enters — covenant gateway into the Body)
     await db.insert(trustRelationships).values({
       fromEntityId: nclt.id, toEntityId: ebt.id,
-      relationshipType: "authority", label: "Authorizes", notes: "Constitutional authority — Romans 13:1 'The powers that be are ordained of God'",
+      relationshipType: "enters", label: "Baptized into the Body", notes: "'For by one Spirit are we all baptized into one body' — 1 Corinthians 12:13",
     });
 
-    // === ASSET ARM: EBT → Operational Trusts (Grants) ===
+    // === Body commissions stewardship organs ===
     await db.insert(trustRelationships).values([
-      { fromEntityId: ebt.id, toEntityId: landTrust.id, relationshipType: "grants", label: "Grants stewardship", notes: "Stewardship mandate — Genesis 2:15 'The LORD God took the man, and put him into the garden to dress it and to keep it'" },
-      { fromEntityId: ebt.id, toEntityId: housingTrust.id, relationshipType: "grants", label: "Grants stewardship", notes: "Shelter provision — Isaiah 32:18 'My people shall dwell in a peaceable habitation'" },
-      { fromEntityId: ebt.id, toEntityId: treasuryTrust.id, relationshipType: "grants", label: "Grants stewardship", notes: "Storehouse principle — Malachi 3:10" },
-      { fromEntityId: ebt.id, toEntityId: enterpriseTrust.id, relationshipType: "grants", label: "Grants stewardship", notes: "Fruitful enterprise — Proverbs 31:16-18" },
-      { fromEntityId: ebt.id, toEntityId: educationTrust.id, relationshipType: "grants", label: "Grants stewardship", notes: "Teaching mandate — Deuteronomy 6:7 'Thou shalt teach them diligently unto thy children'" },
+      { fromEntityId: ebt.id, toEntityId: landTrust.id, relationshipType: "grants", label: "Commissions stewardship", notes: "Stewardship mandate — Genesis 2:15" },
+      { fromEntityId: ebt.id, toEntityId: housingTrust.id, relationshipType: "grants", label: "Commissions stewardship", notes: "Shelter provision — Isaiah 32:18" },
+      { fromEntityId: ebt.id, toEntityId: treasuryTrust.id, relationshipType: "grants", label: "Commissions stewardship", notes: "Storehouse principle — Malachi 3:10" },
+      { fromEntityId: ebt.id, toEntityId: enterpriseTrust.id, relationshipType: "grants", label: "Commissions stewardship", notes: "Fruitful enterprise — Proverbs 31:16-18" },
+      { fromEntityId: ebt.id, toEntityId: educationTrust.id, relationshipType: "grants", label: "Commissions stewardship", notes: "Teaching mandate — Deuteronomy 6:7" },
     ]);
 
-    // === PEOPLE ARM: EBT → PMA (Establishes) ===
+    // === Body establishes the assembly ===
     await db.insert(trustRelationships).values({
       fromEntityId: ebt.id, toEntityId: mainPma.id,
-      relationshipType: "establishes_pma", label: "Establishes", notes: "Ecclesia assembly — Matthew 16:18 'Upon this rock I will build my ecclesia'",
+      relationshipType: "establishes_pma", label: "Gathers the assembly", notes: "Ecclesia assembly — Matthew 16:18 'Upon this rock I will build my ecclesia'",
     });
 
-    // === PEOPLE ARM: PMA → Community Structure ===
+    // === Assembly → Community Structure ===
     await db.insert(trustRelationships).values([
-      { fromEntityId: mainPma.id, toEntityId: chapters.id, relationshipType: "oversees", label: "Elder oversight", notes: "Elder governance — 1 Timothy 5:17 'Let the elders that rule well be counted worthy of double honour'" },
-      { fromEntityId: mainPma.id, toEntityId: guilds.id, relationshipType: "oversees", label: "Organizes", notes: "Gift coordination — 1 Corinthians 12:28 'God hath set some in the church'" },
-      { fromEntityId: mainPma.id, toEntityId: projects.id, relationshipType: "oversees", label: "Organizes", notes: "Kingdom works — Nehemiah 2:17-18 'Let us build up the wall'" },
+      { fromEntityId: mainPma.id, toEntityId: regions.id, relationshipType: "oversees", label: "Elder oversight", notes: "Elder governance — 1 Timothy 5:17" },
+      { fromEntityId: mainPma.id, toEntityId: crafts.id, relationshipType: "oversees", label: "Organizes", notes: "Gift coordination — 1 Corinthians 12:28" },
+      { fromEntityId: mainPma.id, toEntityId: ministries.id, relationshipType: "oversees", label: "Commissions", notes: "Kingdom works — Nehemiah 2:17-18" },
     ]);
 
-    // Chapters → Communes (hierarchical — communes are nested within chapters)
+    // Regions → Households (house churches within regions)
     await db.insert(trustRelationships).values({
-      fromEntityId: chapters.id, toEntityId: communes.id,
-      relationshipType: "oversees", label: "Contains", notes: "House churches within assembly — Romans 16:5 'the church that is in their house'",
+      fromEntityId: regions.id, toEntityId: households.id,
+      relationshipType: "oversees", label: "Contains", notes: "House churches within assembly — Romans 16:5",
     });
 
-    // === CROSS-ARM: Operational Trusts benefit PMA members ===
+    // === Stewardship organs benefit members ===
     await db.insert(trustRelationships).values([
-      { fromEntityId: landTrust.id, toEntityId: beneficiaries.id, relationshipType: "benefits", label: "Benefits", notes: "Inheritance of the land — Psalm 37:11 'The meek shall inherit the earth'" },
-      { fromEntityId: housingTrust.id, toEntityId: beneficiaries.id, relationshipType: "benefits", label: "Benefits", notes: "Shelter for the household — Proverbs 24:3-4" },
-      { fromEntityId: treasuryTrust.id, toEntityId: beneficiaries.id, relationshipType: "benefits", label: "Benefits", notes: "Distribution as every man had need — Acts 4:35" },
-      { fromEntityId: enterpriseTrust.id, toEntityId: beneficiaries.id, relationshipType: "benefits", label: "Benefits", notes: "The laborer is worthy — 1 Timothy 5:18" },
-      { fromEntityId: educationTrust.id, toEntityId: beneficiaries.id, relationshipType: "benefits", label: "Benefits", notes: "Teaching all nations — Matthew 28:19-20" },
+      { fromEntityId: landTrust.id, toEntityId: members.id, relationshipType: "benefits", label: "Benefits", notes: "Inheritance of the land — Psalm 37:11" },
+      { fromEntityId: housingTrust.id, toEntityId: members.id, relationshipType: "benefits", label: "Benefits", notes: "Shelter for the household — Proverbs 24:3-4" },
+      { fromEntityId: treasuryTrust.id, toEntityId: members.id, relationshipType: "benefits", label: "Benefits", notes: "Distribution as every man had need — Acts 4:35" },
+      { fromEntityId: enterpriseTrust.id, toEntityId: members.id, relationshipType: "benefits", label: "Benefits", notes: "The laborer is worthy — 1 Timothy 5:18" },
+      { fromEntityId: educationTrust.id, toEntityId: members.id, relationshipType: "benefits", label: "Benefits", notes: "Teaching all nations — Matthew 28:19-20" },
     ]);
 
-    // === PMA governs beneficiaries (members organized through PMA) ===
+    // === Assembly organizes members ===
     await db.insert(trustRelationships).values({
-      fromEntityId: mainPma.id, toEntityId: beneficiaries.id,
-      relationshipType: "oversees", label: "Organizes members", notes: "Shepherd the flock — 1 Peter 5:2 'Feed the flock of God which is among you'",
+      fromEntityId: mainPma.id, toEntityId: members.id,
+      relationshipType: "oversees", label: "Organizes members", notes: "Shepherd the flock — 1 Peter 5:2",
     });
 
-    // === Beneficiaries contribute back (remits — upward flow) ===
+    // === Members contribute back (remits — upward flow) ===
     await db.insert(trustRelationships).values({
-      fromEntityId: beneficiaries.id, toEntityId: mainPma.id,
-      relationshipType: "remits", label: "Contributes labor & resources", notes: "Each according to ability — Acts 11:29 'Every man according to his ability, determined to send relief'",
+      fromEntityId: members.id, toEntityId: mainPma.id,
+      relationshipType: "remits", label: "Contributes labor & resources", notes: "Each according to ability — Acts 11:29",
     });
 
-    // === Treasury funds other operational trusts ===
+    // === Treasury funds other stewardship organs ===
     await db.insert(trustRelationships).values([
       { fromEntityId: treasuryTrust.id, toEntityId: landTrust.id, relationshipType: "funds", label: "Allocates funds", notes: "Storehouse distribution — Acts 4:34-35" },
       { fromEntityId: treasuryTrust.id, toEntityId: housingTrust.id, relationshipType: "funds", label: "Allocates funds", notes: "Storehouse distribution — Acts 4:34-35" },
@@ -2585,31 +2590,31 @@ export class DatabaseStorage implements IStorage {
     // === SHEPHERDING (Pastoral Care — 1 Peter 5:2) ===
     await db.insert(trustRelationships).values([
       { fromEntityId: ebt.id, toEntityId: mainPma.id, relationshipType: "shepherds", label: "Pastoral oversight", notes: "'Feed the flock of God which is among you, taking the oversight thereof' — 1 Peter 5:2" },
-      { fromEntityId: mainPma.id, toEntityId: chapters.id, relationshipType: "shepherds", label: "Shepherds chapters", notes: "'The elders which are among you I exhort... Feed the flock of God' — 1 Peter 5:1-2" },
-      { fromEntityId: chapters.id, toEntityId: communes.id, relationshipType: "shepherds", label: "Shepherds communes", notes: "'He shall feed his flock like a shepherd' — Isaiah 40:11" },
+      { fromEntityId: mainPma.id, toEntityId: regions.id, relationshipType: "shepherds", label: "Shepherds regions", notes: "'The elders which are among you I exhort... Feed the flock of God' — 1 Peter 5:1-2" },
+      { fromEntityId: regions.id, toEntityId: households.id, relationshipType: "shepherds", label: "Shepherds households", notes: "'He shall feed his flock like a shepherd' — Isaiah 40:11" },
     ]);
 
     // === TEACHING (Discipleship — 2 Timothy 2:2) ===
     await db.insert(trustRelationships).values([
       { fromEntityId: educationTrust.id, toEntityId: mainPma.id, relationshipType: "teaches", label: "Equips the ecclesia", notes: "'For the perfecting of the saints, for the work of the ministry' — Ephesians 4:12" },
-      { fromEntityId: educationTrust.id, toEntityId: guilds.id, relationshipType: "teaches", label: "Trains guild members", notes: "'The same commit thou to faithful men, who shall be able to teach others also' — 2 Timothy 2:2" },
-      { fromEntityId: mainPma.id, toEntityId: chapters.id, relationshipType: "teaches", label: "Doctrinal teaching", notes: "'Teaching them to observe all things whatsoever I have commanded you' — Matthew 28:20" },
-      { fromEntityId: guilds.id, toEntityId: chapters.id, relationshipType: "teaches", label: "Skills training", notes: "'Every wise hearted among you shall come, and make all that the LORD hath commanded' — Exodus 35:10" },
+      { fromEntityId: educationTrust.id, toEntityId: crafts.id, relationshipType: "teaches", label: "Trains craft members", notes: "'The same commit thou to faithful men, who shall be able to teach others also' — 2 Timothy 2:2" },
+      { fromEntityId: mainPma.id, toEntityId: regions.id, relationshipType: "teaches", label: "Doctrinal teaching", notes: "'Teaching them to observe all things whatsoever I have commanded you' — Matthew 28:20" },
+      { fromEntityId: crafts.id, toEntityId: regions.id, relationshipType: "teaches", label: "Skills training", notes: "'Every wise hearted among you shall come, and make all that the LORD hath commanded' — Exodus 35:10" },
     ]);
 
     // === SERVICE (Diaconal — Mark 10:45) ===
     await db.insert(trustRelationships).values([
-      { fromEntityId: mainPma.id, toEntityId: beneficiaries.id, relationshipType: "serves", label: "Serves members", notes: "'Even as the Son of man came not to be ministered unto, but to minister' — Matthew 20:28" },
-      { fromEntityId: guilds.id, toEntityId: communes.id, relationshipType: "serves", label: "Serves communes", notes: "'By love serve one another' — Galatians 5:13" },
-      { fromEntityId: chapters.id, toEntityId: beneficiaries.id, relationshipType: "serves", label: "Serves local members", notes: "'As we have therefore opportunity, let us do good unto all men, especially unto them who are of the household of faith' — Galatians 6:10" },
+      { fromEntityId: mainPma.id, toEntityId: members.id, relationshipType: "serves", label: "Serves members", notes: "'Even as the Son of man came not to be ministered unto, but to minister' — Matthew 20:28" },
+      { fromEntityId: crafts.id, toEntityId: households.id, relationshipType: "serves", label: "Serves households", notes: "'By love serve one another' — Galatians 5:13" },
+      { fromEntityId: regions.id, toEntityId: members.id, relationshipType: "serves", label: "Serves local members", notes: "'As we have therefore opportunity, let us do good unto all men' — Galatians 6:10" },
     ]);
 
     // === TITHING (Storehouse — Malachi 3:10) ===
     await db.insert(trustRelationships).values([
-      { fromEntityId: beneficiaries.id, toEntityId: treasuryTrust.id, relationshipType: "tithes", label: "Tithes & offerings", notes: "'Bring ye all the tithes into the storehouse' — Malachi 3:10" },
-      { fromEntityId: chapters.id, toEntityId: treasuryTrust.id, relationshipType: "tithes", label: "Chapter tithes", notes: "'Upon the first day of the week let every one of you lay by him in store' — 1 Corinthians 16:2" },
-      { fromEntityId: communes.id, toEntityId: treasuryTrust.id, relationshipType: "tithes", label: "Commune contributions", notes: "'Honour the LORD with thy substance, and with the firstfruits of all thine increase' — Proverbs 3:9" },
-      { fromEntityId: guilds.id, toEntityId: treasuryTrust.id, relationshipType: "tithes", label: "Guild revenue share", notes: "'The labourer is worthy of his reward' — 1 Timothy 5:18" },
+      { fromEntityId: members.id, toEntityId: treasuryTrust.id, relationshipType: "tithes", label: "Tithes & offerings", notes: "'Bring ye all the tithes into the storehouse' — Malachi 3:10" },
+      { fromEntityId: regions.id, toEntityId: treasuryTrust.id, relationshipType: "tithes", label: "Regional tithes", notes: "'Upon the first day of the week let every one of you lay by him in store' — 1 Corinthians 16:2" },
+      { fromEntityId: households.id, toEntityId: treasuryTrust.id, relationshipType: "tithes", label: "Household contributions", notes: "'Honour the LORD with thy substance, and with the firstfruits of all thine increase' — Proverbs 3:9" },
+      { fromEntityId: crafts.id, toEntityId: treasuryTrust.id, relationshipType: "tithes", label: "Craft revenue share", notes: "'The labourer is worthy of his reward' — 1 Timothy 5:18" },
     ]);
   }
 
@@ -2703,12 +2708,12 @@ export class DatabaseStorage implements IStorage {
 
     const templates: { name: string; description: string; layers: string[]; sections: { title: string; content: string }[] }[] = [
       // ═══════════════════════════════════════════════════════════════════════════
-      // 1. DECLARATION OF TRUST — Constitutional Root Charter
+      // 1. DECLARATION OF TRUST — Individual Covenant Gateway
       // ═══════════════════════════════════════════════════════════════════════════
       {
         name: "Declaration of Trust",
-        description: "Constitutional root charter — irrevocable express trust, covenant foundation for the entire ecosystem",
-        layers: ["charter"],
+        description: "Individual covenant gateway — irrevocable express trust, the personal covenant through which one enters the Body",
+        layers: ["covenant"],
         sections: [
           { title: "Scripture Preamble", content: '"The earth is the LORD\'s, and the fulness thereof; the world, and they that dwell therein."\n— Psalm 24:1\n\n"But now hath he obtained a more excellent ministry, by how much also he is the mediator of a better covenant, which was established upon better promises."\n— Hebrews 8:6\n\n"If ye be willing and obedient, ye shall eat the good of the land."\n— Isaiah 1:19' },
           { title: "Recitals", content: 'WHEREAS, the Creator of Heaven and Earth is the ultimate owner and sovereign over all property, and mankind is appointed as steward thereof (Genesis 1:28, Psalm 24:1);\n\nWHEREAS, the right of the People to freely associate, worship, contract, and hold property in trust is antecedent to any civil government, recognized but not granted by the First, Ninth, and Tenth Amendments to the Constitution of the United States;\n\nWHEREAS, the common law of trusts has existed since antiquity, predating all statutory codes, and an express private trust is not a creation of statute but a creature of equity, governed by the intent of the Grantor and the conscience of the Trustee;\n\nWHEREAS, the Supreme Court has repeatedly affirmed that the right of free association is protected (NAACP v. Alabama, 357 U.S. 449 (1958)), and that private trust instruments are governed by trust law and equity, not by statutory regulatory schemes designed for public or commercial entities;\n\nWHEREAS, the early church (ecclesia) operated as a self-governing body of believers holding all things in common (Acts 2:44-45, Acts 4:32-35), governed by elders and deacons, accountable to Christ alone as Head;\n\nNOW, THEREFORE, this Declaration of Trust is established on {{date}} under divine law, natural law, common law, and the inherent sovereign right of the People.' },
@@ -2726,16 +2731,16 @@ export class DatabaseStorage implements IStorage {
       },
 
       // ═══════════════════════════════════════════════════════════════════════════
-      // 2. TRUST ADMINISTRATION AGREEMENT — Governance Anchor
+      // 2. TRUST ADMINISTRATION AGREEMENT — Body of Christ
       // ═══════════════════════════════════════════════════════════════════════════
       {
         name: "Trust Administration Agreement",
-        description: "Governance anchor — administrative trust serving as the operational heart of the ecosystem",
-        layers: ["trust"],
+        description: "Body of Christ — the collective Body within which all stewardship, assembly, and community life takes place",
+        layers: ["body"],
         sections: [
           { title: "Scripture Preamble", content: '"And all that believed were together, and had all things common; And sold their possessions and goods, and parted them to all men, as every man had need."\n— Acts 2:44-45\n\n"Moreover it is required in stewards, that a man be found faithful."\n— 1 Corinthians 4:2\n\n"And the things that thou hast heard of me among many witnesses, the same commit thou to faithful men, who shall be able to teach others also."\n— 2 Timothy 2:2' },
-          { title: "Recitals", content: 'WHEREAS, the root charter "{{root.name}}" has been duly established as an irrevocable express trust under common law;\n\nWHEREAS, the governance of the trust ecosystem requires a dedicated administrative instrument to coordinate operations, stewardship, and accountability;\n\nWHEREAS, the early church in Jerusalem appointed deacons specifically for administrative duties so that the apostles could devote themselves to prayer and the ministry of the Word (Acts 6:1-7);\n\nWHEREAS, this Trust Administration Agreement is executed on {{date}} by authority delegated from {{parent.names}}, and derives all its power from the root charter;\n\nNOW, THEREFORE, this instrument establishes "{{entity.name}}" as the governance anchor and administrative arm of the trust ecosystem.' },
-          { title: "Article I — Mission & Covenant Charter", content: '{{entity.charter}}\n\nThis administrative trust exists to faithfully execute the vision of the root charter through:\n• Coordinating all sub-trusts, PMAs, chapters, communes, guilds, and projects\n• Managing the treasury and financial stewardship of the entire ecosystem\n• Ensuring accountability and transparency in all operations\n• Maintaining records, minutes, and documentation of all trust affairs\n• Facilitating communication and coordination between all entities' },
+          { title: "Recitals", content: 'WHEREAS, the root charter "{{root.name}}" has been duly established as an irrevocable express trust under common law;\n\nWHEREAS, the governance of the trust ecosystem requires a dedicated administrative instrument to coordinate operations, stewardship, and accountability;\n\nWHEREAS, the early church in Jerusalem appointed deacons specifically for administrative duties so that the apostles could devote themselves to prayer and the ministry of the Word (Acts 6:1-7);\n\nWHEREAS, this Trust Administration Agreement is executed on {{date}} by authority delegated from {{parent.names}}, and derives all its power from the root charter;\n\nNOW, THEREFORE, this instrument establishes "{{entity.name}}" as the Body of Christ — the collective within which all stewardship and assembly takes place.' },
+          { title: "Article I — Mission & Covenant Charter", content: '{{entity.charter}}\n\nThis administrative trust exists to faithfully execute the vision of the root charter through:\n• Coordinating all stewardship organs, assemblies, regions, households, crafts, and ministries\n• Managing the treasury and financial stewardship of the entire ecosystem\n• Ensuring accountability and transparency in all operations\n• Maintaining records, minutes, and documentation of all trust affairs\n• Facilitating communication and coordination between all entities' },
           { title: "Article II — Authority & Derivation", content: 'This trust derives its authority through the following chain:\n\n{{authority.chain}}\n\nParent authority: {{parent.names}}\n\n{{entity.legalBasis}}\n\nThis trust has no independent authority beyond what is delegated by the root charter. It serves as an instrument of administration, not a source of sovereignty. All authority flows from the covenant and the Grantor\'s original intent.' },
           { title: "Article III — Governance & Officers", content: 'ADMINISTRATIVE TRUSTEE: {{entity.trusteeLabel}}\nThe Administrative Trustee bears fiduciary responsibility for the day-to-day operations of the trust ecosystem. This includes financial management, record-keeping, correspondence, and coordination of all subordinate entities.\n\nPROTECTOR / OVERSIGHT: {{entity.protectorLabel}}\nThe Protector provides check-and-balance oversight consistent with the elder body pattern. No major distribution, acquisition, or policy change may proceed without Protector approval.\n\nELDER COUNCIL: All ecclesiastical decisions are subject to the elder council, whose authority derives from Scripture (1 Timothy 5:17, Hebrews 13:17).\n\nPastoral oversight: {{shepherds.sources}}\nTeaching authority: {{teaches.sources}}\nDiaconal service: {{serves.sources}}' },
           { title: "Article IV — Scope of Operations", content: '{{entity.description}}\n\nThis trust administers the following entities:\n\n{{children.list}}\n\nOversight responsibilities:\n\n{{oversight.targets}}\n\nCoordination responsibilities:\n\n{{coordination.targets}}' },
@@ -2747,15 +2752,15 @@ export class DatabaseStorage implements IStorage {
       },
 
       // ═══════════════════════════════════════════════════════════════════════════
-      // 3. SUB-TRUST DECLARATION — Operational Sub-Trusts
+      // 3. SUB-TRUST DECLARATION — Stewardship Organs
       // ═══════════════════════════════════════════════════════════════════════════
       {
         name: "Sub-Trust Declaration",
-        description: "Declaration for operational sub-trusts — land, housing, treasury, enterprise stewardship",
-        layers: ["operational"],
+        description: "Declaration for stewardship organs — land, housing, treasury, enterprise stewardship within the Body",
+        layers: ["stewardship"],
         sections: [
           { title: "Scripture Preamble", content: '"He that is faithful in that which is least is faithful also in much: and he that is unjust in the least is unjust also in much. If therefore ye have not been faithful in the unrighteous mammon, who will commit to your trust the true riches?"\n— Luke 16:10-11\n\n"The silver is mine, and the gold is mine, saith the LORD of hosts."\n— Haggai 2:8' },
-          { title: "Recitals", content: 'WHEREAS, the root charter "{{root.name}}" and its administrative arm have authorized the creation of specialized operational sub-trusts for specific stewardship functions;\n\nWHEREAS, this Sub-Trust is created to fulfill a specific operational mandate within the broader trust ecosystem;\n\nWHEREAS, this instrument is executed on {{date}} under the delegated authority of {{parent.names}};\n\nNOW, THEREFORE, this Sub-Trust Declaration establishes "{{entity.name}}" as a subordinate express trust within the ecosystem.' },
+          { title: "Recitals", content: 'WHEREAS, the root charter "{{root.name}}" and its administrative arm have authorized the creation of specialized stewardship organs for specific stewardship functions;\n\nWHEREAS, this Sub-Trust is created to fulfill a specific operational mandate within the broader trust ecosystem;\n\nWHEREAS, this instrument is executed on {{date}} under the delegated authority of {{parent.names}};\n\nNOW, THEREFORE, this Sub-Trust Declaration establishes "{{entity.name}}" as a subordinate express trust within the ecosystem.' },
           { title: "Article I — Purpose & Operational Mandate", content: '{{entity.charter}}\n\nThis Sub-Trust is established for the specific operational purpose described above and shall not exceed the scope of its mandate without written authorization from the parent authority.' },
           { title: "Article II — Authority & Chain of Trust", content: 'Authority chain: {{authority.chain}}\n\nParent authority: {{parent.names}}\n\n{{entity.legalBasis}}\n\nThis Sub-Trust is a creature of the root charter. It has no independent existence apart from the ecosystem and may be dissolved or restructured by the parent authority at any time, consistent with the covenant purpose.' },
           { title: "Article III — Scope of Operations", content: '{{entity.description}}\n\nLand stewardship responsibilities:\n{{land.stewardship}}\n\nEntities under coordination:\n{{coordination.targets}}' },
@@ -2772,12 +2777,12 @@ export class DatabaseStorage implements IStorage {
       // ═══════════════════════════════════════════════════════════════════════════
       {
         name: "PMA Agreement",
-        description: "Private Membership Association — voluntary assembly under ecclesia covenant, the people layer of the trust",
-        layers: ["pma"],
+        description: "Private Membership Association — voluntary assembly under ecclesia covenant, the gathered assembly within the Body",
+        layers: ["assembly"],
         sections: [
           { title: "Scripture Preamble", content: '"For where two or three are gathered together in my name, there am I in the midst of them."\n— Matthew 18:20\n\n"And I say also unto thee, That thou art Peter, and upon this rock I will build my church [ecclesia]; and the gates of hell shall not prevail against it. And I will give unto thee the keys of the kingdom of heaven."\n— Matthew 16:18-19\n\n"Stand fast therefore in the liberty wherewith Christ hath made us free, and be not entangled again with the yoke of bondage."\n— Galatians 5:1' },
           { title: "Recitals & Constitutional Foundation", content: 'WHEREAS, the right of the People to freely associate for lawful purposes is an inalienable right, antecedent to the Constitution, recognized and protected (but not granted) by the First Amendment;\n\nWHEREAS, the Supreme Court has affirmed the right of private associations to govern their own affairs (Boy Scouts of America v. Dale, 530 U.S. 640 (2000); Roberts v. U.S. Jaycees, 468 U.S. 609 (1984));\n\nWHEREAS, a Private Membership Association (PMA) is not a statutory entity, is not subject to regulatory jurisdiction intended for public or commercial entities, and operates in the private domain;\n\nWHEREAS, the early church (ecclesia) was a voluntary assembly of believers — not a state-chartered institution — governed by its own internal discipline (Matthew 18:15-20, 1 Corinthians 5, Acts 15);\n\nWHEREAS, this PMA Agreement is established on {{date}} under the authority of {{parent.names}}, rooted in {{root.name}};\n\nNOW, THEREFORE, the undersigned parties voluntarily enter into this Private Membership Association Agreement.' },
-          { title: "Article I — Name & Purpose", content: 'This Private Membership Association shall be known as "{{entity.name}}".\n\n{{entity.charter}}\n\nThis PMA exists as the "people layer" of the trust ecosystem — the voluntary assembly through which members participate in community life, governance, ministry, and the beneficial enjoyment of trust assets.' },
+          { title: "Article I — Name & Purpose", content: 'This Private Membership Association shall be known as "{{entity.name}}".\n\n{{entity.charter}}\n\nThis PMA exists as the "gathered assembly" of the trust ecosystem — the voluntary assembly through which members participate in community life, governance, ministry, and the beneficial enjoyment of trust assets.' },
           { title: "Article II — Legal Foundation & Private Character", content: '{{entity.legalBasis}}\n\nThis PMA is a PRIVATE association. It is:\n• NOT a public accommodation or place of public resort\n• NOT subject to regulatory jurisdiction over commercial or public entities\n• NOT a 501(c)(3) or any tax-exempt entity under the Internal Revenue Code\n• NOT a corporation, LLC, or statutory business organization\n\nThis PMA IS:\n• A voluntary assembly of private individuals exercising their constitutional right of free association\n• An ecclesia — a "called out" assembly in the biblical sense (Matthew 16:18, Acts 7:38)\n• A private body governed exclusively by this agreement, the root charter, and Scripture\n\nAll activities within this PMA are private, member-to-member transactions, not subject to public commercial regulation. No governmental body has jurisdiction over the private affairs of this association.' },
           { title: "Article III — Membership", content: '{{entity.description}}\n\nMEMBERSHIP REQUIREMENTS:\n• Voluntary written consent to this agreement\n• Acknowledgment of the covenant purpose and commitment to abide by it\n• Recommendation by at least one existing member in good standing\n• Approval by the PMA Administrator or elder body\n\nMEMBERSHIP IS:\n• Voluntary — no person may be compelled to join or remain\n• Private — the membership list is confidential and shall not be disclosed to any outside party\n• Equal — each member has one voice and one Beneficial Unit\n• Contingent — upon continued good standing and covenant compliance\n\nMEMBERSHIP TERMINATES BY:\n• Voluntary withdrawal at any time, with 30 days written notice\n• Covenant violation, after completion of the Matthew 18 discipline process\n• Death (beneficial interest does not pass to heirs; it reverts to the trust corpus)' },
           { title: "Article IV — Governance", content: 'PMA ADMINISTRATOR: {{entity.trusteeLabel}}\nThe Administrator serves as the day-to-day coordinator of PMA affairs, subject to the oversight of the elder body.\n\nOVERSIGHT BODY: {{entity.protectorLabel}}\n\nECCLESIASTICAL GOVERNANCE:\nThe PMA is governed according to the New Testament pattern:\n• ELDERS (presbyteroi) — spiritual oversight, teaching, pastoral care (1 Timothy 3:1-7, Titus 1:5-9, 1 Peter 5:1-4)\n• DEACONS (diakonoi) — practical service, administration, benevolence (1 Timothy 3:8-13, Acts 6:1-7)\n• FIVE-FOLD MINISTRY — apostles, prophets, evangelists, pastors, teachers (Ephesians 4:11-13)\n\nPastoral care: {{shepherds.sources}}\nTeaching: {{teaches.sources}}\nService: {{serves.sources}}\n\nAll governance decisions affecting the community require the counsel of the elder body. Major decisions require a supermajority (⅔) of the elder body.' },
@@ -2796,7 +2801,7 @@ export class DatabaseStorage implements IStorage {
       {
         name: "Chapter Charter",
         description: "Charter for geographic chapters — local ecclesia following the Titus 1:5 pattern of elders in every city",
-        layers: ["chapter"],
+        layers: ["region"],
         sections: [
           { title: "Scripture Preamble", content: '"For this cause left I thee in Crete, that thou shouldest set in order the things that are wanting, and ordain elders in every city, as I had appointed thee."\n— Titus 1:5\n\n"Unto the angel of the church of Ephesus write... unto the angel of the church in Smyrna write... unto the angel of the church in Pergamos write..."\n— Revelation 2:1, 8, 12\n\nAs the early church established local assemblies in each city, so this chapter serves as the local expression of the covenant community.' },
           { title: "Recitals", content: 'WHEREAS, the root charter "{{root.name}}" and the PMA have authorized the establishment of geographic chapters to extend the covenant community into specific regions;\n\nWHEREAS, the biblical pattern for church governance is local — elders in every city (Titus 1:5), churches in every region (Revelation 2-3), and the house church model (Romans 16:5, Colossians 4:15);\n\nWHEREAS, this Chapter Charter is issued on {{date}}, authorized by {{parent.names}};\n\nNOW, THEREFORE, this Charter establishes "{{entity.name}}" as a geographic chapter within the trust ecosystem.' },
@@ -2816,7 +2821,7 @@ export class DatabaseStorage implements IStorage {
       {
         name: "Commune Operating Agreement",
         description: "Operating agreement for intentional communities — Acts 2 model of shared life, resources, and mission",
-        layers: ["commune"],
+        layers: ["household"],
         sections: [
           { title: "Scripture Preamble", content: '"And they, continuing daily with one accord in the temple, and breaking bread from house to house, did eat their meat with gladness and singleness of heart, Praising God, and having favour with all the people. And the Lord added to the church daily such as should be saved."\n— Acts 2:46-47\n\n"And the multitude of them that believed were of one heart and of one soul: neither said any of them that ought of the things which he possessed was his own; but they had all things common."\n— Acts 4:32' },
           { title: "Recitals", content: 'WHEREAS, the early church in Jerusalem practiced intentional common life — sharing meals, resources, worship, and mutual care on a daily basis (Acts 2:42-47);\n\nWHEREAS, the monastic and intentional community traditions throughout church history have preserved this pattern of shared life;\n\nWHEREAS, this Commune Operating Agreement is issued on {{date}}, authorized by {{parent.names}}, within the chapter of {{entity.location}};\n\nNOW, THEREFORE, this Agreement establishes "{{entity.name}}" as an intentional community within the trust ecosystem.' },
@@ -2836,7 +2841,7 @@ export class DatabaseStorage implements IStorage {
       {
         name: "Guild Charter",
         description: "Charter for skill-based guilds — Bezalel pattern of Spirit-filled craftsmanship across all chapters",
-        layers: ["guild"],
+        layers: ["craft"],
         sections: [
           { title: "Scripture Preamble", content: '"And I have filled him with the spirit of God, in wisdom, and in understanding, and in knowledge, and in all manner of workmanship."\n— Exodus 31:3\n\n"Every wise hearted among you shall come, and make all that the LORD hath commanded."\n— Exodus 35:10\n\n"Whatsoever thy hand findeth to do, do it with thy might."\n— Ecclesiastes 9:10\n\nAs Bezalel and Oholiab were filled with the Spirit for skilled craftsmanship in building the Tabernacle, so each guild member exercises their God-given gifts and skills for the building up of the covenant community.' },
           { title: "Recitals", content: 'WHEREAS, the covenant community requires organized, cross-chapter coordination of specialized skills, trades, and expertise;\n\nWHEREAS, the biblical model includes both geographic organization (elders in every city) and functional organization (Levitical divisions, trade guilds of the ancient world);\n\nWHEREAS, this Guild Charter is issued on {{date}}, authorized by {{parent.names}};\n\nNOW, THEREFORE, this Charter establishes "{{entity.name}}" as a functional guild within the trust ecosystem.' },
@@ -2856,7 +2861,7 @@ export class DatabaseStorage implements IStorage {
       {
         name: "Project Authorization",
         description: "Authorization document for specific projects — Nehemiah pattern of organized, purposeful building",
-        layers: ["project"],
+        layers: ["ministry"],
         sections: [
           { title: "Scripture Preamble", content: '"Then I told them of the hand of my God which was good upon me... And they said, Let us rise up and build. So they strengthened their hands for this good work."\n— Nehemiah 2:18\n\n"For which of you, intending to build a tower, sitteth not down first, and counteth the cost, whether he have sufficient to finish it?"\n— Luke 14:28' },
           { title: "Recitals", content: 'WHEREAS, the covenant community has identified a specific need or opportunity that requires organized, time-bound effort;\n\nWHEREAS, this Project Authorization is issued on {{date}}, authorized by {{parent.names}};\n\nNOW, THEREFORE, this authorization establishes "{{entity.name}}" as an active project within the trust ecosystem.' },
@@ -2874,7 +2879,7 @@ export class DatabaseStorage implements IStorage {
       {
         name: "Beneficial Interest Declaration",
         description: "Declaration of beneficial interest — joint-heir model, stewardship not ownership, spendthrift protections",
-        layers: ["beneficiary"],
+        layers: ["member"],
         sections: [
           { title: "Scripture Preamble", content: '"The earth is the LORD\'s, and the fulness thereof."\n— Psalm 24:1\n\n"The labourer is worthy of his reward."\n— 1 Timothy 5:18\n\n"And if children, then heirs; heirs of God, and joint-heirs with Christ."\n— Romans 8:17\n\n"Give, and it shall be given unto you; good measure, pressed down, and shaken together, and running over, shall men give into your bosom. For with the same measure that ye mete withal it shall be measured to you again."\n— Luke 6:38' },
           { title: "Recitals & Declaration", content: 'WHEREAS, the trust ecosystem is established on the principle that God is the ultimate owner of all property, and the community members are stewards, not owners (Psalm 24:1, 1 Chronicles 29:14);\n\nWHEREAS, the early church held all things in common, distributing to each according to need (Acts 2:44-45, Acts 4:32-35);\n\nWHEREAS, the concept of "beneficial interest" in trust law perfectly mirrors the biblical stewardship model — beneficial use without legal ownership;\n\nNOW, THEREFORE, this Beneficial Interest Declaration is issued on {{date}} for the members of the trust ecosystem rooted in {{root.name}}.\n\nAll members are hereby recognized as both BENEFICIARIES and STEWARDS — receiving from the community and giving back to it in a reciprocal covenant relationship.' },
@@ -2892,7 +2897,7 @@ export class DatabaseStorage implements IStorage {
       {
         name: "Generic Trust Entity Document",
         description: "General-purpose document for any trust entity — basic framework with biblical foundations",
-        layers: ["charter", "trust", "operational", "pma", "chapter", "commune", "guild", "project", "beneficiary"],
+        layers: ["covenant", "body", "stewardship", "assembly", "region", "household", "craft", "ministry", "member"],
         sections: [
           { title: "Scripture Preamble", content: '"Commit thy works unto the LORD, and thy thoughts shall be established."\n— Proverbs 16:3' },
           { title: "Overview", content: 'This document is generated on {{date}} for "{{entity.name}}" within the trust ecosystem of {{root.name}}.\n\nAuthority chain: {{authority.chain}}\nParent authority: {{parent.names}}' },
@@ -2910,7 +2915,7 @@ export class DatabaseStorage implements IStorage {
       {
         name: "Ecclesiastical Office Appointment",
         description: "Appointment of elders, deacons, and five-fold ministry offices per 1 Timothy 3 and Ephesians 4:11",
-        layers: ["charter", "trust", "pma", "chapter", "commune"],
+        layers: ["covenant", "body", "assembly", "region", "household"],
         sections: [
           { title: "Scripture Preamble", content: '"And he gave some, apostles; and some, prophets; and some, evangelists; and some, pastors and teachers; For the perfecting of the saints, for the work of the ministry, for the edifying of the body of Christ."\n— Ephesians 4:11-12\n\n"This is a true saying, If a man desire the office of a bishop, he desireth a good work. A bishop then must be blameless, the husband of one wife, vigilant, sober, of good behaviour, given to hospitality, apt to teach."\n— 1 Timothy 3:1-2\n\n"The elders which are among you I exhort, who am also an elder, and a witness of the sufferings of Christ... Feed the flock of God which is among you, taking the oversight thereof, not by constraint, but willingly; not for filthy lucre, but of a ready mind."\n— 1 Peter 5:1-2' },
           { title: "Recitals", content: 'WHEREAS, the governance of the ecclesia is established by Scripture, not by human invention, and the offices of elder, deacon, and the five-fold ministry are divinely ordained (Ephesians 4:11, 1 Timothy 3:1-13, Titus 1:5-9);\n\nWHEREAS, the early church appointed leaders through prayer, fasting, and the laying on of hands (Acts 13:1-3, Acts 14:23, 1 Timothy 4:14);\n\nWHEREAS, the qualifications for office are set forth in Scripture and are non-negotiable — they reflect character, not mere competence;\n\nWHEREAS, the entity "{{entity.name}}" has identified a qualified individual for appointment to ecclesiastical office;\n\nNOW, THEREFORE, this Appointment is issued on {{date}} under the authority of {{parent.names}}.' },
@@ -2929,7 +2934,7 @@ export class DatabaseStorage implements IStorage {
       {
         name: "Member Covenant Agreement",
         description: "Individual member covenant — voluntary entry into the ecclesia with full understanding of rights and obligations",
-        layers: ["pma", "chapter", "commune", "beneficiary"],
+        layers: ["assembly", "region", "household", "member"],
         sections: [
           { title: "Scripture Preamble", content: '"And they continued stedfastly in the apostles\' doctrine and fellowship, and in breaking of bread, and in prayers."\n— Acts 2:42\n\n"That which we have seen and heard declare we unto you, that ye also may have fellowship with us: and truly our fellowship is with the Father, and with his Son Jesus Christ."\n— 1 John 1:3\n\n"Bear ye one another\'s burdens, and so fulfil the law of Christ."\n— Galatians 6:2' },
           { title: "Recitals & Voluntary Declaration", content: 'WHEREAS, the undersigned individual (hereinafter "Member") desires to voluntarily enter into covenant fellowship with the community known as "{{entity.name}}", rooted in {{root.name}};\n\nWHEREAS, the Member understands that this is a PRIVATE association, not a public entity, and that membership is a voluntary covenant relationship;\n\nWHEREAS, the Member has been instructed in the community\'s covenant purpose, governance structure, and operating principles;\n\nNOW, THEREFORE, the Member, being of sound mind and acting freely, enters into this Covenant Agreement on {{date}}.' },
@@ -2948,7 +2953,7 @@ export class DatabaseStorage implements IStorage {
       {
         name: "Tithe & Offering Covenant",
         description: "Financial stewardship covenant — storehouse principle, Malachi 3:10, first-fruits, and communal treasury",
-        layers: ["charter", "trust", "pma", "chapter"],
+        layers: ["covenant", "body", "assembly", "region"],
         sections: [
           { title: "Scripture Preamble", content: '"Bring ye all the tithes into the storehouse, that there may be meat in mine house, and prove me now herewith, saith the LORD of hosts, if I will not open you the windows of heaven, and pour you out a blessing, that there shall not be room enough to receive it."\n— Malachi 3:10\n\n"Honour the LORD with thy substance, and with the firstfruits of all thine increase: So shall thy barns be filled with plenty, and thy presses shall burst out with new wine."\n— Proverbs 3:9-10\n\n"Upon the first day of the week let every one of you lay by him in store, as God hath prospered him."\n— 1 Corinthians 16:2\n\n"Every man according as he purposeth in his heart, so let him give; not grudgingly, or of necessity: for God loveth a cheerful giver."\n— 2 Corinthians 9:7' },
           { title: "Recitals", content: 'WHEREAS, the biblical principle of tithing predates the Mosaic Law (Genesis 14:20 — Abraham tithed to Melchizedek) and continues as a covenant principle for the New Testament ecclesia;\n\nWHEREAS, the early church practiced radical generosity — selling possessions and distributing to all according to need (Acts 2:44-45, Acts 4:34-35);\n\nWHEREAS, the storehouse principle (Malachi 3:10) establishes that tithes and offerings flow into a central repository for redistribution;\n\nWHEREAS, all financial contributions to the trust are irrevocable gifts — not investments, loans, or purchases;\n\nWHEREAS, this Tithe & Offering Covenant is established on {{date}} within "{{entity.name}}", rooted in {{root.name}};\n\nNOW, THEREFORE, this Covenant establishes the financial stewardship framework for the trust ecosystem.' },
@@ -2968,7 +2973,7 @@ export class DatabaseStorage implements IStorage {
       {
         name: "Land Stewardship Declaration",
         description: "Land and property stewardship — the earth is the Lord's, allodial principles, community land trust model",
-        layers: ["operational", "chapter", "commune"],
+        layers: ["stewardship", "region", "household"],
         sections: [
           { title: "Scripture Preamble", content: '"The earth is the LORD\'s, and the fulness thereof; the world, and they that dwell therein."\n— Psalm 24:1\n\n"The land shall not be sold for ever: for the land is mine; for ye are strangers and sojourners with me."\n— Leviticus 25:23\n\n"And God blessed them, and God said unto them, Be fruitful, and multiply, and replenish the earth, and subdue it: and have dominion over the fish of the sea, and over the fowl of the air, and over every living thing that moveth upon the earth."\n— Genesis 1:28\n\n"The heaven, even the heavens, are the LORD\'s: but the earth hath he given to the children of men."\n— Psalm 115:16' },
           { title: "Recitals", content: 'WHEREAS, God is the ultimate owner of all land and property (Psalm 24:1, Leviticus 25:23), and human beings are appointed as stewards thereof;\n\nWHEREAS, the biblical model for land management includes the principles of Jubilee (Leviticus 25), Sabbath rest for the land (Leviticus 25:4), and inheritance for future generations;\n\nWHEREAS, land held in trust is protected from individual creditors, speculation, and loss — ensuring that the community\'s land base remains intact for perpetuity;\n\nWHEREAS, this Land Stewardship Declaration is issued on {{date}} under the authority of {{parent.names}};\n\nNOW, THEREFORE, this Declaration establishes the land stewardship framework for "{{entity.name}}" within the trust ecosystem of {{root.name}}.' },
@@ -2988,7 +2993,7 @@ export class DatabaseStorage implements IStorage {
       {
         name: "Dispute Resolution Protocol",
         description: "Matthew 18 dispute resolution — ecclesia jurisdiction, binding arbitration, no civil litigation between members",
-        layers: ["charter", "trust", "pma", "chapter", "commune"],
+        layers: ["covenant", "body", "assembly", "region", "household"],
         sections: [
           { title: "Scripture Foundation", content: '"Moreover if thy brother shall trespass against thee, go and tell him his fault between thee and him alone: if he shall hear thee, thou hast gained thy brother. But if he will not hear thee, then take with thee one or two more, that in the mouth of two or three witnesses every word may be established. And if he shall neglect to hear them, tell it unto the church: but if he neglect to hear the church, let him be unto thee as an heathen man and a publican."\n— Matthew 18:15-17\n\n"Dare any of you, having a matter against another, go to law before the unjust, and not before the saints? Do ye not know that the saints shall judge the world? and if the world shall be judged by you, are ye unworthy to judge the smallest matters?"\n— 1 Corinthians 6:1-2\n\n"If it be possible, as much as lieth in you, live peaceably with all men."\n— Romans 12:18\n\n"Brethren, if a man be overtaken in a fault, ye which are spiritual, restore such an one in the spirit of meekness; considering thyself, lest thou also be tempted."\n— Galatians 6:1' },
           { title: "Recitals & Jurisdiction", content: 'WHEREAS, the early church established its own internal discipline and dispute resolution (Matthew 18:15-20, 1 Corinthians 5-6, Acts 15);\n\nWHEREAS, Paul explicitly prohibited Christians from taking disputes before secular courts (1 Corinthians 6:1-8);\n\nWHEREAS, the trust ecosystem operates as a private ecclesia with its own jurisdiction over internal matters;\n\nWHEREAS, all members have voluntarily agreed to resolve disputes through this internal process as a condition of membership;\n\nNOW, THEREFORE, this Dispute Resolution Protocol is established on {{date}} for "{{entity.name}}" and all entities within the trust ecosystem of {{root.name}}.\n\nThis protocol has BINDING AUTHORITY over all members, officers, and entities within the trust ecosystem. By entering the covenant, each member consents to this process as the EXCLUSIVE means of dispute resolution.' },
@@ -3009,7 +3014,7 @@ export class DatabaseStorage implements IStorage {
       {
         name: "Quit Claim Deed to Trust",
         description: "Conveyance of real or personal property into the trust — irrevocable transfer of all right, title, and interest",
-        layers: ["charter", "trust", "operational"],
+        layers: ["covenant", "body", "stewardship"],
         sections: [
           { title: "Scripture Preamble", content: '"The silver is mine, and the gold is mine, saith the LORD of hosts."\n— Haggai 2:8\n\n"For all things come of thee, and of thine own have we given thee."\n— 1 Chronicles 29:14\n\n"Sell that ye have, and give alms; provide yourselves bags which wax not old, a treasure in the heavens that faileth not, where no thief approacheth, neither moth corrupteth."\n— Luke 12:33' },
           { title: "Quit Claim Deed", content: 'KNOW ALL MEN BY THESE PRESENTS:\n\nThis Quit Claim Deed is executed on {{date}} by the undersigned Grantor in favor of "{{entity.name}}", an irrevocable express trust operating under common law.\n\nAuthority chain: {{authority.chain}}\n\nFOR AND IN CONSIDERATION of the covenant purpose, the mutual benefits of community membership, and the furtherance of the trust\'s ecclesiastical mission — and not for any commercial consideration — the Grantor does hereby REMISE, RELEASE, AND FOREVER QUIT CLAIM unto the Trust, its Trustee(s), successors and assigns, the following described property:' },
@@ -3027,7 +3032,7 @@ export class DatabaseStorage implements IStorage {
       {
         name: "Assignment of Property to Trust",
         description: "General assignment instrument for personal property, intellectual property, accounts, and intangible assets",
-        layers: ["charter", "trust", "operational"],
+        layers: ["covenant", "body", "stewardship"],
         sections: [
           { title: "Scripture Preamble", content: '"Neither said any of them that ought of the things which he possessed was his own; but they had all things common."\n— Acts 4:32\n\n"Every good gift and every perfect gift is from above, and cometh down from the Father of lights."\n— James 1:17\n\n"Of thine own have we given thee."\n— 1 Chronicles 29:14' },
           { title: "Assignment", content: 'ASSIGNMENT OF PROPERTY TO TRUST\n\nThis Assignment is made on {{date}} by the undersigned Assignor in favor of "{{entity.name}}", an irrevocable express trust under common law.\n\nAuthority chain: {{authority.chain}}\n\nFOR AND IN CONSIDERATION of the covenant purpose and mutual benefits of community stewardship, the Assignor hereby ASSIGNS, TRANSFERS, CONVEYS, AND DELIVERS unto the Trust all right, title, and interest in the following described property:' },
@@ -3043,8 +3048,8 @@ export class DatabaseStorage implements IStorage {
       // ═══════════════════════════════════════════════════════════════════════════
       {
         name: "Inter-Trust Transfer Agreement",
-        description: "Transfer of assets between sub-trusts within the ecosystem — treasury allocations, property reassignments",
-        layers: ["trust", "operational"],
+        description: "Transfer of assets between stewardship organs within the Body — treasury allocations, property reassignments",
+        layers: ["body", "stewardship"],
         sections: [
           { title: "Scripture Preamble", content: '"And distribution was made unto every man according as he had need."\n— Acts 4:35\n\n"Let all things be done decently and in order."\n— 1 Corinthians 14:40\n\n"A faithful man shall abound with blessings."\n— Proverbs 28:20' },
           { title: "Transfer Agreement", content: 'INTER-TRUST TRANSFER AGREEMENT\n\nThis Agreement is executed on {{date}} between the following trusts within the ecosystem of {{root.name}}:\n\nTRANSFERRING TRUST: {{entity.name}}\nTrustee: {{entity.trusteeLabel}}\n\nRECEIVING TRUST: [Name of Receiving Trust]\nTrustee: [Receiving Trustee]\n\nAuthority chain: {{authority.chain}}\nParent authority: {{parent.names}}' },
@@ -3061,7 +3066,7 @@ export class DatabaseStorage implements IStorage {
       {
         name: "Acceptance of Trusteeship",
         description: "Formal acceptance by a Trustee of fiduciary duties — oath of faithful stewardship",
-        layers: ["charter", "trust", "operational", "pma", "chapter", "commune", "guild", "project"],
+        layers: ["covenant", "body", "stewardship", "assembly", "region", "household", "craft", "ministry"],
         sections: [
           { title: "Scripture Preamble", content: '"Moreover it is required in stewards, that a man be found faithful."\n— 1 Corinthians 4:2\n\n"His lord said unto him, Well done, thou good and faithful servant: thou hast been faithful over a few things, I will make thee ruler over many things: enter thou into the joy of thy lord."\n— Matthew 25:21\n\n"Who then is a faithful and wise servant, whom his lord hath made ruler over his household, to give them meat in due season?"\n— Matthew 24:45' },
           { title: "Acceptance", content: 'ACCEPTANCE OF TRUSTEESHIP\n\nI, the undersigned, having been duly appointed as Trustee of "{{entity.name}}" within the trust ecosystem of {{root.name}}, do hereby formally ACCEPT the office of Trustee and all fiduciary duties, responsibilities, and obligations pertaining thereto.\n\nDate of acceptance: {{date}}\nAuthority chain: {{authority.chain}}\nAppointed by: {{entity.protectorLabel}}' },
@@ -3078,7 +3083,7 @@ export class DatabaseStorage implements IStorage {
       {
         name: "Certificate of Trust",
         description: "Summary certification for third parties — confirms trust existence without revealing full terms",
-        layers: ["charter", "trust", "operational"],
+        layers: ["covenant", "body", "stewardship"],
         sections: [
           { title: "Certificate of Trust", content: 'CERTIFICATE OF TRUST\n(Certification of Trust Existence)\n\nThis Certificate is issued on {{date}} to certify the existence and authority of the trust described herein. This Certificate is provided for informational purposes to third parties and does not constitute the full Declaration of Trust.\n\n"A good name is rather to be chosen than great riches, and loving favour rather than silver and gold." — Proverbs 22:1' },
           { title: "Trust Information", content: 'TRUST NAME: {{entity.name}}\nSUBTITLE: {{entity.subtitle}}\nDATE OF CREATION: [Date trust was originally established]\nTYPE: Irrevocable Express Trust under Common Law\nCHARACTER: Private, Non-Statutory, Ecclesiastical\n\nAuthority chain: {{authority.chain}}\n\nJURISDICTION: This trust is not organized under any state trust code. It operates under common law trust principles, divine law, and the constitutional right of free association.' },
@@ -3095,7 +3100,7 @@ export class DatabaseStorage implements IStorage {
       {
         name: "Appointment of Successor Trustee",
         description: "Instrument for appointing a new trustee when the current trustee resigns, is removed, or becomes incapacitated",
-        layers: ["charter", "trust", "operational", "pma", "chapter"],
+        layers: ["covenant", "body", "stewardship", "assembly", "region"],
         sections: [
           { title: "Scripture Preamble", content: '"And the things that thou hast heard of me among many witnesses, the same commit thou to faithful men, who shall be able to teach others also."\n— 2 Timothy 2:2\n\n"And Moses did as the LORD commanded: and he took Joshua, and set him before Eleazar the priest, and before all the congregation: And he laid his hands upon him, and gave him a charge, as the LORD commanded by the hand of Moses."\n— Numbers 27:22-23' },
           { title: "Appointment", content: 'APPOINTMENT OF SUCCESSOR TRUSTEE\n\nThis Appointment is made on {{date}} for "{{entity.name}}" within the trust ecosystem of {{root.name}}.\n\nAuthority chain: {{authority.chain}}\n\nWHEREAS, the office of Trustee for the above-named trust has become vacant by reason of:\n☐ Resignation of the prior Trustee\n☐ Removal of the prior Trustee by the Protector Council\n☐ Incapacity of the prior Trustee\n☐ Death of the prior Trustee\n☐ Other: ________________________\n\nWHEREAS, the Protector Council, having the authority to appoint a successor under the Declaration of Trust, has identified a qualified successor;\n\nNOW, THEREFORE, the Protector Council hereby appoints the following individual as Successor Trustee:' },
@@ -3111,7 +3116,7 @@ export class DatabaseStorage implements IStorage {
       {
         name: "Notice of Resignation",
         description: "Formal notice of resignation from Trustee, officer, or elder position — orderly transition",
-        layers: ["charter", "trust", "operational", "pma", "chapter", "commune", "guild"],
+        layers: ["covenant", "body", "stewardship", "assembly", "region", "household", "craft"],
         sections: [
           { title: "Scripture Preamble", content: '"To every thing there is a season, and a time to every purpose under the heaven."\n— Ecclesiastes 3:1\n\n"I have fought a good fight, I have finished my course, I have kept the faith."\n— 2 Timothy 4:7' },
           { title: "Notice of Resignation", content: 'NOTICE OF RESIGNATION\n\nDate: {{date}}\nTo: {{entity.protectorLabel}} and the Protector Council of {{root.name}}\nFrom: {{entity.trusteeLabel}}\nRe: Resignation from the office of ________________________\n\nI, the undersigned, hereby give formal notice of my resignation from the above-stated office within "{{entity.name}}", effective:\n\n☐ Immediately\n☐ Upon appointment of a successor\n☐ On the following date: _______________\n\nI submit this resignation:\n☐ Voluntarily, for personal reasons\n☐ Due to relocation\n☐ Due to health or incapacity\n☐ Other: ________________________' },
@@ -3126,7 +3131,7 @@ export class DatabaseStorage implements IStorage {
       {
         name: "Affidavit of Trust",
         description: "Sworn statement confirming trust existence, authority, and specific facts — for third-party dealings",
-        layers: ["charter", "trust", "operational"],
+        layers: ["covenant", "body", "stewardship"],
         sections: [
           { title: "Scripture Preamble", content: '"But let your communication be, Yea, yea; Nay, nay: for whatsoever is more than these cometh of evil."\n— Matthew 5:37\n\n"Providing for honest things, not only in the sight of the Lord, but also in the sight of men."\n— 2 Corinthians 8:21' },
           { title: "Affidavit", content: 'AFFIDAVIT OF TRUST\n\nState of _______________\nCounty of _______________\n\nBefore me, the undersigned authority, personally appeared the Affiant, who being duly affirmed, deposes and states as follows:\n\n1. I am the duly appointed and acting Trustee of "{{entity.name}}", an irrevocable express trust under common law.\n\n2. The trust was established on [DATE OF CREATION] and is currently in full force and effect.\n\n3. The trust has not been revoked, modified in any material respect, or terminated.\n\n4. As Trustee, I have the authority to act on behalf of the trust in all matters, including but not limited to: holding property, executing documents, opening accounts, entering contracts, and conducting trust business.\n\n5. The Protector Council ({{entity.protectorLabel}}) provides oversight but day-to-day authority rests with the Trustee.\n\n6. Authority chain: {{authority.chain}}' },
@@ -3141,7 +3146,7 @@ export class DatabaseStorage implements IStorage {
       {
         name: "Schedule A — Trust Property Inventory",
         description: "Master inventory of all trust property — real, personal, intellectual, financial, and intangible assets",
-        layers: ["charter", "trust", "operational"],
+        layers: ["covenant", "body", "stewardship"],
         sections: [
           { title: "Scripture Preamble", content: '"The earth is the LORD\'s, and the fulness thereof; the world, and they that dwell therein."\n— Psalm 24:1\n\n"For every beast of the forest is mine, and the cattle upon a thousand hills."\n— Psalm 50:10\n\n"A good man leaveth an inheritance to his children\'s children."\n— Proverbs 13:22' },
           { title: "Schedule A — Trust Property", content: 'SCHEDULE A\nTRUST PROPERTY INVENTORY\n\nTrust: {{entity.name}}\nAs of: {{date}}\nPrepared by: {{entity.trusteeLabel}}\n\nThis Schedule A is incorporated by reference into the Declaration of Trust and all subordinate instruments. It is a living document updated as property is conveyed to or from the trust.\n\nAuthority chain: {{authority.chain}}' },
@@ -3159,7 +3164,7 @@ export class DatabaseStorage implements IStorage {
       {
         name: "Certificate of Beneficial Interest",
         description: "Individual member's certificate documenting their Beneficial Unit — rights, protections, and obligations",
-        layers: ["beneficiary", "pma"],
+        layers: ["member", "assembly"],
         sections: [
           { title: "Scripture Preamble", content: '"And if children, then heirs; heirs of God, and joint-heirs with Christ."\n— Romans 8:17\n\n"Blessed are the meek: for they shall inherit the earth."\n— Matthew 5:5\n\n"The LORD is the portion of mine inheritance and of my cup: thou maintainest my lot. The lines are fallen unto me in pleasant places; yea, I have a goodly heritage."\n— Psalm 16:5-6' },
           { title: "Certificate", content: 'CERTIFICATE OF BENEFICIAL INTEREST\n\nCertificate Number: ____________\nDate of Issuance: {{date}}\n\nThis certifies that ________________________ (the "Member") holds ONE (1) Beneficial Unit in the trust ecosystem of {{root.name}}, representing an equal, undivided interest (1/N, where N is the total number of members) in the trust corpus.\n\nThis Certificate is issued by "{{entity.name}}" under the authority of {{parent.names}}.' },
@@ -3177,7 +3182,7 @@ export class DatabaseStorage implements IStorage {
       {
         name: "Memorandum of Trust",
         description: "Recordable summary of trust for land records — establishes trust holds title without revealing full terms",
-        layers: ["charter", "trust", "operational"],
+        layers: ["covenant", "body", "stewardship"],
         sections: [
           { title: "Memorandum of Trust", content: 'MEMORANDUM OF TRUST\n(For Recording Purposes)\n\nThis Memorandum is filed for the purpose of giving notice that legal title to certain real property is held by the Trustee of an irrevocable express trust. This Memorandum does not constitute the full trust instrument, which is a private document.\n\n"A prudent man foreseeth the evil, and hideth himself: but the simple pass on, and are punished." — Proverbs 22:3' },
           { title: "Trust Information", content: 'TRUST NAME: {{entity.name}}\nDATE OF TRUST: [Date originally established]\nAMENDED: [If applicable]\n\nTRUSTEE: {{entity.trusteeLabel}}\n\nTRUST CHARACTER: Irrevocable Express Trust under Common Law\n— Not organized under any state trust code or Uniform Trust Code\n— Not a corporation, LLC, or statutory entity\n— Organized for ecclesiastical, charitable, and educational purposes\n\nAuthority chain: {{authority.chain}}\n\n{{entity.legalBasis}}' },
@@ -3194,7 +3199,7 @@ export class DatabaseStorage implements IStorage {
       {
         name: "Consent Resolution",
         description: "Written resolution for major governance decisions — Protector Council actions, trustee appointments, policy changes",
-        layers: ["charter", "trust", "operational", "pma", "chapter"],
+        layers: ["covenant", "body", "stewardship", "assembly", "region"],
         sections: [
           { title: "Scripture Preamble", content: '"Where no counsel is, the people fall: but in the multitude of counsellors there is safety."\n— Proverbs 11:14\n\n"And when they had appointed him a day, there came many to him into his lodging; to whom he expounded and testified the kingdom of God."\n— Acts 28:23\n\n"In the multitude of words there wanteth not sin: but he that refraineth his lips is wise."\n— Proverbs 10:19' },
           { title: "Resolution", content: 'CONSENT RESOLUTION\nof the Protector Council / Elder Body\n\nEntity: {{entity.name}}\nDate: {{date}}\nResolution Number: ____________\n\nThe undersigned, being all of the members of the Protector Council / Elder Body of "{{entity.name}}" within the trust ecosystem of {{root.name}}, hereby adopt the following resolution by written consent without a formal meeting, pursuant to the authority granted in the Declaration of Trust:\n\nAuthority chain: {{authority.chain}}' },
@@ -3210,7 +3215,7 @@ export class DatabaseStorage implements IStorage {
       {
         name: "Minutes of Elder Council Meeting",
         description: "Official record of elder body / Protector Council meetings — decisions, discussions, and actions",
-        layers: ["charter", "trust", "pma", "chapter"],
+        layers: ["covenant", "body", "assembly", "region"],
         sections: [
           { title: "Scripture Preamble", content: '"And when they had ordained them elders in every church, and had prayed with fasting, they commended them to the Lord, on whom they believed."\n— Acts 14:23\n\n"Remember them which have the rule over you, who have spoken unto you the word of God: whose faith follow, considering the end of their conversation."\n— Hebrews 13:7' },
           { title: "Meeting Information", content: 'MINUTES OF ELDER COUNCIL / PROTECTOR COUNCIL MEETING\n\nEntity: {{entity.name}}\nDate: {{date}}\nLocation: ________________________\nType: ☐ Regular ☐ Special ☐ Emergency\n\nOpening Prayer: ________________________\nScripture Reading: ________________________\n\nPresiding: {{entity.trusteeLabel}}\nRecording Secretary: ________________________' },
@@ -3227,7 +3232,7 @@ export class DatabaseStorage implements IStorage {
       {
         name: "Limited Power of Attorney",
         description: "Limited POA authorizing an agent to act on behalf of the trust for specific purposes",
-        layers: ["charter", "trust", "operational"],
+        layers: ["covenant", "body", "stewardship"],
         sections: [
           { title: "Scripture Preamble", content: '"And he called his ten servants, and delivered them ten pounds, and said unto them, Occupy till I come."\n— Luke 19:13\n\n"As every man hath received the gift, even so minister the same one to another, as good stewards of the manifold grace of God."\n— 1 Peter 4:10' },
           { title: "Power of Attorney", content: 'LIMITED POWER OF ATTORNEY\n\nKNOW ALL MEN BY THESE PRESENTS:\n\nI, the undersigned Trustee of "{{entity.name}}", an irrevocable express trust under common law, do hereby appoint:\n\nAGENT: ________________________\n\nas my true and lawful attorney-in-fact, with LIMITED authority to act on behalf of the trust for the specific purposes described herein.\n\nDate: {{date}}\nAuthority chain: {{authority.chain}}' },
@@ -3243,7 +3248,7 @@ export class DatabaseStorage implements IStorage {
       {
         name: "Reservation of Rights & UCC Rebuttal",
         description: "Declaration reserving all rights under UCC 1-308, rebutting presumptions of commercial jurisdiction",
-        layers: ["charter", "trust", "pma"],
+        layers: ["covenant", "body", "assembly"],
         sections: [
           { title: "Scripture Preamble", content: '"Stand fast therefore in the liberty wherewith Christ hath made us free, and be not entangled again with the yoke of bondage."\n— Galatians 5:1\n\n"If the Son therefore shall make you free, ye shall be free indeed."\n— John 8:36\n\n"Ye are bought with a price; be not ye the servants of men."\n— 1 Corinthians 7:23' },
           { title: "Reservation of Rights", content: 'RESERVATION OF RIGHTS\nUCC 1-308 DECLARATION\n\nI, the undersigned, acting as Trustee of "{{entity.name}}" and in my private capacity as a living man/woman, do hereby declare and reserve ALL RIGHTS without prejudice:\n\nDate: {{date}}\nAuthority chain: {{authority.chain}}\n\nPursuant to UCC 1-308 (formerly UCC 1-207):\n"A party that with explicit reservation of rights performs or promises performance or assents to performance in a manner demanded or offered by the other party does not thereby prejudice the rights reserved."' },
@@ -3259,7 +3264,7 @@ export class DatabaseStorage implements IStorage {
       {
         name: "Sabbath & Jubilee Declaration",
         description: "Declaration of the community's commitment to Sabbath rest, sabbatical years, and Jubilee — Leviticus 25",
-        layers: ["charter", "trust", "pma", "chapter", "commune"],
+        layers: ["covenant", "body", "assembly", "region", "household"],
         sections: [
           { title: "Scripture Foundation", content: '"Remember the sabbath day, to keep it holy. Six days shalt thou labour, and do all thy work: But the seventh day is the sabbath of the LORD thy God: in it thou shalt not do any work."\n— Exodus 20:8-10\n\n"And six years thou shalt sow thy land, and shalt gather in the fruits thereof: But the seventh year thou shalt let it rest and lie still."\n— Exodus 23:10-11\n\n"And ye shall hallow the fiftieth year, and proclaim liberty throughout all the land unto all the inhabitants thereof: it shall be a jubile unto you; and ye shall return every man unto his possession, and ye shall return every man unto his family."\n— Leviticus 25:10\n\n"Come unto me, all ye that labour and are heavy laden, and I will give you rest."\n— Matthew 11:28' },
           { title: "Declaration", content: 'SABBATH & JUBILEE DECLARATION\n\nThe covenant community of "{{entity.name}}", rooted in {{root.name}}, hereby declares its commitment to the biblical principles of Sabbath rest, sabbatical years, and Jubilee.\n\nDate: {{date}}\nAuthority chain: {{authority.chain}}\n\nWe believe that the Creator established rhythms of rest and renewal that are not merely ceremonial but reflect the divine order of creation itself. "For he spake in a certain place of the seventh day on this wise, And God did rest the seventh day from all his works" (Hebrews 4:4).' },
@@ -3277,7 +3282,7 @@ export class DatabaseStorage implements IStorage {
       {
         name: "Covenant of Marriage",
         description: "Ecclesiastical marriage covenant — union before God and the ecclesia, not a state license",
-        layers: ["pma", "chapter", "commune"],
+        layers: ["assembly", "region", "household"],
         sections: [
           { title: "Scripture Foundation", content: '"Therefore shall a man leave his father and his mother, and shall cleave unto his wife: and they shall be one flesh."\n— Genesis 2:24\n\n"And he answered and said unto them, Have ye not read, that he which made them at the beginning made them male and female, And said, For this cause shall a man leave father and mother, and shall cleave to his wife: and they twain shall be one flesh? Wherefore they are no more twain, but one flesh. What therefore God hath joined together, let not man put asunder."\n— Matthew 19:4-6\n\n"Husbands, love your wives, even as Christ also loved the church, and gave himself for it."\n— Ephesians 5:25\n\n"Marriage is honourable in all, and the bed undefiled."\n— Hebrews 13:4' },
           { title: "Covenant of Marriage", content: 'COVENANT OF MARRIAGE\nWithin the Ecclesia of {{entity.name}}\n\nDate: {{date}}\n\nBefore God Almighty, before the witnesses of the ecclesia, and before the elder body of this covenant community, the following persons enter into the holy covenant of marriage:\n\nHUSBAND: ________________________\nWIFE: ________________________\n\nThis marriage is solemnized under the authority of the ecclesia, not under a state marriage license. Marriage is a divine institution ordained by God in the Garden of Eden (Genesis 2:18-24), recognized by Christ at the wedding in Cana (John 2:1-11), and honored throughout Scripture as a sacred covenant.\n\nThe ecclesia has inherent authority under the First Amendment to solemnize marriages according to its own rites, customs, and beliefs.' },
@@ -3293,7 +3298,7 @@ export class DatabaseStorage implements IStorage {
       {
         name: "Child Dedication & Covenant Covering",
         description: "Dedication of children born into or brought into the covenant community — under the covering of the ecclesia",
-        layers: ["pma", "chapter", "commune"],
+        layers: ["assembly", "region", "household"],
         sections: [
           { title: "Scripture Foundation", content: '"And they brought young children to him, that he should touch them: and his disciples rebuked those that brought them. But when Jesus saw it, he was much displeased, and said unto them, Suffer the little children to come unto me, and forbid them not: for of such is the kingdom of God."\n— Mark 10:13-14\n\n"Train up a child in the way he should go: and when he is old, he will not depart from it."\n— Proverbs 22:6\n\n"Lo, children are an heritage of the LORD: and the fruit of the womb is his reward."\n— Psalm 127:3\n\n"And, ye fathers, provoke not your children to wrath: but bring them up in the nurture and admonition of the Lord."\n— Ephesians 6:4' },
           { title: "Child Dedication", content: 'CHILD DEDICATION & COVENANT COVERING\n\nDate: {{date}}\nEcclesia: {{entity.name}}\n\nCHILD\'S NAME: ________________________\nDATE OF BIRTH: ________________________\nPARENTS: ________________________ and ________________________\n\nFollowing the pattern of Hannah dedicating Samuel to the Lord (1 Samuel 1:27-28) and Jesus blessing the children (Mark 10:13-16), this child is hereby DEDICATED to the Lord and placed under the COVENANT COVERING of the ecclesia.' },
@@ -3309,7 +3314,7 @@ export class DatabaseStorage implements IStorage {
       {
         name: "Death, Burial & Estate Protocol",
         description: "Protocol for handling death within the community — burial, estate, beneficial unit reversion, family care",
-        layers: ["charter", "trust", "pma"],
+        layers: ["covenant", "body", "assembly"],
         sections: [
           { title: "Scripture Foundation", content: '"Precious in the sight of the LORD is the death of his saints."\n— Psalm 116:15\n\n"O death, where is thy sting? O grave, where is thy victory? The sting of death is sin; and the strength of sin is the law. But thanks be to God, which giveth us the victory through our Lord Jesus Christ."\n— 1 Corinthians 15:55-57\n\n"Jesus said unto her, I am the resurrection, and the life: he that believeth in me, though he were dead, yet shall he live."\n— John 11:25\n\n"Blessed are the dead which die in the Lord from henceforth: Yea, saith the Spirit, that they may rest from their labours; and their works do follow them."\n— Revelation 14:13' },
           { title: "Protocol", content: 'DEATH, BURIAL & ESTATE PROTOCOL\n\nEntity: {{entity.name}}\nDate: {{date}}\n\nThis protocol governs the community\'s response when a covenant member passes from this life. We face death with faith, not fear — "to be absent from the body [is] to be present with the Lord" (2 Corinthians 5:8).' },

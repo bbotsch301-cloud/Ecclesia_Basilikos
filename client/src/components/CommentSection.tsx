@@ -159,7 +159,7 @@ export default function CommentSection({ targetType, targetId }: CommentSectionP
             onClick={() => createMutation.mutate(newComment)}
             disabled={!newComment.trim() || createMutation.isPending}
             size="sm"
-            className="bg-covenant-blue hover:bg-covenant-blue/90 text-white"
+            className="bg-royal-navy hover:bg-royal-navy/90 text-white"
           >
             {createMutation.isPending && <Loader2 className="h-4 w-4 mr-1 animate-spin" />}
             Post Comment
@@ -168,7 +168,7 @@ export default function CommentSection({ targetType, targetId }: CommentSectionP
       ) : (
         <div className="mb-6 p-4 bg-gray-50 rounded-lg text-center">
           <p className="text-gray-600 text-sm">
-            <a href="/login" className="text-covenant-blue hover:underline font-medium">Sign in</a> to leave a comment.
+            <a href="/login" className="text-royal-navy hover:underline font-medium">Sign in</a> to leave a comment.
           </p>
         </div>
       )}
@@ -185,7 +185,7 @@ export default function CommentSection({ targetType, targetId }: CommentSectionP
           {commentsList.map((comment) => (
             <div key={comment.id} className="flex gap-3 p-4 bg-gray-50 rounded-lg">
               <Avatar className="h-8 w-8 shrink-0">
-                <AvatarFallback className="bg-covenant-blue text-white text-xs">
+                <AvatarFallback className="bg-royal-navy text-white text-xs">
                   {getInitials(comment.author)}
                 </AvatarFallback>
               </Avatar>

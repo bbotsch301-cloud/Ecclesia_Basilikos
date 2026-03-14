@@ -47,188 +47,19 @@ import AdminLayout from "@/components/layout/admin-layout";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import type { TrustEntity, TrustRelationship } from "@shared/schema";
 import { DocumentBuilderButton } from "@/components/trust-document-builder";
+import {
+  LAYER_CONFIG,
+  RELATIONSHIP_CONFIG,
+  BIBLICAL_LABELS,
+  BIBLICAL_ROLE_LABELS,
+  BIBLICAL_RELATIONSHIP_LABELS,
+  LAYERS_ORDER,
+} from "@/lib/trust-constants";
 
 interface TrustStructureData {
   entities: TrustEntity[];
   relationships: TrustRelationship[];
 }
-
-// ═══════════════════════════════════════════════════════════
-// CONFIGURATION
-// ═══════════════════════════════════════════════════════════
-
-const LAYER_CONFIG: Record<string, {
-  label: string;
-  subtitle: string;
-  nodeColor: string;
-  nodeBorder: string;
-  nodeText: string;
-  nodeBg: string;
-  icon: typeof Crown;
-  defaultEntityType: string;
-}> = {
-  charter: {
-    label: "Constitutional",
-    subtitle: "Charter & Constitutional Root",
-    nodeColor: "bg-red-900",
-    nodeBorder: "border-red-800",
-    nodeText: "text-white",
-    nodeBg: "bg-red-900",
-    icon: Crown,
-    defaultEntityType: "charter",
-  },
-  trust: {
-    label: "Governance",
-    subtitle: "Governance Anchor",
-    nodeColor: "bg-slate-700",
-    nodeBorder: "border-slate-500",
-    nodeText: "text-white",
-    nodeBg: "bg-slate-800",
-    icon: Shield,
-    defaultEntityType: "trust",
-  },
-  operational: {
-    label: "Asset Stewardship",
-    subtitle: "Operational Trusts",
-    nodeColor: "bg-teal-600",
-    nodeBorder: "border-teal-400",
-    nodeText: "text-white",
-    nodeBg: "bg-teal-700",
-    icon: Building2,
-    defaultEntityType: "operational",
-  },
-  pma: {
-    label: "People Layer",
-    subtitle: "Community Governance",
-    nodeColor: "bg-purple-600",
-    nodeBorder: "border-purple-400",
-    nodeText: "text-white",
-    nodeBg: "bg-purple-700",
-    icon: Users,
-    defaultEntityType: "pma",
-  },
-  platform: {
-    label: "Platform",
-    subtitle: "Digital Infrastructure",
-    nodeColor: "bg-indigo-600",
-    nodeBorder: "border-indigo-400",
-    nodeText: "text-white",
-    nodeBg: "bg-indigo-700",
-    icon: Globe,
-    defaultEntityType: "platform",
-  },
-  chapter: {
-    label: "Chapter",
-    subtitle: "Regional Communities",
-    nodeColor: "bg-purple-100",
-    nodeBorder: "border-purple-400 border-dashed",
-    nodeText: "text-purple-800",
-    nodeBg: "bg-white",
-    icon: MapPin,
-    defaultEntityType: "chapter",
-  },
-  commune: {
-    label: "Commune",
-    subtitle: "Local Residential Groups",
-    nodeColor: "bg-purple-100",
-    nodeBorder: "border-purple-400 border-dashed",
-    nodeText: "text-purple-800",
-    nodeBg: "bg-white",
-    icon: Sprout,
-    defaultEntityType: "commune",
-  },
-  guild: {
-    label: "Guild",
-    subtitle: "Cross-Cutting Functional Groups",
-    nodeColor: "bg-amber-100",
-    nodeBorder: "border-amber-500 border-dashed",
-    nodeText: "text-amber-800",
-    nodeBg: "bg-white",
-    icon: Users,
-    defaultEntityType: "guild",
-  },
-  project: {
-    label: "Project",
-    subtitle: "Time-Bound Initiatives",
-    nodeColor: "bg-gray-100",
-    nodeBorder: "border-gray-400 border-dashed",
-    nodeText: "text-gray-700",
-    nodeBg: "bg-white",
-    icon: FolderOpen,
-    defaultEntityType: "project",
-  },
-  beneficiary: {
-    label: "Beneficiary",
-    subtitle: "All Members",
-    nodeColor: "bg-gray-100",
-    nodeBorder: "border-gray-400 border-dashed",
-    nodeText: "text-gray-700",
-    nodeBg: "bg-white",
-    icon: Users,
-    defaultEntityType: "beneficiary",
-  },
-};
-
-const RELATIONSHIP_CONFIG: Record<string, {
-  label: string;
-  color: string;
-  strokeColor: string;
-  dashed: boolean;
-}> = {
-  authority:       { label: "Authority",       color: "bg-red-500",     strokeColor: "#dc2626", dashed: false },
-  grants:          { label: "Grants",          color: "bg-gray-800",    strokeColor: "#1f2937", dashed: false },
-  funds:           { label: "Funds",           color: "bg-blue-500",    strokeColor: "#2563eb", dashed: false },
-  land:            { label: "Land",            color: "bg-green-600",   strokeColor: "#16a34a", dashed: false },
-  remits:          { label: "Remits",          color: "bg-purple-500",  strokeColor: "#9333ea", dashed: false },
-  establishes_pma: { label: "Establishes PMA", color: "bg-purple-400",  strokeColor: "#a855f7", dashed: true },
-  oversees:        { label: "Oversees",        color: "bg-orange-500",  strokeColor: "#ea580c", dashed: true },
-  coordinates:     { label: "Coordinates",     color: "bg-gray-500",    strokeColor: "#6b7280", dashed: true },
-  benefits:        { label: "Benefits",        color: "bg-teal-500",    strokeColor: "#0d9488", dashed: true },
-  shepherds:       { label: "Shepherds",       color: "bg-emerald-600", strokeColor: "#059669", dashed: false },
-  teaches:         { label: "Teaches",         color: "bg-sky-600",     strokeColor: "#0284c7", dashed: false },
-  serves:          { label: "Serves",          color: "bg-rose-500",    strokeColor: "#f43f5e", dashed: true },
-  tithes:          { label: "Tithes",          color: "bg-amber-600",   strokeColor: "#d97706", dashed: false },
-};
-
-// Biblical labels for each layer type (Phase 4 / Phase 7 — UI-only, no enum rename)
-const BIBLICAL_LABELS: Record<string, string> = {
-  charter: "Covenant Foundation",
-  trust: "Common Storehouse (Acts 4:32)",
-  operational: "Stewardship Arm",
-  pma: "Ecclesia (Matthew 16:18)",
-  chapter: "Local Assembly (Acts 14:23)",
-  commune: "Koinonia Household (Acts 2:46)",
-  guild: "Craftsmen Assembly (Exodus 35:10)",
-  project: "Kingdom Work",
-  beneficiary: "Joint Heir (Romans 8:17)",
-};
-
-// Biblical labels for governance roles
-const BIBLICAL_ROLE_LABELS: Record<string, string> = {
-  grantor: "Grantor",
-  trustee: "Trustee",
-  protector: "Protector",
-  steward: "Steward",
-  beneficiary: "Beneficiary",
-  officer: "Officer",
-  elder: "Elder (1 Timothy 3:1-7)",
-  deacon: "Deacon (1 Timothy 3:8-13)",
-  apostle: "Apostle (Ephesians 4:11)",
-  prophet: "Prophet (Ephesians 4:11)",
-  evangelist: "Evangelist (Ephesians 4:11)",
-  pastor: "Pastor (Ephesians 4:11)",
-  teacher: "Teacher (Ephesians 4:11)",
-};
-
-// Biblical labels for relationship types
-const BIBLICAL_RELATIONSHIP_LABELS: Record<string, string> = {
-  shepherds: "Shepherds (1 Peter 5:2)",
-  teaches: "Teaches (Matthew 28:20)",
-  serves: "Serves (Mark 10:45)",
-  tithes: "Tithes (Malachi 3:10)",
-};
-
-const LAYERS_ORDER = ['charter', 'trust', 'operational', 'pma', 'chapter', 'commune', 'guild', 'project', 'beneficiary'];
 
 // ── Quick templates per layer ──
 interface EntityTemplate {
@@ -238,37 +69,37 @@ interface EntityTemplate {
 }
 
 const LAYER_TEMPLATES: Record<string, EntityTemplate[]> = {
-  charter: [
-    { name: "New Covenant Legacy Trust", subtitle: "Constitutional Root & Covenant Charter", entityType: "charter" },
+  covenant: [
+    { name: "New Covenant Legacy Trust", subtitle: "Individual Covenant Gateway", entityType: "covenant" },
   ],
-  trust: [
-    { name: "Governance Trust", subtitle: "Governance Anchor", entityType: "trust" },
+  body: [
+    { name: "Ecclesia Basilikos", subtitle: "Body of Christ", entityType: "body" },
   ],
-  operational: [
-    { name: "Land Trust", subtitle: "Stewardship of Land", entityType: "operational" },
-    { name: "Housing Trust", subtitle: "Shelter & Buildings", entityType: "operational" },
-    { name: "Treasury Trust", subtitle: "Finances & Resources", entityType: "operational" },
-    { name: "Enterprise Trust", subtitle: "Commerce & Innovation", entityType: "operational" },
-    { name: "Education Trust", subtitle: "Knowledge & Training", entityType: "operational" },
+  stewardship: [
+    { name: "Land Trust", subtitle: "Stewardship of Land", entityType: "stewardship" },
+    { name: "Housing Trust", subtitle: "Shelter & Buildings", entityType: "stewardship" },
+    { name: "Treasury Trust", subtitle: "Finances & Resources", entityType: "stewardship" },
+    { name: "Enterprise Trust", subtitle: "Commerce & Innovation", entityType: "stewardship" },
+    { name: "Education Trust", subtitle: "Knowledge & Training", entityType: "stewardship" },
   ],
-  pma: [
-    { name: "Private Membership Association", subtitle: "(PMA)", entityType: "pma" },
-    { name: "Local PMA", subtitle: "Sub-PMA · Local Chapter", entityType: "pma" },
+  assembly: [
+    { name: "Private Membership Association", subtitle: "The Gathered Ecclesia", entityType: "assembly" },
+    { name: "Local Assembly", subtitle: "Sub-Assembly · Local Region", entityType: "assembly" },
   ],
-  chapter: [
-    { name: "Chapter", subtitle: "Regional Community", entityType: "chapter" },
+  region: [
+    { name: "Region", subtitle: "City-Church", entityType: "region" },
   ],
-  commune: [
-    { name: "Commune", subtitle: "Local Residential Group", entityType: "commune" },
+  household: [
+    { name: "Household", subtitle: "House-Church", entityType: "household" },
   ],
-  guild: [
-    { name: "Guild", subtitle: "Functional Group", entityType: "guild" },
+  craft: [
+    { name: "Craft", subtitle: "Skilled Workers — Bezalel Pattern", entityType: "craft" },
   ],
-  project: [
-    { name: "Project", subtitle: "Time-Bound Initiative", entityType: "project" },
+  ministry: [
+    { name: "Ministry", subtitle: "Service Initiative — Diakonia", entityType: "ministry" },
   ],
-  beneficiary: [
-    { name: "Beneficiaries & Stewards", subtitle: "All Members", entityType: "beneficiary" },
+  member: [
+    { name: "Members of the Body", subtitle: "Joint Heirs with Christ", entityType: "member" },
   ],
 };
 
@@ -390,14 +221,14 @@ type NodeSizeVariant = 'compact' | 'standard' | 'wide' | 'prominent';
 
 function getNodeSizeVariant(layer: string): NodeSizeVariant {
   switch (layer) {
-    case 'charter': return 'wide';
-    case 'trust': return 'wide';
-    case 'pma': return 'prominent';
-    case 'beneficiary': return 'wide';
-    case 'chapter':
-    case 'commune':
-    case 'guild':
-    case 'project': return 'compact';
+    case 'covenant': return 'wide';
+    case 'body': return 'wide';
+    case 'assembly': return 'prominent';
+    case 'member': return 'wide';
+    case 'region':
+    case 'household':
+    case 'craft':
+    case 'ministry': return 'compact';
     default: return 'standard';
   }
 }
@@ -434,7 +265,7 @@ function EntityNode({
   onDragStart: (e: React.DragEvent, entity: TrustEntity) => void;
   sizeOverride?: NodeSizeVariant;
 }) {
-  const config = LAYER_CONFIG[entity.layer] || LAYER_CONFIG.project;
+  const config = LAYER_CONFIG[entity.layer] || LAYER_CONFIG.stewardship;
   const sizeVariant = sizeOverride || getNodeSizeVariant(entity.layer);
   const sizeClasses = NODE_SIZE_CLASSES[sizeVariant];
   const isProminent = sizeVariant === 'prominent';
@@ -1385,17 +1216,17 @@ export default function AdminTrustStructure() {
                   Ecclesia Basilikos Trust Ecosystem
                 </h2>
 
-                {/* ── CONSTITUTIONAL ROOT (centered) ── */}
+                {/* ── COVENANT GATEWAY (centered) ── */}
                 {(() => {
-                  const charterEntities = getEntitiesForLayers(['charter']);
+                  const covenantEntities = getEntitiesForLayers(['covenant']);
                   return (
                     <div
-                      className={`group/section flex flex-col items-center gap-4 py-3 rounded-xl transition-all ${dragOverLayer === 'charter' ? 'bg-cyan-100/70 ring-2 ring-cyan-400/50' : ''}`}
-                      onDragOver={(e) => handleDragOver(e, 'charter')}
+                      className={`group/section flex flex-col items-center gap-4 py-3 rounded-xl transition-all ${dragOverLayer === 'covenant' ? 'bg-cyan-100/70 ring-2 ring-cyan-400/50' : ''}`}
+                      onDragOver={(e) => handleDragOver(e, 'covenant')}
                       onDragLeave={handleDragLeave}
-                      onDrop={(e) => handleDrop(e, 'charter')}
+                      onDrop={(e) => handleDrop(e, 'covenant')}
                     >
-                      {charterEntities.map((entity) => (
+                      {covenantEntities.map((entity) => (
                         <EntityNode
                           key={entity.id} entity={entity}
                           isSelected={selectedEntity === entity.id} isConnecting={connectMode} connectFrom={connectFrom}
@@ -1406,13 +1237,13 @@ export default function AdminTrustStructure() {
                           onStartConnect={handleStartConnect} onDragStart={handleDragStart}
                         />
                       ))}
-                      {inlineAddLayer === 'charter' ? (
-                        <InlineAddForm layer="charter" templates={LAYER_TEMPLATES.charter || []}
+                      {inlineAddLayer === 'covenant' ? (
+                        <InlineAddForm layer="covenant" templates={LAYER_TEMPLATES.covenant || []}
                           onSubmit={handleInlineAdd} onCancel={() => setInlineAddLayer(null)} isPending={createEntityMutation.isPending} />
                       ) : (
-                        <button onClick={() => setInlineAddLayer('charter')}
+                        <button onClick={() => setInlineAddLayer('covenant')}
                           className="border-2 border-dashed border-gray-200 hover:border-gray-400 rounded-xl w-8 h-8 flex items-center justify-center text-gray-300 hover:text-gray-500 transition-all bg-white/40 hover:bg-white/80 opacity-0 group-hover/section:opacity-100"
-                          title="Add Constitutional entity">
+                          title="Add Covenant entity">
                           <Plus className="w-4 h-4" />
                         </button>
                       )}
@@ -1420,17 +1251,17 @@ export default function AdminTrustStructure() {
                   );
                 })()}
 
-                {/* ── GOVERNANCE ANCHOR (centered) ── */}
+                {/* ── BODY OF CHRIST (centered) ── */}
                 {(() => {
-                  const trustEntitiesList = getEntitiesForLayers(['trust']);
+                  const bodyEntitiesList = getEntitiesForLayers(['body']);
                   return (
                     <div
-                      className={`group/section flex flex-col items-center gap-4 py-3 rounded-xl transition-all ${dragOverLayer === 'trust' ? 'bg-cyan-100/70 ring-2 ring-cyan-400/50' : ''}`}
-                      onDragOver={(e) => handleDragOver(e, 'trust')}
+                      className={`group/section flex flex-col items-center gap-4 py-3 rounded-xl transition-all ${dragOverLayer === 'body' ? 'bg-cyan-100/70 ring-2 ring-cyan-400/50' : ''}`}
+                      onDragOver={(e) => handleDragOver(e, 'body')}
                       onDragLeave={handleDragLeave}
-                      onDrop={(e) => handleDrop(e, 'trust')}
+                      onDrop={(e) => handleDrop(e, 'body')}
                     >
-                      {trustEntitiesList.map((entity) => (
+                      {bodyEntitiesList.map((entity) => (
                         <EntityNode
                           key={entity.id} entity={entity}
                           isSelected={selectedEntity === entity.id} isConnecting={connectMode} connectFrom={connectFrom}
@@ -1441,13 +1272,13 @@ export default function AdminTrustStructure() {
                           onStartConnect={handleStartConnect} onDragStart={handleDragStart}
                         />
                       ))}
-                      {inlineAddLayer === 'trust' ? (
-                        <InlineAddForm layer="trust" templates={LAYER_TEMPLATES.trust || []}
+                      {inlineAddLayer === 'body' ? (
+                        <InlineAddForm layer="body" templates={LAYER_TEMPLATES.body || []}
                           onSubmit={handleInlineAdd} onCancel={() => setInlineAddLayer(null)} isPending={createEntityMutation.isPending} />
                       ) : (
-                        <button onClick={() => setInlineAddLayer('trust')}
+                        <button onClick={() => setInlineAddLayer('body')}
                           className="border-2 border-dashed border-gray-200 hover:border-gray-400 rounded-xl w-8 h-8 flex items-center justify-center text-gray-300 hover:text-gray-500 transition-all bg-white/40 hover:bg-white/80 opacity-0 group-hover/section:opacity-100"
-                          title="Add Governance entity">
+                          title="Add Body entity">
                           <Plus className="w-4 h-4" />
                         </button>
                       )}
@@ -1458,23 +1289,23 @@ export default function AdminTrustStructure() {
                 {/* ══════ TWO-ARM SPLIT ══════ */}
                 <div className="flex flex-col md:flex-row gap-6 md:gap-8 lg:gap-16 items-start justify-center w-full mt-4">
 
-                  {/* ── LEFT ARM: ASSET STEWARDSHIP ── */}
+                  {/* ── LEFT ARM: STEWARDSHIP ORGANS ── */}
                   <div className="group/section w-full md:flex-1 md:max-w-[480px]">
                     <div className="relative mb-6">
                       <div className="border-t border-gray-300 w-full" />
                       <span className="absolute left-3 -translate-y-1/2 bg-gradient-to-b from-slate-50 to-gray-100 px-2 text-[10px] uppercase tracking-[0.2em] text-gray-400 font-semibold">
-                        Asset Stewardship
+                        Stewardship Organs
                       </span>
                     </div>
                     <div
                       className={`flex flex-wrap justify-center items-start gap-4 min-h-[80px] p-4 rounded-xl border border-dashed border-gray-300 bg-white/30 transition-all ${
-                        dragOverLayer === 'operational' ? 'bg-cyan-100/70 ring-2 ring-cyan-400/50 border-cyan-400' : ''
+                        dragOverLayer === 'stewardship' ? 'bg-cyan-100/70 ring-2 ring-cyan-400/50 border-cyan-400' : ''
                       }`}
-                      onDragOver={(e) => handleDragOver(e, 'operational')}
+                      onDragOver={(e) => handleDragOver(e, 'stewardship')}
                       onDragLeave={handleDragLeave}
-                      onDrop={(e) => handleDrop(e, 'operational')}
+                      onDrop={(e) => handleDrop(e, 'stewardship')}
                     >
-                      {getEntitiesForLayers(['operational']).map((entity) => (
+                      {getEntitiesForLayers(['stewardship']).map((entity) => (
                         <EntityNode
                           key={entity.id} entity={entity}
                           isSelected={selectedEntity === entity.id} isConnecting={connectMode} connectFrom={connectFrom}
@@ -1485,39 +1316,39 @@ export default function AdminTrustStructure() {
                           onStartConnect={handleStartConnect} onDragStart={handleDragStart}
                         />
                       ))}
-                      {inlineAddLayer === 'operational' ? (
-                        <InlineAddForm layer="operational" templates={LAYER_TEMPLATES.operational || []}
+                      {inlineAddLayer === 'stewardship' ? (
+                        <InlineAddForm layer="stewardship" templates={LAYER_TEMPLATES.stewardship || []}
                           onSubmit={handleInlineAdd} onCancel={() => setInlineAddLayer(null)} isPending={createEntityMutation.isPending} />
                       ) : (
-                        <button onClick={() => setInlineAddLayer('operational')}
+                        <button onClick={() => setInlineAddLayer('stewardship')}
                           className="border-2 border-dashed border-gray-200 hover:border-gray-400 rounded-xl w-8 h-8 flex items-center justify-center text-gray-300 hover:text-gray-500 transition-all self-center bg-white/40 hover:bg-white/80 opacity-0 group-hover/section:opacity-100"
-                          title="Add Operational Trust">
+                          title="Add Stewardship Organ">
                           <Plus className="w-4 h-4" />
                         </button>
                       )}
                     </div>
                   </div>
 
-                  {/* ── RIGHT ARM: COMMUNITY GOVERNANCE ── */}
+                  {/* ── RIGHT ARM: ASSEMBLY & COMMUNITY ── */}
                   <div className="group/section w-full md:flex-1 md:max-w-[480px]">
                     <div className="relative mb-6">
                       <div className="border-t border-gray-300 w-full" />
                       <span className="absolute left-3 -translate-y-1/2 bg-gradient-to-b from-slate-50 to-gray-100 px-2 text-[10px] uppercase tracking-[0.2em] text-gray-400 font-semibold">
-                        Community Governance
+                        Assembly & Community
                       </span>
                     </div>
                     <div className="flex flex-col items-center gap-6">
 
-                      {/* PMA */}
+                      {/* Assembly */}
                       <div
                         className={`flex flex-wrap justify-center items-start gap-4 w-full rounded-xl transition-all py-2 ${
-                          dragOverLayer === 'pma' ? 'bg-cyan-100/70 ring-2 ring-cyan-400/50' : ''
+                          dragOverLayer === 'assembly' ? 'bg-cyan-100/70 ring-2 ring-cyan-400/50' : ''
                         }`}
-                        onDragOver={(e) => handleDragOver(e, 'pma')}
+                        onDragOver={(e) => handleDragOver(e, 'assembly')}
                         onDragLeave={handleDragLeave}
-                        onDrop={(e) => handleDrop(e, 'pma')}
+                        onDrop={(e) => handleDrop(e, 'assembly')}
                       >
-                        {getEntitiesForLayers(['pma']).map((entity) => (
+                        {getEntitiesForLayers(['assembly']).map((entity) => (
                           <EntityNode
                             key={entity.id} entity={entity}
                             isSelected={selectedEntity === entity.id} isConnecting={connectMode} connectFrom={connectFrom}
@@ -1528,21 +1359,21 @@ export default function AdminTrustStructure() {
                             onStartConnect={handleStartConnect} onDragStart={handleDragStart}
                           />
                         ))}
-                        {inlineAddLayer === 'pma' ? (
-                          <InlineAddForm layer="pma" templates={LAYER_TEMPLATES.pma || []}
+                        {inlineAddLayer === 'assembly' ? (
+                          <InlineAddForm layer="assembly" templates={LAYER_TEMPLATES.assembly || []}
                             onSubmit={handleInlineAdd} onCancel={() => setInlineAddLayer(null)} isPending={createEntityMutation.isPending} />
                         ) : (
-                          <button onClick={() => setInlineAddLayer('pma')}
+                          <button onClick={() => setInlineAddLayer('assembly')}
                             className="border-2 border-dashed border-gray-200 hover:border-gray-400 rounded-xl w-8 h-8 flex items-center justify-center text-gray-300 hover:text-gray-500 transition-all self-center bg-white/40 hover:bg-white/80 opacity-0 group-hover/section:opacity-100"
-                            title="Add PMA">
+                            title="Add Assembly">
                             <Plus className="w-4 h-4" />
                           </button>
                         )}
                       </div>
 
-                      {/* Chapters → Communes (hierarchical) */}
+                      {/* Regions → Households (hierarchical) */}
                       <div className="flex flex-col items-center gap-3 w-full">
-                        {['chapter', 'commune'].map((layer) => {
+                        {['region', 'household'].map((layer) => {
                           const layerConfig = LAYER_CONFIG[layer];
                           const layerEnts = getEntitiesForLayers([layer]);
                           return (
@@ -1581,9 +1412,9 @@ export default function AdminTrustStructure() {
                         })}
                       </div>
 
-                      {/* Guilds & Projects (cross-cutting) */}
+                      {/* Crafts & Ministries (cross-cutting) */}
                       <div className="flex flex-wrap justify-center items-start gap-3 w-full">
-                        {['guild', 'project'].map((layer) => {
+                        {['craft', 'ministry'].map((layer) => {
                           const layerConfig = LAYER_CONFIG[layer];
                           const layerEnts = getEntitiesForLayers([layer]);
                           return layerEnts.map((entity) => (
@@ -1622,15 +1453,15 @@ export default function AdminTrustStructure() {
                   </div>
                 </div>
 
-                {/* ── BENEFICIARIES & STEWARDS (centered, below both arms) ── */}
+                {/* ── MEMBERS OF THE BODY (centered, below both arms) ── */}
                 <div className="mt-8 w-full">
                   <div
-                    className={`group/section flex flex-col items-center gap-4 py-3 rounded-xl transition-all ${dragOverLayer === 'beneficiary' ? 'bg-cyan-100/70 ring-2 ring-cyan-400/50' : ''}`}
-                    onDragOver={(e) => handleDragOver(e, 'beneficiary')}
+                    className={`group/section flex flex-col items-center gap-4 py-3 rounded-xl transition-all ${dragOverLayer === 'member' ? 'bg-cyan-100/70 ring-2 ring-cyan-400/50' : ''}`}
+                    onDragOver={(e) => handleDragOver(e, 'member')}
                     onDragLeave={handleDragLeave}
-                    onDrop={(e) => handleDrop(e, 'beneficiary')}
+                    onDrop={(e) => handleDrop(e, 'member')}
                   >
-                    {getEntitiesForLayers(['beneficiary']).map((entity) => (
+                    {getEntitiesForLayers(['member']).map((entity) => (
                       <EntityNode
                         key={entity.id} entity={entity}
                         isSelected={selectedEntity === entity.id} isConnecting={connectMode} connectFrom={connectFrom}
@@ -1641,13 +1472,13 @@ export default function AdminTrustStructure() {
                         onStartConnect={handleStartConnect} onDragStart={handleDragStart}
                       />
                     ))}
-                    {inlineAddLayer === 'beneficiary' ? (
-                      <InlineAddForm layer="beneficiary" templates={LAYER_TEMPLATES.beneficiary || []}
+                    {inlineAddLayer === 'member' ? (
+                      <InlineAddForm layer="member" templates={LAYER_TEMPLATES.member || []}
                         onSubmit={handleInlineAdd} onCancel={() => setInlineAddLayer(null)} isPending={createEntityMutation.isPending} />
                     ) : (
-                      <button onClick={() => setInlineAddLayer('beneficiary')}
+                      <button onClick={() => setInlineAddLayer('member')}
                         className="border-2 border-dashed border-gray-200 hover:border-gray-400 rounded-xl w-8 h-8 flex items-center justify-center text-gray-300 hover:text-gray-500 transition-all bg-white/40 hover:bg-white/80 opacity-0 group-hover/section:opacity-100"
-                        title="Add Beneficiary entity">
+                        title="Add Member entity">
                         <Plus className="w-4 h-4" />
                       </button>
                     )}

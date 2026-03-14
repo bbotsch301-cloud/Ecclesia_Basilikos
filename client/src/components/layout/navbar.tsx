@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Menu, Crown, LogIn, UserPlus, LogOut, BookOpen, FileText, Shield, Home, ChevronDown, Settings, User, Search, CreditCard, Sparkles, MessageSquare, Download } from "lucide-react";
+import { Menu, Crown, LogIn, UserPlus, LogOut, BookOpen, FileText, Shield, Home, ChevronDown, Settings, User, Search, CreditCard, Sparkles, MessageSquare, Download, Video } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import NotificationBell from "@/components/NotificationBell";
 import SearchDialog from "@/components/SearchDialog";
@@ -105,6 +105,12 @@ export default function Navbar() {
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => navigate("/courses")}>
                     <BookOpen className="w-4 h-4 mr-2" /> Courses
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/downloads")}>
+                    <Download className="w-4 h-4 mr-2" /> Downloads
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/videos")}>
+                    <Video className="w-4 h-4 mr-2" /> Videos
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => navigate("/resources")}>
                     <FileText className="w-4 h-4 mr-2" /> Resources
@@ -217,6 +223,9 @@ export default function Navbar() {
                           </Link>
                           <Link href="/downloads" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">
                             <Download className="w-4 h-4" /> Downloads
+                          </Link>
+                          <Link href="/videos" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">
+                            <Video className="w-4 h-4" /> Videos
                           </Link>
                           <Link href="/resources" onClick={() => setIsOpen(false)} className="flex items-center gap-2 py-2 text-royal-navy font-cinzel hover:text-royal-gold">
                             <FileText className="w-4 h-4" /> Resources

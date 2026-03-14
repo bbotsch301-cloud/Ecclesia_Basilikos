@@ -127,12 +127,33 @@ export default function Signup() {
         <div className="hidden lg:flex flex-col justify-center bg-gradient-to-br from-royal-navy via-royal-burgundy to-royal-navy p-12 xl:p-16 text-white">
           <Crown className="w-12 h-12 text-royal-gold mb-6" />
           <h2 className="font-cinzel-decorative text-3xl xl:text-4xl font-bold mb-4">
-            Begin Your Journey
+            Enter the Assembly
           </h2>
-          <p className="text-gray-300 text-lg mb-8 leading-relaxed">
-            Access free Trust educational content, courses, and community resources. Acquire full beneficial interest through PMA membership anytime.
+          <p className="text-gray-300 text-lg mb-6 leading-relaxed">
+            You are not creating a website account. You are entering a private covenant assembly —
+            a trust-governed body operating outside Babylon's commercial systems.
           </p>
-          <ul className="space-y-4 mb-10">
+
+          <div className="bg-white/10 backdrop-blur-sm border border-royal-gold/30 rounded-lg p-5 mb-8">
+            <p className="font-cinzel text-sm font-bold text-royal-gold mb-3">The Three Pillars You Will Learn</p>
+            <ul className="space-y-3">
+              {[
+                { num: "1", label: "Lawful Money", desc: "Understand 12 USC 411 and the right to redeem" },
+                { num: "2", label: "Trust Protection", desc: "Hold assets in trust, not in your name" },
+                { num: "3", label: "Proper Status", desc: "Secure your standing under the correct jurisdiction" },
+              ].map((p, i) => (
+                <li key={i} className="flex items-start gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-royal-gold/20 flex items-center justify-center text-royal-gold font-cinzel text-xs font-bold">{p.num}</span>
+                  <div>
+                    <span className="text-white font-semibold text-sm">{p.label}</span>
+                    <span className="text-gray-400 text-sm"> — {p.desc}</span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <ul className="space-y-3 mb-8">
             {benefits.map((b, i) => (
               <li key={i} className="flex items-center gap-3">
                 <b.icon className="w-5 h-5 text-royal-gold flex-shrink-0" />
@@ -140,14 +161,12 @@ export default function Signup() {
               </li>
             ))}
           </ul>
-          <p className="text-sm text-gray-400 mb-4">
-            Free account includes Trust content. <Link href="/pricing" className="text-royal-gold hover:underline">Acquire PMA membership</Link> for full beneficial interest.
-          </p>
+
           <div className="bg-white/10 backdrop-blur-sm border border-royal-gold/30 rounded-lg p-5">
             <p className="font-georgia italic text-gray-200">
               "But ye are a chosen generation, a royal priesthood, an holy nation, a peculiar people."
             </p>
-            <p className="text-royal-gold mt-2 font-semibold text-sm">— 1 Peter 2:9</p>
+            <p className="text-royal-gold mt-2 font-semibold text-sm">— 1 Peter 2:9 (KJV)</p>
           </div>
         </div>
 
@@ -159,9 +178,9 @@ export default function Signup() {
                 <Crown className="w-10 h-10 text-royal-gold" />
               </div>
               <h1 className="font-cinzel-decorative text-2xl font-bold text-royal-navy">
-                Create Your Account
+                Enter the Assembly
               </h1>
-              <p className="text-gray-500 text-sm">Begin your covenant journey</p>
+              <p className="text-gray-500 text-sm">Create your account to begin the three-pillar foundation</p>
             </CardHeader>
             <CardContent>
               <Form {...form}>

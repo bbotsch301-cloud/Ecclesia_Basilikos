@@ -3,9 +3,10 @@ import { useAuth } from "@/hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Award, BookOpen, FileText, Shield, Users, Download, GraduationCap, Mail, Settings, CheckCircle, Crown, ArrowRight, Play, Star } from "lucide-react";
+import { Award, BookOpen, FileText, Shield, Users, Download, GraduationCap, Mail, Settings, CheckCircle, Crown, ArrowRight, Play, Star, Banknote, Globe } from "lucide-react";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import RequireAuth from "@/components/RequireAuth";
+import TrustHierarchyDiagram from "@/components/trust-hierarchy-diagram";
 
 interface Enrollment {
   courseId: string;
@@ -85,7 +86,7 @@ function WelcomeContent() {
     { title: "Downloads", description: "Documents, declarations & resources", href: "/downloads", icon: Download, disabled: false },
     { title: "Educational Resources", description: "Templates, guides & educational materials", href: "/resources", icon: FileText, disabled: false },
     { title: "Royal Academy", description: "Explore courses in trust, stewardship & covenant authority", href: "/courses", icon: BookOpen, disabled: false },
-    { title: "Proof Vault", description: "Timestamp & verify your documents", href: "/proof-vault", icon: Shield, disabled: true },
+    { title: "Proof Vault", description: "Timestamp & verify your documents", href: "/proof-vault", icon: Shield, disabled: false },
     { title: "Embassy Forum", description: "Join discussions with the covenant community", href: "/forum", icon: Users, disabled: false },
   ];
 
@@ -97,8 +98,8 @@ function WelcomeContent() {
           <h1 className="font-cinzel-decorative text-3xl md:text-5xl font-bold mb-4">
             Welcome, {user.firstName}
           </h1>
-          <p className="text-lg md:text-xl text-gray-300">
-            Your Covenant Journey Begins
+          <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
+            You have entered the assembly. Below is your path — three pillars that form the foundation of everything we teach.
           </p>
         </div>
       </section>
@@ -154,6 +155,109 @@ function WelcomeContent() {
             </Card>
           </Link>
         </div>
+
+        {/* Three Pillar Progression */}
+        <div className="mb-8">
+          <h2 className="font-cinzel text-lg font-bold text-royal-navy mb-4">The Three-Pillar Foundation</h2>
+          <div className="grid md:grid-cols-3 gap-4">
+            {[
+              {
+                num: "1",
+                icon: Banknote,
+                title: "Lawful Money",
+                description: "Understand the difference between Federal Reserve Notes and lawful money under 12 USC 411. This is where everything begins.",
+                href: "/lawful-money",
+                courseCategory: "Lawful Money",
+                color: "border-t-royal-gold",
+              },
+              {
+                num: "2",
+                icon: Shield,
+                title: "Trust Protection",
+                description: "Learn why assets must be held in trust — not in your name — and how the trust structure works.",
+                href: "/trust-assets",
+                courseCategory: "Trust & Assets",
+                color: "border-t-royal-burgundy",
+              },
+              {
+                num: "3",
+                icon: Globe,
+                title: "Proper Status",
+                description: "Secure your standing under the correct jurisdiction. Your political status determines your rights.",
+                href: "/state-passport",
+                courseCategory: "State Passport",
+                color: "border-t-royal-navy",
+              },
+            ].map((pillar) => {
+              const pillarCourse = courses.find(c => c.category === pillar.courseCategory);
+              const pillarEnrollment = pillarCourse ? enrollments.find(e => e.courseId === pillarCourse.id) : null;
+              const isComplete = !!pillarEnrollment?.completedAt;
+              const isStarted = !!pillarEnrollment && !isComplete;
+              const progress = pillarEnrollment?.progress ?? 0;
+
+              return (
+                <Link key={pillar.num} href={pillarCourse ? `/course/${pillarCourse.id}` : pillar.href}>
+                  <Card className={`royal-card h-full ${pillar.color} border-t-4 hover:border-royal-gold/50 cursor-pointer transition-all relative`}>
+                    {isComplete && (
+                      <div className="absolute top-3 right-3">
+                        <CheckCircle className="w-5 h-5 text-green-500" />
+                      </div>
+                    )}
+                    <CardContent className="p-6">
+                      <div className="flex items-center gap-3 mb-3">
+                        <span className="flex-shrink-0 w-8 h-8 rounded-full bg-royal-navy flex items-center justify-center">
+                          <span className="text-royal-gold font-cinzel text-sm font-bold">{pillar.num}</span>
+                        </span>
+                        <pillar.icon className="w-5 h-5 text-royal-burgundy" />
+                      </div>
+                      <h3 className="font-cinzel text-base font-bold text-royal-navy mb-2">{pillar.title}</h3>
+                      <p className="text-gray-600 text-sm leading-relaxed mb-3">{pillar.description}</p>
+                      {isStarted && (
+                        <div className="mt-auto">
+                          <div className="flex items-center justify-between text-xs text-gray-500 mb-1">
+                            <span>In progress</span>
+                            <span>{progress}%</span>
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-1.5">
+                            <div className="bg-royal-gold rounded-full h-1.5 transition-all" style={{ width: `${progress}%` }} />
+                          </div>
+                        </div>
+                      )}
+                      {!isStarted && !isComplete && (
+                        <span className="text-royal-gold text-sm font-medium flex items-center gap-1">
+                          {pillarCourse ? "Begin" : "Learn more"} <ArrowRight className="w-3 h-3" />
+                        </span>
+                      )}
+                      {isComplete && (
+                        <span className="text-green-600 text-sm font-medium">Completed</span>
+                      )}
+                    </CardContent>
+                  </Card>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Your Place in the Trust — Premium Users */}
+        {isPremium && (
+          <div className="mb-8">
+            <Card className="royal-card border border-royal-gold/20">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <Crown className="w-5 h-5 text-royal-gold" />
+                  <h2 className="font-cinzel text-lg font-bold text-royal-navy">Your Place in the Trust</h2>
+                </div>
+                <TrustHierarchyDiagram compact highlightLayer="member" className="mb-3" />
+                <div className="text-center">
+                  <Link href="/beneficiary/unit" className="text-sm font-cinzel font-semibold text-royal-gold hover:text-royal-burgundy transition-colors">
+                    View Your Beneficial Unit →
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
 
         {/* Secondary Pathway Cards */}
         <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-4">

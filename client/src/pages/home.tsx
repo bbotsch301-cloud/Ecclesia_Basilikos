@@ -16,6 +16,7 @@ import StaggerContainer, {
   emphasisItemVariants,
 } from "@/components/ui/stagger-container";
 import sealImage from "@assets/EB_1772210493582.png";
+import TrustHierarchyDiagram from "@/components/trust-hierarchy-diagram";
 
 export default function Home() {
   usePageTitle(undefined, "Ecclesia Basilikos — A Private Membership Association operating under divine covenant authority. Acquire beneficial interest in the trust.");
@@ -78,9 +79,9 @@ export default function Home() {
             animate={heroAnimate}
             transition={heroTransition(0.4)}
           >
-            Ecclesia Basilikos is a trust-governed assembly established to educate, equip, and restore
-            those called to operate outside Babylon's commercial systems — under private jurisdiction,
-            divine authority, and covenant law.
+            Everything on this platform — every course, every document, every resource — is held
+            in trust. Ecclesia Basilikos is a trust-governed private assembly. Its members are not
+            customers. They are beneficiaries. The education you see here is a function of the trust corpus.
           </motion.p>
 
           <motion.div
@@ -116,233 +117,45 @@ export default function Home() {
       </div>
 
       {/* ═══════════════════════════════════════════════════════════════
-          SECTION 2: WHAT IS THE PMA
-          ═══════════════════════════════════════════════════════════════ */}
-      <div className="py-24 bg-white">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <RevealOnScroll>
-            <div className="text-center mb-16">
-              <h2 className="font-cinzel-decorative text-3xl md:text-4xl font-bold text-royal-navy mb-6">
-                What Is a Private Membership Association?
-              </h2>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                A PMA operates under the First Amendment right to freely assemble. It is a private,
-                non-commercial body — not a business. Its members are not customers. Its offerings are
-                not products. Everything exchanged within the association is governed by private agreement,
-                not commercial regulation.
-              </p>
-            </div>
-          </RevealOnScroll>
-
-          <StaggerContainer staggerDelay={0.12} className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-16">
-            {[
-              {
-                icon: Shield,
-                title: "Private Jurisdiction",
-                description:
-                  "The PMA operates outside the commercial public sphere. Members enter by private agreement, not by public contract. This places the association — and its activities — under private, not statutory, jurisdiction.",
-              },
-              {
-                icon: Scale,
-                title: "Trust-Governed Structure",
-                description:
-                  "Ecclesia Basilikos is organized as a trust. Christ is the Grantor. The Trustee administers the corpus. Beneficiaries receive their share of the trust's educational, spiritual, and material resources.",
-              },
-              {
-                icon: Crown,
-                title: "Divine Covenant Authority",
-                description:
-                  "This assembly does not derive its authority from the state. It operates under the New Covenant — a higher jurisdiction. Members are recognized as royal priests, ambassadors, and stewards of an eternal kingdom.",
-              },
-            ].map((item, index) => (
-              <motion.div key={index} variants={staggerItemVariants}>
-                <Card className="royal-card h-full border-t-4 border-t-royal-burgundy">
-                  <CardContent className="p-8">
-                    <div className="w-12 h-12 rounded-full bg-royal-burgundy/10 flex items-center justify-center mb-5">
-                      <item.icon className="w-6 h-6 text-royal-burgundy" />
-                    </div>
-                    <h3 className="font-cinzel text-lg font-bold text-royal-navy mb-3">
-                      {item.title}
-                    </h3>
-                    <p className="text-gray-600 leading-relaxed">
-                      {item.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </StaggerContainer>
-
-          <RevealOnScroll>
-            <div className="text-center">
-              <p className="text-xl md:text-2xl font-semibold text-royal-navy max-w-3xl mx-auto">
-                This is not a church. Not a corporation. Not a club.{" "}
-                <span className="text-royal-burgundy">It is a covenant assembly operating under trust law.</span>
-              </p>
-            </div>
-          </RevealOnScroll>
-        </div>
-      </div>
-
-      {/* ═══════════════════════════════════════════════════════════════
-          SECTION 3: THE TRUST STRUCTURE
+          SECTION 2: THE TRUST NARRATIVE & STRUCTURE
           ═══════════════════════════════════════════════════════════════ */}
       <div className="py-28 marble-bg">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <RevealOnScroll>
             <div className="text-center mb-8">
-              <span className="inline-flex items-center gap-2 font-cinzel text-xs tracking-[0.3em] uppercase text-royal-burgundy bg-royal-burgundy/10 px-5 py-2 rounded-full mb-5">
-                <Landmark className="w-3.5 h-3.5" />
-                Trust Architecture
-              </span>
               <h2 className="font-cinzel-decorative text-3xl md:text-5xl font-bold text-royal-navy mb-6">
-                How the Trust Is Structured
+                This Is Not a Website. It Is a Trust.
               </h2>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                Ecclesia Basilikos operates through a layered trust framework. Each layer serves
-                a distinct purpose — from divine authority down to individual stewardship.
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed mb-6">
+                Ecclesia Basilikos holds the education in trust. The courses, documents, templates,
+                and resources you see here are not products for sale — they are the trust corpus,
+                administered by the Trustee for the benefit of the assembly. The Private Membership
+                Association is how you enter. When you join, you are not subscribing to a service —
+                you are stepping into a private covenant body and becoming a beneficiary of the trust.
+              </p>
+              <p className="text-xl md:text-2xl font-semibold text-royal-navy max-w-3xl mx-auto mb-8">
+                The trust holds the resources. The PMA is the assembly.{" "}
+                <span className="text-royal-burgundy">Members are beneficiaries — not customers.</span>
+              </p>
+              <p className="text-base text-gray-500 max-w-2xl mx-auto leading-relaxed">
+                Here is how the assembly is structured — from its divine authority down to where you enter.
               </p>
             </div>
           </RevealOnScroll>
 
-          {/* Layer 1 — Covenant Charter */}
-          <RevealOnScroll>
-            <div className="max-w-5xl mx-auto mt-16">
-              <Card className="royal-card hover:border-royal-gold transition-all group overflow-hidden">
-                <CardContent className="p-0">
-                  <div className="grid md:grid-cols-5">
-                    <div className="md:col-span-2 bg-gradient-to-br from-royal-navy to-royal-burgundy p-8 md:p-10 flex flex-col justify-center text-white">
-                      <span className="inline-block self-start text-xs font-semibold text-royal-gold bg-royal-gold/15 px-3 py-1 rounded-full mb-4">
-                        Layer 1
-                      </span>
-                      <Crown className="w-14 h-14 text-royal-gold mb-4" />
-                      <h3 className="font-cinzel-decorative text-2xl md:text-3xl font-bold mb-2">
-                        Covenant Charter
-                      </h3>
-                      <p className="text-sm text-royal-gold font-cinzel font-semibold">
-                        Philosophy & Divine Authority
-                      </p>
-                    </div>
-                    <div className="md:col-span-3 p-8 md:p-10 flex flex-col justify-center">
-                      <p className="text-gray-700 leading-relaxed mb-6">
-                        The charter establishes the source of authority — the New Covenant — and the
-                        mission of the assembly. It defines the Grantor (Christ), the purpose of the trust,
-                        and the mandate under which all operations proceed. Nothing exists in this framework
-                        without this foundation.
-                      </p>
-                      <ul className="space-y-3 mb-6">
-                        {[
-                          "Establishes divine covenant as the source of authority",
-                          "Defines the Grantor, mission, and purpose of the trust",
-                          "Anchors all activity in scriptural mandate",
-                          "Supersedes all lower layers in governance",
-                        ].map((item, i) => (
-                          <li key={i} className="flex items-start gap-3 text-sm text-gray-600">
-                            <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
-                            {item}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </RevealOnScroll>
+          {/* Interactive Trust Hierarchy Diagram */}
+          <div className="max-w-5xl mx-auto mt-12">
+            <TrustHierarchyDiagram highlightLayer="member" />
+          </div>
 
-          {/* Layer 2 — Ecclesia Basilikos Trust */}
           <RevealOnScroll>
-            <div className="max-w-5xl mx-auto mt-8">
-              <Card className="royal-card hover:border-royal-gold transition-all group overflow-hidden">
-                <CardContent className="p-0">
-                  <div className="grid md:grid-cols-5">
-                    <div className="md:col-span-3 p-8 md:p-10 flex flex-col justify-center order-2 md:order-1">
-                      <p className="text-gray-700 leading-relaxed mb-6">
-                        The central trust holds the corpus — all educational content, courses, downloads,
-                        community resources, and financial contributions. The Trustee administers this corpus
-                        with fiduciary duty to the beneficiaries. Every member who acquires beneficial interest
-                        receives a Beneficial Unit — a 1/N share of the trust corpus.
-                      </p>
-                      <ul className="space-y-3 mb-6">
-                        {[
-                          "Holds and governs the trust corpus (all assets and content)",
-                          "Trustee administers with fiduciary duty to beneficiaries",
-                          "Each beneficiary receives a Beneficial Unit (1/N share)",
-                          "Protected from external claims under trust law",
-                        ].map((item, i) => (
-                          <li key={i} className="flex items-start gap-3 text-sm text-gray-600">
-                            <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
-                            {item}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div className="md:col-span-2 bg-gradient-to-br from-royal-burgundy to-royal-navy p-8 md:p-10 flex flex-col justify-center text-white order-1 md:order-2">
-                      <span className="inline-block self-start text-xs font-semibold text-royal-gold bg-royal-gold/15 px-3 py-1 rounded-full mb-4">
-                        Layer 2
-                      </span>
-                      <Landmark className="w-14 h-14 text-royal-gold mb-4" />
-                      <h3 className="font-cinzel-decorative text-2xl md:text-3xl font-bold mb-2">
-                        Ecclesia Basilikos Trust
-                      </h3>
-                      <p className="text-sm text-royal-gold font-cinzel font-semibold">
-                        Mission Anchor & Stewardship
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </RevealOnScroll>
-
-          {/* Layer 3 — Private Membership Association */}
-          <RevealOnScroll>
-            <div className="max-w-5xl mx-auto mt-8">
-              <Card className="royal-card hover:border-royal-gold transition-all group overflow-hidden">
-                <CardContent className="p-0">
-                  <div className="grid md:grid-cols-5">
-                    <div className="md:col-span-2 bg-gradient-to-br from-royal-navy to-royal-burgundy p-8 md:p-10 flex flex-col justify-center text-white">
-                      <span className="inline-block self-start text-xs font-semibold text-royal-gold bg-royal-gold/15 px-3 py-1 rounded-full mb-4">
-                        Layer 3
-                      </span>
-                      <Users className="w-14 h-14 text-royal-gold mb-4" />
-                      <h3 className="font-cinzel-decorative text-2xl md:text-3xl font-bold mb-2">
-                        The PMA
-                      </h3>
-                      <p className="text-sm text-royal-gold font-cinzel font-semibold">
-                        The People Layer
-                      </p>
-                    </div>
-                    <div className="md:col-span-3 p-8 md:p-10 flex flex-col justify-center">
-                      <p className="text-gray-700 leading-relaxed mb-6">
-                        The Private Membership Association is where you enter. By accepting the PMA agreement,
-                        you step into private jurisdiction. You are not a customer — you are a member of a
-                        covenant body. Your rights within this assembly are governed by private agreement,
-                        not commercial statute.
-                      </p>
-                      <ul className="space-y-3 mb-6">
-                        {[
-                          "Enter by private agreement — not public contract",
-                          "First Amendment right to freely assemble",
-                          "Members are beneficiaries — not customers or subscribers",
-                          "All exchange governed by covenant, not commerce",
-                        ].map((item, i) => (
-                          <li key={i} className="flex items-start gap-3 text-sm text-gray-600">
-                            <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
-                            {item}
-                          </li>
-                        ))}
-                      </ul>
-                      <Link href="/pma-agreement">
-                        <div className="flex items-center gap-2 text-royal-gold font-cinzel text-sm font-semibold group-hover:gap-3 transition-all">
-                          Read the Full PMA Agreement
-                          <ArrowRight className="w-4 h-4" />
-                        </div>
-                      </Link>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+            <div className="text-center mt-8">
+              <Link href="/pma-agreement">
+                <div className="inline-flex items-center gap-2 text-royal-gold font-cinzel text-sm font-semibold hover:gap-3 transition-all">
+                  Read the Full PMA Agreement
+                  <ArrowRight className="w-4 h-4" />
+                </div>
+              </Link>
             </div>
           </RevealOnScroll>
         </div>
@@ -423,12 +236,12 @@ export default function Home() {
           <RevealOnScroll>
             <div className="text-center mb-16">
               <h2 className="font-cinzel-decorative text-3xl md:text-4xl font-bold text-royal-navy mb-6">
-                What the Trust Provides
+                The Trust Corpus — What You Are Looking At
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                The trust corpus contains everything the assembly has built — education,
-                resources, community, and tools. Beneficiaries access these according to
-                their level of interest.
+                This platform and everything on it is the trust corpus — administered by the Trustee
+                for the benefit of PMA members. The education is not a product being sold.
+                It is a function of the trust, delivered to its beneficiaries.
               </p>
             </div>
           </RevealOnScroll>
@@ -437,7 +250,7 @@ export default function Home() {
             {[
               {
                 icon: Banknote,
-                text: "Lawful money redemption education — how to exercise 12 USC § 411",
+                text: "Lawful money redemption education — understanding 12 USC § 411",
               },
               {
                 icon: Shield,
@@ -469,7 +282,7 @@ export default function Home() {
               },
               {
                 icon: Landmark,
-                text: "Trust structure education — charter, operational trusts, and governance",
+                text: "Trust structure education — covenant, stewardship organs, and the Body",
               },
               {
                 icon: Eye,
@@ -499,11 +312,12 @@ export default function Home() {
           <RevealOnScroll>
             <div className="text-center mb-16">
               <h2 className="font-cinzel-decorative text-3xl md:text-4xl font-bold text-royal-navy mb-6">
-                The Path to Beneficial Interest
+                How You Enter the Assembly
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                Entry into the assembly is open to all. Acquiring full beneficial interest
-                is a deliberate step — a covenant commitment, not a commercial transaction.
+                The trust already exists. The corpus is already being administered. The question
+                is whether you enter as a beneficiary. Here is the path — from first visit to
+                full beneficial interest.
               </p>
             </div>
           </RevealOnScroll>
@@ -528,9 +342,9 @@ export default function Home() {
                         </span>
                       </div>
                       <p className="text-gray-600 leading-relaxed mb-3">
-                        Create an account and begin learning. Access the trust pillar courses,
-                        download foundational documents, read the forum, and track your progress.
-                        No contribution required. No obligation.
+                        Create an account and begin learning. You immediately gain access to
+                        the three-pillar educational foundation — the trust's core curriculum.
+                        This is the trust serving its educational purpose. No contribution required.
                       </p>
                       <Link href="/signup" className="text-xs font-cinzel font-semibold text-royal-gold hover:text-royal-burgundy transition-colors">
                         Create Free Account →
@@ -621,7 +435,7 @@ export default function Home() {
             {[
               {
                 q: "Is a Private Membership Association legal?",
-                a: "Yes. The right to freely assemble is protected under the First Amendment. PMAs have been upheld in numerous court decisions. The key is proper structure, genuine private agreement, and non-commercial purpose — all of which Ecclesia Basilikos maintains.",
+                a: "Yes. The right to freely assemble is a natural, unalienable right recognized in every civilized jurisdiction — from constitutional protections to international human rights instruments. PMAs have been upheld in numerous legal contexts. The key is proper structure, genuine private agreement, and non-commercial purpose — all of which Ecclesia Basilikos maintains.",
               },
               {
                 q: "What is a Beneficial Unit?",
@@ -736,7 +550,8 @@ export default function Home() {
               The Assembly Is Open
             </h2>
             <p className="text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto leading-relaxed mb-4">
-              A covenant body. A trust-governed assembly. A kingdom embassy.
+              The trust holds the resources. The PMA is the assembly. The education is the function.
+              Enter and become a beneficiary.
             </p>
           </RevealOnScroll>
 
@@ -790,8 +605,9 @@ export default function Home() {
 
           <RevealOnScroll delay={0.7}>
             <p className="text-gray-400 text-base max-w-xl mx-auto leading-relaxed mt-10">
-              Ecclesia Basilikos is a Private Membership Association providing education and community
-              under divine covenant authority — not legal, financial, or tax advice.
+              Ecclesia Basilikos is a Private Membership Association. All education and resources
+              are functions of the trust corpus, administered for the benefit of its members —
+              not legal, financial, or tax advice.
             </p>
           </RevealOnScroll>
         </div>

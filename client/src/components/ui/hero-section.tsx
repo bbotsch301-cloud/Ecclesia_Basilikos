@@ -28,30 +28,30 @@ export default function HeroSection({
   return (
     <div className="relative min-h-screen flex items-center mountain-landscape">
       <div className="hero-overlay absolute inset-0 z-10" />
-      
+
       <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div className="max-w-4xl mx-auto">
-          <h1 className="font-playfair text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
+          <h1 className="font-cinzel-decorative text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
             {subtitle ? (
               <>
                 {title}<br />
-                <span className="text-covenant-gold">{subtitle}</span>
+                <span className="text-royal-gold">{subtitle}</span>
               </>
             ) : (
               title
             )}
           </h1>
-          
+
           <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto leading-relaxed">
             {description}
           </p>
-          
+
           {(primaryButton || secondaryButton) && (
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               {primaryButton && (
                 <Button
                   asChild
-                  className="bg-covenant-gold hover:bg-yellow-500 text-covenant-blue px-8 py-4 text-lg font-semibold shadow-lg transform hover:scale-105 transition-all"
+                  className="royal-button px-8 py-4 text-lg font-semibold shadow-lg transform hover:scale-105 transition-all"
                 >
                   <Link href={primaryButton.href}>
                     {primaryButton.text}
@@ -62,7 +62,7 @@ export default function HeroSection({
                 <Button
                   asChild
                   variant="outline"
-                  className="border-2 border-covenant-gold text-covenant-gold hover:bg-covenant-gold hover:text-covenant-blue px-8 py-4 text-lg font-semibold transition-all shadow-lg"
+                  className="border-2 border-royal-gold text-royal-gold hover:bg-royal-gold hover:text-royal-navy px-8 py-4 text-lg font-semibold transition-all shadow-lg"
                 >
                   <Link href={secondaryButton.href}>
                     {secondaryButton.text}

@@ -4,7 +4,7 @@ import { Link } from "wouter";
 import {
   Shield, Lock, FileText, BookOpen, ArrowRight,
   Building, Key, CheckCircle, AlertTriangle, Landmark,
-  Users, Info, Scale
+  Users, Info, Scale, Crown
 } from "lucide-react";
 import { motion } from "framer-motion";
 import RevealOnScroll from "@/components/ui/reveal-on-scroll";
@@ -13,6 +13,7 @@ import { useAuth } from "@/hooks/useAuth";
 import StaggerContainer, {
   staggerItemVariants,
 } from "@/components/ui/stagger-container";
+import TrustHierarchyDiagram from "@/components/trust-hierarchy-diagram";
 
 export default function TrustAssets() {
   usePageTitle("Trust & Asset Protection");
@@ -173,6 +174,7 @@ export default function TrustAssets() {
                 icon: Key,
                 title: "The Grantor",
                 subtitle: "Creator of the Trust",
+                badge: "See: Covenant Gateway",
                 description:
                   "The grantor establishes the trust, defines its terms, and transfers assets into it. The grantor's intent governs the trust's purpose and operation. In the covenant framework, Christ is the ultimate Grantor of the New Covenant trust.",
               },
@@ -180,6 +182,7 @@ export default function TrustAssets() {
                 icon: Building,
                 title: "The Trustee",
                 subtitle: "Administrator of the Trust",
+                badge: "See: Governance Trust",
                 description:
                   "The trustee holds legal title to the trust assets and administers them according to the trust instrument. The trustee has a fiduciary duty — the highest obligation known in law — to act in the beneficiary's interest.",
               },
@@ -187,6 +190,7 @@ export default function TrustAssets() {
                 icon: Users,
                 title: "The Beneficiary",
                 subtitle: "Recipient of the Benefits",
+                badge: "See: PMA Members",
                 description:
                   "The beneficiary holds equitable (beneficial) interest in the trust assets. They receive the benefits of the trust without holding legal title — which is precisely what provides the protection.",
               },
@@ -198,9 +202,15 @@ export default function TrustAssets() {
                     <h3 className="font-cinzel text-xl font-bold text-royal-navy mb-1">
                       {item.title}
                     </h3>
-                    <p className="text-sm text-royal-burgundy font-semibold mb-4">
+                    <p className="text-sm text-royal-burgundy font-semibold mb-2">
                       {item.subtitle}
                     </p>
+                    {item.badge && (
+                      <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-royal-gold bg-royal-gold/10 px-2.5 py-1 rounded-full mb-4">
+                        <Crown className="w-3 h-3" />
+                        {item.badge}
+                      </span>
+                    )}
                     <p className="text-gray-700 leading-relaxed text-sm">
                       {item.description}
                     </p>
@@ -218,6 +228,22 @@ export default function TrustAssets() {
                 counsel of his own will."
               </p>
               <p className="text-royal-burgundy mt-3 font-semibold">— Ephesians 1:11</p>
+            </div>
+          </RevealOnScroll>
+
+          {/* How This Trust Is Actually Structured */}
+          <RevealOnScroll>
+            <div className="mt-16">
+              <div className="text-center mb-8">
+                <h3 className="font-cinzel-decorative text-2xl md:text-3xl font-bold text-royal-navy mb-3">
+                  How This Trust Is Actually Structured
+                </h3>
+                <p className="text-gray-600 max-w-2xl mx-auto">
+                  The Grantor, Trustee, and Beneficiary roles above are not abstract concepts —
+                  they are woven into a concrete hierarchy. Here is the actual trust structure:
+                </p>
+              </div>
+              <TrustHierarchyDiagram highlightLayer="member" />
             </div>
           </RevealOnScroll>
         </div>

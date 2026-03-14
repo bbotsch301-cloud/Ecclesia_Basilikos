@@ -4,13 +4,13 @@ import { usePageTitle } from "@/hooks/usePageTitle";
 export default function Privacy() {
   usePageTitle("Privacy Policy");
   return (
-    <div className="max-w-4xl mx-auto px-4 py-16">
-      <h1 className="font-playfair text-4xl font-bold text-royal-navy mb-2">Privacy Policy</h1>
+    <div className="max-w-4xl mx-auto px-4 pt-24 pb-16">
+      <h1 className="font-cinzel text-4xl font-bold text-royal-navy mb-2">Privacy Policy</h1>
       <p className="text-muted-foreground mb-8">Last updated: February 2026</p>
 
       <div className="prose prose-slate max-w-none space-y-6">
         <section>
-          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">1. Information We Collect</h2>
+          <h2 className="font-cinzel text-2xl font-semibold text-royal-navy">1. Information We Collect</h2>
           <p>We collect the following types of information:</p>
           <ul className="list-disc pl-6 space-y-1">
             <li>
@@ -33,7 +33,7 @@ export default function Privacy() {
         </section>
 
         <section>
-          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">2. How We Use Your Information</h2>
+          <h2 className="font-cinzel text-2xl font-semibold text-royal-navy">2. How We Use Your Information</h2>
           <p>We use your information to:</p>
           <ul className="list-disc pl-6 space-y-1">
             <li>Administer your beneficial interest and trust operations</li>
@@ -46,7 +46,7 @@ export default function Privacy() {
         </section>
 
         <section>
-          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">3. Data Storage and Security</h2>
+          <h2 className="font-cinzel text-2xl font-semibold text-royal-navy">3. Data Storage and Security</h2>
           <p>
             Your data is stored in a secure PostgreSQL database. Passwords are hashed using bcrypt and never
             stored in plain text. Sessions are managed securely with HTTP-only cookies. We implement
@@ -55,7 +55,7 @@ export default function Privacy() {
         </section>
 
         <section>
-          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">4. Cookies</h2>
+          <h2 className="font-cinzel text-2xl font-semibold text-royal-navy">4. Cookies</h2>
           <p>
             We use essential cookies for session management and authentication. These cookies are necessary
             for the Platform to function properly. We also use a CSRF token cookie to protect against
@@ -64,7 +64,7 @@ export default function Privacy() {
         </section>
 
         <section>
-          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">5. Third-Party Services</h2>
+          <h2 className="font-cinzel text-2xl font-semibold text-royal-navy">5. Third-Party Services</h2>
           <p>We use the following third-party services:</p>
           <ul className="list-disc pl-6 space-y-1">
             <li><strong>Google Fonts:</strong> For typography (loads fonts from Google servers)</li>
@@ -75,14 +75,14 @@ export default function Privacy() {
         </section>
 
         <section>
-          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">6. Data Sharing</h2>
+          <h2 className="font-cinzel text-2xl font-semibold text-royal-navy">6. Data Sharing</h2>
           <p>
             We do not sell, trade, or otherwise transfer your personal information to outside parties. Your data is held within the private trust structure and is only shared with third-party services as described above, which are necessary for the Platform to function.
           </p>
         </section>
 
         <section>
-          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">7. Your Rights</h2>
+          <h2 className="font-cinzel text-2xl font-semibold text-royal-navy">7. Your Rights</h2>
           <p>You have the right to:</p>
           <ul className="list-disc pl-6 space-y-1">
             <li>Access and update your personal information through your profile</li>
@@ -93,7 +93,7 @@ export default function Privacy() {
         </section>
 
         <section>
-          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">Private Association Data Practices</h2>
+          <h2 className="font-cinzel text-2xl font-semibold text-royal-navy">Private Association Data Practices</h2>
           <p>
             As a Private Membership Association, Ecclesia Basilikos handles all member data within the private
             jurisdiction of the Trust. Data collected from Beneficiaries is used exclusively for the administration
@@ -103,7 +103,7 @@ export default function Privacy() {
         </section>
 
         <section>
-          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">9. Children's Privacy</h2>
+          <h2 className="font-cinzel text-2xl font-semibold text-royal-navy">9. Children's Privacy</h2>
           <p>
             The Platform is not intended for children under the age of 13. We do not knowingly collect
             personal information from children under 13.
@@ -111,7 +111,7 @@ export default function Privacy() {
         </section>
 
         <section>
-          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">10. Changes to This Policy</h2>
+          <h2 className="font-cinzel text-2xl font-semibold text-royal-navy">10. Changes to This Policy</h2>
           <p>
             We may update this Privacy Policy from time to time. Changes will be posted on this page with
             an updated revision date. Your continued use of the Platform constitutes acceptance of the
@@ -120,7 +120,7 @@ export default function Privacy() {
         </section>
 
         <section>
-          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">11. Contact</h2>
+          <h2 className="font-cinzel text-2xl font-semibold text-royal-navy">11. Contact</h2>
           <p>
             If you have questions about this Privacy Policy or your personal data, please{" "}
             <Link href="/contact" className="text-royal-gold hover:text-royal-gold-bright underline">

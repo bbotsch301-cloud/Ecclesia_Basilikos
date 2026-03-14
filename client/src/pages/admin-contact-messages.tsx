@@ -85,9 +85,9 @@ export default function AdminContactMessages() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center space-x-2">
-                <Mail className="h-5 w-5 text-covenant-blue" />
+                <Mail className="h-5 w-5 text-royal-navy" />
                 <div>
-                  <p className="text-2xl font-bold text-covenant-blue">{contacts.length}</p>
+                  <p className="text-2xl font-bold text-royal-navy">{contacts.length}</p>
                   <p className="text-xs text-gray-600">Total Messages</p>
                 </div>
               </div>
@@ -96,9 +96,9 @@ export default function AdminContactMessages() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center space-x-2">
-                <Calendar className="h-5 w-5 text-covenant-gold" />
+                <Calendar className="h-5 w-5 text-royal-gold" />
                 <div>
-                  <p className="text-2xl font-bold text-covenant-blue">
+                  <p className="text-2xl font-bold text-royal-navy">
                     {contacts.filter(c => {
                       const messageDate = new Date(c.created_at);
                       const today = new Date();
@@ -131,8 +131,8 @@ export default function AdminContactMessages() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-4 mb-2">
                         <div className="flex items-center gap-2">
-                          <User className="h-4 w-4 text-covenant-blue" />
-                          <span className="font-semibold text-covenant-blue">{contact.name}</span>
+                          <User className="h-4 w-4 text-royal-navy" />
+                          <span className="font-semibold text-royal-navy">{contact.name}</span>
                         </div>
                         <Badge variant="outline" className="text-xs">
                           {contact.email}
@@ -154,7 +154,7 @@ export default function AdminContactMessages() {
                         size="sm"
                         variant="outline"
                         onClick={() => handleViewMessage(contact)}
-                        className="border-covenant-blue text-covenant-blue hover:bg-covenant-blue hover:text-white"
+                        className="border-royal-navy text-royal-navy hover:bg-royal-navy hover:text-white"
                       >
                         <Eye className="h-4 w-4 mr-1" />
                         View
@@ -214,7 +214,7 @@ export default function AdminContactMessages() {
                 <div className="flex gap-3 pt-4">
                   <Button 
                     onClick={() => window.location.href = `mailto:${selectedMessage.email}?subject=Re: ${selectedMessage.subject}`}
-                    className="bg-covenant-blue hover:bg-covenant-blue/80"
+                    className="bg-royal-navy hover:bg-royal-navy/80"
                   >
                     <Mail className="h-4 w-4 mr-2" />
                     Reply via Email

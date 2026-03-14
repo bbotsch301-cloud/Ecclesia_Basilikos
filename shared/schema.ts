@@ -964,19 +964,18 @@ export type InsertBeneficialUnit = z.infer<typeof insertBeneficialUnitSchema>;
 export type BeneficialUnit = typeof beneficialUnits.$inferSelect;
 
 // ====== TRUST STRUCTURE ======
-// The full hierarchical trust model: Constitutional → Governance → Stewardship → Community → Participation
+// Biblical ecclesiology: Individual → Covenant Gateway → Body of Christ → Internal Organs → Members
 
 export const trustEntityLayerEnum = pgEnum('trust_entity_layer', [
-  'charter',         // Covenant Charter — philosophy & authority
-  'trust',           // Ecclesia Basilikos Trust — mission anchor & stewardship
-  'operational',     // Operational Trusts — Land, Housing, Treasury, Enterprise
-  'pma',             // Private Membership Association — people layer
-  'platform',        // Digital Platform / Community OS — coordination
-  'chapter',         // City/Geographic Chapters
-  'commune',         // Functional Communities (farming, discipleship, etc.)
-  'project',         // Active Projects within communes/chapters
-  'guild',           // Functional Groups (skills, trades, etc.)
-  'beneficiary',     // Beneficiaries & Stewards — all members
+  'covenant',        // Individual gateway — personal covenant with God through Christ (Rom 2:29, Jer 31:33)
+  'body',            // Body of Christ — the collective you enter (1 Cor 12:12-27, Gal 3:27-28)
+  'stewardship',     // Organs of the Body — asset stewardship (Matt 25:21, 1 Peter 4:10)
+  'assembly',        // The gathered ecclesia — people governance (Matt 16:18, Acts 2:42)
+  'region',          // City-churches / regional assemblies (Titus 1:5, Rev 2-3)
+  'household',       // House-churches / oikos groups (Acts 2:46, Rom 16:5)
+  'craft',           // Skilled workers / Bezalel pattern (Exodus 35:10)
+  'ministry',        // Service initiatives / diakonia (Nehemiah pattern)
+  'member',          // Joint heirs — members of the Body (Romans 8:17)
 ]);
 
 // Governance roles within the trust structure
@@ -1001,7 +1000,7 @@ export const trustEntities = pgTable("trust_entities", {
   name: text("name").notNull(),
   subtitle: text("subtitle"),           // e.g. "Constitutional Root", "Governance Anchor"
   layer: trustEntityLayerEnum("layer").notNull(),
-  entityType: text("entity_type").notNull(), // e.g. "trust", "community", "pma", "chapter", "project"
+  entityType: text("entity_type").notNull(), // e.g. "covenant", "body", "stewardship", "assembly", "region"
   description: text("description"),
   // Governance
   trusteeLabel: text("trustee_label"),    // who serves as trustee
@@ -1042,6 +1041,7 @@ export const trustRelationshipTypeEnum = pgEnum('trust_relationship_type', [
   'teaches',         // discipleship chain — Matthew 28:20
   'serves',          // diaconal service — Mark 10:45
   'tithes',          // storehouse giving — Malachi 3:10
+  'enters',          // gateway — baptized into the Body (1 Cor 12:13)
 ]);
 
 export const trustRelationships = pgTable("trust_relationships", {

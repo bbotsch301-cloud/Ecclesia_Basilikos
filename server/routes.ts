@@ -528,6 +528,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Public trust structure (stripped of sensitive data)
+  app.get("/api/trust-structure/public", optionalAuth, async (req, res) => {
+    try {
+      const structure = await storage.getTrustStructure();
+      const activeEntities = structure.entities
+        .filter(e => e.status === 'active' || !e.status)
+        .map(({ totalValue, annualRevenue, acreage, location, notes, ...rest }) => rest);
+      res.json({
+        entities: activeEntities,
+        relationships: structure.relationships,
+      });
+    } catch (error) {
+      logger.error({ err: error }, "Get public trust structure error:");
+      res.status(500).json({ error: "Failed to fetch trust structure" });
+    }
+  });
+
   // Course routes
   app.get("/api/courses", optionalAuth, async (req, res) => {
     try {

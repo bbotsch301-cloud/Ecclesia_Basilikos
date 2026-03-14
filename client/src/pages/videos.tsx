@@ -70,12 +70,12 @@ export default function Videos() {
         backgroundImage="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080"
       />
 
-      <div className="py-20 bg-covenant-light">
+      <div className="py-20 bg-marble-bg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {isLoading ? (
             <div className="flex justify-center items-center min-h-64">
               <div className="text-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-covenant-gold mx-auto mb-4"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-royal-gold mx-auto mb-4"></div>
                 <p className="text-gray-600">Loading videos...</p>
               </div>
             </div>
@@ -93,7 +93,7 @@ export default function Videos() {
               <div className="flex flex-wrap justify-center gap-4 mb-12">
                 <Button
                   variant={selectedCategory === "all" ? "default" : "outline"}
-                  className={selectedCategory === "all" ? "bg-covenant-blue text-white" : "bg-white text-covenant-blue"}
+                  className={selectedCategory === "all" ? "bg-royal-navy text-white" : "bg-white text-royal-navy"}
                   onClick={() => setSelectedCategory("all")}
                 >
                   All Videos
@@ -102,7 +102,7 @@ export default function Videos() {
                   <Button
                     key={category}
                     variant={selectedCategory === category ? "default" : "outline"}
-                    className={selectedCategory === category ? "bg-covenant-blue text-white" : "bg-white text-covenant-blue"}
+                    className={selectedCategory === category ? "bg-royal-navy text-white" : "bg-white text-royal-navy"}
                     onClick={() => setSelectedCategory(category)}
                   >
                     {category}
@@ -129,28 +129,28 @@ export default function Videos() {
                       </div>
                     )}
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <Button className="bg-covenant-gold hover:bg-yellow-500 text-covenant-blue rounded-full p-6 shadow-lg transform hover:scale-110 transition-all">
+                      <Button className="bg-royal-gold hover:bg-yellow-500 text-royal-navy rounded-full p-6 shadow-lg transform hover:scale-110 transition-all">
                         <Play size={32} />
                       </Button>
                     </div>
                   </div>
                   <div className="p-8">
-                    <h3 className="font-playfair text-2xl font-bold text-covenant-blue mb-4">
+                    <h3 className="font-cinzel text-2xl font-bold text-royal-navy mb-4">
                       {featuredVideo.title}
                     </h3>
                     {featuredVideo.description && (
-                      <p className="text-covenant-gray leading-relaxed mb-4">
+                      <p className="text-gray-600 leading-relaxed mb-4">
                         {featuredVideo.description}
                       </p>
                     )}
                     <div className="flex items-center justify-between">
                       {featuredVideo.duration && (
-                        <div className="flex items-center text-sm text-covenant-gray">
+                        <div className="flex items-center text-sm text-gray-600">
                           <Clock size={16} className="mr-2" />
                           Duration: {featuredVideo.duration}
                         </div>
                       )}
-                      <Badge className="bg-covenant-light text-covenant-blue">Featured</Badge>
+                      <Badge className="bg-marble-bg text-royal-navy">Featured</Badge>
                     </div>
                   </div>
                 </div>
@@ -177,17 +177,17 @@ export default function Videos() {
                         </div>
                       )}
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <Button className="bg-covenant-gold text-covenant-blue rounded-full p-4 shadow-lg">
+                        <Button className="bg-royal-gold text-royal-navy rounded-full p-4 shadow-lg">
                           <Play size={20} />
                         </Button>
                       </div>
                     </div>
                     <div className="p-6">
-                      <h4 className="font-playfair text-lg font-semibold text-covenant-blue mb-2">{video.title}</h4>
+                      <h4 className="font-cinzel text-lg font-semibold text-royal-navy mb-2">{video.title}</h4>
                       {video.description && (
-                        <p className="text-covenant-gray text-sm mb-3 line-clamp-2">{video.description}</p>
+                        <p className="text-gray-600 text-sm mb-3 line-clamp-2">{video.description}</p>
                       )}
-                      <div className="flex justify-between items-center text-xs text-covenant-gray">
+                      <div className="flex justify-between items-center text-xs text-gray-600">
                         {video.duration && (
                           <div className="flex items-center">
                             <Clock size={12} className="mr-1" />
@@ -211,7 +211,7 @@ export default function Videos() {
       <Dialog open={!!selectedVideo} onOpenChange={() => setSelectedVideo(null)}>
         <DialogContent className="max-w-4xl p-0">
           <DialogHeader className="p-6 pb-0">
-            <DialogTitle className="text-xl font-playfair">
+            <DialogTitle className="text-xl font-cinzel">
               {selectedVideo?.title}
             </DialogTitle>
           </DialogHeader>
@@ -242,7 +242,7 @@ export default function Videos() {
               );
             })()}
             {selectedVideo?.description && (
-              <p className="text-covenant-gray mt-4">{selectedVideo.description}</p>
+              <p className="text-gray-600 mt-4">{selectedVideo.description}</p>
             )}
             {selectedVideo && (
               <CommentSection targetType="video" targetId={selectedVideo.id} />

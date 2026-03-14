@@ -51,7 +51,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="font-playfair font-semibold text-lg mb-4">Quick Links</h4>
+            <h4 className="font-cinzel font-semibold text-lg mb-4">Quick Links</h4>
             <ul className="space-y-2">
               <li>
                 <Link href="/lawful-money" className="text-gray-300 hover:text-royal-gold transition-colors">
@@ -72,7 +72,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="font-playfair font-semibold text-lg mb-4">Community</h4>
+            <h4 className="font-cinzel font-semibold text-lg mb-4">Community</h4>
             <ul className="space-y-2">
               <li>
                 <Link href="/forum" className="text-gray-300 hover:text-royal-gold transition-colors">
@@ -85,6 +85,16 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/videos" className="text-gray-300 hover:text-royal-gold transition-colors">
+                  Videos
+                </Link>
+              </li>
+              <li>
+                <Link href="/downloads" className="text-gray-300 hover:text-royal-gold transition-colors">
+                  Downloads
+                </Link>
+              </li>
+              <li>
                 <Link href="/pricing" className="text-gray-300 hover:text-royal-gold transition-colors">
                   PMA Membership
                 </Link>
@@ -93,7 +103,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="font-playfair font-semibold text-lg mb-4">Stay Connected</h4>
+            <h4 className="font-cinzel font-semibold text-lg mb-4">Stay Connected</h4>
             <p className="text-gray-300 mb-4">Get updates on new teachings and resources</p>
             <form onSubmit={handleNewsletterSubmit} className="flex" aria-label="Newsletter subscription">
               <Input

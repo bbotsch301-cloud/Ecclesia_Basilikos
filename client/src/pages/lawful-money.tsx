@@ -3,7 +3,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "wouter";
 import {
   Banknote, Scale, FileText, BookOpen, AlertTriangle,
-  CheckCircle, ArrowRight, ScrollText, Shield, Info, Users
+  CheckCircle, ArrowRight, ScrollText, Shield, Info, Users,
+  Crown, Landmark
 } from "lucide-react";
 import { motion } from "framer-motion";
 import RevealOnScroll from "@/components/ui/reveal-on-scroll";
@@ -72,8 +73,74 @@ export default function LawfulMoney() {
         </div>
       </div>
 
-      {/* What Is Lawful Money? */}
+      {/* The Biblical Foundation */}
       <div className="py-24 bg-white">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <RevealOnScroll>
+            <div className="text-center mb-16">
+              <span className="inline-flex items-center gap-2 font-cinzel text-xs tracking-[0.3em] uppercase text-royal-burgundy bg-royal-burgundy/10 px-5 py-2 rounded-full mb-5">
+                <Crown className="w-3.5 h-3.5" />
+                The Divine Standard
+              </span>
+              <h2 className="font-cinzel-decorative text-3xl md:text-4xl font-bold text-royal-navy mb-6">
+                God Commands Honest Weights & Measures
+              </h2>
+              <p className="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">
+                Before any statute or constitution, the Creator established a standard
+                for honest exchange. The Federal Reserve system violates this standard.
+                Understanding lawful money begins with understanding why God condemns
+                false balances.
+              </p>
+            </div>
+          </RevealOnScroll>
+
+          <StaggerContainer staggerDelay={0.15} className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-12">
+            {[
+              {
+                scripture: "A false balance is abomination to the LORD: but a just weight is his delight.",
+                reference: "Proverbs 11:1",
+              },
+              {
+                scripture: "Ye shall do no unrighteousness in judgment, in meteyard, in weight, or in measure. Just balances, just weights, a just ephah, and a just hin, shall ye have.",
+                reference: "Leviticus 19:35-36",
+              },
+              {
+                scripture: "Divers weights, and divers measures, both of them are alike abomination to the LORD.",
+                reference: "Proverbs 20:10",
+              },
+            ].map((item, index) => (
+              <motion.div key={index} variants={staggerItemVariants}>
+                <Card className="royal-card h-full border-t-4 border-t-royal-gold">
+                  <CardContent className="p-6">
+                    <p className="font-georgia italic text-gray-800 leading-relaxed mb-4">
+                      "{item.scripture}"
+                    </p>
+                    <p className="text-royal-gold font-semibold text-sm text-right">
+                      — {item.reference} (KJV)
+                    </p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </StaggerContainer>
+
+          <RevealOnScroll>
+            <div className="text-center max-w-3xl mx-auto">
+              <p className="text-xl text-gray-700 leading-relaxed">
+                When a monetary system issues currency backed by nothing — or worse, backed by debt —
+                it violates this principle.{" "}
+                <span className="font-bold text-royal-navy">
+                  The Federal Reserve operates a system of false weights.
+                </span>{" "}
+                Congress provided a remedy. That remedy is lawful money redemption.
+              </p>
+            </div>
+          </RevealOnScroll>
+        </div>
+      </div>
+
+      {/* What Is Lawful Money? */}
+      <div className="py-24 marble-bg">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <RevealOnScroll>
             <div className="text-center mb-16">
@@ -151,10 +218,14 @@ export default function LawfulMoney() {
       </div>
 
       {/* The Statute */}
-      <div className="py-24 marble-bg">
+      <div className="py-24 bg-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <RevealOnScroll>
             <div className="text-center mb-12">
+              <span className="inline-flex items-center gap-2 font-cinzel text-xs tracking-[0.3em] uppercase text-royal-burgundy bg-royal-burgundy/10 px-5 py-2 rounded-full mb-5">
+                <Landmark className="w-3.5 h-3.5" />
+                The Law
+              </span>
               <h2 className="font-cinzel-decorative text-3xl md:text-4xl font-bold text-royal-navy mb-6">
                 The Statute: 12 USC § 411
               </h2>
@@ -263,7 +334,7 @@ export default function LawfulMoney() {
         </div>
       </RevealOnScroll>
 
-      {/* How to Redeem */}
+      {/* How to Redeem — Steps */}
       <div className="py-24 bg-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <RevealOnScroll>
@@ -420,30 +491,33 @@ export default function LawfulMoney() {
         </div>
       </div>
 
-      {/* CTA */}
+      {/* CTA — Pillar Progression */}
       <div className="py-24 bg-gradient-to-br from-royal-navy via-royal-burgundy to-royal-navy">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <RevealOnScroll>
             <h2 className="font-cinzel-decorative text-3xl md:text-4xl font-bold text-white mb-6">
               Begin Your Redemption Journey
             </h2>
-            <p className="text-lg text-gray-200 max-w-2xl mx-auto leading-relaxed mb-10">
+            <p className="text-lg text-gray-200 max-w-2xl mx-auto leading-relaxed mb-4">
               Lawful money redemption is the first step in realigning your
               financial standing. Combined with trust protection and proper
               status documentation, it forms the complete foundation.
+            </p>
+            <p className="text-base text-royal-gold font-cinzel mb-10">
+              Pillar 1 of 3 — Lawful Money &rarr; Trust Protection &rarr; State-Citizen Passport
             </p>
           </RevealOnScroll>
 
           <RevealOnScroll delay={0.3}>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <div className="inline-block rounded-lg animate-glow-pulse">
-                <Link href={isAuthenticated ? "/dashboard" : "/signup"}>
+                <Link href={isAuthenticated ? "/courses" : "/signup"}>
                   <Button
                     size="lg"
                     className="royal-button text-lg px-10 py-6 shadow-2xl hover:scale-105 transition-transform"
                   >
-                    <Users className="mr-3 h-6 w-6" />
-                    {isAuthenticated ? "Go to Dashboard" : "Join Free"}
+                    <BookOpen className="mr-3 h-6 w-6" />
+                    {isAuthenticated ? "Start the Course" : "Enter the Assembly"}
                     <ArrowRight className="ml-3 h-5 w-5" />
                   </Button>
                 </Link>
@@ -457,15 +531,6 @@ export default function LawfulMoney() {
                   <Shield className="mr-3 h-6 w-6" />
                   Next: Trust & Asset Protection
                   <ArrowRight className="ml-3 h-5 w-5" />
-                </Button>
-              </Link>
-              <Link href="/contact">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="text-lg px-10 py-6 border-white/30 text-white/70 hover:bg-white/10 transition-all"
-                >
-                  Contact Us
                 </Button>
               </Link>
             </div>

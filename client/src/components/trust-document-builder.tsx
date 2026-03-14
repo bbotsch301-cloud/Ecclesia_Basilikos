@@ -143,23 +143,23 @@ function generateDocument(resolved: ResolvedEntity): { title: string; subtitle: 
   const rootName = resolved.rootAuthority?.name || entity.name;
 
   switch (layer) {
-    case 'charter':
+    case 'covenant':
       return generateCharterDocument(resolved, today, rootName);
-    case 'trust':
+    case 'body':
       return generateGovernanceDocument(resolved, today, parentNames, rootName);
-    case 'operational':
+    case 'stewardship':
       return generateSubTrustDocument(resolved, today, parentNames, rootName);
-    case 'pma':
+    case 'assembly':
       return generatePMADocument(resolved, today, parentNames, rootName);
-    case 'chapter':
+    case 'region':
       return generateChapterDocument(resolved, today, parentNames);
-    case 'commune':
+    case 'household':
       return generateCommuneDocument(resolved, today, parentNames);
-    case 'guild':
+    case 'craft':
       return generateGuildDocument(resolved, today, parentNames);
-    case 'project':
+    case 'ministry':
       return generateProjectDocument(resolved, today, parentNames);
-    case 'beneficiary':
+    case 'member':
       return generateBeneficiaryDocument(resolved, today);
     default:
       return generateGenericDocument(resolved, today);
@@ -180,7 +180,7 @@ function generateCharterDocument(r: ResolvedEntity, today: string, _rootName: st
       },
       {
         title: "Preamble",
-        content: `This Declaration of Trust is established on ${today} under the authority of divine law, constitutional principles, and the inherent right of free association.\n\nThis instrument creates and governs "${e.name}" as an irrevocable express trust, serving as the constitutional root and covenant charter for the entire trust ecosystem described herein.`,
+        content: `This Declaration of Trust is established on ${today} under the authority of divine law, constitutional principles, and the inherent right of free association.\n\nThis instrument creates and governs "${e.name}" as an irrevocable express trust, serving as the individual covenant gateway — the personal covenant through which one enters the Body of Christ.`,
       },
       {
         title: "Article I — Purpose & Covenant",
@@ -216,8 +216,8 @@ function generateCharterDocument(r: ResolvedEntity, today: string, _rootName: st
 
 function generateGovernanceDocument(r: ResolvedEntity, today: string, parentNames: string, rootName: string): ReturnType<typeof generateDocument> {
   const e = r.entity;
-  const assetArm = r.childEntities.filter(c => c.entity.layer === 'operational');
-  const peopleArm = r.childEntities.filter(c => c.entity.layer === 'pma');
+  const assetArm = r.childEntities.filter(c => c.entity.layer === 'stewardship');
+  const peopleArm = r.childEntities.filter(c => c.entity.layer === 'assembly');
   const assetList = assetArm.map(c => `    ${c.entity.name} — ${c.entity.subtitle || ''}`).join('\n') || '    (None)';
   const peopleList = peopleArm.map(c => `    ${c.entity.name} — ${c.entity.subtitle || ''}`).join('\n') || '    (None)';
 
@@ -231,7 +231,7 @@ function generateGovernanceDocument(r: ResolvedEntity, today: string, parentName
       },
       {
         title: "Preamble",
-        content: `This Trust Administration Agreement is executed on ${today} under the authority of ${parentNames}.\n\n"${e.name}" serves as the governance anchor for the trust ecosystem rooted in ${rootName}.`,
+        content: `This Trust Administration Agreement is executed on ${today} under the authority of ${parentNames}.\n\n"${e.name}" is the Body of Christ — the collective assembly within which all stewardship, governance, and community life takes place, rooted in ${rootName}.`,
       },
       {
         title: "Article I — Mission & Charter",
@@ -246,12 +246,12 @@ function generateGovernanceDocument(r: ResolvedEntity, today: string, parentName
         content: `Administrative Trustee: ${e.trusteeLabel || '(Not assigned)'}\n\nProtector/Oversight: ${e.protectorLabel || '(Not assigned)'}`,
       },
       {
-        title: "Article IV — Asset Stewardship Arm",
-        content: `The following operational trusts are authorized under the asset stewardship arm:\n\n${assetList}\n\nEach sub-trust holds and administers specific categories of assets for the benefit of the community.`,
+        title: "Article IV — Stewardship Organs",
+        content: `The following stewardship organs are commissioned within the Body:\n\n${assetList}\n\nEach organ holds and administers specific functions for the benefit of all members of the Body.`,
       },
       {
-        title: "Article V — Community Governance Arm",
-        content: `The following community governance entities are authorized:\n\n${peopleList}\n\nThe PMA organizes members as beneficiaries and stewards. Neither arm controls the other; both are authorized independently by this governance trust.`,
+        title: "Article V — The Gathered Assembly",
+        content: `The following assembly entities are gathered within the Body:\n\n${peopleList}\n\nThe assembly organizes members within the Body. Stewardship organs and the assembly both serve the Body and its members.`,
       },
       {
         title: "Article VI — Scope & Operations",
@@ -271,7 +271,7 @@ function generateGovernanceDocument(r: ResolvedEntity, today: string, parentName
 
 function generateSubTrustDocument(r: ResolvedEntity, today: string, parentNames: string, rootName: string): ReturnType<typeof generateDocument> {
   const e = r.entity;
-  const beneficiaries = r.beneficiaryEntities.map(b => `    ${b.entity.name}`).join('\n') || '    All PMA members (as defined by the community governance arm)';
+  const beneficiaries = r.beneficiaryEntities.map(b => `    ${b.entity.name}`).join('\n') || '    All members of the Body';
   const fundingInfo = r.fundingSources.length > 0
     ? `This trust receives funding from: ${r.fundingSources.map(f => f.entity.name).join(', ')}.`
     : '';
@@ -361,7 +361,7 @@ function generatePMADocument(r: ResolvedEntity, today: string, parentNames: stri
       },
       {
         title: "Article III — Membership",
-        content: `${e.description || ''}\n\nMembership is voluntary and requires execution of this agreement. Members are beneficiaries of trust assets held by the asset stewardship arm, not owners. All member interactions are private and protected by constitutional association rights.`,
+        content: `${e.description || ''}\n\nMembership is voluntary and requires execution of this agreement. Members are beneficiaries of trust assets held by the Body's stewardship organs, not owners. All member interactions are private and protected by constitutional association rights.`,
       },
       {
         title: "Article IV — Governance",
@@ -381,7 +381,7 @@ function generatePMADocument(r: ResolvedEntity, today: string, parentNames: stri
       },
       ...(r.benefitSources.length > 0 ? [{
         title: "Article VII — Trust Benefits Received",
-        content: `Members receive beneficial interest from the following trust entities:\n\n${r.benefitSources.map(b => `    ${b.entity.name}${b.relationship.label ? ` — ${b.relationship.label}` : ''}`).join('\n')}\n\nThese trusts hold assets for the benefit of PMA members. Members do not own these assets — they hold equitable beneficial interest through their Beneficial Units.`,
+        content: `Members receive beneficial interest from the following stewardship organs:\n\n${r.benefitSources.map(b => `    ${b.entity.name}${b.relationship.label ? ` — ${b.relationship.label}` : ''}`).join('\n')}\n\nThese organs hold assets for the benefit of members of the Body. Members do not own these assets — they hold equitable beneficial interest through their Beneficial Units.`,
       }] : []),
       ...(r.remitsTo.length > 0 ? [{
         title: `Article ${r.benefitSources.length > 0 ? 'VIII' : 'VII'} — Reporting & Accountability`,

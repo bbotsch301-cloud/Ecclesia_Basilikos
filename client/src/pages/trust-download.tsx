@@ -81,9 +81,9 @@ export default function TrustDownload() {
               <Card className="mb-8">
                 <CardHeader>
                   <div className="flex items-center mb-4">
-                    <FileText className="text-covenant-gold text-3xl mr-4" />
+                    <FileText className="text-royal-gold text-3xl mr-4" />
                     <div>
-                      <CardTitle className="font-playfair text-2xl text-covenant-blue">
+                      <CardTitle className="font-cinzel text-2xl text-royal-navy">
                         The New Covenant Trust
                       </CardTitle>
                       <CardDescription className="text-lg">
@@ -94,15 +94,15 @@ export default function TrustDownload() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-6">
-                    <div className="bg-covenant-light p-6 rounded-lg">
-                      <blockquote className="font-georgia text-lg italic text-covenant-dark-gray mb-3">
+                    <div className="bg-gray-50 p-6 rounded-lg">
+                      <blockquote className="font-georgia text-lg italic text-gray-700 mb-3">
                         "If the Son therefore shall make you free, ye shall be free indeed."
                       </blockquote>
-                      <cite className="text-covenant-gold font-semibold">John 8:36</cite>
+                      <cite className="text-royal-gold font-semibold">John 8:36</cite>
                     </div>
 
-                    <div className="flex items-center text-sm text-covenant-gray">
-                      <Shield className="text-covenant-gold mr-2" size={16} />
+                    <div className="flex items-center text-sm text-gray-600">
+                      <Shield className="text-royal-gold mr-2" size={16} />
                       <span>Your information is secure and will never be shared</span>
                     </div>
                   </div>
@@ -115,8 +115,8 @@ export default function TrustDownload() {
               {!downloadGranted ? (
                 <Card>
                   <CardHeader>
-                    <CardTitle className="font-playfair text-2xl text-covenant-blue flex items-center">
-                      <Mail className="text-covenant-gold mr-3" />
+                    <CardTitle className="font-cinzel text-2xl text-royal-navy flex items-center">
+                      <Mail className="text-royal-gold mr-3" />
                       Get Your Free Document
                     </CardTitle>
                     <CardDescription>
@@ -174,7 +174,7 @@ export default function TrustDownload() {
 
                         <Button 
                           type="submit" 
-                          className="w-full bg-covenant-blue hover:bg-blue-700 text-white py-3 text-lg font-semibold"
+                          className="w-full bg-royal-navy hover:bg-blue-700 text-white py-3 text-lg font-semibold"
                           disabled={signupMutation.isPending}
                         >
                           {signupMutation.isPending ? "Processing..." : "Get Free Access"}
@@ -182,7 +182,7 @@ export default function TrustDownload() {
                       </form>
                     </Form>
 
-                    <div className="mt-6 text-center text-sm text-covenant-gray">
+                    <div className="mt-6 text-center text-sm text-gray-600">
                       <p>By providing your email, you agree to receive occasional updates about covenant freedom resources. You can unsubscribe at any time.</p>
                     </div>
                   </CardContent>
@@ -190,7 +190,7 @@ export default function TrustDownload() {
               ) : (
                 <Card className="border-green-200 bg-green-50">
                   <CardHeader>
-                    <CardTitle className="font-playfair text-2xl text-green-700 flex items-center">
+                    <CardTitle className="font-cinzel text-2xl text-green-700 flex items-center">
                       <CheckCircle className="text-green-500 mr-3" />
                       Access Granted!
                     </CardTitle>

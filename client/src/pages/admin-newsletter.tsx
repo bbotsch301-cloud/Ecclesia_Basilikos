@@ -169,7 +169,7 @@ export default function AdminNewsletter() {
           </div>
           <Button
             onClick={() => { setShowCreate(true); setSubject(""); setBody(""); setEditingCampaign(null); }}
-            className="bg-covenant-blue hover:bg-covenant-blue/90 text-white"
+            className="bg-royal-navy hover:bg-royal-navy/90 text-white"
           >
             <Plus className="h-4 w-4 mr-1" /> New Campaign
           </Button>

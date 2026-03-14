@@ -4,8 +4,8 @@ import { usePageTitle } from "@/hooks/usePageTitle";
 export default function PmaAgreement() {
   usePageTitle("PMA Membership Agreement");
   return (
-    <div className="max-w-4xl mx-auto px-4 py-16">
-      <h1 className="font-playfair text-4xl font-bold text-royal-navy mb-2">PMA Membership Agreement</h1>
+    <div className="max-w-4xl mx-auto px-4 pt-24 pb-16">
+      <h1 className="font-cinzel text-4xl font-bold text-royal-navy mb-2">PMA Membership Agreement</h1>
       <p className="text-muted-foreground mb-4">Ecclesia Basilikos Private Membership Association</p>
       <p className="text-muted-foreground mb-8">Last updated: March 2026</p>
 
@@ -23,12 +23,17 @@ export default function PmaAgreement() {
         </div>
 
         <section>
-          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">1. Preamble</h2>
+          <h2 className="font-cinzel text-2xl font-semibold text-royal-navy">1. Preamble</h2>
           <p>
-            Ecclesia Basilikos is established as a Private Membership Association ("PMA") operating under the First Amendment
-            right of free association and the free exercise of religion as guaranteed by the Constitution of the United States
-            of America. This Association exists as a body of believers gathered in covenant fellowship, exercising their
-            unalienable rights to associate privately for religious, educational, and charitable purposes.
+            Ecclesia Basilikos is established as a Private Membership Association ("PMA") — a voluntary, non-commercial
+            body of believers gathered in covenant fellowship. This Association operates under the natural and unalienable
+            right of free assembly, the free exercise of religion, and the inherent authority of private agreement — rights
+            recognized across all civilized jurisdictions and rooted in divine law.
+          </p>
+          <p>
+            No earthly government grants these rights. They are endowed by the Creator and exercised by His people in every
+            nation, tongue, and tribe. This Association exists to educate, equip, and restore those called to operate under
+            covenant authority for religious, educational, and charitable purposes.
           </p>
           <p>
             This PMA Membership Agreement ("Agreement") constitutes the governing document of the Association and establishes
@@ -37,7 +42,7 @@ export default function PmaAgreement() {
         </section>
 
         <section>
-          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">2. Definitions</h2>
+          <h2 className="font-cinzel text-2xl font-semibold text-royal-navy">2. Definitions</h2>
           <ul className="list-disc pl-6 space-y-2">
             <li><strong>The Trust:</strong> Ecclesia Basilikos Trust, the organizational structure through which the Association operates and administers its corpus.</li>
             <li><strong>Grantor:</strong> Christ and the New Covenant, the source of divine authority under which the Trust operates.</li>
@@ -45,12 +50,12 @@ export default function PmaAgreement() {
             <li><strong>Beneficiary:</strong> Any individual who has voluntarily accepted this Agreement and thereby acquired beneficial interest in the Trust. Formerly referred to as a "member."</li>
             <li><strong>Beneficial Interest:</strong> The rights, privileges, and access granted to a Beneficiary through their participation in the Trust.</li>
             <li><strong>Private Jurisdiction:</strong> The internal governance structure of the Association, operating outside of public commercial jurisdiction.</li>
-            <li><strong>Trust Corpus:</strong> The totality of assets administered by the Trust, including but not limited to: educational content, courses, downloadable resources, community forums, platform infrastructure, and financial contributions.</li>
+            <li><strong>Trust Corpus:</strong> The totality of assets administered within the trust ecosystem, including but not limited to: educational content and courses, downloadable resources, community forums, platform infrastructure, and financial contributions. Education is the primary active function of the trust; the structure supports additional purposes including community stewardship and charitable activity.</li>
           </ul>
         </section>
 
         <section>
-          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">3. Membership as Beneficial Interest</h2>
+          <h2 className="font-cinzel text-2xl font-semibold text-royal-navy">3. Membership as Beneficial Interest</h2>
           <p>
             By accepting this Agreement, you acquire beneficial interest in the Ecclesia Basilikos Trust. This is not a
             commercial transaction but an act of voluntary association and trust participation.
@@ -68,7 +73,7 @@ export default function PmaAgreement() {
         </section>
 
         <section>
-          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">4. Rights of Beneficiaries</h2>
+          <h2 className="font-cinzel text-2xl font-semibold text-royal-navy">4. Rights of Beneficiaries</h2>
           <p>All Beneficiaries are entitled to:</p>
           <ul className="list-disc pl-6 space-y-1">
             <li>Access to educational materials and courses as determined by their tier of beneficial interest</li>
@@ -81,7 +86,7 @@ export default function PmaAgreement() {
         </section>
 
         <section>
-          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">5. Obligations of Beneficiaries</h2>
+          <h2 className="font-cinzel text-2xl font-semibold text-royal-navy">5. Obligations of Beneficiaries</h2>
           <p>By accepting this Agreement, each Beneficiary agrees to:</p>
           <ul className="list-disc pl-6 space-y-1">
             <li>Conduct themselves in accordance with the principles and values of the Trust</li>
@@ -94,7 +99,7 @@ export default function PmaAgreement() {
         </section>
 
         <section>
-          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">6. Trustee's Duties & Authority</h2>
+          <h2 className="font-cinzel text-2xl font-semibold text-royal-navy">6. Trustee's Duties & Authority</h2>
           <p>The Trustee is responsible for:</p>
           <ul className="list-disc pl-6 space-y-1">
             <li>Administration and stewardship of the Trust corpus</li>
@@ -110,11 +115,18 @@ export default function PmaAgreement() {
         </section>
 
         <section>
-          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">7. Private Jurisdiction</h2>
+          <h2 className="font-cinzel text-2xl font-semibold text-royal-navy">7. Private Jurisdiction</h2>
           <p>
             This Association operates in a private capacity and not as a public commercial enterprise. The activities
-            conducted within this Association are private in nature and are protected by the First Amendment right of
-            free association and the Fourteenth Amendment protections of the Constitution of the United States.
+            conducted within this Association are private in nature and are protected by the universal right of free
+            assembly, the right of private contract, and the free exercise of religion — principles recognized under
+            natural law, common law, and the legal traditions of nations worldwide.
+          </p>
+          <p>
+            Members residing in specific jurisdictions may benefit from additional local protections for private
+            association and religious exercise. These local protections supplement, but do not define, the authority
+            under which this Association operates. The Association's authority derives from divine covenant, not from
+            any statute or constitution of any nation.
           </p>
           <p>
             By accepting this Agreement, each Beneficiary acknowledges that they are voluntarily entering into a private
@@ -124,7 +136,7 @@ export default function PmaAgreement() {
         </section>
 
         <section>
-          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">8. Educational Disclaimer</h2>
+          <h2 className="font-cinzel text-2xl font-semibold text-royal-navy">8. Educational Disclaimer</h2>
           <p>
             All content provided through the Ecclesia Basilikos Trust is for educational and informational purposes only.
             Nothing contained in the Trust corpus constitutes legal, financial, tax, or professional advice.
@@ -138,7 +150,7 @@ export default function PmaAgreement() {
         </section>
 
         <section>
-          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">9. Dispute Resolution</h2>
+          <h2 className="font-cinzel text-2xl font-semibold text-royal-navy">9. Dispute Resolution</h2>
           <p>
             Any disputes arising between Beneficiaries, or between a Beneficiary and the Trust, shall be resolved
             through the following process:
@@ -151,7 +163,7 @@ export default function PmaAgreement() {
         </section>
 
         <section>
-          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">10. Amendments & Severability</h2>
+          <h2 className="font-cinzel text-2xl font-semibold text-royal-navy">10. Amendments & Severability</h2>
           <p>
             The Trustee may amend this Agreement at any time with reasonable notice to Beneficiaries. Continued
             participation in the Trust following notice of amendment constitutes acceptance of the amended terms.
@@ -164,7 +176,7 @@ export default function PmaAgreement() {
         </section>
 
         <section>
-          <h2 className="font-playfair text-2xl font-semibold text-royal-navy">11. Voluntary Acceptance</h2>
+          <h2 className="font-cinzel text-2xl font-semibold text-royal-navy">11. Voluntary Acceptance</h2>
           <p>
             By digitally accepting this Agreement during registration, the Beneficiary affirms that:
           </p>

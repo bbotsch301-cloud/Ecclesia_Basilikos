@@ -308,7 +308,7 @@ export default function AdminContent() {
             onClick={() => setActiveTab("content")}
             className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
               activeTab === "content"
-                ? "border-covenant-gold text-covenant-gold"
+                ? "border-royal-gold text-royal-gold"
                 : "border-transparent text-gray-500 hover:text-gray-700"
             }`}
             data-testid="tab-content"
@@ -320,7 +320,7 @@ export default function AdminContent() {
             onClick={() => setActiveTab("email-templates")}
             className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
               activeTab === "email-templates"
-                ? "border-covenant-gold text-covenant-gold"
+                ? "border-royal-gold text-royal-gold"
                 : "border-transparent text-gray-500 hover:text-gray-700"
             }`}
             data-testid="tab-email-templates"

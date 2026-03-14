@@ -3,11 +3,12 @@ import { Link } from "wouter";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Award, Download, Users, Calendar, Percent, FileText, Loader2 } from "lucide-react";
+import { Award, Download, Users, Calendar, Percent, FileText, Loader2, Crown, Shield, Building2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import RequireAuth from "@/components/RequireAuth";
 import { useState } from "react";
+import TrustHierarchyDiagram from "@/components/trust-hierarchy-diagram";
 
 interface BeneficialUnitData {
   id: string;
@@ -89,6 +90,28 @@ function BeneficialUnitContent() {
       </section>
 
       <div className="max-w-3xl mx-auto px-4 py-8 space-y-6">
+        {/* Your Place in the Trust */}
+        <Card className="border border-royal-gold/20">
+          <CardHeader>
+            <CardTitle className="font-cinzel text-lg flex items-center gap-2">
+              <Crown className="w-5 h-5 text-royal-gold" />
+              Your Place in the Trust
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <TrustHierarchyDiagram compact highlightLayer="member" className="mb-4" />
+            <div className="bg-royal-gold/5 border border-royal-gold/15 rounded-lg p-4 mt-4">
+              <h4 className="font-cinzel text-sm font-bold text-royal-navy mb-2">What Your Unit Represents</h4>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                Your Beneficial Unit is your membership in the Body — the place where all
+                the trust's protections, resources, and governance flow down to you. Your personal covenant
+                is the gateway through which you entered. The Body of Christ holds and stewards all things.
+                The assembly is where you gather. And your unit is your 1/N share of everything the Body holds.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Unit Details Card */}
         <Card className="border-2 border-royal-gold/20">
           <CardHeader>
