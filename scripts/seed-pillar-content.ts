@@ -1093,9 +1093,247 @@ Documentation serves two purposes:
 1. **Evidence**: It proves your claims if challenged
 2. **Clarity**: The act of preparing documents forces you to understand your position completely
 
-Do not submit documents you do not understand. Study first, document second, submit third.`,
+Do not submit documents you do not understand. Study first, document second, submit third.
+
+## The Explanatory Statement
+
+Distinct from an affidavit, an **Explanatory Statement** is a written declaration that clarifies your political status for the reviewing officer. While an affidavit is a sworn factual statement, the Explanatory Statement is a broader narrative explaining *why* you are applying as a state citizen and *what that means*.
+
+### What It Is
+
+The Explanatory Statement is a document — typically one to two pages — that you prepare, sign, and optionally notarize. It preemptively addresses questions the passport agent may have about your application by clearly and respectfully explaining your political status.
+
+Think of it this way:
+- The **Affidavit** says: "I swear under penalty of perjury that I am a citizen of [state]."
+- The **Explanatory Statement** says: "Here is why I am applying as a state citizen, what that means under the Constitution, and why this is the correct classification."
+
+### Why It Matters
+
+Passport acceptance agents process thousands of standard applications. A state-citizen application may be unfamiliar to them. The Explanatory Statement:
+- **Preemptively answers questions** the agent may have about your status claims
+- **Provides a paper trail** that shows you understand your own position
+- **Demonstrates good faith** — you are not trying to evade or deceive; you are asserting a lawful status
+- **Educates without confrontation** — the document speaks for you in a calm, factual tone
+
+### What It Should Contain
+
+A well-prepared Explanatory Statement includes:
+
+1. **Your full legal name** as it appears on the application
+2. **Your domicile** — the state in which you are domiciled and your physical address
+3. **A clear statement of your political status**: that you are a citizen of [your state], one of the several states of the Union, and that you are *not* claiming citizenship under the 14th Amendment
+4. **The constitutional basis** for your claim:
+   - Article IV, Section 2 of the Constitution (privileges and immunities of citizens in the several states)
+   - The distinction between state citizenship (original Constitution) and federal citizenship (14th Amendment)
+5. **A brief explanation** of why these are different political statuses with different legal implications
+6. **Your signature and date**
+7. **Notarization** (recommended but not always required)
+
+### How It Differs from the Affidavit of Citizenship Status
+
+| Aspect | Affidavit | Explanatory Statement |
+|--------|-----------|----------------------|
+| Purpose | Sworn factual declaration | Narrative explanation |
+| Tone | Formal, legal | Clear, educational |
+| Content | Facts under oath | Context and reasoning |
+| Legal weight | Sworn under penalty of perjury | Signed declaration |
+| Length | Typically 1 page | 1–2 pages |
+| Notarization | Required | Recommended |
+
+Both documents work together: the Affidavit establishes the legal facts; the Explanatory Statement provides the context.
+
+### Tips on Tone and Language
+
+- **Be clear and factual.** Avoid emotional language, sovereign-citizen jargon, or combative phrasing.
+- **Be respectful.** The reviewing officer is doing their job. Your goal is to help them understand, not to lecture.
+- **Cite the law.** Reference specific constitutional provisions and statutes. Let the law speak.
+- **Avoid overcomplication.** If you cannot explain your position simply, study more before submitting.
+- **Do not claim to be "not a citizen."** You *are* a citizen — a state citizen. Make that distinction clear.
+- **Use proper formatting.** Type it professionally, use formal language, and ensure there are no errors.
+
+### When to Include It
+
+Include the Explanatory Statement with your DS-11 application whenever:
+- You are applying at a passport acceptance facility (not by mail for first-time applicants)
+- You want to ensure the reviewing officer has context for any unusual aspects of your application
+- You are including other supporting documents (affidavits, Declaration of Domicile) and want a cover document that ties them together`,
           order: 6,
           duration: "20 min",
+        },
+        {
+          title: "Child Passport Without a Birth Certificate — Secondary Evidence",
+          description: "How to apply for a child's passport when no birth certificate is available, using secondary evidence per travel.state.gov.",
+          content: `# Child Passport Without a Birth Certificate — Secondary Evidence
+
+There are situations where a parent needs to obtain a passport for a child but cannot produce a standard birth certificate. This lesson covers the lawful process for using secondary evidence to establish the child's citizenship and identity.
+
+## When This Path Applies
+
+This process applies when:
+- The child has **no birth certificate on file** with the state's vital records office
+- The child has a **delayed birth certificate** that lacks required elements (e.g., missing the filing date within one year of birth)
+- The birth certificate is **unavailable** due to records loss, home birth without registration, or other circumstances
+
+If you have a standard, certified birth certificate filed within one year of birth, use the normal DS-11 process covered in Lesson 5.
+
+## Step 1: Obtain a Letter of No Record
+
+Before submitting secondary evidence, you must first demonstrate that no primary record exists. Contact the vital records office in the **state where the child was born** and request a "Letter of No Record" (sometimes called a "No Record Found" letter).
+
+This letter must include:
+- The child's **full name**
+- The child's **date of birth**
+- The **years searched** by the vital records office
+- A **confirmation that no birth record exists** for the child in their records
+
+This letter establishes that you are not simply choosing to skip the birth certificate — there genuinely is no record available.
+
+### How to Request
+- Most states allow requests by mail or online through their vital records office
+- There may be a small fee ($10–$30 depending on the state)
+- Request a **certified** letter if available
+- Processing times vary; allow 4–8 weeks
+
+## Step 2: Gather Secondary Evidence from the First Five Years of Life
+
+With the Letter of No Record in hand, you must provide **as much secondary evidence as possible** to establish the child's birth in the United States. The State Department accepts documents created within the **first five years of the child's life**.
+
+### Acceptable Secondary Evidence
+
+Any combination of the following:
+
+**Baptism Certificate**
+- Must show the date and place of birth
+- Must show the date of baptism
+- Must be an original or certified copy from the church
+
+**Hospital Birth Record**
+- A record from the hospital where the child was born
+- This is different from the birth certificate — it is the hospital's own internal record
+- Contact the hospital's medical records department
+
+**Census Records**
+- If the child appears in census records within the first five years
+- Contact the U.S. Census Bureau for certified copies
+
+**Early School Records**
+- Enrollment or attendance records from the child's first school
+- Must show the child's name, date of birth, place of birth, and parents' names
+
+**Family Bible Record**
+- A Bible record showing the child's birth date and parents
+- The record must appear to have been made at or near the time of birth (not recently added)
+- Submit the original or a clear photocopy of the relevant page(s)
+
+**Doctor's Records of Early Treatment**
+- Medical records from a physician who treated the child in the first five years
+- Must include the child's name, date of birth, and place of birth
+
+**Birth Affidavit (Form DS-10)**
+- A notarized affidavit from a person who has **personal knowledge** of the child's birth
+- The affiant must have been present at the birth or have direct knowledge of the circumstances
+- Form DS-10 is available from the State Department
+- The affiant must provide their own identification
+- This is one of the strongest forms of secondary evidence
+
+### Tips for Gathering Evidence
+- **More is better.** Submit every piece of secondary evidence you can obtain.
+- **Originals or certified copies** are preferred. Photocopies may not be accepted.
+- **Consistency matters.** All documents should show the same name, date of birth, and place of birth.
+- **Organize clearly.** Label and arrange documents logically for the reviewing officer.
+
+## Step 3: Parental Consent Requirements
+
+Passport applications for children under 16 have strict parental consent rules.
+
+### Both Parents Present
+The simplest path: both parents appear in person at the passport acceptance facility with the child, both sign the DS-11, and both present valid ID.
+
+### One Parent Applying
+If only one parent can appear:
+- The absent parent must complete **Form DS-3053** (Statement of Consent: Issuance of a Passport to a Minor Under Age 16)
+- DS-3053 must be **notarized**
+- A **photocopy of the absent parent's ID** must accompany the form
+
+### Sole Custody
+If one parent has sole legal custody:
+- Submit a **certified court order** granting sole legal custody
+- Or submit a **certified death certificate** of the other parent
+- Or submit a court order specifically authorizing passport issuance
+
+### Special Circumstances
+If consent from the other parent is truly impossible (e.g., parent is incarcerated, whereabouts unknown, or there was never an established legal father):
+- Submit a **written statement** explaining the circumstances
+- Provide any supporting documentation (court orders, police reports, etc.)
+- The State Department will review on a case-by-case basis
+
+## Step 4: Additional Documents
+
+Beyond the Letter of No Record and secondary evidence, you will also need:
+
+**Passport Photo**
+- A compliant passport photo of the child (2x2 inches, white background, taken within last 6 months)
+- For infants: the child must be photographed alone with eyes open
+
+**Parental ID Copies**
+- Photocopies of the front and back of each appearing parent's valid ID
+
+**Citizenship Evidence Photocopies**
+- If either parent is using a passport as evidence of their own citizenship, include a photocopy of the data page
+
+**Form DS-11**
+- Completed but **unsigned** — you will sign in the presence of the acceptance agent
+
+## How to Combine with the Explanatory Statement
+
+When a child's situation is unusual — no birth certificate, secondary evidence, unique family circumstances — an **Explanatory Statement from the parent** can accompany the application.
+
+This parent's Explanatory Statement should:
+- Explain **why** no birth certificate exists (home birth not registered, records lost, etc.)
+- Describe the **secondary evidence** being submitted and how it establishes the child's birth
+- State the **parent's own political status** if relevant to the application
+- Be **signed and dated** by the applying parent
+- Be **notarized** for additional weight
+
+This is especially useful when:
+- The combination of secondary evidence may raise questions
+- The child's birth circumstances are uncommon
+- The parent wants to ensure the reviewing officer has full context
+
+The Explanatory Statement ties all the supporting documents together into a coherent narrative.
+
+## Fees and Processing
+
+**Application Fees (as of current State Department schedule):**
+- Under 16: $100 application fee + $35 execution fee = **$135 total** (book only)
+- Passport card: $15 application fee + $35 execution fee = **$50 total**
+- Both book and card: $115 application fee + $35 execution fee = **$150 total**
+
+**Processing Times:**
+- Routine processing: 6–8 weeks
+- Expedited processing: 2–3 weeks (additional $60 fee)
+
+**Important Notes:**
+- Fees are subject to change — verify at travel.state.gov before applying
+- Pay by check or money order (two separate payments: one to "U.S. Department of State" for the application fee, one to the acceptance facility for the execution fee)
+- Applications with secondary evidence may take longer to process as they require additional review
+- You may receive a request for additional information — respond promptly
+
+## Summary Checklist
+
+Before visiting the passport acceptance facility, confirm you have:
+
+- [ ] Letter of No Record from the birth state's vital records office
+- [ ] Multiple pieces of secondary evidence from the child's first five years
+- [ ] Form DS-11 completed but unsigned
+- [ ] Passport photo meeting State Department requirements
+- [ ] Both parents present (or DS-3053 notarized consent from absent parent)
+- [ ] Valid parental ID (originals and photocopies)
+- [ ] Citizenship evidence for parents (originals and photocopies)
+- [ ] Explanatory Statement (if applicable)
+- [ ] Payment (check or money order)`,
+          order: 7,
+          duration: "30 min",
         },
         {
           title: "After the Passport — Living from Your Status",
@@ -1151,7 +1389,7 @@ Together, these three pillars form a complete foundation:
 From this foundation, everything else can be built. The courses, the community, the deeper study — all of it rests on these three pillars being in place.
 
 You are not escaping anything. You are not fighting anything. You are aligning with what was always available to you — the law as written, the rights as established, and the status as confirmed.`,
-          order: 7,
+          order: 8,
           duration: "15 min",
         },
       ],
