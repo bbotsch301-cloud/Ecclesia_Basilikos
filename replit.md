@@ -43,6 +43,7 @@
 ✓ Exclusive use of King James Version (KJV) scriptures
 ✓ Trust document download page with email tracking
 ✓ Admin dashboard with content management
+✓ Comprehensive White Paper (Version 2.0) — 14-section exhaustive trust economy document with print/download
 
 ## User Preferences
 
@@ -132,10 +133,14 @@ Each comparison table includes:
 8. **Trust Download** (`/trust-download`): Secure document access with email requirement
 9. **Embassy Forum** (`/forum`): Community discussion (currently disabled)
 
+#### Admin Platform Pages
+
+- `/admin/white-paper`: Comprehensive 14-section White Paper — "The Ecclesia Basilikos Trust Economy" (Version 2.0), covering philosophical & theological foundations, biblical & early church economics, the Melchizedek Order, trust law origins, PMA constitutional foundations, nine-layer trust architecture, beneficial unit mechanics, value flows, covenant governance, Babylon vs. Kingdom comparisons, implementation roadmap, and risk analysis. Includes print and HTML download functionality.
+- `/admin/trust-downloads`: Admin dashboard for document downloads management
+
 #### Student Platform Pages
 
 - `/course/:id/lesson/:lessonId`: Individual lesson content viewer
-- `/admin/trust-downloads`: Admin dashboard for document downloads management
 
 ### Royal UI Components
 
