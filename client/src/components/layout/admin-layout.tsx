@@ -18,6 +18,7 @@ import {
   CreditCard,
   Crown,
   ScrollText,
+  Layers,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -36,6 +37,7 @@ const adminNav = [
   { name: "Trust Structure", href: "/admin/trust-structure", icon: Crown },
   { name: "Trust Documents", href: "/admin/trust-documents", icon: FileText },
   { name: "White Paper", href: "/admin/white-paper", icon: ScrollText },
+  { name: "Trust Architecture", href: "/admin/trust-architecture", icon: Layers },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
