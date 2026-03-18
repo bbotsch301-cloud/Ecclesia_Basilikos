@@ -36,6 +36,7 @@ interface Lesson {
   order: number;
   duration: string | null;
   createdAt: string;
+  isLocked?: boolean;
 }
 
 interface CourseWithLessons {
@@ -256,11 +257,13 @@ function CourseLessonContent() {
                           isActive
                             ? "bg-royal-navy text-white shadow-md"
                             : "bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-700"
-                        }`}
+                        } ${lesson.isLocked && !isActive ? "opacity-60" : ""}`}
                       >
                         <div className="flex items-start gap-2">
                           {isCompleted ? (
                             <CheckCircle className={`h-3.5 w-3.5 mt-0.5 shrink-0 ${isActive ? "text-royal-gold" : "text-green-500"}`} />
+                          ) : lesson.isLocked ? (
+                            <Lock className={`h-3.5 w-3.5 mt-0.5 shrink-0 ${isActive ? "text-royal-gold/70" : "text-gray-400"}`} />
                           ) : (
                             <span className={`text-xs font-bold mt-0.5 ${
                               isActive ? "text-royal-gold" : "text-gray-400"
@@ -307,6 +310,41 @@ function CourseLessonContent() {
               )}
             </div>
 
+            {/* Paywall Card for locked lessons */}
+            {currentLesson?.isLocked ? (
+              <Card className="border-2 border-royal-gold/40 bg-gradient-to-br from-royal-gold/10 via-amber-50 to-transparent dark:from-royal-gold/5 dark:via-gray-900 dark:to-transparent">
+                <CardContent className="p-6 md:p-8">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Crown className="w-5 h-5 text-royal-gold" />
+                    <h3 className="font-cinzel text-lg font-bold text-royal-navy dark:text-royal-gold">PMA Membership Required</h3>
+                  </div>
+                  <p className="text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">
+                    Complete Lesson 1 for free, then acquire PMA membership to continue your journey through the remaining lessons.
+                  </p>
+                  <ul className="space-y-2 mb-5">
+                    <li className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                      <CheckCircle className="w-4 h-4 text-royal-gold flex-shrink-0" />
+                      All 3 pillar courses — Lawful Money, Trust, and State Passport
+                    </li>
+                    <li className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                      <CheckCircle className="w-4 h-4 text-royal-gold flex-shrink-0" />
+                      Full downloads library with templates and forms
+                    </li>
+                    <li className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                      <CheckCircle className="w-4 h-4 text-royal-gold flex-shrink-0" />
+                      Forum posting and full community access
+                    </li>
+                  </ul>
+                  <Link href="/pricing">
+                    <Button className="bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold px-8 shadow-md hover:shadow-lg transition-all">
+                      <Lock className="w-4 h-4 mr-2" />
+                      Acquire PMA Membership <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            ) : (
+            <>
             {/* Video Player */}
             {youtubeId ? (
               <Card className="overflow-hidden border-0 shadow-lg">
@@ -544,6 +582,7 @@ function CourseLessonContent() {
             {currentLesson && (
               <CommentSection targetType="lesson" targetId={currentLesson.id} />
             )}
+            </>
 
             {/* Navigation */}
             <div className="flex justify-between items-center pt-6 border-t border-gray-200 dark:border-gray-700">

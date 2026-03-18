@@ -90,6 +90,12 @@
     @apply tracking-tight;
   }
 
+  /* Disable ligatures globally — prevents "oo", "fi", "fl" from merging */
+  * {
+    font-variant-ligatures: no-common-ligatures;
+    font-feature-settings: "liga" 0, "clig" 0;
+  }
+
   a:focus-visible,
   button:focus-visible,
   [role="button"]:focus-visible,

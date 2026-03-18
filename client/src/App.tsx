@@ -1,5 +1,5 @@
-import { lazy, Suspense } from "react";
-import { Switch, Route, Redirect } from "wouter";
+import { lazy, Suspense, useEffect } from "react";
+import { Switch, Route, Redirect, useLocation } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -71,6 +71,7 @@ const AdminTrustStructure = lazy(() => import("@/pages/admin-trust-structure"));
 const AdminWhitePaper = lazy(() => import("@/pages/admin-white-paper"));
 const AdminTrustDocuments = lazy(() => import("@/pages/admin-trust-documents"));
 const AdminTrustArchitecture = lazy(() => import("@/pages/admin-trust-architecture"));
+const AdminBabylonianComparison = lazy(() => import("@/pages/admin-babylonian-comparison"));
 
 function PageLoader() {
   return (
@@ -80,9 +81,18 @@ function PageLoader() {
   );
 }
 
+function ScrollToTop() {
+  const [location] = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+  return null;
+}
+
 function Router() {
   return (
     <div className="min-h-screen flex flex-col">
+      <ScrollToTop />
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:top-2 focus:left-2 focus:px-4 focus:py-2 focus:bg-royal-gold focus:text-royal-navy focus:rounded focus:font-semibold">
         Skip to main content
       </a>
@@ -148,6 +158,7 @@ function Router() {
             <Route path="/admin/white-paper">{() => <RequireAdmin><SectionErrorBoundary><AdminWhitePaper /></SectionErrorBoundary></RequireAdmin>}</Route>
             <Route path="/admin/trust-documents">{() => <RequireAdmin><SectionErrorBoundary><AdminTrustDocuments /></SectionErrorBoundary></RequireAdmin>}</Route>
             <Route path="/admin/trust-architecture">{() => <RequireAdmin><SectionErrorBoundary><AdminTrustArchitecture /></SectionErrorBoundary></RequireAdmin>}</Route>
+            <Route path="/admin/babylonian-comparison">{() => <RequireAdmin><SectionErrorBoundary><AdminBabylonianComparison /></SectionErrorBoundary></RequireAdmin>}</Route>
             <Route path="/admin">{() => <RequireAdmin><SectionErrorBoundary><AdminDashboard /></SectionErrorBoundary></RequireAdmin>}</Route>
             <Route component={NotFound} />
           </Switch>

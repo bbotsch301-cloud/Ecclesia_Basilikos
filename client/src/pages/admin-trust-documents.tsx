@@ -69,6 +69,16 @@ const LAYER_OPTIONS = [
 // API HELPERS
 // ═══════════════════════════════════════════════════════════
 
+function getCsrfToken(): string | undefined {
+  const match = document.cookie.match(/(?:^|;\s*)csrf_token=([^;]*)/);
+  return match?.[1];
+}
+
+function csrfHeaders(): Record<string, string> {
+  const token = getCsrfToken();
+  return token ? { "x-csrf-token": token } : {};
+}
+
 async function apiGet<T>(url: string): Promise<T> {
   const res = await fetch(url, { credentials: "include" });
   if (!res.ok) throw new Error(await res.text());
@@ -78,7 +88,7 @@ async function apiGet<T>(url: string): Promise<T> {
 async function apiPost<T>(url: string, body?: any): Promise<T> {
   const res = await fetch(url, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...csrfHeaders() },
     credentials: "include",
     body: body ? JSON.stringify(body) : undefined,
   });
@@ -89,7 +99,7 @@ async function apiPost<T>(url: string, body?: any): Promise<T> {
 async function apiPut<T>(url: string, body: any): Promise<T> {
   const res = await fetch(url, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...csrfHeaders() },
     credentials: "include",
     body: JSON.stringify(body),
   });
@@ -98,7 +108,7 @@ async function apiPut<T>(url: string, body: any): Promise<T> {
 }
 
 async function apiDelete(url: string): Promise<void> {
-  const res = await fetch(url, { method: "DELETE", credentials: "include" });
+  const res = await fetch(url, { method: "DELETE", headers: csrfHeaders(), credentials: "include" });
   if (!res.ok) throw new Error(await res.text());
 }
 

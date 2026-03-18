@@ -56,7 +56,7 @@ interface CourseDetail {
   category: string;
   level: string;
   duration: string | null;
-  lessons: { id: string; title: string; description: string | null; order: number; duration: string | null }[];
+  lessons: { id: string; title: string; description: string | null; order: number; duration: string | null; isLocked?: boolean }[];
 }
 
 interface Enrollment {
@@ -600,10 +600,10 @@ export default function Courses() {
                                       <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${
                                         isStarted ? "bg-royal-gold/10 text-royal-gold" : "bg-gray-200 dark:bg-gray-700 text-gray-500"
                                       }`}>
-                                        {i + 1}
+                                        {lesson.isLocked ? <Lock className="w-3.5 h-3.5" /> : i + 1}
                                       </div>
                                       <div className="flex-1 min-w-0">
-                                        <p className="font-medium text-sm text-royal-navy dark:text-gray-200">
+                                        <p className={`font-medium text-sm text-royal-navy dark:text-gray-200 ${lesson.isLocked ? "opacity-60" : ""}`}>
                                           {lesson.title}
                                         </p>
                                         {lesson.description && (
@@ -745,7 +745,7 @@ export default function Courses() {
             {[
               {
                 q: "Which courses are free?",
-                a: "Trust pillar courses are free forever. Other courses require PMA membership. We believe foundational Trust knowledge should be accessible to everyone.",
+                a: "Lesson 1 of the Trust course is free. Full access to all courses requires PMA membership.",
               },
               {
                 q: "Do I need to take them in order?",

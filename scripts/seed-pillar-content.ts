@@ -345,6 +345,8 @@ No. You need knowledge. The endorsement is simple. Understanding why you're doin
       level: "beginner",
       duration: "Self-paced",
       price: 0,
+      isFree: true,
+      freePreviewLessons: 1,
       isPublished: true,
       createdById: admin.id,
       lessons: [
@@ -1396,9 +1398,20 @@ You are not escaping anything. You are not fighting anything. You are aligning w
     },
   ];
 
-  // Insert courses and lessons
+  // Insert courses and lessons (skip if a course with same category already exists)
   for (const course of courseData) {
     const { lessons: courseLessons, ...courseFields } = course;
+
+    const [existing] = await db
+      .select()
+      .from(courses)
+      .where(eq(courses.category, courseFields.category))
+      .limit(1);
+
+    if (existing) {
+      console.log(`⏭️  Course for "${courseFields.category}" already exists — skipping`);
+      continue;
+    }
 
     const [inserted] = await db
       .insert(courses)
@@ -1431,6 +1444,17 @@ You are not escaping anything. You are not fighting anything. You are aligning w
   ];
 
   for (const cat of forumCats) {
+    const [existing] = await db
+      .select()
+      .from(forum_categories)
+      .where(eq(forum_categories.name, cat.name))
+      .limit(1);
+
+    if (existing) {
+      console.log(`⏭️  Forum category "${cat.name}" already exists — skipping`);
+      continue;
+    }
+
     const [inserted] = await db
       .insert(forum_categories)
       .values(cat)
@@ -1526,6 +1550,17 @@ You are not escaping anything. You are not fighting anything. You are aligning w
   ];
 
   for (const dl of downloadEntries) {
+    const [existing] = await db
+      .select()
+      .from(downloads)
+      .where(eq(downloads.title, dl.title))
+      .limit(1);
+
+    if (existing) {
+      console.log(`⏭️  Download "${dl.title}" already exists — skipping`);
+      continue;
+    }
+
     const [inserted] = await db
       .insert(downloads)
       .values(dl)

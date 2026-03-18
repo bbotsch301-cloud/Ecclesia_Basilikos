@@ -67,6 +67,7 @@ export const courses = pgTable("courses", {
   duration: text("duration"), // e.g., "4 weeks", "8 hours"
   price: integer("price").default(0), // in cents, 0 for free
   isFree: boolean("is_free").default(false), // true for Trust/free-tier courses
+  freePreviewLessons: integer("free_preview_lessons").default(1), // number of lessons free users can access
   imageUrl: text("image_url"),
   scheduledPublishAt: timestamp("scheduled_publish_at"),
   isPublished: boolean("is_published").default(false),

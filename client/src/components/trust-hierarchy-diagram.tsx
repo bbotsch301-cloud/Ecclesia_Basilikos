@@ -301,13 +301,14 @@ function LayerRow({
   const biblicalLabel = BIBLICAL_LABELS[layer];
   const plainEnglish = perspectiveText || LAYER_PLAIN_ENGLISH[layer];
   const sizing = LAYER_SIZING[layer] || { maxWidth: "max-w-2xl", border: "border", shadow: "shadow-sm" };
-  if (!config || !colors) return null;
 
-  const Icon = config.icon;
+  const Icon = config?.icon;
   const layerIndex = LAYERS_ORDER.indexOf(layer);
   const hasDeepDive = !!LAYER_DEEP_DIVE[layer];
 
   const [operationalOpen, setOperationalOpen] = useState(false);
+
+  if (!config || !colors) return null;
 
   return (
     <div className="flex flex-col items-center w-full">

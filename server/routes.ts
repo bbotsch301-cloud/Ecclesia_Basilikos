@@ -563,8 +563,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ error: "Course not found" });
       }
       
-      const lessons = await storage.getCourseLessons(req.params.id);
-      res.json({ ...course, lessons });
+      const courseLessons = await storage.getCourseLessons(req.params.id);
+      const premium = isPremiumUser(req.user);
+
+      const gatedLessons = courseLessons.map(lesson => {
+        const isFreePreview = course.isFree && lesson.order <= (course.freePreviewLessons ?? 1);
+        const isLocked = !premium && !isFreePreview;
+        return isLocked
+          ? { ...lesson, content: null, videoUrl: null, isLocked: true }
+          : { ...lesson, isLocked: false };
+      });
+
+      res.json({ ...course, lessons: gatedLessons });
     } catch (error) {
       logger.error({ err: error }, "Get course error:");
       res.status(500).json({ error: "Failed to fetch course" });
@@ -1186,7 +1196,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       await storage.trackUserDownload(user.id, id, req.ip);
       await storage.incrementDownloadCount(id);
 
-      res.json({ fileUrl: download.fileUrl, fileName: download.title });
+      // Redirect to the actual file so window.open() triggers a download
+      res.redirect(download.fileUrl);
     } catch (error) {
       logger.error({ err: error }, "Error downloading file:");
       res.status(500).json({ error: "Failed to download file" });
@@ -1333,6 +1344,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/sections/:sectionId/complete", requireAuth, async (req, res) => {
     try {
       const userId = (req as any).user.id;
+
+      // Gate: prevent free users from completing locked lessons
+      if (!isPremiumUser(req.user)) {
+        const lesson = await storage.getLessonById(req.params.sectionId);
+        if (lesson) {
+          const course = await storage.getCourse(lesson.courseId);
+          if (course) {
+            const maxFree = course.isFree ? (course.freePreviewLessons ?? 1) : 0;
+            if (lesson.order > maxFree) {
+              return res.status(403).json({ error: "PMA membership required to complete this lesson", code: "PREMIUM_REQUIRED" });
+            }
+          }
+        }
+      }
+
       const progress = await storage.completeSectionForUser(userId, req.params.sectionId);
       res.json(progress);
     } catch (error) {
