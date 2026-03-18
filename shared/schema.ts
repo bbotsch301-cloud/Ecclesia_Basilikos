@@ -1200,3 +1200,61 @@ export type TrustDocument = typeof trustDocuments.$inferSelect;
 export type InsertTrustDocument = z.infer<typeof insertTrustDocumentSchema>;
 export type TrustDocumentSection = typeof trustDocumentSections.$inferSelect;
 export type InsertTrustDocumentSection = z.infer<typeof insertTrustDocumentSectionSchema>;
+
+// Treasury enums and tables
+export const treasuryTransactionTypeEnum = pgEnum('treasury_transaction_type', [
+  'payment_allocation',
+  'installment_allocation',
+  'manual_adjustment',
+  'crypto_conversion',
+  'crypto_transfer',
+  'disbursement',
+]);
+
+export const treasuryTransactions = pgTable("treasury_transactions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  type: treasuryTransactionTypeEnum("type").notNull(),
+  amountCents: integer("amount_cents").notNull(),
+  currency: text("currency").default('USD'),
+  description: text("description"),
+  sourcePaymentId: text("source_payment_id"),
+  sourceSubscriptionId: text("source_subscription_id"),
+  sourceUserId: varchar("source_user_id").references(() => users.id),
+  walletAddress: text("wallet_address"),
+  cryptoAmount: text("crypto_amount"),
+  cryptoCurrency: text("crypto_currency"),
+  transactionHash: text("transaction_hash"),
+  chainId: text("chain_id"),
+  performedByAdminId: varchar("performed_by_admin_id").references(() => users.id),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("treasury_tx_type_idx").on(table.type),
+  index("treasury_tx_source_user_idx").on(table.sourceUserId),
+  index("treasury_tx_created_idx").on(table.createdAt),
+]);
+
+export const treasurySettings = pgTable("treasury_settings", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  key: text("key").notNull().unique(),
+  value: text("value"),
+  updatedById: varchar("updated_by_id").references(() => users.id),
+  updatedAt: timestamp("updated_at").defaultNow(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const insertTreasuryTransactionSchema = createInsertSchema(treasuryTransactions).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertTreasurySettingSchema = createInsertSchema(treasurySettings).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type TreasuryTransaction = typeof treasuryTransactions.$inferSelect;
+export type InsertTreasuryTransaction = z.infer<typeof insertTreasuryTransactionSchema>;
+export type TreasurySetting = typeof treasurySettings.$inferSelect;
+export type InsertTreasurySetting = z.infer<typeof insertTreasurySettingSchema>;

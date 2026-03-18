@@ -136,6 +136,32 @@ export async function handleWebhookEvent(
       const invoice = event.data?.object?.invoice;
       if (invoice) {
         logger.info({ invoiceId: invoice.id, subscriptionId: invoice.subscription_id }, "Square subscription invoice paid");
+        // Allocate 50% of invoice payment to treasury
+        try {
+          const invoiceAmount = invoice.payment_requests?.[0]?.computed_amount_money?.amount;
+          const invoiceCents = invoiceAmount ? Number(invoiceAmount) : 5000; // fallback $50
+          const treasuryAmount = Math.round(invoiceCents / 2);
+          if (treasuryAmount > 0) {
+            // Try to find user by subscription's customer_id
+            let sourceUserId: string | undefined;
+            if (invoice.primary_recipient?.customer_id) {
+              const user = await storage.getUserBySquareCustomerId(invoice.primary_recipient.customer_id);
+              sourceUserId = user?.id;
+            }
+            await storage.createTreasuryTransaction({
+              type: 'installment_allocation',
+              amountCents: treasuryAmount,
+              currency: 'USD',
+              description: `50% allocation from installment invoice payment`,
+              sourcePaymentId: invoice.id || null,
+              sourceSubscriptionId: invoice.subscription_id || null,
+              sourceUserId: sourceUserId || null,
+            });
+            logger.info({ treasuryAmount, invoiceId: invoice.id }, "Treasury installment allocation recorded");
+          }
+        } catch (err) {
+          logger.warn({ err, invoiceId: invoice.id }, "Failed to record treasury installment allocation");
+        }
       }
       break;
     }
@@ -212,6 +238,24 @@ async function handlePaymentCompleted(payment: any): Promise<void> {
       ? "PMA Beneficial Interest acquired — $500 one-time contribution"
       : "PMA Beneficial Interest acquired — $50×10 installment plan (first payment)",
   });
+
+  // Allocate 50% to treasury
+  try {
+    const treasuryAmount = Math.round((amountCents || 0) / 2);
+    if (treasuryAmount > 0) {
+      await storage.createTreasuryTransaction({
+        type: 'payment_allocation',
+        amountCents: treasuryAmount,
+        currency: 'USD',
+        description: `50% allocation from ${paymentMode === "one_time" ? "one-time" : "first installment"} payment`,
+        sourcePaymentId: payment.id || null,
+        sourceUserId: userId,
+      });
+      logger.info({ userId, treasuryAmount }, "Treasury allocation recorded");
+    }
+  } catch (err) {
+    logger.warn({ err, userId }, "Failed to record treasury allocation");
+  }
 
   // For installment mode, try to create a subscription for remaining 9 payments
   if (paymentMode === "installment" && customerId) {

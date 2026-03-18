@@ -10,11 +10,16 @@ import NotificationBell from "@/components/NotificationBell";
 import SearchDialog from "@/components/SearchDialog";
 import PremiumBadge from "@/components/PremiumBadge";
 
-const navigation = [
+const navigation: Array<
+  { name: string; href: string; separator?: never } | { separator: true; name?: never; href?: never }
+> = [
   { name: "Home", href: "/" },
+  { name: "The Vision", href: "/vision" },
+  { separator: true },
   { name: "Lawful Money", href: "/lawful-money" },
   { name: "Trust & Assets", href: "/trust-assets" },
   { name: "State Passport", href: "/state-passport" },
+  { separator: true },
   { name: "The Mandate", href: "/mandate" },
   { name: "Courses", href: "/courses" },
   { name: "Pricing", href: "/pricing" },
@@ -56,24 +61,24 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden xl:flex items-center space-x-2 lg:space-x-4">
-            {navigation.map((item) => {
-              const href = item.href;
-              const isActive = location === item.href;
-              return (
+            {navigation.map((item, i) =>
+              item.separator ? (
+                <span key={`sep-${i}`} className="w-px h-4 bg-royal-gold/40" />
+              ) : (
                 <Link
                   key={item.name}
-                  href={href}
-                  aria-current={isActive ? "page" : undefined}
+                  href={item.href}
+                  aria-current={location === item.href ? "page" : undefined}
                   className={`transition-colors font-medium font-cinzel text-xs whitespace-nowrap ${
-                    isActive
+                    location === item.href
                       ? "text-royal-gold"
                       : "text-royal-navy dark:text-gray-300 hover:text-royal-gold"
                   }`}
                 >
                   {item.name}
                 </Link>
-              );
-            })}
+              )
+            )}
 
             {/* Search & Notifications (desktop) */}
             <SearchDialog />
@@ -186,25 +191,25 @@ export default function Navbar() {
 
                   {/* Nav links */}
                   <div className="flex flex-col space-y-4 mt-2 flex-1">
-                    {navigation.map((item) => {
-                      const href = item.href;
-                      const isActive = location === item.href;
-                      return (
+                    {navigation.map((item, i) =>
+                      item.separator ? (
+                        <div key={`sep-${i}`} className="border-t border-royal-gold/30" />
+                      ) : (
                         <Link
                           key={item.name}
-                          href={href}
+                          href={item.href}
                           onClick={() => setIsOpen(false)}
-                          aria-current={isActive ? "page" : undefined}
+                          aria-current={location === item.href ? "page" : undefined}
                           className={`text-left py-2 transition-colors font-cinzel ${
-                            isActive
+                            location === item.href
                               ? "text-royal-gold"
                               : "text-royal-navy dark:text-gray-300 hover:text-royal-gold"
                           }`}
                         >
                           {item.name}
                         </Link>
-                      );
-                    })}
+                      )
+                    )}
 
                     {isAuthenticated && (
                       <>

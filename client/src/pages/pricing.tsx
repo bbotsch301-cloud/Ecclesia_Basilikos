@@ -120,6 +120,7 @@ export default function Pricing() {
                 <h2 className="font-cinzel-decorative text-2xl font-bold text-royal-navy mb-2">Beneficial Interest</h2>
                 <p className="text-4xl font-bold text-royal-navy">$500</p>
                 <p className="text-sm text-gray-500 mt-2">One-time trust contribution &bull; or $50 &times; 10 months</p>
+                <p className="text-xs text-royal-gold/80 mt-1">50% of your contribution funds the Treasury Trust</p>
               </div>
               <ul className="space-y-3 mb-8">
                 {pmaFeatures.map((feature, i) => (
@@ -201,6 +202,10 @@ export default function Pricing() {
             {
               q: "Is the $500 a subscription?",
               a: "No. It's a one-time trust contribution that permanently establishes your beneficial interest. You can also choose the $50×10 installment plan. There are no recurring charges after your contribution is complete.",
+            },
+            {
+              q: "Where does my contribution go?",
+              a: "50% of every contribution is allocated to the Treasury Trust, managed by the Financial Trustee for the long-term benefit of all PMA beneficiaries. The remaining 50% supports operations, content development, and platform maintenance.",
             },
             {
               q: "Will free content ever be locked?",

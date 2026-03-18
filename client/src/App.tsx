@@ -72,6 +72,9 @@ const AdminWhitePaper = lazy(() => import("@/pages/admin-white-paper"));
 const AdminTrustDocuments = lazy(() => import("@/pages/admin-trust-documents"));
 const AdminTrustArchitecture = lazy(() => import("@/pages/admin-trust-architecture"));
 const AdminBabylonianComparison = lazy(() => import("@/pages/admin-babylonian-comparison"));
+const AdminTreasury = lazy(() => import("@/pages/admin-treasury"));
+const Treasury = lazy(() => import("@/pages/treasury"));
+const Vision = lazy(() => import("@/pages/vision"));
 
 function PageLoader() {
   return (
@@ -107,6 +110,7 @@ function Router() {
             <Route path="/trust-assets" component={TrustAssets} />
             <Route path="/state-passport" component={StatePassport} />
             <Route path="/mandate" component={Mandate} />
+            <Route path="/vision" component={Vision} />
             <Route path="/repository" component={Repository} />
             <Route path="/videos" component={Videos} />
             <Route path="/resources" component={Resources} />
@@ -134,6 +138,7 @@ function Router() {
             <Route path="/privacy" component={Privacy} />
             <Route path="/pma-agreement" component={PmaAgreement} />
             <Route path="/beneficiary/unit">{() => <SectionErrorBoundary><BeneficialUnit /></SectionErrorBoundary>}</Route>
+            <Route path="/treasury" component={Treasury} />
             <Route path="/pricing" component={Pricing} />
             <Route path="/billing">{() => <SectionErrorBoundary><Billing /></SectionErrorBoundary>}</Route>
             <Route path="/user/:userId" component={UserProfile} />
@@ -159,6 +164,7 @@ function Router() {
             <Route path="/admin/trust-documents">{() => <RequireAdmin><SectionErrorBoundary><AdminTrustDocuments /></SectionErrorBoundary></RequireAdmin>}</Route>
             <Route path="/admin/trust-architecture">{() => <RequireAdmin><SectionErrorBoundary><AdminTrustArchitecture /></SectionErrorBoundary></RequireAdmin>}</Route>
             <Route path="/admin/babylonian-comparison">{() => <RequireAdmin><SectionErrorBoundary><AdminBabylonianComparison /></SectionErrorBoundary></RequireAdmin>}</Route>
+            <Route path="/admin/treasury">{() => <RequireAdmin><SectionErrorBoundary><AdminTreasury /></SectionErrorBoundary></RequireAdmin>}</Route>
             <Route path="/admin">{() => <RequireAdmin><SectionErrorBoundary><AdminDashboard /></SectionErrorBoundary></RequireAdmin>}</Route>
             <Route component={NotFound} />
           </Switch>

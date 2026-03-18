@@ -311,6 +311,59 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Resend verification email
+  app.post("/api/auth/resend-verification", requireAuth, authLimiter, async (req, res) => {
+    try {
+      const user = (req as any).user as User;
+
+      if (user.isEmailVerified) {
+        return res.json({ success: true, message: "Email is already verified." });
+      }
+
+      // Regenerate token and expiration
+      const updatedUser = await storage.regenerateVerificationToken(user.id);
+
+      const verificationUrl = `${process.env.BASE_URL || `${req.protocol}://${req.get('host')}`}/verify-email?token=${updatedUser.emailVerificationToken}`;
+
+      const emailTemplateContent = await storage.getPageContent('email-templates');
+      const emailTemplate = {
+        subject: emailTemplateContent.find(c => c.contentKey === 'verification_subject')?.contentValue,
+        headerTitle: emailTemplateContent.find(c => c.contentKey === 'verification_header_title')?.contentValue,
+        headerSubtitle: emailTemplateContent.find(c => c.contentKey === 'verification_header_subtitle')?.contentValue,
+        greeting: emailTemplateContent.find(c => c.contentKey === 'verification_greeting')?.contentValue,
+        mainMessage: emailTemplateContent.find(c => c.contentKey === 'verification_main_message')?.contentValue,
+        instructionText: emailTemplateContent.find(c => c.contentKey === 'verification_instruction_text')?.contentValue,
+        buttonText: emailTemplateContent.find(c => c.contentKey === 'verification_button_text')?.contentValue,
+        expirationText: emailTemplateContent.find(c => c.contentKey === 'verification_expiration_text')?.contentValue,
+        scriptureQuote: emailTemplateContent.find(c => c.contentKey === 'verification_scripture_quote')?.contentValue,
+        scriptureReference: emailTemplateContent.find(c => c.contentKey === 'verification_scripture_reference')?.contentValue,
+        benefitsList: emailTemplateContent.find(c => c.contentKey === 'verification_benefits_list')?.contentValue,
+        closingMessage: emailTemplateContent.find(c => c.contentKey === 'verification_closing_message')?.contentValue,
+        footerText: emailTemplateContent.find(c => c.contentKey === 'verification_footer_text')?.contentValue,
+        footerSubtext: emailTemplateContent.find(c => c.contentKey === 'verification_footer_subtext')?.contentValue,
+      };
+
+      const { sendEmail, generateVerificationEmailHtml } = await import('./email');
+      const emailSent = await sendEmail({
+        to: user.email,
+        subject: emailTemplate.subject || 'Verify Your Email - Ecclesia Basilikos',
+        html: generateVerificationEmailHtml(user.firstName, verificationUrl, emailTemplate),
+      });
+
+      if (!emailSent) {
+        // Mirror registration fallback: auto-verify when email delivery is unavailable
+        logger.error('Failed to send verification email on resend — auto-verifying user');
+        await storage.verifyUserEmail(user.id);
+        return res.json({ success: true, message: "Your email has been verified automatically.", autoVerified: true });
+      }
+
+      res.json({ success: true, message: "Verification email sent. Please check your inbox." });
+    } catch (error) {
+      logger.error({ err: error }, "Resend verification error:");
+      res.status(500).json({ error: "Failed to resend verification email" });
+    }
+  });
+
   // Password reset: request
   app.post("/api/auth/forgot-password", authLimiter, async (req, res) => {
     try {
@@ -1758,6 +1811,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Admin routes
   app.use('/api/admin', adminRoutes);
+
+  // Public treasury page
+  app.get("/api/treasury/public", async (_req, res) => {
+    try {
+      const setting = await storage.getTreasurySetting("public_page_enabled");
+      if (!setting || setting.value !== "true") {
+        return res.status(404).json({ error: "Treasury page is not available" });
+      }
+      const stats = await storage.getTreasuryStats();
+      // Return only non-identifying data
+      res.json({
+        balance: stats.balance,
+        totalInflow: stats.totalInflow,
+        transactionCount: stats.transactionCount,
+        breakdownByType: stats.breakdownByType,
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch treasury data" });
+    }
+  });
 
   // Subscription status endpoint
   app.get("/api/subscription/status", requireAuth, async (req, res) => {

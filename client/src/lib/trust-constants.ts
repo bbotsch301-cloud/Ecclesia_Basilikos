@@ -311,7 +311,7 @@ export const FALLBACK_ENTITIES: FallbackEntity[] = [
   { id: "f-body", name: "Ecclesia Basilikos", subtitle: "Body of Christ", layer: "body", entityType: "body" },
   { id: "f-land", name: "Land Trust", subtitle: "Stewardship of Land", layer: "stewardship", entityType: "stewardship" },
   { id: "f-housing", name: "Housing Trust", subtitle: "Shelter & Buildings", layer: "stewardship", entityType: "stewardship" },
-  { id: "f-treasury", name: "Treasury Trust", subtitle: "Finances & Resources", layer: "stewardship", entityType: "stewardship" },
+  { id: "f-treasury", name: "Treasury Trust", subtitle: "Finances & Resources — Managed by Financial Trustee", layer: "stewardship", entityType: "stewardship" },
   { id: "f-enterprise", name: "Enterprise Trust", subtitle: "Commerce & Innovation", layer: "stewardship", entityType: "stewardship" },
   { id: "f-education", name: "Education Trust", subtitle: "Knowledge & Training", layer: "stewardship", entityType: "stewardship" },
   { id: "f-assembly", name: "Private Membership Association", subtitle: "The Gathered Ecclesia", layer: "assembly", entityType: "assembly" },
@@ -455,7 +455,7 @@ export const WALKTHROUGH_STEPS: WalkthroughStep[] = [
     layer: "stewardship",
     title: "The Body's Organs",
     eli5: "Just like your body has a heart, lungs, and hands — each doing a specific job — the Body of Christ has organs too. Each one manages a different type of resource.",
-    detail: "Within the Body, five stewardship organs handle specific functions: Land Trust stewards property, Housing Trust provides shelter, Treasury Trust manages finances, Enterprise Trust handles business and digital infrastructure, and Education Trust handles knowledge. If one organ faces trouble, the others are protected.",
+    detail: "Within the Body, five stewardship organs handle specific functions: Land Trust stewards property, Housing Trust provides shelter, Treasury Trust manages finances under the Financial Trustee who can invest in assets including crypto, Enterprise Trust handles business and digital infrastructure, and Education Trust handles knowledge. If one organ faces trouble, the others are protected. 50% of all member contributions flow into the Treasury Trust.",
     analogy: "Like organs in your body — your heart pumps blood, your lungs breathe, your hands work. If you break a finger, your heart keeps beating. Isolation protects the whole.",
   },
   {

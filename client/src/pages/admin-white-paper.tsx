@@ -266,8 +266,8 @@ As the community grew, this function was formalized through the appointment of d
     — Acts 6:3-4
 
 The Treasury Trust mirrors this structure precisely:
-    • Tithes and contributions flow into the centralized treasury
-    • The trustee (administrative authority) manages allocation and distribution
+    • 50% of every member contribution flows into the centralized treasury
+    • The Financial Trustee manages allocation, distribution, and investment into productive assets
     • The protector council provides oversight (equivalent to apostolic accountability)
     • Distribution is made according to community need and governance policy
     • The treasury maintains reserves for emergencies, expansion, and benevolence
@@ -677,7 +677,7 @@ The governance trust has two functionally separated arms:
     • Manages and oversees the operational trusts (land, housing, treasury, enterprise)
     • Sets economic policy (contribution rates, distribution formulas, investment priorities)
     • Authorizes the creation of new sub-trusts and operational entities
-    • Appoints trustees for each operational sub-trust
+    • Appoints trustees for each operational sub-trust (e.g., the Financial Trustee for the Treasury Trust)
     • Conducts strategic economic planning for the ecosystem
 
     COMMUNITY GOVERNANCE ARM
@@ -720,13 +720,17 @@ Oversight is provided by the Protector Council:
     • Members who leave the community vacate housing but are not displaced without process
 
     ═══ TREASURY TRUST ═══
+    • Managed by the Financial Trustee — a delegable fiduciary role responsible for all treasury operations
+    • The Financial Trustee has authority to invest treasury funds into assets including cryptocurrency, precious metals, productive enterprises, and other stores of value
+    • 50% of every member contribution is allocated to the Treasury Trust for long-term stewardship
     • Manages all financial assets, liquid reserves, and the internal accounting system
-    • Receives contributions from: enterprise profits, member tithes, external donations, asset appreciation
+    • Receives contributions from: enterprise profits, member contributions (50% allocation), external donations, asset appreciation
     • Distributes funds according to governance policy: operational budgets, emergency reserves, expansion capital, benevolence
     • Operates the internal ledger system for member-to-member value exchange
     • Maintains reserves for emergencies, community projects, and expansion into new chapters
-    • May hold precious metals, productive assets, or other stores of value as directed by governance policy
+    • May hold precious metals, cryptocurrency, productive assets, or other stores of value as directed by the Financial Trustee under governance policy
     • Provides financial reporting and transparency to all members through the digital platform
+    • The Financial Trustee role may be delegated to a qualified successor appointed by governance
 
     ═══ ENTERPRISE TRUST ═══
     • Holds and operates all community businesses, productive enterprises, and revenue-generating activities

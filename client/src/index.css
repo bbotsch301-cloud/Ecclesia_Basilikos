@@ -419,7 +419,8 @@
   }
   
   .font-cinzel-decorative {
-    font-family: var(--font-cinzel-decorative);
+    font-family: var(--font-cinzel);
+    letter-spacing: 0.03em;
   }
   
   .text-royal-navy {

@@ -18,6 +18,7 @@ import {
   ScrollText,
   Layers,
   Landmark,
+  Coins,
   ChevronDown,
   type LucideIcon,
 } from "lucide-react";
@@ -69,6 +70,12 @@ const adminNavGroups: NavGroup[] = [
       { name: "Trust Downloads", href: "/admin/trust-downloads", icon: Download },
       { name: "White Paper", href: "/admin/white-paper", icon: ScrollText },
       { name: "Babylonian Comparison", href: "/admin/babylonian-comparison", icon: Landmark },
+    ],
+  },
+  {
+    label: "Finance",
+    items: [
+      { name: "Treasury", href: "/admin/treasury", icon: Coins },
     ],
   },
 ];

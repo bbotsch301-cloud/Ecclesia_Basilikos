@@ -103,6 +103,11 @@ import {
   type InsertTrustDocument,
   type TrustDocumentSection,
   type InsertTrustDocumentSection,
+  treasuryTransactions,
+  treasurySettings,
+  type TreasuryTransaction,
+  type InsertTreasuryTransaction,
+  type TreasurySetting,
 } from "@shared/schema";
 import { eq, and, desc, sql, or, inArray, ilike } from "drizzle-orm";
 import { db } from "./db";
@@ -122,6 +127,7 @@ export interface IStorage {
   setPasswordResetToken(userId: string, token: string, expires: Date): Promise<void>;
   resetPassword(userId: string, hashedPassword: string): Promise<void>;
   verifyUserEmail(userId: string): Promise<User>;
+  regenerateVerificationToken(userId: string): Promise<User>;
   validateUser(email: string, password: string): Promise<User | null>;
   issueBeneficialUnit(userId: string): Promise<any>;
   getBeneficialUnit(userId: string): Promise<any>;
@@ -391,6 +397,20 @@ export interface IStorage {
   updateTrustDocumentSectionContent(sectionId: string, content: string): Promise<TrustDocumentSection>;
   resetTrustDocumentFromTemplate(id: string, sections: Omit<InsertTrustDocumentSection, 'documentId'>[]): Promise<TrustDocument & { sections: TrustDocumentSection[] }>;
   deleteTrustDocumentById(id: string): Promise<void>;
+
+  // Treasury
+  createTreasuryTransaction(data: InsertTreasuryTransaction): Promise<TreasuryTransaction>;
+  getTreasuryTransactions(limit: number, offset: number): Promise<TreasuryTransaction[]>;
+  getTreasuryBalance(): Promise<number>;
+  getTreasuryStats(): Promise<{
+    balance: number;
+    totalInflow: number;
+    totalOutflow: number;
+    transactionCount: number;
+    breakdownByType: Record<string, number>;
+  }>;
+  getTreasurySetting(key: string): Promise<TreasurySetting | undefined>;
+  upsertTreasurySetting(key: string, value: string, updatedById: string): Promise<TreasurySetting>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -458,6 +478,20 @@ export class DatabaseStorage implements IStorage {
         emailVerificationToken: null,
         emailVerificationExpires: null,
         updatedAt: new Date()
+      })
+      .where(eq(users.id, userId))
+      .returning();
+    return user;
+  }
+
+  async regenerateVerificationToken(userId: string): Promise<User> {
+    const token = randomUUID();
+    const expires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+    const [user] = await db.update(users)
+      .set({
+        emailVerificationToken: token,
+        emailVerificationExpires: expires,
+        updatedAt: new Date(),
       })
       .where(eq(users.id, userId))
       .returning();
@@ -3573,6 +3607,80 @@ export class DatabaseStorage implements IStorage {
 
   async deleteTrustDocumentById(id: string): Promise<void> {
     await db.delete(trustDocuments).where(eq(trustDocuments.id, id));
+  }
+
+  // Treasury
+  async createTreasuryTransaction(data: InsertTreasuryTransaction): Promise<TreasuryTransaction> {
+    const [tx] = await db.insert(treasuryTransactions).values(data).returning();
+    return tx;
+  }
+
+  async getTreasuryTransactions(limit: number, offset: number): Promise<TreasuryTransaction[]> {
+    return db.select().from(treasuryTransactions)
+      .orderBy(desc(treasuryTransactions.createdAt))
+      .limit(limit)
+      .offset(offset);
+  }
+
+  async getTreasuryBalance(): Promise<number> {
+    const [result] = await db.select({
+      balance: sql<number>`COALESCE(SUM(${treasuryTransactions.amountCents}), 0)`,
+    }).from(treasuryTransactions);
+    return Number(result.balance);
+  }
+
+  async getTreasuryStats(): Promise<{
+    balance: number;
+    totalInflow: number;
+    totalOutflow: number;
+    transactionCount: number;
+    breakdownByType: Record<string, number>;
+  }> {
+    const [summary] = await db.select({
+      balance: sql<number>`COALESCE(SUM(${treasuryTransactions.amountCents}), 0)`,
+      totalInflow: sql<number>`COALESCE(SUM(CASE WHEN ${treasuryTransactions.amountCents} > 0 THEN ${treasuryTransactions.amountCents} ELSE 0 END), 0)`,
+      totalOutflow: sql<number>`COALESCE(SUM(CASE WHEN ${treasuryTransactions.amountCents} < 0 THEN ${treasuryTransactions.amountCents} ELSE 0 END), 0)`,
+      transactionCount: sql<number>`COUNT(*)`,
+    }).from(treasuryTransactions);
+
+    const typeBreakdown = await db.select({
+      type: treasuryTransactions.type,
+      total: sql<number>`SUM(${treasuryTransactions.amountCents})`,
+    }).from(treasuryTransactions).groupBy(treasuryTransactions.type);
+
+    const breakdownByType: Record<string, number> = {};
+    for (const row of typeBreakdown) {
+      breakdownByType[row.type] = Number(row.total);
+    }
+
+    return {
+      balance: Number(summary.balance),
+      totalInflow: Number(summary.totalInflow),
+      totalOutflow: Number(summary.totalOutflow),
+      transactionCount: Number(summary.transactionCount),
+      breakdownByType,
+    };
+  }
+
+  async getTreasurySetting(key: string): Promise<TreasurySetting | undefined> {
+    const [setting] = await db.select().from(treasurySettings)
+      .where(eq(treasurySettings.key, key));
+    return setting;
+  }
+
+  async upsertTreasurySetting(key: string, value: string, updatedById: string): Promise<TreasurySetting> {
+    const existing = await this.getTreasurySetting(key);
+    if (existing) {
+      const [updated] = await db.update(treasurySettings)
+        .set({ value, updatedById, updatedAt: new Date() })
+        .where(eq(treasurySettings.key, key))
+        .returning();
+      return updated;
+    }
+    const [created] = await db.insert(treasurySettings)
+      .values({ key, value, updatedById })
+      .returning();
+    return created;
   }
 }
 

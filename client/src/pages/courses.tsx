@@ -7,7 +7,7 @@ import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { apiRequest } from "@/lib/queryClient";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 import {
   BookOpen,
   Banknote,
@@ -32,6 +32,7 @@ import {
   BarChart3,
   Crown,
 } from "lucide-react";
+import { ToastAction } from "@/components/ui/toast";
 import { usePageTitle } from "@/hooks/usePageTitle";
 
 interface CourseWithLessonCount {
@@ -196,8 +197,42 @@ export default function Courses() {
       if (serverMessage.toLowerCase().includes("verification") || serverMessage.toLowerCase().includes("verify")) {
         toast({
           title: "Email Verification Required",
-          description: "Please verify your email address before starting a course. Check your inbox for a verification link.",
+          description: "Please verify your email address before starting a course. Check your inbox or resend the link.",
           variant: "destructive",
+          action: (
+            <ToastAction
+              altText="Resend verification email"
+              onClick={async () => {
+                try {
+                  const resp = await fetch("/api/auth/resend-verification", {
+                    method: "POST",
+                    credentials: "include",
+                    headers: (() => {
+                      const h: Record<string, string> = {};
+                      const csrfMatch = document.cookie.match(/(?:^|;\s*)csrf_token=([^;]*)/);
+                      if (csrfMatch?.[1]) h["x-csrf-token"] = csrfMatch[1];
+                      return h;
+                    })(),
+                  });
+                  const data = await resp.json();
+                  if (!resp.ok) {
+                    toast({ title: "Failed to Resend", description: data.error || "Please try again later.", variant: "destructive" });
+                    return;
+                  }
+                  if (data.autoVerified) {
+                    queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
+                    toast({ title: "Email Verified", description: "Your email has been verified. You can now start courses." });
+                  } else {
+                    toast({ title: "Verification Email Sent", description: data.message || "Check your inbox for a new verification link." });
+                  }
+                } catch {
+                  toast({ title: "Failed to Resend", description: "Please try again later.", variant: "destructive" });
+                }
+              }}
+            >
+              Resend
+            </ToastAction>
+          ),
         });
       } else if (serverCode.toLowerCase().includes("premium") || serverMessage.toLowerCase().includes("premium")) {
         toast({

@@ -141,6 +141,23 @@ function BillingContent() {
           </CardContent>
         </Card>
 
+        {/* Treasury Allocation Info */}
+        {isPremium && (
+          <Card className="mb-8 border-yellow-200 bg-gradient-to-br from-yellow-50/50 to-white">
+            <CardHeader>
+              <CardTitle className="font-cinzel text-lg flex items-center gap-2">
+                <Crown className="w-5 h-5 text-yellow-500" />
+                Treasury Stewardship
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-gray-600">
+                50% of your contribution has been allocated to the Treasury Trust, managed by the Financial Trustee for the long-term benefit of all PMA beneficiaries. These funds support asset growth, future investments, and the collective prosperity of the community.
+              </p>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Manage Membership */}
         {isPremium && (
           <Card className="mb-8">

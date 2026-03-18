@@ -1835,4 +1835,76 @@ router.delete('/trust-documents/:id', requireAdmin, async (req, res) => {
   }
 });
 
+// ================================
+// TREASURY MANAGEMENT (ADMIN ONLY)
+// ================================
+
+router.get('/treasury/stats', requireAdmin, async (req, res) => {
+  try {
+    const stats = await storage.getTreasuryStats();
+    res.json(stats);
+  } catch (error) {
+    logger.error({ err: error }, 'Error fetching treasury stats');
+    res.status(500).json({ error: 'Failed to fetch treasury stats' });
+  }
+});
+
+router.get('/treasury/transactions', requireAdmin, async (req, res) => {
+  try {
+    const limit = Math.min(parseInt(req.query.limit as string) || 50, 200);
+    const offset = parseInt(req.query.offset as string) || 0;
+    const transactions = await storage.getTreasuryTransactions(limit, offset);
+    res.json(transactions);
+  } catch (error) {
+    logger.error({ err: error }, 'Error fetching treasury transactions');
+    res.status(500).json({ error: 'Failed to fetch treasury transactions' });
+  }
+});
+
+router.post('/treasury/transactions', requireAdmin, async (req, res) => {
+  try {
+    const { amount, description, notes } = z.object({
+      amount: z.number(),
+      description: z.string().min(1),
+      notes: z.string().optional(),
+    }).parse(req.body);
+
+    const amountCents = Math.round(amount * 100);
+    const transaction = await storage.createTreasuryTransaction({
+      type: 'manual_adjustment',
+      amountCents,
+      currency: 'USD',
+      description,
+      notes: notes || null,
+      performedByAdminId: req.user!.id,
+    });
+    res.json(transaction);
+  } catch (error) {
+    logger.error({ err: error }, 'Error creating treasury transaction');
+    res.status(500).json({ error: 'Failed to create treasury transaction' });
+  }
+});
+
+router.get('/treasury/settings/:key', requireAdmin, async (req, res) => {
+  try {
+    const setting = await storage.getTreasurySetting(req.params.key);
+    if (!setting) return res.status(404).json({ error: 'Setting not found' });
+    res.json(setting);
+  } catch (error) {
+    logger.error({ err: error }, 'Error fetching treasury setting');
+    res.status(500).json({ error: 'Failed to fetch treasury setting' });
+  }
+});
+
+router.put('/treasury/settings/:key', requireAdmin, async (req, res) => {
+  try {
+    const { value } = z.object({ value: z.string() }).parse(req.body);
+    const setting = await storage.upsertTreasurySetting(req.params.key, value, req.user!.id);
+    res.json(setting);
+  } catch (error) {
+    logger.error({ err: error }, 'Error updating treasury setting');
+    res.status(500).json({ error: 'Failed to update treasury setting' });
+  }
+});
+
 export default router;
