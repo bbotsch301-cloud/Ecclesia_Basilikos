@@ -43,6 +43,13 @@
       "when": 1773795158121,
       "tag": "0005_ambiguous_prowler",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1773796034210,
+      "tag": "0006_cultured_shatterstar",
+      "breakpoints": true
     }
   ]
 }

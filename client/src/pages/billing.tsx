@@ -14,7 +14,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Crown, CreditCard, Calendar, Loader2, XCircle, ExternalLink } from "lucide-react";
+import { Crown, CreditCard, Calendar, Loader2, XCircle } from "lucide-react";
 import { Link } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
 import { usePageTitle } from "@/hooks/usePageTitle";
@@ -46,12 +46,10 @@ interface SubscriptionRecord {
 
 function BillingContent() {
   usePageTitle("Billing");
-  const { user, isPremium } = useAuth();
+  const { isPremium } = useAuth();
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
-  const [portalLoading, setPortalLoading] = useState(false);
-  const [portalError, setPortalError] = useState<string | null>(null);
 
   const { data: subStatus, isLoading: statusLoading } = useQuery<SubscriptionStatus>({
     queryKey: ["/api/subscription/status"],
@@ -60,31 +58,6 @@ function BillingContent() {
   const { data: history = [], isLoading: historyLoading } = useQuery<SubscriptionRecord[]>({
     queryKey: ["/api/subscription/history"],
   });
-
-  const { data: stripeStatus } = useQuery<{ enabled: boolean }>({
-    queryKey: ["/api/stripe/status"],
-    staleTime: 60_000,
-  });
-
-  const stripeEnabled = stripeStatus?.enabled ?? false;
-  const hasStripeCustomer = !!user?.stripeCustomerId;
-
-  async function handleManageSubscription() {
-    setPortalLoading(true);
-    setPortalError(null);
-    try {
-      const res = await apiRequest("POST", "/api/stripe/create-portal-session", {});
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        setPortalError("Failed to open billing portal. Please try again.");
-      }
-    } catch (err: any) {
-      setPortalError(err.message || "Failed to open billing portal. Please try again.");
-      setPortalLoading(false);
-    }
-  }
 
   const cancelMutation = useMutation({
     mutationFn: async () => {
@@ -175,37 +148,12 @@ function BillingContent() {
               <CardTitle className="font-cinzel text-lg">Manage Membership</CardTitle>
             </CardHeader>
             <CardContent>
-              {stripeEnabled && hasStripeCustomer ? (
-                <div>
-                  <p className="text-sm text-gray-500 mb-4">
-                    Manage your PMA membership, update payment methods, or view invoices through the Stripe customer portal.
-                  </p>
-                  <Button
-                    variant="outline"
-                    className="font-cinzel"
-                    onClick={handleManageSubscription}
-                    disabled={portalLoading}
-                  >
-                    {portalLoading ? (
-                      <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Opening Portal...</>
-                    ) : (
-                      <><ExternalLink className="w-4 h-4 mr-2" /> Manage via Stripe</>
-                    )}
-                  </Button>
-                  {portalError && (
-                    <p className="text-sm text-red-600 mt-2">{portalError}</p>
-                  )}
-                </div>
-              ) : (
-                <div>
-                  <p className="text-sm text-gray-500 mb-4">
-                    Your PMA membership is managed by an administrator. Contact support for any changes.
-                  </p>
-                  <Button variant="outline" disabled className="font-cinzel">
-                    Admin-Managed Membership
-                  </Button>
-                </div>
-              )}
+              <p className="text-sm text-gray-500 mb-4">
+                Your PMA membership and beneficial interest are permanent. Contact support for any questions about your membership.
+              </p>
+              <Button variant="outline" disabled className="font-cinzel">
+                Membership Active
+              </Button>
             </CardContent>
           </Card>
         )}

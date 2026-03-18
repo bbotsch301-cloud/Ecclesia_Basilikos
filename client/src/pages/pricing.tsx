@@ -1,17 +1,15 @@
 import { useState } from "react";
 import { Link } from "wouter";
-import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, Crown, Users, ArrowRight, Loader2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { usePageTitle } from "@/hooks/usePageTitle";
-import PremiumBadge from "@/components/PremiumBadge";
 import { apiRequest } from "@/lib/queryClient";
 
 const freeTierFeatures = [
-  "Trust pillar course access",
+  "Trust course Lesson 1",
   "Trust document downloads",
   "Forum reading & browsing",
   "Public educational resources",
@@ -36,20 +34,11 @@ export default function Pricing() {
   const [isLoading, setIsLoading] = useState<"one_time" | "installment" | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const { data: stripeStatus } = useQuery<{ enabled: boolean; priceIdOneTime: string | null; priceIdInstallment: string | null }>({
-    queryKey: ["/api/stripe/status"],
-    staleTime: 60_000,
-  });
-
-  const stripeEnabled = stripeStatus?.enabled ?? false;
-
   async function handleCheckout(mode: "one_time" | "installment") {
     setIsLoading(mode);
     setError(null);
     try {
-      const priceId = mode === "one_time" ? stripeStatus?.priceIdOneTime : stripeStatus?.priceIdInstallment;
-      const res = await apiRequest("POST", "/api/stripe/create-checkout-session", {
-        priceId: priceId || undefined,
+      const res = await apiRequest("POST", "/api/square/create-checkout", {
         paymentMode: mode,
       });
       const data = await res.json();
@@ -155,7 +144,7 @@ export default function Pricing() {
                     </Button>
                   </Link>
                 </div>
-              ) : stripeEnabled && isAuthenticated ? (
+              ) : isAuthenticated ? (
                 <div className="space-y-3">
                   <Button
                     className="w-full bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold"
@@ -184,16 +173,12 @@ export default function Pricing() {
                     <p className="text-sm text-red-600 text-center">{error}</p>
                   )}
                 </div>
-              ) : stripeEnabled && !isAuthenticated ? (
+              ) : (
                 <Link href="/signup">
                   <Button className="w-full bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold">
                     Sign Up to Acquire Interest
                   </Button>
                 </Link>
-              ) : (
-                <Button className="w-full bg-royal-gold/50 text-royal-navy font-cinzel font-bold cursor-not-allowed" disabled>
-                  Coming Soon
-                </Button>
               )}
             </CardContent>
           </Card>
@@ -207,7 +192,7 @@ export default function Pricing() {
           {[
             {
               q: "What's included with a free account?",
-              a: "You get full access to Trust pillar content, including the Trust course, related downloads, and the ability to read all forum discussions. Progress tracking is also included.",
+              a: "You get Lesson 1 of the Trust course for free, plus Trust document downloads and the ability to read all forum discussions. Progress tracking is also included.",
             },
             {
               q: "What is PMA Beneficial Interest?",
@@ -219,7 +204,7 @@ export default function Pricing() {
             },
             {
               q: "Will free content ever be locked?",
-              a: "No. Trust content marked as free will remain free forever. We believe this foundational knowledge should be accessible to everyone.",
+              a: "Lesson 1 of the Trust course and the Trust downloads will remain free forever. We believe this foundational knowledge should be accessible to everyone.",
             },
           ].map((faq, i) => (
             <div key={i} className="p-5 rounded-xl bg-white border border-gray-200">

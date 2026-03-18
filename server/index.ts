@@ -43,7 +43,31 @@ app.use(helmet({
   },
 }));
 
-// Stripe webhook needs raw body for signature verification - must be before express.json()
+// Square webhook needs raw body for signature verification - must be before express.json()
+app.post(
+  "/api/square/webhook",
+  express.raw({ type: "application/json" }),
+  async (req: Request, res: Response) => {
+    try {
+      const { handleWebhookEvent, isSquareEnabled } = await import("./square");
+      if (!isSquareEnabled()) {
+        return res.status(503).json({ error: "Square is not configured" });
+      }
+      const signature = req.headers["x-square-hmacsha256-signature"];
+      if (!signature || typeof signature !== "string") {
+        return res.status(400).json({ error: "Missing x-square-hmacsha256-signature header" });
+      }
+      const notificationUrl = `${process.env.BASE_URL || "http://localhost:5000"}/api/square/webhook`;
+      await handleWebhookEvent(req.body.toString("utf8"), signature, notificationUrl);
+      res.json({ received: true });
+    } catch (error: any) {
+      logger.error({ err: error }, "Square webhook error");
+      res.status(400).json({ error: error.message || "Webhook processing failed" });
+    }
+  },
+);
+
+// Legacy Stripe webhook (kept for any in-flight Stripe payments)
 app.post(
   "/api/stripe/webhook",
   express.raw({ type: "application/json" }),

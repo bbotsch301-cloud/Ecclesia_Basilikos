@@ -35,6 +35,8 @@ export const users = pgTable("users", {
   subscriptionEndDate: timestamp("subscription_end_date"),
   stripeCustomerId: text("stripe_customer_id"),
   stripeSubscriptionId: text("stripe_subscription_id"),
+  squareCustomerId: text("square_customer_id"),
+  squareSubscriptionId: text("square_subscription_id"),
   premiumGrantedBy: varchar("premium_granted_by"),
   premiumGrantedAt: timestamp("premium_granted_at"),
   beneficialUnitId: varchar("beneficial_unit_id"),
@@ -908,6 +910,8 @@ export const subscriptions = pgTable("subscriptions", {
   cancelledAt: timestamp("cancelled_at"),
   grantedByAdminId: varchar("granted_by_admin_id").references(() => users.id),
   stripeSubscriptionId: text("stripe_subscription_id"),
+  squarePaymentId: text("square_payment_id"),
+  squareSubscriptionId: text("square_subscription_id"),
   amount: integer("amount"), // in cents
   notes: text("notes"),
   createdAt: timestamp("created_at").defaultNow(),

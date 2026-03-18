@@ -1854,75 +1854,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // ─── Stripe integration routes ───
+  // ─── Square integration routes ───
 
-  // Check if Stripe is enabled (used by frontend to show/hide payment buttons)
-  app.get("/api/stripe/status", async (_req, res) => {
+  // Check if Square is enabled (used by frontend to show/hide payment buttons)
+  app.get("/api/square/status", async (_req, res) => {
     try {
-      const { isStripeEnabled } = await import("./stripe");
-      res.json({
-        enabled: isStripeEnabled(),
-        priceIdOneTime: process.env.STRIPE_PRICE_ID_ONETIME || process.env.STRIPE_PRICE_ID || null,
-        priceIdInstallment: process.env.STRIPE_PRICE_ID_INSTALLMENT || null,
-      });
+      const { isSquareEnabled } = await import("./square");
+      res.json({ enabled: isSquareEnabled() });
     } catch {
       res.json({ enabled: false });
     }
   });
 
-  // Create Stripe Checkout session for subscription
-  app.post("/api/stripe/create-checkout-session", requireAuth, async (req, res) => {
+  // Create Square Checkout payment link
+  app.post("/api/square/create-checkout", requireAuth, async (req, res) => {
     try {
-      const { createCheckoutSession, isStripeEnabled } = await import("./stripe");
-      if (!isStripeEnabled()) {
-        return res.status(503).json({ error: "Stripe is not configured" });
+      const { createCheckoutUrl, isSquareEnabled } = await import("./square");
+      if (!isSquareEnabled()) {
+        return res.status(503).json({ error: "Square is not configured" });
       }
 
       const user = req.user as User;
       const paymentMode: "one_time" | "installment" = req.body.paymentMode === "installment" ? "installment" : "one_time";
 
-      let priceId: string | undefined;
-      if (paymentMode === "one_time") {
-        priceId = req.body.priceId || process.env.STRIPE_PRICE_ID_ONETIME || process.env.STRIPE_PRICE_ID;
-      } else {
-        priceId = req.body.priceId || process.env.STRIPE_PRICE_ID_INSTALLMENT;
-      }
-
-      if (!priceId || typeof priceId !== "string") {
-        return res.status(400).json({ error: "priceId is required (set STRIPE_PRICE_ID_ONETIME / STRIPE_PRICE_ID_INSTALLMENT env var or pass in body)" });
-      }
-
-      const url = await createCheckoutSession(user.id, user.email, priceId, paymentMode);
+      const url = await createCheckoutUrl(user.id, user.email, paymentMode);
       res.json({ url });
     } catch (error: any) {
-      logger.error({ err: error }, "Error creating checkout session");
-      res.status(500).json({ error: error.message || "Failed to create checkout session" });
+      logger.error({ err: error }, "Error creating Square checkout");
+      res.status(500).json({ error: error.message || "Failed to create checkout" });
     }
   });
 
-  // Create Stripe Customer Portal session for managing subscription
-  app.post("/api/stripe/create-portal-session", requireAuth, async (req, res) => {
-    try {
-      const { createBillingPortalSession, isStripeEnabled } = await import("./stripe");
-      if (!isStripeEnabled()) {
-        return res.status(503).json({ error: "Stripe is not configured" });
-      }
-
-      const user = req.user as User;
-      if (!user.stripeCustomerId) {
-        return res.status(400).json({ error: "No Stripe customer found. Please subscribe first." });
-      }
-
-      const url = await createBillingPortalSession(user.stripeCustomerId);
-      res.json({ url });
-    } catch (error: any) {
-      logger.error({ err: error }, "Error creating portal session");
-      res.status(500).json({ error: error.message || "Failed to create portal session" });
-    }
-  });
-
-  // Note: The POST /api/stripe/webhook route is registered in server/index.ts
+  // Note: The POST /api/square/webhook route is registered in server/index.ts
   // BEFORE express.json() middleware, because it requires raw body for signature verification.
+
+  // Legacy Stripe status endpoint (returns disabled)
+  app.get("/api/stripe/status", async (_req, res) => {
+    res.json({ enabled: false });
+  });
 
   // Proof Vault routes
   app.use('/api/proof-vault', proofVaultRoutes);

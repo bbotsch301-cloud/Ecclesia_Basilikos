@@ -116,6 +116,7 @@ export interface IStorage {
   getUserByVerificationToken(token: string): Promise<User | undefined>;
   getUserByPasswordResetToken(token: string): Promise<User | undefined>;
   getUserByStripeCustomerId(customerId: string): Promise<User | undefined>;
+  getUserBySquareCustomerId(customerId: string): Promise<User | undefined>;
   createUser(user: Omit<InsertUser, 'pmaAgreementAccepted' | 'privacyAccepted'> & { termsAcceptedAt?: Date; pmaAgreementAcceptedAt?: Date }): Promise<User>;
   updateUser(userId: string, updates: Partial<InsertUser>): Promise<User>;
   setPasswordResetToken(userId: string, token: string, expires: Date): Promise<void>;
@@ -338,6 +339,8 @@ export interface IStorage {
     subscriptionEndDate: Date | null;
     stripeCustomerId: string;
     stripeSubscriptionId: string;
+    squareCustomerId: string;
+    squareSubscriptionId: string;
     premiumGrantedBy: string;
     premiumGrantedAt: Date;
   }>): Promise<User>;
@@ -414,6 +417,11 @@ export class DatabaseStorage implements IStorage {
 
   async getUserByStripeCustomerId(customerId: string): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.stripeCustomerId, customerId));
+    return user;
+  }
+
+  async getUserBySquareCustomerId(customerId: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.squareCustomerId, customerId));
     return user;
   }
 
@@ -2017,6 +2025,8 @@ export class DatabaseStorage implements IStorage {
     subscriptionEndDate: Date | null;
     stripeCustomerId: string;
     stripeSubscriptionId: string;
+    squareCustomerId: string;
+    squareSubscriptionId: string;
     premiumGrantedBy: string;
     premiumGrantedAt: Date;
   }>): Promise<User> {
