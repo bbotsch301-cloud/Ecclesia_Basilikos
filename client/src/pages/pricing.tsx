@@ -155,7 +155,7 @@ export default function Pricing() {
                     {isLoading === "one_time" ? (
                       <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Processing...</>
                     ) : (
-                      <><Crown className="w-4 h-4 mr-2" /> Acquire Interest — $500</>
+                      <><Crown className="w-4 h-4 mr-2" /> Acquire Interest ($500)</>
                     )}
                   </Button>
                   <Button

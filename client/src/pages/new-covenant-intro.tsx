@@ -237,7 +237,14 @@ export default function NewCovenantIntro() {
                     </div>
 
                     {isAuthenticated ? (
-                      <Button className="w-full bg-royal-gold hover:bg-royal-gold/80 text-royal-navy">
+                      <Button
+                        className="w-full bg-royal-gold hover:bg-royal-gold/80 text-royal-navy"
+                        onClick={() => {
+                          const nextSection = lessonSections.find((_s: any, i: number) => !completedSections.includes(String(i)));
+                          const target = nextSection ? document.getElementById(`section-${lessonSections.indexOf(nextSection)}`) : null;
+                          target?.scrollIntoView({ behavior: 'smooth' });
+                        }}
+                      >
                         <Play className="h-4 w-4 mr-2" />
                         Continue Learning
                       </Button>
@@ -485,7 +492,7 @@ export default function NewCovenantIntro() {
                             Video: {section.title}
                           </h4>
                           <p className="text-sm text-gray-600 mb-3">
-                            Coming Soon - {section.duration} teaching video
+                            In Preparation - {section.duration} teaching video
                           </p>
                           <Badge className="bg-royal-gold/10 text-royal-navy border-royal-gold">
                             Video Content Planned

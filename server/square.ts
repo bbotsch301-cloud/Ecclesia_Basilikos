@@ -50,8 +50,8 @@ export async function createCheckoutUrl(
   // $500 one-time or $50 first installment (amounts in cents)
   const amountCents = paymentMode === "one_time" ? 50000 : 5000;
   const itemName = paymentMode === "one_time"
-    ? "PMA Beneficial Interest — One-time Contribution"
-    : "PMA Beneficial Interest — Installment (1 of 10)";
+    ? "PMA Beneficial Interest. One-time Contribution"
+    : "PMA Beneficial Interest. Installment (1 of 10)";
 
   const response = await square.checkout.paymentLinks.create({
     idempotencyKey: `${userId}-${paymentMode}-${Date.now()}`,
@@ -235,8 +235,8 @@ async function handlePaymentCompleted(payment: any): Promise<void> {
     squarePaymentId: payment.id || undefined,
     amount: amountCents,
     notes: paymentMode === "one_time"
-      ? "PMA Beneficial Interest acquired — $500 one-time contribution"
-      : "PMA Beneficial Interest acquired — $50×10 installment plan (first payment)",
+      ? "PMA Beneficial Interest acquired. $500 one-time contribution"
+      : "PMA Beneficial Interest acquired. $50×10 installment plan (first payment)",
   });
 
   // Allocate 50% to treasury
@@ -322,8 +322,20 @@ async function tryCreateSubscription(userId: string, customerId: string, payment
 }
 
 /**
+ * Cancel a Square subscription by ID.
+ */
+export async function cancelSquareSubscription(subscriptionId: string): Promise<void> {
+  if (!square) {
+    throw new Error("Square is not configured");
+  }
+
+  await square.subscriptions.cancel({ subscriptionId });
+  logger.info({ subscriptionId }, "Square subscription cancelled");
+}
+
+/**
  * Handle subscription status changes.
- * PMA membership is permanent — we never downgrade the user.
+ * PMA membership is permanent; we never downgrade the user.
  */
 async function handleSubscriptionUpdated(subscription: any): Promise<void> {
   const customerId = subscription.customer_id;
@@ -341,7 +353,7 @@ async function handleSubscriptionUpdated(subscription: any): Promise<void> {
     : squareStatus === "PAUSED" ? "past_due"
     : "active";
 
-  // PMA membership is permanent — never downgrade tier
+  // PMA membership is permanent; never downgrade tier
   await storage.updateUserSubscription(user.id, {
     subscriptionStatus: mappedStatus,
     squareSubscriptionId: subscription.id,
@@ -356,9 +368,9 @@ async function handleSubscriptionUpdated(subscription: any): Promise<void> {
       startDate: user.subscriptionStartDate || new Date(),
       endDate: new Date(),
       squareSubscriptionId: subscription.id,
-      notes: "Installment plan completed or ended — PMA membership retained",
+      notes: "Installment plan completed or ended. PMA membership retained",
     });
   }
 
-  logger.info({ userId: user.id, status: squareStatus }, "Square subscription updated — PMA membership retained");
+  logger.info({ userId: user.id, status: squareStatus }, "Square subscription updated. PMA membership retained");
 }

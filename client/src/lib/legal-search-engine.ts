@@ -352,7 +352,7 @@ function generatePreview(definition: string, maxLen: number = 250): string {
       startIdx = i + 1;
       continue;
     }
-    // Found a sentence starting with a capital letter — use from here
+    // Found a sentence starting with a capital letter; use from here
     if (/^[A-Z]/.test(s)) break;
     startIdx = i + 1;
   }
@@ -430,14 +430,14 @@ function scoreEntry(
     }
   }
 
-  // Definition match — only if query appears in first 300 chars
+  // Definition match: only if query appears in first 300 chars
   const defEarly = defNorm.substring(0, 300);
   const earlyMatchCount = queryTokens.filter(t => defEarly.includes(t)).length;
   if (earlyMatchCount > 0) {
     const tokenRatio = earlyMatchCount / queryTokens.length;
     // For multi-word queries, require at least 50% of tokens to match
     if (queryTokens.length > 1 && tokenRatio < 0.5) {
-      // Skip — not enough tokens matched
+      // Skip: not enough tokens matched
     } else {
       return { score: SCORE_WEIGHTS.definitionMatch * tokenRatio, matchType: "definition" };
     }

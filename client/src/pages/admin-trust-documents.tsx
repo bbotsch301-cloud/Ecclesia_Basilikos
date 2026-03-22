@@ -113,7 +113,7 @@ async function apiDelete(url: string): Promise<void> {
 }
 
 // ═══════════════════════════════════════════════════════════
-// VARIABLE PALETTE — insert {{variable}} at cursor
+// VARIABLE PALETTE: insert {{variable}} at cursor
 // ═══════════════════════════════════════════════════════════
 
 function VariablePalette({ onInsert }: { onInsert: (variable: string) => void }) {
@@ -808,7 +808,7 @@ function ExportTab() {
     return `<!DOCTYPE html>
 <html>
 <head>
-  <title>${doc.title} — ${doc.subtitle || ''}</title>
+  <title>${doc.title}${doc.subtitle ? ': ' + doc.subtitle : ''}</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap');
     body {
@@ -903,7 +903,7 @@ function ExportTab() {
             <SelectTrigger><SelectValue placeholder="Choose a document..." /></SelectTrigger>
             <SelectContent>
               {documents.map(d => (
-                <SelectItem key={d.id} value={d.id}>{d.title} — {d.subtitle || ''} (v{d.version})</SelectItem>
+                <SelectItem key={d.id} value={d.id}>{d.title}{d.subtitle ? `: ${d.subtitle}` : ''} (v{d.version})</SelectItem>
               ))}
             </SelectContent>
           </Select>

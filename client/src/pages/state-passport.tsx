@@ -85,7 +85,7 @@ export default function StatePassport() {
               <p className="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">
                 The Constitution recognizes a fundamental distinction between
                 state citizenship and federal citizenship. The 14th Amendment
-                created a secondary class of federal citizenship — but it did
+                created a secondary class of federal citizenship, but it did
                 not abolish the original. Understanding this distinction is
                 critical.
               </p>
@@ -106,7 +106,7 @@ export default function StatePassport() {
                     </li>
                     <li className="flex items-start gap-3">
                       <AlertTriangle className="w-5 h-5 text-royal-burgundy flex-shrink-0 mt-0.5" />
-                      <span>Civil rights granted by legislation — can be amended or revoked</span>
+                      <span>Civil rights granted by legislation; can be amended or revoked</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <AlertTriangle className="w-5 h-5 text-royal-burgundy flex-shrink-0 mt-0.5" />
@@ -130,15 +130,15 @@ export default function StatePassport() {
                   <ul className="space-y-3 text-gray-700">
                     <li className="flex items-start gap-3">
                       <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                      <span>Sovereign political status — a member of the republic, not a subject of it</span>
+                      <span>Sovereign political status: a member of the republic, not a subject of it</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                      <span>Unalienable rights secured by the Constitution — not granted by government</span>
+                      <span>Unalienable rights secured by the Constitution, not granted by government</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                      <span>Domiciled in one of the several states — not a federal territory</span>
+                      <span>Domiciled in one of the several states, not a federal territory</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
@@ -197,7 +197,7 @@ export default function StatePassport() {
                   icon: Shield,
                   title: "Rights vs. Privileges",
                   description:
-                    "State citizens hold unalienable rights that precede government. Federal citizens hold civil rights granted by the 14th Amendment — rights that exist by legislative permission.",
+                    "State citizens hold unalienable rights that precede government. Federal citizens hold civil rights granted by the 14th Amendment, rights that exist only by legislative permission.",
                 },
                 {
                   icon: Landmark,
@@ -247,7 +247,7 @@ export default function StatePassport() {
                 step: "01",
                 title: "Establish Your Domicile",
                 description:
-                  "Domicile is the cornerstone of state citizenship. You must establish and declare your domicile in one of the several states of the Union — not a federal territory, district, or possession. Domicile is a matter of intent and physical presence.",
+                  "Domicile is the cornerstone of state citizenship. You must establish and declare your domicile in one of the several states of the Union, not a federal territory, district, or possession. Domicile is a matter of intent and physical presence.",
               },
               {
                 step: "02",
@@ -259,7 +259,7 @@ export default function StatePassport() {
                 step: "03",
                 title: "Prepare Supporting Documentation",
                 description:
-                  "Gather your supporting documents — birth certificate, identification, and any affidavits or declarations that establish your political status and domicile. Proper documentation is essential.",
+                  "Gather your supporting documents: birth certificate, identification, and any affidavits or declarations that establish your political status and domicile. Proper documentation is essential.",
               },
               {
                 step: "04",
@@ -271,7 +271,7 @@ export default function StatePassport() {
                 step: "05",
                 title: "Submit with Knowledge and Confidence",
                 description:
-                  "When you understand the law, the process, and your rights, you submit your application not as a petitioner — but as a citizen of the republic exercising a right. Knowledge removes fear and uncertainty.",
+                  "When you understand the law, the process, and your rights, you submit your application not as a petitioner but as a citizen of the republic exercising a right. Knowledge removes fear and uncertainty.",
               },
             ].map((item, index) => (
               <motion.div key={index} variants={staggerItemVariants}>

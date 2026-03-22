@@ -18,7 +18,7 @@ export default function Resources() {
             Resources
           </h1>
           <p className="text-lg md:text-xl text-gray-200 max-w-3xl mx-auto leading-relaxed">
-            Black's Law Dictionary — look up legal terms and definitions to support your foundation work.
+            Black's Law Dictionary: look up legal terms and definitions to support your foundation work.
           </p>
         </div>
       </div>

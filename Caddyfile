@@ -1,5 +1,4 @@
-# Replace :80 with your domain (e.g., ecclesiabasilikos.com) to enable automatic HTTPS
-:80 {
+ecclesiabasilikos.org {
 	reverse_proxy app:5000
 
 	encode gzip zstd

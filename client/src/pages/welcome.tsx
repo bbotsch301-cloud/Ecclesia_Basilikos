@@ -55,14 +55,14 @@ function WelcomeContent() {
   const hasAnyInProgress = !!inProgressEnrollment;
 
   let primaryTitle = "Start Free Course";
-  let primaryDescription = "Begin with the Trust Foundation — it's free and sets the stage for everything else.";
+  let primaryDescription = "Begin with the Trust Foundation; it's free and sets the stage for everything else.";
   let primaryHref = freeCourse ? `/course/${freeCourse.id}` : "/courses";
   let primaryIcon = GraduationCap;
   let primaryButtonText = "Start Learning";
 
   if (hasAnyInProgress && inProgressEnrollment) {
     primaryTitle = "Continue Learning";
-    primaryDescription = `Pick up where you left off — ${inProgressEnrollment.course?.title || "your course"} is ${inProgressEnrollment.progress || 0}% complete.`;
+    primaryDescription = `Pick up where you left off. ${inProgressEnrollment.course?.title || "your course"} is ${inProgressEnrollment.progress || 0}% complete.`;
     primaryHref = `/course/${inProgressEnrollment.courseId}`;
     primaryIcon = Play;
     primaryButtonText = "Continue Course";
@@ -74,7 +74,7 @@ function WelcomeContent() {
     primaryButtonText = "View Courses";
   } else if (hasStartedFreeCourse) {
     primaryTitle = "Continue Learning";
-    primaryDescription = `You've started the Trust Foundation — keep going! You're ${freeCourseEnrollment?.progress || 0}% complete.`;
+    primaryDescription = `You've started the Trust Foundation, so keep going! You're ${freeCourseEnrollment?.progress || 0}% complete.`;
     primaryHref = `/course/${freeCourse!.id}`;
     primaryIcon = Play;
     primaryButtonText = "Continue Course";
@@ -99,7 +99,7 @@ function WelcomeContent() {
             Welcome, {user.firstName}
           </h1>
           <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
-            You have entered the assembly. Below is your path — three pillars that form the foundation of everything we teach.
+            You have entered the assembly. Below is your path: three pillars that form the foundation of everything we teach.
           </p>
         </div>
       </section>
@@ -125,7 +125,7 @@ function WelcomeContent() {
         </div>
         )}
 
-        {/* Primary Card — Start Free Course / Continue Learning */}
+        {/* Primary Card: Start Free Course / Continue Learning */}
         <div className="mb-8">
           <Link href={primaryHref}>
             <Card className="border-2 border-royal-gold bg-gradient-to-br from-royal-gold/10 via-amber-50 to-transparent hover:shadow-xl transition-all cursor-pointer relative overflow-hidden">
@@ -174,7 +174,7 @@ function WelcomeContent() {
                 num: "2",
                 icon: Shield,
                 title: "Trust Protection",
-                description: "Learn why assets must be held in trust — not in your name — and how the trust structure works.",
+                description: "Learn why assets must be held in trust, not in your name, and how the trust structure works.",
                 href: "/trust-assets",
                 courseCategory: "Trust & Assets",
                 color: "border-t-royal-burgundy",
@@ -239,7 +239,7 @@ function WelcomeContent() {
           </div>
         </div>
 
-        {/* Your Place in the Trust — Premium Users */}
+        {/* Your Place in the Trust (Premium Users) */}
         {isPremium && (
           <div className="mb-8">
             <Card className="royal-card border border-royal-gold/20">
@@ -267,7 +267,7 @@ function WelcomeContent() {
                 <CardContent className="p-5 relative text-center">
                   {p.disabled && (
                     <span className="absolute top-2 right-2 text-[10px] font-semibold bg-gray-200 text-gray-500 px-2 py-0.5 rounded-full">
-                      Coming Soon
+                      In Progress
                     </span>
                   )}
                   <p.icon className={`w-8 h-8 mb-3 mx-auto ${p.disabled ? "text-gray-400" : "text-royal-burgundy"}`} />

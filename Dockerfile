@@ -23,6 +23,8 @@ RUN npm ci --omit=dev
 
 COPY --from=builder /app/dist ./dist
 
+RUN mkdir -p /data/public /data/private/uploads
+
 EXPOSE 5000
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \

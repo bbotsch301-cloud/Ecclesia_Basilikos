@@ -205,8 +205,8 @@ export default function AdminUsers() {
             </Button>
             <Button
               onClick={() => toast({
-                title: "Coming Soon",
-                description: "User invite functionality will be available in a future update.",
+                title: "In Development",
+                description: "User invite functionality is being developed and will be available in a future update.",
               })}
             >
               <UserPlus className="h-4 w-4 mr-2" />

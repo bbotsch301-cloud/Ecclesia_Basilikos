@@ -480,11 +480,35 @@ export const forumReplyRelations = relations(forum_replies, ({ one, many }) => (
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
   isActive: true,
+  isEmailVerified: true,
+  emailVerificationToken: true,
+  emailVerificationExpires: true,
+  passwordResetToken: true,
+  passwordResetExpires: true,
   termsAcceptedAt: true,
   pmaAgreementAcceptedAt: true,
   createdAt: true,
+  updatedAt: true,
+  role: true,
+  subscriptionTier: true,
+  subscriptionStatus: true,
+  subscriptionStartDate: true,
+  subscriptionEndDate: true,
+  stripeCustomerId: true,
+  stripeSubscriptionId: true,
+  squareCustomerId: true,
+  squareSubscriptionId: true,
+  premiumGrantedBy: true,
+  premiumGrantedAt: true,
+  beneficialUnitId: true,
+  lastLoginAt: true,
 }).extend({
-  password: z.string().min(8, "Password must be at least 8 characters"),
+  password: z.string()
+    .min(8, "Password must be at least 8 characters")
+    .regex(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).+$/,
+      "Password must include at least one uppercase letter, one lowercase letter, one number, and one special character"
+    ),
   privacyAccepted: z.literal(true, { errorMap: () => ({ message: "You must acknowledge the Privacy Policy" }) }),
 });
 
@@ -686,7 +710,7 @@ export const trustDownloads = pgTable("trust_downloads", {
   userAgent: varchar("user_agent"),
 });
 
-export const insertTrustDownloadSchema = createInsertSchema(trustDownloads);
+export const insertTrustDownloadSchema = createInsertSchema(trustDownloads).omit({ id: true });
 export type InsertTrustDownload = z.infer<typeof insertTrustDownloadSchema>;
 export type TrustDownload = typeof trustDownloads.$inferSelect;
 
@@ -942,7 +966,7 @@ export const insertSubscriptionSchema = createInsertSchema(subscriptions).omit({
 export type InsertSubscription = z.infer<typeof insertSubscriptionSchema>;
 export type Subscription = typeof subscriptions.$inferSelect;
 
-// Beneficial Units — each beneficiary receives 1 unit representing equal share (1/N) of trust corpus
+// Beneficial Units: each beneficiary receives 1 unit representing equal share (1/N) of trust corpus
 export const beneficialUnits = pgTable("beneficial_units", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   userId: varchar("user_id").notNull().references(() => users.id).unique(),
@@ -972,32 +996,32 @@ export type BeneficialUnit = typeof beneficialUnits.$inferSelect;
 // Biblical ecclesiology: Individual → Covenant Gateway → Body of Christ → Internal Organs → Members
 
 export const trustEntityLayerEnum = pgEnum('trust_entity_layer', [
-  'covenant',        // Individual gateway — personal covenant with God through Christ (Rom 2:29, Jer 31:33)
-  'body',            // Body of Christ — the collective you enter (1 Cor 12:12-27, Gal 3:27-28)
-  'stewardship',     // Organs of the Body — asset stewardship (Matt 25:21, 1 Peter 4:10)
-  'assembly',        // The gathered ecclesia — people governance (Matt 16:18, Acts 2:42)
+  'covenant',        // Individual gateway: personal covenant with God through Christ (Rom 2:29, Jer 31:33)
+  'body',            // Body of Christ: the collective you enter (1 Cor 12:12-27, Gal 3:27-28)
+  'stewardship',     // Organs of the Body: asset stewardship (Matt 25:21, 1 Peter 4:10)
+  'assembly',        // The gathered ecclesia: people governance (Matt 16:18, Acts 2:42)
   'region',          // City-churches / regional assemblies (Titus 1:5, Rev 2-3)
   'household',       // House-churches / oikos groups (Acts 2:46, Rom 16:5)
   'craft',           // Skilled workers / Bezalel pattern (Exodus 35:10)
   'ministry',        // Service initiatives / diakonia (Nehemiah pattern)
-  'member',          // Joint heirs — members of the Body (Romans 8:17)
+  'member',          // Joint heirs: members of the Body (Romans 8:17)
 ]);
 
 // Governance roles within the trust structure
 export const trustRoleEnum = pgEnum('trust_role', [
   'grantor',          // mission founder / source of authority
   'trustee',          // administrative authority
-  'protector',        // protector council member — checks & balances
+  'protector',        // protector council member: checks & balances
   'steward',          // chapter/commune leader
   'beneficiary',      // community participant
   'officer',          // operational role
-  'elder',            // local governance — 1 Timothy 3:1-7, Titus 1:5-9
-  'deacon',           // service governance — 1 Timothy 3:8-13
-  'apostle',          // five-fold ministry — Ephesians 4:11
-  'prophet',          // five-fold ministry — Ephesians 4:11
-  'evangelist',       // five-fold ministry — Ephesians 4:11
-  'pastor',           // five-fold ministry — Ephesians 4:11
-  'teacher',          // five-fold ministry — Ephesians 4:11
+  'elder',            // local governance: 1 Timothy 3:1-7, Titus 1:5-9
+  'deacon',           // service governance: 1 Timothy 3:8-13
+  'apostle',          // five-fold ministry: Ephesians 4:11
+  'prophet',          // five-fold ministry: Ephesians 4:11
+  'evangelist',       // five-fold ministry: Ephesians 4:11
+  'pastor',           // five-fold ministry: Ephesians 4:11
+  'teacher',          // five-fold ministry: Ephesians 4:11
 ]);
 
 export const trustEntities = pgTable("trust_entities", {
@@ -1033,20 +1057,20 @@ export const trustEntities = pgTable("trust_entities", {
 });
 
 export const trustRelationshipTypeEnum = pgEnum('trust_relationship_type', [
-  'authority',       // red — constitutional authority chain
-  'grants',          // black — grants powers/rights
-  'funds',           // blue — financial flows
-  'land',            // green — land stewardship
-  'remits',          // purple — remits/reports
-  'establishes_pma', // dashed purple — establishes a PMA
-  'oversees',        // dashed orange — oversight
-  'coordinates',     // dashed gray — coordination
-  'benefits',        // dashed teal — trusts hold assets for benefit of members
-  'shepherds',       // pastoral care — 1 Peter 5:2
-  'teaches',         // discipleship chain — Matthew 28:20
-  'serves',          // diaconal service — Mark 10:45
-  'tithes',          // storehouse giving — Malachi 3:10
-  'enters',          // gateway — baptized into the Body (1 Cor 12:13)
+  'authority',       // red: constitutional authority chain
+  'grants',          // black: grants powers/rights
+  'funds',           // blue: financial flows
+  'land',            // green: land stewardship
+  'remits',          // purple: remits/reports
+  'establishes_pma', // dashed purple: establishes a PMA
+  'oversees',        // dashed orange: oversight
+  'coordinates',     // dashed gray: coordination
+  'benefits',        // dashed teal: trusts hold assets for benefit of members
+  'shepherds',       // pastoral care: 1 Peter 5:2
+  'teaches',         // discipleship chain: Matthew 28:20
+  'serves',          // diaconal service: Mark 10:45
+  'tithes',          // storehouse giving: Malachi 3:10
+  'enters',          // gateway: baptized into the Body (1 Cor 12:13)
 ]);
 
 export const trustRelationships = pgTable("trust_relationships", {

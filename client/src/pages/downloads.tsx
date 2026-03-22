@@ -62,7 +62,7 @@ export default function Downloads() {
       window.open(`/api/downloads/${item.id}/file`, '_blank');
     } else {
       toast({
-        title: "Coming Soon",
+        title: "In Preparation",
         description: `The "${item.title}" document is being prepared and will be available for download shortly.`,
       });
     }
@@ -94,7 +94,7 @@ export default function Downloads() {
             Downloads
           </h1>
           <p className="text-lg md:text-xl text-gray-200 max-w-3xl mx-auto leading-relaxed">
-            Practical templates, guides, and forms for each pillar — Lawful Money Redemption, Trust & Asset Protection, and State-Citizen Passport.
+            Practical templates, guides, and forms for each pillar: Lawful Money Redemption, Trust & Asset Protection, and State-Citizen Passport.
           </p>
         </div>
       </div>
@@ -271,7 +271,7 @@ export default function Downloads() {
                             "{selectedItem.scriptureText}"
                           </blockquote>
                           <cite className="text-royal-gold font-cinzel font-semibold text-sm">
-                            — {selectedItem.scriptureReference}
+                            {selectedItem.scriptureReference}
                           </cite>
                         </div>
                       )}
@@ -351,7 +351,7 @@ export default function Downloads() {
                               className="bg-royal-gold hover:bg-royal-gold-bright text-royal-navy font-cinzel font-bold px-8 shadow-lg hover:shadow-xl transition-all hover:scale-105"
                             >
                               <Download className="w-5 h-5 mr-2" />
-                              {selectedItem.fileUrl ? `Download ${selectedItem.fileType}` : "Coming Soon"}
+                              {selectedItem.fileUrl ? `Download ${selectedItem.fileType}` : "In Preparation"}
                             </Button>
                           </CardContent>
                         </Card>

@@ -151,6 +151,7 @@ export default function Courses() {
   const { toast } = useToast();
   const [, navigate] = useLocation();
   const [expandedCourse, setExpandedCourse] = useState<string | null>(null);
+  const [enrollingCourseId, setEnrollingCourseId] = useState<string | null>(null);
 
   const { data: courses = [], isLoading: coursesLoading } = useQuery<CourseWithLessonCount[]>({
     queryKey: ["/api/courses"],
@@ -263,10 +264,13 @@ export default function Courses() {
     }
 
     try {
+      setEnrollingCourseId(courseId);
       await enrollMutation.mutateAsync(courseId);
       (await import("@/lib/analytics")).trackEvent("Enrollment", { courseId });
     } catch (error) {
       console.error("Auto-enrollment error:", error);
+    } finally {
+      setEnrollingCourseId(null);
     }
   };
 
@@ -315,7 +319,7 @@ export default function Courses() {
               Courses & Learning Path
             </h1>
             <p className="text-lg md:text-xl text-gray-200 max-w-3xl mx-auto leading-relaxed mb-8">
-              Master each pillar through structured, step-by-step courses. Work through them in order — each builds on the one before it.
+              Master each pillar through structured, step-by-step courses. Work through them in order; each builds on the one before it.
             </p>
 
             {isAuthenticated && (
@@ -368,7 +372,7 @@ export default function Courses() {
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: BookOpen, title: "Choose a Pillar", desc: "Start with any pillar — we recommend beginning with Lawful Money as the foundation." },
+              { icon: BookOpen, title: "Choose a Pillar", desc: "Start with any pillar; we recommend beginning with Lawful Money as the foundation." },
               { icon: Layers, title: "Work Through Lessons", desc: "Each course has 7 structured lessons that build on each other sequentially." },
               { icon: Download, title: "Use the Templates", desc: "Download practical templates and forms to implement what you learn in each lesson." },
               { icon: Award, title: "Complete & Advance", desc: "Finish all three pillars to establish your complete foundation." },
@@ -395,9 +399,9 @@ export default function Courses() {
         {courses.length === 0 ? (
           <div className="text-center py-20">
             <GraduationCap className="h-16 w-16 text-royal-gold mx-auto mb-4" />
-            <h3 className="font-cinzel text-2xl font-bold text-royal-navy mb-2">Courses Coming Soon</h3>
+            <h3 className="font-cinzel text-2xl font-bold text-royal-navy mb-2">Courses</h3>
             <p className="text-gray-500 max-w-md mx-auto">
-              We are preparing structured courses for each pillar. Check back soon.
+              Structured courses for each pillar are being prepared. New content will appear here as it becomes available.
             </p>
           </div>
         ) : (
@@ -433,7 +437,7 @@ export default function Courses() {
                         {index + 1}
                       </div>
                       <span className="font-cinzel text-sm font-semibold text-gray-400 uppercase tracking-wider">
-                        Pillar {index + 1} — {meta.statute}
+                        Pillar {index + 1}. {meta.statute}
                       </span>
                       {isCompleted && (
                         <Badge className="bg-green-100 text-green-700 border-green-300">
@@ -546,7 +550,7 @@ export default function Courses() {
                                       const hasCompletedTrust = !!trustEnrollment?.completedAt;
                                       return hasCompletedTrust
                                         ? `Ready for the next step? Acquire PMA membership to access ${course.title}`
-                                        : "Acquire PMA Membership — $500 or $50/mo";
+                                        : "Acquire PMA Membership ($500 or $50/mo)";
                                     })()}
                                   </Button>
                                 </Link>
@@ -578,11 +582,11 @@ export default function Courses() {
                             ) : (
                               <Button
                                 onClick={() => handleBeginLearning(course.id)}
-                                disabled={enrollMutation.isPending}
+                                disabled={enrollingCourseId === course.id}
                                 size="lg"
                                 className="bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold px-8 shadow-md hover:shadow-lg transition-all"
                               >
-                                {enrollMutation.isPending ? (
+                                {enrollingCourseId === course.id ? (
                                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                                 ) : isCompleted ? (
                                   <CheckCircle className="w-4 h-4 mr-2" />

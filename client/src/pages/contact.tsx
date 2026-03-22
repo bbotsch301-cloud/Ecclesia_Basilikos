@@ -220,7 +220,7 @@ export default function Contact() {
                     <CheckCircle className="w-6 h-6 text-royal-burgundy flex-shrink-0 mt-1" />
                     <div>
                       <h4 className="font-semibold text-royal-navy mb-1">Community Connection</h4>
-                      <p className="text-gray-700 text-sm">Access to the Embassy Forum—a private community of fellow trustees and ambassadors walking this path.</p>
+                      <p className="text-gray-700 text-sm">Access to the Embassy Forum, a private community of fellow trustees and ambassadors walking this path.</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">

@@ -67,7 +67,7 @@ export default function Nation() {
       <RoyalHero
         title="Ecclesia Nation"
         subtitle="The Royal Commonwealth"
-        description="The Body of Christ is a real kingdom with heavenly law, divine authority, and eternal citizenship—a holy nation called out from Babylon"
+        description="The Body of Christ is a real kingdom with heavenly law, divine authority, and eternal citizenship: a holy nation called out from Babylon"
         scriptureVerse={{
           text: "But ye are a chosen generation, a royal priesthood, an holy nation, a peculiar people",
           reference: "1 Peter 2:9"
@@ -139,7 +139,7 @@ export default function Nation() {
                 <cite className="text-royal-gold font-semibold font-cinzel">— Daniel 2:44</cite>
               </div>
               <p className="text-lg text-gray-700 leading-relaxed">
-                This eternal Kingdom, established by the God of heaven, shall never be destroyed nor given to another people, but will consume all earthly kingdoms and stand forever. We are not building within Babylon—we are manifesting the Kingdom that consumes Babylon.
+                This eternal Kingdom, established by the God of heaven, shall never be destroyed nor given to another people, but will consume all earthly kingdoms and stand forever. We are not building within Babylon; we are manifesting the Kingdom that consumes Babylon.
               </p>
             </div>
             <div className="bg-gradient-to-br from-royal-navy to-royal-burgundy p-8 rounded-xl text-white">

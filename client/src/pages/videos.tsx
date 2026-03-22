@@ -82,9 +82,9 @@ export default function Videos() {
           ) : videos.length === 0 ? (
             <div className="text-center py-16">
               <Play className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Videos Coming Soon</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Video Teachings</h3>
               <p className="text-gray-600">
-                We are preparing video teachings. Check back soon for new content.
+                Video teachings are being prepared. New content will appear here as it becomes available.
               </p>
             </div>
           ) : (
@@ -236,7 +236,7 @@ export default function Videos() {
                 <div className="aspect-video bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg flex items-center justify-center">
                   <div className="text-center">
                     <Play className="h-16 w-16 text-white/30 mx-auto mb-4" />
-                    <p className="text-gray-400">Video coming soon</p>
+                    <p className="text-gray-400">Video is being prepared</p>
                   </div>
                 </div>
               );

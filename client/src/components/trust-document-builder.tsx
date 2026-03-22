@@ -14,7 +14,7 @@ import {
 import type { TrustEntity, TrustRelationship } from "@shared/schema";
 
 // ═══════════════════════════════════════════════════════════
-// VARIABLE RESOLVER — pulls all data from the trust structure
+// VARIABLE RESOLVER: pulls all data from the trust structure
 // ═══════════════════════════════════════════════════════════
 
 interface ResolvedEntity {
@@ -72,7 +72,7 @@ function resolveEntity(
     .map(r => ({ entity: findEntity(r.toEntityId)!, relationship: r }))
     .filter(r => r.entity);
 
-  // Incoming benefits — trusts that hold assets for the benefit of this entity
+  // Incoming benefits: trusts that hold assets for the benefit of this entity
   const benefitSources = incoming
     .filter(r => r.relationshipType === 'benefits')
     .map(r => ({ entity: findEntity(r.fromEntityId)!, relationship: r }))
@@ -125,7 +125,7 @@ function resolveEntity(
 }
 
 // ═══════════════════════════════════════════════════════════
-// DOCUMENT TEMPLATES — per entity type
+// DOCUMENT TEMPLATES: per entity type
 // ═══════════════════════════════════════════════════════════
 
 interface DocumentSection {
@@ -168,7 +168,7 @@ function generateDocument(resolved: ResolvedEntity): { title: string; subtitle: 
 
 function generateCharterDocument(r: ResolvedEntity, today: string, _rootName: string): ReturnType<typeof generateDocument> {
   const e = r.entity;
-  const childList = r.childEntities.map(c => `    ${c.entity.name} — ${c.entity.subtitle || c.entity.entityType}`).join('\n') || '    (None defined)';
+  const childList = r.childEntities.map(c => `    ${c.entity.name}: ${c.entity.subtitle || c.entity.entityType}`).join('\n') || '    (None defined)';
 
   return {
     title: `DECLARATION OF TRUST`,
@@ -180,34 +180,34 @@ function generateCharterDocument(r: ResolvedEntity, today: string, _rootName: st
       },
       {
         title: "Preamble",
-        content: `This Declaration of Trust is established on ${today} under the authority of divine law, constitutional principles, and the inherent right of free association.\n\nThis instrument creates and governs "${e.name}" as an irrevocable express trust, serving as the individual covenant gateway — the personal covenant through which one enters the Body of Christ.`,
+        content: `This Declaration of Trust is established on ${today} under the authority of divine law, constitutional principles, and the inherent right of free association.\n\nThis instrument creates and governs "${e.name}" as an irrevocable express trust, serving as the individual covenant gateway through which one enters the Body of Christ.`,
       },
       {
-        title: "Article I — Purpose & Covenant",
+        title: "Article I: Purpose & Covenant",
         content: e.charter || '(No charter/purpose statement defined. Edit this entity to add one.)',
       },
       {
-        title: "Article II — Legal Foundation",
+        title: "Article II: Legal Foundation",
         content: e.legalBasis || '(No legal basis defined. Edit this entity to add one.)',
       },
       {
-        title: "Article III — Governance Structure",
+        title: "Article III: Governance Structure",
         content: `Trustee: ${e.trusteeLabel || '(Not assigned)'}\n\nProtector: ${e.protectorLabel || '(Not assigned)'}\n\nThe Trustee shall administer the Trust corpus and operations in accordance with this Declaration. The Protector Council shall provide oversight and ensure alignment with the covenant purpose.`,
       },
       {
-        title: "Article IV — Description & Scope",
+        title: "Article IV: Description & Scope",
         content: e.description || '(No description defined.)',
       },
       {
-        title: "Article V — Sub-Trusts & Entities Authorized",
+        title: "Article V: Sub-Trusts & Entities Authorized",
         content: `The following entities are authorized under this trust:\n\n${childList}`,
       },
       {
-        title: "Article VI — Amendments & Irrevocability",
+        title: "Article VI: Amendments & Irrevocability",
         content: `This trust is irrevocable. Amendments to this Declaration require unanimous approval of the Protector Council.\n\n${e.notes || ''}`,
       },
       {
-        title: "Article VII — Signatures & Attestation",
+        title: "Article VII: Signatures & Attestation",
         content: `IN WITNESS WHEREOF, the Grantor has executed this Declaration of Trust on the date first written above.\n\n\n____________________________________\n${e.trusteeLabel || 'Trustee'}\nDate: _______________\n\n\n____________________________________\n${e.protectorLabel || 'Protector'}\nDate: _______________`,
       },
     ],
@@ -218,8 +218,8 @@ function generateGovernanceDocument(r: ResolvedEntity, today: string, parentName
   const e = r.entity;
   const assetArm = r.childEntities.filter(c => c.entity.layer === 'stewardship');
   const peopleArm = r.childEntities.filter(c => c.entity.layer === 'assembly');
-  const assetList = assetArm.map(c => `    ${c.entity.name} — ${c.entity.subtitle || ''}`).join('\n') || '    (None)';
-  const peopleList = peopleArm.map(c => `    ${c.entity.name} — ${c.entity.subtitle || ''}`).join('\n') || '    (None)';
+  const assetList = assetArm.map(c => `    ${c.entity.name}: ${c.entity.subtitle || ''}`).join('\n') || '    (None)';
+  const peopleList = peopleArm.map(c => `    ${c.entity.name}: ${c.entity.subtitle || ''}`).join('\n') || '    (None)';
 
   return {
     title: `TRUST ADMINISTRATION AGREEMENT`,
@@ -231,34 +231,34 @@ function generateGovernanceDocument(r: ResolvedEntity, today: string, parentName
       },
       {
         title: "Preamble",
-        content: `This Trust Administration Agreement is executed on ${today} under the authority of ${parentNames}.\n\n"${e.name}" is the Body of Christ — the collective assembly within which all stewardship, governance, and community life takes place, rooted in ${rootName}.`,
+        content: `This Trust Administration Agreement is executed on ${today} under the authority of ${parentNames}.\n\n"${e.name}" is the Body of Christ, the collective assembly within which all stewardship, governance, and community life takes place, rooted in ${rootName}.`,
       },
       {
-        title: "Article I — Mission & Charter",
+        title: "Article I: Mission & Charter",
         content: e.charter || '(No charter defined.)',
       },
       {
-        title: "Article II — Authority Derived",
+        title: "Article II: Authority Derived",
         content: `This trust derives its authority from: ${parentNames}.\n\n${e.legalBasis || ''}`,
       },
       {
-        title: "Article III — Governance",
+        title: "Article III: Governance",
         content: `Administrative Trustee: ${e.trusteeLabel || '(Not assigned)'}\n\nProtector/Oversight: ${e.protectorLabel || '(Not assigned)'}`,
       },
       {
-        title: "Article IV — Stewardship Organs",
+        title: "Article IV: Stewardship Organs",
         content: `The following stewardship organs are commissioned within the Body:\n\n${assetList}\n\nEach organ holds and administers specific functions for the benefit of all members of the Body.`,
       },
       {
-        title: "Article V — The Gathered Assembly",
+        title: "Article V: The Gathered Assembly",
         content: `The following assembly entities are gathered within the Body:\n\n${peopleList}\n\nThe assembly organizes members within the Body. Stewardship organs and the assembly both serve the Body and its members.`,
       },
       {
-        title: "Article VI — Scope & Operations",
+        title: "Article VI: Scope & Operations",
         content: e.description || '(No description defined.)',
       },
       {
-        title: "Article VII — Additional Provisions",
+        title: "Article VII: Additional Provisions",
         content: e.notes || '(No additional provisions.)',
       },
       {
@@ -292,27 +292,27 @@ function generateSubTrustDocument(r: ResolvedEntity, today: string, parentNames:
         content: `This Sub-Trust Declaration is executed on ${today} under the authority granted by ${parentNames}, ultimately rooted in ${rootName}.`,
       },
       {
-        title: "Article I — Purpose",
+        title: "Article I: Purpose",
         content: e.charter || '(No purpose statement defined.)',
       },
       {
-        title: "Article II — Scope of Operations",
+        title: "Article II: Scope of Operations",
         content: e.description || '(No description defined.)',
       },
       {
-        title: "Article III — Legal Basis",
+        title: "Article III: Legal Basis",
         content: e.legalBasis || '(No legal basis defined.)',
       },
       {
-        title: "Article IV — Governance",
+        title: "Article IV: Governance",
         content: `Trustee: ${e.trusteeLabel || '(Not assigned)'}\n\nOversight: ${e.protectorLabel || '(Not assigned)'}\n\nAuthority derived from: ${parentNames}`,
       },
       {
-        title: "Article V — Beneficiaries",
+        title: "Article V: Beneficiaries",
         content: `Assets held by this trust are for the benefit of:\n\n${beneficiaries}`,
       },
       {
-        title: "Article VI — Financial Provisions",
+        title: "Article VI: Financial Provisions",
         content: [fundingInfo, fundingOut, e.notes].filter(Boolean).join('\n\n') || '(No financial provisions defined.)',
       },
       {
@@ -320,12 +320,12 @@ function generateSubTrustDocument(r: ResolvedEntity, today: string, parentNames:
         content: `This trust acknowledges and incorporates the biblical economic cycles:\n\nSabbatical Year (every 7th year):\n    "But the seventh year thou shalt let it rest and lie still; that the poor of thy people may eat." — Exodus 23:11\n    Land held by this trust shall observe a sabbatical rest cycle. Commerce operations shall conduct a review of all debts owed by members.\n\nYear of Jubilee (every 50th year):\n    "And ye shall hallow the fiftieth year, and proclaim liberty throughout all the land unto all the inhabitants thereof: it shall be a jubile unto you; and ye shall return every man unto his possession." — Leviticus 25:10\n    All internal debts shall be released. Land stewardship assignments shall be reviewed and equitably redistributed. Economic participation shall be reset to ensure no generational accumulation distorts the covenant community.`,
       },
       ...(r.landStewardship.length > 0 ? [{
-        title: "Article VII — Land Stewardship",
-        content: `This trust provides land stewardship to:\n\n${r.landStewardship.map(l => `    ${l.entity.name}${l.relationship.label ? ` — ${l.relationship.label}` : ''}`).join('\n')}`,
+        title: "Article VII: Land Stewardship",
+        content: `This trust provides land stewardship to:\n\n${r.landStewardship.map(l => `    ${l.entity.name}${l.relationship.label ? `: ${l.relationship.label}` : ''}`).join('\n')}`,
       }] : []),
       ...(r.coordinationTargets.length > 0 ? [{
-        title: `Article ${r.landStewardship.length > 0 ? 'VIII' : 'VII'} — Coordination`,
-        content: `This trust coordinates with:\n\n${r.coordinationTargets.map(c => `    ${c.entity.name}${c.relationship.label ? ` — ${c.relationship.label}` : ''}`).join('\n')}`,
+        title: `Article ${r.landStewardship.length > 0 ? 'VIII' : 'VII'}: Coordination`,
+        content: `This trust coordinates with:\n\n${r.coordinationTargets.map(c => `    ${c.entity.name}${c.relationship.label ? `: ${c.relationship.label}` : ''}`).join('\n')}`,
       }] : []),
       {
         title: "Signatures",
@@ -337,7 +337,7 @@ function generateSubTrustDocument(r: ResolvedEntity, today: string, parentNames:
 
 function generatePMADocument(r: ResolvedEntity, today: string, parentNames: string, rootName: string): ReturnType<typeof generateDocument> {
   const e = r.entity;
-  const subEntities = r.oversightTargets.map(c => `    ${c.entity.name} — ${c.entity.subtitle || ''}`).join('\n') || '    (None defined)';
+  const subEntities = r.oversightTargets.map(c => `    ${c.entity.name}: ${c.entity.subtitle || ''}`).join('\n') || '    (None defined)';
 
   return {
     title: `PRIVATE MEMBERSHIP ASSOCIATION AGREEMENT`,
@@ -352,43 +352,43 @@ function generatePMADocument(r: ResolvedEntity, today: string, parentNames: stri
         content: `This Private Membership Association Agreement is established on ${today} under the authority of ${parentNames}, rooted in ${rootName}.\n\nThis agreement governs the voluntary association of members under the ecclesia covenant.`,
       },
       {
-        title: "Article I — Purpose & Mission",
+        title: "Article I: Purpose & Mission",
         content: e.charter || '(No charter defined.)',
       },
       {
-        title: "Article II — Legal Foundation",
+        title: "Article II: Legal Foundation",
         content: e.legalBasis || '(No legal basis defined.)',
       },
       {
-        title: "Article III — Membership",
+        title: "Article III: Membership",
         content: `${e.description || ''}\n\nMembership is voluntary and requires execution of this agreement. Members are beneficiaries of trust assets held by the Body's stewardship organs, not owners. All member interactions are private and protected by constitutional association rights.`,
       },
       {
-        title: "Article IV — Governance",
+        title: "Article IV: Governance",
         content: `PMA Administrator: ${e.trusteeLabel || '(Not assigned)'}\n\nOversight Body: ${e.protectorLabel || '(Not assigned)'}`,
       },
       {
-        title: "Article IV-A — Elder & Deacon Qualifications",
+        title: "Article IV-A: Elder & Deacon Qualifications",
         content: `Elders appointed to governance must meet the qualifications set forth in scripture:\n\n    "A bishop then must be blameless, the husband of one wife, vigilant, sober, of good behaviour, given to hospitality, apt to teach; Not given to wine, no striker, not greedy of filthy lucre; but patient, not a brawler, not covetous; One that ruleth well his own house, having his children in subjection with all gravity."\n    — 1 Timothy 3:2-4\n\n    "For a bishop must be blameless, as the steward of God; not selfwilled, not soon angry, not given to wine, no striker, not given to filthy lucre; But a lover of hospitality, a lover of good men, sober, just, holy, temperate; Holding fast the faithful word as he hath been taught."\n    — Titus 1:7-9\n\nDeacons appointed to service must likewise meet the qualifications:\n\n    "Likewise must the deacons be grave, not doubletongued, not given to much wine, not greedy of filthy lucre; Holding the mystery of the faith in a pure conscience. And let these also first be proved; then let them use the office of a deacon, being found blameless."\n    — 1 Timothy 3:8-10`,
       },
       {
-        title: "Article V — Community Structure",
+        title: "Article V: Community Structure",
         content: `The following organizational units operate under this PMA:\n\n${subEntities}`,
       },
       {
-        title: "Article VI — Member Rights & Obligations",
+        title: "Article VI: Member Rights & Obligations",
         content: `Members have the right to:\n    • Beneficial use of trust assets as allocated\n    • Participation in community governance\n    • Access to community resources and programs\n    • Voluntary withdrawal at any time\n\nMembers have the obligation to:\n    • Abide by the covenant charter\n    • Contribute labor, skills, or resources as agreed\n    • Respect the governance structure\n    • Maintain the private nature of the association`,
       },
       ...(r.benefitSources.length > 0 ? [{
-        title: "Article VII — Trust Benefits Received",
-        content: `Members receive beneficial interest from the following stewardship organs:\n\n${r.benefitSources.map(b => `    ${b.entity.name}${b.relationship.label ? ` — ${b.relationship.label}` : ''}`).join('\n')}\n\nThese organs hold assets for the benefit of members of the Body. Members do not own these assets — they hold equitable beneficial interest through their Beneficial Units.`,
+        title: "Article VII: Trust Benefits Received",
+        content: `Members receive beneficial interest from the following stewardship organs:\n\n${r.benefitSources.map(b => `    ${b.entity.name}${b.relationship.label ? `: ${b.relationship.label}` : ''}`).join('\n')}\n\nThese organs hold assets for the benefit of members of the Body. Members do not own these assets; they hold equitable beneficial interest through their Beneficial Units.`,
       }] : []),
       ...(r.remitsTo.length > 0 ? [{
-        title: `Article ${r.benefitSources.length > 0 ? 'VIII' : 'VII'} — Reporting & Accountability`,
-        content: `This PMA reports to:\n\n${r.remitsTo.map(rt => `    ${rt.entity.name}${rt.relationship.label ? ` — ${rt.relationship.label}` : ''}`).join('\n')}`,
+        title: `Article ${r.benefitSources.length > 0 ? 'VIII' : 'VII'}: Reporting & Accountability`,
+        content: `This PMA reports to:\n\n${r.remitsTo.map(rt => `    ${rt.entity.name}${rt.relationship.label ? `: ${rt.relationship.label}` : ''}`).join('\n')}`,
       }] : []),
       {
-        title: `Article ${7 + (r.benefitSources.length > 0 ? 1 : 0) + (r.remitsTo.length > 0 ? 1 : 0)} — Additional Provisions`,
+        title: `Article ${7 + (r.benefitSources.length > 0 ? 1 : 0) + (r.remitsTo.length > 0 ? 1 : 0)}: Additional Provisions`,
         content: e.notes || '(No additional provisions.)',
       },
       {
@@ -401,7 +401,7 @@ function generatePMADocument(r: ResolvedEntity, today: string, parentNames: stri
 
 function generateChapterDocument(r: ResolvedEntity, today: string, parentNames: string): ReturnType<typeof generateDocument> {
   const e = r.entity;
-  const children = r.childEntities.map(c => `    ${c.entity.name} — ${c.entity.subtitle || ''}`).join('\n') || '    (None defined yet)';
+  const children = r.childEntities.map(c => `    ${c.entity.name}: ${c.entity.subtitle || ''}`).join('\n') || '    (None defined yet)';
 
   return {
     title: `CHAPTER CHARTER`,
@@ -409,10 +409,10 @@ function generateChapterDocument(r: ResolvedEntity, today: string, parentNames: 
     sections: [
       { title: "Scripture Preamble", content: `"For this cause left I thee in Crete, that thou shouldest set in order the things that are wanting, and ordain elders in every city, as I had appointed thee."\n— Titus 1:5` },
       { title: "Authorization", content: `This Chapter Charter is issued on ${today}, authorized by ${parentNames}.` },
-      { title: "Article I — Purpose", content: e.charter || e.description || '(No purpose defined.)' },
-      { title: "Article II — Governance", content: `Chapter Steward: ${e.trusteeLabel || '(Not assigned)'}\nOversight: ${e.protectorLabel || '(Not assigned)'}` },
-      { title: "Article III — Sub-Units", content: `The following units operate within this chapter:\n\n${children}` },
-      { title: "Article IV — Provisions", content: e.notes || '(No additional provisions.)' },
+      { title: "Article I: Purpose", content: e.charter || e.description || '(No purpose defined.)' },
+      { title: "Article II: Governance", content: `Chapter Steward: ${e.trusteeLabel || '(Not assigned)'}\nOversight: ${e.protectorLabel || '(Not assigned)'}` },
+      { title: "Article III: Sub-Units", content: `The following units operate within this chapter:\n\n${children}` },
+      { title: "Article IV: Provisions", content: e.notes || '(No additional provisions.)' },
       { title: "Signatures", content: `Chapter Steward: ____________________________________\nDate: _______________` },
     ],
   };
@@ -426,9 +426,9 @@ function generateCommuneDocument(r: ResolvedEntity, today: string, parentNames: 
     sections: [
       { title: "Scripture Preamble", content: `"And they, continuing daily with one accord in the temple, and breaking bread from house to house, did eat their meat with gladness and singleness of heart, Praising God, and having favour with all the people."\n— Acts 2:46-47` },
       { title: "Authorization", content: `This Commune Operating Agreement is issued on ${today}, authorized by ${parentNames}.` },
-      { title: "Article I — Purpose", content: e.charter || e.description || '(No purpose defined.)' },
-      { title: "Article II — Governance", content: `Commune Lead: ${e.trusteeLabel || '(Not assigned)'}\nOversight: ${e.protectorLabel || '(Not assigned)'}` },
-      { title: "Article III — Provisions", content: e.notes || '(No additional provisions.)' },
+      { title: "Article I: Purpose", content: e.charter || e.description || '(No purpose defined.)' },
+      { title: "Article II: Governance", content: `Commune Lead: ${e.trusteeLabel || '(Not assigned)'}\nOversight: ${e.protectorLabel || '(Not assigned)'}` },
+      { title: "Article III: Provisions", content: e.notes || '(No additional provisions.)' },
       { title: "Signatures", content: `Commune Lead: ____________________________________\nDate: _______________` },
     ],
   };
@@ -442,10 +442,10 @@ function generateGuildDocument(r: ResolvedEntity, today: string, parentNames: st
     sections: [
       { title: "Scripture Preamble", content: `"Every wise hearted among you shall come, and make all that the LORD hath commanded."\n— Exodus 35:10` },
       { title: "Authorization", content: `This Guild Charter is issued on ${today}, authorized by ${parentNames}.` },
-      { title: "Article I — Purpose & Scope", content: e.charter || e.description || '(No purpose defined.)' },
-      { title: "Article II — Governance", content: `Guild Master: ${e.trusteeLabel || '(Not assigned)'}\nOversight: ${e.protectorLabel || '(Not assigned)'}` },
-      { title: "Article III — Cross-Chapter Operations", content: `This guild operates across all chapters and geographic boundaries. Members from any chapter may participate based on relevant skills and expertise.` },
-      { title: "Article IV — Provisions", content: e.notes || '(No additional provisions.)' },
+      { title: "Article I: Purpose & Scope", content: e.charter || e.description || '(No purpose defined.)' },
+      { title: "Article II: Governance", content: `Guild Master: ${e.trusteeLabel || '(Not assigned)'}\nOversight: ${e.protectorLabel || '(Not assigned)'}` },
+      { title: "Article III: Cross-Chapter Operations", content: `This guild operates across all chapters and geographic boundaries. Members from any chapter may participate based on relevant skills and expertise.` },
+      { title: "Article IV: Provisions", content: e.notes || '(No additional provisions.)' },
       { title: "Signatures", content: `Guild Master: ____________________________________\nDate: _______________` },
     ],
   };
@@ -458,9 +458,9 @@ function generateProjectDocument(r: ResolvedEntity, today: string, parentNames: 
     subtitle: e.name,
     sections: [
       { title: "Authorization", content: `This Project Authorization is issued on ${today}, authorized by ${parentNames}.` },
-      { title: "Article I — Scope & Deliverables", content: e.charter || e.description || '(No scope defined.)' },
-      { title: "Article II — Governance", content: `Project Lead: ${e.trusteeLabel || '(Not assigned)'}\nOversight: ${e.protectorLabel || '(Not assigned)'}` },
-      { title: "Article III — Provisions", content: e.notes || '(No additional provisions.)' },
+      { title: "Article I: Scope & Deliverables", content: e.charter || e.description || '(No scope defined.)' },
+      { title: "Article II: Governance", content: `Project Lead: ${e.trusteeLabel || '(Not assigned)'}\nOversight: ${e.protectorLabel || '(Not assigned)'}` },
+      { title: "Article III: Provisions", content: e.notes || '(No additional provisions.)' },
       { title: "Signatures", content: `Project Lead: ____________________________________\nDate: _______________\n\nAuthorizing Body: ____________________________________\nDate: _______________` },
     ],
   };
@@ -470,7 +470,7 @@ function generateBeneficiaryDocument(r: ResolvedEntity, today: string): ReturnTy
   const e = r.entity;
 
   const benefitSourcesList = r.benefitSources.length > 0
-    ? r.benefitSources.map(b => `    ${b.entity.name}${b.relationship.label ? ` — ${b.relationship.label}` : ''}`).join('\n')
+    ? r.benefitSources.map(b => `    ${b.entity.name}${b.relationship.label ? `: ${b.relationship.label}` : ''}`).join('\n')
     : '    All operational trusts within the ecosystem';
 
   const fundingSourcesList = r.fundingSources.length > 0
@@ -483,9 +483,9 @@ function generateBeneficiaryDocument(r: ResolvedEntity, today: string): ReturnTy
     sections: [
       { title: "Scripture Preamble", content: `"The labourer is worthy of his reward."\n— 1 Timothy 5:18\n\n"And if children, then heirs; heirs of God, and joint-heirs with Christ."\n— Romans 8:17` },
       { title: "Declaration", content: `This Beneficial Interest Declaration is issued on ${today}.\n\nAll members of the trust ecosystem are hereby recognized as both beneficiaries and stewards. Each member holds one (1) Beneficial Unit representing an equal, undivided interest (1/N) in the trust corpus.` },
-      { title: "Article I — Rights & Beneficial Interest", content: `${e.charter || e.description || 'Members are entitled to beneficial use of trust assets as allocated by the governance structure.'}\n\nBeneficial interest is derived from the following trust entities:\n\n${benefitSourcesList}${fundingSourcesList}` },
-      { title: "Article II — Obligations & Stewardship", content: `Members contribute labor, skills, and resources back to the community through the PMA. The relationship is reciprocal — beneficial interest is contingent on active stewardship participation.\n\nBeneficial Units are:\n    Non-transferable (cannot be sold, traded, or speculated upon)\n    Non-attachable (cannot be seized by external creditors)\n    Revocable only by voluntary withdrawal or covenant violation` },
-      { title: "Article III — Provisions", content: e.notes || '(No additional provisions.)' },
+      { title: "Article I: Rights & Beneficial Interest", content: `${e.charter || e.description || 'Members are entitled to beneficial use of trust assets as allocated by the governance structure.'}\n\nBeneficial interest is derived from the following trust entities:\n\n${benefitSourcesList}${fundingSourcesList}` },
+      { title: "Article II: Obligations & Stewardship", content: `Members contribute labor, skills, and resources back to the community through the PMA. The relationship is reciprocal; beneficial interest is contingent on active stewardship participation.\n\nBeneficial Units are:\n    Non-transferable (cannot be sold, traded, or speculated upon)\n    Non-attachable (cannot be seized by external creditors)\n    Revocable only by voluntary withdrawal or covenant violation` },
+      { title: "Article III: Provisions", content: e.notes || '(No additional provisions.)' },
     ],
   };
 }
@@ -568,7 +568,7 @@ function DocumentPreviewDialog({
     return `<!DOCTYPE html>
 <html>
 <head>
-  <title>${doc.title} — ${doc.subtitle}</title>
+  <title>${doc.title}: ${doc.subtitle}</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap');
     body {
@@ -682,7 +682,7 @@ function DocumentPreviewDialog({
           </p>
         </DialogHeader>
 
-        {/* Document body — scrollable */}
+        {/* Document body (scrollable) */}
         <div className="overflow-y-auto flex-1 px-6 py-6">
           {/* Visual preview */}
           <div className="max-w-2xl mx-auto">

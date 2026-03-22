@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -18,6 +18,7 @@ import {
   Zap,
   Lightbulb,
   MessageCircleQuestion,
+  ArrowDown,
 } from "lucide-react";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import StaggerContainer, { staggerItemVariants } from "@/components/ui/stagger-container";
@@ -27,13 +28,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import {
   LAYER_CONFIG,
   BIBLICAL_LABELS,
@@ -47,6 +42,9 @@ import {
   WALKTHROUGH_STEPS,
   TRUST_SCENARIOS,
   LAYER_DEEP_DIVE,
+  CONNECTOR_GRADIENTS,
+  STEWARDSHIP_TRUST_STYLES,
+  LAYER_PANEL_BACKGROUNDS,
   type FallbackEntity,
   type PerspectiveId,
   type PerspectiveConfig,
@@ -82,45 +80,20 @@ type DiagramMode = "explore" | "walkthrough" | "scenarios";
 const PUBLIC_LAYERS = ['covenant', 'body', 'stewardship', 'assembly', 'member'];
 const COMPACT_LAYERS = ['covenant', 'body', 'assembly', 'member'];
 
-// Progressive sizing for desktop pyramid effect
-const LAYER_SIZING: Record<string, { maxWidth: string; border: string; shadow: string }> = {
-  covenant:    { maxWidth: "max-w-2xl",     border: "border-2", shadow: "shadow-lg" },
-  body:        { maxWidth: "max-w-[38rem]", border: "border-2", shadow: "shadow-md" },
-  stewardship: { maxWidth: "max-w-xl",      border: "border",   shadow: "shadow-sm" },
-  assembly:    { maxWidth: "max-w-lg",      border: "border",   shadow: "shadow-sm" },
-  member:      { maxWidth: "max-w-md",      border: "border",   shadow: "shadow-sm" },
+// Progressive sizing for desktop pyramid effect (Phase 2: wider spread)
+const LAYER_SIZING: Record<string, { maxWidth: string; border: string; shadow: string; rounded: string }> = {
+  covenant:    { maxWidth: "max-w-3xl",     border: "border-2", shadow: "shadow-xl", rounded: "rounded-2xl" },
+  body:        { maxWidth: "max-w-[42rem]", border: "border-2", shadow: "shadow-lg", rounded: "rounded-xl" },
+  stewardship: { maxWidth: "max-w-[34rem]", border: "border",   shadow: "shadow-md", rounded: "rounded-xl" },
+  assembly:    { maxWidth: "max-w-md",      border: "border",   shadow: "shadow-md", rounded: "rounded-lg" },
+  member:      { maxWidth: "max-w-sm",      border: "border",   shadow: "shadow-sm", rounded: "rounded-lg" },
 };
 
 // ═══════════════════════════════════════════════════════════
-// ANIMATED FLOW PARTICLES
+// SVG CONNECTOR (Phase 1 + Phase 4)
 // ═══════════════════════════════════════════════════════════
 
-function FlowParticle({ direction, delay, color }: { direction: "down" | "up"; delay: number; color: string }) {
-  return (
-    <motion.div
-      className={`absolute left-1/2 -translate-x-1/2 w-2 h-2 rounded-full ${color}`}
-      initial={{
-        opacity: 0,
-        y: direction === "down" ? -8 : 32,
-        scale: 0.5,
-      }}
-      animate={{
-        opacity: [0, 1, 1, 0],
-        y: direction === "down" ? [- 8, 32] : [32, -8],
-        scale: [0.5, 1, 1, 0.5],
-      }}
-      transition={{
-        duration: 1.8,
-        delay,
-        repeat: Infinity,
-        repeatDelay: 1.5,
-        ease: "easeInOut",
-      }}
-    />
-  );
-}
-
-function AnimatedConnector({
+function SVGConnector({
   fromLayer,
   toLayer,
   compact,
@@ -129,6 +102,9 @@ function AnimatedConnector({
   showFlow,
   flowDirection,
   isActive,
+  isHovered,
+  onMouseEnter,
+  onMouseLeave,
 }: {
   fromLayer: string;
   toLayer: string;
@@ -138,69 +114,217 @@ function AnimatedConnector({
   showFlow?: boolean;
   flowDirection?: "down" | "up";
   isActive?: boolean;
+  isHovered?: boolean;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 }) {
   const connectorKey = `${fromLayer}→${toLayer}`;
   const label = labelOverride ?? CONNECTOR_LABELS[connectorKey];
+  const gradientId = `grad-${fromLayer}-${toLayer}`;
+  const glowId = `glow-${fromLayer}-${toLayer}`;
+  const pathId = `path-${fromLayer}-${toLayer}`;
+  const gradient = CONNECTOR_GRADIENTS[connectorKey] || { from: "#b59548", to: "#b59548" };
 
   if (compact) {
     return (
       <div className="flex flex-col items-center py-1">
-        <div className="w-px h-4 bg-royal-gold/40" />
+        <svg width="2" height="16" className="text-royal-gold/40">
+          <line x1="1" y1="0" x2="1" y2="16" stroke="currentColor" strokeWidth="2" />
+        </svg>
         <ChevronDown className="w-4 h-4 text-royal-gold/60 -mt-1" />
       </div>
     );
   }
 
+  const svgHeight = 64;
+  const svgWidth = 200;
+  const strokeWidth = isHovered ? 5 : 3;
+  // Gentle cubic bezier curve
+  const pathD = `M ${svgWidth / 2} 0 C ${svgWidth / 2} ${svgHeight * 0.35}, ${svgWidth / 2} ${svgHeight * 0.65}, ${svgWidth / 2} ${svgHeight}`;
+
   return (
-    <div className={`relative flex flex-col items-center py-2 transition-opacity duration-300 ${isActive === false ? "opacity-20" : ""}`}>
-      <div className="relative w-px h-3 border-l border-dashed border-royal-gold/40">
+    <div
+      className={`relative flex flex-col items-center transition-opacity duration-300 ${isActive === false ? "opacity-20" : ""}`}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
+      <svg
+        width={svgWidth}
+        height={svgHeight}
+        viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+        className="overflow-visible md:h-16 h-12"
+        preserveAspectRatio="xMidYMid meet"
+      >
+        <defs>
+          <linearGradient id={gradientId} x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor={gradient.from} />
+            <stop offset="100%" stopColor={gradient.to} />
+          </linearGradient>
+          <filter id={glowId}>
+            <feGaussianBlur stdDeviation="3" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+
+        {/* Main path */}
+        <path
+          id={pathId}
+          d={pathD}
+          fill="none"
+          stroke={`url(#${gradientId})`}
+          strokeWidth={strokeWidth}
+          strokeLinecap="round"
+          filter={isHovered ? `url(#${glowId})` : undefined}
+          className="transition-all duration-300"
+        />
+
+        {/* Flow particles */}
         {showFlow && (
           <>
-            <FlowParticle direction={flowDirection || "down"} delay={0} color={flowDirection === "up" ? "bg-royal-gold" : "bg-royal-gold/80"} />
-            <FlowParticle direction={flowDirection || "down"} delay={0.6} color={flowDirection === "up" ? "bg-royal-gold" : "bg-royal-gold/80"} />
+            <circle r="4" fill={gradient.from} opacity="0.9">
+              <animateMotion
+                dur="2s"
+                repeatCount="indefinite"
+                keyPoints={flowDirection === "up" ? "1;0" : "0;1"}
+                keyTimes="0;1"
+              >
+                <mpath href={`#${pathId}`} />
+              </animateMotion>
+            </circle>
+            <circle r="4" fill={gradient.to} opacity="0.9">
+              <animateMotion
+                dur="2s"
+                repeatCount="indefinite"
+                begin="1s"
+                keyPoints={flowDirection === "up" ? "1;0" : "0;1"}
+                keyTimes="0;1"
+              >
+                <mpath href={`#${pathId}`} />
+              </animateMotion>
+            </circle>
+            {/* Glow circles */}
+            <circle r="6" fill={gradient.from} opacity="0.3" filter={`url(#${glowId})`}>
+              <animateMotion
+                dur="2s"
+                repeatCount="indefinite"
+                keyPoints={flowDirection === "up" ? "1;0" : "0;1"}
+                keyTimes="0;1"
+              >
+                <mpath href={`#${pathId}`} />
+              </animateMotion>
+            </circle>
           </>
         )}
-      </div>
-      {label && (
-        <AnimatePresence mode="wait">
-          <motion.span
-            key={`${perspective || "default"}-${label}`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
-            className="inline-flex items-center text-xs font-georgia italic text-royal-gold/80 bg-royal-gold/10 border border-royal-gold/20 rounded-full px-3 py-0.5 my-1"
+
+        {/* Connector label via foreignObject (Phase 4) */}
+        {label && (
+          <foreignObject
+            x={0}
+            y={svgHeight / 2 - 16}
+            width={svgWidth}
+            height={32}
+            className="overflow-visible"
           >
-            {label}
-          </motion.span>
-        </AnimatePresence>
-      )}
-      <ChevronDown className={`w-4 h-4 text-royal-gold/60 ${flowDirection === "up" ? "rotate-180" : ""}`} />
+            <div className="flex justify-center">
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={`${perspective || "default"}-${label}`}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                  className={`
+                    inline-flex items-center gap-1.5
+                    text-sm font-cinzel font-semibold text-royal-navy
+                    bg-parchment border border-royal-gold/40 shadow-sm
+                    px-4 py-1.5 rounded-lg whitespace-nowrap
+                    ${isHovered ? "text-base font-bold border-royal-gold/60 shadow-md" : ""}
+                  `}
+                >
+                  <ArrowDown className={`w-3 h-3 text-royal-gold/70 ${flowDirection === "up" ? "rotate-180" : ""}`} />
+                  {label}
+                </motion.span>
+              </AnimatePresence>
+            </div>
+          </foreignObject>
+        )}
+      </svg>
     </div>
   );
 }
 
 // ═══════════════════════════════════════════════════════════
-// DEEP DIVE PANEL
+// DEEP DIVE PANEL → Side Drawer (Phase 7)
 // ═══════════════════════════════════════════════════════════
 
-function DeepDivePanel({ layer, onClose }: { layer: string; onClose: () => void }) {
+function DeepDiveDrawer({ layer, onClose }: { layer: string; onClose: () => void }) {
   const content = LAYER_DEEP_DIVE[layer];
   const config = LAYER_CONFIG[layer];
   const colors = LAYER_ROYAL_COLORS[layer];
+
+  // Close on Escape. hook must run before any conditional return (Rules of Hooks)
+  useEffect(() => {
+    if (!content || !config || !colors) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [onClose, content, config, colors]);
+
   if (!content || !config || !colors) return null;
 
   const Icon = config.icon;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, height: 0 }}
-      animate={{ opacity: 1, height: "auto" }}
-      exit={{ opacity: 0, height: 0 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
-      className="overflow-hidden"
-    >
-      <div className="bg-white border border-gray-200 rounded-xl shadow-lg mt-2 overflow-hidden">
+    <>
+      {/* Backdrop overlay */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 bg-black/30 z-40"
+        onClick={onClose}
+      />
+
+      {/* Desktop: Right drawer / Mobile: Bottom sheet */}
+      <motion.div
+        initial={{ x: "100%" }}
+        animate={{ x: 0 }}
+        exit={{ x: "100%" }}
+        transition={{ type: "spring", damping: 25, stiffness: 300 }}
+        className="fixed top-0 right-0 bottom-0 w-[400px] max-w-[90vw] bg-white shadow-2xl z-50 overflow-y-auto hidden md:block"
+      >
+        {/* Header */}
+        <div className={`flex items-center justify-between px-5 py-4 bg-gradient-to-r ${colors.gradient} sticky top-0 z-10`}>
+          <div className="flex items-center gap-2">
+            <Icon className={`w-5 h-5 ${colors.accent}`} />
+            <span className={`font-cinzel font-bold ${colors.text}`}>Deep Dive: {config.label}</span>
+          </div>
+          <button onClick={onClose} className="text-white/60 hover:text-white transition-colors">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <DrawerContent content={content} />
+      </motion.div>
+
+      {/* Mobile: Bottom sheet */}
+      <motion.div
+        initial={{ y: "100%" }}
+        animate={{ y: 0 }}
+        exit={{ y: "100%" }}
+        transition={{ type: "spring", damping: 25, stiffness: 300 }}
+        className="fixed left-0 right-0 bottom-0 max-h-[70vh] bg-white shadow-2xl z-50 overflow-y-auto rounded-t-2xl md:hidden"
+      >
+        {/* Drag handle */}
+        <div className="flex justify-center pt-3 pb-1 sticky top-0 bg-white z-10">
+          <div className="w-10 h-1 bg-gray-300 rounded-full" />
+        </div>
+
         {/* Header */}
         <div className={`flex items-center justify-between px-5 py-3 bg-gradient-to-r ${colors.gradient}`}>
           <div className="flex items-center gap-2">
@@ -208,65 +332,119 @@ function DeepDivePanel({ layer, onClose }: { layer: string; onClose: () => void 
             <span className={`font-cinzel font-bold ${colors.text}`}>Deep Dive: {config.label}</span>
           </div>
           <button onClick={onClose} className="text-white/60 hover:text-white transition-colors">
-            <X className="w-4 h-4" />
+            <X className="w-5 h-5" />
           </button>
         </div>
 
-        <div className="p-5 space-y-5">
-          {/* ELI5 */}
-          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
-            <div className="flex items-center gap-2 mb-2">
-              <Sparkles className="w-4 h-4 text-amber-500" />
-              <span className="text-sm font-bold text-amber-800">Explain Like I'm 5</span>
-            </div>
-            <p className="text-sm text-amber-900 leading-relaxed">{content.eli5}</p>
-          </div>
+        <DrawerContent content={content} />
+      </motion.div>
+    </>
+  );
+}
 
-          {/* Real-World Examples */}
-          <div>
-            <h4 className="text-sm font-bold text-royal-navy mb-2">Real-World Examples</h4>
-            <ul className="space-y-1.5">
-              {content.realExamples.map((example, i) => (
-                <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
-                  <span className="text-royal-gold mt-0.5">&#x2022;</span>
-                  {example}
-                </li>
-              ))}
-            </ul>
-          </div>
+function DrawerContent({ content }: { content: typeof LAYER_DEEP_DIVE[string] }) {
+  return (
+    <div className="p-5 space-y-5">
+      {/* Simple Version */}
+      <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+        <div className="flex items-center gap-2 mb-2">
+          <Sparkles className="w-4 h-4 text-amber-500" />
+          <span className="text-sm font-bold text-amber-800">In Plain English</span>
+        </div>
+        <p className="text-sm text-amber-900 leading-relaxed">{content.simpleVersion}</p>
+      </div>
 
-          {/* FAQ */}
-          <div>
-            <h4 className="text-sm font-bold text-royal-navy mb-2">Common Questions</h4>
-            <div className="space-y-3">
-              {content.faq.map((item, i) => (
-                <div key={i} className="bg-gray-50 rounded-lg p-3">
-                  <p className="text-sm font-semibold text-royal-navy flex items-start gap-2">
-                    <MessageCircleQuestion className="w-4 h-4 text-royal-gold flex-shrink-0 mt-0.5" />
-                    {item.q}
-                  </p>
-                  <p className="text-sm text-gray-600 mt-1 ml-6">{item.a}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+      {/* Real-World Examples */}
+      <div>
+        <h4 className="text-sm font-bold text-royal-navy mb-2">Real-World Examples</h4>
+        <ul className="space-y-1.5">
+          {content.realExamples.map((example, i) => (
+            <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
+              <span className="text-royal-gold mt-0.5">&#x2022;</span>
+              {example}
+            </li>
+          ))}
+        </ul>
+      </div>
 
-          {/* Key Takeaway */}
-          <div className="bg-royal-navy/5 border border-royal-navy/10 rounded-lg p-4">
-            <div className="flex items-center gap-2 mb-1">
-              <Zap className="w-4 h-4 text-royal-gold" />
-              <span className="text-sm font-bold text-royal-navy">Key Takeaway</span>
+      {/* FAQ */}
+      <div>
+        <h4 className="text-sm font-bold text-royal-navy mb-2">Common Questions</h4>
+        <div className="space-y-3">
+          {content.faq.map((item, i) => (
+            <div key={i} className="bg-gray-50 rounded-lg p-3">
+              <p className="text-sm font-semibold text-royal-navy flex items-start gap-2">
+                <MessageCircleQuestion className="w-4 h-4 text-royal-gold flex-shrink-0 mt-0.5" />
+                {item.q}
+              </p>
+              <p className="text-sm text-gray-600 mt-1 ml-6">{item.a}</p>
             </div>
-            <p className="text-sm text-gray-700 leading-relaxed">{content.keyTakeaway}</p>
-          </div>
+          ))}
         </div>
       </div>
-    </motion.div>
+
+      {/* Key Takeaway */}
+      <div className="bg-royal-navy/5 border border-royal-navy/10 rounded-lg p-4">
+        <div className="flex items-center gap-2 mb-1">
+          <Zap className="w-4 h-4 text-royal-gold" />
+          <span className="text-sm font-bold text-royal-navy">Key Takeaway</span>
+        </div>
+        <p className="text-sm text-gray-700 leading-relaxed">{content.keyTakeaway}</p>
+      </div>
+    </div>
   );
 }
 
 // ═══════════════════════════════════════════════════════════
-// LAYER ROW (updated with click-to-expand deep dive)
+// STEWARDSHIP GRID (Phase 3)
+// ═══════════════════════════════════════════════════════════
+
+function StewardshipGrid({ entities }: { entities: Array<{ name: string; subtitle?: string | null }> }) {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-3">
+      {entities.map((entity, i) => {
+        const style = STEWARDSHIP_TRUST_STYLES[entity.name];
+        const TrustIcon = style?.icon;
+
+        return (
+          <motion.div
+            key={i}
+            whileHover={{ scale: 1.02 }}
+            className={`
+              flex items-start gap-3 border-l-4 rounded-lg px-3 py-2.5 bg-white border border-gray-100 shadow-sm
+              hover:shadow-md transition-shadow cursor-default
+              ${style?.border || "border-l-gray-300"}
+            `}
+          >
+            {TrustIcon && (
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${style?.bg || "bg-gray-50"}`}>
+                <TrustIcon className={`w-4 h-4 ${style?.accent || "text-gray-500"}`} />
+              </div>
+            )}
+            <div className="min-w-0">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span className="text-sm font-medium text-royal-navy block truncate cursor-help">
+                    {entity.name}
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent side="top" className="max-w-xs text-sm">
+                  {entity.subtitle || entity.name}
+                </TooltipContent>
+              </Tooltip>
+              {entity.subtitle && (
+                <span className="text-xs text-gray-400 block truncate">{entity.subtitle}</span>
+              )}
+            </div>
+          </motion.div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════
+// LAYER ROW (Phase 2 + Phase 3 + Phase 5)
 // ═══════════════════════════════════════════════════════════
 
 function LayerRow({
@@ -282,6 +460,9 @@ function LayerRow({
   onDeepDiveToggle,
   showDeepDive,
   scenarioAction,
+  hoveredLayer,
+  onMouseEnter,
+  onMouseLeave,
 }: {
   layer: string;
   entities: Array<{ name: string; subtitle?: string | null }>;
@@ -295,38 +476,57 @@ function LayerRow({
   onDeepDiveToggle?: () => void;
   showDeepDive?: boolean;
   scenarioAction?: string;
+  hoveredLayer?: string | null;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 }) {
   const config = LAYER_CONFIG[layer];
   const colors = LAYER_ROYAL_COLORS[layer];
   const biblicalLabel = BIBLICAL_LABELS[layer];
   const plainEnglish = perspectiveText || LAYER_PLAIN_ENGLISH[layer];
-  const sizing = LAYER_SIZING[layer] || { maxWidth: "max-w-2xl", border: "border", shadow: "shadow-sm" };
+  const sizing = LAYER_SIZING[layer] || { maxWidth: "max-w-3xl", border: "border", shadow: "shadow-sm", rounded: "rounded-xl" };
+  const panelBg = LAYER_PANEL_BACKGROUNDS[layer] || "bg-white";
 
   const Icon = config?.icon;
   const layerIndex = LAYERS_ORDER.indexOf(layer);
   const hasDeepDive = !!LAYER_DEEP_DIVE[layer];
 
-  const [operationalOpen, setOperationalOpen] = useState(false);
+  // Phase 5: Determine if this layer is adjacent to hovered layer
+  const isHoveredLayer = hoveredLayer === layer;
+  const isAdjacentToHovered = useMemo(() => {
+    if (!hoveredLayer) return false;
+    const hoveredIdx = PUBLIC_LAYERS.indexOf(hoveredLayer);
+    const thisIdx = PUBLIC_LAYERS.indexOf(layer);
+    return Math.abs(hoveredIdx - thisIdx) === 1;
+  }, [hoveredLayer, layer]);
+  const shouldDim = hoveredLayer && !isHoveredLayer && !isAdjacentToHovered;
+
+  // Scroll into view ref
+  const rowRef = useRef<HTMLDivElement>(null);
 
   if (!config || !colors) return null;
 
   return (
-    <div className="flex flex-col items-center w-full">
+    <div className="flex flex-col items-center w-full" ref={rowRef}>
       <motion.div
         animate={{
-          opacity: isDimmed ? 0.25 : 1,
-          scale: isSpotlit ? 1.02 : 1,
+          opacity: isDimmed ? 0.25 : shouldDim ? 0.5 : 1,
+          scale: isSpotlit ? 1.02 : isHoveredLayer ? 1.01 : 1,
         }}
-        transition={{ duration: 0.4 }}
+        transition={{ duration: 0.3 }}
         className={`
-          relative w-full ${sizing.maxWidth} rounded-xl ${sizing.border} overflow-visible transition-all
+          relative w-full ${sizing.maxWidth} ${sizing.rounded} ${sizing.border} overflow-visible transition-all
           ${colors.border} ${sizing.shadow}
           ${isHighlighted ? "ring-2 ring-royal-gold ring-offset-2 shadow-lg shadow-royal-gold/20" : ""}
           ${isSpotlit ? "ring-2 ring-royal-gold ring-offset-2 shadow-xl shadow-royal-gold/30" : ""}
+          ${isHoveredLayer ? "ring-2 ring-royal-gold shadow-xl scale-[1.01]" : ""}
+          ${shouldDim ? "saturate-50" : ""}
           ${compact ? "p-3" : "p-0"}
           ${!compact && hasDeepDive ? "cursor-pointer" : ""}
         `}
         onClick={!compact && hasDeepDive && onDeepDiveToggle ? onDeepDiveToggle : undefined}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
         role={!compact && hasDeepDive ? "button" : undefined}
         tabIndex={!compact && hasDeepDive ? 0 : undefined}
         aria-label={!compact && hasDeepDive ? `Deep dive into ${config.label}` : undefined}
@@ -392,13 +592,13 @@ function LayerRow({
             </div>
           </div>
         ) : (
-          <div className="grid md:grid-cols-[160px,1fr] items-stretch overflow-hidden rounded-xl">
-            {/* Layer label sidebar */}
+          <div className={`grid md:grid-cols-[180px,1fr] items-stretch overflow-hidden ${sizing.rounded}`}>
+            {/* Layer label sidebar (Phase 2: wider, larger icons, circular badge) */}
             <div className={`${colors.bg} p-4 md:p-5 flex flex-col justify-center items-center md:items-start gap-1`}>
-              <span className={`inline-block text-[10px] font-semibold ${colors.accent} bg-white/10 px-2 py-0.5 rounded-full uppercase tracking-wider`}>
-                Layer {layerIndex + 1}
+              <span className={`inline-flex items-center justify-center w-7 h-7 text-xs font-bold ${colors.accent} bg-white/15 rounded-full`}>
+                {layerIndex + 1}
               </span>
-              <Icon className={`w-8 h-8 ${colors.accent} mt-1`} />
+              <Icon className={`w-10 h-10 ${colors.accent} mt-1`} />
               <Tooltip>
                 <TooltipTrigger asChild>
                   <span className={`font-cinzel text-sm font-bold ${colors.text} mt-1 border-b border-dashed border-current cursor-help`}>
@@ -410,14 +610,14 @@ function LayerRow({
                 </TooltipContent>
               </Tooltip>
               {biblicalLabel && (
-                <span className={`text-[10px] ${colors.accent} font-georgia italic`}>
+                <span className={`text-xs ${colors.accent} font-georgia italic`}>
                   {biblicalLabel}
                 </span>
               )}
             </div>
 
-            {/* Entity cards */}
-            <div className="p-4 md:p-5 bg-white">
+            {/* Entity cards (Phase 2: per-layer background) */}
+            <div className={`p-4 md:p-5 ${panelBg}`}>
               {entities.length === 0 ? (
                 <p className="text-sm text-gray-400 italic">No entities</p>
               ) : entities.length === 1 ? (
@@ -460,15 +660,13 @@ function LayerRow({
               ) : (
                 <div>
                   {layer === 'stewardship' ? (
-                    <Collapsible open={operationalOpen} onOpenChange={setOperationalOpen}>
-                      <div className="flex items-center justify-between">
-                        <CollapsibleTrigger className="flex items-center gap-2 text-left group">
-                          <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${operationalOpen ? 'rotate-180' : ''}`} />
-                          <span className="text-sm text-gray-600">
-                            <span className="font-medium text-royal-navy">{entities.length} specialized trusts</span>
-                            {" "}managing different asset types
-                          </span>
-                        </CollapsibleTrigger>
+                    /* Phase 3: Always-visible stewardship grid */
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-sm text-gray-600">
+                          <span className="font-medium text-royal-navy">{entities.length} specialized trusts</span>
+                          {" "}managing different asset types
+                        </span>
                         {hasDeepDive && (
                           <Tooltip>
                             <TooltipTrigger asChild>
@@ -480,34 +678,7 @@ function LayerRow({
                           </Tooltip>
                         )}
                       </div>
-                      <CollapsibleContent>
-                        <AnimatePresence>
-                          {operationalOpen && (
-                            <motion.div
-                              initial={{ opacity: 0, height: 0 }}
-                              animate={{ opacity: 1, height: "auto" }}
-                              exit={{ opacity: 0, height: 0 }}
-                              transition={{ duration: 0.2 }}
-                              className="flex flex-wrap gap-2 mt-3"
-                            >
-                              {entities.map((entity, i) => (
-                                <div
-                                  key={i}
-                                  className="inline-flex flex-col bg-gray-50 border border-gray-200 rounded-lg px-3 py-2"
-                                >
-                                  <div className="flex items-center gap-2">
-                                    <Icon className="w-3.5 h-3.5 text-gray-400" />
-                                    <span className="text-sm font-medium text-royal-navy">{entity.name}</span>
-                                  </div>
-                                  {entity.subtitle && (
-                                    <span className="text-xs text-gray-400 ml-5.5">{entity.subtitle}</span>
-                                  )}
-                                </div>
-                              ))}
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </CollapsibleContent>
+                      <StewardshipGrid entities={entities} />
                       {plainEnglish && (
                         <AnimatePresence mode="wait">
                           <motion.p
@@ -516,13 +687,13 @@ function LayerRow({
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             transition={{ duration: 0.15 }}
-                            className="text-sm text-gray-500 mt-2 italic font-georgia"
+                            className="text-sm text-gray-500 mt-3 italic font-georgia"
                           >
                             {plainEnglish.oneLineSummary}
                           </motion.p>
                         </AnimatePresence>
                       )}
-                    </Collapsible>
+                    </div>
                   ) : (
                     <>
                       <div className="flex items-start justify-between">
@@ -570,17 +741,6 @@ function LayerRow({
           </div>
         )}
       </motion.div>
-
-      {/* Deep Dive Panel */}
-      {!compact && (
-        <AnimatePresence>
-          {showDeepDive && (
-            <div className={`w-full ${sizing.maxWidth}`}>
-              <DeepDivePanel layer={layer} onClose={onDeepDiveToggle!} />
-            </div>
-          )}
-        </AnimatePresence>
-      )}
     </div>
   );
 }
@@ -662,7 +822,7 @@ function WalkthroughOverlay({
               spotlightLabel={isSpotlit ? currentStep.title : undefined}
             />
             {idx < visibleLayers.length - 1 && (
-              <AnimatedConnector
+              <SVGConnector
                 fromLayer={layer}
                 toLayer={visibleLayers[idx + 1]}
                 compact={false}
@@ -693,9 +853,9 @@ function WalkthroughOverlay({
               </h3>
             </div>
             <div className="p-6 space-y-4">
-              {/* ELI5 */}
+              {/* Simple Version */}
               <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
-                <p className="text-sm text-amber-900 leading-relaxed font-medium">{currentStep.eli5}</p>
+                <p className="text-sm text-amber-900 leading-relaxed font-medium">{currentStep.simpleVersion}</p>
               </div>
 
               {/* Detailed explanation */}
@@ -767,7 +927,6 @@ function ScenarioExplorer({
   const [isPlaying, setIsPlaying] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Clear any pending timer
   const clearTimer = useCallback(() => {
     if (timerRef.current) {
       clearTimeout(timerRef.current);
@@ -775,7 +934,6 @@ function ScenarioExplorer({
     }
   }, []);
 
-  // Auto-play scenario steps
   useEffect(() => {
     clearTimer();
     if (!isPlaying || !selectedScenario) return;
@@ -794,7 +952,6 @@ function ScenarioExplorer({
     setSelectedScenario(scenario);
     setActiveStepIndex(-1);
     setIsPlaying(false);
-    // Start playing after a brief delay to allow render
     timerRef.current = setTimeout(() => {
       setActiveStepIndex(0);
       setIsPlaying(true);
@@ -807,7 +964,6 @@ function ScenarioExplorer({
     setIsPlaying(false);
   };
 
-  // Build action map for current scenario step
   const actionByLayer: Record<string, string> = {};
   if (selectedScenario && activeStepIndex >= 0) {
     for (let i = 0; i <= activeStepIndex && i < selectedScenario.steps.length; i++) {
@@ -818,7 +974,6 @@ function ScenarioExplorer({
 
   return (
     <div className="flex flex-col items-center gap-0 py-4">
-      {/* Scenario picker */}
       {!selectedScenario ? (
         <div className="w-full max-w-3xl mb-6">
           <div className="text-center mb-6">
@@ -851,7 +1006,6 @@ function ScenarioExplorer({
         </div>
       ) : (
         <>
-          {/* Active scenario header */}
           <div className="w-full max-w-2xl mb-4">
             <div className="flex items-center justify-between bg-white border border-royal-gold/30 rounded-xl px-5 py-3 shadow-sm">
               <div className="flex items-center gap-3">
@@ -873,7 +1027,6 @@ function ScenarioExplorer({
             </div>
           </div>
 
-          {/* Diagram with scenario highlights */}
           {visibleLayers.map((layer, idx) => {
             const layerEntities = entitiesByLayer[layer] || [];
             const isActive = selectedScenario.highlightLayers.includes(layer);
@@ -895,7 +1048,7 @@ function ScenarioExplorer({
                   scenarioAction={hasAction ? actionByLayer[layer] : undefined}
                 />
                 {idx < visibleLayers.length - 1 && (
-                  <AnimatedConnector
+                  <SVGConnector
                     fromLayer={layer}
                     toLayer={visibleLayers[idx + 1]}
                     compact={false}
@@ -910,7 +1063,7 @@ function ScenarioExplorer({
             );
           })}
 
-          {/* Outcome card — shows when all steps are done */}
+          {/* Outcome card */}
           <AnimatePresence>
             {activeStepIndex >= selectedScenario.steps.length - 1 && (
               <motion.div
@@ -957,7 +1110,7 @@ function ScenarioExplorer({
 }
 
 // ═══════════════════════════════════════════════════════════
-// EXPLORE MODE (original diagram with deep-dive upgrade)
+// EXPLORE MODE (Phase 5: hover interactions + Phase 8: staggered entry)
 // ═══════════════════════════════════════════════════════════
 
 function ExploreContent({
@@ -973,21 +1126,11 @@ function ExploreContent({
 }) {
   const [perspective, setPerspective] = useState<PerspectiveId>("howItWorks");
   const [deepDiveLayer, setDeepDiveLayer] = useState<string | null>(null);
+  const [hoveredLayer, setHoveredLayer] = useState<string | null>(null);
   const activePerspective = PERSPECTIVES.find(p => p.id === perspective) || PERSPECTIVES[0];
-
-  // Escape key closes deep dive panel
-  useEffect(() => {
-    if (!deepDiveLayer) return;
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setDeepDiveLayer(null);
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [deepDiveLayer]);
 
   const layersToShow = compact ? COMPACT_LAYERS : PUBLIC_LAYERS;
 
-  // Group entities by layer
   const entitiesByLayer: Record<string, Array<{ name: string; subtitle?: string | null }>> = {};
   for (const layer of layersToShow) {
     entitiesByLayer[layer] = entities
@@ -999,9 +1142,15 @@ function ExploreContent({
     layer => (entitiesByLayer[layer] || []).length > 0 || layer === 'member'
   );
 
+  // Adjacent layer check for connector hover
+  const isConnectorAdjacentToHovered = (fromLayer: string, toLayer: string) => {
+    if (!hoveredLayer) return undefined;
+    return fromLayer === hoveredLayer || toLayer === hoveredLayer;
+  };
+
   return (
     <div className={`flex flex-col items-center gap-0 ${compact ? "" : "py-4"}`}>
-      {/* Perspective toggle — full mode only */}
+      {/* Perspective toggle */}
       {!compact && (
         <div className="flex justify-center mb-4">
           <ToggleGroup
@@ -1027,7 +1176,7 @@ function ExploreContent({
         </div>
       )}
 
-      {/* Intro hint — full mode only */}
+      {/* Intro hint */}
       {!compact && (
         <AnimatePresence mode="wait">
           <motion.div
@@ -1048,7 +1197,7 @@ function ExploreContent({
       {!compact && (
         <div className="flex items-center gap-1.5 mb-3 text-xs text-gray-300">
           <HelpCircle className="w-3.5 h-3.5" />
-          <span>Click any layer to deep dive</span>
+          <span>Click any layer to deep dive &middot; Hover to highlight connections</span>
         </div>
       )}
 
@@ -1059,7 +1208,14 @@ function ExploreContent({
           : undefined;
 
         return (
-          <motion.div key={layer} variants={staggerItemVariants} className="w-full flex flex-col items-center">
+          <motion.div
+            key={layer}
+            variants={staggerItemVariants}
+            className="w-full flex flex-col items-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: idx * 0.15, duration: 0.4 }}
+          >
             <LayerRow
               layer={layer}
               entities={layerEntities}
@@ -1068,22 +1224,47 @@ function ExploreContent({
               perspectiveText={!compact ? activePerspective.layers[layer] : undefined}
               perspective={!compact ? perspective : undefined}
               onDeepDiveToggle={!compact ? () => setDeepDiveLayer(deepDiveLayer === layer ? null : layer) : undefined}
-              showDeepDive={deepDiveLayer === layer}
+              showDeepDive={false}
+              hoveredLayer={hoveredLayer}
+              onMouseEnter={!compact ? () => setHoveredLayer(layer) : undefined}
+              onMouseLeave={!compact ? () => setHoveredLayer(null) : undefined}
             />
             {idx < visibleLayers.length - 1 && (
-              <AnimatedConnector
-                fromLayer={layer}
-                toLayer={visibleLayers[idx + 1]}
-                compact={compact}
-                label={!compact ? activePerspective.connectors[connectorKey!] : undefined}
-                perspective={!compact ? perspective : undefined}
-                showFlow={!compact}
-                flowDirection="down"
-              />
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: (idx + 0.5) * 0.15, duration: 0.3 }}
+              >
+                <SVGConnector
+                  fromLayer={layer}
+                  toLayer={visibleLayers[idx + 1]}
+                  compact={compact}
+                  label={!compact ? activePerspective.connectors[connectorKey!] : undefined}
+                  perspective={!compact ? perspective : undefined}
+                  showFlow={!compact}
+                  flowDirection="down"
+                  isHovered={isConnectorAdjacentToHovered(layer, visibleLayers[idx + 1])}
+                  onMouseEnter={!compact ? () => {
+                    // Hovering connector highlights both adjacent layers
+                    setHoveredLayer(layer);
+                  } : undefined}
+                  onMouseLeave={!compact ? () => setHoveredLayer(null) : undefined}
+                />
+              </motion.div>
             )}
           </motion.div>
         );
       })}
+
+      {/* Deep Dive Drawer (Phase 7) */}
+      <AnimatePresence>
+        {deepDiveLayer && (
+          <DeepDiveDrawer
+            layer={deepDiveLayer}
+            onClose={() => setDeepDiveLayer(null)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -1107,7 +1288,6 @@ export default function TrustHierarchyDiagram({
     staleTime: 5 * 60 * 1000,
   });
 
-  // Use API data if available, otherwise fall back to static
   const hasData = data && data.entities && data.entities.length > 0;
   const entities = hasData
     ? data.entities
@@ -1116,7 +1296,6 @@ export default function TrustHierarchyDiagram({
     ? data.relationships.filter(r => PRIMARY_RELATIONSHIPS.includes(r.relationshipType))
     : [];
 
-  // Shared layer computation for walkthrough/scenario modes
   const layersToShow = compact ? COMPACT_LAYERS : PUBLIC_LAYERS;
   const entitiesByLayer: Record<string, Array<{ name: string; subtitle?: string | null }>> = {};
   for (const layer of layersToShow) {

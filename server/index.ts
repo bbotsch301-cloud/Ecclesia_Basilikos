@@ -4,7 +4,7 @@ import compression from "compression";
 import cookieParser from "cookie-parser";
 import path from "path";
 import { registerRoutes } from "./routes";
-import { setupVite, serveStatic } from "./vite";
+import { serveStatic } from "./static";
 import { initializeEmailTemplates } from "./initializeEmailTemplates";
 import { storage } from "./storage";
 import { csrfProtection } from "./csrf";
@@ -12,6 +12,9 @@ import logger from "./logger";
 import { requestId } from "./requestId";
 
 const app = express();
+
+// Trust reverse proxy (Replit, Nginx, etc.) so req.protocol and req.ip are correct
+app.set("trust proxy", 1);
 
 // Gzip/Brotli compression
 app.use(compression());
@@ -27,15 +30,15 @@ app.use(helmet({
       defaultSrc: ["'self'"],
       scriptSrc: isDevelopment
         ? ["'self'", "'unsafe-inline'", "localhost:*", "127.0.0.1:*"]
-        : ["'self'", "https://plausible.io", "https://cdnjs.cloudflare.com"],
+        : ["'self'", "https://plausible.io", "https://cdnjs.cloudflare.com", "https://web.squarecdn.com", "https://sandbox.web.squarecdn.com"],
       styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdnjs.cloudflare.com"],
       fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"],
       imgSrc: ["'self'", "data:", "blob:", "https:"],
       mediaSrc: ["'self'", "https:"],
-      frameSrc: ["'self'", "https://www.youtube.com", "https://www.youtube-nocookie.com", "https://player.vimeo.com"],
+      frameSrc: ["'self'", "https://www.youtube.com", "https://www.youtube-nocookie.com", "https://player.vimeo.com", "https://web.squarecdn.com", "https://sandbox.web.squarecdn.com"],
       connectSrc: isDevelopment
         ? ["'self'", "ws:", "wss:", "localhost:*", "127.0.0.1:*"]
-        : ["'self'", "https://plausible.io"],
+        : ["'self'", "https://plausible.io", "https://pci-connect.squareup.com", "https://connect.squareup.com"],
       objectSrc: ["'none'"],
       baseUri: ["'self'"],
       formAction: ["'self'"],
@@ -62,29 +65,6 @@ app.post(
       res.json({ received: true });
     } catch (error: any) {
       logger.error({ err: error }, "Square webhook error");
-      res.status(400).json({ error: error.message || "Webhook processing failed" });
-    }
-  },
-);
-
-// Legacy Stripe webhook (kept for any in-flight Stripe payments)
-app.post(
-  "/api/stripe/webhook",
-  express.raw({ type: "application/json" }),
-  async (req: Request, res: Response) => {
-    try {
-      const { handleWebhookEvent, isStripeEnabled } = await import("./stripe");
-      if (!isStripeEnabled()) {
-        return res.status(503).json({ error: "Stripe is not configured" });
-      }
-      const signature = req.headers["stripe-signature"];
-      if (!signature || typeof signature !== "string") {
-        return res.status(400).json({ error: "Missing stripe-signature header" });
-      }
-      await handleWebhookEvent(req.body as Buffer, signature);
-      res.json({ received: true });
-    } catch (error: any) {
-      logger.error({ err: error }, "Stripe webhook error");
       res.status(400).json({ error: error.message || "Webhook processing failed" });
     }
   },
@@ -125,8 +105,17 @@ app.use((req, res, next) => {
 });
 
 // Startup validation
-if (process.env.NODE_ENV === "production" && !process.env.BASE_URL) {
-  logger.warn("BASE_URL is not set. Email links and redirects may not work correctly in production.");
+if (process.env.NODE_ENV === "production") {
+  if (!process.env.BASE_URL) {
+    throw new Error("BASE_URL must be set in production. Email links, webhooks, and redirects require it.");
+  }
+  if (!process.env.GMAIL_EMAIL || !process.env.GMAIL_APP_PASSWORD) {
+    logger.warn("GMAIL_EMAIL or GMAIL_APP_PASSWORD is not set. Email sending will fail in production.");
+  }
+} else {
+  if (!process.env.GMAIL_EMAIL || !process.env.GMAIL_APP_PASSWORD) {
+    logger.warn("GMAIL_EMAIL or GMAIL_APP_PASSWORD is not set. Email functionality will be unavailable.");
+  }
 }
 
 (async () => {
@@ -144,6 +133,20 @@ if (process.env.NODE_ENV === "production" && !process.env.BASE_URL) {
     logger.error({ err }, "Failed to seed trust data on startup");
   }
 
+  // Serve resource PDFs statically (must be before Vite/SPA catch-all)
+  app.use("/resources", express.static(path.resolve(import.meta.dirname, "../resources")));
+
+  // importantly only setup vite in development and after
+  // setting up all the other routes so the catch-all route
+  // doesn't interfere with the other routes
+  if (app.get("env") === "development") {
+    const { setupVite } = await import("./vite");
+    await setupVite(app, server);
+  } else {
+    serveStatic(app);
+  }
+
+  // Error handler must be registered AFTER all other middleware (including static/Vite)
   app.use((err: any, req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";
@@ -166,20 +169,11 @@ if (process.env.NODE_ENV === "production" && !process.env.BASE_URL) {
       stack: err.stack,
     }, `Unhandled error: ${message}`);
 
-    res.status(status).json({ message });
+    const clientMessage = status >= 500 && process.env.NODE_ENV === "production"
+      ? "Internal Server Error"
+      : message;
+    res.status(status).json({ message: clientMessage });
   });
-
-  // Serve resource PDFs statically (must be before Vite/SPA catch-all)
-  app.use("/resources", express.static(path.resolve(import.meta.dirname, "../resources")));
-
-  // importantly only setup vite in development and after
-  // setting up all the other routes so the catch-all route
-  // doesn't interfere with the other routes
-  if (app.get("env") === "development") {
-    await setupVite(app, server);
-  } else {
-    serveStatic(app);
-  }
 
   // ALWAYS serve the app on the port specified in the environment variable PORT
   // Other ports are firewalled. Default to 5000 if not specified.
@@ -187,9 +181,16 @@ if (process.env.NODE_ENV === "production" && !process.env.BASE_URL) {
   // It is the only port that is not firewalled.
   const port = parseInt(process.env.PORT || '5000', 10);
 
+  let retryCount = 0;
+  const MAX_RETRIES = 3;
   server.on("error", (err: NodeJS.ErrnoException) => {
     if (err.code === "EADDRINUSE") {
-      logger.warn(`Port ${port} is in use, retrying in 2 seconds...`);
+      retryCount++;
+      if (retryCount > MAX_RETRIES) {
+        logger.fatal(`Port ${port} still in use after ${MAX_RETRIES} retries, exiting`);
+        process.exit(1);
+      }
+      logger.warn(`Port ${port} is in use, retrying in 2 seconds... (attempt ${retryCount}/${MAX_RETRIES})`);
       setTimeout(() => {
         server.listen({ port, host: "0.0.0.0", reusePort: true });
       }, 2000);

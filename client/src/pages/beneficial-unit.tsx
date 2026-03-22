@@ -103,7 +103,7 @@ function BeneficialUnitContent() {
             <div className="bg-royal-gold/5 border border-royal-gold/15 rounded-lg p-4 mt-4">
               <h4 className="font-cinzel text-sm font-bold text-royal-navy mb-2">What Your Unit Represents</h4>
               <p className="text-sm text-gray-600 leading-relaxed">
-                Your Beneficial Unit is your membership in the Body — the place where all
+                Your Beneficial Unit is your membership in the Body, the place where all
                 the trust's protections, resources, and governance flow down to you. Your personal covenant
                 is the gateway through which you entered. The Body of Christ holds and stewards all things.
                 The assembly is where you gather. And your unit is your 1/N share of everything the Body holds.

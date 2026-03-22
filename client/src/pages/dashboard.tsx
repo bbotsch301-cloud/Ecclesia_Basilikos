@@ -198,7 +198,7 @@ function DashboardContent() {
           )}
         </div>
 
-        {/* Main Sections Grid — equal weight */}
+        {/* Main Sections Grid: equal weight */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {/* Courses */}
           <Card className="flex flex-col">
@@ -334,7 +334,7 @@ function DashboardContent() {
             </CardContent>
           </Card>
 
-          {/* Premium Upgrade Card — only for free users */}
+          {/* Premium Upgrade Card (only for free users) */}
           {!isPremium && (
             <Card className="flex flex-col border-2 border-royal-gold/30 bg-gradient-to-br from-royal-gold/5 to-transparent">
               <CardHeader className="pb-3">

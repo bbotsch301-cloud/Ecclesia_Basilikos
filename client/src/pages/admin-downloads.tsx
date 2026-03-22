@@ -1201,7 +1201,7 @@ export default function AdminDownloads() {
                           form.setValue("fileSize", formatFileSize(uploadedFile.size));
                         }
 
-                        toast({ title: "File uploaded", description: "File uploaded — title, type, and size auto-filled" });
+                        toast({ title: "File uploaded", description: "File uploaded; title, type, and size auto-filled" });
                       }
                     }}
                   >

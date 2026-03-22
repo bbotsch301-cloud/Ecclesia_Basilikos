@@ -25,9 +25,9 @@ export default function PmaAgreement() {
         <section>
           <h2 className="font-cinzel text-2xl font-semibold text-royal-navy">1. Preamble</h2>
           <p>
-            Ecclesia Basilikos is established as a Private Membership Association ("PMA") — a voluntary, non-commercial
+            Ecclesia Basilikos is established as a Private Membership Association ("PMA"): a voluntary, non-commercial
             body of believers gathered in covenant fellowship. This Association operates under the natural and unalienable
-            right of free assembly, the free exercise of religion, and the inherent authority of private agreement — rights
+            right of free assembly, the free exercise of religion, and the inherent authority of private agreement, rights
             recognized across all civilized jurisdictions and rooted in divine law.
           </p>
           <p>
@@ -119,7 +119,7 @@ export default function PmaAgreement() {
           <p>
             This Association operates in a private capacity and not as a public commercial enterprise. The activities
             conducted within this Association are private in nature and are protected by the universal right of free
-            assembly, the right of private contract, and the free exercise of religion — principles recognized under
+            assembly, the right of private contract, and the free exercise of religion, principles recognized under
             natural law, common law, and the legal traditions of nations worldwide.
           </p>
           <p>

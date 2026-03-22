@@ -68,7 +68,7 @@ export default function LawfulMoney() {
           >
             Every Federal Reserve Note carries a lawful obligation. You have the
             statutory right to redeem those notes for lawful money of the United
-            States. This is not theory — it is codified law.
+            States. This is not theory; it is codified law.
           </motion.p>
         </div>
       </div>
@@ -127,7 +127,7 @@ export default function LawfulMoney() {
           <RevealOnScroll>
             <div className="text-center max-w-3xl mx-auto">
               <p className="text-xl text-gray-700 leading-relaxed">
-                When a monetary system issues currency backed by nothing — or worse, backed by debt —
+                When a monetary system issues currency backed by nothing (or worse, backed by debt),
                 it violates this principle.{" "}
                 <span className="font-bold text-royal-navy">
                   The Federal Reserve operates a system of false weights.
@@ -149,7 +149,7 @@ export default function LawfulMoney() {
               </h2>
               <p className="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">
                 Lawful money is the constitutionally recognized currency of the
-                United States — distinct from Federal Reserve Notes, which are
+                United States, distinct from Federal Reserve Notes, which are
                 debt instruments issued by a private banking system. The
                 distinction is not academic. It carries legal, tax, and
                 jurisdictional implications.
@@ -167,7 +167,7 @@ export default function LawfulMoney() {
                   <ul className="space-y-3 text-gray-700">
                     <li className="flex items-start gap-3">
                       <AlertTriangle className="w-5 h-5 text-royal-burgundy flex-shrink-0 mt-0.5" />
-                      <span>Debt-based instruments — every note is a liability</span>
+                      <span>Debt-based instruments: every note is a liability</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <AlertTriangle className="w-5 h-5 text-royal-burgundy flex-shrink-0 mt-0.5" />
@@ -195,7 +195,7 @@ export default function LawfulMoney() {
                   <ul className="space-y-3 text-gray-700">
                     <li className="flex items-start gap-3">
                       <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                      <span>Non-debt currency — represents actual value, not liability</span>
+                      <span>Non-debt currency that represents actual value, not liability</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
@@ -203,7 +203,7 @@ export default function LawfulMoney() {
                     </li>
                     <li className="flex items-start gap-3">
                       <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                      <span>Redemption is a statutory right — not a request or petition</span>
+                      <span>Redemption is a statutory right, not a request or petition</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
@@ -239,7 +239,7 @@ export default function LawfulMoney() {
                   <ScrollText className="w-8 h-8 text-royal-gold flex-shrink-0 mt-1" />
                   <div>
                     <h3 className="font-cinzel text-lg font-bold text-royal-navy mb-2">
-                      Federal Reserve Act — Section 16
+                      Federal Reserve Act, Section 16
                     </h3>
                     <p className="text-sm text-gray-500 font-medium">
                       Title 12, United States Code, Section 411
@@ -312,7 +312,7 @@ export default function LawfulMoney() {
                   icon: Scale,
                   title: "Jurisdictional Clarity",
                   description:
-                    "Operating in lawful money clarifies which jurisdiction governs your transactions — public constitutional law versus private commercial agreements.",
+                    "Operating in lawful money clarifies which jurisdiction governs your transactions: public constitutional law versus private commercial agreements.",
                 },
               ].map((item, index) => (
                 <motion.div key={index} variants={staggerItemVariants}>
@@ -334,7 +334,7 @@ export default function LawfulMoney() {
         </div>
       </RevealOnScroll>
 
-      {/* How to Redeem — Steps */}
+      {/* How to Redeem: Steps */}
       <div className="py-24 bg-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <RevealOnScroll>
@@ -343,7 +343,7 @@ export default function LawfulMoney() {
                 How Lawful Money Redemption Works
               </h2>
               <p className="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">
-                Redemption is exercised through a demand — a non-negotiable
+                Redemption is exercised through a demand: a non-negotiable
                 restrictive endorsement on the instrument of deposit. It is not
                 a petition. It is the exercise of a statutory right.
               </p>
@@ -362,13 +362,13 @@ export default function LawfulMoney() {
                 step: "02",
                 title: "The Endorsement Language",
                 description:
-                  "A proper endorsement reads: \"Redeemed in Lawful Money Pursuant to Title 12 USC §411\" — written above your signature on all deposits. This is a demand, not a request.",
+                  "A proper endorsement reads: \"Redeemed in Lawful Money Pursuant to Title 12 USC §411\", written above your signature on all deposits. This is a demand, not a request.",
               },
               {
                 step: "03",
                 title: "Maintain Consistent Practice",
                 description:
-                  "Every deposit, every paycheck, every transaction — consistency establishes the pattern and reinforces your standing. This is not a one-time event but a continuous practice.",
+                  "Every deposit, every paycheck, every transaction: consistency establishes the pattern and reinforces your standing. This is not a one-time event but a continuous practice.",
               },
               {
                 step: "04",
@@ -428,7 +428,7 @@ export default function LawfulMoney() {
               {
                 term: "Private Credit vs. Public Money",
                 explanation:
-                  "When you deposit FRNs without redemption, you are presumed to be using private credit — the Federal Reserve's credit system. Redemption shifts the transaction to public money.",
+                  "When you deposit FRNs without redemption, you are presumed to be using private credit (the Federal Reserve's credit system). Redemption shifts the transaction to public money.",
               },
               {
                 term: "Voluntary vs. Mandatory",
@@ -438,7 +438,7 @@ export default function LawfulMoney() {
               {
                 term: "Endorsement vs. Protest",
                 explanation:
-                  "Lawful money redemption is not a protest against the system. It is the lawful exercise of a statutory right within the system — using the law as written.",
+                  "Lawful money redemption is not a protest against the system. It is the lawful exercise of a statutory right within the system, using the law as written.",
               },
             ].map((item, index) => (
               <motion.div key={index} variants={staggerItemVariants}>
@@ -479,7 +479,7 @@ export default function LawfulMoney() {
                       of the law.
                     </p>
                     <p className="text-gray-700 leading-relaxed">
-                      Ecclesia Basilikos provides education and community — not
+                      Ecclesia Basilikos provides education and community, not
                       legal or tax advice. Your journey in lawful money
                       redemption is your own, supported by knowledge and fellowship.
                     </p>
@@ -491,7 +491,7 @@ export default function LawfulMoney() {
         </div>
       </div>
 
-      {/* CTA — Pillar Progression */}
+      {/* CTA: Pillar Progression */}
       <div className="py-24 bg-gradient-to-br from-royal-navy via-royal-burgundy to-royal-navy">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <RevealOnScroll>
@@ -504,7 +504,7 @@ export default function LawfulMoney() {
               status documentation, it forms the complete foundation.
             </p>
             <p className="text-base text-royal-gold font-cinzel mb-10">
-              Pillar 1 of 3 — Lawful Money &rarr; Trust Protection &rarr; State-Citizen Passport
+              Pillar 1 of 3: Lawful Money &rarr; Trust Protection &rarr; State-Citizen Passport
             </p>
           </RevealOnScroll>
 

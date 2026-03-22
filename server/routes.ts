@@ -1,5 +1,13 @@
 import type { Express, Request, Response, NextFunction } from "express";
 
+/** Resolve the public-facing origin for building email links. */
+function getBaseUrl(req: Request): string {
+  if (process.env.BASE_URL) return process.env.BASE_URL;
+  // On Replit the REPLIT_DEV_DOMAIN env var holds the public hostname
+  if (process.env.REPLIT_DEV_DOMAIN) return `https://${process.env.REPLIT_DEV_DOMAIN}`;
+  return `${req.protocol}://${req.get('host')}`;
+}
+
 // Extend Request type to include user property
 declare global {
   namespace Express {
@@ -28,6 +36,7 @@ import {
 } from "@shared/schema";
 import { z } from "zod";
 import { ObjectStorageService } from "./objectStorage";
+import multer from "multer";
 import proofVaultRoutes from "./proofVaultRoutes";
 import path from "path";
 import { rateLimit } from "./rateLimit";
@@ -51,19 +60,28 @@ const MAX_LOGIN_ATTEMPTS = 5;
 const LOCKOUT_DURATION_MS = 15 * 60_000; // 15 minutes
 
 // Clean up expired login attempt entries every 30 minutes to prevent memory leak
-setInterval(() => {
+const loginCleanupTimer = setInterval(() => {
   const now = Date.now();
   loginAttempts.forEach((entry, key) => {
-    if (entry.lockedUntil && now > entry.lockedUntil) {
+    // Clean up expired lockouts AND stale entries older than lockout duration
+    if ((entry.lockedUntil && now > entry.lockedUntil) || (!entry.lockedUntil && entry.count > 0)) {
       loginAttempts.delete(key);
     }
   });
 }, 30 * 60_000);
+loginCleanupTimer.unref(); // Allow clean process shutdown
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Health check endpoints (no auth required)
-  app.get("/health", (_req, res) => {
-    res.json({ status: "ok", timestamp: new Date().toISOString() });
+  app.get("/health", async (_req, res) => {
+    try {
+      const { pool } = await import("./db");
+      await pool.query("SELECT 1");
+      res.json({ status: "ok", timestamp: new Date().toISOString() });
+    } catch (err) {
+      logger.error({ err }, "Health check failed: database unreachable");
+      res.status(503).json({ status: "error", timestamp: new Date().toISOString() });
+    }
   });
 
   app.get("/ready", async (_req, res) => {
@@ -92,6 +110,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { privacyAccepted, ...userData } = insertUserSchema.parse(req.body);
 
+      // Normalize email to lowercase
+      userData.email = userData.email.toLowerCase();
+
       // Check if user already exists
       const existingUser = await storage.getUserByEmail(userData.email);
       if (existingUser) {
@@ -101,7 +122,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const user = await storage.createUser({ ...userData, termsAcceptedAt: new Date() });
 
       // Send verification email
-      const verificationUrl = `${process.env.BASE_URL || `${req.protocol}://${req.get('host')}`}/verify-email?token=${user.emailVerificationToken}`;
+      const verificationUrl = `${getBaseUrl(req)}/verify-email?token=${user.emailVerificationToken}`;
       
       // Get email template from page content
       const emailTemplateContent = await storage.getPageContent('email-templates');
@@ -130,37 +151,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
       
       if (!emailSent) {
-        logger.error('Failed to send verification email — auto-verifying user');
-        await storage.verifyUserEmail(user.id);
-        // Reload user to reflect verified state in response
-        const verifiedUser = await storage.getUser(user.id);
-        if (verifiedUser) {
-          req.session.userId = verifiedUser.id;
-
-          // Create welcome notification
-          await storage.createNotification({
-            userId: verifiedUser.id,
-            type: 'welcome',
-            title: 'Welcome, Beneficiary!',
-            message: 'Your beneficial interest in the Ecclesia Basilikos Trust is now established. Begin your journey.',
-            linkUrl: '/dashboard',
-          });
-
-          // Send welcome email (non-blocking)
-          const { sendEmail: sendWelcome, generateWelcomeEmailHtml } = await import('./email');
-          sendWelcome({
-            to: verifiedUser.email,
-            subject: 'Welcome to Ecclesia Basilikos - Your Journey Begins',
-            html: generateWelcomeEmailHtml(verifiedUser.firstName),
-          }).catch((err) => logger.warn({ err }, 'Failed to send welcome email'));
-
-          const { password: _pw, emailVerificationToken: _tok, ...safeUser } = verifiedUser;
-          return res.json({
-            success: true,
-            user: safeUser,
-            message: "Registration successful! You can now log in."
-          });
-        }
+        logger.error({ userId: user.id, email: user.email }, 'Failed to send verification email during registration');
       }
 
       req.session.userId = user.id;
@@ -198,7 +189,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         loginAttempts.delete(normalizedEmail);
       }
 
-      const user = await storage.validateUser(email, password);
+      const user = await storage.validateUser(normalizedEmail, password);
       if (!user) {
         // Track failed attempt
         const current = loginAttempts.get(normalizedEmail) || { count: 0, lockedUntil: null };
@@ -214,16 +205,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ error: "Invalid email or password" });
       }
 
-      // Successful login — clear any failed attempts
+      // Successful login; clear any failed attempts
       loginAttempts.delete(normalizedEmail);
 
-      // Allow login even if email not yet verified — verification is advisory
+      // Allow login even if email not yet verified; verification is advisory
       // when email service may not be configured
       if (!user.isActive) {
         // Activate user on first successful login if still inactive
-        await storage.updateUser(user.id, { isActive: true } as any);
+        await storage.updateUser(user.id, { isActive: true });
       }
 
+      // Regenerate session to prevent session fixation
+      await new Promise<void>((resolve, reject) => {
+        req.session.regenerate((err) => {
+          if (err) reject(err);
+          else resolve();
+        });
+      });
       req.session.userId = user.id;
 
       // Update last login
@@ -267,7 +265,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const user = await storage.getUserByVerificationToken(token);
       if (!user) {
-        return res.status(400).json({ error: "Invalid verification token" });
+        // Token not found; it may have already been consumed.
+        // Some email clients pre-fetch links, which can verify the email
+        // before the user clicks. Return a friendly message instead of an error.
+        return res.status(400).json({ error: "This verification link has already been used or is invalid. If your email is verified, you can log in normally." });
       }
       
       // Check if token has expired
@@ -279,6 +280,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       await storage.verifyUserEmail(user.id);
 
       // Log the user in so they land on the dashboard authenticated
+      // Regenerate session to prevent session fixation
+      await new Promise<void>((resolve, reject) => {
+        req.session.regenerate((err) => {
+          if (err) reject(err);
+          else resolve();
+        });
+      });
       req.session.userId = user.id;
 
       // Create welcome notification
@@ -323,7 +331,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Regenerate token and expiration
       const updatedUser = await storage.regenerateVerificationToken(user.id);
 
-      const verificationUrl = `${process.env.BASE_URL || `${req.protocol}://${req.get('host')}`}/verify-email?token=${updatedUser.emailVerificationToken}`;
+      const verificationUrl = `${getBaseUrl(req)}/verify-email?token=${updatedUser.emailVerificationToken}`;
 
       const emailTemplateContent = await storage.getPageContent('email-templates');
       const emailTemplate = {
@@ -351,10 +359,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
 
       if (!emailSent) {
-        // Mirror registration fallback: auto-verify when email delivery is unavailable
-        logger.error('Failed to send verification email on resend — auto-verifying user');
-        await storage.verifyUserEmail(user.id);
-        return res.json({ success: true, message: "Your email has been verified automatically.", autoVerified: true });
+        logger.error({ userId: user.id, email: user.email }, 'Failed to send verification email on resend');
+        return res.json({ success: true, message: "We're having trouble sending emails right now. Please try again later or contact support." });
       }
 
       res.json({ success: true, message: "Verification email sent. Please check your inbox." });
@@ -380,7 +386,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const expires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
       await storage.setPasswordResetToken(user.id, token, expires);
 
-      const resetUrl = `${process.env.BASE_URL || `${req.protocol}://${req.get("host")}`}/reset-password?token=${token}`;
+      const resetUrl = `${getBaseUrl(req)}/reset-password?token=${token}`;
 
       const { sendEmail } = await import("./email");
       await sendEmail({
@@ -481,7 +487,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const hashedPassword = await bcryptMod.hash(newPassword, 10);
-      await storage.updateUser(user.id, { password: hashedPassword } as any);
+      await storage.updateUser(user.id, { password: hashedPassword });
       res.json({ success: true, message: "Password changed successfully" });
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -821,7 +827,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get all recent threads (across all categories)
-  app.get("/api/forum/threads", async (req, res) => {
+  app.get("/api/forum/threads", optionalAuth, async (req, res) => {
     try {
       const page = Math.max(1, parseInt((req.query.page as string) || "1", 10));
       const limit = 20;
@@ -865,7 +871,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // (adminRoutes.ts) with requireModerator middleware.
 
   // Get threads by category
-  app.get("/api/forum/categories/:categoryId/threads", async (req, res) => {
+  app.get("/api/forum/categories/:categoryId/threads", optionalAuth, async (req, res) => {
     try {
       const { categoryId } = req.params;
       const threads = await storage.getForumThreadsByCategory(categoryId);
@@ -912,7 +918,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get a specific thread with replies
-  app.get("/api/forum/threads/:threadId", async (req, res) => {
+  app.get("/api/forum/threads/:threadId", optionalAuth, async (req, res) => {
     try {
       const { threadId } = req.params;
 
@@ -986,43 +992,53 @@ export async function registerRoutes(app: Express): Promise<Server> {
         authorId: user.id,
       });
 
-      // Notify thread author and subscribers about the reply
+      // Notify thread author and subscribers about the reply (non-blocking)
       if (thread) {
-        const notifyUserIds = new Set<string>();
+        (async () => {
+          try {
+            const notifyUserIds = new Set<string>();
 
-        // Thread author (unless self-reply)
-        if (thread.authorId !== user.id) {
-          notifyUserIds.add(thread.authorId);
-        }
+            // Thread author (unless self-reply)
+            if (thread.authorId !== user.id) {
+              notifyUserIds.add(thread.authorId);
+            }
 
-        // Thread subscribers (async, non-blocking)
-        storage.getThreadSubscribers(threadId).then(async (subscriberIds) => {
-          for (const subId of subscriberIds) {
-            if (subId !== user.id) notifyUserIds.add(subId);
-          }
-          const replierName = user.firstName || "Someone";
-          for (const uid of Array.from(notifyUserIds)) {
-            storage.createNotification({
-              userId: uid,
-              type: "forum_reply",
-              title: "New reply to your thread",
-              message: `${replierName} replied to "${thread.title}"`,
-              linkUrl: `/forum/thread/${threadId}`,
-            }).catch((err) => logger.warn({ err }, "Failed to create reply notification"));
-
-            // Send email notification (non-blocking)
-            storage.getUser(uid).then((recipient) => {
-              if (recipient && recipient.isEmailVerified && recipient.emailNotifications !== false) {
-                sendForumReplyNotificationEmail(
-                  recipient.email,
-                  replierName,
-                  thread.title,
-                  threadId,
-                );
+            // Thread subscribers
+            try {
+              const subscriberIds = await storage.getThreadSubscribers(threadId);
+              for (const subId of subscriberIds) {
+                if (subId !== user.id) notifyUserIds.add(subId);
               }
-            }).catch((err) => logger.warn({ err }, "Failed to send forum reply email"));
+            } catch (err) {
+              logger.warn({ err }, "Failed to fetch thread subscribers");
+            }
+
+            const replierName = user.firstName || "Someone";
+            for (const uid of Array.from(notifyUserIds)) {
+              storage.createNotification({
+                userId: uid,
+                type: "forum_reply",
+                title: "New reply to your thread",
+                message: `${replierName} replied to "${thread.title}"`,
+                linkUrl: `/forum/thread/${threadId}`,
+              }).catch((err) => logger.warn({ err }, "Failed to create reply notification"));
+
+              // Send email notification (non-blocking)
+              storage.getUser(uid).then((recipient) => {
+                if (recipient && recipient.isEmailVerified && recipient.emailNotifications !== false) {
+                  sendForumReplyNotificationEmail(
+                    recipient.email,
+                    replierName,
+                    thread.title,
+                    threadId,
+                  );
+                }
+              }).catch((err) => logger.warn({ err }, "Failed to send forum reply email"));
+            }
+          } catch (err) {
+            logger.warn({ err }, "Failed to process reply notifications");
           }
-        }).catch((err) => logger.warn({ err }, "Failed to fetch thread subscribers"));
+        })();
       }
 
       res.json({ success: true, reply });
@@ -1098,7 +1114,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const isMod = ['admin', 'moderator'].includes(user.role || '');
       if (!isOwner && !isMod) return res.status(403).json({ error: "Not authorized" });
 
-      const { content } = z.object({ content: z.string().min(1) }).parse(req.body);
+      const { content } = z.object({ content: z.string().min(1).max(50000) }).parse(req.body);
       const updated = await storage.updateForumReply(replyId, { content: sanitizeHtml(content) });
       res.json({ success: true, reply: updated });
     } catch (error) {
@@ -1188,7 +1204,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Page Content Management routes are in adminRoutes.ts (mounted at /api/admin)
 
-  // Object Storage Upload Endpoint (requires authentication)
+  // Object Storage: get an upload URL (returns a server-side path)
   app.post("/api/objects/upload", requireAuth, uploadLimiter, async (req, res) => {
     try {
       const user = req.user as User;
@@ -1201,6 +1217,54 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       logger.error({ err: error }, "Error getting upload URL:");
       res.status(500).json({ error: "Failed to get upload URL" });
+    }
+  });
+
+  // Object Storage: direct file upload endpoint
+  const objectUpload = multer({
+    storage: multer.diskStorage({
+      destination: (_req, _file, cb) => {
+        const privateDir = process.env.PRIVATE_OBJECT_DIR || "/data/private";
+        const uploadsDir = path.join(privateDir, "uploads");
+        cb(null, uploadsDir);
+      },
+      filename: (req, _file, cb) => {
+        // Use the token from the URL as the filename
+        cb(null, req.params.token);
+      },
+    }),
+    limits: { fileSize: 100 * 1024 * 1024 }, // 100 MB
+  });
+
+  app.put("/api/objects/upload/:token", requireAuth, uploadLimiter, objectUpload.single("file"), async (req, res) => {
+    try {
+      const user = req.user as User;
+      if (!['admin', 'instructor'].includes(user.role || '')) {
+        return res.status(403).json({ error: "Upload permission required" });
+      }
+      if (!req.file) {
+        return res.status(400).json({ error: "No file provided" });
+      }
+      res.json({ path: `/objects/uploads/${req.params.token}` });
+    } catch (error) {
+      logger.error({ err: error }, "Error uploading file:");
+      res.status(500).json({ error: "Failed to upload file" });
+    }
+  });
+
+  app.post("/api/objects/upload/:token", requireAuth, uploadLimiter, objectUpload.single("file"), async (req, res) => {
+    try {
+      const user = req.user as User;
+      if (!['admin', 'instructor'].includes(user.role || '')) {
+        return res.status(403).json({ error: "Upload permission required" });
+      }
+      if (!req.file) {
+        return res.status(400).json({ error: "No file provided" });
+      }
+      res.json({ path: `/objects/uploads/${req.params.token}` });
+    } catch (error) {
+      logger.error({ err: error }, "Error uploading file:");
+      res.status(500).json({ error: "Failed to upload file" });
     }
   });
 
@@ -1307,7 +1371,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Serve the trust document PDF from resources
-  app.get("/api/trust-document-pdf", (req, res) => {
+  app.get("/api/trust-document-pdf", requireAuth, (req, res) => {
     const pdfPath = path.resolve(import.meta.dirname, "../resources/Public-Declaration-of-Trust.pdf");
     res.download(pdfPath, "new-covenant-trust-document.pdf", (err) => {
       if (err && !res.headersSent) {
@@ -1398,14 +1462,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = (req as any).user.id;
 
-      // Gate: prevent free users from completing locked lessons
+      // Gate: prevent free users from completing locked sections
       if (!isPremiumUser(req.user)) {
-        const lesson = await storage.getLessonById(req.params.sectionId);
-        if (lesson) {
-          const course = await storage.getCourse(lesson.courseId);
+        const section = await storage.getSectionById(req.params.sectionId);
+        if (section) {
+          const course = await storage.getCourse(section.courseId);
           if (course) {
             const maxFree = course.isFree ? (course.freePreviewLessons ?? 1) : 0;
-            if (lesson.order > maxFree) {
+            if (section.sectionOrder > maxFree) {
               return res.status(403).json({ error: "PMA membership required to complete this lesson", code: "PREMIUM_REQUIRED" });
             }
           }
@@ -1462,7 +1526,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Dictionary routes (public — no auth required)
+  // Dictionary routes (public, no auth required)
   app.get("/api/dictionary/search", async (req, res) => {
     try {
       const q = typeof req.query.q === "string" ? req.query.q : "";
@@ -1626,7 +1690,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const isMod = ['admin', 'moderator'].includes(user.role || '');
       if (!isOwner && !isMod) return res.status(403).json({ error: "Not authorized" });
 
-      const { content } = z.object({ content: z.string().min(1) }).parse(req.body);
+      const { content } = z.object({ content: z.string().min(1).max(50000) }).parse(req.body);
       const updated = await storage.updateComment(req.params.id, { content: sanitizeHtml(content) });
       res.json({ success: true, comment: updated });
     } catch (error) {
@@ -1724,12 +1788,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const reportCounts = new Map<string, { count: number; resetAt: number }>();
 
   // Cleanup stale entries every 30 minutes
-  setInterval(() => {
+  const reportCleanupTimer = setInterval(() => {
     const now = Date.now();
     reportCounts.forEach((entry, key) => {
       if (now > entry.resetAt) reportCounts.delete(key);
     });
   }, 30 * 60_000);
+  reportCleanupTimer.unref(); // Allow clean process shutdown
 
   function checkReportRateLimit(userId: string): boolean {
     const now = Date.now();
@@ -1744,7 +1809,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   }
 
   const reportSchema = z.object({
-    reason: z.string().min(10, "Reason must be at least 10 characters"),
+    reason: z.string().min(10, "Reason must be at least 10 characters").max(2000),
   });
 
   app.post("/api/forum/threads/:threadId/report", requireAuth, async (req, res) => {
@@ -1885,6 +1950,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({
           error: "Your subscription is managed through Stripe. Please use the Stripe customer portal to cancel.",
         });
+      }
+
+      // If the user has a Square subscription, cancel it via Square API
+      if (user.squareSubscriptionId) {
+        try {
+          const { cancelSquareSubscription } = await import("./square");
+          await cancelSquareSubscription(user.squareSubscriptionId);
+        } catch (err) {
+          logger.warn({ err, userId: user.id, subscriptionId: user.squareSubscriptionId }, "Failed to cancel Square subscription - proceeding with local cancellation");
+        }
       }
 
       const now = new Date();

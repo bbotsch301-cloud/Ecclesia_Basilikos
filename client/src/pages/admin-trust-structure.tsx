@@ -93,10 +93,10 @@ const LAYER_TEMPLATES: Record<string, EntityTemplate[]> = {
     { name: "Household", subtitle: "House-Church", entityType: "household" },
   ],
   craft: [
-    { name: "Craft", subtitle: "Skilled Workers — Bezalel Pattern", entityType: "craft" },
+    { name: "Craft", subtitle: "Skilled Workers (Bezalel Pattern)", entityType: "craft" },
   ],
   ministry: [
-    { name: "Ministry", subtitle: "Service Initiative — Diakonia", entityType: "ministry" },
+    { name: "Ministry", subtitle: "Service Initiative (Diakonia)", entityType: "ministry" },
   ],
   member: [
     { name: "Members of the Body", subtitle: "Joint Heirs with Christ", entityType: "member" },
@@ -312,7 +312,7 @@ function EntityNode({
         </p>
       )}
 
-      {/* Connection handle (bottom center) — only show in connect mode */}
+      {/* Connection handle (bottom center): only show in connect mode */}
       {isConnecting && (
         <button
           onClick={(e) => {
@@ -617,7 +617,7 @@ function DetailSidebar({
                     </div>
                     {(r.label || r.notes) && (
                       <p className="text-[10px] text-gray-400 italic ml-5 mt-0.5 truncate">
-                        {r.label}{r.label && r.notes ? ' — ' : ''}{r.notes}
+                        {r.label}{r.label && r.notes ? '; ' : ''}{r.notes}
                       </p>
                     )}
                   </div>
@@ -639,7 +639,7 @@ function DetailSidebar({
                     </div>
                     {(r.label || r.notes) && (
                       <p className="text-[10px] text-gray-400 italic ml-5 mt-0.5 truncate">
-                        {r.label}{r.label && r.notes ? ' — ' : ''}{r.notes}
+                        {r.label}{r.label && r.notes ? '; ' : ''}{r.notes}
                       </p>
                     )}
                   </div>
@@ -733,7 +733,7 @@ function DetailSidebar({
           <div className="h-16" />
         </div>
 
-        {/* Sticky save footer — always visible */}
+        {/* Sticky save footer (always visible) */}
         <div className="sticky bottom-0 bg-white border-t border-gray-200 px-5 py-3 shadow-[0_-2px_8px_rgba(0,0,0,0.06)]">
           <Button
             onClick={handleSave}
@@ -1139,7 +1139,7 @@ export default function AdminTrustStructure() {
               <MousePointer2 className="w-4 h-4 text-cyan-600 shrink-0" />
               {!connectFrom
                 ? "Click the SOURCE entity"
-                : <>Source: <strong className="text-cyan-900">{entities.find(e => e.id === connectFrom)?.name}</strong> — now click TARGET</>
+                : <>Source: <strong className="text-cyan-900">{entities.find(e => e.id === connectFrom)?.name}</strong>; now click TARGET</>
               }
             </div>
             <div className="flex items-center gap-2">
@@ -1203,7 +1203,7 @@ export default function AdminTrustStructure() {
             style={{ transform: `scale(${zoom})`, transformOrigin: 'top center', zIndex: 2 }}
           >
             {entities.length === 0 ? (
-              /* ── Empty state — auto-seeds defaults ── */
+              /* ── Empty state: auto-seeds defaults ── */
               <div className="flex flex-col items-center justify-center py-20 gap-4">
                 <Loader2 className="h-10 w-10 animate-spin text-royal-gold" />
                 <p className="text-gray-500 text-sm font-cinzel">Loading default trust structure...</p>

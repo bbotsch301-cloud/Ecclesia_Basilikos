@@ -68,7 +68,7 @@ export default function TrustAssets() {
           >
             A properly structured trust is not a scheme or loophole. It is one
             of the oldest and most recognized legal instruments in the common
-            law — and it is how assets are lawfully protected, managed, and
+            law, and it is how assets are lawfully protected, managed, and
             transferred outside of direct personal liability.
           </motion.p>
         </div>
@@ -86,7 +86,7 @@ export default function TrustAssets() {
                 In the current system, anything held in your personal name is
                 subject to liens, levies, judgments, and claims. You do not
                 truly own what can be taken from you by operation of law. A
-                trust separates legal title from beneficial interest — placing
+                trust separates legal title from beneficial interest, placing
                 assets beyond the reach of personal liability.
               </p>
             </div>
@@ -102,11 +102,11 @@ export default function TrustAssets() {
                   <ul className="space-y-3 text-gray-700">
                     <li className="flex items-start gap-3">
                       <AlertTriangle className="w-5 h-5 text-royal-burgundy flex-shrink-0 mt-0.5" />
-                      <span>Assets held in personal name — fully exposed to creditors</span>
+                      <span>Assets held in personal name, fully exposed to creditors</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <AlertTriangle className="w-5 h-5 text-royal-burgundy flex-shrink-0 mt-0.5" />
-                      <span>Subject to probate — public, costly, and time-consuming</span>
+                      <span>Subject to probate (public, costly, and time-consuming)</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <AlertTriangle className="w-5 h-5 text-royal-burgundy flex-shrink-0 mt-0.5" />
@@ -130,11 +130,11 @@ export default function TrustAssets() {
                   <ul className="space-y-3 text-gray-700">
                     <li className="flex items-start gap-3">
                       <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                      <span>Assets held by the trust — separate legal entity</span>
+                      <span>Assets held by the trust as a separate legal entity</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                      <span>Avoids probate — private, efficient, and immediate</span>
+                      <span>Avoids probate: private, efficient, and immediate</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
@@ -184,7 +184,7 @@ export default function TrustAssets() {
                 subtitle: "Administrator of the Trust",
                 badge: "See: Governance Trust",
                 description:
-                  "The trustee holds legal title to the trust assets and administers them according to the trust instrument. The trustee has a fiduciary duty — the highest obligation known in law — to act in the beneficiary's interest.",
+                  "The trustee holds legal title to the trust assets and administers them according to the trust instrument. The trustee has a fiduciary duty (the highest obligation known in law) to act in the beneficiary's interest.",
               },
               {
                 icon: Users,
@@ -192,7 +192,7 @@ export default function TrustAssets() {
                 subtitle: "Recipient of the Benefits",
                 badge: "See: PMA Members",
                 description:
-                  "The beneficiary holds equitable (beneficial) interest in the trust assets. They receive the benefits of the trust without holding legal title — which is precisely what provides the protection.",
+                  "The beneficiary holds equitable (beneficial) interest in the trust assets. They receive the benefits of the trust without holding legal title, which is precisely what provides the protection.",
               },
             ].map((item, index) => (
               <motion.div key={index} variants={staggerItemVariants}>
@@ -239,8 +239,8 @@ export default function TrustAssets() {
                   How This Trust Is Actually Structured
                 </h3>
                 <p className="text-gray-600 max-w-2xl mx-auto">
-                  The Grantor, Trustee, and Beneficiary roles above are not abstract concepts —
-                  they are woven into a concrete hierarchy. Here is the actual trust structure:
+                  The Grantor, Trustee, and Beneficiary roles above are not abstract concepts.
+                  They are woven into a concrete hierarchy. Here is the actual trust structure:
                 </p>
               </div>
               <TrustHierarchyDiagram highlightLayer="member" />
@@ -395,13 +395,13 @@ export default function TrustAssets() {
                 step: "03",
                 title: "Asset Transfer & Funding",
                 description:
-                  "Assets are formally transferred into the trust through proper conveyance documents — deeds for real property, assignment documents for personal property, and re-titling for financial accounts.",
+                  "Assets are formally transferred into the trust through proper conveyance documents: deeds for real property, assignment documents for personal property, and re-titling for financial accounts.",
               },
               {
                 step: "04",
                 title: "Ongoing Administration",
                 description:
-                  "A trust is a living instrument that requires proper administration — maintaining records, filing necessary documents, conducting trust business in the trust's name, and ensuring fiduciary duties are met.",
+                  "A trust is a living instrument that requires proper administration: maintaining records, filing necessary documents, conducting trust business in the trust's name, and ensuring fiduciary duties are met.",
               },
             ].map((item, index) => (
               <motion.div key={index} variants={staggerItemVariants}>
@@ -469,7 +469,7 @@ export default function TrustAssets() {
             </h2>
             <p className="text-lg text-gray-200 max-w-2xl mx-auto leading-relaxed mb-10">
               A trust is not about hiding assets. It is about stewarding them
-              properly — placing them under lawful protection so they can
+              properly, placing them under lawful protection so they can
               serve their intended purpose.
             </p>
           </RevealOnScroll>

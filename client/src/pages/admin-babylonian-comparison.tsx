@@ -57,13 +57,13 @@ const sections: WhitePaperSection[] = [
   {
     id: "introduction",
     number: "I",
-    title: "Introduction — Purpose of This Comparison",
+    title: "Introduction: Purpose of This Comparison",
     icon: ScrollText,
     content: `This document presents a structured, educational comparison between two fundamentally different systems of social, economic, and legal organization:
 
-    1. The Covenant Model — as implemented in the Ecclesia Basilikos Trust, a nine-layer common law trust governed by biblical principles, ecclesiastical jurisdiction, and voluntary covenant membership.
+    1. The Covenant Model, as implemented in the Ecclesia Basilikos Trust: a nine-layer common law trust governed by biblical principles, ecclesiastical jurisdiction, and voluntary covenant membership.
 
-    2. The Babylonian Model — referring to the modern debt-based, corporate, commercial system that characterizes the dominant global economic and legal order.
+    2. The Babylonian Model, referring to the modern debt-based, corporate, commercial system that characterizes the dominant global economic and legal order.
 
 The term "Babylonian" is used as a theological and historical reference, not as an insult. In biblical typology, Babylon represents the system of centralized human authority, debt-bondage, commercial control, and the substitution of man's law for God's law. From Nimrod's tower (Genesis 11) to the "mystery Babylon" of Revelation 18, the pattern repeats: centralized control, commerce as the basis of citizenship, and dependence on human institutions rather than divine covenant.
 
@@ -74,7 +74,7 @@ This comparison is educational in nature. Its purpose is to help covenant member
     • How the two systems differ in philosophy, structure, and legal foundation
     • Why the covenant model provides superior asset protection, generational transfer, and community governance
 
-Each section compares the two models across a specific domain — hierarchy, property, finance, governance, membership, asset protection, labor, education, generational transfer, dispute resolution, and legal foundations. The goal is clarity, not antagonism — understanding the architecture of both systems so that informed choices can be made.`,
+Each section compares the two models across a specific domain: hierarchy, property, finance, governance, membership, asset protection, labor, education, generational transfer, dispute resolution, and legal foundations. The goal is clarity, not antagonism; understanding the architecture of both systems allows informed choices to be made.`,
     keyTakeaway: "The Covenant Model flows from God's authority through voluntary covenant; the Babylonian Model flows from human institutions through compulsory jurisdiction. One liberates through relationship; the other controls through regulation.",
     comparisonRows: [
       { covenant: "Authority from God through Christ", babylonian: "Authority from human institutions" },
@@ -89,40 +89,40 @@ Each section compares the two models across a specific domain — hierarchy, pro
     number: "II",
     title: "Hierarchical Structure",
     icon: Layers,
-    content: `Every organized system has a hierarchy — a structure of authority, accountability, and flow. The two models differ fundamentally in how authority originates, flows, and is exercised.`,
+    content: `Every organized system has a hierarchy: a structure of authority, accountability, and flow. The two models differ fundamentally in how authority originates, flows, and is exercised.`,
     subsections: [
       {
-        title: "Covenant Model — Nine-Layer Covenant Hierarchy",
+        title: "Covenant Model: Nine-Layer Covenant Hierarchy",
         content: `The Ecclesia Basilikos Trust is organized into nine layers, each rooted in scripture and flowing from God's authority through Christ to His people:
 
-    Layer 1: Covenant — The individual's irrevocable covenant with God through Christ (Jeremiah 31:33)
-    Layer 2: Body of Christ — The collective assembly, with Christ as Head (1 Corinthians 12:12-13)
-    Layer 3: Stewardship — Five organs of the Body: Land, Housing, Treasury, Enterprise, Education
-    Layer 4: Ecclesia — The gathered assembly where authority is exercised (Matthew 18:20)
-    Layer 5: Regional — Local churches and geographic congregations
-    Layer 6: Household — The biblical family unit as a self-governing entity (Joshua 24:15)
-    Layer 7: Craft & Vocation — Guilds and vocational callings (Exodus 31:1-6, the Bezalel pattern)
-    Layer 8: Ministry — Specialized service functions within the Body
-    Layer 9: Individual — The covenant member who benefits from the whole
+    Layer 1: Covenant. The individual's irrevocable covenant with God through Christ (Jeremiah 31:33)
+    Layer 2: Body of Christ. The collective assembly, with Christ as Head (1 Corinthians 12:12-13)
+    Layer 3: Stewardship. Five organs of the Body: Land, Housing, Treasury, Enterprise, Education
+    Layer 4: Ecclesia. The gathered assembly where authority is exercised (Matthew 18:20)
+    Layer 5: Regional. Local churches and geographic congregations
+    Layer 6: Household. The biblical family unit as a self-governing entity (Joshua 24:15)
+    Layer 7: Craft & Vocation. Guilds and vocational callings (Exodus 31:1-6, the Bezalel pattern)
+    Layer 8: Ministry. Specialized service functions within the Body
+    Layer 9: Individual. The covenant member who benefits from the whole
 
-Authority flows downward from God through Christ through appointed stewards. Accountability flows upward. The Protector Council provides checks and balances. No single human holds absolute authority — Christ is the Head.
+Authority flows downward from God through Christ through appointed stewards. Accountability flows upward. The Protector Council provides checks and balances. No single human holds absolute authority; Christ is the Head.
 
 Key characteristics:
     • Authority originates in God, not in human consent or majority vote
     • Every layer has a scriptural mandate and fiduciary duty
     • Separation of powers is built into the structure (Trustee, Protector, Beneficiary)
-    • The hierarchy serves the members — the greatest shall be servant of all (Matthew 23:11)`,
+    • The hierarchy serves the members; the greatest shall be servant of all (Matthew 23:11)`,
       },
       {
-        title: "Babylonian Model — Corporate Pyramid",
+        title: "Babylonian Model: Corporate Pyramid",
         content: `The modern corporate and governmental system is organized as a pyramid of legal fictions and delegated authority:
 
-    Shareholders / Sovereign (theoretical top — owners or "the people")
+    Shareholders / Sovereign (theoretical top, the nominal owners or "the people")
     Board of Directors / Legislature (policy-making body)
-    Officers / Executive (CEO, President — operational authority)
+    Officers / Executive (CEO, President; operational authority)
     Management / Bureaucracy (middle layer of administration)
     Employees / Citizens (labor and compliance layer)
-    Consumers / Subjects (the base — those who consume and are consumed)
+    Consumers / Subjects (the base, those who consume and are consumed)
 
 Authority theoretically flows from the shareholders or "the people," but in practice is concentrated at the top through:
     • Central banking systems that control money supply
@@ -131,13 +131,13 @@ Authority theoretically flows from the shareholders or "the people," but in prac
     • Government officials insulated by sovereign immunity
 
 Key characteristics:
-    • Authority originates in human institutions — constitutions, charters, statutes
+    • Authority originates in human institutions: constitutions, charters, statutes
     • The hierarchy is maintained by economic dependence (wages, debt, benefits)
-    • Separation of powers is nominal — regulatory capture, revolving doors, executive overreach
+    • Separation of powers is nominal, undermined by regulatory capture, revolving doors, and executive overreach
     • The pyramid extracts from the base to enrich the top
-    • Individuals are classified as "human resources" — assets on a balance sheet
+    • Individuals are classified as "human resources," treated as assets on a balance sheet
 
-"And he causeth all, both small and great, rich and poor, free and bond, to receive a mark in their right hand, or in their foreheads: And that no man might buy or sell, save he that had the mark" — Revelation 13:16-17
+"And he causeth all, both small and great, rich and poor, free and bond, to receive a mark in their right hand, or in their foreheads: And that no man might buy or sell, save he that had the mark" (Revelation 13:16-17)
 
 The commercial system conditions participation on compliance: licensing, registration, taxation, and adherence to commercial codes. Those who do not comply are excluded from commerce.`,
       },
@@ -145,9 +145,9 @@ The commercial system conditions participation on compliance: licensing, registr
     keyTakeaway: "The Covenant Model derives authority from God downward through Christ to stewards; the Babylonian Model concentrates authority upward into human institutions that control through economic dependence.",
     comparisonRows: [
       { covenant: "Nine layers rooted in scripture", babylonian: "Corporate pyramid of legal fictions" },
-      { covenant: "Christ is Head — no human holds absolute authority", babylonian: "Authority concentrated through central banking and regulation" },
+      { covenant: "Christ is Head; no human holds absolute authority", babylonian: "Authority concentrated through central banking and regulation" },
       { covenant: "Accountability flows upward to God", babylonian: "Accountability flows upward to shareholders/profit" },
-      { covenant: "Separation of powers (Trustee, Protector, Beneficiary)", babylonian: "Nominal separation — regulatory capture and revolving doors" },
+      { covenant: "Separation of powers (Trustee, Protector, Beneficiary)", babylonian: "Nominal separation, undermined by regulatory capture and revolving doors" },
       { covenant: "The greatest shall be servant of all", babylonian: "Individuals classified as 'human resources'" },
     ],
     scriptureRefs: ["Jeremiah 31:33 (Covenant)", "1 Corinthians 12:12-13 (Body of Christ)", "Revelation 13:16-17 (Mark of commerce)"],
@@ -160,48 +160,48 @@ The commercial system conditions participation on compliance: licensing, registr
     content: `How property is held, transferred, and protected reveals the deepest assumptions of any legal system. The covenant and Babylonian models approach property from fundamentally different premises.`,
     subsections: [
       {
-        title: "Covenant Model — Trust-Held Communal Stewardship",
+        title: "Covenant Model: Trust-Held Communal Stewardship",
         content: `In the covenant model, all property belongs to God. Humans are stewards, not absolute owners:
 
-    "The earth is the LORD's, and the fulness thereof; the world, and they that dwell therein" — Psalm 24:1
+    "The earth is the LORD's, and the fulness thereof; the world, and they that dwell therein" (Psalm 24:1)
 
-    "The silver is mine, and the gold is mine, saith the LORD of hosts" — Haggai 2:8
+    "The silver is mine, and the gold is mine, saith the LORD of hosts" (Haggai 2:8)
 
 Property within the trust is held in three ways:
 
-    1. Trust Corpus — Real property, financial assets, and intellectual property held by the Trustee for the benefit of all covenant members. Legal title vests in the trust; equitable title vests in the beneficiaries.
+    1. Trust Corpus: Real property, financial assets, and intellectual property held by the Trustee for the benefit of all covenant members. Legal title vests in the trust; equitable title vests in the beneficiaries.
 
-    2. Stewardship Allocation — Specific assets assigned to stewardship organs (Land Trust, Housing Trust, etc.) for specific purposes. The steward manages but does not own.
+    2. Stewardship Allocation: Specific assets assigned to stewardship organs (Land Trust, Housing Trust, etc.) for specific purposes. The steward manages but does not own.
 
-    3. Beneficial Use — Individual members have the right to use and enjoy trust property according to their needs, governed by the Beneficial Unit system.
+    3. Beneficial Use: Individual members have the right to use and enjoy trust property according to their needs, governed by the Beneficial Unit system.
 
 Key principles:
-    • No individual "owns" trust property — they have beneficial interest
+    • No individual "owns" trust property; they hold beneficial interest
     • Property cannot be seized by individual creditors (spendthrift protection)
     • Property transfers within the trust avoid probate, estate tax, and inheritance litigation
-    • The concept mirrors allodial title — land held free and clear of any superior landlord
+    • The concept mirrors allodial title: land held free and clear of any superior landlord
     • Stewardship accountability replaces the profit motive
 
-"And all that believed were together, and had all things common; And sold their possessions and goods, and parted them to all men, as every man had need" — Acts 2:44-45`,
+"And all that believed were together, and had all things common; And sold their possessions and goods, and parted them to all men, as every man had need" (Acts 2:44-45)`,
       },
       {
-        title: "Babylonian Model — Fee Simple & Corporate Ownership",
+        title: "Babylonian Model: Fee Simple and Corporate Ownership",
         content: `In the modern system, property is held under a feudal framework disguised by modern terminology:
 
-    Fee Simple — The highest form of "ownership" available, yet still subject to:
-        • Property taxes (fail to pay and the state seizes your land — you are renting from the state)
+    Fee Simple: The highest form of "ownership" available, yet still subject to:
+        • Property taxes (fail to pay and the state seizes your land; in effect, you are renting from the state)
         • Eminent domain (the government can take your property for "public use")
         • Zoning and land use regulations (the government dictates what you can do with "your" property)
         • Environmental regulations and building codes
         • HOA covenants and deed restrictions
 
-    Corporate Ownership — Corporations hold property as legal fictions:
+    Corporate Ownership: Corporations hold property as legal fictions:
         • Shareholders own shares, not the underlying assets
         • Corporate property is subject to lawsuits, judgments, and regulatory seizure
         • Piercing the corporate veil exposes personal assets
         • Beneficial ownership reporting (Corporate Transparency Act) subjects all owners to government surveillance
 
-    Personal Property — Individually held assets are exposed to:
+    Personal Property: Individually held assets are exposed to:
         • Creditor claims and judgments
         • Divorce proceedings
         • Probate proceedings upon death (average 6-18 months, 3-7% of estate value in fees)
@@ -209,21 +209,21 @@ Key principles:
         • Forfeiture laws (civil asset forfeiture requires no criminal conviction)
 
 Key characteristics:
-    • "Ownership" is conditional — failure to pay taxes or comply with regulations results in seizure
+    • "Ownership" is conditional; failure to pay taxes or comply with regulations results in seizure
     • The feudal lord has been replaced by the state, but the relationship remains the same
     • Property is treated as a taxable commodity, not a stewardship responsibility
     • Death triggers a cascade of government and legal claims against the estate
     • The system incentivizes debt-financed acquisition (mortgage interest deductions, leveraged buyouts)
 
-The word "mortgage" itself comes from the Old French "mort gage" — literally "death pledge."`,
+The word "mortgage" itself comes from the Old French "mort gage," literally "death pledge."`,
       },
     ],
-    keyTakeaway: "In the Covenant Model, all property belongs to God and is held in trust for communal stewardship. In the Babylonian Model, 'ownership' is conditional — the state can seize property for tax non-payment, eminent domain, or regulatory violation.",
+    keyTakeaway: "In the Covenant Model, all property belongs to God and is held in trust for communal stewardship. In the Babylonian Model, 'ownership' is conditional; the state can seize property for tax non-payment, eminent domain, or regulatory violation.",
     comparisonRows: [
-      { covenant: "God owns all — humans are stewards", babylonian: "'Ownership' conditional on taxes and compliance" },
+      { covenant: "God owns all; humans are stewards", babylonian: "'Ownership' conditional on taxes and compliance" },
       { covenant: "Trust property protected from creditors (spendthrift)", babylonian: "Assets exposed to lawsuits, divorce, and forfeiture" },
-      { covenant: "No probate — trust continues in perpetuity", babylonian: "Probate takes 6-18 months, costs 3-7% of estate" },
-      { covenant: "Allodial-style title — free and clear", babylonian: "Fee simple — perpetual rent to the state via property tax" },
+      { covenant: "No probate; trust continues in perpetuity", babylonian: "Probate takes 6-18 months, costs 3-7% of estate" },
+      { covenant: "Allodial-style title, free and clear", babylonian: "Fee simple: perpetual rent to the state via property tax" },
     ],
     scriptureRefs: ["Psalm 24:1 (The earth is the LORD's)", "Haggai 2:8 (Silver and gold are mine)", "Acts 2:44-45 (All things common)"],
   },
@@ -235,16 +235,16 @@ The word "mortgage" itself comes from the Old French "mort gage" — literally "
     content: `The financial architecture of a system determines how wealth is created, distributed, preserved, and transferred. The two models operate on fundamentally incompatible premises.`,
     subsections: [
       {
-        title: "Covenant Model — Tithes, Storehouse & Redistribution",
+        title: "Covenant Model: Tithes, Storehouse, and Redistribution",
         content: `The covenant economy operates on principles of stewardship, sufficiency, and generational wealth:
 
 TITHES AND OFFERINGS:
-    "Bring ye all the tithes into the storehouse, that there may be meat in mine house" — Malachi 3:10
+    "Bring ye all the tithes into the storehouse, that there may be meat in mine house" (Malachi 3:10)
 
-Members contribute a tithe (tenth) of their increase to the common treasury. This is voluntary, covenantal, and based on increase — not on gross income before expenses. Additional offerings are given freely as the Spirit leads.
+Members contribute a tithe (tenth) of their increase to the common treasury. This is voluntary, covenantal, and based on increase (not on gross income before expenses). Additional offerings are given freely as the Spirit leads.
 
 THE STOREHOUSE PRINCIPLE:
-The Treasury Trust functions as the biblical storehouse — receiving tithes, managing resources, and distributing according to need:
+The Treasury Trust functions as the biblical storehouse, receiving tithes, managing resources, and distributing according to need:
     • Emergency reserves for members in crisis
     • Capital for enterprise development
     • Funding for education and training
@@ -252,7 +252,7 @@ The Treasury Trust functions as the biblical storehouse — receiving tithes, ma
     • Infrastructure maintenance and development
 
 NO USURY (INTEREST):
-    "Thou shalt not lend upon usury to thy brother; usury of money, usury of victuals, usury of any thing that is lent upon usury" — Deuteronomy 23:19
+    "Thou shalt not lend upon usury to thy brother; usury of money, usury of victuals, usury of any thing that is lent upon usury" (Deuteronomy 23:19)
 
 The covenant economy prohibits charging interest to fellow covenant members. Capital is provided through:
     • Interest-free loans from the Treasury Trust
@@ -262,50 +262,50 @@ The covenant economy prohibits charging interest to fellow covenant members. Cap
 
 WEALTH PRESERVATION:
     • Assets held in irrevocable trust are protected from creditors
-    • No estate tax — trust property does not pass through probate
+    • No estate tax; trust property does not pass through probate
     • Generational wealth accumulates rather than dissipates
     • The Beneficial Unit system ensures equitable distribution without creating dependency`,
       },
       {
-        title: "Babylonian Model — Fractional-Reserve Banking & Debt-Money",
+        title: "Babylonian Model: Fractional-Reserve Banking and Debt-Money",
         content: `The modern financial system is built on debt creation, interest extraction, and centralized monetary control:
 
 FRACTIONAL-RESERVE BANKING:
-Banks create money through lending. When a bank issues a $100,000 mortgage, it does not lend existing deposits — it creates new money as a ledger entry. The borrower must repay $100,000 plus interest, but only $100,000 was created. The interest must come from someone else's principal, creating a systemic shortage that requires ever-increasing debt to sustain.
+Banks create money through lending. When a bank issues a $100,000 mortgage, it does not lend existing deposits; it creates new money as a ledger entry. The borrower must repay $100,000 plus interest, but only $100,000 was created. The interest must come from someone else's principal, creating a systemic shortage that requires ever-increasing debt to sustain.
 
-    "The process by which banks create money is so simple that the mind is repelled" — John Kenneth Galbraith
+    "The process by which banks create money is so simple that the mind is repelled" (John Kenneth Galbraith)
 
 USURY (INTEREST) AS THE ENGINE:
 Interest is the fundamental mechanism of wealth transfer in the Babylonian system:
     • A 30-year mortgage at 7% costs approximately 2.4x the original loan amount
     • Credit card interest rates of 20-30% ensure perpetual debt for consumers
     • Student loan interest accrues during education, creating debt before earning begins
-    • National debt compounds exponentially — the US national debt exceeds $34 trillion
+    • National debt compounds exponentially; the US national debt exceeds $34 trillion
     • Interest payments flow from borrowers (labor) to lenders (capital), concentrating wealth
 
 FIAT CURRENCY:
     • Money is not backed by gold, silver, or any tangible commodity
     • The Federal Reserve (a private banking cartel) controls money supply
-    • Inflation is a hidden tax — purchasing power declines as money is created
+    • Inflation is a hidden tax; purchasing power declines as money is created
     • The dollar has lost approximately 97% of its purchasing power since 1913
 
 TAXATION:
-    • Income tax (16th Amendment, 1913 — same year as the Federal Reserve Act)
+    • Income tax (16th Amendment, 1913, the same year as the Federal Reserve Act)
     • Property tax (perpetual rent paid to the state)
     • Sales tax, capital gains tax, estate tax, gift tax
     • Social Security and Medicare taxes (payroll deductions)
     • The average American works approximately 100+ days per year just to pay taxes
 
-"The rich ruleth over the poor, and the borrower is servant to the lender" — Proverbs 22:7
+"The rich ruleth over the poor, and the borrower is servant to the lender" (Proverbs 22:7)
 
 The entire system is designed to create and maintain debt servitude. Participation requires borrowing, earning, spending, and being taxed at every stage.`,
       },
     ],
-    keyTakeaway: "The Covenant economy runs on tithes, interest-free lending, and storehouse redistribution. The Babylonian economy runs on fractional-reserve banking, compounding interest, and fiat currency — extracting wealth through debt.",
+    keyTakeaway: "The Covenant economy runs on tithes, interest-free lending, and storehouse redistribution. The Babylonian economy runs on fractional-reserve banking, compounding interest, and fiat currency, extracting wealth through debt.",
     comparisonRows: [
-      { covenant: "Tithes (10% of increase) — voluntary", babylonian: "Taxes at every stage — compulsory" },
-      { covenant: "No usury — interest-free loans to members", babylonian: "Usury is the engine — 30-year mortgage costs 2.4x principal" },
-      { covenant: "Storehouse principle — reserves for community need", babylonian: "Fractional-reserve banking — money created as debt" },
+      { covenant: "Tithes (10% of increase), voluntary", babylonian: "Taxes at every stage, compulsory" },
+      { covenant: "No usury; interest-free loans to members", babylonian: "Usury is the engine; a 30-year mortgage costs 2.4x principal" },
+      { covenant: "Storehouse principle: reserves for community need", babylonian: "Fractional-reserve banking: money created as debt" },
       { covenant: "Wealth preserved in irrevocable trust", babylonian: "Dollar lost ~97% purchasing power since 1913" },
     ],
     scriptureRefs: ["Malachi 3:10 (Bring tithes to the storehouse)", "Deuteronomy 23:19 (No usury)", "Proverbs 22:7 (Borrower is servant to lender)"],
@@ -318,32 +318,32 @@ The entire system is designed to create and maintain debt servitude. Participati
     content: `Governance determines how decisions are made, authority is exercised, and disputes are resolved. The source and structure of authority differ radically between the two models.`,
     subsections: [
       {
-        title: "Covenant Model — Protector Council & Biblical Governance",
+        title: "Covenant Model: Protector Council and Biblical Governance",
         content: `The trust operates under a tripartite governance structure modeled on biblical principles:
 
 THE PROTECTOR COUNCIL:
     • Composed of mature covenant members selected for wisdom, integrity, and spiritual maturity
     • Functions as the guardian of the trust's purpose and principles
     • Has veto power over trustee actions that violate the trust instrument
-    • Cannot initiate action — only approve, deny, or direct investigation
+    • Cannot initiate action; can only approve, deny, or direct investigation
     • Accountable to the covenant community and to scripture
 
 TRUSTEE AUTHORITY:
     • The Trustee holds legal title and operational authority
-    • Bound by fiduciary duty — the highest duty known to law
+    • Bound by fiduciary duty, the highest duty known to law
     • Subject to Protector Council oversight
     • Must act in the best interest of all beneficiaries, not personal interest
     • Can be removed for breach of fiduciary duty
 
 SEPARATION OF POWERS:
-    • Grantor (establishes the trust and its purpose — then steps back)
-    • Trustee (manages and administers — legal title)
-    • Protector (oversees and safeguards — veto and direction)
-    • Beneficiary (receives and enjoys — equitable title)
+    • Grantor (establishes the trust and its purpose, then steps back)
+    • Trustee (manages and administers; holds legal title)
+    • Protector (oversees and safeguards; holds veto and direction)
+    • Beneficiary (receives and enjoys; holds equitable title)
     No single role combines all powers. This mirrors the biblical pattern:
-    • Prophet (speaks truth) — Protector
-    • Priest (serves and administers) — Trustee
-    • King (governs and decides) — reserved for Christ
+    • Prophet (speaks truth): Protector
+    • Priest (serves and administers): Trustee
+    • King (governs and decides): reserved for Christ
 
 MATTHEW 18 GOVERNANCE:
 All internal disputes follow the Matthew 18 Protocol:
@@ -355,7 +355,7 @@ All internal disputes follow the Matthew 18 Protocol:
 This process is the exclusive dispute resolution mechanism, shielding internal matters from civil court jurisdiction.`,
       },
       {
-        title: "Babylonian Model — Corporate Boards, State Courts & Regulatory Agencies",
+        title: "Babylonian Model: Corporate Boards, State Courts, and Regulatory Agencies",
         content: `The modern governance system operates through multiple overlapping jurisdictions:
 
 CORPORATE GOVERNANCE:
@@ -368,7 +368,7 @@ CORPORATE GOVERNANCE:
 GOVERNMENT AUTHORITY:
     • Legislative branch creates statutes (often thousands of pages, written by lobbyists)
     • Executive branch enforces through regulatory agencies (EPA, IRS, SEC, FDA, etc.)
-    • Judicial branch interprets — but judges are political appointees
+    • Judicial branch interprets, though judges are political appointees
     • Administrative law: agencies write rules, enforce rules, and adjudicate violations (combining legislative, executive, and judicial functions in a single body)
 
 REGULATORY STATE:
@@ -382,19 +382,19 @@ COURT SYSTEM:
     • Civil litigation is adversarial, expensive, and slow
     • Average federal civil case takes 2-3 years
     • Legal costs create a two-tier system: justice for those who can afford it
-    • Jury trials have declined to less than 2% of cases — most are settled or decided by judges
+    • Jury trials have declined to less than 2% of cases; most are settled or decided by judges
     • Qualified immunity shields government actors from accountability
 
-"Woe unto you, lawyers! for ye have taken away the key of knowledge: ye entered not in yourselves, and them that were entering in ye hindered" — Luke 11:52
+"Woe unto you, lawyers! for ye have taken away the key of knowledge: ye entered not in yourselves, and them that were entering in ye hindered" (Luke 11:52)
 
-The system's complexity is a feature, not a bug — it creates dependence on licensed professionals and government-approved institutions for basic life functions.`,
+The system's complexity is a feature, not a bug; it creates dependence on licensed professionals and government-approved institutions for basic life functions.`,
       },
     ],
-    keyTakeaway: "The Covenant Model uses a tripartite structure (Trustee, Protector, Beneficiary) mirroring the biblical pattern of Prophet, Priest, and King — with Christ as ultimate authority. The Babylonian Model concentrates power through regulatory agencies that combine legislative, executive, and judicial functions.",
+    keyTakeaway: "The Covenant Model uses a tripartite structure (Trustee, Protector, Beneficiary) mirroring the biblical pattern of Prophet, Priest, and King, with Christ as ultimate authority. The Babylonian Model concentrates power through regulatory agencies that combine legislative, executive, and judicial functions.",
     comparisonRows: [
-      { covenant: "Protector Council — mature covenant members", babylonian: "Corporate boards answerable to shareholders" },
-      { covenant: "Fiduciary duty — the highest duty in law", babylonian: "Fiduciary duty to profit, not community" },
-      { covenant: "Matthew 18 Protocol for disputes", babylonian: "Civil litigation — adversarial, costly, slow" },
+      { covenant: "Protector Council: mature covenant members", babylonian: "Corporate boards answerable to shareholders" },
+      { covenant: "Fiduciary duty, the highest duty in law", babylonian: "Fiduciary duty to profit, not community" },
+      { covenant: "Matthew 18 Protocol for disputes", babylonian: "Civil litigation: adversarial, costly, and slow" },
       { covenant: "No single role combines all powers", babylonian: "Administrative agencies: legislate, enforce, and judge" },
     ],
     scriptureRefs: ["Matthew 18:15-17 (Dispute resolution)", "Luke 11:52 (Woe unto lawyers)", "Matthew 23:11 (Greatest shall serve)"],
@@ -407,7 +407,7 @@ The system's complexity is a feature, not a bug — it creates dependence on lic
     content: `How individuals enter, participate in, and relate to a system reveals whether that system is based on consent or compulsion.`,
     subsections: [
       {
-        title: "Covenant Model — Voluntary Covenant Membership (PMA)",
+        title: "Covenant Model: Voluntary Covenant Membership (PMA)",
         content: `Membership in the Ecclesia Basilikos Trust is entirely voluntary, based on informed consent and covenant commitment:
 
 ENTRY REQUIREMENTS:
@@ -426,37 +426,37 @@ The trust operates as a Private Membership Association (PMA), which enjoys speci
     • Internal affairs governed by the membership agreement, not state statutes
 
 KEY CHARACTERISTICS:
-    • Entry is voluntary — no one is born into obligation
-    • Exit is permitted — though the covenant is irrevocable, physical participation is not compelled
+    • Entry is voluntary; no one is born into obligation
+    • Exit is permitted; though the covenant is irrevocable, physical participation is not compelled
     • Rights and benefits flow from the covenant relationship, not from government grant
     • No Social Security number, driver's license, or government ID required for membership
     • Members are known by their covenant names and relationships, not by government-assigned numbers
 
-"Choose you this day whom ye will serve... but as for me and my house, we will serve the LORD" — Joshua 24:15
+"Choose you this day whom ye will serve... but as for me and my house, we will serve the LORD" (Joshua 24:15)
 
 The covenant model presupposes free will. God does not compel worship; the trust does not compel membership. Every participant has chosen to be there.`,
       },
       {
-        title: "Babylonian Model — Statutory Citizenship & Compulsory Jurisdiction",
+        title: "Babylonian Model: Statutory Citizenship and Compulsory Jurisdiction",
         content: `In the modern system, "citizenship" is assigned at birth and carries compulsory obligations:
 
 BIRTH REGISTRATION:
-    • Birth certificate creates a legal fiction (the "straw man" — the all-caps name)
+    • Birth certificate creates a legal fiction (the "straw man," the all-caps name)
     • Social Security number assigned shortly after birth
     • The individual is enrolled in the system before they can consent
-    • Birth certificate is a financial instrument — registered with the state as a vital statistic
+    • Birth certificate is a financial instrument, registered with the state as a vital statistic
 
 COMPULSORY OBLIGATIONS:
     • Taxation: failure to pay results in liens, levies, and imprisonment
     • Selective Service: males must register at 18 or face penalties
     • Compulsory education: state mandates education through age 16-18
-    • Licensing: driving, marriage, business, profession — all require government permission
+    • Licensing: driving, marriage, business, and profession all require government permission
     • Jury duty: compelled service under threat of contempt
     • Compliance with all federal, state, and local regulations
 
 JURISDICTION BY PRESUMPTION:
     • The system presumes jurisdiction over everyone within its borders
-    • "Consent of the governed" is theoretical — there is no practical mechanism to withdraw
+    • "Consent of the governed" is theoretical; there is no practical mechanism to withdraw
     • Renouncing citizenship requires government approval, an exit tax, and a fee
     • The 14th Amendment created "citizens of the United States" subject to federal jurisdiction
     • Commercial activity (banking, employment, commerce) creates nexus for regulation
@@ -468,18 +468,18 @@ KEY CHARACTERISTICS:
     • Non-compliance results in penalties ranging from fines to imprisonment
     • The system does not recognize a right to opt out
 
-"Come out of her, my people, that ye be not partakers of her sins, and that ye receive not of her plagues" — Revelation 18:4
+"Come out of her, my people, that ye be not partakers of her sins, and that ye receive not of her plagues" (Revelation 18:4)
 
-The call to "come out" presupposes that one is currently "in" — the Babylonian system encompasses by default, and exit requires deliberate, informed action.`,
+The call to "come out" presupposes that one is currently "in"; the Babylonian system encompasses by default, and exit requires deliberate, informed action.`,
       },
     ],
-    keyTakeaway: "Covenant membership is voluntary — entered by informed consent and covenant commitment. Babylonian citizenship is assigned at birth and carries compulsory obligations enforced by penalties.",
+    keyTakeaway: "Covenant membership is voluntary, entered by informed consent and covenant commitment. Babylonian citizenship is assigned at birth and carries compulsory obligations enforced by penalties.",
     comparisonRows: [
       { covenant: "Voluntary entry by profession of faith", babylonian: "Assigned at birth via birth certificate" },
       { covenant: "Rights flow from covenant relationship", babylonian: "Rights treated as government-granted privileges" },
       { covenant: "Identity in covenant names and relationships", babylonian: "Identity by government-assigned numbers (SSN, TIN)" },
-      { covenant: "Private Membership Association protections", babylonian: "Jurisdiction presumed — no practical mechanism to withdraw" },
-      { covenant: "Exit permitted — participation not compelled", babylonian: "Renouncing requires approval, exit tax, and fees" },
+      { covenant: "Private Membership Association protections", babylonian: "Jurisdiction presumed; no practical mechanism to withdraw" },
+      { covenant: "Exit permitted; participation not compelled", babylonian: "Renouncing requires approval, exit tax, and fees" },
     ],
     scriptureRefs: ["Joshua 24:15 (Choose this day whom ye will serve)", "Revelation 18:4 (Come out of her, my people)", "NAACP v. Alabama (Right to private association)"],
   },
@@ -491,47 +491,47 @@ The call to "come out" presupposes that one is currently "in" — the Babylonian
     content: `Asset protection is the practical test of any legal structure. How well does the system protect what has been entrusted to its care?`,
     subsections: [
       {
-        title: "Covenant Model — Spendthrift Trust & Ecclesiastical Jurisdiction",
+        title: "Covenant Model: Spendthrift Trust and Ecclesiastical Jurisdiction",
         content: `The trust architecture provides multiple layers of asset protection:
 
-LAYER 1 — TRUST STRUCTURE:
+LAYER 1: TRUST STRUCTURE
     • Irrevocable trust: grantor has no power to alter, amend, or revoke
     • Spendthrift provisions: beneficiaries cannot transfer their interest; creditors cannot reach it
     • Separation of legal and equitable title: the Trustee holds legal title; beneficiaries hold equitable title
-    • No single individual "owns" trust assets — they are held for the collective benefit
+    • No single individual "owns" trust assets; they are held for the collective benefit
 
-LAYER 2 — ECCLESIASTICAL JURISDICTION:
+LAYER 2: ECCLESIASTICAL JURISDICTION
     • Watson v. Jones (1871): civil courts have no jurisdiction over ecclesiastical matters
     • Hosanna-Tabor (2012): religious organizations have absolute autonomy over internal affairs
     • The ministerial exception bars employment claims against religious leaders
     • Internal governance decisions are ecclesiastical matters beyond civil court reach
 
-LAYER 3 — CONSTITUTIONAL PROTECTIONS:
+LAYER 3: CONSTITUTIONAL PROTECTIONS
     • First Amendment: free exercise, assembly, and religious self-governance
     • RFRA: government cannot substantially burden religious exercise
     • RLUIPA: protects religious land use from discriminatory regulation
     • Contract Clause: no state law may impair the Declaration of Trust
 
-LAYER 4 — OPERATIONAL ISOLATION:
+LAYER 4: OPERATIONAL ISOLATION
     • Each stewardship organ is a separate trust with independent liability
     • The Enterprise Trust operates businesses without exposing the parent trust
     • Individual member liability does not flow to the trust
     • Trust liability does not flow to individual members
 
-LAYER 5 — PMA PROTECTIONS:
-    • Private association — internal affairs are not subject to public regulation
+LAYER 5: PMA PROTECTIONS
+    • Private association; internal affairs are not subject to public regulation
     • No government registration or reporting required
     • Membership agreements supersede statutory default rules
     • Right to exclude government interference in internal operations
 
-The result: multiple overlapping shields that an adversary must penetrate simultaneously — a task that is legally, constitutionally, and practically near-impossible.`,
+The result is multiple overlapping shields that an adversary must penetrate simultaneously, a task that is legally, constitutionally, and practically near-impossible.`,
       },
       {
-        title: "Babylonian Model — Corporate Veil, Insurance & Statutory Compliance",
+        title: "Babylonian Model: Corporate Veil, Insurance, and Statutory Compliance",
         content: `The modern system offers asset protection, but it is conditional, limited, and subject to government override:
 
 CORPORATE VEIL:
-    • LLCs and corporations provide liability protection — until pierced
+    • LLCs and corporations provide liability protection, but it can be pierced
     • Courts regularly pierce the veil for: commingling funds, undercapitalization, fraud, alter ego
     • Corporate Transparency Act requires beneficial ownership reporting to FinCEN
     • Single-member LLCs provide no charging order protection in many states
@@ -541,7 +541,7 @@ INSURANCE:
     • Insurers control defense strategy and settlement decisions
     • Policy exclusions, limits, and deductibles create gaps
     • Insurance companies are profit-motivated and will deny claims when possible
-    • Malpractice, E&O, D&O, umbrella — each covers a narrow slice
+    • Malpractice, E&O, D&O, umbrella: each covers only a narrow slice
 
 STATUTORY COMPLIANCE:
     • Protection is contingent on compliance with all regulations
@@ -569,7 +569,7 @@ The fundamental problem: the Babylonian system's asset protection mechanisms are
     ],
     keyTakeaway: "The Covenant Model provides five overlapping layers of protection (trust structure, ecclesiastical jurisdiction, constitutional protections, operational isolation, PMA). The Babylonian Model's protections are granted by the same system that threatens the assets.",
     comparisonRows: [
-      { covenant: "Irrevocable trust — spendthrift provisions", babylonian: "Corporate veil — regularly pierced by courts" },
+      { covenant: "Irrevocable trust with spendthrift provisions", babylonian: "Corporate veil regularly pierced by courts" },
       { covenant: "Ecclesiastical jurisdiction shields internal affairs", babylonian: "Insurance controlled by profit-motivated companies" },
       { covenant: "Constitutional protections (First Amendment, RFRA)", babylonian: "Protection contingent on regulatory compliance" },
       { covenant: "Separate trust organs isolate liability", babylonian: "Civil asset forfeiture requires no conviction" },
@@ -584,11 +584,11 @@ The fundamental problem: the Babylonian system's asset protection mechanisms are
     content: `How work is organized, compensated, and valued reflects the deepest priorities of an economic system.`,
     subsections: [
       {
-        title: "Covenant Model — Craft Guilds & the Bezalel Pattern",
+        title: "Covenant Model: Craft Guilds and the Bezalel Pattern",
         content: `The covenant economy organizes work around calling, craft, and community benefit:
 
 THE BEZALEL PATTERN:
-    "See, I have called by name Bezaleel... and I have filled him with the spirit of God, in wisdom, and in understanding, and in knowledge, and in all manner of workmanship" — Exodus 31:1-3
+    "See, I have called by name Bezaleel... and I have filled him with the spirit of God, in wisdom, and in understanding, and in knowledge, and in all manner of workmanship" (Exodus 31:1-3)
 
 Work in the covenant model is:
     • A divine calling, not merely a means of income
@@ -597,7 +597,7 @@ Work in the covenant model is:
     • Directed toward building the community, not extracting from it
 
 CRAFT GUILDS (LAYER 7):
-The Enterprise Trust establishes and supports craft guilds — cooperative economic units organized by trade:
+The Enterprise Trust establishes and supports craft guilds, cooperative economic units organized by trade:
     • Master-apprentice relationships for skill transfer
     • Quality standards maintained by the guild, not by government regulators
     • Pricing that reflects true value, not market manipulation
@@ -607,22 +607,22 @@ The Enterprise Trust establishes and supports craft guilds — cooperative econo
 COOPERATIVE ECONOMY:
     • Enterprises are owned by the trust, not by outside investors
     • Workers are covenant members, not "human resources"
-    • There is no distinction between "labor" and "management" — all are stewards
+    • There is no distinction between "labor" and "management"; all are stewards
     • Enterprise profits flow to the Treasury Trust for community benefit
     • No member is exploited; no member is idle
 
-"For even when we were with you, this we commanded you, that if any would not work, neither should he eat" — 2 Thessalonians 3:10
+"For even when we were with you, this we commanded you, that if any would not work, neither should he eat" (2 Thessalonians 3:10)
 
 Work is both a privilege and a responsibility. The covenant economy provides meaningful work for every able member and dignified support for those who cannot work.`,
       },
       {
-        title: "Babylonian Model — Employer-Employee & Labor Regulation",
-        content: `The modern labor system is built on the employer-employee relationship — a legal construct that replaced master-servant:
+        title: "Babylonian Model: Employer-Employee and Labor Regulation",
+        content: `The modern labor system is built on the employer-employee relationship, a legal construct that replaced master-servant:
 
 THE EMPLOYMENT RELATIONSHIP:
     • Employees sell their time and labor for wages
     • Employers own the output of that labor
-    • The relationship is inherently unequal — the employer holds the power
+    • The relationship is inherently unequal; the employer holds the power
     • "At-will" employment: either party can terminate for any reason (or no reason)
     • Workers are classified as W-2 (employee) or 1099 (independent contractor)
 
@@ -630,7 +630,7 @@ LABOR REGULATION:
     • Federal: FLSA (minimum wage, overtime), OSHA, EEOC, NLRA, ERISA, ADA, FMLA
     • State: workers' compensation, unemployment insurance, state labor boards
     • Local: minimum wage ordinances, paid sick leave, scheduling regulations
-    • Compliance creates enormous overhead — particularly for small businesses
+    • Compliance creates enormous overhead, particularly for small businesses
     • Regulations are written by large corporations who can afford compliance, creating barriers to entry
 
 THE WAGE SYSTEM:
@@ -647,19 +647,19 @@ TAXATION OF LABOR:
     • The tax code incentivizes corporate structures and penalizes individual labor
     • Workers are the most heavily taxed participants in the economy
 
-"Behold, the hire of the labourers who have reaped down your fields, which is of you kept back by fraud, crieth: and the cries of them which have reaped are entered into the ears of the Lord of sabaoth" — James 5:4
+"Behold, the hire of the labourers who have reaped down your fields, which is of you kept back by fraud, crieth: and the cries of them which have reaped are entered into the ears of the Lord of sabaoth" (James 5:4)
 
 The Babylonian system treats human labor as a commodity to be purchased at the lowest possible price and taxed at the highest possible rate.`,
       },
     ],
-    keyTakeaway: "The Covenant Model organizes work around divine calling, craft guilds, and cooperative enterprise owned by the trust. The Babylonian Model treats labor as a commodity — purchased cheaply, taxed heavily, and controlled through economic dependence.",
+    keyTakeaway: "The Covenant Model organizes work around divine calling, craft guilds, and cooperative enterprise owned by the trust. The Babylonian Model treats labor as a commodity: purchased cheaply, taxed heavily, and controlled through economic dependence.",
     comparisonRows: [
-      { covenant: "Work as divine calling (Bezalel pattern)", babylonian: "Work as commodity — 'human resources'" },
+      { covenant: "Work as divine calling (Bezalel pattern)", babylonian: "Work as commodity; 'human resources'" },
       { covenant: "Craft guilds with master-apprentice training", babylonian: "Employer-employee with at-will termination" },
       { covenant: "Enterprises owned by the trust for community benefit", babylonian: "Surplus extracted as profit for shareholders" },
-      { covenant: "Fair compensation — no exploitation", babylonian: "Wages stagnant vs. productivity since 1970s" },
+      { covenant: "Fair compensation; no exploitation", babylonian: "Wages stagnant vs. productivity since 1970s" },
     ],
-    scriptureRefs: ["Exodus 31:1-3 (Bezalel — filled with the Spirit)", "2 Thessalonians 3:10 (If any would not work)", "James 5:4 (Wages kept back by fraud)"],
+    scriptureRefs: ["Exodus 31:1-3 (Bezalel, filled with the Spirit)", "2 Thessalonians 3:10 (If any would not work)", "James 5:4 (Wages kept back by fraud)"],
   },
   {
     id: "education-knowledge",
@@ -669,20 +669,20 @@ The Babylonian system treats human labor as a commodity to be purchased at the l
     content: `How a society educates its members reveals what it values and who it serves. Education is either a tool of liberation or a mechanism of control.`,
     subsections: [
       {
-        title: "Covenant Model — Discipleship Chain & Education Trust",
+        title: "Covenant Model: Discipleship Chain and Education Trust",
         content: `The covenant model follows the biblical pattern of knowledge transfer through relationship:
 
 THE DISCIPLESHIP CHAIN:
-    "And the things that thou hast heard of me among many witnesses, the same commit thou to faithful men, who shall be able to teach others also" — 2 Timothy 2:2
+    "And the things that thou hast heard of me among many witnesses, the same commit thou to faithful men, who shall be able to teach others also" (2 Timothy 2:2)
 
 This verse describes a four-generation knowledge transfer:
     1. Paul → 2. Timothy → 3. Faithful men → 4. Others also
 
 Education in the covenant model is:
-    • Relational, not institutional — master teaches apprentice
-    • Practical, not merely theoretical — knowledge is applied
-    • Generational — each generation teaches the next
-    • Free of debt — education is a community investment, not a profit center
+    • Relational, not institutional; master teaches apprentice
+    • Practical, not merely theoretical; knowledge is applied
+    • Generational; each generation teaches the next
+    • Free of debt; education is a community investment, not a profit center
     • Rooted in scripture as the foundation of all knowledge
 
 THE EDUCATION TRUST (LAYER 3):
@@ -694,15 +694,15 @@ The Education Trust is one of the five stewardship organs, responsible for:
     • Continuing education for adults
 
 KEY PRINCIPLES:
-    • "The fear of the LORD is the beginning of knowledge" — Proverbs 1:7
+    • "The fear of the LORD is the beginning of knowledge" (Proverbs 1:7)
     • Education is a parental responsibility delegated to the community, not the state
-    • No credentialism — competence is demonstrated, not certified
-    • No student debt — the community invests in its members
-    • No government curriculum standards — the trust sets its own educational goals
+    • No credentialism; competence is demonstrated, not certified
+    • No student debt; the community invests in its members
+    • No government curriculum standards; the trust sets its own educational goals
     • Education prepares members for covenant life, not for the corporate workforce`,
       },
       {
-        title: "Babylonian Model — State Accreditation, Student Debt & Credentialism",
+        title: "Babylonian Model: State Accreditation, Student Debt, and Credentialism",
         content: `The modern education system is a government-regulated, debt-financed credential factory:
 
 COMPULSORY EDUCATION:
@@ -733,19 +733,19 @@ THE KNOWLEDGE MONOPOLY:
     • Dissent from consensus is punished with loss of funding, position, and reputation
     • The system produces experts who know more and more about less and less
 
-"Ever learning, and never able to come to the knowledge of the truth" — 2 Timothy 3:7
+"Ever learning, and never able to come to the knowledge of the truth" (2 Timothy 3:7)
 
 The Babylonian education system is designed to produce compliant workers and consumers, not wise stewards and independent thinkers. Knowledge is commodified, and the price of admission creates a new form of debt bondage.`,
       },
     ],
     keyTakeaway: "The Covenant Model transfers knowledge through relational discipleship chains and a debt-free Education Trust. The Babylonian Model commodifies education through accreditation monopolies and $1.7 trillion in student debt.",
     comparisonRows: [
-      { covenant: "Discipleship chain — relational knowledge transfer", babylonian: "Institutional — credentialism and accreditation" },
+      { covenant: "Discipleship chain: relational knowledge transfer", babylonian: "Institutional credentialism and accreditation" },
       { covenant: "Education is debt-free community investment", babylonian: "Average graduate carries $30,000+ in student debt" },
       { covenant: "Competence demonstrated, not certified", babylonian: "Credentials as barriers to entry" },
       { covenant: "Scripture as the foundation of knowledge", babylonian: "Government curriculum standards and mandates" },
     ],
-    scriptureRefs: ["2 Timothy 2:2 (Four-generation transfer)", "Proverbs 1:7 (Fear of the LORD — beginning of knowledge)", "2 Timothy 3:7 (Ever learning, never able)"],
+    scriptureRefs: ["2 Timothy 2:2 (Four-generation transfer)", "Proverbs 1:7 (Fear of the LORD, beginning of knowledge)", "2 Timothy 3:7 (Ever learning, never able)"],
   },
   {
     id: "generational-transfer",
@@ -755,45 +755,45 @@ The Babylonian education system is designed to produce compliant workers and con
     content: `How wealth, knowledge, and identity pass from one generation to the next determines whether a community grows stronger or weaker over time.`,
     subsections: [
       {
-        title: "Covenant Model — Perpetual Trust & Children's Covenant Pathway",
+        title: "Covenant Model: Perpetual Trust and Children's Covenant Pathway",
         content: `The covenant model is designed for perpetual, uninterrupted generational transfer:
 
 PERPETUAL TRUST:
-    • The trust has no expiration date — it continues in perpetuity
+    • The trust has no expiration date; it continues in perpetuity
     • Trust property does not pass through probate upon the death of any individual
-    • No estate tax — trust assets are not part of any individual's taxable estate
+    • No estate tax; trust assets are not part of any individual's taxable estate
     • Each generation inherits the accumulated wealth and wisdom of all previous generations
     • The Rule Against Perpetuities does not apply to common law ecclesiastical trusts
 
 CHILDREN'S COVENANT PATHWAY:
 Children born to covenant members are:
-    1. Dedicated to God (presented before the ecclesia, similar to Samuel — 1 Samuel 1:28)
+    1. Dedicated to God (presented before the ecclesia, similar to Samuel in 1 Samuel 1:28)
     2. Raised within the covenant community with access to all trust benefits
     3. Educated through the Education Trust
     4. Mentored through craft guilds and discipleship relationships
     5. At maturity, invited to make their own covenant commitment
     6. Upon profession, they become full covenant members with beneficial interest
 
-"Train up a child in the way he should go: and when he is old, he will not depart from it" — Proverbs 22:6
+"Train up a child in the way he should go: and when he is old, he will not depart from it" (Proverbs 22:6)
 
 KEY PRINCIPLES:
     • Every generation starts from a position of strength, not debt
     • Knowledge transfer is intentional and relational
     • Identity is rooted in covenant, not in government classification
     • Wealth accumulates across generations rather than being taxed and dissipated
-    • The "thousand generations" principle: "Know therefore that the LORD thy God, he is God, the faithful God, which keepeth covenant and mercy with them that love him and keep his commandments to a thousand generations" — Deuteronomy 7:9`,
+    • The "thousand generations" principle: "Know therefore that the LORD thy God, he is God, the faithful God, which keepeth covenant and mercy with them that love him and keep his commandments to a thousand generations" (Deuteronomy 7:9)`,
       },
       {
-        title: "Babylonian Model — Probate, Estate Tax & Inheritance Litigation",
+        title: "Babylonian Model: Probate, Estate Tax, and Inheritance Litigation",
         content: `The modern system is designed to extract maximum value at each generational transition:
 
 PROBATE:
     • Upon death, individually held assets enter the probate process
-    • Probate is public — anyone can see what the deceased owned
+    • Probate is public; anyone can see what the deceased owned
     • Average probate takes 6-18 months; complex estates can take years
     • Attorney fees typically 3-7% of the estate value
     • Executor fees, court costs, and administrative expenses add more
-    • During probate, assets are frozen — heirs cannot access them
+    • During probate, assets are frozen and heirs cannot access them
 
 ESTATE AND GIFT TAXES:
     • Federal estate tax applies to estates exceeding the exemption amount
@@ -803,7 +803,7 @@ ESTATE AND GIFT TAXES:
     • The tax code is designed to prevent dynastic wealth accumulation
 
 INHERITANCE LITIGATION:
-    • Will contests are common — family members dispute the deceased's wishes
+    • Will contests are common, with family members disputing the deceased's wishes
     • Intestate succession (dying without a will) follows state statutory rules
     • Blended families create complex competing claims
     • Litigation can consume a significant portion of the estate
@@ -816,16 +816,16 @@ THE GENERATIONAL RESET:
     • Retirement systems (Social Security, 401k) are designed for individual consumption, not generational transfer
     • The average inheritance is spent within 2-3 years
 
-"A good man leaveth an inheritance to his children's children: and the wealth of the sinner is laid up for the just" — Proverbs 13:22
+"A good man leaveth an inheritance to his children's children: and the wealth of the sinner is laid up for the just" (Proverbs 13:22)
 
-The Babylonian system ensures that wealth is recycled through the system at each generational transition — extracted by lawyers, taxed by the government, and dissipated by a consumer culture that teaches spending, not stewardship.`,
+The Babylonian system ensures that wealth is recycled through the system at each generational transition, extracted by lawyers, taxed by the government, and dissipated by a consumer culture that teaches spending, not stewardship.`,
       },
     ],
-    keyTakeaway: "The Covenant Model builds perpetual, tax-free generational wealth through irrevocable trust — each generation starts from strength. The Babylonian Model resets wealth at every death through probate, estate taxes, and inheritance litigation.",
+    keyTakeaway: "The Covenant Model builds perpetual, tax-free generational wealth through irrevocable trust; each generation starts from strength. The Babylonian Model resets wealth at every death through probate, estate taxes, and inheritance litigation.",
     comparisonRows: [
-      { covenant: "Perpetual trust — no expiration date", babylonian: "Probate — public, costly, 6-18 months" },
-      { covenant: "No estate tax — assets not in any individual's estate", babylonian: "Estate tax, gift tax, generation-skipping tax" },
-      { covenant: "Children's Covenant Pathway — mentored into membership", babylonian: "Student debt burdens the next generation before earning" },
+      { covenant: "Perpetual trust; no expiration date", babylonian: "Probate: public, costly, 6-18 months" },
+      { covenant: "No estate tax; assets not in any individual's estate", babylonian: "Estate tax, gift tax, generation-skipping tax" },
+      { covenant: "Children's Covenant Pathway: mentored into membership", babylonian: "Student debt burdens the next generation before earning" },
       { covenant: "Wealth accumulates across generations", babylonian: "Average inheritance spent within 2-3 years" },
     ],
     scriptureRefs: ["Proverbs 13:22 (Inheritance to children's children)", "Proverbs 22:6 (Train up a child)", "Deuteronomy 7:9 (A thousand generations)"],
@@ -838,44 +838,44 @@ The Babylonian system ensures that wealth is recycled through the system at each
     content: `How disputes are resolved reveals whether a system prioritizes reconciliation or adversarial victory.`,
     subsections: [
       {
-        title: "Covenant Model — The Matthew 18 Protocol",
+        title: "Covenant Model: The Matthew 18 Protocol",
         content: `The trust's exclusive dispute resolution mechanism follows the process Jesus prescribed:
 
-    "Moreover if thy brother shall trespass against thee, go and tell him his fault between thee and him alone: if he shall hear thee, thou hast gained thy brother. But if he will not hear thee, then take with thee one or two more, that in the mouth of two or three witnesses every word may be established. And if he shall neglect to hear them, tell it unto the church: but if he neglect to hear the church, let him be unto thee as an heathen man and a publican." — Matthew 18:15-17
+    "Moreover if thy brother shall trespass against thee, go and tell him his fault between thee and him alone: if he shall hear thee, thou hast gained thy brother. But if he will not hear thee, then take with thee one or two more, that in the mouth of two or three witnesses every word may be established. And if he shall neglect to hear them, tell it unto the church: but if he neglect to hear the church, let him be unto thee as an heathen man and a publican." (Matthew 18:15-17)
 
 THE FOUR STEPS:
-    Step 1: PRIVATE CONVERSATION — The aggrieved party goes directly to the other party, privately. Most disputes are resolved here through honest dialogue and repentance.
+    Step 1: PRIVATE CONVERSATION. The aggrieved party goes directly to the other party, privately. Most disputes are resolved here through honest dialogue and repentance.
 
-    Step 2: WITNESSES — If private conversation fails, two or three witnesses are brought in. These are mature covenant members who can hear both sides and counsel wisely.
+    Step 2: WITNESSES. If private conversation fails, two or three witnesses are brought in. These are mature covenant members who can hear both sides and counsel wisely.
 
-    Step 3: ECCLESIA — If the matter remains unresolved, it is brought before the gathered assembly. The community hears the matter and renders a collective judgment.
+    Step 3: ECCLESIA. If the matter remains unresolved, it is brought before the gathered assembly. The community hears the matter and renders a collective judgment.
 
-    Step 4: SEPARATION — If the offending party refuses to hear the ecclesia, they are treated as outside the covenant. This is not punishment but recognition that the person has chosen to leave the covenant relationship.
+    Step 4: SEPARATION. If the offending party refuses to hear the ecclesia, they are treated as outside the covenant. This is not punishment but recognition that the person has chosen to leave the covenant relationship.
 
 KEY CHARACTERISTICS:
     • The goal is reconciliation, not victory
-    • The process is private until Step 3 — protecting the dignity of both parties
+    • The process is private until Step 3, protecting the dignity of both parties
     • No attorneys, filing fees, or court costs
-    • Resolution is typically swift — days or weeks, not months or years
+    • Resolution is typically swift: days or weeks, not months or years
     • The process is an ecclesiastical matter protected from civil court interference
     • By agreeing to the PMA, members waive the right to civil litigation for internal disputes
 
-"Dare any of you, having a matter against another, go to law before the unjust, and not before the saints?" — 1 Corinthians 6:1`,
+"Dare any of you, having a matter against another, go to law before the unjust, and not before the saints?" (1 Corinthians 6:1)`,
       },
       {
-        title: "Babylonian Model — Civil Litigation & Regulatory Enforcement",
+        title: "Babylonian Model: Civil Litigation and Regulatory Enforcement",
         content: `The modern dispute resolution system is adversarial, expensive, and often unjust:
 
 CIVIL LITIGATION:
     • Parties hire attorneys who advocate zealously for their client's position
-    • Discovery process: interrogatories, depositions, document production — costly and invasive
-    • Motion practice: motions to dismiss, for summary judgment, in limine — each generating legal fees
+    • Discovery process: interrogatories, depositions, document production; all costly and invasive
+    • Motion practice: motions to dismiss, for summary judgment, in limine, each generating legal fees
     • Trial: if reached (less than 2% of cases), before a judge or jury of strangers
     • Appeal: the losing party can appeal, extending the process by years
     • Average cost of civil litigation: $50,000-$100,000+ for simple cases; millions for complex ones
 
 REGULATORY ENFORCEMENT:
-    • Government agencies investigate, prosecute, and adjudicate — often simultaneously
+    • Government agencies investigate, prosecute, and adjudicate, often simultaneously
     • Administrative law judges work for the agency bringing the charges
     • The burden of proof is lower than in criminal court
     • Regulated entities often settle rather than fight, regardless of merit
@@ -889,9 +889,9 @@ ARBITRATION:
     • Arbitration clauses strip individuals of the right to a jury trial
 
 KEY CHARACTERISTICS:
-    • The system is adversarial — one party wins, one loses
-    • Cost creates inequality — corporations can outspend individuals
-    • Delay is a weapon — those with resources can outlast those without
+    • The system is adversarial; one party wins, one loses
+    • Cost creates inequality; corporations can outspend individuals
+    • Delay is a weapon; those with resources can outlast those without
     • The process is emotionally and financially devastating
     • Resolution often comes years after the dispute arose
     • The system enriches attorneys, not the parties
@@ -899,10 +899,10 @@ KEY CHARACTERISTICS:
 The average American cannot afford to vindicate their rights in court. The Babylonian dispute resolution system is, in practice, a system of justice for those who can afford it and endurance for those who cannot.`,
       },
     ],
-    keyTakeaway: "The Covenant Model resolves disputes through the Matthew 18 Protocol — private, swift, restorative, and free. The Babylonian Model uses adversarial litigation — public, slow, destructive, and costing $50,000-$100,000+ for simple cases.",
+    keyTakeaway: "The Covenant Model resolves disputes through the Matthew 18 Protocol: private, swift, restorative, and free. The Babylonian Model uses adversarial litigation that is public, slow, destructive, and costs $50,000-$100,000+ for simple cases.",
     comparisonRows: [
       { covenant: "Goal is reconciliation", babylonian: "Goal is adversarial victory" },
-      { covenant: "Four steps: private → witnesses → ecclesia → separation", babylonian: "Discovery, motions, trial, appeal — years of process" },
+      { covenant: "Four steps: private, witnesses, ecclesia, separation", babylonian: "Discovery, motions, trial, appeal: years of process" },
       { covenant: "No attorneys, filing fees, or court costs", babylonian: "$50,000-$100,000+ for simple civil cases" },
       { covenant: "Resolution in days or weeks", babylonian: "Average federal case takes 2-3 years" },
       { covenant: "Protected as ecclesiastical matter", babylonian: "Cost creates two-tier justice system" },
@@ -917,11 +917,11 @@ The average American cannot afford to vindicate their rights in court. The Babyl
     content: `The legal foundation of a system determines what is legitimate, what is enforceable, and what rights exist. The two models rest on fundamentally different legal bases.`,
     subsections: [
       {
-        title: "Covenant Model — Common Law Trust, First Amendment & Ecclesiastical Jurisdiction",
+        title: "Covenant Model: Common Law Trust, First Amendment, and Ecclesiastical Jurisdiction",
         content: `The covenant model operates under three interlocking legal frameworks:
 
 1. COMMON LAW TRUST:
-The trust is a creature of common law — not statutory law. Common law trusts:
+The trust is a creature of common law, not statutory law. Common law trusts:
     • Predate all statutory codes (rooted in English equity courts from the 13th century)
     • Require only the three certainties: intention, subject matter, objects
     • Are governed by the terms of the trust instrument, not by state trust codes
@@ -930,10 +930,10 @@ The trust is a creature of common law — not statutory law. Common law trusts:
 
 2. FIRST AMENDMENT:
 Four distinct protections:
-    • Free Exercise — right to practice religion without government interference
-    • Establishment Clause — government cannot define or regulate religious organizations
-    • Freedom of Assembly — right to gather as a private association
-    • Freedom of Speech — right to teach, preach, and publish
+    • Free Exercise: right to practice religion without government interference
+    • Establishment Clause: government cannot define or regulate religious organizations
+    • Freedom of Assembly: right to gather as a private association
+    • Freedom of Speech: right to teach, preach, and publish
 
 3. ECCLESIASTICAL JURISDICTION:
     • Watson v. Jones (1871): courts have no jurisdiction over religious governance
@@ -952,60 +952,60 @@ STATUTORY RECOGNITION:
     • RLUIPA: protects religious land use
     • Public Law 97-280: Congress acknowledged the Bible as "the Word of God"
 
-The covenant model does not operate outside the law — it operates under the highest law: divine law, natural law, and the common law of trusts, reinforced by constitutional protections that the government itself is bound to respect.`,
+The covenant model does not operate outside the law; it operates under the highest law: divine law, natural law, and the common law of trusts, reinforced by constitutional protections that the government itself is bound to respect.`,
       },
       {
-        title: "Babylonian Model — UCC, Commercial Code & Statutory Regulatory Framework",
+        title: "Babylonian Model: UCC, Commercial Code, and Statutory Regulatory Framework",
 
         content: `The modern legal system operates under a layered framework of statutory, regulatory, and commercial law:
 
 UNIFORM COMMERCIAL CODE (UCC):
-    • Adopted in all 50 states — governs commercial transactions
+    • Adopted in all 50 states; governs commercial transactions
     • Article 1: General Provisions (definitions, choice of law)
     • Article 2: Sales of goods
     • Article 3: Negotiable instruments (checks, notes, drafts)
     • Article 9: Secured transactions (liens, security interests)
-    • The UCC treats all transactions as commercial — including many that individuals don't recognize as commercial
+    • The UCC treats all transactions as commercial, including many that individuals do not recognize as commercial
 
 STATUTORY LAW:
     • Federal statutes: Title 26 (tax), Title 42 (civil rights), Title 18 (criminal), etc.
     • State statutes: trust codes, business entity acts, family law, property law
     • Local ordinances: zoning, building codes, licensing
     • The volume of law is so vast that no person can know all laws that apply to them
-    • Ignorance of the law is not a defense — even when the law is unknowable
+    • Ignorance of the law is not a defense, even when the law is unknowable
 
 REGULATORY LAW:
     • Federal agencies: IRS, SEC, EPA, FDA, FTC, OSHA, CFPB, FinCEN, and hundreds more
     • Each agency writes rules (quasi-legislative), enforces them (quasi-executive), and adjudicates violations (quasi-judicial)
-    • Administrative Procedure Act governs rulemaking — but agencies routinely circumvent it
+    • Administrative Procedure Act governs rulemaking, though agencies routinely circumvent it
     • Chevron deference (now limited): courts deferred to agency interpretations of ambiguous statutes
 
 THE LEGAL FICTION:
-    • The "person" in statutory law is a legal fiction — a creation of the state
+    • The "person" in statutory law is a legal fiction, a creation of the state
     • Corporations are "persons" under the 14th Amendment (Santa Clara County v. Southern Pacific Railroad, 1886)
     • The individual is treated as a corporate entity for tax and regulatory purposes
     • Birth certificates, Social Security numbers, and taxpayer identification numbers create the legal identity
-    • The living man or woman is distinct from the legal "person" — but the system does not acknowledge the distinction
+    • The living man or woman is distinct from the legal "person," but the system does not acknowledge the distinction
 
 KEY CHARACTERISTICS:
     • Law is created by human institutions and can be changed by them
     • Rights are statutory grants, subject to amendment and repeal
-    • Jurisdiction is presumed — the burden is on the individual to prove otherwise
+    • Jurisdiction is presumed; the burden is on the individual to prove otherwise
     • The system is self-referential: it validates itself by its own authority
     • Compliance is mandatory; non-compliance is punishable
     • The complexity of the system creates dependence on licensed professionals
 
-"Where there is no vision, the people perish: but he that keepeth the law, happy is he" — Proverbs 29:18
+"Where there is no vision, the people perish: but he that keepeth the law, happy is he" (Proverbs 29:18)
 
 The Babylonian legal system is comprehensive, all-encompassing, and inescapable by design. It treats every human activity as subject to regulation and every person as subject to its jurisdiction. The covenant model offers a lawful alternative grounded in higher authority.`,
       },
     ],
-    keyTakeaway: "The Covenant Model rests on common law trust, First Amendment protections, and ecclesiastical jurisdiction — legal frameworks that predate and supersede statutory codes. The Babylonian Model operates under UCC commercial code and an ever-expanding regulatory state.",
+    keyTakeaway: "The Covenant Model rests on common law trust, First Amendment protections, and ecclesiastical jurisdiction: legal frameworks that predate and supersede statutory codes. The Babylonian Model operates under UCC commercial code and an ever-expanding regulatory state.",
     comparisonRows: [
-      { covenant: "Common law trust — predates all statutory codes", babylonian: "UCC commercial code — treats all transactions as commercial" },
+      { covenant: "Common law trust: predates all statutory codes", babylonian: "UCC commercial code treats all transactions as commercial" },
       { covenant: "First Amendment: free exercise, assembly, speech", babylonian: "180,000+ pages of federal regulations" },
-      { covenant: "Ecclesiastical jurisdiction — courts cannot interfere", babylonian: "Agencies write, enforce, and adjudicate their own rules" },
-      { covenant: "Churches automatically tax-exempt (§508(c)(1)(A))", babylonian: "Compliance mandatory — ignorance is no defense" },
+      { covenant: "Ecclesiastical jurisdiction; courts cannot interfere", babylonian: "Agencies write, enforce, and adjudicate their own rules" },
+      { covenant: "Churches automatically tax-exempt (§508(c)(1)(A))", babylonian: "Compliance mandatory; ignorance is no defense" },
     ],
     scriptureRefs: ["Proverbs 29:18 (Where there is no vision)", "Watson v. Jones, 1871 (Ecclesiastical jurisdiction)", "Public Law 97-280 (Bible as Word of God)"],
   },
@@ -1028,7 +1028,7 @@ interface DiagramNode {
 const covenantLayers: DiagramNode[] = [
   { label: "God / Christ", subtitle: "Head of the Body", icon: Crown, bg: "bg-red-900", border: "border-red-800", text: "text-white", width: "max-w-[200px]" },
   { label: "New Covenant Legacy Trust", subtitle: "Individual Covenant Gateway", icon: Heart, bg: "bg-red-900", border: "border-red-700", text: "text-white", width: "max-w-[240px]" },
-  { label: "Ecclesia Basilikos", subtitle: "Body of Christ — Collective Assembly", icon: Crown, bg: "bg-slate-800", border: "border-slate-500", text: "text-white", width: "max-w-[280px]" },
+  { label: "Ecclesia Basilikos", subtitle: "Body of Christ: Collective Assembly", icon: Crown, bg: "bg-slate-800", border: "border-slate-500", text: "text-white", width: "max-w-[280px]" },
   { label: "Stewardship Organs", subtitle: "Land · Housing · Treasury · Enterprise · Education", icon: Shield, bg: "bg-teal-700", border: "border-teal-400", text: "text-white", width: "max-w-[320px]" },
   { label: "Ecclesia / Assembly", subtitle: "The Gathered Assembly (PMA)", icon: Users, bg: "bg-purple-700", border: "border-purple-400", text: "text-white", width: "max-w-[340px]" },
   { label: "Regions & Households", subtitle: "City-Churches · House-Churches", icon: Users, bg: "bg-white", border: "border-purple-400 border-dashed", text: "text-purple-800", width: "max-w-[360px]" },
@@ -1092,7 +1092,7 @@ function ComparisonDiagram() {
         <h3 className="font-cinzel text-lg font-semibold tracking-wide text-slate-700">
           Structural Comparison
         </h3>
-        <p className="text-xs text-slate-400 mt-1">Authority flows from top to bottom in both systems — the source and nature differ</p>
+        <p className="text-xs text-slate-400 mt-1">Authority flows from top to bottom in both systems; the source and nature differ</p>
       </div>
       <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
         <HierarchyDiagram
@@ -1115,7 +1115,7 @@ function ComparisonDiagram() {
       </div>
       <div className="mt-6 text-center">
         <p className="text-[11px] text-slate-400 italic">
-          "No man can serve two masters" — Matthew 6:24
+          "No man can serve two masters" (Matthew 6:24)
         </p>
       </div>
     </div>
@@ -1349,7 +1349,7 @@ export default function AdminBabylonianComparison() {
   const getComparisonHtml = () => {
     const allContent = sections
       .map((s) => {
-        let html = `<div class="section-title">Section ${s.number} — ${s.title}</div>`;
+        let html = `<div class="section-title">Section ${s.number}: ${s.title}</div>`;
         html += `<div class="section-content">${s.content}</div>`;
         if (s.keyTakeaway) {
           html += `<div class="key-takeaway"><strong>Key Distinction:</strong> <em>${s.keyTakeaway}</em></div>`;
@@ -1378,7 +1378,7 @@ export default function AdminBabylonianComparison() {
     return `<!DOCTYPE html>
 <html>
 <head>
-  <title>Babylonian System Comparison — Two Kingdoms, Two Architectures</title>
+  <title>Babylonian System Comparison: Two Kingdoms, Two Architectures</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap');
     body {
@@ -1490,7 +1490,7 @@ export default function AdminBabylonianComparison() {
       Ecclesia Basilikos Trust
     </div>
     <div style="font-size: 9pt; color: #aaa; margin-top: 4pt;">
-      Educational Reference — For Covenant Members
+      Educational Reference | For Covenant Members
     </div>
   </div>
 </body>
@@ -1565,7 +1565,7 @@ export default function AdminBabylonianComparison() {
           </p>
           <div className="mt-4 mx-auto w-32 border-t-2 border-royal-navy/30" />
           <p className="text-xs text-slate-400 mt-4 tracking-widest uppercase">
-            Version 1.0 — {new Date().toLocaleDateString("en-US", { year: "numeric", month: "long" })}
+            Version 1.0 | {new Date().toLocaleDateString("en-US", { year: "numeric", month: "long" })}
           </p>
         </div>
 
@@ -1589,7 +1589,7 @@ export default function AdminBabylonianComparison() {
             Ecclesia Basilikos Trust
           </p>
           <p className="text-[10px] text-slate-400 mt-1">
-            Educational Reference — For Covenant Members
+            Educational Reference | For Covenant Members
           </p>
         </div>
       </div>

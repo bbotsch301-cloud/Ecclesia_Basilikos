@@ -270,7 +270,7 @@ export default function Forum() {
 
         {/* Sidebar + Content Layout */}
         <div className="flex gap-6">
-          {/* Left Sidebar — Categories */}
+          {/* Left Sidebar: Categories */}
           <aside className="hidden md:block w-60 shrink-0">
             <div className="sticky top-20">
               <h2 className="font-cinzel text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 px-1">
@@ -440,7 +440,7 @@ export default function Forum() {
                           New Thread
                         </Button>
                       </DialogTrigger>
-                      {/* Dialog content reused from sidebar — same form */}
+                      {/* Dialog content reused from sidebar (same form) */}
                       <DialogContent className="sm:max-w-[525px]">
                         <DialogHeader>
                           <DialogTitle className="font-cinzel">Start a Discussion</DialogTitle>
@@ -582,7 +582,7 @@ export default function Forum() {
                 </h2>
                 {selectedCategoryData.description && (
                   <span className="text-xs text-gray-400 hidden sm:inline">
-                    — {selectedCategoryData.description}
+                    {selectedCategoryData.description}
                   </span>
                 )}
               </div>

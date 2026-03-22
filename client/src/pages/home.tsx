@@ -19,7 +19,7 @@ import sealImage from "@assets/EB_1772210493582.png";
 import TrustHierarchyDiagram from "@/components/trust-hierarchy-diagram";
 
 export default function Home() {
-  usePageTitle(undefined, "Ecclesia Basilikos — A Private Membership Association operating under divine covenant authority. Acquire beneficial interest in the trust.");
+  usePageTitle(undefined, "Ecclesia Basilikos: A Private Membership Association operating under divine covenant authority. Acquire beneficial interest in the trust.");
   const ctaHref = useCtaHref();
   const shouldReduceMotion = useReducedMotion();
 
@@ -79,7 +79,7 @@ export default function Home() {
             animate={heroAnimate}
             transition={heroTransition(0.4)}
           >
-            Everything on this platform — every course, every document, every resource — is held
+            Everything on this platform (every course, every document, every resource) is held
             in trust. Ecclesia Basilikos is a trust-governed private assembly. Its members are not
             customers. They are beneficiaries. The education you see here is a function of the trust corpus.
           </motion.p>
@@ -128,17 +128,17 @@ export default function Home() {
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed mb-6">
                 Ecclesia Basilikos holds the education in trust. The courses, documents, templates,
-                and resources you see here are not products for sale — they are the trust corpus,
+                and resources you see here are not products for sale; they are the trust corpus,
                 administered by the Trustee for the benefit of the assembly. The Private Membership
-                Association is how you enter. When you join, you are not subscribing to a service —
+                Association is how you enter. When you join, you are not subscribing to a service;
                 you are stepping into a private covenant body and becoming a beneficiary of the trust.
               </p>
               <p className="text-xl md:text-2xl font-semibold text-royal-navy max-w-3xl mx-auto mb-8">
                 The trust holds the resources. The PMA is the assembly.{" "}
-                <span className="text-royal-burgundy">Members are beneficiaries — not customers.</span>
+                <span className="text-royal-burgundy">Members are beneficiaries, not customers.</span>
               </p>
               <p className="text-base text-gray-500 max-w-2xl mx-auto leading-relaxed">
-                Here is how the assembly is structured — from its divine authority down to where you enter.
+                Here is how the assembly is structured: from its divine authority down to where you enter.
               </p>
             </div>
           </RevealOnScroll>
@@ -173,15 +173,15 @@ export default function Home() {
               </h2>
               <p className="text-lg text-gray-300 max-w-3xl mx-auto leading-relaxed">
                 The world operates under one framework. This assembly operates under another.
-                The PMA exists to formalize that separation — lawfully.
+                The PMA exists to formalize that separation, lawfully.
               </p>
             </div>
 
             <StaggerContainer staggerDelay={0.15} className="space-y-4 max-w-4xl mx-auto">
               {[
                 {
-                  before: "Commercial jurisdiction — regulated by statute",
-                  after: "Private jurisdiction — governed by covenant agreement",
+                  before: "Commercial jurisdiction: regulated by statute",
+                  after: "Private jurisdiction: governed by covenant agreement",
                   icon: Scale,
                 },
                 {
@@ -190,8 +190,8 @@ export default function Home() {
                   icon: Users,
                 },
                 {
-                  before: "Corporate structure — owned by shareholders",
-                  after: "Trust structure — administered for beneficiaries",
+                  before: "Corporate structure: owned by shareholders",
+                  after: "Trust structure: administered for beneficiaries",
                   icon: Building,
                 },
                 {
@@ -236,10 +236,10 @@ export default function Home() {
           <RevealOnScroll>
             <div className="text-center mb-16">
               <h2 className="font-cinzel-decorative text-3xl md:text-4xl font-bold text-royal-navy mb-6">
-                The Trust Corpus — What You Are Looking At
+                The Trust Corpus: What You Are Looking At
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                This platform and everything on it is the trust corpus — administered by the Trustee
+                This platform and everything on it is the trust corpus, administered by the Trustee
                 for the benefit of PMA members. The education is not a product being sold.
                 It is a function of the trust, delivered to its beneficiaries.
               </p>
@@ -250,15 +250,15 @@ export default function Home() {
             {[
               {
                 icon: Banknote,
-                text: "Lawful money redemption education — understanding 12 USC § 411",
+                text: "Lawful money redemption education: understanding 12 USC § 411",
               },
               {
                 icon: Shield,
-                text: "Trust law education — separating legal title from beneficial interest",
+                text: "Trust law education: separating legal title from beneficial interest",
               },
               {
                 icon: Globe,
-                text: "State-citizen passport guidance — reclaiming your political status",
+                text: "State-citizen passport guidance: reclaiming your political status",
               },
               {
                 icon: FileText,
@@ -266,27 +266,27 @@ export default function Home() {
               },
               {
                 icon: BookOpen,
-                text: "Full course library — structured lessons across all pillars",
+                text: "Full course library: structured lessons across all pillars",
               },
               {
                 icon: Lock,
-                text: "Proof Vault — secure document storage and verification",
+                text: "Proof Vault: secure document storage and verification",
               },
               {
                 icon: Users,
-                text: "Community forum — fellowship, guidance, and shared learning",
+                text: "Community forum: fellowship, guidance, and shared learning",
               },
               {
                 icon: Key,
-                text: "Beneficial Unit certificate — your 1/N share of the trust corpus",
+                text: "Beneficial Unit certificate: your 1/N share of the trust corpus",
               },
               {
                 icon: Landmark,
-                text: "Trust structure education — covenant, stewardship organs, and the Body",
+                text: "Trust structure education: covenant, stewardship organs, and the Body",
               },
               {
                 icon: Eye,
-                text: "Case law references — Slaughter-House Cases, Cruikshank, and more",
+                text: "Case law references: Slaughter-House Cases, Cruikshank, and more",
               },
             ].map((item, index) => (
               <motion.div key={index} variants={staggerItemVariants}>
@@ -316,7 +316,7 @@ export default function Home() {
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
                 The trust already exists. The corpus is already being administered. The question
-                is whether you enter as a beneficiary. Here is the path — from first visit to
+                is whether you enter as a beneficiary. Here is the path: from first visit to
                 full beneficial interest.
               </p>
             </div>
@@ -343,7 +343,7 @@ export default function Home() {
                       </div>
                       <p className="text-gray-600 leading-relaxed mb-3">
                         Create an account and begin learning. You immediately gain access to
-                        the three-pillar educational foundation — the trust's core curriculum.
+                        the three-pillar educational foundation, which is the trust's core curriculum.
                         This is the trust serving its educational purpose. No contribution required.
                       </p>
                       <Link href="/signup" className="text-xs font-cinzel font-semibold text-royal-gold hover:text-royal-burgundy transition-colors">
@@ -403,7 +403,7 @@ export default function Home() {
                       </div>
                       <p className="text-gray-600 leading-relaxed mb-3">
                         Make a one-time trust contribution of $500 (or $50 × 10 months).
-                        Accept the PMA agreement and receive your Beneficial Unit — a 1/N share
+                        Accept the PMA agreement and receive your Beneficial Unit, a 1/N share
                         of the entire trust corpus. Your interest is permanent. It never downgrades.
                       </p>
                       <Link href="/pricing" className="text-xs font-cinzel font-semibold text-royal-gold hover:text-royal-burgundy transition-colors">
@@ -435,7 +435,7 @@ export default function Home() {
             {[
               {
                 q: "Is a Private Membership Association legal?",
-                a: "Yes. The right to freely assemble is a natural, unalienable right recognized in every civilized jurisdiction — from constitutional protections to international human rights instruments. PMAs have been upheld in numerous legal contexts. The key is proper structure, genuine private agreement, and non-commercial purpose — all of which Ecclesia Basilikos maintains.",
+                a: "Yes. The right to freely assemble is a natural, unalienable right recognized in every civilized jurisdiction, from constitutional protections to international human rights instruments. PMAs have been upheld in numerous legal contexts. The key is proper structure, genuine private agreement, and non-commercial purpose; all of which Ecclesia Basilikos maintains.",
               },
               {
                 q: "What is a Beneficial Unit?",
@@ -443,7 +443,7 @@ export default function Home() {
               },
               {
                 q: "Is the $500 contribution a payment for services?",
-                a: "No. It is a trust contribution — not a purchase. You are contributing to the trust corpus and in return acquiring beneficial interest in that corpus. This is a trust relationship, not a commercial transaction. The distinction is fundamental to the PMA structure.",
+                a: "No. It is a trust contribution, not a purchase. You are contributing to the trust corpus and in return acquiring beneficial interest in that corpus. This is a trust relationship, not a commercial transaction. The distinction is fundamental to the PMA structure.",
               },
               {
                 q: "Can my beneficial interest be revoked?",
@@ -451,7 +451,7 @@ export default function Home() {
               },
               {
                 q: "What is the three-pillar foundation?",
-                a: "The three pillars — Lawful Money Redemption, Trust & Asset Protection, and State-Citizen Passport — are the core educational tracks. They address the three areas where most people are unknowingly operating under the wrong legal framework: money, property, and political status.",
+                a: "The three pillars are the core educational tracks: Lawful Money Redemption, Trust & Asset Protection, and State-Citizen Passport. They address the three areas where most people are unknowingly operating under the wrong legal framework: money, property, and political status.",
               },
             ].map((item, index) => (
               <motion.div key={index} variants={staggerItemVariants}>
@@ -491,7 +491,7 @@ export default function Home() {
             <RevealOnScroll>
               <Card className="royal-card h-full">
                 <CardContent className="p-8">
-                  <h3 className="font-cinzel text-xl font-bold text-royal-navy mb-2">General Interest — Trust User</h3>
+                  <h3 className="font-cinzel text-xl font-bold text-royal-navy mb-2">General Interest: Trust User</h3>
                   <p className="text-3xl font-bold text-royal-navy mb-4">$0</p>
                   <ul className="space-y-2 mb-6">
                     {["Trust pillar course access", "Foundational downloads", "Forum reading", "Progress tracking"].map((f, i) => (
@@ -516,7 +516,7 @@ export default function Home() {
                   <p className="text-3xl font-bold text-royal-navy mb-1">$500</p>
                   <p className="text-sm text-gray-500 mb-4">one-time contribution · or $50 × 10</p>
                   <ul className="space-y-2 mb-6">
-                    {["All courses & lessons across every pillar", "All downloads, templates & trust documents", "Forum posting & community participation", "Proof Vault — secure document storage", "Beneficial Unit certificate (1/N share)"].map((f, i) => (
+                    {["All courses & lessons across every pillar", "All downloads, templates & trust documents", "Forum posting & community participation", "Proof Vault: secure document storage", "Beneficial Unit certificate (1/N share)"].map((f, i) => (
                       <li key={i} className="flex items-center gap-2 text-sm text-gray-600">
                         <CheckCircle className="w-4 h-4 text-royal-gold flex-shrink-0" /> {f}
                       </li>
@@ -606,7 +606,7 @@ export default function Home() {
           <RevealOnScroll delay={0.7}>
             <p className="text-gray-400 text-base max-w-xl mx-auto leading-relaxed mt-10">
               Ecclesia Basilikos is a Private Membership Association. All education and resources
-              are functions of the trust corpus, administered for the benefit of its members —
+              are functions of the trust corpus, administered for the benefit of its members,
               not legal, financial, or tax advice.
             </p>
           </RevealOnScroll>

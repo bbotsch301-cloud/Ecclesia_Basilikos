@@ -69,9 +69,9 @@ export default function Treasury() {
             <h1 className="font-cinzel-decorative text-4xl md:text-5xl font-bold text-white mb-4">
               Treasury
             </h1>
-            <p className="text-lg text-gray-200">Coming Soon</p>
+            <p className="text-lg text-gray-200">This feature is being prepared</p>
             <p className="text-gray-300 mt-4 max-w-xl mx-auto">
-              The Treasury Trust transparency page is being prepared. Check back soon to see how contributions are stewarded for the benefit of all members.
+              The Treasury Trust transparency page is under development. You will be able to see how contributions are stewarded for the benefit of all members.
             </p>
           </div>
         </section>
@@ -162,7 +162,7 @@ export default function Treasury() {
             The Storehouse Principle
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            The Treasury Trust implements the biblical storehouse principle (Malachi 3:10) — a centralized
+            The Treasury Trust implements the biblical storehouse principle (Malachi 3:10): a centralized
             repository that receives contributions and distributes according to community need. It is the
             financial heart of the community, ensuring every member's contribution is stewarded with purpose.
           </p>
@@ -204,8 +204,8 @@ export default function Treasury() {
                 </div>
                 <h3 className="font-cinzel text-lg font-bold text-royal-navy mb-2">Steward</h3>
                 <p className="text-gray-600 text-sm">
-                  The Financial Trustee manages funds and invests in assets — crypto, precious metals, and
-                  productive enterprises — to grow community wealth.
+                  The Financial Trustee manages funds and invests in assets such as crypto, precious metals, and
+                  productive enterprises to grow community wealth.
                 </p>
               </CardContent>
             </Card>
@@ -296,7 +296,7 @@ export default function Treasury() {
             </div>
             <p className="text-gray-600 text-center text-sm max-w-2xl mx-auto">
               No private shareholders. No profit extraction. Funds circulate for the collective benefit of every
-              member — a self-sustaining ecosystem where contribution fuels growth and growth fuels contribution.
+              member: a self-sustaining ecosystem where contribution fuels growth and growth fuels contribution.
             </p>
           </CardContent>
         </Card>
@@ -335,7 +335,10 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
   return (
     <Card
       className="cursor-pointer shadow-sm hover:shadow-md transition-shadow"
+      role="button"
+      tabIndex={0}
       onClick={() => setOpen(!open)}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setOpen(!open); } }}
     >
       <CardContent className="py-4">
         <div className="flex items-center justify-between">

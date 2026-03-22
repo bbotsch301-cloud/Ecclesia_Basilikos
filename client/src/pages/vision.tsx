@@ -24,15 +24,15 @@ const phases = [
     icon: Landmark,
     color: "yellow",
     highlights: [
-      "Legal foundations — charter, PMA, trust instruments filed and operational",
-      "Digital platform — courses, forum, proof vault, and internal ledger live",
-      "Community formation — member enrollment, assemblies, Royal Academy curriculum",
-      "Governance establishment — trustees seated, protector council constituted",
+      "Legal foundations: charter, PMA, and trust instruments filed and operational",
+      "Digital platform: courses, forum, proof vault, and internal ledger live",
+      "Community formation: member enrollment, assemblies, and Royal Academy curriculum",
+      "Governance establishment: trustees seated and protector council constituted",
     ],
   },
   {
     number: 2,
-    title: "First Chapter — Proof of Concept",
+    title: "First Chapter: Proof of Concept",
     icon: Home,
     color: "green",
     highlights: [
@@ -44,7 +44,7 @@ const phases = [
   },
   {
     number: 3,
-    title: "Network Growth — Multiple Chapters",
+    title: "Network Growth: Multiple Chapters",
     icon: Network,
     color: "blue",
     highlights: [
@@ -56,14 +56,14 @@ const phases = [
   },
   {
     number: 4,
-    title: "Maturity — Fully Functioning Covenant Economy",
+    title: "Maturity: Fully Functioning Covenant Economy",
     icon: Globe,
     color: "purple",
     highlights: [
-      "Comprehensive internal production — food, housing, education, healthcare",
+      "Comprehensive internal production: food, housing, education, and healthcare",
       "Proven governance with tested succession and conflict-resolution procedures",
       "Replicable model documented and available for chapters worldwide",
-      "Generational vision realized — children formed in covenant from birth, trust corpus growing across generations",
+      "Generational vision realized: children formed in covenant from birth, with the trust corpus growing across generations",
     ],
   },
 ];
@@ -102,7 +102,7 @@ const differentiators = [
     icon: Hammer,
     title: "Not Theoretical",
     description:
-      "Being built now — platform live, members enrolled, governance seated, Phase 1 underway. This is not a whiteboard exercise.",
+      "Being built now: platform live, members enrolled, governance seated, Phase 1 underway. This is not a whiteboard exercise.",
   },
 ];
 
@@ -133,7 +133,7 @@ export default function Vision() {
           </p>
           <p className="text-gray-200 max-w-xl mx-auto">
             A phased journey from covenant foundation to a fully self-sustaining
-            Kingdom economy — built one chapter, one enterprise, one faithful
+            Kingdom economy, built one chapter, one enterprise, one faithful
             steward at a time.
           </p>
         </div>
@@ -146,9 +146,9 @@ export default function Vision() {
             Where We Stand
           </h2>
           <p className="text-gray-700 max-w-2xl mx-auto leading-relaxed">
-            We are in <span className="font-semibold text-royal-navy">Phase 1 — Foundation</span>.
+            We are in <span className="font-semibold text-royal-navy">Phase 1: Foundation</span>.
             The legal instruments are filed, the digital platform is live, and the first
-            members are enrolled. What follows is a generational vision — not a sprint,
+            members are enrolled. What follows is a generational vision; not a sprint,
             but a patient, faithful buildout of the infrastructure that will sustain
             covenant communities for decades to come.
           </p>
@@ -281,7 +281,7 @@ export default function Vision() {
             Build With Us
           </h2>
           <p className="text-gray-600 mb-8 max-w-xl mx-auto">
-            The foundation is laid. The first members are enrolled. Now we build —
+            The foundation is laid. The first members are enrolled. Now we build,
             together, faithfully, one phase at a time.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

@@ -1,4 +1,7 @@
 import { storage } from "./storage";
+import { db } from "./db";
+import { users } from "@shared/schema";
+import { eq } from "drizzle-orm";
 import logger from "./logger";
 
 const emailTemplateDefaults = [
@@ -110,16 +113,11 @@ export async function initializeEmailTemplates() {
   try {
     const existingTemplates = await storage.getPageContent('email-templates');
     
-    // Get or create system admin user for template initialization
-    let systemUser = await storage.getUserByEmail('system@kingdomventures.com');
-    if (!systemUser) {
-      systemUser = await storage.createUser({
-        email: 'system@kingdomventures.com',
-        password: 'system',
-        firstName: 'System',
-        lastName: 'Administrator',
-        role: 'admin',
-      });
+    // Find any existing admin user to attribute template creation
+    const [adminUser] = await db.select().from(users).where(eq(users.role, 'admin')).limit(1);
+    if (!adminUser) {
+      logger.warn('No admin user found; skipping email template initialization. Templates will be created once an admin account exists.');
+      return;
     }
     
     for (const template of emailTemplateDefaults) {
@@ -128,7 +126,7 @@ export async function initializeEmailTemplates() {
         logger.info(`Creating email template: ${template.contentKey}`);
         await storage.upsertPageContent({
           ...template,
-          updatedById: systemUser.id
+          updatedById: adminUser.id
         });
       }
     }

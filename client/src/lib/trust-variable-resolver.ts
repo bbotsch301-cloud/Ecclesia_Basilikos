@@ -1,7 +1,7 @@
 import type { TrustEntity, TrustRelationship } from "@shared/schema";
 
 // ═══════════════════════════════════════════════════════════
-// RESOLVED ENTITY — pulls all data from the trust structure
+// RESOLVED ENTITY: pulls all data from the trust structure
 // ═══════════════════════════════════════════════════════════
 
 export interface ResolvedEntity {
@@ -149,7 +149,7 @@ export function resolveEntity(
 }
 
 // ═══════════════════════════════════════════════════════════
-// VARIABLE RESOLUTION — replaces {{key}} with entity data
+// VARIABLE RESOLUTION: replaces {{key}} with entity data
 // ═══════════════════════════════════════════════════════════
 
 export const TEMPLATE_VARIABLES = [
@@ -211,24 +211,24 @@ export function buildVariableMap(resolved: ResolvedEntity): Record<string, strin
     'entity.memberCount': e.memberCount != null ? String(e.memberCount) : '',
     'parent.names': resolved.parentAuthorities.map(p => p.entity.name).join(', ') || 'N/A',
     'root.name': resolved.rootAuthority?.name || e.name,
-    'children.list': resolved.childEntities.map(c => `${c.entity.name} — ${c.entity.subtitle || c.entity.entityType}`).join('\n') || '(None defined)',
+    'children.list': resolved.childEntities.map(c => `${c.entity.name}: ${c.entity.subtitle || c.entity.entityType}`).join('\n') || '(None defined)',
     'beneficiaries.list': resolved.beneficiaryEntities.map(b => b.entity.name).join('\n') || 'All PMA members',
     'funding.sources': resolved.fundingSources.map(f => f.entity.name).join(', ') || '(None)',
     'funding.targets': resolved.fundingTargets.map(f => f.entity.name).join(', ') || '(None)',
-    'oversight.targets': resolved.oversightTargets.map(o => `${o.entity.name} — ${o.entity.subtitle || ''}`).join('\n') || '(None defined)',
-    'benefit.sources': resolved.benefitSources.map(b => `${b.entity.name}${b.relationship.label ? ` — ${b.relationship.label}` : ''}`).join('\n') || '(None)',
-    'coordination.targets': resolved.coordinationTargets.map(c => `${c.entity.name}${c.relationship.label ? ` — ${c.relationship.label}` : ''}`).join('\n') || '(None)',
-    'land.stewardship': resolved.landStewardship.map(l => `${l.entity.name}${l.relationship.label ? ` — ${l.relationship.label}` : ''}`).join('\n') || '(None)',
-    'remits.targets': resolved.remitsTo.map(rt => `${rt.entity.name}${rt.relationship.label ? ` — ${rt.relationship.label}` : ''}`).join('\n') || '(None)',
+    'oversight.targets': resolved.oversightTargets.map(o => `${o.entity.name}: ${o.entity.subtitle || ''}`).join('\n') || '(None defined)',
+    'benefit.sources': resolved.benefitSources.map(b => `${b.entity.name}${b.relationship.label ? `: ${b.relationship.label}` : ''}`).join('\n') || '(None)',
+    'coordination.targets': resolved.coordinationTargets.map(c => `${c.entity.name}${c.relationship.label ? `: ${c.relationship.label}` : ''}`).join('\n') || '(None)',
+    'land.stewardship': resolved.landStewardship.map(l => `${l.entity.name}${l.relationship.label ? `: ${l.relationship.label}` : ''}`).join('\n') || '(None)',
+    'remits.targets': resolved.remitsTo.map(rt => `${rt.entity.name}${rt.relationship.label ? `: ${rt.relationship.label}` : ''}`).join('\n') || '(None)',
     // Ecclesiastical variables
-    'shepherds.targets': resolved.shepherdTargets.map(s => `${s.entity.name}${s.relationship.label ? ` — ${s.relationship.label}` : ''}`).join('\n') || '(None)',
-    'shepherds.sources': resolved.shepherdSources.map(s => `${s.entity.name}${s.relationship.label ? ` — ${s.relationship.label}` : ''}`).join('\n') || '(None)',
-    'teaches.targets': resolved.teachTargets.map(t => `${t.entity.name}${t.relationship.label ? ` — ${t.relationship.label}` : ''}`).join('\n') || '(None)',
-    'teaches.sources': resolved.teachSources.map(t => `${t.entity.name}${t.relationship.label ? ` — ${t.relationship.label}` : ''}`).join('\n') || '(None)',
-    'serves.targets': resolved.serveTargets.map(s => `${s.entity.name}${s.relationship.label ? ` — ${s.relationship.label}` : ''}`).join('\n') || '(None)',
-    'serves.sources': resolved.serveSources.map(s => `${s.entity.name}${s.relationship.label ? ` — ${s.relationship.label}` : ''}`).join('\n') || '(None)',
-    'tithe.targets': resolved.titheTargets.map(t => `${t.entity.name}${t.relationship.label ? ` — ${t.relationship.label}` : ''}`).join('\n') || '(None)',
-    'tithe.sources': resolved.titheSources.map(t => `${t.entity.name}${t.relationship.label ? ` — ${t.relationship.label}` : ''}`).join('\n') || '(None)',
+    'shepherds.targets': resolved.shepherdTargets.map(s => `${s.entity.name}${s.relationship.label ? `: ${s.relationship.label}` : ''}`).join('\n') || '(None)',
+    'shepherds.sources': resolved.shepherdSources.map(s => `${s.entity.name}${s.relationship.label ? `: ${s.relationship.label}` : ''}`).join('\n') || '(None)',
+    'teaches.targets': resolved.teachTargets.map(t => `${t.entity.name}${t.relationship.label ? `: ${t.relationship.label}` : ''}`).join('\n') || '(None)',
+    'teaches.sources': resolved.teachSources.map(t => `${t.entity.name}${t.relationship.label ? `: ${t.relationship.label}` : ''}`).join('\n') || '(None)',
+    'serves.targets': resolved.serveTargets.map(s => `${s.entity.name}${s.relationship.label ? `: ${s.relationship.label}` : ''}`).join('\n') || '(None)',
+    'serves.sources': resolved.serveSources.map(s => `${s.entity.name}${s.relationship.label ? `: ${s.relationship.label}` : ''}`).join('\n') || '(None)',
+    'tithe.targets': resolved.titheTargets.map(t => `${t.entity.name}${t.relationship.label ? `: ${t.relationship.label}` : ''}`).join('\n') || '(None)',
+    'tithe.sources': resolved.titheSources.map(t => `${t.entity.name}${t.relationship.label ? `: ${t.relationship.label}` : ''}`).join('\n') || '(None)',
     // Authority chain
     'authority.chain': resolved.authorityChain.map(e => e.name).join(' → ') || e.name,
     'date': today,

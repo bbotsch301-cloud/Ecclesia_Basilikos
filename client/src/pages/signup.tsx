@@ -123,14 +123,14 @@ export default function Signup() {
   return (
     <div className="min-h-screen pt-16">
       <div className="grid lg:grid-cols-2 min-h-[calc(100vh-4rem)]">
-        {/* Left — Value Proposition */}
+        {/* Left: Value Proposition */}
         <div className="hidden lg:flex flex-col justify-center bg-gradient-to-br from-royal-navy via-royal-burgundy to-royal-navy p-12 xl:p-16 text-white">
           <Crown className="w-12 h-12 text-royal-gold mb-6" />
           <h2 className="font-cinzel-decorative text-3xl xl:text-4xl font-bold mb-4">
             Enter the Assembly
           </h2>
           <p className="text-gray-300 text-lg mb-6 leading-relaxed">
-            You are not creating a website account. You are entering a private covenant assembly —
+            You are not creating a website account. You are entering a private covenant assembly,
             a trust-governed body operating outside Babylon's commercial systems.
           </p>
 
@@ -146,7 +146,7 @@ export default function Signup() {
                   <span className="flex-shrink-0 w-6 h-6 rounded-full bg-royal-gold/20 flex items-center justify-center text-royal-gold font-cinzel text-xs font-bold">{p.num}</span>
                   <div>
                     <span className="text-white font-semibold text-sm">{p.label}</span>
-                    <span className="text-gray-400 text-sm"> — {p.desc}</span>
+                    <span className="text-gray-400 text-sm">: {p.desc}</span>
                   </div>
                 </li>
               ))}
@@ -170,7 +170,7 @@ export default function Signup() {
           </div>
         </div>
 
-        {/* Right — Registration Form */}
+        {/* Right: Registration Form */}
         <div className="flex items-center justify-center bg-gray-50 px-4 py-12">
           <Card className="w-full max-w-md">
             <CardHeader className="text-center space-y-2 pb-2">

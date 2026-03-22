@@ -7,7 +7,14 @@ import type { User } from '@shared/schema';
 export function isPremiumUser(user: User | undefined): boolean {
   if (!user) return false;
   if (user.role === 'admin') return true;
-  return user.subscriptionTier === 'premium' && user.subscriptionStatus === 'active';
+  if (user.subscriptionTier !== 'premium') return false;
+  // Active subscriptions are always valid
+  if (user.subscriptionStatus === 'active') return true;
+  // Cancelled subscriptions retain access until end date
+  if (user.subscriptionStatus === 'cancelled' && user.subscriptionEndDate) {
+    return new Date() < new Date(user.subscriptionEndDate);
+  }
+  return false;
 }
 
 /**

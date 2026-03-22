@@ -324,7 +324,7 @@ function CourseLessonContent() {
                   <ul className="space-y-2 mb-5">
                     <li className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                       <CheckCircle className="w-4 h-4 text-royal-gold flex-shrink-0" />
-                      All 3 pillar courses — Lawful Money, Trust, and State Passport
+                      All 3 pillar courses: Lawful Money, Trust, and State Passport
                     </li>
                     <li className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                       <CheckCircle className="w-4 h-4 text-royal-gold flex-shrink-0" />
@@ -366,13 +366,13 @@ function CourseLessonContent() {
                     <div className="bg-white/10 rounded-full p-5 mb-3 mx-auto w-fit">
                       <Video className="h-10 w-10 text-royal-gold" />
                     </div>
-                    <p className="text-gray-300 text-sm">Video coming soon</p>
+                    <p className="text-gray-300 text-sm">Video is being prepared</p>
                   </div>
                 </div>
               </Card>
             )}
 
-            {/* Lesson Content — Markdown */}
+            {/* Lesson Content (Markdown) */}
             {currentLesson?.content && (
               <Card className="border border-gray-200 dark:border-gray-800 shadow-sm">
                 <CardHeader className="border-b border-gray-100 dark:border-gray-800 pb-4">
@@ -642,7 +642,7 @@ function CourseLessonContent() {
               </div>
             </div>
 
-            {/* Upgrade Prompt — shown on the last lesson of a free course for non-premium users */}
+            {/* Upgrade Prompt: shown on the last lesson of a free course for non-premium users */}
             {!nextLesson && !isPremium && courseData && (courseData as any).category === "Trust & Assets" && (
               <Card className="border-2 border-royal-gold/40 bg-gradient-to-br from-royal-gold/10 via-amber-50 to-transparent mt-6">
                 <CardContent className="p-6 md:p-8">
@@ -656,7 +656,7 @@ function CourseLessonContent() {
                   <ul className="space-y-2 mb-5">
                     <li className="flex items-center gap-2 text-sm text-gray-600">
                       <CheckCircle className="w-4 h-4 text-royal-gold flex-shrink-0" />
-                      All 3 pillar courses — Lawful Money, Trust, and State Passport
+                      All 3 pillar courses: Lawful Money, Trust, and State Passport
                     </li>
                     <li className="flex items-center gap-2 text-sm text-gray-600">
                       <CheckCircle className="w-4 h-4 text-royal-gold flex-shrink-0" />

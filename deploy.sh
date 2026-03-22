@@ -2,9 +2,9 @@
 set -euo pipefail
 
 # =============================================================================
-# Oracle Cloud Instance Bootstrap Script
-# Run this on a fresh Ubuntu 22.04+ instance:
-#   ssh ubuntu@<YOUR_IP> 'bash -s' < deploy.sh
+# Hetzner Cloud Instance Bootstrap Script
+# Run this on a fresh Ubuntu 24.04 instance:
+#   ssh root@<YOUR_IP> 'bash -s' < deploy.sh
 # =============================================================================
 
 echo "==> Updating system packages..."
@@ -24,12 +24,6 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plug
 
 echo "==> Adding current user to docker group..."
 sudo usermod -aG docker "$USER"
-
-echo "==> Configuring firewall (iptables)..."
-# Oracle Linux uses iptables by default — open HTTP/HTTPS
-sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 80 -j ACCEPT
-sudo iptables -I INPUT 7 -m state --state NEW -p tcp --dport 443 -j ACCEPT
-sudo netfilter-persistent save 2>/dev/null || sudo sh -c "iptables-save > /etc/iptables/rules.v4" 2>/dev/null || true
 
 echo "==> Creating app directory..."
 sudo mkdir -p /opt/ecclesia

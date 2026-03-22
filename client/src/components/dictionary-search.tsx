@@ -390,7 +390,7 @@ export default function DictionarySearch() {
   const [indexReady, setIndexReady] = useState(engine.isReady);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  // Debounce search input — 150ms for snappy feel
+  // Debounce search input: 150ms for snappy feel
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedQuery(searchInput);
@@ -511,7 +511,7 @@ export default function DictionarySearch() {
             <BookOpen className="h-7 w-7 text-royal-gold" />
           </div>
           <p className="font-georgia text-base text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            Search definitions from Black's Law Dictionary, 4th Edition — with intelligent full-text search,
+            Search definitions from Black's Law Dictionary, 4th Edition, with intelligent full-text search,
             cross-reference detection, and writ classification.
           </p>
           {stats && stats.totalEntries > 0 && (
@@ -601,7 +601,7 @@ export default function DictionarySearch() {
           {/* Client-side results */}
           {indexReady && (
             <>
-              {/* No query — show featured terms */}
+              {/* No query: show featured terms */}
               {!shouldSearch && !selectedLetter && (
                 <div className="text-center py-10 dict-empty-state">
                   <Scale className="h-10 w-10 text-royal-gold/60 mx-auto mb-4" />

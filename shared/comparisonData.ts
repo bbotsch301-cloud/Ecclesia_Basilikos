@@ -26,7 +26,7 @@ export const comparisons: Comparison[] = [
     slug: 'two-births',
     category: 'identity',
     summary: 'Babylon\'s Registry of Flesh vs Heaven\'s Registry of Spirit',
-    keyRevelation: 'The system\'s greatest counterfeit is birth itself — reducing a living soul to a legal fiction, tied to debt and statutes from the first breath. In Christ, your name is written in the Book of Life, sealed by the Spirit, and beyond Babylon\'s reach.',
+    keyRevelation: 'The system\'s greatest counterfeit is birth itself: it reduces a living soul to a legal fiction, tied to debt and statutes from the first breath. In Christ, your name is written in the Book of Life, sealed by the Spirit, and beyond Babylon\'s reach.',
     scriptureReferences: ['John 3:3', 'Luke 10:20', 'Romans 8:17', '1 Peter 2:9', 'Ephesians 1:13', 'Jeremiah 31:33'],
     comparisonTable: [
       {
@@ -51,7 +51,7 @@ export const comparisons: Comparison[] = [
       },
       {
         dimension: 'Jurisdiction',
-        babylon: 'Governed by statutes, courts, and clerks — presumed guilty/debtor.',
+        babylon: 'Governed by statutes, courts, and clerks; presumed guilty/debtor.',
         kingdom: 'Governed by Christ\'s covenant, grace, and law of liberty (James 1:25).'
       },
       {
@@ -153,13 +153,13 @@ export const comparisons: Comparison[] = [
     comparisonTable: [
       {
         dimension: 'Title',
-        babylon: 'Deed, title, or mortgage. Land is never fully owned — always held in trust for the state through property tax.',
+        babylon: 'Deed, title, or mortgage. Land is never fully owned; it is always held in trust for the state through property tax.',
         kingdom: 'Allodial inheritance: "The meek shall inherit the earth" (Matthew 5:5). What God gives cannot be taxed or taken.'
       },
       {
         dimension: 'Access',
         babylon: 'Purchased through fiat currency, contracts, and debt instruments.',
-        kingdom: 'Given as covenant gift from God — allotment and stewardship (Joshua 1:3; Psalm 24:1).'
+        kingdom: 'Given as covenant gift from God: allotment and stewardship (Joshua 1:3; Psalm 24:1).'
       },
       {
         dimension: 'Security',
@@ -232,7 +232,7 @@ export const comparisons: Comparison[] = [
       {
         dimension: 'Access',
         babylon: 'Only high priest entered Holy of Holies once a year with blood (Hebrews 9:7).',
-        kingdom: 'Veil torn — all believers have access to the throne of grace (Hebrews 4:16; Matthew 27:51).'
+        kingdom: 'The veil was torn; all believers now have access to the throne of grace (Hebrews 4:16; Matthew 27:51).'
       },
       {
         dimension: 'Law',
@@ -242,7 +242,7 @@ export const comparisons: Comparison[] = [
       {
         dimension: 'Inheritance',
         babylon: 'Priests received tithes from Israel; no land inheritance (Numbers 18:20-21).',
-        kingdom: 'Christ and His body inherit all things — heaven, earth, nations (Romans 8:17; Revelation 21:7).'
+        kingdom: 'Christ and His body inherit all things: heaven, earth, and nations (Romans 8:17; Revelation 21:7).'
       },
       {
         dimension: 'Duration',
@@ -329,8 +329,8 @@ export const comparisons: Comparison[] = [
       },
       {
         dimension: 'Identity',
-        babylon: 'Religious organization — an artificial entity with state-granted life.',
-        kingdom: 'The Ekklesia Basilikos — a living body, eternal covenant community, stewarding heaven\'s economy.'
+        babylon: 'Religious organization: an artificial entity with state-granted life.',
+        kingdom: 'The Ekklesia Basilikos: a living body, eternal covenant community, stewarding heaven\'s economy.'
       }
     ],
     featured: true,
@@ -387,7 +387,7 @@ export const comparisons: Comparison[] = [
     slug: 'levitical-babylon-melchizedek',
     category: 'priesthood',
     summary: 'The Complete Arc of Priesthood Systems',
-    keyRevelation: 'Shadow → Counterfeit → Fulfillment. Levitical Priesthood: God\'s shadow system — endless sacrifices reminding Israel of sin and pointing to Messiah. Babylonian Currency System: Counterfeit of Levi — endless debt keeping men in cycles of guilt. Melchizedek Priesthood: Fulfillment in Christ — one sacrifice, eternal covenant, freedom from debt.',
+    keyRevelation: 'Shadow → Counterfeit → Fulfillment. Levitical Priesthood: God\'s shadow system of endless sacrifices reminding Israel of sin and pointing to Messiah. Babylonian Currency System: the Counterfeit of Levi, with endless debt keeping men in cycles of guilt. Melchizedek Priesthood: Fulfillment in Christ with one sacrifice, eternal covenant, and freedom from debt.',
     scriptureReferences: ['Hebrews 10:12-14', 'Colossians 2:14', 'Hebrews 7:24', '1 Peter 2:9', 'Hebrews 9:12', 'Revelation 21:7'],
     comparisonTable: [
       {
@@ -402,7 +402,7 @@ export const comparisons: Comparison[] = [
       },
       {
         dimension: 'Temple',
-        babylon: 'Banks, courts, government halls — modern temples of debt.',
+        babylon: 'Banks, courts, and government halls serve as modern temples of debt.',
         kingdom: 'Heavenly temple not made with hands; body of Christ as temple (Hebrews 9:11; 1 Cor. 3:16).'
       },
       {
@@ -441,7 +441,7 @@ export const comparisons: Comparison[] = [
       },
       {
         dimension: 'Temple',
-        babylon: 'Temples of commerce — banks, courts, capitols — point to Mystery Babylon, the harlot city (Rev. 17–18).',
+        babylon: 'Temples of commerce (banks, courts, capitols) point to Mystery Babylon, the harlot city (Rev. 17–18).',
         kingdom: 'Earthly temple pointed to Christ\'s body and heavenly sanctuary (John 2:19; Hebrews 9:11).'
       },
       {

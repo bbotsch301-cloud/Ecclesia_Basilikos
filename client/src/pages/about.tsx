@@ -26,7 +26,7 @@ export default function About() {
             Founded by a community of covenant educators and trust practitioners, we provide courses, resources, and community support for those seeking to understand their rights and responsibilities.
           </p>
           <p className="text-lg text-gray-700 leading-relaxed">
-            Our teaching is organized around three pillars — Lawful Money Redemption, Trust &amp; Asset Protection, and the State-Citizen Passport — forming a complete framework for those walking this path.
+            Our teaching is organized around three pillars (Lawful Money Redemption, Trust &amp; Asset Protection, and the State-Citizen Passport), forming a complete framework for those walking this path.
           </p>
         </div>
       </div>

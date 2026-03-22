@@ -39,7 +39,7 @@ export default function Mandate() {
               The Divine Call: Come Out of Her
             </h2>
             <p className="text-xl text-gray-700 max-w-4xl mx-auto leading-relaxed">
-              God's urgent command echoes through the ages: separate from Babylon's counterfeit systems and become partakers of His everlasting Kingdom. This is not mere theological theory—it is the divine mandate for every believer who hears His voice.
+              God's urgent command echoes through the ages: separate from Babylon's counterfeit systems and become partakers of His everlasting Kingdom. This is not mere theological theory; it is the divine mandate for every believer who hears His voice.
             </p>
           </div>
 
@@ -118,7 +118,7 @@ export default function Mandate() {
               The Stone Cut Without Hands
             </h2>
             <p className="text-xl text-gray-700 max-w-4xl mx-auto leading-relaxed mb-8">
-              Daniel 2:44 reveals God's ultimate plan: an everlasting Kingdom established by divine power—not by human hands, not by political revolution, not by earthly warfare. This Kingdom breaks in pieces every counterfeit system and stands forever.
+              Daniel 2:44 reveals God's ultimate plan: an everlasting Kingdom established by divine power, not by human hands, not by political revolution, not by earthly warfare. This Kingdom breaks in pieces every counterfeit system and stands forever.
             </p>
           </div>
 
@@ -132,7 +132,7 @@ export default function Mandate() {
                   Not Made By Hands
                 </h3>
                 <p className="text-gray-700 leading-relaxed">
-                  This Kingdom is established by God Himself—not through human legislation, contracts, or corporate structures. It cannot be registered, licensed, or taxed by Babylon.
+                  This Kingdom is established by God Himself, not through human legislation, contracts, or corporate structures. It cannot be registered, licensed, or taxed by Babylon.
                 </p>
               </CardContent>
             </Card>
@@ -160,7 +160,7 @@ export default function Mandate() {
                   Shall Consume All Kingdoms
                 </h3>
                 <p className="text-gray-700 leading-relaxed">
-                  This Kingdom doesn't coexist with Babylon—it breaks in pieces and consumes every counterfeit system. Every false priesthood, every legal fiction, every mark of the beast.
+                  This Kingdom does not coexist with Babylon; it breaks in pieces and consumes every counterfeit system. Every false priesthood, every legal fiction, every mark of the beast.
                 </p>
               </CardContent>
             </Card>

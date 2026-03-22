@@ -10,6 +10,7 @@ import {
   BookOpen,
   Home,
   Briefcase,
+  Coins,
   ShieldAlert,
   Scale,
   Handshake,
@@ -96,7 +97,7 @@ export const LAYER_CONFIG: Record<string, {
   },
   craft: {
     label: "Craft",
-    subtitle: "Skilled Workers — Bezalel Pattern",
+    subtitle: "Skilled Workers, Bezalel Pattern",
     nodeColor: "bg-amber-100",
     nodeBorder: "border-amber-500 border-dashed",
     nodeText: "text-amber-800",
@@ -106,7 +107,7 @@ export const LAYER_CONFIG: Record<string, {
   },
   ministry: {
     label: "Ministry",
-    subtitle: "Service Initiatives — Diakonia",
+    subtitle: "Service Initiatives, Diakonia",
     nodeColor: "bg-gray-100",
     nodeBorder: "border-gray-400 border-dashed",
     nodeText: "text-gray-700",
@@ -154,9 +155,9 @@ export const BIBLICAL_LABELS: Record<string, string> = {
   stewardship: "Faithful Stewardship (Matthew 25:21)",
   assembly: "Ecclesia (Matthew 16:18)",
   region: "City-Church (Titus 1:5)",
-  household: "Oikos — House-Church (Acts 2:46)",
+  household: "Oikos, House-Church (Acts 2:46)",
   craft: "Bezalel Pattern (Exodus 35:10)",
-  ministry: "Diakonia — Service (Nehemiah 2:18)",
+  ministry: "Diakonia, Service (Nehemiah 2:18)",
   member: "Joint Heir (Romans 8:17)",
 };
 
@@ -192,23 +193,23 @@ export const LAYER_PLAIN_ENGLISH: Record<string, {
   tooltipExplanation: string;
 }> = {
   covenant: {
-    oneLineSummary: "Your personal covenant with God — the doorway into the Body",
-    tooltipExplanation: "Like a baptism or circumcision of heart. This is your individual, irrevocable covenant — the gateway through which you enter the Body of Christ. It's personal, between you and God through Christ.",
+    oneLineSummary: "Your personal covenant with God, the doorway into the Body",
+    tooltipExplanation: "Like a baptism or circumcision of heart, this is your individual, irrevocable covenant: the gateway through which you enter the Body of Christ. It's personal, between you and God through Christ.",
   },
   body: {
-    oneLineSummary: "The Body of Christ — the collective you willfully enter as a new creation",
-    tooltipExplanation: "Once you establish your personal covenant, you enter the Body. Everything else exists within this living organism — stewardship organs, the gathered assembly, regional churches, households, and all members.",
+    oneLineSummary: "The Body of Christ, the collective you willfully enter as a new creation",
+    tooltipExplanation: "Once you establish your personal covenant, you enter the Body. Everything else exists within this living organism: stewardship organs, the gathered assembly, regional churches, households, and all members.",
   },
   stewardship: {
-    oneLineSummary: "The organs of the Body — each stewarding a specific function",
-    tooltipExplanation: "Just as a body has organs with specialized functions (heart, lungs, hands), the Body has stewardship organs: Land, Housing, Treasury, Enterprise, and Education — each faithfully managing one area.",
+    oneLineSummary: "The organs of the Body, each stewarding a specific function",
+    tooltipExplanation: "Just as a body has organs with specialized functions (heart, lungs, hands), the Body has stewardship organs: Land, Housing, Treasury, Enterprise, and Education. Each one faithfully manages a specific area.",
   },
   assembly: {
-    oneLineSummary: "The gathered ecclesia — where the Body comes together",
-    tooltipExplanation: "The private assembly where members of the Body gather, govern themselves, make decisions, and participate in community life. The ecclesia — the 'called out' ones.",
+    oneLineSummary: "The gathered ecclesia, where the Body comes together",
+    tooltipExplanation: "The private assembly where members of the Body gather, govern themselves, make decisions, and participate in community life. This is the ecclesia: the 'called out' ones.",
   },
   member: {
-    oneLineSummary: "You — a member of the Body, a joint heir with Christ",
+    oneLineSummary: "You, a member of the Body, a joint heir with Christ",
     tooltipExplanation: "As a member of the Body, you hold beneficial interest in the whole structure. All the organs and assemblies exist to serve you. You entered through the covenant; now you participate as a living member.",
   },
 };
@@ -311,7 +312,7 @@ export const FALLBACK_ENTITIES: FallbackEntity[] = [
   { id: "f-body", name: "Ecclesia Basilikos", subtitle: "Body of Christ", layer: "body", entityType: "body" },
   { id: "f-land", name: "Land Trust", subtitle: "Stewardship of Land", layer: "stewardship", entityType: "stewardship" },
   { id: "f-housing", name: "Housing Trust", subtitle: "Shelter & Buildings", layer: "stewardship", entityType: "stewardship" },
-  { id: "f-treasury", name: "Treasury Trust", subtitle: "Finances & Resources — Managed by Financial Trustee", layer: "stewardship", entityType: "stewardship" },
+  { id: "f-treasury", name: "Treasury Trust", subtitle: "Finances & Resources, Managed by Financial Trustee", layer: "stewardship", entityType: "stewardship" },
   { id: "f-enterprise", name: "Enterprise Trust", subtitle: "Commerce & Innovation", layer: "stewardship", entityType: "stewardship" },
   { id: "f-education", name: "Education Trust", subtitle: "Knowledge & Training", layer: "stewardship", entityType: "stewardship" },
   { id: "f-assembly", name: "Private Membership Association", subtitle: "The Gathered Ecclesia", layer: "assembly", entityType: "assembly" },
@@ -349,23 +350,23 @@ export const PERSPECTIVES: PerspectiveConfig[] = [
     introHint: "Think of it like an oath of allegiance, citizenship, and the nation's institutions.",
     layers: {
       covenant: {
-        oneLineSummary: "Like an oath of allegiance — your personal commitment that makes you eligible to enter",
-        tooltipExplanation: "Before you become a citizen, you take an oath. The covenant is your personal declaration — your commitment to the principles and purpose of the community.",
+        oneLineSummary: "Like an oath of allegiance, your personal commitment that makes you eligible to enter",
+        tooltipExplanation: "Before you become a citizen, you take an oath. The covenant is your personal declaration, your commitment to the principles and purpose of the community.",
       },
       body: {
-        oneLineSummary: "The nation itself — the collective body you enter through your oath",
+        oneLineSummary: "The nation itself, the collective body you enter through your oath",
         tooltipExplanation: "Once you take the oath, you become part of the nation. All institutions, services, and protections exist within this body. You are now a member.",
       },
       stewardship: {
-        oneLineSummary: "The nation's departments — housing authority, treasury, land office",
+        oneLineSummary: "The nation's departments: housing authority, treasury, land office",
         tooltipExplanation: "Just like a nation has separate departments for housing, finance, and land management, the Body has stewardship organs that each handle one area with dedicated focus.",
       },
       assembly: {
-        oneLineSummary: "The town hall — where citizens gather, vote, and govern",
+        oneLineSummary: "The town hall, where citizens gather, vote, and govern",
         tooltipExplanation: "The assembly is the civic gathering place where members come together to participate in governance, much like a town hall meeting.",
       },
       member: {
-        oneLineSummary: "You, the citizen — every institution exists to serve you",
+        oneLineSummary: "You, the citizen. Every institution exists to serve you",
         tooltipExplanation: "As a citizen of this nation, every department and institution exists to protect and benefit you. You entered through your oath; now you participate fully.",
       },
     },
@@ -383,24 +384,24 @@ export const PERSPECTIVES: PerspectiveConfig[] = [
     introHint: "Circumcision of heart → Baptized into the Body → Body with many members.",
     layers: {
       covenant: {
-        oneLineSummary: "Circumcision of heart — 'I will put my law in their inward parts' (Jer 31:33)",
-        tooltipExplanation: "The covenant is the circumcision of heart (Romans 2:29) — your personal transformation through Christ. The old man dies, the new man is born. This is the doorway into the Body.",
+        oneLineSummary: "Circumcision of heart, 'I will put my law in their inward parts' (Jer 31:33)",
+        tooltipExplanation: "The covenant is the circumcision of heart (Romans 2:29), your personal transformation through Christ. The old man dies; the new man is born. This is the doorway into the Body.",
       },
       body: {
-        oneLineSummary: "The Body of Christ — 'by one Spirit are we all baptized into one body' (1 Cor 12:13)",
-        tooltipExplanation: "Through the covenant, you are baptized into one Body. Christ is the Head; we are the members. Everything exists within this living organism — stewardship, assembly, and all ministry.",
+        oneLineSummary: "The Body of Christ, 'by one Spirit are we all baptized into one body' (1 Cor 12:13)",
+        tooltipExplanation: "Through the covenant, you are baptized into one Body. Christ is the Head; we are the members. Everything exists within this living organism: stewardship, assembly, and all ministry.",
       },
       stewardship: {
-        oneLineSummary: "Faithful stewardship — 'well done, good and faithful servant' (Matt 25:21)",
-        tooltipExplanation: "Each stewardship organ is like a member of the Body with a specific function — the hand, the eye, the foot. Each entrusted with specific resources to manage faithfully for the whole Body.",
+        oneLineSummary: "Faithful stewardship, 'well done, good and faithful servant' (Matt 25:21)",
+        tooltipExplanation: "Each stewardship organ is like a member of the Body with a specific function (the hand, the eye, the foot), entrusted with specific resources to manage faithfully for the whole Body.",
       },
       assembly: {
-        oneLineSummary: "The ecclesia — 'upon this rock I will build my ecclesia' (Matt 16:18)",
-        tooltipExplanation: "The assembly is the gathered ecclesia — the called-out ones within the Body, governing themselves according to scriptural principles.",
+        oneLineSummary: "The ecclesia, 'upon this rock I will build my ecclesia' (Matt 16:18)",
+        tooltipExplanation: "The assembly is the gathered ecclesia, the called-out ones within the Body, governing themselves according to scriptural principles.",
       },
       member: {
-        oneLineSummary: "Joint heir with Christ — 'heirs of God and co-heirs with Christ' (Rom 8:17)",
-        tooltipExplanation: "As a member of the Body, you are a joint heir. You entered through the covenant; now you are a living member — receiving and giving, served and serving.",
+        oneLineSummary: "Joint heir with Christ, 'heirs of God and co-heirs with Christ' (Rom 8:17)",
+        tooltipExplanation: "As a member of the Body, you are a joint heir. You entered through the covenant; now you are a living member, receiving and giving, served and serving.",
       },
     },
     connectors: {
@@ -431,7 +432,7 @@ export const FALLBACK_RELATIONSHIPS = [
 export interface WalkthroughStep {
   layer: string;
   title: string;
-  eli5: string;
+  simpleVersion: string;
   detail: string;
   analogy: string;
 }
@@ -440,37 +441,37 @@ export const WALKTHROUGH_STEPS: WalkthroughStep[] = [
   {
     layer: "covenant",
     title: "Your Personal Covenant",
-    eli5: "This is where it all begins — just you and God. You make a personal commitment, like a vow or a baptism.",
-    detail: "The New Covenant Legacy Trust is your individual covenant gateway — an irrevocable declaration of faith and commitment. Like the circumcision of heart described in Romans 2:29, this is a personal transformation. The old man dies; the new man is born. Through this covenant, you become eligible to enter the Body.",
+    simpleVersion: "This is where it all begins: just you and God. You make a personal commitment, like a vow or a baptism.",
+    detail: "The New Covenant Legacy Trust is your individual covenant gateway, an irrevocable declaration of faith and commitment. Like the circumcision of heart described in Romans 2:29, this is a personal transformation. The old man dies; the new man is born. Through this covenant, you become eligible to enter the Body.",
     analogy: "Think of it like taking an oath of allegiance before becoming a citizen. You can't participate in the nation until you've made your personal commitment.",
   },
   {
     layer: "body",
     title: "Entering the Body",
-    eli5: "Once you've made your covenant, you enter a living community — the Body of Christ. Everything else exists inside here.",
-    detail: "Ecclesia Basilikos is the Body of Christ — the collective assembly of all who have entered through the covenant. 'By one Spirit are we all baptized into one body' (1 Corinthians 12:13). The Body commissions stewardship organs, gathers the assembly, establishes regional churches, and nurtures households. Christ is the Head; you are a member.",
+    simpleVersion: "Once you've made your covenant, you enter a living community: the Body of Christ. Everything else exists inside here.",
+    detail: "Ecclesia Basilikos is the Body of Christ, the collective assembly of all who have entered through the covenant. 'By one Spirit are we all baptized into one body' (1 Corinthians 12:13). The Body commissions stewardship organs, gathers the assembly, establishes regional churches, and nurtures households. Christ is the Head; you are a member.",
     analogy: "Like becoming a citizen of a nation. Once you're in, all the nation's institutions, protections, and services are available to you.",
   },
   {
     layer: "stewardship",
     title: "The Body's Organs",
-    eli5: "Just like your body has a heart, lungs, and hands — each doing a specific job — the Body of Christ has organs too. Each one manages a different type of resource.",
+    simpleVersion: "Just like your body has a heart, lungs, and hands (each doing a specific job), the Body of Christ has organs too. Each one manages a different type of resource.",
     detail: "Within the Body, five stewardship organs handle specific functions: Land Trust stewards property, Housing Trust provides shelter, Treasury Trust manages finances under the Financial Trustee who can invest in assets including crypto, Enterprise Trust handles business and digital infrastructure, and Education Trust handles knowledge. If one organ faces trouble, the others are protected. 50% of all member contributions flow into the Treasury Trust.",
-    analogy: "Like organs in your body — your heart pumps blood, your lungs breathe, your hands work. If you break a finger, your heart keeps beating. Isolation protects the whole.",
+    analogy: "Like organs in your body. Your heart pumps blood, your lungs breathe, your hands work. If you break a finger, your heart keeps beating. Isolation protects the whole.",
   },
   {
     layer: "assembly",
     title: "The Gathered Ecclesia",
-    eli5: "This is where everyone in the Body comes together — to worship, to govern, to decide things as a community.",
-    detail: "The Private Membership Association is the gathered ecclesia within the Body — a constitutionally-protected private assembly where members govern themselves, make decisions, and participate in community life. 'Upon this rock I will build my ecclesia' (Matthew 16:18). It organizes regions, households, crafts, and ministries.",
-    analogy: "Like the town hall of a nation — where citizens gather, vote, and make their voices heard. Your assembly is where the Body comes alive in community.",
+    simpleVersion: "This is where everyone in the Body comes together: to worship, to govern, to decide things as a community.",
+    detail: "The Private Membership Association is the gathered ecclesia within the Body, a constitutionally-protected private assembly where members govern themselves, make decisions, and participate in community life. 'Upon this rock I will build my ecclesia' (Matthew 16:18). It organizes regions, households, crafts, and ministries.",
+    analogy: "Like the town hall of a nation. Where citizens gather, vote, and make their voices heard. Your assembly is where the Body comes alive in community.",
   },
   {
     layer: "member",
-    title: "You — A Living Member",
-    eli5: "This is you again, but now you're inside. You're not just looking at the structure from outside — you're a living part of it.",
-    detail: "As a member of the Body, you hold a Beneficial Unit — an equal, undivided interest in the trust corpus. You entered through the covenant; now you participate fully as a joint heir with Christ (Romans 8:17). Every stewardship organ, every assembly, every ministry exists to serve you — and you serve them in return.",
-    analogy: "Like a cell in a body — you receive nutrients from the whole organism, and you contribute your unique function back. The Body needs you, and you need the Body.",
+    title: "You, A Living Member",
+    simpleVersion: "This is you again, but now you're inside. You're not just looking at the structure from outside; you're a living part of it.",
+    detail: "As a member of the Body, you hold a Beneficial Unit, an equal, undivided interest in the trust corpus. You entered through the covenant; now you participate fully as a joint heir with Christ (Romans 8:17). Every stewardship organ, every assembly, every ministry exists to serve you, and you serve them in return.",
+    analogy: "Like a cell in a body. You receive nutrients from the whole organism, and you contribute your unique function back. The Body needs you, and you need the Body.",
   },
 ];
 
@@ -502,12 +503,12 @@ export const TRUST_SCENARIOS: TrustScenario[] = [
     highlightLayers: ["covenant", "body", "stewardship"],
     flowDirection: "down",
     steps: [
-      { layer: "covenant", action: "Your covenant declares all assets are held in trust — they're not \"yours\" to be seized personally" },
-      { layer: "body", action: "The Body asserts its authority — it's the legal steward, not any individual" },
+      { layer: "covenant", action: "Your covenant declares all assets are held in trust. They're not \"yours\" to be seized personally" },
+      { layer: "body", action: "The Body asserts its authority; it's the legal steward, not any individual" },
       { layer: "stewardship", action: "The Land Trust or Housing Trust holds the specific asset as an organ of the Body with its own protections" },
       { layer: "member", action: "You still benefit from the asset, but there's nothing in your name for a creditor to grab" },
     ],
-    outcome: "Your assets are shielded by multiple layers of trust law within the Body. A creditor would have to pierce through every layer — which is nearly impossible when the structure is properly maintained.",
+    outcome: "Your assets are shielded by multiple layers of trust law within the Body. A creditor would have to pierce through every layer, which is nearly impossible when the structure is properly maintained.",
   },
   {
     id: "start-business",
@@ -522,7 +523,7 @@ export const TRUST_SCENARIOS: TrustScenario[] = [
       { layer: "stewardship", action: "The Enterprise Trust provides the structure, funding, and liability protection" },
       { layer: "body", action: "The Body ensures the business aligns with the covenant's mission" },
     ],
-    outcome: "Your business operates under the Enterprise Trust's umbrella — giving you liability protection, shared resources, and community support without the overhead of forming your own corporation.",
+    outcome: "Your business operates under the Enterprise Trust's umbrella, giving you liability protection, shared resources, and community support without the overhead of forming your own corporation.",
   },
   {
     id: "need-housing",
@@ -535,9 +536,9 @@ export const TRUST_SCENARIOS: TrustScenario[] = [
       { layer: "body", action: "The Body has already established housing as a core mission" },
       { layer: "stewardship", action: "The Housing Trust manages available properties and builds new ones" },
       { layer: "assembly", action: "The assembly coordinates community needs and allocation priorities" },
-      { layer: "member", action: "You receive housing as a beneficial right — not as a tenant, but as a member of the Body" },
+      { layer: "member", action: "You receive housing as a beneficial right, not as a tenant, but as a member of the Body" },
     ],
-    outcome: "You don't rent and you don't have a mortgage. You occupy housing as a member of the Body — your right to housing is protected by the covenant itself.",
+    outcome: "You don't rent and you don't have a mortgage. You occupy housing as a member of the Body. Your right to housing is protected by the covenant itself.",
   },
   {
     id: "dispute",
@@ -551,7 +552,7 @@ export const TRUST_SCENARIOS: TrustScenario[] = [
       { layer: "body", action: "If unresolved, the Body can intervene with binding arbitration through the elder council" },
       { layer: "covenant", action: "The covenant provides the ultimate principles that guide any decision" },
     ],
-    outcome: "Disputes stay private and are resolved internally — no courts, no lawyers, no public records. The covenant principles ensure fair, consistent outcomes.",
+    outcome: "Disputes stay private and are resolved internally. No courts, no lawyers, no public records. The covenant principles ensure fair, consistent outcomes.",
   },
   {
     id: "new-member",
@@ -561,7 +562,7 @@ export const TRUST_SCENARIOS: TrustScenario[] = [
     highlightLayers: ["covenant", "body", "member"],
     flowDirection: "down",
     steps: [
-      { layer: "covenant", action: "The individual establishes their personal covenant — their commitment and circumcision of heart" },
+      { layer: "covenant", action: "The individual establishes their personal covenant, their commitment and circumcision of heart" },
       { layer: "body", action: "Through the covenant, they are baptized into the Body" },
       { layer: "assembly", action: "The assembly welcomes them and processes their membership" },
       { layer: "member", action: "They receive their beneficial unit and full access to the Body's benefits" },
@@ -576,9 +577,9 @@ export const TRUST_SCENARIOS: TrustScenario[] = [
     highlightLayers: ["covenant", "body", "member"],
     flowDirection: "down",
     steps: [
-      { layer: "covenant", action: "The covenant establishes perpetual trust provisions — no expiration date" },
+      { layer: "covenant", action: "The covenant establishes perpetual trust provisions (no expiration date)" },
       { layer: "body", action: "The Body manages succession planning and beneficiary designation" },
-      { layer: "member", action: "Your children establish their own covenant, enter the Body, and inherit beneficial interest — not taxable assets" },
+      { layer: "member", action: "Your children establish their own covenant, enter the Body, and inherit beneficial interest, not taxable assets" },
     ],
     outcome: "Wealth passes through the Body, not through probate. No estate tax, no public records, no court involvement. Your children enter through their own covenant and inherit as joint heirs.",
   },
@@ -590,7 +591,7 @@ export const TRUST_SCENARIOS: TrustScenario[] = [
 // ═══════════════════════════════════════════════════════════
 
 export interface DeepDiveContent {
-  eli5: string;
+  simpleVersion: string;
   realExamples: string[];
   faq: Array<{ q: string; a: string }>;
   keyTakeaway: string;
@@ -598,73 +599,96 @@ export interface DeepDiveContent {
 
 export const LAYER_DEEP_DIVE: Record<string, DeepDiveContent> = {
   covenant: {
-    eli5: "Imagine you want to join a special treehouse club. Before you can go inside, you have to make a pinky promise — a real, serious promise — that you'll follow the rules and take care of the treehouse. That promise is your covenant. It's just between you and the club founders. Once you make it, the door opens.",
+    simpleVersion: "Imagine you want to join a special treehouse club. Before you can go inside, you have to make a pinky promise (a real, serious promise) that you'll follow the rules and take care of the treehouse. That promise is your covenant. It's just between you and the club founders. Once you make it, the door opens.",
     realExamples: [
       "An oath of allegiance before becoming a citizen of a new country",
-      "Baptism — a public declaration of personal faith and transformation",
-      "A marriage vow — an irrevocable personal commitment between two parties",
+      "Baptism: a public declaration of personal faith and transformation",
+      "A marriage vow: an irrevocable personal commitment between two parties",
     ],
     faq: [
-      { q: "Is this covenant just paperwork?", a: "No. It represents a genuine spiritual and legal commitment — a circumcision of heart (Romans 2:29). It's the doorway through which you enter the Body, not just a form to fill out." },
-      { q: "Can I revoke my covenant?", a: "The covenant is irrevocable — like baptism, you can't un-do it. However, you can voluntarily withdraw from active participation in the Body." },
-      { q: "Why does entry start here and not at the community?", a: "Because the relationship with God comes first. You don't join an organization — you make a personal covenant, and through that covenant you enter a living Body. The individual comes before the collective." },
+      { q: "Is this covenant just paperwork?", a: "No. It represents a genuine spiritual and legal commitment, a circumcision of heart (Romans 2:29). It's the doorway through which you enter the Body, not just a form to fill out." },
+      { q: "Can I revoke my covenant?", a: "The covenant is irrevocable. Like baptism, you can't un-do it. However, you can voluntarily withdraw from active participation in the Body." },
+      { q: "Why does entry start here and not at the community?", a: "The relationship with God comes first. You don't join an organization. You make a personal covenant, and through that covenant you enter a living Body. The individual comes before the collective." },
     ],
-    keyTakeaway: "The covenant is your personal gateway. It's not about joining a club — it's about a transformation. Through this covenant, you die to the old and enter the Body as a new creation.",
+    keyTakeaway: "The covenant is your personal gateway. It's not about joining a club. It's about a transformation. Through this covenant, you die to the old and enter the Body as a new creation.",
   },
   body: {
-    eli5: "Once you've made your promise, you step inside the treehouse. And wow — it's not just a treehouse, it's a whole little city in there! There's a kitchen, a workshop, a library, a meeting room, and lots of friends. Everything you need is inside.",
+    simpleVersion: "So you made the pinky promise, and now you're inside the treehouse. But here's the thing: it's way bigger than it looks from outside. There's a kitchen, a workshop, a library, a room where people argue about stuff and figure things out. Everybody has a job. Everybody looks out for each other. You don't need to leave to get what you need; it's all in here.",
     realExamples: [
-      "A nation — once you're a citizen, all the nation's institutions serve you",
-      "The human body — a living organism where every organ works together for the whole",
-      "The early church in Acts — 'all that believed were together and had all things common' (Acts 2:44)",
+      "A nation: once you're a citizen, all the nation's institutions serve you",
+      "The human body: a living organism where every organ works together for the whole",
+      "The early church in Acts: 'all that believed were together and had all things common' (Acts 2:44)",
     ],
     faq: [
-      { q: "What's the difference between the covenant and the Body?", a: "The covenant is your personal gateway — it's between you and God. The Body is the collective you enter through that gateway. The covenant sits outside/above the Body; everything else exists within it." },
+      { q: "What's the difference between the covenant and the Body?", a: "The covenant is your personal gateway. It's between you and God. The Body is the collective you enter through that gateway. The covenant sits outside/above the Body; everything else exists within it." },
       { q: "Who leads the Body?", a: "Christ is the Head (Colossians 1:18). Appointed trustees and the Protector Council steward the Body's operations, accountable to the covenant's principles." },
       { q: "Can the Body exist without the covenant?", a: "No. The covenant is the foundation. Without it, the Body has no authority, no members, and no purpose. Every member enters through the covenant." },
     ],
-    keyTakeaway: "The Body of Christ is a living organism, not an organization chart. Everything exists within it — stewardship, assembly, regions, households, crafts, ministries, and all members. You entered through the covenant; now you're a living part of the whole.",
+    keyTakeaway: "The Body of Christ is a living organism, not an organization chart. Everything exists within it: stewardship, assembly, regions, households, crafts, ministries, and all members. You entered through the covenant; now you're a living part of the whole.",
   },
   stewardship: {
-    eli5: "Inside the treehouse city, there are different people in charge of different things. One person takes care of the garden (land), another manages the kitchen (food/finances), another builds and fixes rooms (housing), another runs the shop (business), and another teaches everyone new skills. Each has their own job so nothing gets forgotten.",
+    simpleVersion: "Inside the treehouse city, there are different people in charge of different things. One person takes care of the garden (land), another manages the kitchen (food/finances), another builds and fixes rooms (housing), another runs the shop (business), and another teaches everyone new skills. Each has their own job so nothing gets forgotten.",
     realExamples: [
-      "Organs in a body — the heart pumps blood, the lungs breathe, the hands work",
+      "Organs in a body: the heart pumps blood, the lungs breathe, the hands work",
       "A university with separate endowments for scholarships, research, and buildings",
       "A government with separate departments for defense, education, and health",
     ],
     faq: [
-      { q: "Why separate stewardship organs instead of one big trust?", a: "Liability isolation. If the Enterprise Trust gets sued, the Land Trust's properties are completely untouched. Like organs in a body — if you break a finger, your heart keeps beating." },
+      { q: "Why separate stewardship organs instead of one big trust?", a: "The answer is liability isolation: if the Enterprise Trust gets sued, the Land Trust's properties are completely untouched. Like organs in a body, if you break a finger, your heart keeps beating." },
       { q: "How many stewardship organs are there?", a: "Currently five: Land, Housing, Treasury, Enterprise, and Education. More can be created as the Body grows." },
       { q: "Who runs each stewardship organ?", a: "Each has its own appointed stewards, but they all serve the Body. Specialized expertise with collective accountability." },
     ],
-    keyTakeaway: "Separating stewardship into specialized organs isn't just organization — it's protection. Like a body with many members, each organ serves a vital function, and a problem in one never cascades to another.",
+    keyTakeaway: "Separating stewardship into specialized organs isn't just organization; it's protection. Like a body with many members, each organ serves a vital function, and a problem in one never cascades to another.",
   },
   assembly: {
-    eli5: "Inside the treehouse city, there's a big meeting room where everyone gathers. This is where you talk about what to build next, who needs help, and how to make things better. Everyone gets a voice.",
+    simpleVersion: "Inside the treehouse city, there's a big meeting room where everyone gathers. This is where you talk about what to build next, who needs help, and how to make things better. Everyone gets a voice.",
     realExamples: [
       "A town hall where citizens gather to govern and make decisions",
-      "The early church in Acts — 'they continued steadfastly in the apostles' doctrine and fellowship' (Acts 2:42)",
+      "The early church in Acts: 'they continued steadfastly in the apostles' doctrine and fellowship' (Acts 2:42)",
       "A private club with its own constitution and membership rules",
     ],
     faq: [
-      { q: "Is the assembly the same as a PMA?", a: "Yes — the assembly is structured as a Private Membership Association, a constitutionally-protected private gathering. It's the legal form the gathered ecclesia takes." },
+      { q: "Is the assembly the same as a PMA?", a: "Yes, the assembly is structured as a Private Membership Association, a constitutionally-protected private gathering. It's the legal form the gathered ecclesia takes." },
       { q: "Can the government regulate the assembly?", a: "Internal governance of a PMA is largely beyond government regulation, as long as members joined voluntarily. The right of private association is protected by the 1st and 14th Amendments." },
-      { q: "How is this different from a corporation?", a: "A corporation is a creature of the state. The assembly is a creature of the people — it exists by the members' natural right to associate, within the Body." },
+      { q: "How is this different from a corporation?", a: "A corporation is a creature of the state. The assembly is a creature of the people: it exists by the members' natural right to associate, fully within the Body." },
     ],
     keyTakeaway: "The assembly is where the Body comes alive in community. It's where your voice matters, where decisions are made collectively, and where your right to private association provides a constitutional shield.",
   },
   member: {
-    eli5: "You're in the treehouse city now. You get to use the garden, eat in the kitchen, live in a room, learn in the library, and help in the workshop. And everyone else does the same for you. You're not just visiting — you belong here.",
+    simpleVersion: "You're in the treehouse city now. You get to use the garden, eat in the kitchen, live in a room, learn in the library, and help in the workshop. And everyone else does the same for you. You're not just visiting; you belong here.",
     realExamples: [
-      "A citizen of a nation — benefiting from and contributing to the whole",
-      "A cell in a body — receiving nutrients and performing its unique function",
-      "Joint heirs in a family trust — each sharing equally in the inheritance",
+      "A citizen of a nation: benefiting from and contributing to the whole",
+      "A cell in a body: receiving nutrients and performing its unique function",
+      "Joint heirs in a family trust: each sharing equally in the inheritance",
     ],
     faq: [
-      { q: "What does 'beneficial interest' actually mean?", a: "It means you have the right to benefit from the Body's resources — to use the housing, access the land, participate in enterprise — even though you don't hold legal title." },
-      { q: "Can my beneficial interest be taken?", a: "Beneficial interest in a properly structured trust is extremely difficult to seize. It's not property in the traditional sense — it's a right held within the Body." },
-      { q: "What's a beneficial unit?", a: "It's your certificate of membership in the Body — proof that you're a recognized member with an equal, undivided interest (1/N) in the trust corpus." },
+      { q: "What does 'beneficial interest' actually mean?", a: "It means you have the right to benefit from the Body's resources: to use the housing, access the land, participate in enterprise, even though you don't hold legal title." },
+      { q: "Can my beneficial interest be taken?", a: "Beneficial interest in a properly structured trust is extremely difficult to seize. It's not property in the traditional sense. It's a right held within the Body." },
+      { q: "What's a beneficial unit?", a: "It's your certificate of membership in the Body. Proof that you're a recognized member with an equal, undivided interest (1/N) in the trust corpus." },
     ],
-    keyTakeaway: "Being a member of the Body is both receiving and giving. You entered through the covenant; now every organ, every assembly, every ministry exists to serve you — and you serve them in return. The entire Body exists for its members.",
+    keyTakeaway: "Being a member of the Body is both receiving and giving. You entered through the covenant; now every organ, every assembly, every ministry exists to serve you, and you serve them in return. The entire Body exists for its members.",
   },
+};
+
+export const CONNECTOR_GRADIENTS: Record<string, { from: string; to: string }> = {
+  "covenant→body": { from: "#5c1a33", to: "#1e293b" },
+  "body→stewardship": { from: "#1e293b", to: "#115e59" },
+  "stewardship→assembly": { from: "#115e59", to: "#581c87" },
+  "assembly→member": { from: "#581c87", to: "#b59548" },
+};
+
+export const STEWARDSHIP_TRUST_STYLES: Record<string, { icon: LucideIcon; accent: string; border: string; bg: string }> = {
+  "Land Trust": { icon: MapPin, accent: "text-green-600", border: "border-green-500", bg: "bg-green-50" },
+  "Housing Trust": { icon: Home, accent: "text-blue-600", border: "border-blue-500", bg: "bg-blue-50" },
+  "Treasury Trust": { icon: Coins, accent: "text-amber-600", border: "border-amber-500", bg: "bg-amber-50" },
+  "Enterprise Trust": { icon: Briefcase, accent: "text-purple-600", border: "border-purple-500", bg: "bg-purple-50" },
+  "Education Trust": { icon: BookOpen, accent: "text-sky-600", border: "border-sky-500", bg: "bg-sky-50" },
+};
+
+export const LAYER_PANEL_BACKGROUNDS: Record<string, string> = {
+  covenant: "bg-gradient-to-br from-white to-amber-50/30",
+  body: "bg-gradient-to-br from-white to-slate-50/40",
+  stewardship: "bg-gradient-to-br from-white to-teal-50/20",
+  assembly: "bg-gradient-to-br from-white to-purple-50/20",
+  member: "bg-gradient-to-br from-amber-50/20 to-white",
 };
