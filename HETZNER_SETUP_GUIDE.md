@@ -165,7 +165,9 @@ npm run db:push
 
 ### Redeploy After Code Changes
 
-From your local machine:
+**Automatic (recommended):** Every push to `main` triggers `.github/workflows/deploy.yml`, which SSHes into the server, fast-forwards to the pushed commit, rebuilds, and hits `/health`. See *Enable GitHub Actions auto-deploy* below for one-time setup.
+
+**Manual from your local machine:**
 
 ```bash
 # Quick redeploy (uses redeploy.sh)
@@ -177,6 +179,60 @@ cd /opt/ecclesia
 git pull
 docker compose -f docker-compose.prod.yml up -d --build
 ```
+
+### Enable GitHub Actions auto-deploy
+
+One-time setup so every push to `main` deploys itself:
+
+1. **Generate a deploy key** on your local machine:
+
+   ```bash
+   ssh-keygen -t ed25519 -f ~/.ssh/ecclesia_deploy -C "github-actions" -N ""
+   ```
+
+2. **Authorize it on the server:**
+
+   ```bash
+   ssh-copy-id -i ~/.ssh/ecclesia_deploy.pub root@<YOUR_IP>
+   ```
+
+3. **Capture the server host key** (so the Action trusts it):
+
+   ```bash
+   ssh-keyscan -t ed25519,rsa <YOUR_IP>
+   ```
+
+4. **Add these secrets** in GitHub → *Settings → Secrets and variables → Actions*:
+
+   | Name                  | Value                                                |
+   |-----------------------|------------------------------------------------------|
+   | `SSH_PRIVATE_KEY`     | Contents of `~/.ssh/ecclesia_deploy` (the whole file) |
+   | `DEPLOY_HOST`         | `root@<YOUR_IP>`                                     |
+   | `DEPLOY_KNOWN_HOSTS`  | Output of the `ssh-keyscan` command above            |
+
+   Optional repository **variables** (not secrets) if your paths differ:
+
+   | Name          | Default                              |
+   |---------------|--------------------------------------|
+   | `DEPLOY_DIR`  | `/opt/ecclesia`                      |
+   | `HEALTH_URL`  | `https://ecclesiabasilikos.org/health` |
+
+5. **Test it:** push a trivial commit to `main` (or run the workflow manually from the *Actions* tab) and watch the run.
+
+### Automatic server maintenance (weekly)
+
+`scripts/server-update.sh` runs `apt upgrade`, prunes unused Docker images/cache, and reboots if the kernel was upgraded. Install it once on the server:
+
+```bash
+ssh root@<YOUR_IP>
+cd /opt/ecclesia
+sudo cp scripts/server-update.sh /usr/local/sbin/ecclesia-server-update
+sudo chmod +x /usr/local/sbin/ecclesia-server-update
+echo '0 4 * * 0 root /usr/local/sbin/ecclesia-server-update >> /var/log/ecclesia-update.log 2>&1' \
+  | sudo tee /etc/cron.d/ecclesia-server-update
+```
+
+Logs land in `/var/log/ecclesia-update.log`.
 
 ### View Logs
 
