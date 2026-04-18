@@ -1,0 +1,44 @@
+services:
+  - type: web
+    name: ecclesia-basilikos
+    runtime: docker
+    plan: starter
+    region: virginia
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: BASE_URL
+        value: https://ecclesiabasilikos.org
+      - key: PUBLIC_OBJECT_SEARCH_PATHS
+        value: /data/public
+      - key: PRIVATE_OBJECT_DIR
+        value: /data/private
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false
+      - key: GMAIL_EMAIL
+        sync: false
+      - key: GMAIL_APP_PASSWORD
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: SQUARE_ACCESS_TOKEN
+        sync: false
+      - key: SQUARE_LOCATION_ID
+        sync: false
+      - key: SQUARE_WEBHOOK_SIGNATURE_KEY
+        sync: false
+      - key: SQUARE_ENVIRONMENT
+        sync: false
+      - key: SQUARE_SUBSCRIPTION_PLAN_ID
+        sync: false
+    disk:
+      name: app-data
+      mountPath: /data
+      sizeGB: 1
