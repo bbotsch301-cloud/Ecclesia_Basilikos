@@ -537,7 +537,7 @@ function LayerRow({
         {isHighlighted && !isSpotlit && (
           <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
             <span className="inline-flex items-center gap-1.5 text-xs font-bold text-royal-navy bg-royal-gold px-3 py-1 rounded-full shadow-md animate-pulse">
-              You Enter Here
+              Your Granting Act — You Enter Here
             </span>
           </div>
         )}

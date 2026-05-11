@@ -80,8 +80,8 @@ export default function Home() {
             transition={heroTransition(0.4)}
           >
             Everything on this platform (every course, every document, every resource) is held
-            in trust. Ecclesia Basilikos is a trust-governed private assembly. Its members are not
-            customers. They are beneficiaries. The education you see here is a function of the trust corpus.
+            in trust. Ecclesia Basilikos is a trust-governed private assembly. The New Covenant is the trust instrument.
+            Your acceptance is the granting act. Members are not customers — they are Grantor-Beneficiaries.
           </motion.p>
 
           <motion.div
@@ -127,15 +127,15 @@ export default function Home() {
                 This Is Not a Website. It Is a Trust.
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed mb-6">
-                Ecclesia Basilikos holds the education in trust. The courses, documents, templates,
-                and resources you see here are not products for sale; they are the trust corpus,
-                administered by the Trustee for the benefit of the assembly. The Private Membership
-                Association is how you enter. When you join, you are not subscribing to a service;
-                you are stepping into a private covenant body and becoming a beneficiary of the trust.
+                Ecclesia Basilikos holds the education in trust. The New Covenant itself is the trust instrument,
+                authored by God (Jer 31:31-34). Christ activated it as Testator through His death (Heb 9:16-17).
+                When you accept the covenant — through faith, confession, and baptism — that acceptance is the
+                granting act. You become the Grantor, depositing the old man into death. And the Grantor
+                simultaneously becomes Beneficiary: heir of God and joint-heir with Christ (Rom 8:17).
               </p>
               <p className="text-xl md:text-2xl font-semibold text-royal-navy max-w-3xl mx-auto mb-8">
-                The trust holds the resources. The PMA is the assembly.{" "}
-                <span className="text-royal-burgundy">Members are beneficiaries, not customers.</span>
+                The New Covenant is the instrument. Your acceptance is the granting act.{" "}
+                <span className="text-royal-burgundy">Members are Grantor-Beneficiaries, not customers.</span>
               </p>
               <p className="text-base text-gray-500 max-w-2xl mx-auto leading-relaxed">
                 Here is how the assembly is structured: from its divine authority down to where you enter.
@@ -186,7 +186,7 @@ export default function Home() {
                 },
                 {
                   before: "Customers purchasing products and services",
-                  after: "Beneficiaries receiving their share of the trust corpus",
+                  after: "Grantor-Beneficiaries receiving their share of the trust corpus",
                   icon: Users,
                 },
                 {
@@ -196,7 +196,7 @@ export default function Home() {
                 },
                 {
                   before: "Authority derived from the state",
-                  after: "Authority derived from the Grantor under divine covenant",
+                  after: "Authority derived from the New Covenant — the trust instrument authored by God",
                   icon: Crown,
                 },
                 {
@@ -241,7 +241,8 @@ export default function Home() {
               <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
                 This platform and everything on it is the trust corpus, administered by the Trustee
                 for the benefit of PMA members. The education is not a product being sold.
-                It is a function of the trust, delivered to its beneficiaries.
+                It is a function of the trust, delivered to its Grantor-Beneficiaries — those who
+                accepted the New Covenant and granted themselves into the trust.
               </p>
             </div>
           </RevealOnScroll>
@@ -315,9 +316,9 @@ export default function Home() {
                 How You Enter the Assembly
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                The trust already exists. The corpus is already being administered. The question
-                is whether you enter as a beneficiary. Here is the path: from first visit to
-                full beneficial interest.
+                The New Covenant — the trust instrument — already exists. The corpus is already being administered.
+                The question is whether you accept the covenant and become a Grantor-Beneficiary.
+                Here is the path: from first visit to full beneficial interest.
               </p>
             </div>
           </RevealOnScroll>
@@ -550,8 +551,8 @@ export default function Home() {
               The Assembly Is Open
             </h2>
             <p className="text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto leading-relaxed mb-4">
-              The trust holds the resources. The PMA is the assembly. The education is the function.
-              Enter and become a beneficiary.
+              The New Covenant is the trust instrument. Your acceptance is the granting act.
+              Enter and become a Grantor-Beneficiary.
             </p>
           </RevealOnScroll>
 

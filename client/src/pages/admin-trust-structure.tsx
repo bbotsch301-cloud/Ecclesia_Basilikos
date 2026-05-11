@@ -70,7 +70,7 @@ interface EntityTemplate {
 
 const LAYER_TEMPLATES: Record<string, EntityTemplate[]> = {
   covenant: [
-    { name: "New Covenant Legacy Trust", subtitle: "Individual Covenant Gateway", entityType: "covenant" },
+    { name: "New Covenant Legacy Trust", subtitle: "Acceptance of the New Covenant — The Granting Act", entityType: "covenant" },
   ],
   body: [
     { name: "Ecclesia Basilikos", subtitle: "Body of Christ", entityType: "body" },

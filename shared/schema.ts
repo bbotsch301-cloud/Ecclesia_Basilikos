@@ -993,10 +993,10 @@ export type InsertBeneficialUnit = z.infer<typeof insertBeneficialUnitSchema>;
 export type BeneficialUnit = typeof beneficialUnits.$inferSelect;
 
 // ====== TRUST STRUCTURE ======
-// Biblical ecclesiology: Individual → Covenant Gateway → Body of Christ → Internal Organs → Members
+// Biblical ecclesiology: Acceptance of the New Covenant (Granting Act) → Body of Christ → Internal Organs → Members
 
 export const trustEntityLayerEnum = pgEnum('trust_entity_layer', [
-  'covenant',        // Individual gateway: personal covenant with God through Christ (Rom 2:29, Jer 31:33)
+  'covenant',        // Acceptance of the New Covenant IS the granting act: the individual becomes Grantor by accepting the pre-existing trust instrument (Jer 31:31-34, Heb 8:8-12, Heb 9:16-17, Eph 1:13-14, Rom 8:17)
   'body',            // Body of Christ: the collective you enter (1 Cor 12:12-27, Gal 3:27-28)
   'stewardship',     // Organs of the Body: asset stewardship (Matt 25:21, 1 Peter 4:10)
   'assembly',        // The gathered ecclesia: people governance (Matt 16:18, Acts 2:42)
@@ -1009,7 +1009,7 @@ export const trustEntityLayerEnum = pgEnum('trust_entity_layer', [
 
 // Governance roles within the trust structure
 export const trustRoleEnum = pgEnum('trust_role', [
-  'grantor',          // mission founder / source of authority
+  'grantor',          // the individual who accepted the New Covenant, becoming Grantor by the act of acceptance — deposits old man, body, property into trust (Rom 6:6, Rom 12:1, Rom 8:17)
   'trustee',          // administrative authority
   'protector',        // protector council member: checks & balances
   'steward',          // chapter/commune leader

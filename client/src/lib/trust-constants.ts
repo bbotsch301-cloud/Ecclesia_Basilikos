@@ -22,7 +22,7 @@ import {
 
 // ═══════════════════════════════════════════════════════════
 // SHARED TRUST HIERARCHY CONSTANTS
-// Biblical ecclesiology: Individual → Covenant Gateway → Body of Christ → Internal Organs → Members
+// Biblical ecclesiology: Acceptance of the New Covenant (Granting Act) → Body of Christ → Internal Organs → Members
 // ═══════════════════════════════════════════════════════════
 
 export const LAYER_CONFIG: Record<string, {
@@ -37,7 +37,7 @@ export const LAYER_CONFIG: Record<string, {
 }> = {
   covenant: {
     label: "Covenant",
-    subtitle: "Individual Covenant Gateway",
+    subtitle: "Acceptance of the New Covenant — The Granting Act",
     nodeColor: "bg-red-900",
     nodeBorder: "border-red-800",
     nodeText: "text-white",
@@ -150,7 +150,7 @@ export const RELATIONSHIP_CONFIG: Record<string, {
 };
 
 export const BIBLICAL_LABELS: Record<string, string> = {
-  covenant: "Circumcision of Heart (Romans 2:29)",
+  covenant: "Acceptance of the New Covenant — The Granting Act (Jer 31:31-34, Heb 8:8-12, Rom 2:29)",
   body: "Body of Christ (1 Corinthians 12:12-27)",
   stewardship: "Faithful Stewardship (Matthew 25:21)",
   assembly: "Ecclesia (Matthew 16:18)",
@@ -162,7 +162,7 @@ export const BIBLICAL_LABELS: Record<string, string> = {
 };
 
 export const BIBLICAL_ROLE_LABELS: Record<string, string> = {
-  grantor: "Grantor",
+  grantor: "Grantor — The Individual Who Accepted the New Covenant (Rom 8:17)",
   trustee: "Trustee",
   protector: "Protector",
   steward: "Steward",
@@ -193,12 +193,12 @@ export const LAYER_PLAIN_ENGLISH: Record<string, {
   tooltipExplanation: string;
 }> = {
   covenant: {
-    oneLineSummary: "Your personal covenant with God, the doorway into the Body",
-    tooltipExplanation: "Like a baptism or circumcision of heart, this is your individual, irrevocable covenant: the gateway through which you enter the Body of Christ. It's personal, between you and God through Christ.",
+    oneLineSummary: "Your acceptance of the New Covenant IS the granting act — you become the Grantor who deposits the old man into trust",
+    tooltipExplanation: "The New Covenant (Jer 31:31-34, Heb 8:8-12) is the pre-existing trust instrument authored by God. Your acceptance of it — through faith, confession, and baptism — is the granting act that makes you the Grantor. You deposit your old man, your body, and your property into the trust. By this same act, you simultaneously become the Beneficiary: an heir of God and joint-heir with Christ (Rom 8:17).",
   },
   body: {
-    oneLineSummary: "The Body of Christ, the collective you willfully enter as a new creation",
-    tooltipExplanation: "Once you establish your personal covenant, you enter the Body. Everything else exists within this living organism: stewardship organs, the gathered assembly, regional churches, households, and all members.",
+    oneLineSummary: "The Body of Christ, the collective you enter through your granting act as a new creation",
+    tooltipExplanation: "Once you accept the New Covenant (the granting act), you enter the Body. Everything else exists within this living organism: stewardship organs, the gathered assembly, regional churches, households, and all members.",
   },
   stewardship: {
     oneLineSummary: "The organs of the Body, each stewarding a specific function",
@@ -209,14 +209,14 @@ export const LAYER_PLAIN_ENGLISH: Record<string, {
     tooltipExplanation: "The private assembly where members of the Body gather, govern themselves, make decisions, and participate in community life. This is the ecclesia: the 'called out' ones.",
   },
   member: {
-    oneLineSummary: "You, a member of the Body, a joint heir with Christ",
-    tooltipExplanation: "As a member of the Body, you hold beneficial interest in the whole structure. All the organs and assemblies exist to serve you. You entered through the covenant; now you participate as a living member.",
+    oneLineSummary: "You, a member of the Body — Grantor and Beneficiary, a joint heir with Christ",
+    tooltipExplanation: "As a member of the Body, you hold beneficial interest in the whole structure. All the organs and assemblies exist to serve you. You entered by accepting the New Covenant (your granting act); now you participate as a living member — both Grantor who deposited the old man and Beneficiary who inherits with Christ (Rom 8:17).",
   },
 };
 
 // Labels for connectors between adjacent layers
 export const CONNECTOR_LABELS: Record<string, string> = {
-  "covenant→body": "Baptized into the Body",
+  "covenant→body": "Granting act → Baptized into the Body",
   "body→stewardship": "Commissions stewardship",
   "stewardship→assembly": "Serves the assembly",
   "assembly→member": "Benefits flow to members",
@@ -308,7 +308,7 @@ export interface FallbackEntity {
 }
 
 export const FALLBACK_ENTITIES: FallbackEntity[] = [
-  { id: "f-covenant", name: "New Covenant Legacy Trust", subtitle: "Individual Covenant Gateway", layer: "covenant", entityType: "covenant" },
+  { id: "f-covenant", name: "New Covenant Legacy Trust", subtitle: "Acceptance of the New Covenant — The Granting Act", layer: "covenant", entityType: "covenant" },
   { id: "f-body", name: "Ecclesia Basilikos", subtitle: "Body of Christ", layer: "body", entityType: "body" },
   { id: "f-land", name: "Land Trust", subtitle: "Stewardship of Land", layer: "stewardship", entityType: "stewardship" },
   { id: "f-housing", name: "Housing Trust", subtitle: "Shelter & Buildings", layer: "stewardship", entityType: "stewardship" },
@@ -347,15 +347,15 @@ export const PERSPECTIVES: PerspectiveConfig[] = [
     id: "realWorld",
     label: "Real-World Analogy",
     icon: Building2,
-    introHint: "Think of it like an oath of allegiance, citizenship, and the nation's institutions.",
+    introHint: "Think of it like signing a founding trust document — your acceptance is the granting act.",
     layers: {
       covenant: {
-        oneLineSummary: "Like an oath of allegiance, your personal commitment that makes you eligible to enter",
-        tooltipExplanation: "Before you become a citizen, you take an oath. The covenant is your personal declaration, your commitment to the principles and purpose of the community.",
+        oneLineSummary: "Like signing a founding trust document — your acceptance IS the granting act that makes you the Grantor",
+        tooltipExplanation: "Imagine a trust instrument already exists, written by a sovereign authority. By signing it, you become the Grantor: you deposit your old life, assets, and identity into the trust. The New Covenant is that pre-existing instrument. Your acceptance of it is the granting act, and you simultaneously become both Grantor and Beneficiary.",
       },
       body: {
-        oneLineSummary: "The nation itself, the collective body you enter through your oath",
-        tooltipExplanation: "Once you take the oath, you become part of the nation. All institutions, services, and protections exist within this body. You are now a member.",
+        oneLineSummary: "The nation itself, the collective body you enter through your granting act",
+        tooltipExplanation: "Once you sign the founding document (the granting act), you become part of the nation. All institutions, services, and protections exist within this body. You are now a member — both Grantor and Beneficiary.",
       },
       stewardship: {
         oneLineSummary: "The nation's departments: housing authority, treasury, land office",
@@ -366,12 +366,12 @@ export const PERSPECTIVES: PerspectiveConfig[] = [
         tooltipExplanation: "The assembly is the civic gathering place where members come together to participate in governance, much like a town hall meeting.",
       },
       member: {
-        oneLineSummary: "You, the citizen. Every institution exists to serve you",
-        tooltipExplanation: "As a citizen of this nation, every department and institution exists to protect and benefit you. You entered through your oath; now you participate fully.",
+        oneLineSummary: "You, the citizen — Grantor and Beneficiary. Every institution exists to serve you",
+        tooltipExplanation: "As a citizen of this nation, every department and institution exists to protect and benefit you. You entered through your granting act; now you participate fully as both Grantor and Beneficiary.",
       },
     },
     connectors: {
-      "covenant→body": "Oath grants citizenship →",
+      "covenant→body": "Granting act → citizenship →",
       "body→stewardship": "Nation establishes departments →",
       "stewardship→assembly": "Departments serve the assembly →",
       "assembly→member": "Assembly represents citizens →",
@@ -381,15 +381,15 @@ export const PERSPECTIVES: PerspectiveConfig[] = [
     id: "biblical",
     label: "Biblical Foundation",
     icon: BookOpen,
-    introHint: "Circumcision of heart → Baptized into the Body → Body with many members.",
+    introHint: "Accept the New Covenant (the granting act) → Baptized into the Body → Body with many members.",
     layers: {
       covenant: {
-        oneLineSummary: "Circumcision of heart, 'I will put my law in their inward parts' (Jer 31:33)",
-        tooltipExplanation: "The covenant is the circumcision of heart (Romans 2:29), your personal transformation through Christ. The old man dies; the new man is born. This is the doorway into the Body.",
+        oneLineSummary: "The New Covenant IS the trust instrument (Jer 31:31-34, Heb 8:8-12); your acceptance is the granting act",
+        tooltipExplanation: "God authored the New Covenant (Jer 31:31-34, Heb 8:8-12). Christ the Testator activated it by His death (Heb 9:16-17) and mediates it (Heb 9:15) as High Priest (Heb 7:24-25). The Holy Spirit seals and guarantees it (Eph 1:13-14, 2 Cor 1:21-22). When you accept the New Covenant through faith, confession, and baptism, that acceptance IS the granting act — you become the Grantor who deposits the old man, body, and property into trust. You simultaneously become the Beneficiary: heir of God, joint-heir with Christ (Rom 8:17).",
       },
       body: {
         oneLineSummary: "The Body of Christ, 'by one Spirit are we all baptized into one body' (1 Cor 12:13)",
-        tooltipExplanation: "Through the covenant, you are baptized into one Body. Christ is the Head; we are the members. Everything exists within this living organism: stewardship, assembly, and all ministry.",
+        tooltipExplanation: "Through your acceptance of the New Covenant (the granting act), you are baptized into one Body. Christ is the Head; we are the members. Everything exists within this living organism: stewardship, assembly, and all ministry.",
       },
       stewardship: {
         oneLineSummary: "Faithful stewardship, 'well done, good and faithful servant' (Matt 25:21)",
@@ -400,12 +400,12 @@ export const PERSPECTIVES: PerspectiveConfig[] = [
         tooltipExplanation: "The assembly is the gathered ecclesia, the called-out ones within the Body, governing themselves according to scriptural principles.",
       },
       member: {
-        oneLineSummary: "Joint heir with Christ, 'heirs of God and co-heirs with Christ' (Rom 8:17)",
-        tooltipExplanation: "As a member of the Body, you are a joint heir. You entered through the covenant; now you are a living member, receiving and giving, served and serving.",
+        oneLineSummary: "Joint heir with Christ — Grantor and Beneficiary, 'heirs of God and co-heirs with Christ' (Rom 8:17)",
+        tooltipExplanation: "As a member of the Body, you are a joint heir. You entered by accepting the New Covenant (your granting act), which made you both Grantor and Beneficiary. Now you are a living member, receiving and giving, served and serving.",
       },
     },
     connectors: {
-      "covenant→body": "Circumcision of heart → Baptized into →",
+      "covenant→body": "Acceptance (granting act) → Baptized into →",
       "body→stewardship": "Body commissions organs →",
       "stewardship→assembly": "Stewards serve the ecclesia →",
       "assembly→member": "Ecclesia nurtures members →",
@@ -426,7 +426,7 @@ export const FALLBACK_RELATIONSHIPS = [
 
 // ═══════════════════════════════════════════════════════════
 // GUIDED WALKTHROUGH STEPS
-// Step-by-step tour starting from the individual's covenant
+// Step-by-step tour starting from the individual's acceptance of the New Covenant (the granting act)
 // ═══════════════════════════════════════════════════════════
 
 export interface WalkthroughStep {
@@ -440,17 +440,17 @@ export interface WalkthroughStep {
 export const WALKTHROUGH_STEPS: WalkthroughStep[] = [
   {
     layer: "covenant",
-    title: "Your Personal Covenant",
-    simpleVersion: "This is where it all begins: just you and God. You make a personal commitment, like a vow or a baptism.",
-    detail: "The New Covenant Legacy Trust is your individual covenant gateway, an irrevocable declaration of faith and commitment. Like the circumcision of heart described in Romans 2:29, this is a personal transformation. The old man dies; the new man is born. Through this covenant, you become eligible to enter the Body.",
-    analogy: "Think of it like taking an oath of allegiance before becoming a citizen. You can't participate in the nation until you've made your personal commitment.",
+    title: "Your Acceptance — The Granting Act",
+    simpleVersion: "This is where it all begins: the New Covenant already exists, authored by God. When you accept it through faith, confession, and baptism, that acceptance IS the granting act. You become the Grantor, depositing your old man into trust.",
+    detail: "The New Covenant (Jer 31:31-34, Heb 8:8-12) is the pre-existing trust instrument. God is its Author and Architect. Christ is the Testator whose death activated it (Heb 9:16-17), the Mediator (Heb 9:15), and the High Priest who forever intercedes (Heb 7:24-25). The Holy Spirit is the Executor, Seal, and Guarantor (Eph 1:13-14, 2 Cor 1:21-22). Your individual acceptance of this New Covenant IS the granting act — it makes you the Grantor who deposits the old man, your body, and your property into the trust. By this same act you simultaneously become the Beneficiary: an heir of God and joint-heir with Christ (Rom 8:17). The circumcision of heart (Rom 2:29) describes this transformation — the old man dies, the new man is born.",
+    analogy: "Think of it like a trust document already written by a king. The moment you sign it, you become the Grantor — you place everything you had into the trust. But you also become the Beneficiary of the trust's provisions. You gave up ownership of the old life and received an inheritance in the new one.",
   },
   {
     layer: "body",
     title: "Entering the Body",
-    simpleVersion: "Once you've made your covenant, you enter a living community: the Body of Christ. Everything else exists inside here.",
-    detail: "Ecclesia Basilikos is the Body of Christ, the collective assembly of all who have entered through the covenant. 'By one Spirit are we all baptized into one body' (1 Corinthians 12:13). The Body commissions stewardship organs, gathers the assembly, establishes regional churches, and nurtures households. Christ is the Head; you are a member.",
-    analogy: "Like becoming a citizen of a nation. Once you're in, all the nation's institutions, protections, and services are available to you.",
+    simpleVersion: "Once you've accepted the New Covenant (your granting act), you enter a living community: the Body of Christ. Everything else exists inside here.",
+    detail: "Ecclesia Basilikos is the Body of Christ, the collective assembly of all who have entered through their granting act — accepting the New Covenant. 'By one Spirit are we all baptized into one body' (1 Corinthians 12:13). The Body commissions stewardship organs, gathers the assembly, establishes regional churches, and nurtures households. Christ is the Head; you are a member — both Grantor and Beneficiary.",
+    analogy: "Like becoming a citizen of a nation by signing the founding document. Once you're in, all the nation's institutions, protections, and services are available to you. You gave up the old life (Grantor) and received the new (Beneficiary).",
   },
   {
     layer: "stewardship",
@@ -468,10 +468,10 @@ export const WALKTHROUGH_STEPS: WalkthroughStep[] = [
   },
   {
     layer: "member",
-    title: "You, A Living Member",
-    simpleVersion: "This is you again, but now you're inside. You're not just looking at the structure from outside; you're a living part of it.",
-    detail: "As a member of the Body, you hold a Beneficial Unit, an equal, undivided interest in the trust corpus. You entered through the covenant; now you participate fully as a joint heir with Christ (Romans 8:17). Every stewardship organ, every assembly, every ministry exists to serve you, and you serve them in return.",
-    analogy: "Like a cell in a body. You receive nutrients from the whole organism, and you contribute your unique function back. The Body needs you, and you need the Body.",
+    title: "You, A Living Member — Grantor and Beneficiary",
+    simpleVersion: "This is you again, but now you're inside. You're not just looking at the structure from outside; you're a living part of it — both the one who granted and the one who benefits.",
+    detail: "As a member of the Body, you hold a Beneficial Unit, an equal, undivided interest in the trust corpus. You entered by accepting the New Covenant (your granting act), which made you both Grantor and Beneficiary. Now you participate fully as a joint heir with Christ (Romans 8:17). Every stewardship organ, every assembly, every ministry exists to serve you, and you serve them in return.",
+    analogy: "Like a cell in a body. You receive nutrients from the whole organism, and you contribute your unique function back. You gave up the old life (Grantor) and received the new (Beneficiary). The Body needs you, and you need the Body.",
   },
 ];
 
@@ -503,7 +503,7 @@ export const TRUST_SCENARIOS: TrustScenario[] = [
     highlightLayers: ["covenant", "body", "stewardship"],
     flowDirection: "down",
     steps: [
-      { layer: "covenant", action: "Your covenant declares all assets are held in trust. They're not \"yours\" to be seized personally" },
+      { layer: "covenant", action: "Your acceptance of the New Covenant was the granting act — you deposited all assets into trust. They're not \"yours\" to be seized personally" },
       { layer: "body", action: "The Body asserts its authority; it's the legal steward, not any individual" },
       { layer: "stewardship", action: "The Land Trust or Housing Trust holds the specific asset as an organ of the Body with its own protections" },
       { layer: "member", action: "You still benefit from the asset, but there's nothing in your name for a creditor to grab" },
@@ -550,7 +550,7 @@ export const TRUST_SCENARIOS: TrustScenario[] = [
     steps: [
       { layer: "assembly", action: "The dispute is first handled within the assembly through internal mediation and community governance" },
       { layer: "body", action: "If unresolved, the Body can intervene with binding arbitration through the elder council" },
-      { layer: "covenant", action: "The covenant provides the ultimate principles that guide any decision" },
+      { layer: "covenant", action: "The New Covenant — the trust instrument itself — provides the ultimate principles that guide any decision" },
     ],
     outcome: "Disputes stay private and are resolved internally. No courts, no lawyers, no public records. The covenant principles ensure fair, consistent outcomes.",
   },
@@ -562,12 +562,12 @@ export const TRUST_SCENARIOS: TrustScenario[] = [
     highlightLayers: ["covenant", "body", "member"],
     flowDirection: "down",
     steps: [
-      { layer: "covenant", action: "The individual establishes their personal covenant, their commitment and circumcision of heart" },
+      { layer: "covenant", action: "The individual accepts the New Covenant — this acceptance IS the granting act, making them the Grantor who deposits the old man, body, and property into trust" },
       { layer: "body", action: "Through the covenant, they are baptized into the Body" },
       { layer: "assembly", action: "The assembly welcomes them and processes their membership" },
       { layer: "member", action: "They receive their beneficial unit and full access to the Body's benefits" },
     ],
-    outcome: "New members enter through a personal covenant with God, not just an organizational application. They are baptized into the Body and gain protected rights as joint heirs from day one.",
+    outcome: "New members enter by accepting the New Covenant — the pre-existing trust instrument authored by God. Their acceptance IS the granting act that makes them the Grantor. They deposit the old man into trust, are baptized into the Body, and simultaneously become Beneficiaries — heirs of God and joint-heirs with Christ from day one.",
   },
   {
     id: "generational",
@@ -577,11 +577,11 @@ export const TRUST_SCENARIOS: TrustScenario[] = [
     highlightLayers: ["covenant", "body", "member"],
     flowDirection: "down",
     steps: [
-      { layer: "covenant", action: "The covenant establishes perpetual trust provisions (no expiration date)" },
+      { layer: "covenant", action: "The New Covenant — the trust instrument itself — establishes perpetual provisions (no expiration date). Your acceptance as Grantor initiated this for your line" },
       { layer: "body", action: "The Body manages succession planning and beneficiary designation" },
-      { layer: "member", action: "Your children establish their own covenant, enter the Body, and inherit beneficial interest, not taxable assets" },
+      { layer: "member", action: "Your children accept the New Covenant themselves — their own granting act makes them Grantors and Beneficiaries, inheriting beneficial interest, not taxable assets" },
     ],
-    outcome: "Wealth passes through the Body, not through probate. No estate tax, no public records, no court involvement. Your children enter through their own covenant and inherit as joint heirs.",
+    outcome: "Wealth passes through the Body, not through probate. No estate tax, no public records, no court involvement. Your children accept the New Covenant themselves — their own granting act makes them Grantors and Beneficiaries, inheriting as joint heirs with Christ.",
   },
 ];
 
@@ -599,18 +599,19 @@ export interface DeepDiveContent {
 
 export const LAYER_DEEP_DIVE: Record<string, DeepDiveContent> = {
   covenant: {
-    simpleVersion: "Imagine you want to join a special treehouse club. Before you can go inside, you have to make a pinky promise (a real, serious promise) that you'll follow the rules and take care of the treehouse. That promise is your covenant. It's just between you and the club founders. Once you make it, the door opens.",
+    simpleVersion: "Imagine a treasure chest already exists, built by a king, with rules written on it. The moment you say 'I accept,' you become the person who puts everything into the chest (the Grantor). But you also get to use everything inside it (the Beneficiary). The New Covenant is that chest — God wrote it, Christ's death opened it, and your acceptance is the key that makes you both the giver and the receiver.",
     realExamples: [
-      "An oath of allegiance before becoming a citizen of a new country",
-      "Baptism: a public declaration of personal faith and transformation",
-      "A marriage vow: an irrevocable personal commitment between two parties",
+      "Signing a pre-existing trust document: the trust already exists, your signature is the granting act that makes you the Grantor",
+      "Baptism: a public declaration where you deposit the old man into trust and rise as a new creation — Grantor and Beneficiary in one act",
+      "Accepting an inheritance: the testament was activated by the Testator's death (Heb 9:16-17), and your acceptance makes the provisions yours",
     ],
     faq: [
-      { q: "Is this covenant just paperwork?", a: "No. It represents a genuine spiritual and legal commitment, a circumcision of heart (Romans 2:29). It's the doorway through which you enter the Body, not just a form to fill out." },
-      { q: "Can I revoke my covenant?", a: "The covenant is irrevocable. Like baptism, you can't un-do it. However, you can voluntarily withdraw from active participation in the Body." },
-      { q: "Why does entry start here and not at the community?", a: "The relationship with God comes first. You don't join an organization. You make a personal covenant, and through that covenant you enter a living Body. The individual comes before the collective." },
+      { q: "What does it mean that the New Covenant IS the trust instrument?", a: "God authored the New Covenant (Jer 31:31-34, Heb 8:8-12). Christ the Testator activated it by His death (Heb 9:16-17). The Holy Spirit seals and guarantees it (Eph 1:13-14). It is the pre-existing trust document — not something you create, but something you accept." },
+      { q: "How does my acceptance make me the Grantor?", a: "In trust law, the Grantor is the one who deposits assets into a trust. When you accept the New Covenant, you deposit your old man, your body, and your property into the trust (Rom 6:6, Rom 12:1). That acceptance IS the granting act. You simultaneously become the Beneficiary — an heir of God, joint-heir with Christ (Rom 8:17)." },
+      { q: "Can I revoke my acceptance?", a: "The New Covenant is irrevocable — God Himself established it. Your acceptance, like baptism, represents a permanent transformation. However, you can voluntarily withdraw from active participation in the Body." },
+      { q: "Why does entry start here and not at the community?", a: "The individual's acceptance of the New Covenant must come first. You don't join an organization — you accept a pre-existing trust instrument authored by God, and by that granting act you enter a living Body. The individual comes before the collective." },
     ],
-    keyTakeaway: "The covenant is your personal gateway. It's not about joining a club. It's about a transformation. Through this covenant, you die to the old and enter the Body as a new creation.",
+    keyTakeaway: "The New Covenant IS the trust instrument, authored by God, activated by Christ's death, sealed by the Holy Spirit. Your acceptance of it is the granting act that makes you the Grantor. You deposit the old man into trust, and simultaneously become the Beneficiary — an heir of God and joint-heir with Christ.",
   },
   body: {
     simpleVersion: "So you made the pinky promise, and now you're inside the treehouse. But here's the thing: it's way bigger than it looks from outside. There's a kitchen, a workshop, a library, a room where people argue about stuff and figure things out. Everybody has a job. Everybody looks out for each other. You don't need to leave to get what you need; it's all in here.",
@@ -620,9 +621,9 @@ export const LAYER_DEEP_DIVE: Record<string, DeepDiveContent> = {
       "The early church in Acts: 'all that believed were together and had all things common' (Acts 2:44)",
     ],
     faq: [
-      { q: "What's the difference between the covenant and the Body?", a: "The covenant is your personal gateway. It's between you and God. The Body is the collective you enter through that gateway. The covenant sits outside/above the Body; everything else exists within it." },
+      { q: "What's the difference between the covenant and the Body?", a: "The New Covenant is the trust instrument itself, authored by God. Your acceptance of it is the granting act that makes you the Grantor. The Body is the collective you enter through that granting act. The covenant sits outside/above the Body as the foundational instrument; everything else exists within it." },
       { q: "Who leads the Body?", a: "Christ is the Head (Colossians 1:18). Appointed trustees and the Protector Council steward the Body's operations, accountable to the covenant's principles." },
-      { q: "Can the Body exist without the covenant?", a: "No. The covenant is the foundation. Without it, the Body has no authority, no members, and no purpose. Every member enters through the covenant." },
+      { q: "Can the Body exist without the covenant?", a: "No. The New Covenant is the trust instrument itself — the foundational document. Without it, the Body has no authority, no members, and no purpose. Every member enters by accepting the New Covenant, which is their granting act." },
     ],
     keyTakeaway: "The Body of Christ is a living organism, not an organization chart. Everything exists within it: stewardship, assembly, regions, households, crafts, ministries, and all members. You entered through the covenant; now you're a living part of the whole.",
   },
@@ -666,7 +667,7 @@ export const LAYER_DEEP_DIVE: Record<string, DeepDiveContent> = {
       { q: "Can my beneficial interest be taken?", a: "Beneficial interest in a properly structured trust is extremely difficult to seize. It's not property in the traditional sense. It's a right held within the Body." },
       { q: "What's a beneficial unit?", a: "It's your certificate of membership in the Body. Proof that you're a recognized member with an equal, undivided interest (1/N) in the trust corpus." },
     ],
-    keyTakeaway: "Being a member of the Body is both receiving and giving. You entered through the covenant; now every organ, every assembly, every ministry exists to serve you, and you serve them in return. The entire Body exists for its members.",
+    keyTakeaway: "Being a member of the Body is both receiving and giving. You entered by accepting the New Covenant — your granting act made you both the Grantor and the Beneficiary. Now every organ, every assembly, every ministry exists to serve you, and you serve them in return. The entire Body exists for its members.",
   },
 };
 

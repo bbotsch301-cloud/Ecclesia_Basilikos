@@ -65,11 +65,11 @@ Every structural element described herein is implemented in the platform's data 
     number: "II",
     title: "The Nine-Layer Hierarchy",
     icon: Layers,
-    content: `The Ecclesia Basilikos Trust is organized into nine distinct layers, each serving a specific purpose in the covenant economy. The hierarchy flows from the individual's personal covenant with God through the collective Body and its organs, down to the individual member who benefits from the whole.`,
+    content: `The Ecclesia Basilikos Trust is organized into nine distinct layers, each serving a specific purpose in the covenant economy. The hierarchy flows from the individual's acceptance of the New Covenant (the granting act that makes them the Grantor) through the collective Body and its organs, down to the individual member who benefits as both Grantor and Beneficiary — heir of God and joint-heir with Christ (Rom 8:17).`,
     subsections: [
       {
-        title: "Layer 1: Covenant (Individual Covenant Gateway)",
-        content: `The New Covenant Legacy Trust is the individual's personal covenant with God through Christ, the doorway into the Body.
+        title: "Layer 1: Covenant (Acceptance of the New Covenant — The Granting Act)",
+        content: `The New Covenant Legacy Trust is the individual's personal covenant with God through Christ, the doorway into the Body. The New Covenant itself IS the Trust Instrument — authored by God (Jeremiah 31:31-34, Hebrews 8:8-12), activated by Christ the Testator whose death established the testament (Hebrews 9:16-17), mediated by Christ the High Priest (Hebrews 7:24-25, 9:15), and sealed by the Holy Spirit as Executor, Seal, and Guarantor (Ephesians 1:13-14, 2 Corinthians 1:21-22).
 
     "But this shall be the covenant that I will make with the house of Israel; After those days, saith the LORD, I will put my law in their inward parts, and write it in their hearts"
     (Jeremiah 31:33)
@@ -77,13 +77,13 @@ Every structural element described herein is implemented in the platform's data 
     "For he is not a Jew, which is one outwardly; neither is that circumcision, which is outward in the flesh: But he is a Jew, which is one inwardly; and circumcision is that of the heart, in the spirit, and not in the letter"
     (Romans 2:28-29)
 
-The NCLT is the individual's irrevocable covenant: a circumcision of heart establishing the singular relationship between man and God through Christ. It sits outside and above the Body as the gateway through which one enters. The covenant is irrevocable: "No man, having put his hand to the plough, and looking back, is fit for the kingdom of God" (Luke 9:62).
+The NCLT is the individual's irrevocable covenant: a circumcision of heart establishing the singular relationship between man and God through Christ. The individual's acceptance of the New Covenant — through faith, confession, and baptism — IS the granting act that makes the individual the Grantor. The Grantor does not create the trust; the Grantor enters the pre-existing divine trust framework that God established. The Grantor deposits the old man, the body, and property into the trust, and simultaneously becomes the Beneficiary — an heir of God and joint-heir with Christ (Romans 8:17). It sits outside and above the Body as the gateway through which one enters. The covenant is irrevocable: "No man, having put his hand to the plough, and looking back, is fit for the kingdom of God" (Luke 9:62).
 
 Legal basis: Divine law (2 Timothy 3:16), natural law (Creator-endowed rights), common law express trust (not organized under any state trust code), First Amendment (free exercise, assembly), Ninth and Tenth Amendments.`,
       },
       {
         title: "Layer 2: Body of Christ (The Collective Body)",
-        content: `Ecclesia Basilikos is the Body of Christ: the collective assembly of all who have entered through the covenant gateway.
+        content: `Ecclesia Basilikos is the Body of Christ: the collective assembly of all who have entered through accepting the New Covenant (the granting act).
 
     "For as the body is one, and hath many members, and all the members of that one body, being many, are one body: so also is Christ. For by one Spirit are we all baptized into one body"
     (1 Corinthians 12:12-13)
@@ -272,14 +272,14 @@ COORDINATES: Cross-layer coordination between entities that have functional rela
       },
       {
         title: "B. Entry & Membership Relationships",
-        content: `ENTERS: The covenant gateway relationship. An individual enters the Body through the covenant. "For by one Spirit are we all baptized into one body" (1 Corinthians 12:13). This is the foundational relationship; without it, no other relationship in the system exists.
+        content: `ENTERS: The granting act relationship. An individual enters the Body through acceptance of the New Covenant — which IS the Trust Instrument itself (Jeremiah 31:31-34, Hebrews 8:8-12). This acceptance IS the granting act that makes the individual the Grantor. "For by one Spirit are we all baptized into one body" (1 Corinthians 12:13). This is the foundational relationship; without it, no other relationship in the system exists.
 
 The "enters" relationship is:
-    • Irrevocable: the covenant cannot be undone
-    • Individual: each person enters through their own covenant
+    • Irrevocable: the granting act — acceptance of the New Covenant — cannot be undone
+    • Individual: each person enters through their own acceptance, becoming the Grantor
     • Spiritual: representing the circumcision of heart (Romans 2:29)
-    • Legal: establishing beneficial interest in the trust corpus
-    • Transformational: the old man dies, the new creation enters (2 Corinthians 5:17)`,
+    • Legal: the granting act establishes beneficial interest in the trust corpus; the Grantor simultaneously becomes Beneficiary — heir of God, joint-heir with Christ (Romans 8:17)
+    • Transformational: the old man is deposited into the trust (dies), the new creation enters (2 Corinthians 5:17)`,
       },
       {
         title: "C. Financial Relationships",
@@ -320,7 +320,7 @@ The benefits relationship is the fulfillment of the entire trust architecture: e
     subsections: [
       {
         title: "A. Trust Governance Roles",
-        content: `GRANTOR: The one who establishes the trust and sets its terms. In the covenant framework, the individual is the grantor of the NCLT (their personal covenant trust). The Body's grantor is the covenant community collectively operating under divine mandate. The grantor establishes the purpose, terms, and restrictions that bind all other parties.
+        content: `GRANTOR: In the Ecclesia Basilikos covenant framework, the Grantor is the individual whose acceptance of the New Covenant IS the granting act. The New Covenant itself (the Bible/New Testament) is the pre-existing Trust Instrument, authored by God (Jeremiah 31:31-34, Hebrews 8:8-12). Christ is the Testator whose death activated the testament (Hebrews 9:16-17) and Mediator (Hebrews 9:15). The Holy Spirit is the Executor, Seal, and Guarantor (Ephesians 1:13-14, 2 Corinthians 1:21-22). The individual does not create the trust — the individual enters the divine trust framework through acceptance (faith, confession, baptism), depositing the old man, the body, and property into the trust. The Grantor simultaneously becomes Beneficiary: an heir of God and joint-heir with Christ (Romans 8:17). At the Body level, the covenant community collectively operates under this same divine mandate. The grantor's acceptance establishes the purpose, terms, and restrictions that bind all other parties.
 
 TRUSTEE: The fiduciary who holds legal title and administers the trust. "A faithful and wise steward, whom his lord shall make ruler over his household" (Luke 12:42). Each layer has its own trustee designation: the Individual (covenant layer), Administrative Steward (body layer), Land/Housing/Treasury/Enterprise/Education Stewards (stewardship layer), PMA Administrator (assembly layer), Region Steward, Household Lead, Craft Master, Ministry Lead.
 
@@ -389,9 +389,9 @@ No entity in the hierarchy exercises authority beyond its delegated scope. Each 
         title: "B. Separation of Powers",
         content: `The trust architecture implements a three-way separation of powers at every level:
 
-    GRANTOR POWER: The power to establish terms and purposes
-    • Sets the covenant principles and restrictions
-    • Defines the trust's charitable purpose and mandate
+    GRANTOR POWER: The power exercised through acceptance of the New Covenant (the Trust Instrument). The individual's acceptance IS the granting act:
+    • The New Covenant sets the covenant principles and restrictions (God is the Author — Hebrews 8:8-12)
+    • The Grantor's acceptance deposits the old man into the trust and defines participation in the trust's charitable purpose and mandate
     • Cannot be overridden by trustee or protector
 
     TRUSTEE POWER: The power to administer and manage
@@ -404,7 +404,7 @@ No entity in the hierarchy exercises authority beyond its delegated scope. Each 
     • Approves major transactions and structural changes
     • Ensures compliance with covenant principles
 
-This separation prevents concentration of power in any single role. The grantor (covenant) sets the rules, the trustee (steward) executes them, and the protector (elder council) ensures faithful execution.`,
+This separation prevents concentration of power in any single role. The Grantor — the individual who accepted the New Covenant (the Trust Instrument itself) — enters the pre-existing divine trust framework. God authored the covenant, Christ the Testator activated it, and the Holy Spirit executes it. The trustee (steward) administers within those terms, and the protector (elder council) ensures faithful execution.`,
       },
       {
         title: "C. The Protector Council",

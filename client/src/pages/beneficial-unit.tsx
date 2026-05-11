@@ -103,10 +103,12 @@ function BeneficialUnitContent() {
             <div className="bg-royal-gold/5 border border-royal-gold/15 rounded-lg p-4 mt-4">
               <h4 className="font-cinzel text-sm font-bold text-royal-navy mb-2">What Your Unit Represents</h4>
               <p className="text-sm text-gray-600 leading-relaxed">
-                Your Beneficial Unit is your membership in the Body, the place where all
-                the trust's protections, resources, and governance flow down to you. Your personal covenant
-                is the gateway through which you entered. The Body of Christ holds and stewards all things.
-                The assembly is where you gather. And your unit is your 1/N share of everything the Body holds.
+                As Grantor, you deposited your old man and all property into the trust by accepting the
+                New Covenant — the pre-existing trust instrument authored by God. Your acceptance was the
+                granting act. Your Beneficial Unit is your receipt of inheritance as joint-heir with Christ
+                (Rom 8:17). The Body of Christ holds and stewards all things. The assembly is where you gather.
+                And your unit is your 1/N share of everything the Body holds — the inheritance you receive
+                back as Grantor-Beneficiary.
               </p>
             </div>
           </CardContent>

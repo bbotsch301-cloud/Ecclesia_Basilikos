@@ -137,6 +137,14 @@ Every trust has three essential parties. Understanding their legal definitions, 
 
 ## The Grantor (Settlor / Trustor)
 
+### The Covenant Framework
+
+In the Ecclesia Basilikos trust framework, the Grantor is the individual whose acceptance of the New Covenant constitutes the granting act. The New Covenant itself (the Bible/New Testament) IS the pre-existing Trust Instrument — authored by God as Architect (Jeremiah 31:31-34, Hebrews 8:8-12). Christ is the Testator whose death activated the testament (Hebrews 9:16-17), the Mediator (Hebrews 9:15), and the High Priest (Hebrews 7:24-25). The Holy Spirit is the Executor, Seal, and Guarantor (Ephesians 1:13-14, 2 Corinthians 1:21-22).
+
+The individual does not "create" a trust in the traditional sense. Rather, the individual enters the pre-existing divine trust framework through acceptance — faith, confession, and baptism. This acceptance IS the granting act that makes the individual the Grantor. The Grantor deposits the old man, the body, and property into the trust. The Grantor simultaneously becomes the Beneficiary: an heir of God and joint-heir with Christ (Romans 8:17).
+
+### Legal Definitions
+
 **Black's Law Dictionary (11th Edition)** defines "settlor" as:
 
 > "A person who creates a trust; one who transfers property to a trustee to hold subject to the terms of the trust. Also termed grantor; trustor; donor; creator."
@@ -153,7 +161,7 @@ The grantor must have:
 
 2. **Ownership of the property** — you cannot place into trust what you do not own. **Nemo dat quod non habet** — "no one gives what they do not have."
 
-3. **Intent to create the trust** — the grantor must manifest an intention to create a trust. Under **Restatement (Third) of Trusts §13**: *"A trust is created only if the settlor properly manifests an intention to create a trust relationship."*
+3. **Intent to create the trust** — the grantor must manifest an intention to create a trust. Under **Restatement (Third) of Trusts §13**: *"A trust is created only if the settlor properly manifests an intention to create a trust relationship."* In the covenant framework, acceptance of the New Covenant (faith, confession, baptism) is the manifestation of intent — the granting act.
 
 ### Grantor's Powers
 
@@ -319,7 +327,11 @@ The Private Express Trust provides an excellent bridge between the public and th
 
 A **Private Express Trust** brings you, your assets, and your sacred business into **sovereign alignment** — bridging God's Law with the Common Law of the Land. This is not merely a legal strategy; it is a philosophical and spiritual alignment of your commercial affairs with your deeper values.
 
-The separation of legal and equitable title (discussed above) is the mechanical expression of this principle — the trustee navigates the waters of commerce while the beneficiary remains on the land, protected.`,
+The separation of legal and equitable title (discussed above) is the mechanical expression of this principle — the trustee navigates the waters of commerce while the beneficiary remains on the land, protected.
+
+### The New Covenant as the Trust Instrument
+
+In the Ecclesia Basilikos framework, the New Covenant IS the Trust Instrument itself — authored by God (Jeremiah 31:31-34, Hebrews 8:8-12), activated by Christ the Testator through His death (Hebrews 9:16-17), mediated by Christ (Hebrews 9:15), and sealed by the Holy Spirit as Executor, Seal, and Guarantor (Ephesians 1:13-14). The individual's acceptance of this covenant — through faith, confession, and baptism — IS the granting act that makes the individual the Grantor. The Grantor deposits the old man, the body, and property into the trust, and simultaneously becomes the Beneficiary: an heir of God and joint-heir with Christ (Romans 8:17). The Private Express Trust, therefore, is not a human invention — it is a reflection of the divine trust structure that God established before the foundation of the world.`,
   },
   {
     order: 3,
@@ -338,6 +350,8 @@ The separation of legal and equitable title (discussed above) is the mechanical 
 > "Unless the terms of a trust expressly provide that the trust is revocable, the settlor may not revoke or amend the trust."
 
 Note: Under the UTC (adopted by most states), **trusts are presumed irrevocable** unless the instrument says otherwise. This is the opposite of the common law rule in some jurisdictions.
+
+In the covenant framework, the irrevocable trust mirrors the irrevocability of accepting the New Covenant. When the individual accepts the New Covenant (the granting act), what is deposited — the old man, the flesh, the worldly claims — is irrevocably surrendered. "No man, having put his hand to the plough, and looking back, is fit for the kingdom of God" (Luke 9:62). "I am crucified with Christ: nevertheless I live; yet not I, but Christ liveth in me" (Galatians 2:20). The granting act cannot be undone, and the Grantor's simultaneous inheritance as Beneficiary (heir of God, joint-heir with Christ — Romans 8:17) is secured by the Holy Spirit as Seal and Guarantor (Ephesians 1:13-14).
 
 ### Legal Characteristics
 
@@ -374,6 +388,8 @@ The grantor may be treated as owner for tax purposes if sufficient control is re
 **Black's Law Dictionary:**
 > "Express trust: A trust created with the settlor's express intent, usually declared in writing; a trust created by the direct and positive acts of the parties, by some writing, deed, or will, or oral declaration."
 
+In the Ecclesia Basilikos covenant framework, the New Covenant IS the express trust instrument — explicitly authored by God with clearly defined terms, beneficiaries, and purposes (Jeremiah 31:31-34, Hebrews 8:8-12). The individual's acceptance of this covenant is the granting act that brings them into the express trust. God expressed His intention with unmistakable clarity: "I will put my law in their inward parts, and write it in their hearts; and will be their God, and they shall be my people" (Jeremiah 31:33).
+
 ### Legal Characteristics
 
 An express trust must satisfy four elements (the "four certainties" in traditional trust law):
@@ -381,6 +397,7 @@ An express trust must satisfy four elements (the "four certainties" in tradition
 1. **Certainty of intention** — the settlor must intend to create a trust
    - **Restatement (Third) §13**: The intention must be manifested
    - Words like "I give to X in trust for Y" or "I declare that I hold this property for the benefit of Y"
+   - In the covenant framework, God's express intention is manifest: "Behold, the days come, saith the LORD, that I will make a new covenant" (Jeremiah 31:31)
 
 2. **Certainty of subject matter** — the trust property must be identifiable
    - **Restatement (Third) §40**: Trust property must be specific and ascertainable
@@ -708,6 +725,8 @@ Maintain a **Schedule of Trust Assets** — an exhibit to the trust instrument t
 
 The trust instrument is the governing document of the trust. It is the law of the trust — every right, duty, power, and limitation flows from this document.
 
+In the Ecclesia Basilikos covenant framework, the New Covenant (the Bible/New Testament) IS the ultimate Trust Instrument — authored by God (Jeremiah 31:31-34, Hebrews 8:8-12), activated by Christ the Testator (Hebrews 9:16-17), and sealed by the Holy Spirit (Ephesians 1:13-14). The individual's acceptance of this covenant IS the granting act that makes the individual the Grantor, entering the pre-existing divine trust framework. Every earthly trust instrument drafted within the Ecclesia Basilikos framework flows from and aligns with this supreme Trust Instrument.
+
 **UTC §103(18):**
 > "'Terms of a trust' means the manifestation of the settlor's intent regarding a trust's provisions as expressed in the trust instrument or as may be established by other evidence that would be admissible in a judicial proceeding."
 
@@ -871,7 +890,7 @@ The private container of a PMA, combined with **lawful money redemption**, sets 
 - **Empowering others** — every person who steps into private standing creates a ripple effect
 - **Contributing to the growing collective field of freedom** — as more people operate from private jurisdiction, the infrastructure of sovereignty strengthens for all
 
-This combination — the trust instrument as the legal vessel, the PMA as the private container, and lawful money redemption as the financial mechanism — represents a comprehensive approach to conscious participation in commerce without unconscious obligation.`,
+This combination — the New Covenant as the supreme Trust Instrument, the individual's acceptance as the granting act that makes them the Grantor, the PMA as the private container, and lawful money redemption as the financial mechanism — represents a comprehensive approach to conscious participation in commerce without unconscious obligation. The Grantor (the individual who accepted the New Covenant) deposits the old man into the trust and simultaneously inherits as Beneficiary — heir of God, joint-heir with Christ (Romans 8:17).`,
   },
   {
     order: 6,
@@ -1142,7 +1161,9 @@ This means **exculpation clauses** can protect against negligence but not agains
 
 ## Conscious Stewardship
 
-Trust administration is ultimately an act of conscious participation in the systems that govern property and wealth. Unlike unconscious engagement with financial structures — where obligations accumulate without awareness — maintaining a trust requires intentional, informed action. This awareness extends beyond mere compliance: it represents a fundamental shift from passive participation to active stewardship of your resources, your obligations, and your legacy.`,
+Trust administration is ultimately an act of conscious participation in the systems that govern property and wealth. Unlike unconscious engagement with financial structures — where obligations accumulate without awareness — maintaining a trust requires intentional, informed action. This awareness extends beyond mere compliance: it represents a fundamental shift from passive participation to active stewardship of your resources, your obligations, and your legacy.
+
+In the covenant framework, trust administration reflects the ongoing walk of the Grantor-Beneficiary: the individual who accepted the New Covenant (the granting act), deposited the old man into the irrevocable trust, and now stewards their inheritance as an heir of God and joint-heir with Christ (Romans 8:17). The New Covenant IS the Trust Instrument; Christ is the Testator and Mediator; the Holy Spirit is the Executor, Seal, and Guarantor. Faithful administration is faithful discipleship.`,
   },
 ];
 

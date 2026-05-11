@@ -50,7 +50,7 @@
 **Preferred communication style**: Simple, everyday language  
 **Scripture versions**: King James Version (KJV) exclusively  
 **Design preference**: Serious, royal embassy aesthetic with formal tone  
-**Theological framework**: New Covenant, Melchizedek priesthood, separation from Babylon
+**Theological framework**: New Covenant (the Trust Instrument itself), Melchizedek priesthood, separation from Babylon. The individual's acceptance of the New Covenant IS the granting act that makes them the Grantor. Christ is Testator and Mediator; the Holy Spirit is Executor, Seal, and Guarantor.
 
 ## Core Educational Content
 
@@ -238,7 +238,7 @@ Custom components built for consistent royal aesthetic:
 
 ### Core Doctrines
 
-1. **New Covenant in Christ's Blood**: All authority flows from Christ as Grantor
+1. **New Covenant in Christ's Blood**: The New Covenant IS the Trust Instrument, authored by God (Jeremiah 31:31-34, Hebrews 8:8-12). The individual's acceptance of the New Covenant is the Granting Act that makes the individual the Grantor, who deposits the old man into the trust and simultaneously becomes Beneficiary (Romans 8:17). Christ is the Testator (Hebrews 9:16-17) and Mediator (Hebrews 9:15); the Holy Spirit is Executor, Seal, and Guarantor (Ephesians 1:13-14)
 2. **Melchizedek Priesthood**: Believers operate as royal priests under eternal order
 3. **Separation from Babylon**: Called out from world systems into Kingdom jurisdiction
 4. **Heavenly Citizenship**: Primary allegiance to Christ, not earthly governments

@@ -156,7 +156,7 @@ export default function Contact() {
                     <CheckCircle className="w-6 h-6 text-royal-gold flex-shrink-0 mt-1" />
                     <div>
                       <h4 className="font-semibold text-royal-navy mb-1">Understanding Trust Roles</h4>
-                      <p className="text-gray-700 text-sm">Learn how you function as trustee of what God has given you to steward, with Christ as ultimate Trustee and the Father as Grantor.</p>
+                      <p className="text-gray-700 text-sm">Learn how the New Covenant is the trust instrument, your acceptance is the granting act, and you function as both Grantor and Beneficiary — heir of God and joint-heir with Christ.</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">

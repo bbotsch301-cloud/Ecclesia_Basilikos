@@ -11,7 +11,7 @@ export default function About() {
     <div className="pt-16">
       <HeroSection
         title="About Ecclesia Basilikos"
-        description="Embassy of the Eternal Kingdom established by Christ as Grantor and High Priest of the Melchizedek order"
+        description="Embassy of the Eternal Kingdom — the New Covenant is the trust instrument, your acceptance is the granting act"
         backgroundImage="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1920&h=1080&q=80"
       />
 
@@ -42,9 +42,9 @@ export default function About() {
               />
             </div>
             <div>
-              <h2 className="font-cinzel text-3xl font-bold text-royal-navy mb-6">Christ as the Grantor</h2>
+              <h2 className="font-cinzel text-3xl font-bold text-royal-navy mb-6">The New Covenant Trust Framework</h2>
               <p className="text-lg text-gray-600 leading-relaxed mb-6">
-                Ecclesia Basilikos is established by Jesus Christ Himself as the Grantor, who has transferred all authority and blessing to His Body. Unlike Babylon's system of contracts and merchandise, this trust operates under divine law and spiritual authority.
+                The New Covenant itself is the trust instrument, authored by God (Jer 31:31-34, Heb 8:8-12). Christ is the Testator whose death activated the testament (Heb 9:16-17) and the Mediator who administers it. Your acceptance of the New Covenant — through faith, confession, and baptism — is the granting act that makes you the Grantor. You deposit the old man into death and simultaneously become Beneficiary: heir of God and joint-heir with Christ (Rom 8:17). Unlike Babylon's system of contracts and merchandise, this trust operates under divine law and spiritual authority.
               </p>
               <div className="bg-parchment p-6 rounded-lg">
                 <blockquote className="font-georgia text-lg italic text-gray-600 mb-3">
@@ -193,17 +193,17 @@ export default function About() {
                     <span className="text-2xl font-bold text-royal-navy">G</span>
                   </div>
                   <h3 className="font-cinzel text-xl font-bold text-royal-navy">The Grantor</h3>
-                  <p className="text-sm text-gray-600">Creator & Owner of the Trust</p>
+                  <p className="text-sm text-gray-600">You — Through Acceptance of the Covenant</p>
                 </div>
                 <div className="space-y-3">
                   <p className="text-sm text-gray-600">
                     <strong>In earthly trusts:</strong> The person who creates the trust and transfers assets into it.
                   </p>
                   <p className="text-sm text-royal-navy font-semibold">
-                    <strong>In Ecclesia Basilikos:</strong> Jesus Christ, who transferred all authority and blessing to His Body.
+                    <strong>In Ecclesia Basilikos:</strong> You become the Grantor by accepting the New Covenant — depositing the old man, body, and property into the trust.
                   </p>
                   <blockquote className="text-xs italic bg-parchment p-3 rounded">
-                    "All power is given unto me in heaven and in earth." - Matthew 28:18
+                    "Know ye not, that so many of us as were baptized into Jesus Christ were baptized into his death?" - Romans 6:3
                   </blockquote>
                 </div>
               </div>
@@ -237,14 +237,14 @@ export default function About() {
                     <span className="text-2xl font-bold text-royal-navy">B</span>
                   </div>
                   <h3 className="font-cinzel text-xl font-bold text-royal-navy">The Beneficiary</h3>
-                  <p className="text-sm text-gray-600">Recipient of Trust Benefits</p>
+                  <p className="text-sm text-gray-600">The Grantor's Dual Role</p>
                 </div>
                 <div className="space-y-3">
                   <p className="text-sm text-gray-600">
                     <strong>In earthly trusts:</strong> The person who receives benefits from the trust assets.
                   </p>
                   <p className="text-sm text-royal-navy font-semibold">
-                    <strong>In Ecclesia Basilikos:</strong> All believers as joint-heirs with Christ in His inheritance.
+                    <strong>In Ecclesia Basilikos:</strong> The Grantor simultaneously becomes Beneficiary — heir of God and joint-heir with Christ. You grant all in and receive all back as inheritance.
                   </p>
                   <blockquote className="text-xs italic bg-parchment p-3 rounded">
                     "And if children, then heirs; heirs of God, and joint-heirs with Christ" - Romans 8:17
@@ -263,19 +263,19 @@ export default function About() {
                   <ul className="space-y-3 text-sm">
                     <li className="flex items-start">
                       <span className="text-royal-gold mr-2">•</span>
-                      <span>Christ as Grantor established the trust through His death and resurrection</span>
+                      <span>God authored the New Covenant — the trust instrument itself (Jer 31:31-34, Heb 8:8-12)</span>
                     </li>
                     <li className="flex items-start">
                       <span className="text-royal-gold mr-2">•</span>
-                      <span>Believers serve as both trustees (managing Kingdom resources) and beneficiaries (receiving inheritance)</span>
+                      <span>Christ as Testator activated the testament through His death (Heb 9:16-17) and serves as Mediator and High Priest (Heb 9:15, 7:24-25)</span>
                     </li>
                     <li className="flex items-start">
                       <span className="text-royal-gold mr-2">•</span>
-                      <span>Holy Spirit acts as the down payment ensuring full inheritance</span>
+                      <span>Your acceptance of the covenant is the granting act — making you Grantor and simultaneously Beneficiary (Rom 8:17)</span>
                     </li>
                     <li className="flex items-start">
                       <span className="text-royal-gold mr-2">•</span>
-                      <span>Operates under divine law, not human legal systems</span>
+                      <span>Holy Spirit serves as Executor, Seal, and Guarantor of the trust (Eph 1:13-14, 2 Cor 1:21-22)</span>
                     </li>
                   </ul>
                 </div>
@@ -332,7 +332,7 @@ export default function About() {
               <div className="bg-white p-6 rounded-xl shadow-lg border border-parchment-dark">
                 <h3 className="font-cinzel text-xl font-bold text-royal-navy mb-4">The New Covenant</h3>
                 <p className="text-sm text-gray-600 mb-4">
-                  Understanding Christ's testament as both covenant and will
+                  The trust instrument authored by God, activated by Christ as Testator
                 </p>
                 <div className="bg-parchment p-4 rounded-lg mb-4">
                   <blockquote className="font-georgia text-sm italic text-gray-600 mb-2">
@@ -341,7 +341,7 @@ export default function About() {
                   <cite className="text-royal-gold font-semibold text-xs">Hebrews 9:16 (KJV)</cite>
                 </div>
                 <p className="text-sm text-gray-600">
-                  Jesus' death ratified the New Covenant, making us beneficiaries of His will and co-heirs to His Kingdom.
+                  The New Covenant is the pre-existing trust instrument. Christ's death as Testator activated it. Your acceptance is the granting act that makes you the Grantor and simultaneously the Beneficiary.
                 </p>
               </div>
 
@@ -388,7 +388,7 @@ export default function About() {
                 The Ecclesia Basilikos Structure
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                Understanding your role as trustee in God's divine legacy trust
+                Understanding your role as Grantor-Beneficiary in God's divine covenant trust
               </p>
             </div>
 
@@ -396,40 +396,40 @@ export default function About() {
               <h3 className="font-cinzel-decorative text-2xl font-bold mb-8 text-center text-royal-gold">Trust Elements</h3>
               
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {/* Grantor */}
+                {/* Architect */}
                 <div className="bg-white/10 p-6 rounded-lg text-center">
                   <div className="w-12 h-12 bg-royal-gold rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-lg font-bold text-royal-navy">G</span>
+                    <span className="text-lg font-bold text-royal-navy">A</span>
                   </div>
-                  <h4 className="font-semibold text-lg mb-2 text-royal-gold">Grantor: The Creator</h4>
-                  <p className="text-sm">God, the original grantor of the divine trust</p>
+                  <h4 className="font-semibold text-lg mb-2 text-royal-gold">Architect: God</h4>
+                  <p className="text-sm">Author of the New Covenant — the trust instrument itself (Jer 31:31-34)</p>
                 </div>
 
-                {/* Trustee of Trustees */}
+                {/* Testator & Mediator */}
                 <div className="bg-white/10 p-6 rounded-lg text-center">
                   <div className="w-12 h-12 bg-royal-gold rounded-full flex items-center justify-center mx-auto mb-4">
                     <span className="text-lg font-bold text-royal-navy">T</span>
                   </div>
-                  <h4 className="font-semibold text-lg mb-2 text-royal-gold">Trustee of Trustees: Christ</h4>
-                  <p className="text-sm">Jesus who reconciled the breach and restored authority</p>
+                  <h4 className="font-semibold text-lg mb-2 text-royal-gold">Testator & Mediator: Christ</h4>
+                  <p className="text-sm">His death activated the testament (Heb 9:16-17); He mediates and intercedes (Heb 9:15, 7:24-25)</p>
                 </div>
 
-                {/* Beneficiary */}
+                {/* Grantor-Beneficiary */}
                 <div className="bg-white/10 p-6 rounded-lg text-center">
                   <div className="w-12 h-12 bg-royal-gold rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-lg font-bold text-royal-navy">B</span>
+                    <span className="text-lg font-bold text-royal-navy">G</span>
                   </div>
-                  <h4 className="font-semibold text-lg mb-2 text-royal-gold">Beneficiary: You</h4>
-                  <p className="text-sm">Co-heir with Christ, trustee of the restored estate</p>
+                  <h4 className="font-semibold text-lg mb-2 text-royal-gold">Grantor-Beneficiary: You</h4>
+                  <p className="text-sm">Your acceptance is the granting act; you simultaneously become heir of God and joint-heir with Christ</p>
                 </div>
 
-                {/* Witness */}
+                {/* Executor */}
                 <div className="bg-white/10 p-6 rounded-lg text-center">
                   <div className="w-12 h-12 bg-royal-gold rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-lg font-bold text-royal-navy">W</span>
+                    <span className="text-lg font-bold text-royal-navy">E</span>
                   </div>
-                  <h4 className="font-semibold text-lg mb-2 text-royal-gold">Witness: Holy Spirit</h4>
-                  <p className="text-sm">The earnest and seal of your inheritance</p>
+                  <h4 className="font-semibold text-lg mb-2 text-royal-gold">Executor: Holy Spirit</h4>
+                  <p className="text-sm">The Seal, Guarantor, and Executor of the trust (Eph 1:13-14, 2 Cor 1:21-22)</p>
                 </div>
               </div>
 
@@ -446,7 +446,7 @@ export default function About() {
               <h3 className="font-cinzel-decorative text-2xl font-bold text-royal-navy mb-6 text-center">Your Divine Role</h3>
               <div className="max-w-4xl mx-auto">
                 <p className="text-lg text-gray-600 leading-relaxed mb-6">
-                  As a trustee in Ecclesia Basilikos, you are called to be a living sacrifice, holy and acceptable to God. Your body becomes a temple of the Holy Spirit, stewarding the Kingdom's resources with divine authority.
+                  As a Grantor-Beneficiary in Ecclesia Basilikos, your acceptance of the New Covenant was the granting act. You deposited the old man into death through faith, confession, and baptism (Rom 6:3-4). In return, you became a new creature (2 Cor 5:17) — simultaneously the Grantor and the Beneficiary, heir of God and joint-heir with Christ.
                 </p>
                 <p className="text-lg text-gray-600 leading-relaxed">
                   This trust operates under <span className="font-semibold text-royal-navy">Lex Divina</span> (divine law), transcending earthly jurisdictions and empowering you to walk as an ambassador of Heaven with full access to Kingdom resources.

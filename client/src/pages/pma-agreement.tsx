@@ -45,9 +45,9 @@ export default function PmaAgreement() {
           <h2 className="font-cinzel text-2xl font-semibold text-royal-navy">2. Definitions</h2>
           <ul className="list-disc pl-6 space-y-2">
             <li><strong>The Trust:</strong> Ecclesia Basilikos Trust, the organizational structure through which the Association operates and administers its corpus.</li>
-            <li><strong>Grantor:</strong> Christ and the New Covenant, the source of divine authority under which the Trust operates.</li>
+            <li><strong>Grantor:</strong> The individual whose acceptance of the New Covenant constitutes the granting act, depositing the old man, body, and property into the trust. The New Covenant itself is the pre-existing trust instrument authored by God (Jer 31:31-34, Heb 8:8-12). Christ is the Testator whose death activated the testament (Heb 9:16-17) and the Mediator who administers it (Heb 9:15). The Holy Spirit serves as Executor, Seal, and Guarantor (Eph 1:13-14).</li>
             <li><strong>Trustee:</strong> The administrator of the Ecclesia Basilikos Trust, responsible for the stewardship and management of the Trust corpus.</li>
-            <li><strong>Beneficiary:</strong> Any individual who has voluntarily accepted this Agreement and thereby acquired beneficial interest in the Trust. Formerly referred to as a "member."</li>
+            <li><strong>Beneficiary:</strong> Any individual who has voluntarily accepted this Agreement and thereby acquired beneficial interest in the Trust. The Grantor simultaneously becomes Beneficiary — heir of God and joint-heir with Christ (Rom 8:17). Formerly referred to as a "member."</li>
             <li><strong>Beneficial Interest:</strong> The rights, privileges, and access granted to a Beneficiary through their participation in the Trust.</li>
             <li><strong>Private Jurisdiction:</strong> The internal governance structure of the Association, operating outside of public commercial jurisdiction.</li>
             <li><strong>Trust Corpus:</strong> The totality of assets administered within the trust ecosystem, including but not limited to: educational content and courses, downloadable resources, community forums, platform infrastructure, and financial contributions. Education is the primary active function of the trust; the structure supports additional purposes including community stewardship and charitable activity.</li>
@@ -57,8 +57,10 @@ export default function PmaAgreement() {
         <section>
           <h2 className="font-cinzel text-2xl font-semibold text-royal-navy">3. Membership as Beneficial Interest</h2>
           <p>
-            By accepting this Agreement, you acquire beneficial interest in the Ecclesia Basilikos Trust. This is not a
-            commercial transaction but an act of voluntary association and trust participation.
+            By accepting this Agreement, you perform the granting act: you accept the New Covenant as the trust instrument
+            and deposit yourself — the old man — into the trust. This makes you the Grantor. Simultaneously, you acquire
+            beneficial interest in the Ecclesia Basilikos Trust, becoming the Beneficiary. This is not a commercial
+            transaction but an act of voluntary covenant acceptance and trust participation.
           </p>
           <p>Beneficial interest is structured in two tiers:</p>
           <ul className="list-disc pl-6 space-y-2">

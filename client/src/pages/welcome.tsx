@@ -99,7 +99,7 @@ function WelcomeContent() {
             Welcome, {user.firstName}
           </h1>
           <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
-            You have entered the assembly. Below is your path: three pillars that form the foundation of everything we teach.
+            You have entered the assembly as a Grantor-Beneficiary. Below is your path: three pillars that form the foundation of everything we teach.
           </p>
         </div>
       </section>

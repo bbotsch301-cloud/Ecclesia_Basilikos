@@ -404,13 +404,17 @@ Every trust has three essential roles. Understanding these roles is the foundati
 
 ## The Grantor (Settlor/Trustor)
 
-The grantor is the person who creates the trust. The grantor:
+In the Ecclesia Basilikos trust framework, the Grantor is the individual whose acceptance of the New Covenant constitutes the granting act. The New Covenant itself (the Bible/New Testament) IS the pre-existing Trust Instrument — authored by God (Jeremiah 31:31-34, Hebrews 8:8-12), activated by Christ the Testator through His death (Hebrews 9:16-17), mediated by Christ the High Priest (Hebrews 7:24-25, 9:15), and sealed by the Holy Spirit as Executor, Seal, and Guarantor (Ephesians 1:13-14, 2 Corinthians 1:21-22).
+
+The Grantor does not "create" a trust in the traditional secular sense. Rather, the individual enters the pre-existing divine trust framework through acceptance — faith, confession, and baptism. This acceptance IS the granting act. The Grantor deposits the old man, the body, and property into the trust, and simultaneously becomes the Beneficiary: an heir of God and joint-heir with Christ (Romans 8:17).
+
+In secular trust law, the grantor:
 - Establishes the trust by executing the trust instrument
 - Defines the terms, conditions, and purpose of the trust
 - Transfers assets into the trust (funds it)
 - Determines who the trustee and beneficiaries will be
 
-**The grantor's intent governs the trust.** The trust instrument is the expression of that intent.
+**The grantor's intent governs the trust.** The trust instrument is the expression of that intent. In the covenant framework, God's intent governs the New Covenant trust, and the individual's acceptance activates their participation in it.
 
 ## The Trustee
 
@@ -456,6 +460,8 @@ Once established, the grantor **relinquishes control** over the assets. This pro
 - The trust cannot be modified or revoked by the grantor
 - Provides maximum separation between grantor and assets
 
+In the covenant framework, the irrevocable trust mirrors the irrevocability of accepting the New Covenant. When the individual accepts the New Covenant (the granting act), the old man is deposited irrevocably — "No man, having put his hand to the plough, and looking back, is fit for the kingdom of God" (Luke 9:62). Just as the Grantor of an irrevocable trust cannot reclaim what was deposited, the believer's old nature is crucified with Christ and cannot be taken back (Galatians 2:20).
+
 **Best for:** Maximum asset protection, estate planning, high-value assets
 
 ## Express Trust
@@ -465,6 +471,8 @@ Created by the **express intention** of the grantor with clearly defined terms, 
 - Terms are explicitly stated in the trust instrument
 - Can be revocable or irrevocable
 - Widely recognized in all jurisdictions
+
+In the covenant framework, the New Covenant IS the express trust instrument — explicitly authored by God with clearly defined terms, beneficiaries, and purposes (Jeremiah 31:31-34, Hebrews 8:8-12). The individual's acceptance of this covenant is the granting act that brings them into the express trust. God expressed His intention with precision: "I will put my law in their inward parts, and write it in their hearts; and will be their God, and they shall be my people" (Jeremiah 31:33).
 
 **Best for:** General asset protection, flexibility, multi-purpose use
 

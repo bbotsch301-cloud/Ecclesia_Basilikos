@@ -90,7 +90,7 @@ This is not merely theological rhetoric; it has direct, practical, and legally o
     4. Wealth accumulation for its own sake is a breach of fiduciary duty; the steward who hoards violates his mandate
     5. Economic activity is worship; the faithful steward renders an account (Luke 16:2)
 
-The legal structure of a trust perfectly encodes this theological reality. In trust law, the trustee holds legal title but has no beneficial interest. The beneficiary holds equitable title but has no administrative control. The grantor establishes the terms and purposes that bind both. This tripartite structure mirrors the divine economy: the Father grants, the Son administers, and the Body benefits.
+The legal structure of a trust perfectly encodes this theological reality. In trust law, the trustee holds legal title but has no beneficial interest. The beneficiary holds equitable title but has no administrative control. The grantor establishes the terms and purposes that bind both. This tripartite structure mirrors the divine economy: God authored the New Covenant (Jeremiah 31:31-34, Hebrews 8:8-12), Christ is the Testator whose death activated the testament (Hebrews 9:16-17) and Mediator (Hebrews 9:15), the Holy Spirit is the Executor, Seal, and Guarantor (Ephesians 1:13-14, 2 Corinthians 1:21-22), and the New Covenant itself IS the Trust Instrument. The individual's acceptance of the New Covenant — through faith, confession, and baptism — IS the granting act that makes the individual the Grantor, who deposits the old man, the body, and property into the trust. The Grantor simultaneously becomes Beneficiary: an heir of God and joint-heir with Christ (Romans 8:17).
 
 The practical consequence is the elimination of the predatory dynamics inherent in absolute ownership: foreclosure, speculative asset inflation, creditor seizure, and the concentration of productive resources in the hands of those who neither labor nor steward. When all assets are held in trust, the question changes from "Who owns this?" to "For whose benefit is this held, and is the steward faithful?"`,
       },
@@ -314,7 +314,7 @@ Where ancient Israel needed a periodic jubilee to correct the drift toward inequ
 Each role serves a distinct function in the governance ecosystem, and each maps directly to a trust structure role:
 
     Apostle: Foundational authority and strategic direction
-    → Maps to: Grantor/Settlor, who establishes the charter and foundational purpose
+    → Maps to: The one who proclaims the New Covenant (the Trust Instrument itself). As individuals accept the New Covenant through the apostolic witness, their acceptance IS the granting act — making each believer the Grantor who deposits their old man into the irrevocable trust of Christ's death and resurrection. The apostle establishes the charter by declaring the covenant that God authored (Jeremiah 31:31-34)
 
     Prophet: Discernment, correction, and protection of covenant integrity
     → Maps to: Protector Council, with veto power over charter violations and oversight
@@ -470,7 +470,7 @@ This is not a claim to exemption from civil law; it is the affirmative exercise 
     subsections: [
       {
         title: "A. Historical Origins: The Use and the Crusades",
-        content: `The trust (originally called the "use") emerged in medieval England as a mechanism for landowners departing on the Crusades to place their estates in the care of a trusted friend or associate for the benefit of their families. The landowner (grantor/settlor) would convey legal title to a trusted holder (trustee) with instructions to manage the land for the benefit of the landowner's wife, children, or other specified persons (beneficiaries).
+        content: `The trust (originally called the "use") emerged in medieval England as a mechanism for landowners departing on the Crusades to place their estates in the care of a trusted friend or associate for the benefit of their families. The landowner (grantor/settlor) would convey legal title to a trusted holder (trustee) with instructions to manage the land for the benefit of the landowner's wife, children, or other specified persons (beneficiaries). This secular pattern mirrors the divine trust pattern: God authored the New Covenant as the pre-existing Trust Instrument (Jeremiah 31:31-34), Christ the Testator activated it through His death (Hebrews 9:16-17), and each individual's acceptance of the New Covenant IS the granting act — making the believer the Grantor who deposits the old man and all that pertains to the flesh into the irrevocable trust, while simultaneously becoming the Beneficiary as heir of God and joint-heir with Christ (Romans 8:17).
 
 This arrangement proved so useful that it was rapidly adopted for a wide variety of purposes:
     • Protection of family wealth from creditors and political enemies
@@ -490,7 +490,7 @@ Key legal principles established over centuries:
       },
       {
         title: "B. The Express Trust: Structure and Legal Protections",
-        content: `The Ecclesia Basilikos Trust is structured as an express trust: a trust deliberately created by a grantor through a written trust instrument (declaration of trust), as distinguished from trusts that arise by operation of law (constructive and resulting trusts).
+        content: `The Ecclesia Basilikos Trust is structured as an express trust: a trust deliberately entered by a grantor through a written trust instrument (declaration of trust), as distinguished from trusts that arise by operation of law (constructive and resulting trusts). In the Ecclesia Basilikos covenant framework, the New Covenant IS the pre-existing trust instrument authored by God (Hebrews 8:8-12). The individual's acceptance of that covenant — through faith, confession, and baptism — IS the granting act that makes the individual the Grantor. The Grantor does not create the trust; the Grantor enters the divine trust framework that God established before the foundation of the world. Christ is the Testator (Hebrews 9:16-17) and Mediator (Hebrews 9:15), and the Holy Spirit is the Executor, Seal, and Guarantor (Ephesians 1:13-14).
 
 The express trust provides several critical legal protections:
 
@@ -516,7 +516,7 @@ The express trust provides several critical legal protections:
     • The terms of the trust are known only to the parties
 
     4. FLEXIBILITY
-    The trust instrument can specify virtually any arrangement the grantor desires:
+    The trust instrument can specify virtually any arrangement the grantor — the individual who accepted the New Covenant — desires within its terms:
     • Governance structure (appointment and removal of trustees)
     • Distribution policies (how, when, and to whom benefits are distributed)
     • Investment policies (what assets the trust may hold)
@@ -534,7 +534,7 @@ The express trust provides several critical legal protections:
         title: "C. The Irrevocable Trust: Permanence and Protection",
         content: `The Ecclesia Basilikos Trust is structured as irrevocable, meaning that once established its fundamental terms, purposes, and charter principles cannot be unilaterally changed by any party:
 
-    • The grantor cannot reclaim the assets or change the foundational purpose
+    • The grantor — the individual who accepted the New Covenant — cannot reclaim what was deposited (the old man, the body, and property) or change the foundational purpose. Just as acceptance of the New Covenant is irrevocable ("No man, having put his hand to the plough, and looking back, is fit for the kingdom of God" — Luke 9:62), so the granting act cannot be undone
     • The trustee cannot modify the charter principles, only administer within them
     • The beneficiaries cannot vote to dissolve the trust and divide the assets
     • No temporary administrator, no economic pressure, and no political influence can alter the charter's core commitments
@@ -543,7 +543,7 @@ This irrevocability is a feature, not a limitation. It provides:
 
     1. CONSTITUTIONAL STABILITY: The economic "rules of the game" are fixed by covenant, not subject to the shifting preferences of majorities or the pressures of market conditions. Members can plan their lives within a stable framework.
 
-    2. CREDITOR PROTECTION: Irrevocable trusts provide the strongest asset protection available in law. Assets properly transferred to an irrevocable trust are generally beyond the reach of the grantor's creditors and, in many cases, the beneficiaries' creditors as well.
+    2. CREDITOR PROTECTION: Irrevocable trusts provide the strongest asset protection available in law. Assets properly transferred to an irrevocable trust are generally beyond the reach of the grantor's creditors and, in many cases, the beneficiaries' creditors as well. In the covenant framework, when the individual accepts the New Covenant (the granting act), what is deposited into the trust — the old man, the flesh, the worldly claims — is irrevocably surrendered. The Grantor-Beneficiary's new inheritance in Christ is held under divine administration, beyond the reach of the world's claims.
 
     3. GENERATIONAL CONTINUITY: The trust's purpose endures across generations. The community being built is not a temporary arrangement dependent on the charisma or commitment of its founders; it is a permanent institution designed to serve future generations who will inherit the covenant.
 

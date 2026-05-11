@@ -95,7 +95,7 @@ Each section compares the two models across a specific domain: hierarchy, proper
         title: "Covenant Model: Nine-Layer Covenant Hierarchy",
         content: `The Ecclesia Basilikos Trust is organized into nine layers, each rooted in scripture and flowing from God's authority through Christ to His people:
 
-    Layer 1: Covenant. The individual's irrevocable covenant with God through Christ (Jeremiah 31:33)
+    Layer 1: Covenant. The individual's acceptance of the New Covenant — the Trust Instrument itself (Jeremiah 31:31-34, Hebrews 8:8-12). This acceptance IS the granting act that makes the individual the Grantor, who deposits the old man into the irrevocable trust. Christ is the Testator (Hebrews 9:16-17) and Mediator (Hebrews 9:15); the Holy Spirit is Executor, Seal, and Guarantor (Ephesians 1:13-14)
     Layer 2: Body of Christ. The collective assembly, with Christ as Head (1 Corinthians 12:12-13)
     Layer 3: Stewardship. Five organs of the Body: Land, Housing, Treasury, Enterprise, Education
     Layer 4: Ecclesia. The gathered assembly where authority is exercised (Matthew 18:20)
@@ -336,10 +336,10 @@ TRUSTEE AUTHORITY:
     • Can be removed for breach of fiduciary duty
 
 SEPARATION OF POWERS:
-    • Grantor (establishes the trust and its purpose, then steps back)
+    • Grantor (the individual whose acceptance of the New Covenant IS the granting act; deposits the old man into the trust and simultaneously becomes Beneficiary — heir of God, joint-heir with Christ, Romans 8:17). The New Covenant itself is the Trust Instrument, authored by God (Jeremiah 31:31-34, Hebrews 8:8-12). Christ is the Testator (Hebrews 9:16-17) and Mediator (Hebrews 9:15); the Holy Spirit is Executor, Seal, and Guarantor (Ephesians 1:13-14)
     • Trustee (manages and administers; holds legal title)
     • Protector (oversees and safeguards; holds veto and direction)
-    • Beneficiary (receives and enjoys; holds equitable title)
+    • Beneficiary (receives and enjoys; holds equitable title — the Grantor who accepted the covenant simultaneously becomes the Beneficiary)
     No single role combines all powers. This mirrors the biblical pattern:
     • Prophet (speaks truth): Protector
     • Priest (serves and administers): Trustee
@@ -921,7 +921,9 @@ The average American cannot afford to vindicate their rights in court. The Babyl
         content: `The covenant model operates under three interlocking legal frameworks:
 
 1. COMMON LAW TRUST:
-The trust is a creature of common law, not statutory law. Common law trusts:
+The trust is a creature of common law, not statutory law. In the Ecclesia Basilikos framework, the New Covenant (the Bible/New Testament) IS the Trust Instrument itself — authored by God (Jeremiah 31:31-34, Hebrews 8:8-12), activated by Christ the Testator through His death (Hebrews 9:16-17), and sealed by the Holy Spirit as Executor and Guarantor (Ephesians 1:13-14). The individual's acceptance of the New Covenant IS the granting act — making the believer the Grantor who deposits the old man into the irrevocable trust, while simultaneously becoming the Beneficiary as heir of God and joint-heir with Christ (Romans 8:17). This stands in stark contrast to Babylonian commercial instruments (contracts, UCC filings, corporate charters) which are creatures of statute, not covenant.
+
+Common law trusts:
     • Predate all statutory codes (rooted in English equity courts from the 13th century)
     • Require only the three certainties: intention, subject matter, objects
     • Are governed by the terms of the trust instrument, not by state trust codes
@@ -1027,7 +1029,7 @@ interface DiagramNode {
 
 const covenantLayers: DiagramNode[] = [
   { label: "God / Christ", subtitle: "Head of the Body", icon: Crown, bg: "bg-red-900", border: "border-red-800", text: "text-white", width: "max-w-[200px]" },
-  { label: "New Covenant Legacy Trust", subtitle: "Individual Covenant Gateway", icon: Heart, bg: "bg-red-900", border: "border-red-700", text: "text-white", width: "max-w-[240px]" },
+  { label: "New Covenant Legacy Trust", subtitle: "Acceptance of the New Covenant — The Granting Act", icon: Heart, bg: "bg-red-900", border: "border-red-700", text: "text-white", width: "max-w-[240px]" },
   { label: "Ecclesia Basilikos", subtitle: "Body of Christ: Collective Assembly", icon: Crown, bg: "bg-slate-800", border: "border-slate-500", text: "text-white", width: "max-w-[280px]" },
   { label: "Stewardship Organs", subtitle: "Land · Housing · Treasury · Enterprise · Education", icon: Shield, bg: "bg-teal-700", border: "border-teal-400", text: "text-white", width: "max-w-[320px]" },
   { label: "Ecclesia / Assembly", subtitle: "The Gathered Assembly (PMA)", icon: Users, bg: "bg-purple-700", border: "border-purple-400", text: "text-white", width: "max-w-[340px]" },

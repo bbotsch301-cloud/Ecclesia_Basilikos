@@ -69,8 +69,8 @@ export const comparisons: Comparison[] = [
     subtitle: 'Man vs Heaven',
     slug: 'two-registries',
     category: 'identity',
-    summary: 'Babylon\'s Registry of Man vs The New Covenant Registry of Heaven',
-    keyRevelation: 'Babylon records you at birth, assigns numbers, and defines you as property of the state. Your value is reduced to labor, taxes, and compliance. Christ records you at new birth. You are sealed with the Spirit, your name is written in the Book of Life, and your inheritance is incorruptible.',
+    summary: 'Babylon\'s Registry of Man vs The New Covenant Registry of Heaven — The Trust Instrument Itself',
+    keyRevelation: 'Babylon records you at birth, assigns numbers, and defines you as property of the state. Your value is reduced to labor, taxes, and compliance. The New Covenant IS the trust instrument authored by God (Jer 31:31-34, Heb 8:8-12). Your acceptance of it is the granting act — you become the Grantor who deposits the old man into trust. Christ records you at new birth. You are sealed with the Spirit (Eph 1:13-14), your name is written in the Book of Life, and as both Grantor and Beneficiary you inherit incorruptible treasure as joint-heir with Christ (Rom 8:17).',
     scriptureReferences: ['Philippians 3:20', 'Revelation 20:12'],
     comparisonTable: [
       {
@@ -260,13 +260,13 @@ export const comparisons: Comparison[] = [
     slug: 'two-legal-systems',
     category: 'legal',
     summary: 'Babylon\'s Counterfeit Legalism vs Christ\'s Covenant Freedom',
-    keyRevelation: 'Statutes: Babylon\'s legal system binds men with endless codes, licenses, and presumptions. It reduces living souls to corporate fictions and governs through coercion. Covenant: Christ\'s legal system operates through trust, covenant, and scripture. It presumes freedom in Him, empowers stewardship, and governs through love and truth.',
+    keyRevelation: 'Statutes: Babylon\'s legal system binds men with endless codes, licenses, and presumptions. It reduces living souls to corporate fictions and governs through coercion. Covenant: The New Covenant IS the trust instrument authored by God (Jer 31:31-34, Heb 8:8-12). Christ\'s legal system operates through this covenant, trust, and scripture. Your acceptance of the New Covenant is the granting act — making you the Grantor and Beneficiary. It presumes freedom in Him, empowers stewardship, and governs through love and truth.',
     scriptureReferences: ['James 1:25'],
     comparisonTable: [
       {
         dimension: 'Foundation',
         babylon: 'Codes, statutes, and regulations created by legislatures. Rooted in man-made authority.',
-        kingdom: 'Covenants, trusts, and scripture. Rooted in divine law and eternal promises.'
+        kingdom: 'The New Covenant IS the trust instrument (Jer 31:31-34, Heb 8:8-12). Acceptance of it is the granting act. Rooted in divine law and eternal promises.'
       },
       {
         dimension: 'Identity',
@@ -305,7 +305,7 @@ export const comparisons: Comparison[] = [
       {
         dimension: 'Founding Covenant',
         babylon: 'Created under state law; chartered as a corporate person. Permission granted by IRS.',
-        kingdom: 'Rooted in the New Covenant; established by Christ Himself. Recognition is inherent, not applied for.'
+        kingdom: 'Rooted in the New Covenant — the pre-existing trust instrument authored by God (Jer 31:31-34, Heb 8:8-12), activated by Christ the Testator (Heb 9:16-17). Acceptance of the New Covenant is the granting act. Recognition is inherent, not applied for.'
       },
       {
         dimension: 'Source of Authority',
@@ -330,7 +330,7 @@ export const comparisons: Comparison[] = [
       {
         dimension: 'Identity',
         babylon: 'Religious organization: an artificial entity with state-granted life.',
-        kingdom: 'The Ekklesia Basilikos: a living body, eternal covenant community, stewarding heaven\'s economy.'
+        kingdom: 'The Ekklesia Basilikos: a living body, rooted in the New Covenant (the trust instrument itself), where each member\'s acceptance is the granting act — stewarding heaven\'s economy as both Grantor and Beneficiary.'
       }
     ],
     featured: true,

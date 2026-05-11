@@ -176,11 +176,11 @@ function generateCharterDocument(r: ResolvedEntity, today: string, _rootName: st
     sections: [
       {
         title: "Scripture Preamble",
-        content: `"But now hath he obtained a more excellent ministry, by how much also he is the mediator of a better covenant, which was established upon better promises."\n— Hebrews 8:6`,
+        content: `"Behold, the days come, saith the Lord, when I will make a new covenant... I will put my law in their inward parts, and write it in their hearts; and will be their God, and they shall be my people."\n— Jeremiah 31:31-33\n\n"But now hath he obtained a more excellent ministry, by how much also he is the mediator of a better covenant, which was established upon better promises."\n— Hebrews 8:6\n\n"For where a testament is, there must also of necessity be the death of the testator. For a testament is of force after men are dead."\n— Hebrews 9:16-17\n\n"In whom ye also trusted, after that ye heard the word of truth... in whom also after that ye believed, ye were sealed with that holy Spirit of promise, which is the earnest of our inheritance."\n— Ephesians 1:13-14`,
       },
       {
         title: "Preamble",
-        content: `This Declaration of Trust is established on ${today} under the authority of divine law, constitutional principles, and the inherent right of free association.\n\nThis instrument creates and governs "${e.name}" as an irrevocable express trust, serving as the individual covenant gateway through which one enters the Body of Christ.`,
+        content: `This Declaration of Trust is established on ${today} under the authority of divine law, constitutional principles, and the inherent right of free association.\n\nThe New Covenant (Jer 31:31-34, Heb 8:8-12) IS the pre-existing trust instrument, authored by God the Architect, activated by the death of Christ the Testator (Heb 9:16-17), mediated by Christ the High Priest (Heb 9:15, Heb 7:24-25), and sealed by the Holy Spirit as Executor and Guarantor (Eph 1:13-14, 2 Cor 1:21-22).\n\nThe individual's acceptance of this New Covenant — through faith, confession, and baptism — IS the granting act. By this act, the individual becomes the Grantor, depositing the old man, body, and property into trust (Rom 6:6, Rom 12:1). The Grantor simultaneously becomes the Beneficiary: an heir of God and joint-heir with Christ (Rom 8:17).\n\nThis instrument governs "${e.name}" as an irrevocable express trust rooted in the New Covenant, through which the Grantor enters the Body of Christ.`,
       },
       {
         title: "Article I: Purpose & Covenant",
@@ -208,7 +208,7 @@ function generateCharterDocument(r: ResolvedEntity, today: string, _rootName: st
       },
       {
         title: "Article VII: Signatures & Attestation",
-        content: `IN WITNESS WHEREOF, the Grantor has executed this Declaration of Trust on the date first written above.\n\n\n____________________________________\n${e.trusteeLabel || 'Trustee'}\nDate: _______________\n\n\n____________________________________\n${e.protectorLabel || 'Protector'}\nDate: _______________`,
+        content: `IN WITNESS WHEREOF, the Grantor — having accepted the New Covenant as the granting act, thereby depositing the old man, body, and property into this trust — has executed this Declaration of Trust on the date first written above.\n\n\n____________________________________\nGrantor (the individual who accepted the New Covenant)\nDate: _______________\n\n\n____________________________________\n${e.trusteeLabel || 'Trustee'}\nDate: _______________\n\n\n____________________________________\n${e.protectorLabel || 'Protector'}\nDate: _______________`,
       },
     ],
   };
@@ -231,7 +231,7 @@ function generateGovernanceDocument(r: ResolvedEntity, today: string, parentName
       },
       {
         title: "Preamble",
-        content: `This Trust Administration Agreement is executed on ${today} under the authority of ${parentNames}.\n\n"${e.name}" is the Body of Christ, the collective assembly within which all stewardship, governance, and community life takes place, rooted in ${rootName}.`,
+        content: `This Trust Administration Agreement is executed on ${today} under the authority of ${parentNames}.\n\n"${e.name}" is the Body of Christ, the collective assembly within which all stewardship, governance, and community life takes place, rooted in ${rootName}. Every member entered the Body by accepting the New Covenant — the pre-existing trust instrument authored by God. That acceptance is the granting act which made each individual the Grantor and simultaneously the Beneficiary (Rom 8:17).`,
       },
       {
         title: "Article I: Mission & Charter",
@@ -349,7 +349,7 @@ function generatePMADocument(r: ResolvedEntity, today: string, parentNames: stri
       },
       {
         title: "Preamble",
-        content: `This Private Membership Association Agreement is established on ${today} under the authority of ${parentNames}, rooted in ${rootName}.\n\nThis agreement governs the voluntary association of members under the ecclesia covenant.`,
+        content: `This Private Membership Association Agreement is established on ${today} under the authority of ${parentNames}, rooted in ${rootName}.\n\nThis agreement governs the voluntary association of members under the ecclesia covenant. Each member entered by accepting the New Covenant — the pre-existing trust instrument — whose acceptance IS the granting act making the individual both Grantor and Beneficiary.`,
       },
       {
         title: "Article I: Purpose & Mission",

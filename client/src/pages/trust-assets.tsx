@@ -162,8 +162,8 @@ export default function TrustAssets() {
               </h2>
               <p className="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">
                 A trust is a fiduciary arrangement with three essential roles.
-                Understanding these roles is the foundation of using a trust
-                effectively.
+                In the New Covenant framework, the covenant itself is the trust instrument,
+                and your acceptance is the granting act that activates your role.
               </p>
             </div>
           </RevealOnScroll>
@@ -173,10 +173,10 @@ export default function TrustAssets() {
               {
                 icon: Key,
                 title: "The Grantor",
-                subtitle: "Creator of the Trust",
-                badge: "See: Covenant Gateway",
+                subtitle: "The One Who Grants Into the Trust",
+                badge: "See: Acceptance of the New Covenant — The Granting Act",
                 description:
-                  "The grantor establishes the trust, defines its terms, and transfers assets into it. The grantor's intent governs the trust's purpose and operation. In the covenant framework, Christ is the ultimate Grantor of the New Covenant trust.",
+                  "The grantor establishes the trust by depositing assets into it. In the covenant framework, the New Covenant is the pre-existing trust instrument authored by God. Your acceptance of that covenant — through faith, confession, and baptism — is the granting act that makes you the Grantor, depositing the old man, body, and property into the trust.",
               },
               {
                 icon: Building,
@@ -192,7 +192,7 @@ export default function TrustAssets() {
                 subtitle: "Recipient of the Benefits",
                 badge: "See: PMA Members",
                 description:
-                  "The beneficiary holds equitable (beneficial) interest in the trust assets. They receive the benefits of the trust without holding legal title, which is precisely what provides the protection.",
+                  "The beneficiary holds equitable (beneficial) interest in the trust assets. In the New Covenant framework, the Grantor simultaneously becomes Beneficiary — heir of God and joint-heir with Christ (Rom 8:17). You grant everything in and receive everything back as inheritance.",
               },
             ].map((item, index) => (
               <motion.div key={index} variants={staggerItemVariants}>
@@ -358,8 +358,8 @@ export default function TrustAssets() {
                 <span className="font-bold text-royal-navy">
                   if it can be owned, it can be held in trust.
                 </span>{" "}
-                The trust becomes the legal owner. You become the protected
-                beneficiary.
+                As Grantor, you deposit assets into the trust through your acceptance of the New Covenant.
+                As Beneficiary, you receive those assets back under trust protection.
               </p>
             </div>
           </RevealOnScroll>
