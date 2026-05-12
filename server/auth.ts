@@ -43,7 +43,11 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
     req.session.userId = undefined;
     return res.status(401).json({ error: "Invalid session" });
   }
-  
+
+  if (user.isBanned) {
+    return res.status(403).json({ error: "Account suspended" });
+  }
+
   (req as any).user = user;
   next();
 };

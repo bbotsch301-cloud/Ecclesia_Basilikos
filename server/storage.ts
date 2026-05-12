@@ -108,6 +108,12 @@ import {
   type TreasuryTransaction,
   type InsertTreasuryTransaction,
   type TreasurySetting,
+  flaggedContent,
+  userWarnings,
+  type FlaggedContent,
+  type InsertFlaggedContent,
+  type UserWarning,
+  type InsertUserWarning,
 } from "@shared/schema";
 import { eq, and, desc, sql, or, inArray, ilike } from "drizzle-orm";
 import { db } from "./db";
@@ -411,6 +417,15 @@ export interface IStorage {
   }>;
   getTreasurySetting(key: string): Promise<TreasurySetting | undefined>;
   upsertTreasurySetting(key: string, value: string, updatedById: string): Promise<TreasurySetting>;
+
+  // Forum moderation
+  flagContent(data: InsertFlaggedContent): Promise<FlaggedContent>;
+  getFlaggedContent(status?: string): Promise<FlaggedContent[]>;
+  reviewFlag(id: string, reviewedBy: string, status: string): Promise<FlaggedContent>;
+  createWarning(data: InsertUserWarning): Promise<UserWarning>;
+  getUserWarnings(userId: string): Promise<UserWarning[]>;
+  banUser(userId: string, reason: string): Promise<User>;
+  unbanUser(userId: string): Promise<User>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -3686,6 +3701,57 @@ export class DatabaseStorage implements IStorage {
       .values({ key, value, updatedById })
       .returning();
     return created;
+  }
+
+  // Forum moderation
+  async flagContent(data: InsertFlaggedContent): Promise<FlaggedContent> {
+    const [flag] = await db.insert(flaggedContent).values(data).returning();
+    return flag;
+  }
+
+  async getFlaggedContent(status?: string): Promise<FlaggedContent[]> {
+    if (status) {
+      return await db.select().from(flaggedContent)
+        .where(eq(flaggedContent.status, status as any))
+        .orderBy(desc(flaggedContent.createdAt));
+    }
+    return await db.select().from(flaggedContent)
+      .orderBy(desc(flaggedContent.createdAt));
+  }
+
+  async reviewFlag(id: string, reviewedBy: string, status: string): Promise<FlaggedContent> {
+    const [updated] = await db.update(flaggedContent)
+      .set({ reviewedBy, reviewedAt: new Date(), status: status as any })
+      .where(eq(flaggedContent.id, id))
+      .returning();
+    return updated;
+  }
+
+  async createWarning(data: InsertUserWarning): Promise<UserWarning> {
+    const [warning] = await db.insert(userWarnings).values(data).returning();
+    return warning;
+  }
+
+  async getUserWarnings(userId: string): Promise<UserWarning[]> {
+    return await db.select().from(userWarnings)
+      .where(eq(userWarnings.userId, userId))
+      .orderBy(desc(userWarnings.createdAt));
+  }
+
+  async banUser(userId: string, reason: string): Promise<User> {
+    const [updated] = await db.update(users)
+      .set({ isBanned: true, banReason: reason })
+      .where(eq(users.id, userId))
+      .returning();
+    return updated;
+  }
+
+  async unbanUser(userId: string): Promise<User> {
+    const [updated] = await db.update(users)
+      .set({ isBanned: false, banReason: null })
+      .where(eq(users.id, userId))
+      .returning();
+    return updated;
   }
 }
 
