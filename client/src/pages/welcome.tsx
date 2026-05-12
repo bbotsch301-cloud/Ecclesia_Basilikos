@@ -3,10 +3,11 @@ import { useAuth } from "@/hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Award, BookOpen, FileText, Shield, Users, Download, GraduationCap, Mail, Settings, CheckCircle, Crown, ArrowRight, Play, Star, Banknote, Globe } from "lucide-react";
+import { Award, BookOpen, FileText, Shield, Users, Download, GraduationCap, Mail, Settings, CheckCircle, Crown, ArrowRight, Play, Star, Banknote, Globe, Heart } from "lucide-react";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import RequireAuth from "@/components/RequireAuth";
 import TrustHierarchyDiagram from "@/components/trust-hierarchy-diagram";
+import CovenantChainDiagram from "@/components/covenant-chain-diagram";
 
 interface Enrollment {
   courseId: string;
@@ -40,6 +41,9 @@ function WelcomeContent() {
 
   if (!user) return null;
 
+  // Check if the Covenant Walk has been completed
+  const covenantWalkCompleted = typeof window !== 'undefined' && localStorage.getItem('covenantWalkCompleted') === 'true';
+
   // Find free (Trust) course and user's enrollment in it
   const freeCourse = courses.find(c => c.isFree || c.category === "Trust & Assets");
   const freeCourseEnrollment = freeCourse
@@ -54,30 +58,52 @@ function WelcomeContent() {
   const hasCompletedFreeCourse = !!freeCourseEnrollment?.completedAt;
   const hasAnyInProgress = !!inProgressEnrollment;
 
-  let primaryTitle = "Start Free Course";
-  let primaryDescription = "Begin with the Trust Foundation; it's free and sets the stage for everything else.";
-  let primaryHref = freeCourse ? `/course/${freeCourse.id}` : "/courses";
-  let primaryIcon = GraduationCap;
-  let primaryButtonText = "Start Learning";
+  // New user journey: Covenant Walk -> Free Course -> Paid/Covenantal Membership
+  let primaryTitle = "Begin the Covenant Walk";
+  let primaryDescription = "Understand your identity as Grantor-Beneficiary. Six steps from God's promise to your inheritance.";
+  let primaryHref = "/new-covenant-intro";
+  let primaryIcon = Heart;
+  let primaryButtonText = "Start the Walk";
+  let primaryLabel = "Recommended First Step";
 
-  if (hasAnyInProgress && inProgressEnrollment) {
+  if (!covenantWalkCompleted) {
+    // Default values above apply — Covenant Walk is the first step
+  } else if (isPremium) {
+    primaryTitle = "Explore Courses";
+    primaryDescription = "You have full access as a Covenantal Member. Explore all courses across every pillar.";
+    primaryHref = "/courses";
+    primaryIcon = BookOpen;
+    primaryButtonText = "Explore Courses";
+    primaryLabel = "Full Access";
+  } else if (hasAnyInProgress && inProgressEnrollment) {
     primaryTitle = "Continue Learning";
     primaryDescription = `Pick up where you left off. ${inProgressEnrollment.course?.title || "your course"} is ${inProgressEnrollment.progress || 0}% complete.`;
     primaryHref = `/course/${inProgressEnrollment.courseId}`;
     primaryIcon = Play;
     primaryButtonText = "Continue Course";
+    primaryLabel = "In Progress";
   } else if (hasCompletedFreeCourse) {
-    primaryTitle = "Explore More Courses";
-    primaryDescription = "You've completed the Trust Foundation. Continue your journey with the other pillars.";
-    primaryHref = "/courses";
-    primaryIcon = BookOpen;
-    primaryButtonText = "View Courses";
+    primaryTitle = "Ready for Full Access";
+    primaryDescription = "You've completed the Covenant Walk and the Trust Foundation. Take the next step and enter as a full Grantor-Beneficiary.";
+    primaryHref = "/pricing";
+    primaryIcon = Crown;
+    primaryButtonText = "View Covenantal Membership";
+    primaryLabel = "Next Step";
   } else if (hasStartedFreeCourse) {
     primaryTitle = "Continue Learning";
     primaryDescription = `You've started the Trust Foundation, so keep going! You're ${freeCourseEnrollment?.progress || 0}% complete.`;
     primaryHref = `/course/${freeCourse!.id}`;
     primaryIcon = Play;
     primaryButtonText = "Continue Course";
+    primaryLabel = "In Progress";
+  } else {
+    // Covenant Walk completed, but free course not started
+    primaryTitle = "Start Free Course";
+    primaryDescription = "You've completed the Covenant Walk. Now begin the Trust Foundation course — it's free and sets the stage for everything else.";
+    primaryHref = freeCourse ? `/course/${freeCourse.id}` : "/courses";
+    primaryIcon = GraduationCap;
+    primaryButtonText = "Start Learning";
+    primaryLabel = "Next Step";
   }
 
   const PrimaryIcon = primaryIcon;
@@ -134,7 +160,7 @@ function WelcomeContent() {
                 <div className="flex items-start gap-2 mb-4">
                   <Star className="w-4 h-4 text-royal-gold flex-shrink-0 mt-0.5" />
                   <span className="text-xs font-semibold text-royal-gold uppercase tracking-wider font-cinzel">
-                    Recommended First Step
+                    {primaryLabel}
                   </span>
                 </div>
                 <div className="flex flex-col md:flex-row md:items-center gap-6">
@@ -158,7 +184,57 @@ function WelcomeContent() {
 
         {/* Three Pillar Progression */}
         <div className="mb-8">
-          <h2 className="font-cinzel text-lg font-bold text-royal-navy mb-4">The Three-Pillar Foundation</h2>
+          <h2 className="font-cinzel text-lg font-bold text-royal-navy mb-4">Your Journey</h2>
+
+          {/* Step 0: Covenant Walk */}
+          <div className="mb-4">
+            <Link href={covenantWalkCompleted ? "#" : "/new-covenant-intro"}>
+              <div className={`flex items-center gap-3 p-3 rounded-lg border transition-all ${
+                covenantWalkCompleted
+                  ? "bg-green-50 border-green-200"
+                  : "bg-royal-gold/5 border-royal-gold/30 hover:border-royal-gold/50 cursor-pointer"
+              }`}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                  covenantWalkCompleted ? "bg-green-500 text-white" : "bg-royal-gold/20"
+                }`}>
+                  {covenantWalkCompleted ? (
+                    <CheckCircle className="w-4 h-4" />
+                  ) : (
+                    <Heart className="w-4 h-4 text-royal-gold" />
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-semibold text-gray-400 font-cinzel">STEP 0</span>
+                    <span className="font-cinzel text-sm font-bold text-royal-navy">Covenant Walk</span>
+                    {covenantWalkCompleted && (
+                      <span className="text-xs text-green-600 font-medium">Completed</span>
+                    )}
+                  </div>
+                  <p className="text-xs text-gray-500 truncate">Understand your identity as Grantor-Beneficiary</p>
+                </div>
+                {!covenantWalkCompleted && (
+                  <ArrowRight className="w-4 h-4 text-royal-gold flex-shrink-0" />
+                )}
+              </div>
+            </Link>
+          </div>
+
+          {/* Pillar progression: Covenant Walk -> Lawful Money -> Trust Protection -> Proper Status */}
+          <div className="flex items-center gap-1 mb-4 overflow-x-auto pb-1">
+            <span className={`text-[10px] font-cinzel font-semibold px-2 py-1 rounded-full whitespace-nowrap ${
+              covenantWalkCompleted ? "bg-green-100 text-green-700" : "bg-royal-gold/10 text-royal-gold"
+            }`}>
+              {covenantWalkCompleted ? <span className="inline-flex items-center gap-1"><CheckCircle className="w-3 h-3" /> Covenant Walk</span> : "Covenant Walk"}
+            </span>
+            <ArrowRight className="w-3 h-3 text-gray-300 flex-shrink-0" />
+            <span className="text-[10px] font-cinzel font-semibold px-2 py-1 rounded-full bg-gray-100 text-gray-500 whitespace-nowrap">Lawful Money</span>
+            <ArrowRight className="w-3 h-3 text-gray-300 flex-shrink-0" />
+            <span className="text-[10px] font-cinzel font-semibold px-2 py-1 rounded-full bg-gray-100 text-gray-500 whitespace-nowrap">Trust Protection</span>
+            <ArrowRight className="w-3 h-3 text-gray-300 flex-shrink-0" />
+            <span className="text-[10px] font-cinzel font-semibold px-2 py-1 rounded-full bg-gray-100 text-gray-500 whitespace-nowrap">Proper Status</span>
+          </div>
+
           <div className="grid md:grid-cols-3 gap-4">
             {[
               {
@@ -246,9 +322,12 @@ function WelcomeContent() {
               <CardContent className="p-6">
                 <div className="flex items-center gap-2 mb-4">
                   <Crown className="w-5 h-5 text-royal-gold" />
-                  <h2 className="font-cinzel text-lg font-bold text-royal-navy">Your Place in the Trust</h2>
+                  <h2 className="font-cinzel text-lg font-bold text-royal-navy">Your Covenant Journey</h2>
                 </div>
-                <TrustHierarchyDiagram compact highlightLayer="member" className="mb-3" />
+                <CovenantChainDiagram compact activeStep={6} />
+                <div className="mt-3 pt-3 border-t border-gray-100">
+                  <TrustHierarchyDiagram compact highlightLayer="member" className="mb-3" />
+                </div>
                 <div className="text-center">
                   <Link href="/beneficiary/unit" className="text-sm font-cinzel font-semibold text-royal-gold hover:text-royal-burgundy transition-colors">
                     View Your Beneficial Unit →
@@ -292,7 +371,7 @@ function WelcomeContent() {
               <CardContent className="p-6">
                 <h3 className="font-cinzel text-lg font-bold text-royal-navy mb-4">Your Free Account Includes</h3>
                 <ul className="space-y-2">
-                  {["Trust pillar course", "Trust-related downloads", "Forum reading", "Progress tracking", "Email notifications"].map((f, i) => (
+                  {["Covenant Walk (guided introduction)", "Trust Foundation course", "Trust-related downloads", "Forum reading", "Progress tracking", "Email notifications"].map((f, i) => (
                     <li key={i} className="flex items-center gap-2 text-sm text-gray-600">
                       <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" /> {f}
                     </li>
@@ -304,10 +383,10 @@ function WelcomeContent() {
               <CardContent className="p-6">
                 <div className="flex items-center gap-2 mb-3">
                   <Crown className="w-5 h-5 text-royal-gold" />
-                  <h3 className="font-cinzel text-lg font-bold text-royal-navy">Want Full Access?</h3>
+                  <h3 className="font-cinzel text-lg font-bold text-royal-navy">Covenantal Membership</h3>
                 </div>
                 <p className="text-sm text-gray-600 mb-4">
-                  Acquire PMA Beneficial Interest for all courses, downloads, forum posting, Proof Vault, and more.
+                  Enter as a full Grantor-Beneficiary. Covenant contribution unlocks all courses, downloads, forum posting, Proof Vault, and your Beneficial Unit certificate.
                 </p>
                 <Link href="/pricing">
                   <Button className="w-full bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold">
