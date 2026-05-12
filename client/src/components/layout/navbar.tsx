@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Menu, Crown, LogIn, UserPlus, LogOut, BookOpen, FileText, Shield, Home, ChevronDown, Settings, User, Search, CreditCard, Sparkles, MessageSquare, Download, Video } from "lucide-react";
+import { Menu, Crown, LogIn, UserPlus, LogOut, BookOpen, FileText, Shield, Home, ChevronDown, Settings, User, Search, CreditCard, Sparkles, MessageSquare, Download, Video, Heart } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import NotificationBell from "@/components/NotificationBell";
 import SearchDialog from "@/components/SearchDialog";
@@ -15,6 +15,7 @@ const navigation: Array<
 > = [
   { name: "Home", href: "/" },
   { name: "The Vision", href: "/vision" },
+  { name: "Covenant Walk", href: "/new-covenant-intro" },
   { separator: true },
   { name: "Lawful Money", href: "/lawful-money" },
   { name: "Trust & Assets", href: "/trust-assets" },
@@ -128,7 +129,7 @@ export default function Navbar() {
                   </DropdownMenuItem>
                   {!isPremium && (
                     <DropdownMenuItem onClick={() => navigate("/pricing")} className="text-royal-gold focus:text-royal-gold">
-                      <Sparkles className="w-4 h-4 mr-2" /> Acquire Interest
+                      <Sparkles className="w-4 h-4 mr-2" /> Covenantal Membership
                     </DropdownMenuItem>
                   )}
                   {user?.role === 'admin' && (

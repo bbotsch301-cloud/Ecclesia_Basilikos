@@ -5,7 +5,7 @@ import {
   Shield, BookOpen, Banknote, Globe,
   ArrowRight, CheckCircle, AlertTriangle, Lock,
   Scale, FileText, Building, Users, Eye,
-  ChevronRight, Landmark, CircleDot, Crown, Scroll, Key
+  ChevronRight, Landmark, CircleDot, Crown, Scroll, Key, Heart
 } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import RevealOnScroll from "@/components/ui/reveal-on-scroll";
@@ -91,17 +91,38 @@ export default function Home() {
             transition={heroTransition(0.6)}
           >
             <div className="inline-block rounded-lg animate-glow-pulse">
-              <Link href={ctaHref}>
+              <Link href={ctaHref === "/signup" ? "/new-covenant-intro" : ctaHref}>
                 <Button
                   size="lg"
                   className="royal-button text-lg md:text-xl px-10 py-6 shadow-2xl hover:scale-105 transition-transform"
                 >
-                  <Crown className="mr-3 h-6 w-6" />
-                  {ctaHref === "/signup" ? "Enter the Assembly" : "Go to Dashboard"}
+                  {ctaHref === "/signup" ? (
+                    <>
+                      <Heart className="mr-3 h-6 w-6" />
+                      Begin the Covenant Walk
+                    </>
+                  ) : (
+                    <>
+                      <Crown className="mr-3 h-6 w-6" />
+                      Go to Dashboard
+                    </>
+                  )}
                   <ArrowRight className="ml-3 h-5 w-5" />
                 </Button>
               </Link>
             </div>
+            {ctaHref === "/signup" && (
+              <Link href="/signup">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="text-lg md:text-xl px-10 py-6 bg-white/15 border-royal-gold/50 text-royal-gold hover:bg-white/25 transition-all"
+                >
+                  <Crown className="mr-3 h-6 w-6" />
+                  Sign Up
+                </Button>
+              </Link>
+            )}
             <Link href="/pma-agreement">
               <Button
                 size="lg"
@@ -324,7 +345,7 @@ export default function Home() {
           </RevealOnScroll>
 
           <StaggerContainer staggerDelay={0.2} className="max-w-3xl mx-auto space-y-6">
-            {/* Step 1 — Trust User */}
+            {/* Step 1 — Covenant Walk */}
             <motion.div variants={staggerItemVariants}>
               <Card className="border-2 border-royal-gold shadow-lg">
                 <CardContent className="p-6 md:p-8">
@@ -335,7 +356,7 @@ export default function Home() {
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
                         <h3 className="font-cinzel text-xl font-bold text-royal-navy">
-                          Enter as Trust User
+                          The Covenant Walk
                         </h3>
                         <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-green-700 bg-green-100 px-3 py-1 rounded-full">
                           <CircleDot className="w-3 h-3" />
@@ -343,12 +364,12 @@ export default function Home() {
                         </span>
                       </div>
                       <p className="text-gray-600 leading-relaxed mb-3">
-                        Create an account and begin learning. You immediately gain access to
-                        the three-pillar educational foundation, which is the trust's core curriculum.
-                        This is the trust serving its educational purpose. No contribution required.
+                        Understand your identity as Grantor-Beneficiary. Walk through six steps:
+                        from God's authorship of the covenant to your acceptance and inheritance.
+                        This guided introduction is free and sets the foundation for everything that follows.
                       </p>
-                      <Link href="/signup" className="text-xs font-cinzel font-semibold text-royal-gold hover:text-royal-burgundy transition-colors">
-                        Create Free Account →
+                      <Link href="/new-covenant-intro" className="text-xs font-cinzel font-semibold text-royal-gold hover:text-royal-burgundy transition-colors">
+                        Begin the Covenant Walk →
                       </Link>
                     </div>
                   </div>
@@ -356,7 +377,7 @@ export default function Home() {
               </Card>
             </motion.div>
 
-            {/* Step 2 — Read the Agreement */}
+            {/* Step 2 — Free Course */}
             <motion.div variants={staggerItemVariants}>
               <Card className="border border-gray-200 hover:border-royal-gold/30 transition-all">
                 <CardContent className="p-6 md:p-8">
@@ -367,17 +388,20 @@ export default function Home() {
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
                         <h3 className="font-cinzel text-xl font-bold text-royal-navy">
-                          Study the PMA Agreement
+                          Trust Foundation Course
                         </h3>
+                        <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-green-700 bg-green-100 px-3 py-1 rounded-full">
+                          <CircleDot className="w-3 h-3" />
+                          Free
+                        </span>
                       </div>
                       <p className="text-gray-600 leading-relaxed mb-3">
-                        Read and understand the Private Membership Association agreement.
-                        It defines the trust, the roles (Grantor, Trustee, Beneficiary),
-                        the trust corpus, and the terms of beneficial interest. Know what
-                        you are entering before you enter.
+                        Create an account and begin learning the three-pillar educational foundation:
+                        Lawful Money, Trust Protection, and Proper Status. This is the trust
+                        serving its educational purpose. No contribution required.
                       </p>
-                      <Link href="/pma-agreement" className="text-xs font-cinzel font-semibold text-royal-gold hover:text-royal-burgundy transition-colors">
-                        Read PMA Agreement →
+                      <Link href="/signup" className="text-xs font-cinzel font-semibold text-royal-gold hover:text-royal-burgundy transition-colors">
+                        Create Free Account →
                       </Link>
                     </div>
                   </div>
@@ -385,7 +409,7 @@ export default function Home() {
               </Card>
             </motion.div>
 
-            {/* Step 3 — Acquire Beneficial Interest */}
+            {/* Step 3 — Covenantal Membership */}
             <motion.div variants={staggerItemVariants}>
               <Card className="border border-gray-200 hover:border-royal-gold/30 transition-all">
                 <CardContent className="p-6 md:p-8">
@@ -396,19 +420,19 @@ export default function Home() {
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
                         <h3 className="font-cinzel text-xl font-bold text-royal-navy">
-                          Acquire Beneficial Interest
+                          Covenantal Membership
                         </h3>
                         <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-royal-burgundy bg-royal-burgundy/10 px-3 py-1 rounded-full">
-                          PMA Beneficiary
+                          PMA Beneficial Interest
                         </span>
                       </div>
                       <p className="text-gray-600 leading-relaxed mb-3">
-                        Make a one-time trust contribution of $500 (or $50 × 10 months).
-                        Accept the PMA agreement and receive your Beneficial Unit, a 1/N share
-                        of the entire trust corpus. Your interest is permanent. It never downgrades.
+                        Enter as a full Grantor-Beneficiary. Make a one-time covenant contribution
+                        of $500 (or $50 x 10 months) and receive your Beneficial Unit certificate,
+                        a 1/N share of the entire trust corpus. Your interest is permanent.
                       </p>
                       <Link href="/pricing" className="text-xs font-cinzel font-semibold text-royal-gold hover:text-royal-burgundy transition-colors">
-                        View Contribution Options →
+                        View Covenantal Membership →
                       </Link>
                     </div>
                   </div>
@@ -495,7 +519,7 @@ export default function Home() {
                   <h3 className="font-cinzel text-xl font-bold text-royal-navy mb-2">General Interest: Trust User</h3>
                   <p className="text-3xl font-bold text-royal-navy mb-4">$0</p>
                   <ul className="space-y-2 mb-6">
-                    {["Trust pillar course access", "Foundational downloads", "Forum reading", "Progress tracking"].map((f, i) => (
+                    {["Covenant Walk (guided introduction)", "Trust Foundation course access", "Foundational downloads", "Forum reading", "Progress tracking"].map((f, i) => (
                       <li key={i} className="flex items-center gap-2 text-sm text-gray-600">
                         <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" /> {f}
                       </li>
@@ -512,12 +536,12 @@ export default function Home() {
               <Card className="royal-card h-full border-2 border-royal-gold/30">
                 <CardContent className="p-8">
                   <div className="flex items-center gap-2 mb-2">
-                    <h3 className="font-cinzel text-xl font-bold text-royal-navy">PMA Beneficiary</h3>
+                    <h3 className="font-cinzel text-xl font-bold text-royal-navy">Covenantal Membership</h3>
                   </div>
                   <p className="text-3xl font-bold text-royal-navy mb-1">$500</p>
-                  <p className="text-sm text-gray-500 mb-4">one-time contribution · or $50 × 10</p>
+                  <p className="text-sm text-gray-500 mb-4">one-time covenant contribution · or $50 × 10</p>
                   <ul className="space-y-2 mb-6">
-                    {["All courses & lessons across every pillar", "All downloads, templates & trust documents", "Forum posting & community participation", "Proof Vault: secure document storage", "Beneficial Unit certificate (1/N share)"].map((f, i) => (
+                    {["All courses & lessons across every pillar", "All downloads, templates & trust documents", "Forum posting & community participation", "Proof Vault: secure document storage", "Your Beneficial Unit certificate (1/N share)", "Full standing as Grantor-Beneficiary"].map((f, i) => (
                       <li key={i} className="flex items-center gap-2 text-sm text-gray-600">
                         <CheckCircle className="w-4 h-4 text-royal-gold flex-shrink-0" /> {f}
                       </li>
@@ -525,7 +549,7 @@ export default function Home() {
                   </ul>
                   <Link href="/pricing">
                     <Button className="w-full bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold">
-                      Acquire Beneficial Interest <ArrowRight className="w-4 h-4 ml-2" />
+                      Enter the Covenant <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
                   </Link>
                 </CardContent>
@@ -580,13 +604,22 @@ export default function Home() {
           <RevealOnScroll delay={0.5}>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <div className="inline-block rounded-lg animate-glow-pulse">
-                <Link href={ctaHref}>
+                <Link href={ctaHref === "/signup" ? "/new-covenant-intro" : ctaHref}>
                   <Button
                     size="lg"
                     className="royal-button text-xl px-12 py-7 shadow-2xl hover:scale-105 transition-transform"
                   >
-                    <Crown className="mr-3 h-7 w-7" />
-                    {ctaHref === "/signup" ? "Enter the Assembly" : "Go to Dashboard"}
+                    {ctaHref === "/signup" ? (
+                      <>
+                        <Heart className="mr-3 h-7 w-7" />
+                        Begin the Covenant Walk
+                      </>
+                    ) : (
+                      <>
+                        <Crown className="mr-3 h-7 w-7" />
+                        Go to Dashboard
+                      </>
+                    )}
                     <ArrowRight className="ml-3 h-6 w-6" />
                   </Button>
                 </Link>

@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
-import { Crown, Loader2, BookOpen, FileText, Shield, Users, Download, GraduationCap, Mail } from "lucide-react";
+import { Crown, Loader2, BookOpen, FileText, Shield, Users, Download, GraduationCap, Mail, Heart, ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { usePageTitle } from "@/hooks/usePageTitle";
 
@@ -112,11 +112,11 @@ export default function Signup() {
   }
 
   const benefits = [
-    { icon: BookOpen, text: "Trust pillar course access" },
+    { icon: Heart, text: "The Covenant Walk — guided identity introduction" },
+    { icon: BookOpen, text: "Trust Foundation Course — free first course" },
     { icon: FileText, text: "Trust-related downloads" },
     { icon: Users, text: "Forum reading & browsing" },
     { icon: GraduationCap, text: "Track your learning progress" },
-    { icon: Shield, text: "Email notifications" },
     { icon: Download, text: "Public educational resources" },
   ];
 
@@ -135,19 +135,24 @@ export default function Signup() {
           </p>
 
           <div className="bg-white/10 backdrop-blur-sm border border-royal-gold/30 rounded-lg p-5 mb-8">
-            <p className="font-cinzel text-sm font-bold text-royal-gold mb-3">The Three Pillars You Will Learn</p>
+            <p className="font-cinzel text-sm font-bold text-royal-gold mb-3">Your Journey as a Grantor-Beneficiary</p>
             <ul className="space-y-3">
               {[
-                { num: "1", label: "Lawful Money", desc: "Understand 12 USC 411 and the right to redeem" },
-                { num: "2", label: "Trust Protection", desc: "Hold assets in trust, not in your name" },
-                { num: "3", label: "Proper Status", desc: "Secure your standing under the correct jurisdiction" },
+                { num: "1", icon: Heart, label: "The Covenant Walk", desc: "Understand your identity (free)", highlight: true },
+                { num: "2", icon: BookOpen, label: "Trust Foundation Course", desc: "Learn the three pillars (free)", highlight: false },
+                { num: "3", icon: Crown, label: "Covenantal Membership", desc: "Full access as Grantor-Beneficiary (PMA)", highlight: false },
               ].map((p, i) => (
                 <li key={i} className="flex items-start gap-3">
-                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-royal-gold/20 flex items-center justify-center text-royal-gold font-cinzel text-xs font-bold">{p.num}</span>
-                  <div>
+                  <span className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center font-cinzel text-xs font-bold ${
+                    p.highlight ? "bg-royal-gold/30 text-royal-gold" : "bg-royal-gold/20 text-royal-gold"
+                  }`}>
+                    {p.num}
+                  </span>
+                  <div className="flex-1">
                     <span className="text-white font-semibold text-sm">{p.label}</span>
-                    <span className="text-gray-400 text-sm">: {p.desc}</span>
+                    <span className="text-gray-400 text-sm"> — {p.desc}</span>
                   </div>
+                  {i < 2 && <ArrowRight className="w-3 h-3 text-royal-gold/40 mt-1.5 flex-shrink-0" />}
                 </li>
               ))}
             </ul>
@@ -180,7 +185,7 @@ export default function Signup() {
               <h1 className="font-cinzel-decorative text-2xl font-bold text-royal-navy">
                 Enter the Assembly
               </h1>
-              <p className="text-gray-500 text-sm">Create your account to begin the three-pillar foundation</p>
+              <p className="text-gray-500 text-sm">Create your account to begin the Covenant Walk</p>
             </CardHeader>
             <CardContent>
               <Form {...form}>

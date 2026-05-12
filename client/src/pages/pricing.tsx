@@ -9,7 +9,8 @@ import { usePageTitle } from "@/hooks/usePageTitle";
 import { apiRequest } from "@/lib/queryClient";
 
 const freeTierFeatures = [
-  "Trust course Lesson 1",
+  "Covenant Walk (guided introduction)",
+  "Trust Foundation Course — Lesson 1",
   "Trust document downloads",
   "Forum reading & browsing",
   "Public educational resources",
@@ -19,17 +20,18 @@ const freeTierFeatures = [
 
 const pmaFeatures = [
   "Everything in Free, plus:",
-  "All courses & lesson content",
+  "All courses & lesson content across every pillar",
   "All downloadable templates & guides",
   "Forum posting & community discussion",
   "Proof Vault document timestamping",
   "Comments on lessons & videos",
-  "Beneficial Unit instrument (1/N trust interest)",
+  "Your Beneficial Unit certificate (1/N trust interest)",
+  "Full standing as Grantor-Beneficiary in the Body",
   "Priority community support",
 ];
 
 export default function Pricing() {
-  usePageTitle("Pricing", "Free Trust access and PMA Beneficial Interest for full access to all courses, downloads, and community features.");
+  usePageTitle("Pricing", "Begin free with the Covenant Walk, or enter as a full Grantor-Beneficiary through Covenantal Membership.");
   const { isAuthenticated, isPremium } = useAuth();
   const [isLoading, setIsLoading] = useState<"one_time" | "installment" | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -68,7 +70,7 @@ export default function Pricing() {
             Choose Your Path
           </h1>
           <p className="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto leading-relaxed">
-            Access free Trust content as a user, or acquire full beneficial interest through PMA membership.
+            Begin with the Covenant Walk and free Trust Foundation, or enter as a full Grantor-Beneficiary through Covenantal Membership.
           </p>
         </div>
       </section>
@@ -115,12 +117,16 @@ export default function Pricing() {
             <CardContent className="p-8 md:p-10">
               <div className="text-center mb-8">
                 <Badge className="mb-4 bg-royal-gold/10 text-royal-gold border-royal-gold font-cinzel">
-                  <Crown className="w-3 h-3 mr-1" /> PMA Beneficiary
+                  <Crown className="w-3 h-3 mr-1" /> Covenantal Membership
                 </Badge>
-                <h2 className="font-cinzel-decorative text-2xl font-bold text-royal-navy mb-2">Beneficial Interest</h2>
+                <h2 className="font-cinzel-decorative text-2xl font-bold text-royal-navy mb-2">Covenantal Membership</h2>
+                <p className="text-xs text-royal-navy/60 mb-2">PMA Beneficial Interest</p>
                 <p className="text-4xl font-bold text-royal-navy">$500</p>
-                <p className="text-sm text-gray-500 mt-2">One-time trust contribution &bull; or $50 &times; 10 months</p>
+                <p className="text-sm text-gray-500 mt-2">One-time covenant contribution &bull; or $50 &times; 10 months</p>
                 <p className="text-xs text-royal-gold/80 mt-1">50% of your contribution funds the Treasury Trust</p>
+                <p className="text-xs text-gray-400 mt-2 italic font-georgia">
+                  "And all that believed were together, and had all things common" — Acts 2:44 (KJV)
+                </p>
               </div>
               <ul className="space-y-3 mb-8">
                 {pmaFeatures.map((feature, i) => (
@@ -155,7 +161,7 @@ export default function Pricing() {
                     {isLoading === "one_time" ? (
                       <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Processing...</>
                     ) : (
-                      <><Crown className="w-4 h-4 mr-2" /> Acquire Interest ($500)</>
+                      <><Crown className="w-4 h-4 mr-2" /> Enter the Covenant ($500)</>
                     )}
                   </Button>
                   <Button
@@ -167,7 +173,7 @@ export default function Pricing() {
                     {isLoading === "installment" ? (
                       <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Processing...</>
                     ) : (
-                      <>$50 × 10 Months</>
+                      <>Covenant Contribution: $50 × 10 Months</>
                     )}
                   </Button>
                   {error && (
@@ -177,7 +183,7 @@ export default function Pricing() {
               ) : (
                 <Link href="/signup">
                   <Button className="w-full bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold">
-                    Sign Up to Acquire Interest
+                    Sign Up for Covenantal Membership
                   </Button>
                 </Link>
               )}
@@ -193,15 +199,15 @@ export default function Pricing() {
           {[
             {
               q: "What's included with a free account?",
-              a: "You get Lesson 1 of the Trust course for free, plus Trust document downloads and the ability to read all forum discussions. Progress tracking is also included.",
+              a: "You get the full Covenant Walk (a guided introduction to your identity as Grantor-Beneficiary), Lesson 1 of the Trust Foundation course, Trust document downloads, and the ability to read all forum discussions. Progress tracking is also included.",
             },
             {
-              q: "What is PMA Beneficial Interest?",
-              a: "By contributing $500 (or $50×10), you acquire beneficial interest in the Ecclesia Basilikos Trust through our Private Membership Association. This grants you a Beneficial Unit representing your equal share of the trust corpus, plus full access to all content and community features.",
+              q: "What is Covenantal Membership?",
+              a: "By making a covenant contribution of $500 (or $50x10), you enter as a full Grantor-Beneficiary in the Ecclesia Basilikos Trust through our Private Membership Association. This grants you a Beneficial Unit certificate representing your equal share of the trust corpus, plus full access to all content and community features.",
             },
             {
               q: "Is the $500 a subscription?",
-              a: "No. It's a one-time trust contribution that permanently establishes your beneficial interest. You can also choose the $50×10 installment plan. There are no recurring charges after your contribution is complete.",
+              a: "No. It's a one-time covenant contribution that permanently establishes your beneficial interest. You can also choose the $50x10 installment plan. There are no recurring charges after your contribution is complete.",
             },
             {
               q: "Where does my contribution go?",
@@ -223,10 +229,10 @@ export default function Pricing() {
         {!isAuthenticated && (
           <div className="text-center mt-16">
             <h3 className="font-cinzel text-xl font-bold text-royal-navy mb-3">Ready to Begin?</h3>
-            <p className="text-gray-600 mb-6">Start with a free account and explore Trust content today.</p>
-            <Link href="/signup">
+            <p className="text-gray-600 mb-6">Start with the Covenant Walk — a free guided introduction to your identity as Grantor-Beneficiary.</p>
+            <Link href="/new-covenant-intro">
               <Button size="lg" className="bg-royal-gold hover:bg-royal-gold/90 text-royal-navy font-cinzel font-bold px-10">
-                Create Free Account <ArrowRight className="w-4 h-4 ml-2" />
+                Begin the Covenant Walk <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </Link>
           </div>
