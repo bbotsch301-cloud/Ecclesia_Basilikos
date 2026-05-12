@@ -787,6 +787,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin delete contact message
+  app.delete("/api/admin/contacts/:id", requireAuth, async (req, res) => {
+    try {
+      const user = req.user as User;
+      if (user.role !== 'admin') {
+        return res.status(403).json({ error: "Admin access required" });
+      }
+      await storage.deleteContact(req.params.id);
+      res.json({ success: true });
+    } catch (error) {
+      logger.error({ err: error }, "Error deleting contact:");
+      res.status(500).json({ error: "Failed to delete contact" });
+    }
+  });
+
   // Published videos endpoint (public)
   app.get("/api/videos/published", async (req, res) => {
     try {
