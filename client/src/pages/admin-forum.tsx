@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -20,10 +21,22 @@ import {
   ChevronDown,
   ChevronUp,
 } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import AdminLayout from "@/components/layout/admin-layout";
 import { usePageTitle } from "@/hooks/usePageTitle";
+
+const categoryFormSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  description: z.string().optional().or(z.literal("")),
+  color: z.string().min(1, "Color is required").default("#3B82F6"),
+  order: z.coerce.number().min(0).default(0),
+});
+
+type CategoryFormData = z.infer<typeof categoryFormSchema>;
 
 interface ForumCategory {
   id: string;
@@ -57,12 +70,16 @@ export default function AdminForum() {
   const [editingCategory, setEditingCategory] = useState<ForumCategory | null>(null);
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
 
-  // Category form state
-  const [categoryForm, setCategoryForm] = useState({
-    name: "",
-    description: "",
-    color: "#3B82F6",
-    order: 0,
+  // Category form
+  const categoryForm = useForm<CategoryFormData>({
+    mode: "onBlur",
+    resolver: zodResolver(categoryFormSchema),
+    defaultValues: {
+      name: "",
+      description: "",
+      color: "#3B82F6",
+      order: 0,
+    },
   });
 
   const { data: categories, isLoading: categoriesLoading } = useQuery<ForumCategory[]>({
@@ -82,14 +99,14 @@ export default function AdminForum() {
 
   // Category mutations
   const createCategoryMutation = useMutation({
-    mutationFn: async (data: typeof categoryForm) => {
+    mutationFn: async (data: CategoryFormData) => {
       return apiRequest("POST", "/api/admin/forum/categories", data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/forum/categories"] });
       toast({ title: "Category Created", description: "Forum category has been created." });
       setCategoryDialogOpen(false);
-      resetCategoryForm();
+      categoryForm.reset();
     },
     onError: (error: Error) => {
       toast({ title: "Error", description: error.message || "Failed to create category", variant: "destructive" });
@@ -97,14 +114,14 @@ export default function AdminForum() {
   });
 
   const updateCategoryMutation = useMutation({
-    mutationFn: async ({ id, data }: { id: string; data: typeof categoryForm }) => {
+    mutationFn: async ({ id, data }: { id: string; data: CategoryFormData }) => {
       return apiRequest("PATCH", `/api/admin/forum/categories/${id}`, data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/forum/categories"] });
       toast({ title: "Category Updated", description: "Forum category has been updated." });
       setCategoryDialogOpen(false);
-      resetCategoryForm();
+      categoryForm.reset();
       setEditingCategory(null);
     },
     onError: (error: Error) => {
@@ -165,13 +182,9 @@ export default function AdminForum() {
     },
   });
 
-  const resetCategoryForm = () => {
-    setCategoryForm({ name: "", description: "", color: "#3B82F6", order: 0 });
-  };
-
   const handleEditCategory = (category: ForumCategory) => {
     setEditingCategory(category);
-    setCategoryForm({
+    categoryForm.reset({
       name: category.name,
       description: category.description || "",
       color: category.color || "#3B82F6",
@@ -180,11 +193,11 @@ export default function AdminForum() {
     setCategoryDialogOpen(true);
   };
 
-  const handleCategorySubmit = () => {
+  const onCategorySubmit = (data: CategoryFormData) => {
     if (editingCategory) {
-      updateCategoryMutation.mutate({ id: editingCategory.id, data: categoryForm });
+      updateCategoryMutation.mutate({ id: editingCategory.id, data });
     } else {
-      createCategoryMutation.mutate(categoryForm);
+      createCategoryMutation.mutate(data);
     }
   };
 
@@ -221,11 +234,12 @@ export default function AdminForum() {
                 <Button
                   onClick={() => {
                     setEditingCategory(null);
-                    resetCategoryForm();
-                    setCategoryForm((prev) => ({
-                      ...prev,
+                    categoryForm.reset({
+                      name: "",
+                      description: "",
+                      color: "#3B82F6",
                       order: (categories?.length || 0) + 1,
-                    }));
+                    });
                     setCategoryDialogOpen(true);
                   }}
                 >
@@ -430,74 +444,76 @@ export default function AdminForum() {
               {editingCategory ? "Update category details" : "Add a new forum category"}
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4">
-            <div>
-              <label className="text-sm font-medium">Name *</label>
-              <Input
-                placeholder="Category name"
-                value={categoryForm.name}
-                onChange={(e) => setCategoryForm({ ...categoryForm, name: e.target.value })}
-              />
-            </div>
-            <div>
-              <label className="text-sm font-medium">Description</label>
-              <Textarea
-                placeholder="Category description"
-                value={categoryForm.description}
-                onChange={(e) => setCategoryForm({ ...categoryForm, description: e.target.value })}
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="text-sm font-medium">Color</label>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="color"
-                    value={categoryForm.color}
-                    onChange={(e) => setCategoryForm({ ...categoryForm, color: e.target.value })}
-                    className="w-10 h-10 rounded border cursor-pointer"
-                  />
-                  <Input
-                    value={categoryForm.color}
-                    onChange={(e) => setCategoryForm({ ...categoryForm, color: e.target.value })}
-                    className="flex-1"
-                  />
-                </div>
+          <Form {...categoryForm}>
+            <form onSubmit={categoryForm.handleSubmit(onCategorySubmit)} className="space-y-4">
+              <FormField control={categoryForm.control} name="name" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name *</FormLabel>
+                  <FormControl><Input placeholder="Category name" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+
+              <FormField control={categoryForm.control} name="description" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl><Textarea placeholder="Category description" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+
+              <div className="grid grid-cols-2 gap-4">
+                <FormField control={categoryForm.control} name="color" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Color</FormLabel>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={field.value}
+                        onChange={(e) => field.onChange(e.target.value)}
+                        className="w-10 h-10 rounded border cursor-pointer"
+                      />
+                      <FormControl>
+                        <Input {...field} className="flex-1" />
+                      </FormControl>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+                <FormField control={categoryForm.control} name="order" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Order</FormLabel>
+                    <FormControl><Input type="number" {...field} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
               </div>
-              <div>
-                <label className="text-sm font-medium">Order</label>
-                <Input
-                  type="number"
-                  value={categoryForm.order}
-                  onChange={(e) => setCategoryForm({ ...categoryForm, order: parseInt(e.target.value) || 0 })}
-                />
+
+              <div className="flex justify-end gap-3 pt-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    setCategoryDialogOpen(false);
+                    categoryForm.reset();
+                    setEditingCategory(null);
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={createCategoryMutation.isPending || updateCategoryMutation.isPending}
+                >
+                  {createCategoryMutation.isPending || updateCategoryMutation.isPending
+                    ? "Saving..."
+                    : editingCategory
+                      ? "Update Category"
+                      : "Create Category"}
+                </Button>
               </div>
-            </div>
-            <div className="flex justify-end gap-3 pt-4">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setCategoryDialogOpen(false);
-                  resetCategoryForm();
-                  setEditingCategory(null);
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={handleCategorySubmit}
-                disabled={
-                  createCategoryMutation.isPending || updateCategoryMutation.isPending || !categoryForm.name
-                }
-              >
-                {createCategoryMutation.isPending || updateCategoryMutation.isPending
-                  ? "Saving..."
-                  : editingCategory
-                    ? "Update Category"
-                    : "Create Category"}
-              </Button>
-            </div>
-          </div>
+            </form>
+          </Form>
         </DialogContent>
       </Dialog>
     </AdminLayout>

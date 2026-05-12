@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import {
@@ -22,10 +23,36 @@ import {
   ListOrdered,
   Loader2,
 } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import AdminLayout from "@/components/layout/admin-layout";
 import { usePageTitle } from "@/hooks/usePageTitle";
+
+const courseFormSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  description: z.string().min(1, "Description is required"),
+  category: z.string().min(1, "Category is required"),
+  level: z.string().min(1, "Level is required"),
+  duration: z.string().optional().or(z.literal("")),
+  price: z.coerce.number().min(0).default(0),
+  imageUrl: z.string().optional().or(z.literal("")),
+});
+
+type CourseFormData = z.infer<typeof courseFormSchema>;
+
+const lessonFormSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  description: z.string().optional().or(z.literal("")),
+  content: z.string().optional().or(z.literal("")),
+  videoUrl: z.string().optional().or(z.literal("")),
+  order: z.coerce.number().min(0).default(0),
+  duration: z.string().optional().or(z.literal("")),
+});
+
+type LessonFormData = z.infer<typeof lessonFormSchema>;
 
 interface CourseData {
   id: string;
@@ -67,25 +94,33 @@ export default function AdminCourses() {
   const [managingCourseId, setManagingCourseId] = useState<string | null>(null);
   const [expandedCourse, setExpandedCourse] = useState<string | null>(null);
 
-  // Course form state
-  const [courseForm, setCourseForm] = useState({
-    title: "",
-    description: "",
-    category: "",
-    level: "beginner",
-    duration: "",
-    price: 0,
-    imageUrl: "",
+  // Course form
+  const courseForm = useForm<CourseFormData>({
+    mode: "onBlur",
+    resolver: zodResolver(courseFormSchema),
+    defaultValues: {
+      title: "",
+      description: "",
+      category: "",
+      level: "beginner",
+      duration: "",
+      price: 0,
+      imageUrl: "",
+    },
   });
 
-  // Lesson form state
-  const [lessonForm, setLessonForm] = useState({
-    title: "",
-    description: "",
-    content: "",
-    videoUrl: "",
-    order: 0,
-    duration: "",
+  // Lesson form
+  const lessonForm = useForm<LessonFormData>({
+    mode: "onBlur",
+    resolver: zodResolver(lessonFormSchema),
+    defaultValues: {
+      title: "",
+      description: "",
+      content: "",
+      videoUrl: "",
+      order: 0,
+      duration: "",
+    },
   });
 
   const { data: courses, isLoading } = useQuery<CourseData[]>({
@@ -107,14 +142,14 @@ export default function AdminCourses() {
 
   // Course mutations
   const createCourseMutation = useMutation({
-    mutationFn: async (data: typeof courseForm) => {
+    mutationFn: async (data: CourseFormData) => {
       return apiRequest("POST", "/api/admin/courses", data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/courses"] });
       toast({ title: "Course Created", description: "Course has been created successfully." });
       setCourseDialogOpen(false);
-      resetCourseForm();
+      courseForm.reset();
     },
     onError: (error: Error) => {
       toast({ title: "Error", description: error.message || "Failed to create course", variant: "destructive" });
@@ -122,14 +157,14 @@ export default function AdminCourses() {
   });
 
   const updateCourseMutation = useMutation({
-    mutationFn: async ({ id, data }: { id: string; data: typeof courseForm }) => {
+    mutationFn: async ({ id, data }: { id: string; data: CourseFormData }) => {
       return apiRequest("PATCH", `/api/admin/courses/${id}`, data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/courses"] });
       toast({ title: "Course Updated", description: "Course has been updated successfully." });
       setCourseDialogOpen(false);
-      resetCourseForm();
+      courseForm.reset();
       setEditingCourse(null);
     },
     onError: (error: Error) => {
@@ -165,14 +200,14 @@ export default function AdminCourses() {
 
   // Lesson mutations
   const createLessonMutation = useMutation({
-    mutationFn: async ({ courseId, data }: { courseId: string; data: typeof lessonForm }) => {
+    mutationFn: async ({ courseId, data }: { courseId: string; data: LessonFormData }) => {
       return apiRequest("POST", `/api/admin/courses/${courseId}/lessons`, data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/courses", expandedCourse] });
       toast({ title: "Lesson Created", description: "Lesson has been created successfully." });
       setLessonDialogOpen(false);
-      resetLessonForm();
+      lessonForm.reset();
     },
     onError: (error: Error) => {
       toast({ title: "Error", description: error.message || "Failed to create lesson", variant: "destructive" });
@@ -180,14 +215,14 @@ export default function AdminCourses() {
   });
 
   const updateLessonMutation = useMutation({
-    mutationFn: async ({ id, data }: { id: string; data: typeof lessonForm }) => {
+    mutationFn: async ({ id, data }: { id: string; data: LessonFormData }) => {
       return apiRequest("PATCH", `/api/admin/lessons/${id}`, data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/courses", expandedCourse] });
       toast({ title: "Lesson Updated", description: "Lesson has been updated successfully." });
       setLessonDialogOpen(false);
-      resetLessonForm();
+      lessonForm.reset();
       setEditingLesson(null);
     },
     onError: (error: Error) => {
@@ -208,17 +243,9 @@ export default function AdminCourses() {
     },
   });
 
-  const resetCourseForm = () => {
-    setCourseForm({ title: "", description: "", category: "", level: "beginner", duration: "", price: 0, imageUrl: "" });
-  };
-
-  const resetLessonForm = () => {
-    setLessonForm({ title: "", description: "", content: "", videoUrl: "", order: 0, duration: "" });
-  };
-
   const handleEditCourse = (course: CourseData) => {
     setEditingCourse(course);
-    setCourseForm({
+    courseForm.reset({
       title: course.title,
       description: course.description,
       category: course.category,
@@ -232,7 +259,7 @@ export default function AdminCourses() {
 
   const handleEditLesson = (lesson: LessonData) => {
     setEditingLesson(lesson);
-    setLessonForm({
+    lessonForm.reset({
       title: lesson.title,
       description: lesson.description || "",
       content: lesson.content || "",
@@ -243,19 +270,19 @@ export default function AdminCourses() {
     setLessonDialogOpen(true);
   };
 
-  const handleCourseSubmit = () => {
+  const onCourseSubmit = (data: CourseFormData) => {
     if (editingCourse) {
-      updateCourseMutation.mutate({ id: editingCourse.id, data: courseForm });
+      updateCourseMutation.mutate({ id: editingCourse.id, data });
     } else {
-      createCourseMutation.mutate(courseForm);
+      createCourseMutation.mutate(data);
     }
   };
 
-  const handleLessonSubmit = () => {
+  const onLessonSubmit = (data: LessonFormData) => {
     if (editingLesson) {
-      updateLessonMutation.mutate({ id: editingLesson.id, data: lessonForm });
+      updateLessonMutation.mutate({ id: editingLesson.id, data });
     } else if (managingCourseId) {
-      createLessonMutation.mutate({ courseId: managingCourseId, data: lessonForm });
+      createLessonMutation.mutate({ courseId: managingCourseId, data });
     }
   };
 
@@ -291,7 +318,7 @@ export default function AdminCourses() {
           <Button
             onClick={() => {
               setEditingCourse(null);
-              resetCourseForm();
+              courseForm.reset();
               setCourseDialogOpen(true);
             }}
           >
@@ -443,11 +470,14 @@ export default function AdminCourses() {
                           onClick={() => {
                             setEditingLesson(null);
                             setManagingCourseId(course.id);
-                            resetLessonForm();
-                            setLessonForm((prev) => ({
-                              ...prev,
+                            lessonForm.reset({
+                              title: "",
+                              description: "",
+                              content: "",
+                              videoUrl: "",
                               order: (lessons?.length || 0) + 1,
-                            }));
+                              duration: "",
+                            });
                             setLessonDialogOpen(true);
                           }}
                         >
@@ -546,108 +576,105 @@ export default function AdminCourses() {
               {editingCourse ? "Update course details" : "Fill in the course information"}
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4">
-            <div>
-              <label className="text-sm font-medium">Title *</label>
-              <Input
-                placeholder="Course title"
-                value={courseForm.title}
-                onChange={(e) => setCourseForm({ ...courseForm, title: e.target.value })}
-              />
-            </div>
-            <div>
-              <label className="text-sm font-medium">Description *</label>
-              <Textarea
-                placeholder="Course description"
-                value={courseForm.description}
-                onChange={(e) => setCourseForm({ ...courseForm, description: e.target.value })}
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="text-sm font-medium">Category *</label>
-                <Input
-                  placeholder="e.g., Trust Law"
-                  value={courseForm.category}
-                  onChange={(e) => setCourseForm({ ...courseForm, category: e.target.value })}
-                />
+          <Form {...courseForm}>
+            <form onSubmit={courseForm.handleSubmit(onCourseSubmit)} className="space-y-4">
+              <FormField control={courseForm.control} name="title" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Title *</FormLabel>
+                  <FormControl><Input placeholder="Course title" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+
+              <FormField control={courseForm.control} name="description" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description *</FormLabel>
+                  <FormControl><Textarea placeholder="Course description" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+
+              <div className="grid grid-cols-2 gap-4">
+                <FormField control={courseForm.control} name="category" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Category *</FormLabel>
+                    <FormControl><Input placeholder="e.g., Trust Law" {...field} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+                <FormField control={courseForm.control} name="level" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Level *</FormLabel>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="beginner">Beginner</SelectItem>
+                        <SelectItem value="intermediate">Intermediate</SelectItem>
+                        <SelectItem value="advanced">Advanced</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )} />
               </div>
-              <div>
-                <label className="text-sm font-medium">Level *</label>
-                <Select
-                  value={courseForm.level}
-                  onValueChange={(value) => setCourseForm({ ...courseForm, level: value })}
+
+              <div className="grid grid-cols-2 gap-4">
+                <FormField control={courseForm.control} name="duration" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Duration</FormLabel>
+                    <FormControl><Input placeholder="e.g., 4 weeks" {...field} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+                <FormField control={courseForm.control} name="price" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Price (cents, 0 for free)</FormLabel>
+                    <FormControl><Input type="number" placeholder="0" {...field} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+              </div>
+
+              <FormField control={courseForm.control} name="imageUrl" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Image URL</FormLabel>
+                  <FormControl><Input placeholder="Course image URL" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+
+              <div className="flex justify-end gap-3 pt-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    setCourseDialogOpen(false);
+                    courseForm.reset();
+                    setEditingCourse(null);
+                  }}
                 >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="beginner">Beginner</SelectItem>
-                    <SelectItem value="intermediate">Intermediate</SelectItem>
-                    <SelectItem value="advanced">Advanced</SelectItem>
-                  </SelectContent>
-                </Select>
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={createCourseMutation.isPending || updateCourseMutation.isPending}
+                >
+                  {createCourseMutation.isPending || updateCourseMutation.isPending ? (
+                    <>
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      Saving...
+                    </>
+                  ) : editingCourse
+                      ? "Update Course"
+                      : "Create Course"}
+                </Button>
               </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="text-sm font-medium">Duration</label>
-                <Input
-                  placeholder="e.g., 4 weeks"
-                  value={courseForm.duration}
-                  onChange={(e) => setCourseForm({ ...courseForm, duration: e.target.value })}
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium">Price (cents, 0 for free)</label>
-                <Input
-                  type="number"
-                  placeholder="0"
-                  value={courseForm.price}
-                  onChange={(e) => setCourseForm({ ...courseForm, price: parseInt(e.target.value) || 0 })}
-                />
-              </div>
-            </div>
-            <div>
-              <label className="text-sm font-medium">Image URL</label>
-              <Input
-                placeholder="Course image URL"
-                value={courseForm.imageUrl}
-                onChange={(e) => setCourseForm({ ...courseForm, imageUrl: e.target.value })}
-              />
-            </div>
-            <div className="flex justify-end gap-3 pt-4">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setCourseDialogOpen(false);
-                  resetCourseForm();
-                  setEditingCourse(null);
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={handleCourseSubmit}
-                disabled={
-                  createCourseMutation.isPending ||
-                  updateCourseMutation.isPending ||
-                  !courseForm.title ||
-                  !courseForm.description ||
-                  !courseForm.category
-                }
-              >
-                {createCourseMutation.isPending || updateCourseMutation.isPending ? (
-                  <>
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    Saving...
-                  </>
-                ) : editingCourse
-                    ? "Update Course"
-                    : "Create Course"}
-              </Button>
-            </div>
-          </div>
+            </form>
+          </Form>
         </DialogContent>
       </Dialog>
 
@@ -660,86 +687,84 @@ export default function AdminCourses() {
               {editingLesson ? "Update lesson details" : "Add a lesson to this course"}
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4">
-            <div>
-              <label className="text-sm font-medium">Title *</label>
-              <Input
-                placeholder="Lesson title"
-                value={lessonForm.title}
-                onChange={(e) => setLessonForm({ ...lessonForm, title: e.target.value })}
-              />
-            </div>
-            <div>
-              <label className="text-sm font-medium">Description</label>
-              <Textarea
-                placeholder="Lesson description"
-                value={lessonForm.description}
-                onChange={(e) => setLessonForm({ ...lessonForm, description: e.target.value })}
-              />
-            </div>
-            <div>
-              <label className="text-sm font-medium">Content</label>
-              <Textarea
-                placeholder="Lesson content/notes"
-                value={lessonForm.content}
-                onChange={(e) => setLessonForm({ ...lessonForm, content: e.target.value })}
-                className="min-h-[120px]"
-              />
-            </div>
-            <div className="grid grid-cols-3 gap-4">
-              <div>
-                <label className="text-sm font-medium">Video URL</label>
-                <Input
-                  placeholder="Video URL"
-                  value={lessonForm.videoUrl}
-                  onChange={(e) => setLessonForm({ ...lessonForm, videoUrl: e.target.value })}
-                />
+          <Form {...lessonForm}>
+            <form onSubmit={lessonForm.handleSubmit(onLessonSubmit)} className="space-y-4">
+              <FormField control={lessonForm.control} name="title" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Title *</FormLabel>
+                  <FormControl><Input placeholder="Lesson title" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+
+              <FormField control={lessonForm.control} name="description" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl><Textarea placeholder="Lesson description" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+
+              <FormField control={lessonForm.control} name="content" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Content</FormLabel>
+                  <FormControl><Textarea placeholder="Lesson content/notes" className="min-h-[120px]" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+
+              <div className="grid grid-cols-3 gap-4">
+                <FormField control={lessonForm.control} name="videoUrl" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Video URL</FormLabel>
+                    <FormControl><Input placeholder="Video URL" {...field} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+                <FormField control={lessonForm.control} name="order" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Order</FormLabel>
+                    <FormControl><Input type="number" {...field} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+                <FormField control={lessonForm.control} name="duration" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Duration</FormLabel>
+                    <FormControl><Input placeholder="e.g., 30 minutes" {...field} /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
               </div>
-              <div>
-                <label className="text-sm font-medium">Order</label>
-                <Input
-                  type="number"
-                  value={lessonForm.order}
-                  onChange={(e) => setLessonForm({ ...lessonForm, order: parseInt(e.target.value) || 0 })}
-                />
+
+              <div className="flex justify-end gap-3 pt-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    setLessonDialogOpen(false);
+                    lessonForm.reset();
+                    setEditingLesson(null);
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={createLessonMutation.isPending || updateLessonMutation.isPending}
+                >
+                  {createLessonMutation.isPending || updateLessonMutation.isPending ? (
+                    <>
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      Saving...
+                    </>
+                  ) : editingLesson
+                      ? "Update Lesson"
+                      : "Add Lesson"}
+                </Button>
               </div>
-              <div>
-                <label className="text-sm font-medium">Duration</label>
-                <Input
-                  placeholder="e.g., 30 minutes"
-                  value={lessonForm.duration}
-                  onChange={(e) => setLessonForm({ ...lessonForm, duration: e.target.value })}
-                />
-              </div>
-            </div>
-            <div className="flex justify-end gap-3 pt-4">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setLessonDialogOpen(false);
-                  resetLessonForm();
-                  setEditingLesson(null);
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={handleLessonSubmit}
-                disabled={
-                  createLessonMutation.isPending || updateLessonMutation.isPending || !lessonForm.title
-                }
-              >
-                {createLessonMutation.isPending || updateLessonMutation.isPending ? (
-                  <>
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    Saving...
-                  </>
-                ) : editingLesson
-                    ? "Update Lesson"
-                    : "Add Lesson"}
-              </Button>
-            </div>
-          </div>
+            </form>
+          </Form>
         </DialogContent>
       </Dialog>
     </AdminLayout>
