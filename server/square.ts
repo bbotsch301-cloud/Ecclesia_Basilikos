@@ -27,12 +27,13 @@ export function isSquareEnabled(): boolean {
 }
 
 /**
- * Create a Square Checkout payment link for one-time or first installment payment.
+ * Create a Square Checkout payment link for a recurring monthly donation.
+ * Any amount unlocks full Covenantal Membership (PMA Beneficial Interest).
  */
 export async function createCheckoutUrl(
   userId: string,
   userEmail: string,
-  paymentMode: "one_time" | "installment" = "one_time",
+  amountCents: number,
 ): Promise<string> {
   if (!square || !SQUARE_LOCATION_ID) {
     throw new Error("Square is not configured");
@@ -47,18 +48,18 @@ export async function createCheckoutUrl(
     throw new Error("You are already a PMA Beneficiary");
   }
 
-  // $500 one-time or $50 first installment (amounts in cents)
-  const amountCents = paymentMode === "one_time" ? 50000 : 5000;
-  const itemName = paymentMode === "one_time"
-    ? "PMA Beneficial Interest. One-time Contribution"
-    : "PMA Beneficial Interest. Installment (1 of 10)";
+  if (!amountCents || amountCents < 100) {
+    throw new Error("Minimum donation is $1.00");
+  }
+
+  const dollarAmount = (amountCents / 100).toFixed(2);
 
   const response = await square.checkout.paymentLinks.create({
-    idempotencyKey: `${userId}-${paymentMode}-${Date.now()}`,
+    idempotencyKey: `${userId}-donation-${Date.now()}`,
     order: {
       locationId: SQUARE_LOCATION_ID,
       lineItems: [{
-        name: itemName,
+        name: `Covenantal Membership — Monthly Donation ($${dollarAmount}/mo)`,
         quantity: "1",
         basePriceMoney: {
           amount: BigInt(amountCents),
@@ -67,7 +68,8 @@ export async function createCheckoutUrl(
       }],
       metadata: {
         userId,
-        paymentMode,
+        paymentMode: "donation",
+        amountCents: String(amountCents),
       },
     },
     checkoutOptions: {
@@ -139,7 +141,7 @@ export async function handleWebhookEvent(
         // Allocate 50% of invoice payment to treasury
         try {
           const invoiceAmount = invoice.payment_requests?.[0]?.computed_amount_money?.amount;
-          const invoiceCents = invoiceAmount ? Number(invoiceAmount) : 5000; // fallback $50
+          const invoiceCents = invoiceAmount ? Number(invoiceAmount) : 0;
           const treasuryAmount = Math.round(invoiceCents / 2);
           if (treasuryAmount > 0) {
             // Try to find user by subscription's customer_id
@@ -152,7 +154,7 @@ export async function handleWebhookEvent(
               type: 'installment_allocation',
               amountCents: treasuryAmount,
               currency: 'USD',
-              description: `50% allocation from installment invoice payment`,
+              description: `50% allocation from recurring donation invoice payment`,
               sourcePaymentId: invoice.id || null,
               sourceSubscriptionId: invoice.subscription_id || null,
               sourceUserId: sourceUserId || null,
@@ -172,8 +174,7 @@ export async function handleWebhookEvent(
 
 /**
  * Handle a completed payment from Square Checkout.
- * Grants PMA membership and issues beneficial unit.
- * For installment mode, attempts to create a subscription for remaining payments.
+ * Grants PMA membership, issues beneficial unit, and sets up recurring donation.
  */
 async function handlePaymentCompleted(payment: any): Promise<void> {
   if (!square) return;
@@ -184,11 +185,10 @@ async function handlePaymentCompleted(payment: any): Promise<void> {
     return;
   }
 
-  // Retrieve order to get metadata (userId, paymentMode)
   const orderResponse = await square.orders.get({ orderId });
   const order = orderResponse.order;
   const userId = order?.metadata?.userId;
-  const paymentMode = order?.metadata?.paymentMode || "one_time";
+  const donationAmountCents = order?.metadata?.amountCents ? Number(order.metadata.amountCents) : null;
 
   if (!userId) {
     logger.error({ orderId }, "Payment order missing userId in metadata");
@@ -197,6 +197,8 @@ async function handlePaymentCompleted(payment: any): Promise<void> {
 
   const customerId = payment.customer_id || null;
   const now = new Date();
+  const amountCents = payment.total_money?.amount ? Number(payment.total_money.amount) : null;
+  const dollarAmount = amountCents ? (amountCents / 100).toFixed(2) : "unknown";
 
   // Grant PMA membership
   await storage.updateUserSubscription(userId, {
@@ -225,7 +227,6 @@ async function handlePaymentCompleted(payment: any): Promise<void> {
   }
 
   // Create subscription history record
-  const amountCents = payment.total_money?.amount ? Number(payment.total_money.amount) : null;
   await storage.createSubscriptionRecord({
     userId,
     tier: "premium",
@@ -234,9 +235,7 @@ async function handlePaymentCompleted(payment: any): Promise<void> {
     startDate: now,
     squarePaymentId: payment.id || undefined,
     amount: amountCents,
-    notes: paymentMode === "one_time"
-      ? "PMA Beneficial Interest acquired. $500 one-time contribution"
-      : "PMA Beneficial Interest acquired. $50×10 installment plan (first payment)",
+    notes: `Covenantal Membership acquired via $${dollarAmount}/mo recurring donation`,
   });
 
   // Allocate 50% to treasury
@@ -247,7 +246,7 @@ async function handlePaymentCompleted(payment: any): Promise<void> {
         type: 'payment_allocation',
         amountCents: treasuryAmount,
         currency: 'USD',
-        description: `50% allocation from ${paymentMode === "one_time" ? "one-time" : "first installment"} payment`,
+        description: `50% allocation from monthly donation ($${dollarAmount})`,
         sourcePaymentId: payment.id || null,
         sourceUserId: userId,
       });
@@ -257,28 +256,27 @@ async function handlePaymentCompleted(payment: any): Promise<void> {
     logger.warn({ err, userId }, "Failed to record treasury allocation");
   }
 
-  // For installment mode, try to create a subscription for remaining 9 payments
-  if (paymentMode === "installment" && customerId) {
-    await tryCreateSubscription(userId, customerId, payment);
+  // Set up recurring monthly donation via Square subscription
+  if (customerId && donationAmountCents) {
+    await tryCreateSubscription(userId, customerId, payment, donationAmountCents);
   }
 
-  logger.info({ userId, customerId, paymentMode }, "Checkout completed - beneficiary acquired PMA interest");
+  logger.info({ userId, customerId, amountCents }, "Donation completed - beneficiary acquired PMA interest");
 }
 
 /**
- * After the first installment payment, attempt to create a Square subscription
- * for the remaining 9 monthly payments using the customer's card on file.
+ * After the first donation payment, create a Square subscription for
+ * recurring monthly donations at the chosen amount.
  */
-async function tryCreateSubscription(userId: string, customerId: string, payment: any): Promise<void> {
+async function tryCreateSubscription(userId: string, customerId: string, payment: any, amountCents: number): Promise<void> {
   if (!square || !SQUARE_LOCATION_ID) return;
 
   if (!SQUARE_SUBSCRIPTION_PLAN_ID) {
-    logger.warn("SQUARE_SUBSCRIPTION_PLAN_ID not set - cannot auto-create installment subscription. Admin should set up remaining payments manually.");
+    logger.warn("SQUARE_SUBSCRIPTION_PLAN_ID not set - cannot auto-create recurring donation. Admin should set up manually.");
     return;
   }
 
   try {
-    // Get the card used for the checkout payment
     const cardId = payment.card_details?.card?.id;
 
     if (!cardId) {
@@ -286,15 +284,10 @@ async function tryCreateSubscription(userId: string, customerId: string, payment
       return;
     }
 
-    // Start subscription next month for 9 remaining payments
+    // Start recurring donation next month (first month already paid via checkout)
     const nextMonth = new Date();
     nextMonth.setMonth(nextMonth.getMonth() + 1);
-    const startDate = nextMonth.toISOString().split("T")[0]; // YYYY-MM-DD
-
-    // Calculate cancellation date: 9 months from start (first payment already made via checkout)
-    const cancelDate = new Date(nextMonth);
-    cancelDate.setMonth(cancelDate.getMonth() + 9);
-    const canceledDate = cancelDate.toISOString().split("T")[0];
+    const startDate = nextMonth.toISOString().split("T")[0];
 
     const response = await square.subscriptions.create({
       idempotencyKey: `sub-${userId}-${Date.now()}`,
@@ -303,9 +296,8 @@ async function tryCreateSubscription(userId: string, customerId: string, payment
       customerId,
       cardId,
       startDate,
-      canceledDate, // auto-cancel after 9 more payments
       source: {
-        name: "Ecclesia Basilikos PMA",
+        name: "Ecclesia Basilikos — Monthly Donation",
       },
     });
 
@@ -314,10 +306,10 @@ async function tryCreateSubscription(userId: string, customerId: string, payment
       await storage.updateUserSubscription(userId, {
         squareSubscriptionId: subscriptionId,
       });
-      logger.info({ userId, subscriptionId }, "Installment subscription created for remaining 9 payments");
+      logger.info({ userId, subscriptionId, amountCents }, "Recurring monthly donation subscription created");
     }
   } catch (err) {
-    logger.warn({ err, userId }, "Failed to auto-create installment subscription - admin should follow up");
+    logger.warn({ err, userId }, "Failed to auto-create recurring donation subscription - admin should follow up");
   }
 }
 
@@ -335,7 +327,7 @@ export async function cancelSquareSubscription(subscriptionId: string): Promise<
 
 /**
  * Handle subscription status changes.
- * PMA membership is permanent; we never downgrade the user.
+ * When a recurring donation is canceled, membership is downgraded.
  */
 async function handleSubscriptionUpdated(subscription: any): Promise<void> {
   const customerId = subscription.customer_id;
@@ -348,29 +340,37 @@ async function handleSubscriptionUpdated(subscription: any): Promise<void> {
   }
 
   const squareStatus = subscription.status; // ACTIVE, CANCELED, PAUSED, DEACTIVATED, PENDING
-  const mappedStatus = squareStatus === "ACTIVE" ? "active"
-    : squareStatus === "CANCELED" || squareStatus === "DEACTIVATED" ? "completed"
-    : squareStatus === "PAUSED" ? "past_due"
-    : "active";
 
-  // PMA membership is permanent; never downgrade tier
-  await storage.updateUserSubscription(user.id, {
-    subscriptionStatus: mappedStatus,
-    squareSubscriptionId: subscription.id,
-  });
-
-  if (squareStatus === "CANCELED" || squareStatus === "DEACTIVATED") {
+  if (squareStatus === "ACTIVE") {
+    await storage.updateUserSubscription(user.id, {
+      subscriptionTier: "premium",
+      subscriptionStatus: "active",
+      squareSubscriptionId: subscription.id,
+    });
+  } else if (squareStatus === "CANCELED" || squareStatus === "DEACTIVATED") {
+    await storage.updateUserSubscription(user.id, {
+      subscriptionTier: "free",
+      subscriptionStatus: "canceled",
+      subscriptionEndDate: new Date(),
+      squareSubscriptionId: subscription.id,
+    });
     await storage.createSubscriptionRecord({
       userId: user.id,
-      tier: "premium",
-      status: "completed",
+      tier: "free",
+      status: "canceled",
       source: "square",
       startDate: user.subscriptionStartDate || new Date(),
       endDate: new Date(),
       squareSubscriptionId: subscription.id,
-      notes: "Installment plan completed or ended. PMA membership retained",
+      notes: "Monthly donation canceled. Membership reverted to free tier.",
+    });
+    logger.info({ userId: user.id }, "Donation canceled — membership reverted to free");
+  } else if (squareStatus === "PAUSED") {
+    await storage.updateUserSubscription(user.id, {
+      subscriptionStatus: "past_due",
+      squareSubscriptionId: subscription.id,
     });
   }
 
-  logger.info({ userId: user.id, status: squareStatus }, "Square subscription updated. PMA membership retained");
+  logger.info({ userId: user.id, status: squareStatus }, "Square subscription updated");
 }
