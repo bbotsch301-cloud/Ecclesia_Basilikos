@@ -561,7 +561,7 @@ export default function Courses() {
                                     const hasCompletedTrust = !!trustEnrollment?.completedAt;
                                     return hasCompletedTrust
                                       ? `You've completed the free Trust course. Acquire PMA membership to continue with ${course.title}.`
-                                      : `Complete the free Trust course first, then acquire PMA membership to access ${course.title}. $500 one-time or $50/mo installment.`;
+                                      : `Complete the free Trust course first, then support the assembly with a monthly donation to access ${course.title}.`;
                                   })()}
                                 </p>
                                 <ul className="mt-3 space-y-1">

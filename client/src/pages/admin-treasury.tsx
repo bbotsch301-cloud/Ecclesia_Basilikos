@@ -79,7 +79,7 @@ function formatType(type: string): string {
 
 const typeBadgeColors: Record<string, string> = {
   payment_allocation: "bg-green-100 text-green-800",
-  installment_allocation: "bg-blue-100 text-blue-800",
+  donation_allocation: "bg-blue-100 text-blue-800",
   manual_adjustment: "bg-yellow-100 text-yellow-800",
   crypto_conversion: "bg-purple-100 text-purple-800",
   crypto_transfer: "bg-indigo-100 text-indigo-800",
