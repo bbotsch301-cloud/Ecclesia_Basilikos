@@ -872,6 +872,176 @@ router.delete('/forum/replies/:id', requireModerator, async (req, res) => {
 });
 
 // ================================
+// FORUM MODERATION (MODERATOR+)
+// ================================
+
+// Get flagged content
+router.get('/flagged', requireModerator, async (req, res) => {
+  try {
+    const status = typeof req.query.status === 'string' ? req.query.status : undefined;
+    const flags = await storage.getFlaggedContent(status);
+    res.json(flags);
+  } catch (error) {
+    logger.error({ err: error }, 'Error fetching flagged content');
+    res.status(500).json({ error: 'Failed to fetch flagged content' });
+  }
+});
+
+// Review a flag
+router.patch('/flagged/:id', requireModerator, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = z.object({
+      status: z.enum(['reviewed', 'dismissed']),
+    }).parse(req.body);
+
+    const flag = await storage.reviewFlag(id, req.user!.id, status);
+
+    await auditLog(
+      req.user!.id,
+      'UPDATE',
+      'FLAGGED_CONTENT',
+      id,
+      null,
+      { status },
+      req.ip,
+      req.get('User-Agent')
+    );
+
+    res.json(flag);
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({ errors: error.errors });
+    }
+    logger.error({ err: error }, 'Error reviewing flag');
+    res.status(500).json({ error: 'Failed to review flag' });
+  }
+});
+
+// Issue a warning to a user
+router.post('/users/:id/warn', requireModerator, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { reason, severity } = z.object({
+      reason: z.string().min(1),
+      severity: z.enum(['notice', 'warning', 'final']),
+    }).parse(req.body);
+
+    const targetUser = await storage.getUser(id);
+    if (!targetUser) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const warning = await storage.createWarning({
+      userId: id,
+      issuedBy: req.user!.id,
+      reason,
+      severity,
+    });
+
+    await auditLog(
+      req.user!.id,
+      'CREATE',
+      'USER_WARNING',
+      warning.id,
+      null,
+      { userId: id, severity },
+      req.ip,
+      req.get('User-Agent')
+    );
+
+    res.status(201).json(warning);
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({ errors: error.errors });
+    }
+    logger.error({ err: error }, 'Error issuing warning');
+    res.status(500).json({ error: 'Failed to issue warning' });
+  }
+});
+
+// Get warnings for a user
+router.get('/users/:id/warnings', requireModerator, async (req, res) => {
+  try {
+    const warnings = await storage.getUserWarnings(req.params.id);
+    res.json(warnings);
+  } catch (error) {
+    logger.error({ err: error }, 'Error fetching user warnings');
+    res.status(500).json({ error: 'Failed to fetch user warnings' });
+  }
+});
+
+// Ban a user
+router.post('/users/:id/ban', requireAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { reason } = z.object({
+      reason: z.string().min(1),
+    }).parse(req.body);
+
+    const targetUser = await storage.getUser(id);
+    if (!targetUser) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    if (targetUser.role === 'admin') {
+      return res.status(403).json({ error: 'Cannot ban an admin user' });
+    }
+
+    const updated = await storage.banUser(id, reason);
+
+    await auditLog(
+      req.user!.id,
+      'BAN',
+      'USER',
+      id,
+      { isBanned: false },
+      { isBanned: true, banReason: reason },
+      req.ip,
+      req.get('User-Agent')
+    );
+
+    res.json(updated);
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({ errors: error.errors });
+    }
+    logger.error({ err: error }, 'Error banning user');
+    res.status(500).json({ error: 'Failed to ban user' });
+  }
+});
+
+// Unban a user
+router.post('/users/:id/unban', requireAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const targetUser = await storage.getUser(id);
+    if (!targetUser) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const updated = await storage.unbanUser(id);
+
+    await auditLog(
+      req.user!.id,
+      'UNBAN',
+      'USER',
+      id,
+      { isBanned: true },
+      { isBanned: false },
+      req.ip,
+      req.get('User-Agent')
+    );
+
+    res.json(updated);
+  } catch (error) {
+    logger.error({ err: error }, 'Error unbanning user');
+    res.status(500).json({ error: 'Failed to unban user' });
+  }
+});
+
+// ================================
 // ANALYTICS & MONITORING (ADMIN)
 // ================================
 

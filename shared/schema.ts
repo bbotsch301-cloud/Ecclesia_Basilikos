@@ -41,6 +41,8 @@ export const users = pgTable("users", {
   premiumGrantedAt: timestamp("premium_granted_at"),
   beneficialUnitId: varchar("beneficial_unit_id"),
   emailNotifications: boolean("email_notifications").default(true),
+  isBanned: boolean("is_banned").default(false),
+  banReason: text("ban_reason"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -331,6 +333,61 @@ export const admin_audit_log = pgTable("admin_audit_log", {
   userAgent: text("user_agent"),
   createdAt: timestamp("created_at").defaultNow(),
 });
+
+// Forum moderation enums
+export const flagStatusEnum = pgEnum('flag_status', ['pending', 'reviewed', 'dismissed']);
+export const flagContentTypeEnum = pgEnum('flag_content_type', ['thread', 'reply']);
+export const warningSeverityEnum = pgEnum('warning_severity', ['notice', 'warning', 'final']);
+
+// Flagged content table
+export const flaggedContent = pgTable("flagged_content", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  contentType: flagContentTypeEnum("content_type").notNull(),
+  contentId: varchar("content_id").notNull(),
+  reporterId: varchar("reporter_id").notNull().references(() => users.id),
+  reason: text("reason").notNull(),
+  status: flagStatusEnum("status").default('pending'),
+  reviewedBy: varchar("reviewed_by").references(() => users.id),
+  reviewedAt: timestamp("reviewed_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("flagged_content_status_idx").on(table.status),
+  index("flagged_content_reporter_idx").on(table.reporterId),
+]);
+
+// User warnings table
+export const userWarnings = pgTable("user_warnings", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  issuedBy: varchar("issued_by").notNull().references(() => users.id),
+  reason: text("reason").notNull(),
+  severity: warningSeverityEnum("severity").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("user_warnings_user_id_idx").on(table.userId),
+]);
+
+export const flaggedContentRelations = relations(flaggedContent, ({ one }) => ({
+  reporter: one(users, {
+    fields: [flaggedContent.reporterId],
+    references: [users.id],
+  }),
+  reviewer: one(users, {
+    fields: [flaggedContent.reviewedBy],
+    references: [users.id],
+  }),
+}));
+
+export const userWarningRelations = relations(userWarnings, ({ one }) => ({
+  user: one(users, {
+    fields: [userWarnings.userId],
+    references: [users.id],
+  }),
+  issuer: one(users, {
+    fields: [userWarnings.issuedBy],
+    references: [users.id],
+  }),
+}));
 
 // Relations
 export const userRelations = relations(users, ({ many }) => ({
@@ -1282,3 +1339,24 @@ export type TreasuryTransaction = typeof treasuryTransactions.$inferSelect;
 export type InsertTreasuryTransaction = z.infer<typeof insertTreasuryTransactionSchema>;
 export type TreasurySetting = typeof treasurySettings.$inferSelect;
 export type InsertTreasurySetting = z.infer<typeof insertTreasurySettingSchema>;
+
+// Flagged content schemas and types
+export const insertFlaggedContentSchema = createInsertSchema(flaggedContent).omit({
+  id: true,
+  status: true,
+  reviewedBy: true,
+  reviewedAt: true,
+  createdAt: true,
+});
+
+export type InsertFlaggedContent = z.infer<typeof insertFlaggedContentSchema>;
+export type FlaggedContent = typeof flaggedContent.$inferSelect;
+
+// User warnings schemas and types
+export const insertUserWarningSchema = createInsertSchema(userWarnings).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertUserWarning = z.infer<typeof insertUserWarningSchema>;
+export type UserWarning = typeof userWarnings.$inferSelect;

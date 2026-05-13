@@ -1370,14 +1370,81 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Serve the trust document PDF from resources
-  app.get("/api/trust-document-pdf", requireAuth, (req, res) => {
-    const pdfPath = path.resolve(import.meta.dirname, "../resources/Public-Declaration-of-Trust.pdf");
-    res.download(pdfPath, "new-covenant-trust-document.pdf", (err) => {
-      if (err && !res.headersSent) {
-        res.status(404).json({ error: "Trust document not found" });
+  // Serve the trust document PDF — dynamic if templateId is provided, else static fallback
+  app.get("/api/trust-document-pdf", requireAuth, async (req, res) => {
+    try {
+      const templateId = req.query.templateId as string | undefined;
+
+      if (templateId) {
+        const user = req.user as User;
+        const memberName = `${user.firstName} ${user.lastName}`;
+
+        // Look for an existing trust document generated from this template
+        const allDocs = await storage.getTrustDocuments();
+        const existingDoc = allDocs.find(d => d.templateId === templateId);
+
+        if (existingDoc) {
+          const { generateTrustDocumentPDF, buildPdfDataFromDocument } = await import("./trustDocumentPdfGenerator");
+          const pdfData = buildPdfDataFromDocument(existingDoc, memberName);
+          const pdfBuffer = await generateTrustDocumentPDF(pdfData);
+          res.setHeader("Content-Type", "application/pdf");
+          res.setHeader("Content-Disposition", `attachment; filename="trust-document.pdf"`);
+          return res.send(pdfBuffer);
+        }
+
+        // No existing document — generate from the template directly
+        const template = await storage.getTrustDocumentTemplate(templateId);
+        if (!template) {
+          return res.status(404).json({ error: "Template not found" });
+        }
+
+        const { generateTrustDocumentPDF, buildPdfDataFromTemplate } = await import("./trustDocumentPdfGenerator");
+        const pdfData = buildPdfDataFromTemplate(template, memberName);
+        const pdfBuffer = await generateTrustDocumentPDF(pdfData);
+        res.setHeader("Content-Type", "application/pdf");
+        res.setHeader("Content-Disposition", `attachment; filename="trust-document.pdf"`);
+        return res.send(pdfBuffer);
       }
-    });
+
+      // No templateId — fall back to the static PDF
+      const pdfPath = path.resolve(import.meta.dirname, "../resources/Public-Declaration-of-Trust.pdf");
+      res.download(pdfPath, "new-covenant-trust-document.pdf", (err) => {
+        if (err && !res.headersSent) {
+          res.status(404).json({ error: "Trust document not found" });
+        }
+      });
+    } catch (error) {
+      logger.error({ err: error }, "Error serving trust document PDF");
+      if (!res.headersSent) {
+        res.status(500).json({ error: "Failed to generate trust document PDF" });
+      }
+    }
+  });
+
+  // Generate PDF for a specific saved trust document by ID
+  app.get("/api/trust-document-pdf/:documentId", requireAuth, async (req, res) => {
+    try {
+      const { documentId } = req.params;
+      const user = req.user as User;
+      const memberName = `${user.firstName} ${user.lastName}`;
+
+      const trustDoc = await storage.getTrustDocumentById(documentId);
+      if (!trustDoc) {
+        return res.status(404).json({ error: "Trust document not found" });
+      }
+
+      const { generateTrustDocumentPDF, buildPdfDataFromDocument } = await import("./trustDocumentPdfGenerator");
+      const pdfData = buildPdfDataFromDocument(trustDoc, memberName);
+      const pdfBuffer = await generateTrustDocumentPDF(pdfData);
+
+      const safeTitle = trustDoc.title.replace(/[^a-zA-Z0-9-_ ]/g, '').replace(/\s+/g, '-').toLowerCase();
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader("Content-Disposition", `attachment; filename="${safeTitle}.pdf"`);
+      res.send(pdfBuffer);
+    } catch (error) {
+      logger.error({ err: error }, "Error generating trust document PDF by ID");
+      res.status(500).json({ error: "Failed to generate trust document PDF" });
+    }
   });
 
   // Trust document downloads admin endpoint
@@ -1810,6 +1877,47 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   const reportSchema = z.object({
     reason: z.string().min(10, "Reason must be at least 10 characters").max(2000),
+  });
+
+  // Flag a thread or reply for moderator review
+  app.post("/api/forum/flag", requireAuth, forumLimiter, async (req, res) => {
+    try {
+      const user = req.user as User;
+      if (!checkReportRateLimit(user.id)) {
+        return res.status(429).json({ error: "Too many reports. Please try again later." });
+      }
+
+      const { contentType, contentId, reason } = z.object({
+        contentType: z.enum(["thread", "reply"]),
+        contentId: z.string().min(1),
+        reason: z.string().min(10, "Reason must be at least 10 characters").max(2000),
+      }).parse(req.body);
+
+      // Verify the content exists
+      if (contentType === "thread") {
+        const thread = await storage.getForumThreadById(contentId);
+        if (!thread) return res.status(404).json({ error: "Thread not found" });
+      } else {
+        const reply = await storage.getForumReply(contentId);
+        if (!reply) return res.status(404).json({ error: "Reply not found" });
+      }
+
+      const flag = await storage.flagContent({
+        contentType,
+        contentId,
+        reporterId: user.id,
+        reason,
+      });
+
+      logger.info({ userId: user.id, contentType, contentId }, "Content flagged");
+      res.status(201).json(flag);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ errors: error.errors });
+      }
+      logger.error({ err: error }, "Error flagging content");
+      res.status(500).json({ error: "Failed to flag content" });
+    }
   });
 
   app.post("/api/forum/threads/:threadId/report", requireAuth, async (req, res) => {
