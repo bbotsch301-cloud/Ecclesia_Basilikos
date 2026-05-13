@@ -73,8 +73,8 @@ function BillingContent() {
       queryClient.invalidateQueries({ queryKey: ["/api/subscription/history"] });
       queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
       toast({
-        title: "Installment Payments Stopped",
-        description: "Your installment payments have been stopped. Your PMA membership and beneficial interest remain active.",
+        title: "Donation Canceled",
+        description: "Your monthly donation has been stopped. Your membership will revert to the free tier.",
       });
       setCancelDialogOpen(false);
     },
@@ -152,7 +152,7 @@ function BillingContent() {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-gray-600">
-                50% of your contribution has been allocated to the Treasury Trust, managed by the Financial Trustee for the long-term benefit of all PMA beneficiaries. These funds support asset growth, future investments, and the collective prosperity of the community.
+                50% of your monthly donation is allocated to the Treasury Trust, managed by the Financial Trustee for the long-term benefit of all PMA beneficiaries. These funds support asset growth, future investments, and the collective prosperity of the community.
               </p>
             </CardContent>
           </Card>
@@ -166,10 +166,10 @@ function BillingContent() {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-gray-500 mb-4">
-                Your PMA membership and beneficial interest are permanent. Contact support for any questions about your membership.
+                Your Covenantal Membership is active and supported by your monthly donation. Contact support for any questions.
               </p>
               <Button variant="outline" disabled className="font-cinzel">
-                Membership Active
+                Donation Active
               </Button>
             </CardContent>
           </Card>
@@ -181,28 +181,28 @@ function BillingContent() {
             <CardHeader>
               <CardTitle className="font-cinzel text-lg flex items-center gap-2 text-red-700">
                 <XCircle className="w-5 h-5" />
-                Withdraw Beneficial Interest
+                Cancel Monthly Donation
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-gray-600 mb-4">
-                If you are on the installment plan and wish to stop payments, you can do so here. Your PMA membership and beneficial interest remain active regardless.
+                If you wish to stop your monthly donation, you can do so here. Your membership will revert to the free tier.
               </p>
               <AlertDialog open={cancelDialogOpen} onOpenChange={setCancelDialogOpen}>
                 <AlertDialogTrigger asChild>
                   <Button variant="destructive" className="font-cinzel">
-                    Stop Installment Payments
+                    Cancel Donation
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
                     <AlertDialogTitle>Are you sure you want to cancel?</AlertDialogTitle>
                     <AlertDialogDescription>
-                      If you are on the $50×10 installment plan, this will stop future payments. Your PMA membership and beneficial interest in the Trust remain active.
+                      This will stop your monthly donation and your Covenantal Membership will revert to the free tier. You can re-subscribe at any time.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel>Keep Payments</AlertDialogCancel>
+                    <AlertDialogCancel>Keep Donating</AlertDialogCancel>
                     <AlertDialogAction
                       onClick={() => cancelMutation.mutate()}
                       className="bg-red-600 hover:bg-red-700"
@@ -214,7 +214,7 @@ function BillingContent() {
                           Cancelling...
                         </>
                       ) : (
-                        "Yes, Stop Payments"
+                        "Yes, Cancel Donation"
                       )}
                     </AlertDialogAction>
                   </AlertDialogFooter>
