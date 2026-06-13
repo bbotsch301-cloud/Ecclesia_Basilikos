@@ -76,6 +76,7 @@ const adminNavGroups: NavGroup[] = [
     label: "Finance",
     items: [
       { name: "Treasury", href: "/admin/treasury", icon: Coins },
+      { name: "BAS Token", href: "/admin/bas-token", icon: Crown },
     ],
   },
 ];

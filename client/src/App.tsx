@@ -75,6 +75,9 @@ const AdminBabylonianComparison = lazy(() => import("@/pages/admin-babylonian-co
 const AdminTreasury = lazy(() => import("@/pages/admin-treasury"));
 const Treasury = lazy(() => import("@/pages/treasury"));
 const Vision = lazy(() => import("@/pages/vision"));
+const AdminCourseWizard = lazy(() => import("@/pages/admin-course-wizard"));
+const BasTokenPage = lazy(() => import("@/pages/bas-token"));
+const AdminBasToken = lazy(() => import("@/pages/admin-bas-token"));
 
 function PageLoader() {
   return (
@@ -139,6 +142,7 @@ function Router() {
             <Route path="/pma-agreement" component={PmaAgreement} />
             <Route path="/beneficiary/unit">{() => <SectionErrorBoundary><BeneficialUnit /></SectionErrorBoundary>}</Route>
             <Route path="/treasury" component={Treasury} />
+            <Route path="/bas">{() => <SectionErrorBoundary><BasTokenPage /></SectionErrorBoundary>}</Route>
             <Route path="/pricing" component={Pricing} />
             <Route path="/billing">{() => <SectionErrorBoundary><Billing /></SectionErrorBoundary>}</Route>
             <Route path="/user/:userId" component={UserProfile} />
@@ -150,6 +154,7 @@ function Router() {
             {/* Admin routes - client-side gate + server-side requireAdmin middleware */}
             <Route path="/admin/content">{() => <RequireAdmin><SectionErrorBoundary><AdminContent /></SectionErrorBoundary></RequireAdmin>}</Route>
             <Route path="/admin/trust-downloads">{() => <RequireAdmin><SectionErrorBoundary><AdminTrustDownloads /></SectionErrorBoundary></RequireAdmin>}</Route>
+            <Route path="/admin/courses/new">{() => <RequireAdmin><SectionErrorBoundary><AdminCourseWizard /></SectionErrorBoundary></RequireAdmin>}</Route>
             <Route path="/admin/courses">{() => <RequireAdmin><SectionErrorBoundary><AdminCourseEditor /></SectionErrorBoundary></RequireAdmin>}</Route>
             <Route path="/admin/courses/:courseId/edit">{() => <RequireAdmin><SectionErrorBoundary><AdminCourseEditor /></SectionErrorBoundary></RequireAdmin>}</Route>
             <Route path="/admin/videos">{() => <RequireAdmin><SectionErrorBoundary><AdminVideos /></SectionErrorBoundary></RequireAdmin>}</Route>
@@ -165,6 +170,7 @@ function Router() {
             <Route path="/admin/trust-architecture">{() => <RequireAdmin><SectionErrorBoundary><AdminTrustArchitecture /></SectionErrorBoundary></RequireAdmin>}</Route>
             <Route path="/admin/babylonian-comparison">{() => <RequireAdmin><SectionErrorBoundary><AdminBabylonianComparison /></SectionErrorBoundary></RequireAdmin>}</Route>
             <Route path="/admin/treasury">{() => <RequireAdmin><SectionErrorBoundary><AdminTreasury /></SectionErrorBoundary></RequireAdmin>}</Route>
+            <Route path="/admin/bas-token">{() => <RequireAdmin><SectionErrorBoundary><AdminBasToken /></SectionErrorBoundary></RequireAdmin>}</Route>
             <Route path="/admin">{() => <RequireAdmin><SectionErrorBoundary><AdminDashboard /></SectionErrorBoundary></RequireAdmin>}</Route>
             <Route component={NotFound} />
           </Switch>
