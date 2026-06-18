@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* offset anchored sections so the sticky navbar doesn't cover headings */
+    scroll-padding-top: 5rem;
+  }
+
+  body {
+    @apply bg-ink-900 text-cream-200 font-sans antialiased;
+    background-image:
+      radial-gradient(900px 500px at 15% -5%, rgba(36, 122, 93, 0.18), transparent 60%),
+      radial-gradient(900px 600px at 100% 0%, rgba(212, 175, 87, 0.07), transparent 55%);
+    background-attachment: fixed;
+  }
+
+  h1, h2, h3 {
+    @apply font-serif;
+  }
+
+  /* Subtle, premium scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0a0f0c;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #154635;
+    border-radius: 9999px;
+    border: 2px solid #0a0f0c;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #1c5a45;
+  }
+
+  ::selection {
+    background: rgba(212, 175, 87, 0.3);
+    color: #f7f3e9;
+  }
+}
+
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
+  }
+
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.22em] text-gold-500;
+  }
+
+  .gold-divider {
+    @apply h-px w-full bg-gold-line;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold
+           transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400/60;
+  }
+  .btn-primary {
+    @apply btn bg-gold-500 text-ink-900 shadow-soft hover:bg-gold-400 hover:-translate-y-0.5;
+  }
+  .btn-secondary {
+    @apply btn border border-forest-500/60 bg-forest-800/40 text-cream-100 hover:border-gold-500/60 hover:bg-forest-700/50;
+  }
+
+  .goshens-input {
+    @apply w-full rounded-xl border border-forest-700/70 bg-ink-800/60 px-4 py-2.5 text-sm
+           text-cream-100 placeholder:text-cream-300/40 outline-none transition-colors
+           focus:border-gold-500/60 focus:ring-2 focus:ring-gold-500/15;
+  }
+
+  .card {
+    @apply rounded-2xl border border-forest-700/60 bg-forest-900/40 p-6 shadow-soft
+           backdrop-blur-sm transition-all duration-200;
+  }
+  .card-hover {
+    @apply hover:-translate-y-1 hover:border-gold-500/40 hover:shadow-glow;
+  }
+}
