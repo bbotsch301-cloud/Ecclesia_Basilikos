@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import Section from '../components/Section.jsx'
 import Card from '../components/Card.jsx'
 import Badge from '../components/Badge.jsx'
+import Field from '../components/Field.jsx'
 
 const CATEGORIES = ['Needs', 'Offers', 'Projects', 'Funding', 'Land', 'Skills', 'Prayer', 'Body / PMA']
 
@@ -278,17 +279,5 @@ export default function Forum({ notify }) {
         </div>
       </div>
     </Section>
-  )
-}
-
-function Field({ label, htmlFor, optional, children }) {
-  return (
-    <label htmlFor={htmlFor} className="block">
-      <span className="mb-1.5 flex items-center gap-2 text-xs font-medium text-cream-200">
-        {label}
-        {optional && <span className="text-cream-300/50">(optional)</span>}
-      </span>
-      {children}
-    </label>
   )
 }

@@ -59,6 +59,12 @@ export default function Navbar() {
             </a>
           ))}
           <Link
+            to="/steward"
+            className="rounded-full px-3 py-2 text-sm font-medium text-cream-300 transition-colors hover:bg-forest-800/50 hover:text-cream-100"
+          >
+            Stewardship
+          </Link>
+          <Link
             to="/"
             className="rounded-full px-3 py-2 text-sm font-medium text-gold-400/90 transition-colors hover:bg-forest-800/50 hover:text-gold-300"
           >
@@ -106,6 +112,13 @@ export default function Navbar() {
                 {l.label}
               </a>
             ))}
+            <Link
+              to="/steward"
+              onClick={() => setOpen(false)}
+              className="rounded-lg px-3 py-3 text-sm font-medium text-cream-200 transition-colors hover:bg-forest-800/50 hover:text-cream-100"
+            >
+              Stewardship
+            </Link>
             <Link
               to="/"
               onClick={() => setOpen(false)}

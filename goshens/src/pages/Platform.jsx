@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import Navbar from '../components/Navbar.jsx'
 import Footer from '../components/Footer.jsx'
 import Toast from '../components/Toast.jsx'
@@ -48,6 +48,26 @@ export default function Platform() {
         <Projects />
         <BodyPMA />
         <Roadmap />
+
+        {/* Stewardship dashboard entry point */}
+        <section className="py-16">
+          <div className="container-x">
+            <div className="rounded-2xl border border-gold-500/25 bg-gold-500/5 p-8 text-center shadow-soft sm:p-10">
+              <p className="eyebrow mb-3">The Stewardship Layer</p>
+              <h2 className="mx-auto max-w-2xl text-2xl font-semibold text-cream-100 sm:text-3xl">
+                Enter GOSHENS as a steward
+              </h2>
+              <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-cream-300/85">
+                Create your covenant profile, register what you steward, and begin project
+                covenants framed by purpose and accountability.
+              </p>
+              <Link to="/steward" className="btn-primary mt-7 inline-flex">
+                Open the Stewardship Dashboard
+              </Link>
+            </div>
+          </div>
+        </section>
+
         <Join />
       </main>
       <Footer />

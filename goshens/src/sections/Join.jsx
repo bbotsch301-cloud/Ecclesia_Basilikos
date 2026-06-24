@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Section from '../components/Section.jsx'
 import Card from '../components/Card.jsx'
+import Field from '../components/Field.jsx'
 
 const EMPTY = {
   name: '',
@@ -149,17 +150,5 @@ export default function Join() {
         )}
       </Card>
     </Section>
-  )
-}
-
-function Field({ label, htmlFor, optional, children }) {
-  return (
-    <label htmlFor={htmlFor} className="block">
-      <span className="mb-1.5 flex items-center gap-2 text-xs font-medium text-cream-200">
-        {label}
-        {optional && <span className="text-cream-300/50">(optional)</span>}
-      </span>
-      {children}
-    </label>
   )
 }
