@@ -28,10 +28,27 @@ export default {
           200: '#ece5d3',
           300: '#d8cdb4',
         },
+        // Ecclesia Basilikos royal palette (used on the vision / home page).
+        navy: {
+          900: '#0a1230',
+          800: '#0f1c44',
+          700: '#172a5c',
+          600: '#22386f',
+        },
+        burgundy: {
+          900: '#3d1626',
+          800: '#4a1d30',
+          700: '#5e2740',
+        },
+        parchment: '#f0ede5',
       },
       fontFamily: {
         serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
         sans: ['Inter', 'system-ui', 'ui-sans-serif', 'sans-serif'],
+        cinzel: ['Cinzel', 'Georgia', 'serif'],
+        cinzelDecorative: ['"Cinzel Decorative"', 'Cinzel', 'serif'],
+        playfair: ['"Playfair Display"', 'Georgia', 'serif'],
+        georgia: ['Georgia', '"Times New Roman"', 'serif'],
       },
       boxShadow: {
         soft: '0 10px 40px -12px rgba(0, 0, 0, 0.55)',

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import Badge from './Badge.jsx'
 
 const LINKS = [
@@ -32,7 +33,7 @@ export default function Navbar() {
       }`}
     >
       <nav className="container-x flex h-16 items-center justify-between gap-4">
-        <a href="#home" className="group flex items-center gap-3" onClick={() => setOpen(false)}>
+        <Link to="/" className="group flex items-center gap-3" onClick={() => setOpen(false)}>
           <span className="grid h-9 w-9 place-items-center rounded-xl border border-gold-500/40 bg-forest-800/60 font-serif text-lg font-semibold text-gold-400">
             G
           </span>
@@ -44,7 +45,7 @@ export default function Navbar() {
               Powered by EXCHANGE
             </span>
           </span>
-        </a>
+        </Link>
 
         {/* Desktop links */}
         <div className="hidden items-center gap-1 lg:flex">
@@ -57,6 +58,12 @@ export default function Navbar() {
               {l.label}
             </a>
           ))}
+          <Link
+            to="/"
+            className="rounded-full px-3 py-2 text-sm font-medium text-gold-400/90 transition-colors hover:bg-forest-800/50 hover:text-gold-300"
+          >
+            Vision
+          </Link>
         </div>
 
         <div className="hidden lg:block">
@@ -99,6 +106,13 @@ export default function Navbar() {
                 {l.label}
               </a>
             ))}
+            <Link
+              to="/"
+              onClick={() => setOpen(false)}
+              className="rounded-lg px-3 py-3 text-sm font-medium text-gold-400/90 transition-colors hover:bg-forest-800/50 hover:text-gold-300"
+            >
+              Vision
+            </Link>
             <a
               href="#join"
               onClick={() => setOpen(false)}
