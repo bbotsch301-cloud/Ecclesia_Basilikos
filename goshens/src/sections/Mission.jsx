@@ -26,7 +26,7 @@ export default function Mission() {
       id="mission"
       eyebrow="Mission"
       title="Planting the Blueprint"
-      intro="GOSHENS exists to help believers move from scattered effort into coordinated stewardship. The platform combines community discussion, project boards, resource exchange, treasury coordination, and the EXCHANGE coin to help organize real-world Kingdom initiatives."
+      intro="GOSHENS exists to help believers move from scattered effort into coordinated stewardship. The platform combines community discussion, project boards, resource exchange, treasury coordination, and the Ecclesia Basilikos coin to help organize real-world Kingdom initiatives."
     >
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {PILLARS.map((p, i) => (

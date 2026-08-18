@@ -4,7 +4,7 @@ import EcclesiaNav from '../components/EcclesiaNav.jsx'
 import EcclesiaFooter from '../components/EcclesiaFooter.jsx'
 import ScriptureBanner from '../components/ScriptureBanner.jsx'
 
-/* ── Content derived from the GOSHENS ideology ───────────────────────────── */
+/* ── Content derived from the GOSHENS ideology ───────────────────────── */
 
 const ORDER = [
   'The treasury serves the Body.',
@@ -166,6 +166,30 @@ export default function Ecclesia() {
           </div>
         </div>
       </section>
+
+      {/* 1b. The New Covenant / Trust — the foundation */}
+      <RoyalSection
+        id="covenant"
+        eyebrow="The foundation"
+        title="The New Covenant / Trust"
+        intro="The entry into Kingdom identity expression in a lawful manner — bringing your identity and inheritance into worldly systems through lawful expression. Light to the darkness; credit for the debt. Out of this relationship, all things flow."
+      >
+        <div className="royal-card royal-card-hover max-w-3xl border-gold-500/40">
+          <p className="font-playfair text-xl leading-relaxed text-cream-100">
+            This is foundational, and expresses your true identity in Christ. Every member enters
+            GOSHENS as a steward before a participant — beginning with covenant, from which the
+            forum, marketplace, treasury, coin, and projects all flow.
+          </p>
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+            <Link to="/steward" className="btn-royal w-full sm:w-auto">
+              Enter your covenant profile
+            </Link>
+            <Link to="/system" className="btn-royal-ghost w-full sm:w-auto">
+              See the whole system
+            </Link>
+          </div>
+        </div>
+      </RoyalSection>
 
       {/* 2. The Order of Service */}
       <RoyalSection
@@ -394,13 +418,13 @@ export default function Ecclesia() {
           </div>
           <div className="royal-card">
             <h3 className="font-cinzel text-lg font-semibold uppercase tracking-wider text-gold-400">
-              EXCHANGE · XCH
+              The Coin · Ecclesia Basilikos
             </h3>
             <p className="mt-4 leading-relaxed text-cream-200/90">
-              EXCHANGE is an economic coordination tool within the ecosystem — a servant of the
-              mission, never its purpose. If any mechanic, strategy, or structure conflicts with
-              the spirit of Christ, the strengthening of the Body, or faithful stewardship, it is
-              reconsidered or rejected.
+              The Ecclesia Basilikos coin is an economic coordination tool within the ecosystem — a
+              servant of the mission, never its purpose. If any mechanic, strategy, or structure
+              conflicts with the spirit of Christ, the strengthening of the Body, or faithful
+              stewardship, it is reconsidered or rejected.
             </p>
           </div>
         </div>

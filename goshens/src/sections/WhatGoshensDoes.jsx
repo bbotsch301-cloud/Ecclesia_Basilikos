@@ -16,7 +16,7 @@ const FEATURES = [
   },
   {
     title: 'Treasury Coordination',
-    body: 'The treasury receives a portion of EXCHANGE token activity and can later support approved Kingdom projects and productive assets.',
+    body: 'The treasury receives a portion of Ecclesia Basilikos coin activity and can later support approved Kingdom projects and productive assets.',
   },
   {
     title: 'Body / PMA',

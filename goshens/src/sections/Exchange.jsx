@@ -29,20 +29,47 @@ export default function Exchange() {
   return (
     <Section id="exchange" eyebrow="The Coin">
       <div className="mb-12 max-w-3xl">
-        <div className="mb-4 flex items-center gap-3">
-          <h2 className="text-3xl font-semibold text-cream-100 sm:text-4xl">EXCHANGE</h2>
-          <Badge tone="gold">XCH</Badge>
+        <div className="mb-4 flex flex-wrap items-center gap-3">
+          <h2 className="text-3xl font-semibold text-cream-100 sm:text-4xl">Ecclesia Basilikos</h2>
+          <Badge tone="gold">The Coin</Badge>
         </div>
         <p className="text-lg font-medium text-gold-400/90">
           The treasury coin powering the GOSHENS ecosystem.
         </p>
         <p className="mt-5 text-base leading-relaxed text-cream-300/90 sm:text-lg">
-          EXCHANGE is designed as the economic layer of GOSHENS. It is not the mission itself. It
-          is the funding and coordination vehicle that helps gather value into a treasury for
-          future Kingdom projects, land, missions, businesses, and community infrastructure.
+          Ecclesia Basilikos is designed as the economic layer of GOSHENS. It is not the mission
+          itself. It is the funding and coordination vehicle that helps gather value into a
+          treasury for future Kingdom projects, land, missions, businesses, and community
+          infrastructure.
         </p>
       </div>
 
+      {/* How the coin is framed (from the system architecture) */}
+      <div className="mb-8 grid gap-4 sm:grid-cols-3">
+        {[
+          {
+            title: 'Non-redeemable',
+            body: 'The coin is not redeemable for the treasury assets it helps gather.',
+          },
+          {
+            title: 'Value follows the system',
+            body: 'Its value is based on the success of the system, which itself utilizes the coin.',
+          },
+          {
+            title: 'Exchangeable — eventually',
+            body: 'Designed to become tradeable on the open market in a later phase.',
+          },
+        ].map((f) => (
+          <div key={f.title} className="rounded-xl border border-forest-700/60 bg-forest-900/40 p-5">
+            <h3 className="text-sm font-semibold text-gold-400">{f.title}</h3>
+            <p className="mt-2 text-sm leading-relaxed text-cream-300/80">{f.body}</p>
+          </div>
+        ))}
+      </div>
+
+      <p className="mb-5 text-sm font-semibold uppercase tracking-wider text-gold-500">
+        Coin mechanics
+      </p>
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {MECHANICS.map((m) => (
           <Card key={m.title} hover>

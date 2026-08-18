@@ -32,7 +32,7 @@ export default function Join() {
       alt
       eyebrow="Get Involved"
       title="Join the First Builders"
-      intro="GOSHENS is forming its first circle of builders, stewards, contributors, and project supporters. Join to help shape the forum, project boards, treasury priorities, EXCHANGE launch structure, and first real-world initiatives."
+      intro="GOSHENS is forming its first circle of builders, stewards, contributors, and project supporters. Join to help shape the forum, project boards, treasury priorities, the Ecclesia Basilikos coin launch structure, and first real-world initiatives."
     >
       <Card className="mx-auto max-w-2xl">
         {submitted ? (

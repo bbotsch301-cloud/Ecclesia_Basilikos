@@ -7,7 +7,7 @@ const PHASES = [
   },
   {
     phase: 'Phase 2',
-    body: 'EXCHANGE launch preparation, treasury wallet, documentation, public project standards.',
+    body: 'Ecclesia Basilikos coin launch preparation, treasury wallet, documentation, public project standards.',
   },
   {
     phase: 'Phase 3',

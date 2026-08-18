@@ -1,5 +1,6 @@
 import Section from '../components/Section.jsx'
 import Card from '../components/Card.jsx'
+import TreasuryBasket from '../components/TreasuryBasket.jsx'
 
 const USES = [
   'Land',
@@ -21,8 +22,16 @@ export default function Treasury() {
       alt
       eyebrow="Treasury"
       title="From Token Activity to Real-World Stewardship"
-      intro="The treasury is designed to receive resources from EXCHANGE activity and later deploy them into transparent, documented, community-reviewed initiatives."
+      intro="The treasury is a basket of assets, managed by the Trust. It is designed to receive resources from coin activity and deploy them into transparent, documented, community-reviewed initiatives — funding projects and holding projects as assets."
     >
+      {/* The asset basket */}
+      <div className="mb-10">
+        <p className="mb-5 text-sm font-semibold uppercase tracking-wider text-gold-500">
+          The treasury basket
+        </p>
+        <TreasuryBasket variant="green" />
+      </div>
+
       <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
         <div>
           <p className="mb-5 text-sm font-semibold uppercase tracking-wider text-gold-500">

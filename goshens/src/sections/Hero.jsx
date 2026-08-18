@@ -11,7 +11,7 @@ export default function Hero() {
       <div className="container-x relative py-24 sm:py-32">
         <div className="mx-auto max-w-3xl text-center">
           <div className="mb-8 flex justify-center">
-            <Badge tone="gold">Powered by EXCHANGE · XCH</Badge>
+            <Badge tone="gold">Powered by Ecclesia Basilikos</Badge>
           </div>
 
           <h1 className="font-serif text-5xl font-semibold leading-[1.05] tracking-tight text-cream-100 sm:text-7xl">
@@ -33,8 +33,8 @@ export default function Hero() {
           </div>
 
           <p className="mx-auto mt-10 max-w-xl text-sm leading-relaxed text-cream-300/70">
-            EXCHANGE is the treasury coin designed to help fund and coordinate the GOSHENS
-            ecosystem.
+            Ecclesia Basilikos is the treasury coin designed to help fund and coordinate the
+            GOSHENS ecosystem.
           </p>
         </div>
       </div>
