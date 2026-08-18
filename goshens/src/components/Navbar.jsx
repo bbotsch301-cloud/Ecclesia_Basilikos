@@ -6,7 +6,7 @@ const LINKS = [
   { label: 'Home', href: '#home' },
   { label: 'Mission', href: '#mission' },
   { label: 'Treasury', href: '#treasury' },
-  { label: 'EXCHANGE', href: '#exchange' },
+  { label: 'The Coin', href: '#exchange' },
   { label: 'Forum', href: '#forum' },
   { label: 'Projects', href: '#projects' },
   { label: 'Body / PMA', href: '#body-pma' },
@@ -42,7 +42,7 @@ export default function Navbar() {
               GOSHENS
             </span>
             <span className="text-[10px] uppercase tracking-[0.2em] text-gold-500/80">
-              Powered by EXCHANGE
+              Powered by Ecclesia Basilikos
             </span>
           </span>
         </Link>
@@ -63,6 +63,12 @@ export default function Navbar() {
             className="rounded-full px-3 py-2 text-sm font-medium text-cream-300 transition-colors hover:bg-forest-800/50 hover:text-cream-100"
           >
             Stewardship
+          </Link>
+          <Link
+            to="/system"
+            className="rounded-full px-3 py-2 text-sm font-medium text-cream-300 transition-colors hover:bg-forest-800/50 hover:text-cream-100"
+          >
+            System
           </Link>
           <Link
             to="/"
@@ -120,6 +126,13 @@ export default function Navbar() {
               Stewardship
             </Link>
             <Link
+              to="/system"
+              onClick={() => setOpen(false)}
+              className="rounded-lg px-3 py-3 text-sm font-medium text-cream-200 transition-colors hover:bg-forest-800/50 hover:text-cream-100"
+            >
+              System
+            </Link>
+            <Link
               to="/"
               onClick={() => setOpen(false)}
               className="rounded-lg px-3 py-3 text-sm font-medium text-gold-400/90 transition-colors hover:bg-forest-800/50 hover:text-gold-300"
@@ -134,7 +147,7 @@ export default function Navbar() {
               Join the First Builders
             </a>
             <div className="mt-3 flex justify-center">
-              <Badge tone="gold">Powered by EXCHANGE · XCH</Badge>
+              <Badge tone="gold">Powered by Ecclesia Basilikos</Badge>
             </div>
           </div>
         </div>

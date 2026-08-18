@@ -24,12 +24,12 @@ export default function EcclesiaFooter() {
         </div>
 
         <p className="font-cinzel text-xs uppercase tracking-[0.24em] text-gold-500/80">
-          Powered by EXCHANGE · XCH
+          Powered by Ecclesia Basilikos · The covenant coin
         </p>
 
         <p className="mt-6 max-w-3xl text-xs leading-relaxed text-cream-300/60">
           <span className="font-semibold text-cream-300/80">Disclaimer.</span> GOSHENS is a
-          mission-driven community and crypto treasury project. EXCHANGE participation involves
+          mission-driven community and crypto treasury project. Participation in the coin involves
           risk. Nothing on this site is financial, legal, tax, or investment advice. No returns
           are guaranteed.
         </p>

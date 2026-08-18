@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
-const LINKS = [
+// Section anchors are only valid on the Ecclesia home page.
+const SECTION_LINKS = [
   { label: 'The Order', href: '#order' },
   { label: 'Is / Is Not', href: '#is-not' },
   { label: 'To Serve', href: '#serve' },
@@ -9,7 +10,9 @@ const LINKS = [
   { label: 'The Vision', href: '#vision' },
 ]
 
-export default function EcclesiaNav() {
+// variant: 'home' shows the in-page section anchors; 'page' (e.g. /system) shows
+// route links back to the home vision instead of anchors that would not resolve.
+export default function EcclesiaNav({ variant = 'home' }) {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
@@ -20,6 +23,12 @@ export default function EcclesiaNav() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  const isHome = variant === 'home'
+  const linkCls =
+    'rounded-full px-3 py-2 font-cinzel text-xs font-medium uppercase tracking-wider text-cream-300 transition-colors hover:bg-navy-700/50 hover:text-cream-100'
+  const mobileLinkCls =
+    'rounded-lg px-3 py-3 font-cinzel text-sm font-medium uppercase tracking-wide text-cream-200 transition-colors hover:bg-navy-700/50 hover:text-cream-100'
+
   return (
     <header
       className={`sticky top-0 z-50 transition-colors duration-300 ${
@@ -29,7 +38,7 @@ export default function EcclesiaNav() {
       }`}
     >
       <nav className="container-x flex h-16 items-center justify-between gap-4">
-        <a href="#top" className="group flex items-center gap-3" onClick={() => setOpen(false)}>
+        <Link to="/" className="group flex items-center gap-3" onClick={() => setOpen(false)}>
           <span className="grid h-9 w-9 place-items-center rounded-full border border-gold-500/50 bg-navy-800/70 font-cinzelDecorative text-base font-bold text-gold-400">
             &#10013;
           </span>
@@ -41,19 +50,24 @@ export default function EcclesiaNav() {
               The Body of Christ · GOSHENS
             </span>
           </span>
-        </a>
+        </Link>
 
         {/* Desktop links */}
         <div className="hidden items-center gap-1 xl:flex">
-          {LINKS.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              className="rounded-full px-3 py-2 font-cinzel text-xs font-medium uppercase tracking-wider text-cream-300 transition-colors hover:bg-navy-700/50 hover:text-cream-100"
-            >
-              {l.label}
-            </a>
-          ))}
+          {isHome ? (
+            SECTION_LINKS.map((l) => (
+              <a key={l.href} href={l.href} className={linkCls}>
+                {l.label}
+              </a>
+            ))
+          ) : (
+            <Link to="/" className={linkCls}>
+              The Vision
+            </Link>
+          )}
+          <Link to="/system" className={linkCls}>
+            The System
+          </Link>
         </div>
 
         <div className="hidden xl:block">
@@ -86,16 +100,20 @@ export default function EcclesiaNav() {
       {open && (
         <div className="border-t border-gold-500/20 bg-navy-900/95 backdrop-blur-md xl:hidden">
           <div className="container-x grid gap-1 py-4">
-            {LINKS.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                onClick={() => setOpen(false)}
-                className="rounded-lg px-3 py-3 font-cinzel text-sm font-medium uppercase tracking-wide text-cream-200 transition-colors hover:bg-navy-700/50 hover:text-cream-100"
-              >
-                {l.label}
-              </a>
-            ))}
+            {isHome ? (
+              SECTION_LINKS.map((l) => (
+                <a key={l.href} href={l.href} onClick={() => setOpen(false)} className={mobileLinkCls}>
+                  {l.label}
+                </a>
+              ))
+            ) : (
+              <Link to="/" onClick={() => setOpen(false)} className={mobileLinkCls}>
+                The Vision
+              </Link>
+            )}
+            <Link to="/system" onClick={() => setOpen(false)} className={mobileLinkCls}>
+              The System
+            </Link>
             <Link to="/platform" onClick={() => setOpen(false)} className="btn-royal mt-2 w-full">
               Enter GOSHENS
             </Link>

@@ -12,16 +12,16 @@ export default function Footer() {
             </p>
             <p className="mt-1 font-serif text-lg text-gold-400/90">Planting the Blueprint.</p>
           </div>
-          <Badge tone="gold">Powered by EXCHANGE · XCH</Badge>
+          <Badge tone="gold">Powered by Ecclesia Basilikos</Badge>
         </div>
 
         <div className="my-10 gold-divider" />
 
         <p className="max-w-3xl text-xs leading-relaxed text-cream-300/70">
           <span className="font-semibold text-cream-300/90">Disclaimer.</span> GOSHENS is a
-          mission-driven community and crypto treasury project. EXCHANGE participation involves
-          risk. Nothing on this site is financial, legal, tax, or investment advice. No returns
-          are guaranteed.
+          mission-driven community and crypto treasury project. Participation in the Ecclesia
+          Basilikos coin involves risk. Nothing on this site is financial, legal, tax, or
+          investment advice. No returns are guaranteed.
         </p>
 
         <p className="mt-8 text-xs text-cream-300/50">
