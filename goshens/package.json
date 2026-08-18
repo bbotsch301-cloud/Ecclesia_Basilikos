@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "GOSHENS — a Kingdom-centered coordination platform, powered by EXCHANGE (XCH).",
+  "description": "GOSHENS — a Kingdom-centered coordination platform, powered by the Ecclesia Basilikos coin.",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

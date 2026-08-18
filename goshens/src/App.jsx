@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import Ecclesia from './pages/Ecclesia.jsx'
+import System from './pages/System.jsx'
 import Platform from './pages/Platform.jsx'
 import StewardLayout from './pages/steward/StewardLayout.jsx'
 import Overview from './pages/steward/Overview.jsx'
@@ -11,6 +12,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Ecclesia />} />
+      <Route path="/system" element={<System />} />
       <Route path="/platform" element={<Platform />} />
       <Route path="/steward" element={<StewardLayout />}>
         <Route index element={<Overview />} />
